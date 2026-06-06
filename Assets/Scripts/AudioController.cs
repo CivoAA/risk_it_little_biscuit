@@ -1,0 +1,170 @@
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.Audio;
+
+public class AudioController : MonoBehaviour
+{
+    public static AudioController Instance;
+    public AudioMixer mainMixer;
+
+    [Range(0f, 1f)] public float masterVolume = 1f;   // default full volume
+    [Range(0f, 1f)] public float musicVolume = 1f;    // für Slider-Startwert
+    [Range(0f, 1f)] public float effectsVolume = 1f;  // für Slider-Startwert
+    public AudioSource[] musicSources;   // hier deine Musikquellen reinziehen
+    public AudioSource[] effectSources;
+
+    [Header("Audio Sources (optional - keep your existing refs)")]
+    public AudioSource pause;
+    public AudioSource unpause;
+    public AudioSource enemyDeath;
+    public AudioSource selectUpgrade;
+    public AudioSource areaWeaponSpawn;
+    //public AudioSource areaWeaponDespawn;
+    public AudioSource GameOver;
+    public AudioSource JarJamBreakingGlass;
+    public AudioSource Werfen;
+    public AudioSource PlayerHit;
+    public AudioSource PlayerHit2;
+    public AudioSource MenuClick;
+    public AudioSource BOBA;
+    public AudioSource Speen;
+    public AudioSource LevelUpSound;
+    public AudioSource WinSound;
+    public AudioSource LoseSound;
+    public AudioSource NewBoba;
+    public AudioSource ForkHit;
+    public AudioSource EarthHit;
+    public AudioSource Laser;
+    public AudioSource[] audioSources;
+    private static float ToDb(float v) => Mathf.Log10(Mathf.Clamp(v, 0.0001f, 1f)) * 20f;
+
+    // cached list of AudioSources in scene (so background music not referenced explicitly still gets affected)
+    private AudioSource[] cachedSceneSources;
+
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            // destroy the whole game object so references don't point to a destroyed component
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        if (AudioSettingsManager.Instance != null)
+        {
+            AudioSettingsManager.Instance.ApplySettingsNow();
+        }
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.activeSceneChanged += OnActiveSceneChanged;
+    }
+
+    void Start()
+    {
+        // cache audio sources that exist at Start
+        cachedSceneSources = FindObjectsByType<AudioSource>(FindObjectsSortMode.None);
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        SwitchMusic(scene.name);
+    }
+
+    private void OnActiveSceneChanged(Scene oldScene, Scene newScene)
+    {   
+        SwitchMusic(newScene.name);
+    }
+
+    public void SwitchMusic(string sceneName)
+    {
+        if (sceneName == "Main Menu" || sceneName == "World Map")
+        {
+            // 0 = MainMenu-Musik AN
+            audioSources[0].mute = false;
+            // 1 = Game-Musik AUS
+            audioSources[1].mute = true;
+        }
+        // Game
+        else if (sceneName == "Game")
+        {
+            // 0 = MainMenu-Musik AUS
+            audioSources[0].mute = true;
+            // 1 = Game-Musik AN
+            audioSources[1].mute = false;
+        }
+    }
+
+    public void SetMasterVolume(float value)
+    {
+        masterVolume = value;
+        if (!mainMixer.SetFloat("MasterVolume", ToDb(value)))
+            Debug.LogWarning("AudioMixer-Parameter 'MasterVolume' nicht gefunden.");
+    }
+
+    public void SetMusicVolume(float value)
+    {
+        musicVolume = value;
+        if (!mainMixer.SetFloat("MusicVolume", ToDb(value)))
+            Debug.LogWarning("AudioMixer-Parameter 'MusicVolume' nicht gefunden.");
+    }
+
+    public void SetEffectsVolume(float value)
+    {
+        effectsVolume = value;
+        if (!mainMixer.SetFloat("EffectsVolume", ToDb(value)))
+            Debug.LogWarning("AudioMixer-Parameter 'EffectsVolume' nicht gefunden.");
+    }
+
+    // keep your original methods (names preserved)
+    public void PalySound(AudioSource sound, float? volume = null)
+    {
+        if (sound == null) return;
+        sound.Stop();
+        sound.volume = volume ?? masterVolume;
+        sound.Play();
+    }
+    public void PalySoundTime(AudioSource sound, float? startTime = null)
+    {
+        if (sound == null) return;
+
+        sound.Stop();
+
+        // Lautstärke setzen
+        sound.volume = masterVolume;
+
+        // Wenn ein Startzeitpunkt angegeben ist → im Clip springen
+        if (startTime.HasValue)
+        {
+            // Sicherheit: Clampen, damit kein Fehler bei zu großem Wert entsteht
+            float t = Mathf.Clamp(startTime.Value, 0f, sound.clip != null ? sound.clip.length : 0f);
+            sound.time = t;
+        }
+
+        sound.Play();
+    }
+
+    public void PalyModifiedSound(AudioSource sound)
+    {
+        if (sound == null) return;
+        sound.pitch = Random.Range(0.7f, 1.3f);
+        sound.Stop();
+        sound.volume = masterVolume;
+        sound.Play();
+    }
+
+    public void PalySoundMenu(AudioSource sound)
+    {
+        if (sound == null) return;
+        sound.Stop();
+        sound.volume = masterVolume;
+        sound.Play();
+    }
+
+    public void StopSound(AudioSource sound)
+    {
+        if (sound == null) return;
+        sound.Stop();
+    }
+}
