@@ -17,16 +17,16 @@ public class GameManager : MonoBehaviour
     public int skillCurrencyBeforeGame;
     public int gainedThroughAchievements;
 
+    private int lastTimerSecond = -1;
+
     void Awake()
     {
         if (Instance != null && Instance != this)
         {
-            Destroy(this);
+            Destroy(gameObject);
+            return;
         }
-        else
-        {
-            Instance = this;
-        }
+        Instance = this;
     }
     void Start()
     {
@@ -38,14 +38,22 @@ public class GameManager : MonoBehaviour
         if (gameActiv)
         {
             gameTime += Time.deltaTime;
-            UIController.Instance.UpdateTimer(gameTime);
+
+            // Timer-Text nur aktualisieren, wenn sich die angezeigte Sekunde ändert
+            // (vermeidet String-Allokation in jedem Frame)
+            int currentSecond = Mathf.FloorToInt(gameTime);
+            if (currentSecond != lastTimerSecond)
+            {
+                lastTimerSecond = currentSecond;
+                UIController.Instance.UpdateTimer(gameTime);
+            }
 
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 Pause();
-            } 
+            }
         }
-        
+
     }
 
     public void GameOver()

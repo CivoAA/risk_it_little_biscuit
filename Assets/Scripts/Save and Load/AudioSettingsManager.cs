@@ -76,16 +76,37 @@ public class AudioSettingsManager : MonoBehaviour
 
     public void SaveSettings()
     {
-        string json = JsonUtility.ToJson(currentSettings, true);
-        File.WriteAllText(savePath, json);
+        try
+        {
+            string json = JsonUtility.ToJson(currentSettings, true);
+            File.WriteAllText(savePath, json);
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("❌ AudioSettings-Speichern fehlgeschlagen: " + e.Message);
+        }
     }
 
     public void LoadSettings()
     {
         if (File.Exists(savePath))
         {
-            string json = File.ReadAllText(savePath);
-            currentSettings = JsonUtility.FromJson<AudioSettingsData>(json);
+            try
+            {
+                string json = File.ReadAllText(savePath);
+                currentSettings = JsonUtility.FromJson<AudioSettingsData>(json);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogWarning("⚠️ AudioSettings konnten nicht gelesen werden: " + e.Message);
+                currentSettings = null;
+            }
+
+            if (currentSettings == null)
+            {
+                currentSettings = new AudioSettingsData();
+                SaveSettings();
+            }
         }
         else
         {

@@ -117,7 +117,10 @@ public class LevelPoint : MonoBehaviour
 
         // Char / weapon
         extraData[0] = SaveGame.Instance.currentData.skinIndex;
-        WM_PlayerSkinSwitcher.Instance.skinIndex = (int)extraData[0];
+        if (WM_PlayerSkinSwitcher.Instance != null)
+        {
+            WM_PlayerSkinSwitcher.Instance.skinIndex = (int)extraData[0];
+        }
         Startweapon((int)extraData[0]);
 
         // Nur gemappte Buttons verarbeiten

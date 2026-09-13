@@ -18,9 +18,11 @@ public class Achievement_UI_Manager : MonoBehaviour
     void Awake()
     {
         if (Instance != null && Instance != this)
-            Destroy(this);
-        else
-            Instance = this;
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
     }
 
     void Start()

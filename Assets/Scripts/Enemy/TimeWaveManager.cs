@@ -50,6 +50,8 @@ public class TimeWaveManager : MonoBehaviour
     private float timer = 0f;
     private int currentWaveIndex = 0;
     private WaveEvent[] waveEvents;
+    private bool timeLaserUnlocked = false;
+    private int lastTimerSecond = -1;
 
     void Start()
     {
@@ -80,15 +82,25 @@ public class TimeWaveManager : MonoBehaviour
             return;
 
         timer += Time.deltaTime;
-        UIController.Instance.UpdateTimer(timer);
+
+        // Timer-Text nur aktualisieren, wenn sich die angezeigte Sekunde ändert
+        int currentSecond = Mathf.FloorToInt(timer);
+        if (currentSecond != lastTimerSecond)
+        {
+            lastTimerSecond = currentSecond;
+            UIController.Instance.UpdateTimer(timer);
+        }
 
         while (currentWaveIndex < waveEvents.Length && timer >= waveEvents[currentWaveIndex].triggerTime)
         {
             StartCoroutine(SpawnWave(waveEvents[currentWaveIndex]));
             currentWaveIndex++;
         }
-        if(timer == 666)
+        // ⚠️ Bugfix: vorher "timer == 666" – ein Float trifft den Wert nie exakt,
+        // dadurch wurde das Unlock nie ausgelöst.
+        if (!timeLaserUnlocked && timer >= 666f)
         {
+            timeLaserUnlocked = true;
             UnlockManager.Instance.Unlock("unlock_time_laser");
         }
     }

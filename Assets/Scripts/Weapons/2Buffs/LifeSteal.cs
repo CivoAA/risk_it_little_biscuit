@@ -13,12 +13,10 @@ public class LifeSteal : Weapon
     {
         if (Instance != null && Instance != this)
         {
-            Destroy(this);
+            Destroy(gameObject);
+            return;
         }
-        else
-        {
-            Instance = this;
-        }
+        Instance = this;
     }
 
     void Update()

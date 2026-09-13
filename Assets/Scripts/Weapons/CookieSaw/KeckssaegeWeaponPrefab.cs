@@ -9,13 +9,18 @@ public class KeckssaegeWeaponPrefab : MonoBehaviour
 
     void Start()
     {
-        weapon = GameObject.Find("CookieSaw").GetComponent<KeckssaegeWeapon>();
-        counter = weapon.stats[weapon.weaponLevel].AttackSpeed;
+        weapon = WeaponFinder.Find<KeckssaegeWeapon>("CookieSaw");
+        if (weapon != null)
+        {
+            counter = weapon.stats[weapon.weaponLevel].AttackSpeed;
+        }
         // AudioController.Instance.PalySound(AudioController.Instance.saege);
     }
 
     void Update()
     {
+        if (weapon == null) return;
+
         // Zählt runter bis zum nächsten Schadenstik
         counter -= Time.deltaTime;
         if (counter <= 0f)

@@ -11,7 +11,12 @@ public class AreaWeaponPrefabJamJar : MonoBehaviour
 
     void Start()
     {
-        weapon = GameObject.Find("Throwing Jam Jar").GetComponent<AreaWeaponJamJar>();
+        weapon = WeaponFinder.Find<AreaWeaponJamJar>("Throwing Jam Jar");
+        if (weapon == null)
+        {
+            Destroy(gameObject);
+            return;
+        }
         //Destroy(gameObject, weapon.duration);
         targetSize = Vector3.one * weapon.stats[weapon.weaponLevel].range * PlayerController.Instance.AOERange;
         transform.localScale = Vector3.zero;
@@ -22,6 +27,8 @@ public class AreaWeaponPrefabJamJar : MonoBehaviour
 
     void Update()
     {
+        if (weapon == null) return;
+
         //grow and shrink towards targetSize
         transform.localScale = Vector3.MoveTowards(transform.localScale, targetSize, Time.deltaTime * 3);
         timer -= Time.deltaTime;
@@ -34,8 +41,14 @@ public class AreaWeaponPrefabJamJar : MonoBehaviour
         if (counter <= 0)
         {
             counter = weapon.stats[weapon.weaponLevel].AttackSpeed;
-            for (int i = 0; i < enemiesInRange.Count; i++)
+            for (int i = enemiesInRange.Count - 1; i >= 0; i--)
             {
+                // zerstörte Gegner aus der Liste entfernen statt Exception
+                if (enemiesInRange[i] == null)
+                {
+                    enemiesInRange.RemoveAt(i);
+                    continue;
+                }
                 enemiesInRange[i].TakeDamage(weapon.stats[weapon.weaponLevel].damage);
             }
         }

@@ -10,11 +10,12 @@ public class FireBallPrefab : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        weapon = GameObject.Find("Fire Ball").GetComponent<FireBall>();
+        weapon = WeaponFinder.Find<FireBall>("Fire Ball");
     }
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
+        if (weapon == null) return;
         if (collider.CompareTag("Enemy"))
         {
             GameObject fireBallExplosion = Instantiate(prefab, transform.position, transform.rotation);

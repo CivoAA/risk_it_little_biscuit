@@ -12,12 +12,10 @@ public class DamageNumberController : MonoBehaviour
     {
         if (Instance != null && Instance != this)
         {
-            Destroy(this);
+            Destroy(gameObject);
+            return;
         }
-        else
-        {
-            Instance = this;
-        }
+        Instance = this;
     }
 
     public void CreateNumber(float value, Vector3 location)

@@ -65,9 +65,15 @@ public class SkillSaveManager : MonoBehaviour
 
     public void SaveSkills()
     {
-        string json = JsonUtility.ToJson(currentData, true);
-        File.WriteAllText(savePath, json);
-        Debug.Log("💾 Skills gespeichert unter: " + savePath);
+        try
+        {
+            string json = JsonUtility.ToJson(currentData, true);
+            File.WriteAllText(savePath, json);
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("❌ Skill-Speichern fehlgeschlagen: " + e.Message);
+        }
     }
 
     public void ApplyToScene()
@@ -98,8 +104,26 @@ public class SkillSaveManager : MonoBehaviour
     {
         if (File.Exists(savePath))
         {
-            string json = File.ReadAllText(savePath);
-            currentData = JsonUtility.FromJson<SkillSaveData>(json);
+            try
+            {
+                string json = File.ReadAllText(savePath);
+                currentData = JsonUtility.FromJson<SkillSaveData>(json);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogWarning("⚠️ Skill-Datei konnte nicht gelesen werden: " + e.Message);
+                currentData = null;
+            }
+
+            if (currentData == null)
+            {
+                // Korrupte Datei sichern, damit nichts unwiderruflich verloren geht
+                try { File.Copy(savePath, savePath + ".bak", true); } catch { /* Backup optional */ }
+                currentData = new SkillSaveData();
+                SaveSkills();
+                return;
+            }
+
             Debug.Log($"✅ Skills geladen (SkillCurrency: {currentData.skillCurrency})");
         }
         else

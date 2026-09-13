@@ -10,20 +10,17 @@ public class ShurikenWeaponPrefab : MonoBehaviour
 
     void Start()
     {
-        weapon = GameObject.Find("Shurikookie").GetComponent<ShurikenWeapon>();
+        weapon = WeaponFinder.Find<ShurikenWeapon>("Shurikookie");
     }
 
-    void Update()
-    {
-
-
-    }
-    
     private void OnTriggerEnter2D(Collider2D collider)
     {
         if (collider.CompareTag("Enemy"))
         {
-            collider.GetComponent<Enemy>()?.TakeDamage(weapon.stats[weapon.weaponLevel].damage);
+            if (weapon != null)
+            {
+                collider.GetComponent<Enemy>()?.TakeDamage(weapon.stats[weapon.weaponLevel].damage);
+            }
             Destroy(gameObject);
         }
     }

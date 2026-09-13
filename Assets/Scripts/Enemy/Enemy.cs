@@ -103,7 +103,10 @@ public class Enemy : MonoBehaviour
             DamageNumberController.Instance.CreateNumber(finalDamage, transform.position);
         }
         health -= finalDamage;
-        LifeSteal.Instance.StealLife((int)damage);
+        if (LifeSteal.Instance != null)
+        {
+            LifeSteal.Instance.StealLife((int)damage);
+        }
         pushCounter = pushTime;
         if (health <= 0)
         {
@@ -188,7 +191,9 @@ public class Enemy : MonoBehaviour
             //PlayerController.Instance.GetExperience(experienceToGive);
             AudioController.Instance.PalyModifiedSound(AudioController.Instance.enemyDeath);
         }
-        if (slowMultiplier.HasValue && !isSlowed)
+        // Slow nur anwenden, wenn der Gegner noch lebt
+        // (sonst Coroutine auf einem bereits zerstörten Objekt)
+        if (health > 0 && slowMultiplier.HasValue && !isSlowed)
         {
             StartCoroutine(ApplySlowOnce(slowMultiplier.Value, 1.5f));
         }

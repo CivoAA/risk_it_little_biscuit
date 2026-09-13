@@ -55,37 +55,39 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float immunityDuration;
     [SerializeField] private float immunityTimer;
     private int hitsoundinterval = 10;
+    private PlayerHitFeedback hitFeedback;
+    private static readonly System.Random rng = new System.Random();
 
     void Awake()
     {
         if (Instance != null && Instance != this)
         {
-            Destroy(this);
+            Destroy(gameObject);
+            return;
         }
-        else
-        {
-            Instance = this;
-        }
+        Instance = this;
+        hitFeedback = GetComponent<PlayerHitFeedback>();
     }
 
     void Start()
     {
+        BuildLevelCurve();
         StartStats();
         UIController.Instance.UpdateHealthSlider();
         UIController.Instance.UpdateExperienceSlider();
     }
 
-    void Update()
+    // Levelkurve einmalig aufbauen (vorher jeden Frame in Update geprüft)
+    private void BuildLevelCurve()
     {
-        if (pickupRange > pickupRangeOLD)
+        if (playerLevels == null)
         {
-            PickupRange.transform.localScale = Vector3.one * pickupRange;
-            pickupRangeOLD = pickupRange;
+            playerLevels = new List<int>();
         }
-
-        if (experience >= playerLevels[currentLevel - 1])
+        if (playerLevels.Count == 0)
         {
-            LevelUp();
+            playerLevels.Add(10); // Fallback, falls im Inspector nichts eingetragen ist
+            Debug.LogWarning("PlayerController: playerLevels war leer – Fallback-Startwert gesetzt.");
         }
 
         int targetLevel = 30;
@@ -106,10 +108,25 @@ public class PlayerController : MonoBehaviour
             else
             {
                 // From level 31 onward, grow based on the previous level (starting from 5000)
-                playerLevels.Add(Mathf.CeilToInt(lastValue * 1.1f + 20f)); 
+                playerLevels.Add(Mathf.CeilToInt(lastValue * 1.1f + 20f));
             }
         }
+    }
 
+    void Update()
+    {
+        if (pickupRange > pickupRangeOLD)
+        {
+            PickupRange.transform.localScale = Vector3.one * pickupRange;
+            pickupRangeOLD = pickupRange;
+        }
+
+        // Index absichern: currentLevel muss >= 1 sein und in die Levelkurve passen
+        if (currentLevel >= 1 && currentLevel - 1 < playerLevels.Count
+            && experience >= playerLevels[currentLevel - 1])
+        {
+            LevelUp();
+        }
 
         float inputX = Input.GetAxisRaw("Horizontal");
         float inputY = Input.GetAxisRaw("Vertical");
@@ -148,39 +165,50 @@ public class PlayerController : MonoBehaviour
 
     public void StartStats()
     {
-        int startWeaponIndex = (int)MapsManager.Instance.extraData[1]; // in LevelPoint hinterlegt
-        Weapon startWeapon = activeWeapon[startWeaponIndex];
-        startWeapon.weaponLevel = 0;
-        startWeapon.posssibleEvo = true;
-
-        foreach (var recipe in EvoCombinations)
+        // Absicherung: MapsManager und extraData müssen vorhanden sein
+        if (MapsManager.Instance == null || MapsManager.Instance.extraData == null || MapsManager.Instance.extraData.Length < 10)
         {
-            // wenn Startwaffe Weapon1 ist
-            if (recipe.RequiredWeapon1 == startWeapon && recipe.RequiredWeapon2 != null)
+            Debug.LogWarning("PlayerController.StartStats: MapsManager/extraData fehlt oder ist zu kurz – Start-Extras werden übersprungen.");
+        }
+        else
+        {
+            int startWeaponIndex = Mathf.Clamp((int)MapsManager.Instance.extraData[1], 0, activeWeapon.Length - 1); // in LevelPoint hinterlegt
+            Weapon startWeapon = activeWeapon[startWeaponIndex];
+            startWeapon.weaponLevel = 0;
+            startWeapon.posssibleEvo = true;
+
+            foreach (var recipe in EvoCombinations)
             {
-                recipe.RequiredWeapon2.posssibleEvo = true;
+                // wenn Startwaffe Weapon1 ist
+                if (recipe.RequiredWeapon1 == startWeapon && recipe.RequiredWeapon2 != null)
+                {
+                    recipe.RequiredWeapon2.posssibleEvo = true;
+                }
+                // oder wenn Startwaffe Weapon2 ist
+                else if (recipe.RequiredWeapon2 == startWeapon && recipe.RequiredWeapon1 != null)
+                {
+                    recipe.RequiredWeapon1.posssibleEvo = true;
+                }
             }
-            // oder wenn Startwaffe Weapon2 ist
-            else if (recipe.RequiredWeapon2 == startWeapon && recipe.RequiredWeapon1 != null)
-            {
-                recipe.RequiredWeapon1.posssibleEvo = true;
-            }
+
+            var ex = MapsManager.Instance.extraData;
+
+            // ✅ neue Shop-Extras (2..9)
+            GameManager.Instance.currencyGainMultiplire += ex[2]; // Currency Gain
+            rerollAmount += Mathf.RoundToInt(ex[3]); // Reroll
+            banishAmount += Mathf.RoundToInt(ex[4]); // Banish
+            experience += ex[5]; // Start XP
+            powerUpShrinkSpeed += ex[6]; // Shrink Speed
+            BuffSlots += Mathf.RoundToInt(ex[7]); // Buff Slot
+            WeaponSlots += Mathf.RoundToInt(ex[8]); // Weapon Slot
+            EvoSlots += Mathf.RoundToInt(ex[9]); // Evo Slot
         }
 
-        var ex = MapsManager.Instance.extraData;
-
-        // ✅ neue Shop-Extras (2..9)
-        GameManager.Instance.currencyGainMultiplire += ex[2]; // Currency Gain
-        rerollAmount += Mathf.RoundToInt(ex[3]); // Reroll
-        banishAmount += Mathf.RoundToInt(ex[4]); // Banish
-        experience += ex[5]; // Start XP
-        powerUpShrinkSpeed += ex[6]; // Shrink Speed
-        BuffSlots += Mathf.RoundToInt(ex[7]); // Buff Slot
-        WeaponSlots += Mathf.RoundToInt(ex[8]); // Weapon Slot
-        EvoSlots += Mathf.RoundToInt(ex[9]); // Evo Slot
-
-        GameManager.Instance.skillCurrencyBeforeGame = SkillSaveManager.Instance.currentData.skillCurrency;
-        AchievementManager.Instance.UnlockAchievement("First_Game");
+        if (GameManager.Instance != null && SkillSaveManager.Instance != null)
+        {
+            GameManager.Instance.skillCurrencyBeforeGame = SkillSaveManager.Instance.currentData.skillCurrency;
+        }
+        AchievementManager.Instance?.UnlockAchievement("First_Game");
 
         if (SkillStatsManager.Instance != null)
         {
@@ -243,7 +271,7 @@ public class PlayerController : MonoBehaviour
             playerHealth -= finalDamage;
             UIController.Instance.UpdateHealthSlider();
             AudioController.Instance.PalyModifiedSound(AudioController.Instance.PlayerHit);
-            GetComponent<PlayerHitFeedback>().OnPlayerHit();
+            if (hitFeedback != null) hitFeedback.OnPlayerHit();
 
             if (hitsoundinterval >= UnityEngine.Random.Range(2, 5))
             {
@@ -269,7 +297,8 @@ public class PlayerController : MonoBehaviour
 
     public void LevelUp()
     {
-        while (experience >= playerLevels[currentLevel - 1] && LevelUpSelectet == true)
+        while (currentLevel >= 1 && currentLevel - 1 < playerLevels.Count
+            && experience >= playerLevels[currentLevel - 1] && LevelUpSelectet == true)
         {
             LevelUpSelectet = false;
             experience -= playerLevels[currentLevel - 1];
@@ -399,7 +428,6 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        System.Random rng = new System.Random();
         availableWeapons = availableWeapons.OrderBy(x => rng.Next()).ToList();
 
         UIController.Instance.currentLevelUpWeapons = availableWeapons.ToList();
@@ -465,7 +493,6 @@ public class PlayerController : MonoBehaviour
         }
 
         // 🔀 Shuffle
-        System.Random rng = new System.Random();
         availableWeapons = availableWeapons.OrderBy(x => rng.Next()).ToList();
 
         // 📦 1 Button aktivieren
@@ -511,11 +538,14 @@ public class PlayerController : MonoBehaviour
     {
         if (weapon == null) return false;
 
-        string startWeaponID = activeWeapon[Mathf.RoundToInt(MapsManager.Instance.extraData[1])]?.weaponID;
-
-        // 1. Startwaffe ist immer freigeschaltet
-        if (startWeaponID == weapon.weaponID)
-            return true;
+        // 1. Startwaffe ist immer freigeschaltet (mit Absicherung gegen fehlende Daten)
+        if (MapsManager.Instance != null && MapsManager.Instance.extraData != null && MapsManager.Instance.extraData.Length > 1)
+        {
+            int startIdx = Mathf.Clamp(Mathf.RoundToInt(MapsManager.Instance.extraData[1]), 0, activeWeapon.Length - 1);
+            string startWeaponID = activeWeapon[startIdx]?.weaponID;
+            if (startWeaponID == weapon.weaponID)
+                return true;
+        }
 
         // 2. Standardwaffen → immer freigeschaltet
         HashSet<string> defaultUnlockedWeapons = new HashSet<string>

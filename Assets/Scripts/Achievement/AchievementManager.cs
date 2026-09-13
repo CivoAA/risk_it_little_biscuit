@@ -43,7 +43,7 @@ public class AchievementManager : MonoBehaviour
 
         if (ach.unlocked)
         {
-            Debug.Log($"🏆 Achievement '{id}' already unlocked.");
+            // Kein Debug.Log hier: wird von manchen Waffen jeden Frame aufgerufen
             return;
         }
 
@@ -97,16 +97,58 @@ public class AchievementManager : MonoBehaviour
         ach.value += amountToAdd;
         ach.value = Mathf.Min(ach.value, ach.maxvalue); // Clamp auf max
 
-        // Fortschritt loggen (nur bei Achievements mit maxvalue > 1)
-        if (ach.maxvalue > 1)
-            //Debug.Log($"🏁 Achievement '{id}' progress: {ach.value}/{ach.maxvalue}");
+        // ⚠️ Bugfix: Hier stand vorher "if (ach.maxvalue > 1)" mit auskommentiertem
+        // Body – dadurch wurde das nachfolgende if zum Body und Achievements mit
+        // maxvalue <= 1 wurden über Fortschritt nie freigeschaltet.
 
-        // Ziel erreicht → automatisch freischalten
+        // Ziel erreicht → automatisch freischalten (UnlockAchievement speichert selbst)
         if (ach.value >= ach.maxvalue)
         {
             UnlockAchievement(id);
         }
+        else
+        {
+            // Fortschritt nur als "dirty" markieren statt bei jedem Kill
+            // die JSON-Datei auf die Festplatte zu schreiben.
+            saveDirty = true;
+        }
+    }
 
+    // ---- Verzögertes Speichern für Fortschritts-Updates ----
+    private bool saveDirty = false;
+    private float saveTimer = 0f;
+    private const float SaveInterval = 5f;
+
+    void Update()
+    {
+        if (saveDirty)
+        {
+            saveTimer += Time.unscaledDeltaTime;
+            if (saveTimer >= SaveInterval)
+            {
+                FlushSave();
+            }
+        }
+    }
+
+    void OnApplicationQuit()
+    {
+        FlushSave();
+    }
+
+    void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            FlushSave();
+        }
+    }
+
+    private void FlushSave()
+    {
+        saveTimer = 0f;
+        if (!saveDirty) return;
+        saveDirty = false;
         SaveAchievements();
     }
 
@@ -114,11 +156,8 @@ public class AchievementManager : MonoBehaviour
     {
         if (string.IsNullOrEmpty(savePath))
         {
-            Debug.LogError("❌ [Test] savePath is NULL or empty before writing achievements!");
-        }
-        else
-        {
-            Debug.Log($"✅ [Test] savePath is set: {savePath}");
+            Debug.LogError("❌ savePath is NULL or empty before writing achievements!");
+            return;
         }
 
         try
@@ -126,7 +165,6 @@ public class AchievementManager : MonoBehaviour
             AchievementList list = new AchievementList { achievements = achievements };
             string json = JsonUtility.ToJson(list, true);
             File.WriteAllText(savePath, json);
-            Debug.Log("💾 Achievements saved to " + savePath);
         }
         catch (System.Exception e)
         {

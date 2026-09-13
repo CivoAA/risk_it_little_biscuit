@@ -11,11 +11,12 @@ public class RandomVoidSpikePrefab : MonoBehaviour
 
     void Start()
     {
-        weapon = GameObject.Find("Void Spike").GetComponent<RandomVoidSpike>();
+        weapon = WeaponFinder.Find<RandomVoidSpike>("Void Spike");
     }
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
+        if (weapon == null) return;
         if (!collider.CompareTag("Enemy")) return;
 
         Enemy enemy = collider.GetComponent<Enemy>();

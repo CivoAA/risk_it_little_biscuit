@@ -8,12 +8,13 @@ public class TimeLaserPrefab : MonoBehaviour
 
     void Start()
     {
-        weapon = GameObject.Find("Time Laser").GetComponent<TimeLaser>();
+        weapon = WeaponFinder.Find<TimeLaser>("Time Laser");
         StartCoroutine(DestroyAfterDelay(0.45f));
     }
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
+        if (weapon == null) return;
         if (collider.CompareTag("Enemy"))
         {
             collider.GetComponent<Enemy>()?.TakeDamage(weapon.stats[weapon.weaponLevel].damage, 0.1f);

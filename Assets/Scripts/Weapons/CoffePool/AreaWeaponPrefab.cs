@@ -11,7 +11,12 @@ public class AreaWeaponPrefab : MonoBehaviour
 
     void Start()
     {
-        weapon = GameObject.Find("Coffe Pool").GetComponent<AreaWeapon>();
+        weapon = WeaponFinder.Find<AreaWeapon>("Coffe Pool");
+        if (weapon == null)
+        {
+            Destroy(gameObject);
+            return;
+        }
         //Destroy(gameObject, weapon.duration);
         targetSize = Vector3.one * weapon.stats[weapon.weaponLevel].range * PlayerController.Instance.AOERange;
         transform.localScale = Vector3.zero;
@@ -21,6 +26,7 @@ public class AreaWeaponPrefab : MonoBehaviour
 
     void Update()
     {
+        if (weapon == null) return;
         //grow and shrink towards targetSize
         transform.localScale = Vector3.MoveTowards(transform.localScale, targetSize, Time.deltaTime * 17);
         //shrink and only then destory
@@ -38,8 +44,14 @@ public class AreaWeaponPrefab : MonoBehaviour
         if (counter <= 0)
         {
             counter = weapon.stats[weapon.weaponLevel].AttackSpeed;
-            for (int i = 0; i < enemiesInRange.Count; i++)
+            for (int i = enemiesInRange.Count - 1; i >= 0; i--)
             {
+                // zerstörte Gegner aus der Liste entfernen statt Exception
+                if (enemiesInRange[i] == null)
+                {
+                    enemiesInRange.RemoveAt(i);
+                    continue;
+                }
                 enemiesInRange[i].TakeDamage(weapon.stats[weapon.weaponLevel].damage);
             }
         }

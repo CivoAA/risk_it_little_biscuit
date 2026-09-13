@@ -26,16 +26,28 @@ public class EnemySpawner : MonoBehaviour
     public int maxwave = 12;
     [SerializeField] private TMP_Text WaveText;
     private int currentWaveRepeatCount = 0;
+    private int lastDisplayedWave = int.MinValue;
 
     void Update()
     {
-        WaveText.text = "Wave: " + (i - 1);
+        // Text nur aktualisieren, wenn sich die Wave ändert (keine String-Allokation pro Frame)
+        if (WaveText != null && lastDisplayedWave != i - 1)
+        {
+            lastDisplayedWave = i - 1;
+            WaveText.text = "Wave: " + lastDisplayedWave;
+        }
 
-        if (PlayerController.Instance.gameObject.activeSelf)
+        if (PlayerController.Instance != null && PlayerController.Instance.gameObject.activeSelf)
         {
             if (i >= maxwave)
             {
                 i = maxwave;
+            }
+
+            // Absicherung: Index darf die Anzahl der Kind-Objekte nicht überschreiten
+            if (i < 0 || i >= transform.childCount)
+            {
+                return;
             }
 
             GameObject waves = transform.GetChild(i).gameObject;

@@ -11,11 +11,12 @@ public class VoidspikePrefab : MonoBehaviour
 
     void Start()
     {
-        weapon = GameObject.Find("Deathstrike").GetComponent<Voidspike>();
+        weapon = WeaponFinder.Find<Voidspike>("Deathstrike");
     }
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
+        if (weapon == null) return;
         if (!collider.CompareTag("Enemy")) return;
 
         Enemy enemy = collider.GetComponent<Enemy>();

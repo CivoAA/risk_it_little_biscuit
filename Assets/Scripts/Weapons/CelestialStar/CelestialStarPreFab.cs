@@ -6,12 +6,13 @@ public class CelestialStarPreFab : MonoBehaviour
 
     void Start()
     {
-        weapon = GameObject.Find("Celestial Star").GetComponent<CelestialStar>();
+        weapon = WeaponFinder.Find<CelestialStar>("Celestial Star");
         //AudioController.Instance.PalySound(AudioController.Instance.saege);
     }
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
+        if (weapon == null) return;
         if (collider.CompareTag("Enemy"))
         {
             collider.GetComponent<Enemy>()?.TakeDamage(weapon.stats[weapon.weaponLevel].damage);

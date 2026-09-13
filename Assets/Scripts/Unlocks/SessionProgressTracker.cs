@@ -15,7 +15,7 @@ public class SessionProgressTracker : MonoBehaviour
     {
         if (Instance != null && Instance != this)
         {
-            Destroy(this);
+            Destroy(gameObject);
             return;
         }
         Instance = this;
@@ -45,6 +45,16 @@ public class SessionProgressTracker : MonoBehaviour
 
     public void EvaluateAfterGame()
     {
+        // Absicherung: Wenn das Spiel ohne SnapshotBeforeGame gestartet wurde
+        // (z. B. direkter Szenenstart im Editor), wäre achievementsBefore null.
+        if (achievementsBefore == null || unlocksBefore == null)
+        {
+            Debug.LogWarning("SessionProgressTracker: Kein Snapshot vorhanden – EvaluateAfterGame wird übersprungen.");
+            newAchievements.Clear();
+            newUnlocks.Clear();
+            return;
+        }
+
         foreach (var ach in AchievementManager.Instance.achievements)
         {
             if (ach.unlocked && !achievementsBefore.Contains(ach.id))

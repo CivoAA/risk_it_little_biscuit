@@ -10,11 +10,12 @@ public class ExplosiveStarEvoPrefab : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        weapon = GameObject.Find("Explosive Star Evo").GetComponent<ExplosiveStarEvo>();
+        weapon = WeaponFinder.Find<ExplosiveStarEvo>("Explosive Star Evo");
     }
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
+        if (weapon == null) return;
         if (collider.CompareTag("Enemy"))
         {
             GameObject fireBallExplosion = Instantiate(prefab, transform.position, transform.rotation);

@@ -10,12 +10,10 @@ public class TextDisplay : MonoBehaviour
     {
         if (Instance != null && Instance != this)
         {
-            Destroy(this);
+            Destroy(gameObject);
+            return;
         }
-        else
-        {
-            Instance = this;
-        }
+        Instance = this;
     }
     public void CreateText(string Text, Vector3 location)
     {

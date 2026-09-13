@@ -10,8 +10,9 @@ public class BladeSwarmPrefab : MonoBehaviour
 
     void Start()
     {
-        weapon = GameObject.Find("Blade Swarm").GetComponent<BladeSwarm>();
-        playerAnimator = GameObject.FindWithTag("PlayerHitbox").GetComponent<Animator>();
+        weapon = WeaponFinder.Find<BladeSwarm>("Blade Swarm");
+        GameObject hitbox = GameObject.FindWithTag("PlayerHitbox");
+        if (hitbox != null) playerAnimator = hitbox.GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
     void Update()
@@ -38,7 +39,10 @@ public class BladeSwarmPrefab : MonoBehaviour
     {
         if (collider.CompareTag("Enemy"))
         {
-            collider.GetComponent<Enemy>()?.TakeDamage(weapon.stats[weapon.weaponLevel].damage);
+            if (weapon != null)
+            {
+                collider.GetComponent<Enemy>()?.TakeDamage(weapon.stats[weapon.weaponLevel].damage);
+            }
             Destroy(gameObject);
         }
     }

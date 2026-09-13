@@ -9,12 +9,10 @@ public class SpawnDeath : MonoBehaviour
     {
         if (Instance != null && Instance != this)
         {
-            Destroy(this);
+            Destroy(gameObject);
+            return;
         }
-        else
-        {
-            Instance = this;
-        }
+        Instance = this;
     }
 
     public void Spawn(Vector2 pos)

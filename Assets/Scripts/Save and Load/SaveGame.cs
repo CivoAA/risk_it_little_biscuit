@@ -48,9 +48,15 @@ public class SaveGame : MonoBehaviour
     // ---------------- SPEICHERN ----------------
     public void SaveGameData()
     {
-        string json = JsonUtility.ToJson(currentData, true);
-        File.WriteAllText(savePath, json);
-        Debug.Log("✅ Daten gespeichert unter: " + savePath);
+        try
+        {
+            string json = JsonUtility.ToJson(currentData, true);
+            File.WriteAllText(savePath, json);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("❌ Speichern fehlgeschlagen: " + e.Message);
+        }
     }
 
     // ---------------- LADEN + MIGRATION ----------------
@@ -63,12 +69,22 @@ public class SaveGame : MonoBehaviour
             return;
         }
 
-        string json = File.ReadAllText(savePath);
-        var loaded = JsonUtility.FromJson<SaveData>(json);
+        SaveData loaded = null;
+        try
+        {
+            string json = File.ReadAllText(savePath);
+            loaded = JsonUtility.FromJson<SaveData>(json);
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning("⚠️ Save-Datei konnte nicht gelesen werden: " + e.Message);
+        }
 
         if (loaded == null)
         {
             Debug.LogWarning("⚠️ Save konnte nicht gelesen werden. Erzeuge neu aus Defaults.");
+            // Korrupte Datei sichern, damit nichts unwiderruflich verloren geht
+            try { File.Copy(savePath, savePath + ".bak", true); } catch { /* Backup optional */ }
             CreateNewFromDefaults();
             SaveGameData();
             return;

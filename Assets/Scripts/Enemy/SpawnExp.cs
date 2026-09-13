@@ -14,12 +14,10 @@ public class SpawnExp : MonoBehaviour
     {
         if (Instance != null && Instance != this)
         {
-            Destroy(this);
+            Destroy(gameObject);
+            return;
         }
-        else
-        {
-            Instance = this;
-        }
+        Instance = this;
     }
 
     public void SpawnEP(Vector2 pos, int expAmount)

@@ -10,11 +10,12 @@ public class BombSawEvoPrefab : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        weapon = GameObject.Find("Bomb Saw Evo").GetComponent<BombSawEvo>();
+        weapon = WeaponFinder.Find<BombSawEvo>("Bomb Saw Evo");
     }
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
+        if (weapon == null) return;
         if (collider.CompareTag("Enemy"))
         {
             GameObject fireBallExplosion = Instantiate(prefab, transform.position, transform.rotation);

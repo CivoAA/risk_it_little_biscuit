@@ -36,7 +36,6 @@ public class PlayerWorldInteraction : MonoBehaviour
     }
     void Update()
     {
-        AudioSettingsManager.Instance.UpdateAllVolumeSliders();
         // Taste E drücken
         if (Input.GetKeyDown(KeyCode.E))
         {
@@ -258,6 +257,9 @@ public class PlayerWorldInteraction : MonoBehaviour
     {
         pauseCanvas.SetActive(true);
         Time.timeScale = 0f;
+        // Slider-Refresh nur beim Öffnen statt jeden Frame in Update
+        // (FindObjectsByType pro Frame war teuer)
+        AudioSettingsManager.Instance?.UpdateAllVolumeSliders();
     }
 
     public void PauseCanvasClose()

@@ -10,16 +10,7 @@ public class CandyBombPrefab : MonoBehaviour
 
     void Start()
     {
-        // Deine bevorzugte Methode:
-        GameObject weaponObj = GameObject.Find("Candy Bomb");
-        if (weaponObj != null)
-        {
-            weapon = weaponObj.GetComponent<CandyBomb>();
-        }
-        else
-        {
-            Debug.LogWarning("CandyBombPrefab: ⚠️ Kein GameObject namens 'Candy Bomb' gefunden!");
-        }
+        weapon = WeaponFinder.Find<CandyBomb>("Candy Bomb");
 
         // Starte Explosion nach kurzer Verzögerung
         StartCoroutine(TriggerExplosionAfterDelay(1.8f));
