@@ -21,7 +21,7 @@ public class DeathstrikePrefab : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (!col.CompareTag("Enemy")) return;
-        if (weapon == null || weapon.weaponLevel < 0) return;
+        if (weapon == null || !weapon.IsActive) return;
 
         Enemy enemy = col.GetComponent<Enemy>();
         if (enemy == null) return;
@@ -32,7 +32,7 @@ public class DeathstrikePrefab : MonoBehaviour
                 return;
         }
 
-        enemy.TakeDamage(weapon.stats[weapon.weaponLevel].damage);
+        enemy.TakeDamage(weapon.CurrentStats.damage);
         lastHitTimes[enemy] = Time.time;
     }
 }

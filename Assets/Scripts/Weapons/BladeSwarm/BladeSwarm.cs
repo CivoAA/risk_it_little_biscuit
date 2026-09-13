@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 
 public class BladeSwarm : Weapon
 {
@@ -13,31 +12,29 @@ public class BladeSwarm : Weapon
     private float attackCounter;
     private float durationCounter;
     private bool shooting = false;
-    private bool cleanedUp = false;
 
     void Update()
     {
         // kaputte Objekte rauswerfen
         activeBlades.RemoveAll(b => b == null);
 
-        // ► wenn Waffe „deaktiviert“ ist (Evo)
-        if (weaponLevel == -10)
+        // ► Waffe nicht aktiv: entweder noch nicht erhalten (-1) oder durch die
+        // Evo ersetzt (Weapon.RemovedLevel). Früher wurde hier auf -10 geprüft –
+        // diesen Wert setzt aber niemand, dadurch blieben die Klingen nach dem
+        // Evo-Kauf als wirkungslose "Geister" am Spieler hängen und warfen bei
+        // jedem Gegnerkontakt eine IndexOutOfRangeException.
+        if (!IsActive)
         {
-            // nur einmal alles zerstören
-            if (!cleanedUp)
+            if (activeBlades.Count > 0)
             {
                 foreach (var blade in activeBlades)
                 {
                     if (blade != null) Destroy(blade);
                 }
                 activeBlades.Clear();
-                cleanedUp = true;
             }
             return; // nichts mehr machen
         }
-
-        // normale Logik
-        if (weaponLevel < 0) return;
 
         if (weaponLevel == maxweaponLevel)
         {
@@ -145,18 +142,21 @@ public class BladeSwarm : Weapon
     }
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.CompareTag("Enemy"))
+        if (!collider.CompareTag("Enemy")) return;
+
+        Enemy enemy = collider.GetComponent<Enemy>();
+        if (enemy != null && !enemiesInRange.Contains(enemy))
         {
-            enemiesInRange.Add(collider.GetComponent<Enemy>());
+            enemiesInRange.Add(enemy);
         }
     }
 
     private void OnTriggerExit2D(Collider2D collider)
     {
-        if (collider.CompareTag("Enemy"))
-        {
-            enemiesInRange.Remove(collider.GetComponent<Enemy>());
-        }
+        if (!collider.CompareTag("Enemy")) return;
+
+        Enemy enemy = collider.GetComponent<Enemy>();
+        if (enemy != null) enemiesInRange.Remove(enemy);
     }
     private IEnumerator FireAllBladesAtTarget(Vector2 target)
     {

@@ -15,11 +15,11 @@ public class ExplosiveStarEvoPrefab : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (weapon == null) return;
+        if (weapon == null || !weapon.IsActive) return;
         if (collider.CompareTag("Enemy"))
         {
             GameObject fireBallExplosion = Instantiate(prefab, transform.position, transform.rotation);
-            fireBallExplosion.transform.localScale *= weapon.stats[weapon.weaponLevel].range * (PlayerController.Instance.AOERange * 0.7f);
+            fireBallExplosion.transform.localScale *= weapon.CurrentStats.range * (PlayerController.Instance.AOERange * 0.7f);
             Scene gameScene = SceneManager.GetSceneByName("Game");
             if (gameScene.IsValid() && gameScene.isLoaded)
             {

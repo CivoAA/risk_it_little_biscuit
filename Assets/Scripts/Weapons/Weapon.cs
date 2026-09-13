@@ -3,6 +3,12 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
+    /// <summary>
+    /// weaponLevel, das eine Waffe bekommt, wenn sie durch eine Evo ersetzt wird
+    /// (siehe LevelUpButton.SelectUpgrade).
+    /// </summary>
+    public const int RemovedLevel = -99;
+
     public string weaponID;
     public int weaponLevel;
     public int maxweaponLevel;
@@ -12,6 +18,25 @@ public class Weapon : MonoBehaviour
     public Sprite weaponIconEvo;
     public bool posssibleEvo = false;
     public bool hasBeenRemoved = false;
+
+    /// <summary>
+    /// True, wenn die Waffe aktiv ist und <see cref="stats"/> mit
+    /// <see cref="weaponLevel"/> indiziert werden darf. Nicht erhaltene Waffen
+    /// stehen auf -1, durch eine Evo ersetzte auf <see cref="RemovedLevel"/>.
+    /// </summary>
+    public bool IsActive
+    {
+        get { return stats != null && weaponLevel >= 0 && weaponLevel < stats.Count; }
+    }
+
+    /// <summary>
+    /// Werte der aktuellen Stufe, oder null wenn die Waffe nicht aktiv ist.
+    /// Projektile, die ihre Waffe überleben, müssen das prüfen.
+    /// </summary>
+    public WeaponStats CurrentStats
+    {
+        get { return IsActive ? stats[weaponLevel] : null; }
+    }
 
     public void LevelUP()
     {

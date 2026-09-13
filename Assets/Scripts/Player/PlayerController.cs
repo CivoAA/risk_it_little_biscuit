@@ -127,26 +127,32 @@ public class PlayerController : MonoBehaviour
         {
             LevelUp();
         }
-
-        float inputX = Input.GetAxisRaw("Horizontal");
-        float inputY = Input.GetAxisRaw("Vertical");
-        playerMoveDirection = new Vector3(inputX, inputY).normalized;
-
-        animator.SetFloat("MoveX", inputX);
-        animator.SetFloat("MoveY", inputY);
-
-        if (playerMoveDirection != Vector3.zero)
+        // Bei pausiertem Spiel (Level-Up-Panel, Pause-Menue, Gamba, ...) laufen
+        // die Updates weiter, obwohl Time.timeScale 0 ist. Eingaben duerfen dann
+        // nicht ausgewertet werden: sonst dreht sich der Spieler im Menue mit
+        // A/D mit - und mit ihm jede Waffe, die sich an LastMoveX orientiert.
+        if (Time.timeScale > 0f)
         {
-            lastMoveDir = playerMoveDirection;
-            animator.SetBool("moving", true);
-        }
-        else
-        {
-            animator.SetBool("moving", false);
-        }
+            float inputX = Input.GetAxisRaw("Horizontal");
+            float inputY = Input.GetAxisRaw("Vertical");
+            playerMoveDirection = new Vector3(inputX, inputY).normalized;
 
-        animator.SetFloat("LastMoveX", lastMoveDir.x);
-        animator.SetFloat("LastMoveY", lastMoveDir.y);
+            animator.SetFloat("MoveX", inputX);
+            animator.SetFloat("MoveY", inputY);
+
+            if (playerMoveDirection != Vector3.zero)
+            {
+                lastMoveDir = playerMoveDirection;
+                animator.SetBool("moving", true);
+            }
+            else
+            {
+                animator.SetBool("moving", false);
+            }
+
+            animator.SetFloat("LastMoveX", lastMoveDir.x);
+            animator.SetFloat("LastMoveY", lastMoveDir.y);
+        }
 
         if (immunityTimer > 0)
         {
