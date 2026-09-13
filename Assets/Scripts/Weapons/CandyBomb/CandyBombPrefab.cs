@@ -24,7 +24,7 @@ public class CandyBombPrefab : MonoBehaviour
         yield return new WaitForSeconds(delay);
 
         // Wenn keine Waffe oder ungültiges Level → trotzdem zerstören
-        if (weapon == null || weapon.weaponLevel < 0)
+        if (weapon == null || !weapon.IsActive)
         {
             Destroy(gameObject);
             yield break;
@@ -36,14 +36,14 @@ public class CandyBombPrefab : MonoBehaviour
             GameObject explosion = Instantiate(explosionPrefab, transform.position, Quaternion.identity);
 
             // 🔹 Explosion skaliert mit Waffen-Range + Spieler-AOE
-            float totalScale = weapon.stats[weapon.weaponLevel].range + PlayerController.Instance.AOERange + 1.5f;
+            float totalScale = weapon.CurrentStats.range + PlayerController.Instance.AOERange + 1.5f;
             explosion.transform.localScale = Vector3.one * totalScale;
         }
 
         // Kopie der Liste erstellen (damit Änderungen die Schleife nicht crashen)
         var enemiesCopy = new List<Enemy>(enemiesInRange);
 
-        float damage = weapon.stats[weapon.weaponLevel].damage;
+        float damage = weapon.CurrentStats.damage;
         foreach (var enemy in enemiesCopy)
         {
             if (enemy != null)

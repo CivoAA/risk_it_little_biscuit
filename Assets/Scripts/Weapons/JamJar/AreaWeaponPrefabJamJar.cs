@@ -12,22 +12,22 @@ public class AreaWeaponPrefabJamJar : MonoBehaviour
     void Start()
     {
         weapon = WeaponFinder.Find<AreaWeaponJamJar>("Throwing Jam Jar");
-        if (weapon == null)
+        if (weapon == null || !weapon.IsActive)
         {
             Destroy(gameObject);
             return;
         }
         //Destroy(gameObject, weapon.duration);
-        targetSize = Vector3.one * weapon.stats[weapon.weaponLevel].range * PlayerController.Instance.AOERange;
+        targetSize = Vector3.one * weapon.CurrentStats.range * PlayerController.Instance.AOERange;
         transform.localScale = Vector3.zero;
-        timer = weapon.stats[weapon.weaponLevel].duration;
+        timer = weapon.CurrentStats.duration;
         AudioController.Instance.PalySound(AudioController.Instance.JarJamBreakingGlass, 0.1f);
         AudioController.Instance.PalySound(AudioController.Instance.areaWeaponSpawn, 0.5f);
     }
 
     void Update()
     {
-        if (weapon == null) return;
+        if (weapon == null || !weapon.IsActive) return;
 
         //grow and shrink towards targetSize
         transform.localScale = Vector3.MoveTowards(transform.localScale, targetSize, Time.deltaTime * 3);
@@ -40,7 +40,7 @@ public class AreaWeaponPrefabJamJar : MonoBehaviour
         counter -= Time.deltaTime;
         if (counter <= 0)
         {
-            counter = weapon.stats[weapon.weaponLevel].AttackSpeed;
+            counter = weapon.CurrentStats.AttackSpeed;
             for (int i = enemiesInRange.Count - 1; i >= 0; i--)
             {
                 // zerstörte Gegner aus der Liste entfernen statt Exception
@@ -49,7 +49,7 @@ public class AreaWeaponPrefabJamJar : MonoBehaviour
                     enemiesInRange.RemoveAt(i);
                     continue;
                 }
-                enemiesInRange[i].TakeDamage(weapon.stats[weapon.weaponLevel].damage);
+                enemiesInRange[i].TakeDamage(weapon.CurrentStats.damage);
             }
         }
     }

@@ -184,13 +184,13 @@ public class LevelUpButton : MonoBehaviour
 
                     if (PlayerController.Instance.activeWeapon.Contains(w))
                     {
-                        w.weaponLevel = -99;
+                        w.weaponLevel = Weapon.RemovedLevel;
                         w.hasBeenRemoved = true;
                     }
 
                     if (PlayerController.Instance.activeBuffs.Contains(w))
                     {
-                        w.weaponLevel = -99;
+                        w.weaponLevel = Weapon.RemovedLevel;
                         w.hasBeenRemoved = true;
                     }
                 }

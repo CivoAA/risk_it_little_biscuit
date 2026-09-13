@@ -16,7 +16,7 @@ public class VoidspikePrefab : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (weapon == null) return;
+        if (weapon == null || !weapon.IsActive) return;
         if (!collider.CompareTag("Enemy")) return;
 
         Enemy enemy = collider.GetComponent<Enemy>();
@@ -31,7 +31,7 @@ public class VoidspikePrefab : MonoBehaviour
         }
 
         // Schaden zufügen
-        enemy.TakeDamage(weapon.stats[weapon.weaponLevel].damage);
+        enemy.TakeDamage(weapon.CurrentStats.damage);
 
         // Zeitpunkt merken
         lastHitTimes[enemy] = Time.time;

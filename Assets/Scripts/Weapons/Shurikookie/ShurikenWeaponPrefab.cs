@@ -17,9 +17,9 @@ public class ShurikenWeaponPrefab : MonoBehaviour
     {
         if (collider.CompareTag("Enemy"))
         {
-            if (weapon != null)
+            if (weapon != null && weapon.IsActive)
             {
-                collider.GetComponent<Enemy>()?.TakeDamage(weapon.stats[weapon.weaponLevel].damage);
+                collider.GetComponent<Enemy>()?.TakeDamage(weapon.CurrentStats.damage);
             }
             Destroy(gameObject);
         }
