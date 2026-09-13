@@ -29,11 +29,14 @@ public class MenuManager : MonoBehaviour
     }
     public void PauseCanvasClose()
     {
+        // Nach einem Szenenwechsel zeigt die Referenz ins Leere - sonst knallt es hier jedes Mal bei Escape.
+        if (pauseCanvas == null) return;
         pauseCanvas.SetActive(false);
         //Time.timeScale = 1f;
     }
     public void PauseCanvasOpen()
     {
+        if (pauseCanvas == null) return;
         pauseCanvas.SetActive(true);
         AudioSettingsManager.Instance.UpdateAllVolumeSliders();
         //Time.timeScale = 0f;
