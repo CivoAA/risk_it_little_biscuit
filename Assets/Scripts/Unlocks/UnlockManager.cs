@@ -10,6 +10,9 @@ public class UnlockManager : MonoBehaviour
     [Header("🔓 Unlocks (Inspector)")]
     public List<Unlock> unlocks = new List<Unlock>();
 
+    [Tooltip("Sandbox (Test-Szene): schaltet nichts frei und speichert nichts.")]
+    public bool sandboxMode = false;
+
     private string savePath;
 
     // =============================
@@ -26,6 +29,8 @@ public class UnlockManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
+        if (sandboxMode) return;
+
         savePath = Path.Combine(Application.persistentDataPath, "unlocks.json");
         LoadUnlocks();
     }
@@ -36,6 +41,8 @@ public class UnlockManager : MonoBehaviour
 
     public void Unlock(string id)
     {
+        if (sandboxMode) return;
+
         Unlock unlock = unlocks.Find(u => u.id == id);
         if (unlock == null)
         {
@@ -113,6 +120,8 @@ public class UnlockManager : MonoBehaviour
 
     public void SaveUnlocks()
     {
+        if (sandboxMode) return;
+
         UnlockDataList data = new UnlockDataList
         {
             unlocks = unlocks.Select(u => new UnlockData
@@ -141,6 +150,8 @@ public class UnlockManager : MonoBehaviour
     [ContextMenu("🔄 Reset ALL Unlocks (DEV ONLY)")]
     public void ResetAllUnlocks()
     {
+        if (sandboxMode) return;
+
         foreach (var unlock in unlocks)
             unlock.isUnlocked = false;
 

@@ -11,6 +11,9 @@ public class AchievementManager : MonoBehaviour
     [Tooltip("Wenn aktiv, werden NUR die Achievements aus dem Inspector gespeichert (alte Save-Dateien werden ignoriert).")]
     public bool overwriteWithInspectorData = false;
 
+    [Tooltip("Sandbox (Test-Szene): schaltet nichts frei, speichert nichts und meldet nichts an Steam.")]
+    public bool sandboxMode = false;
+
     [Header("🎯 Achievements")]
     public List<Achievement> achievements = new List<Achievement>();
 
@@ -27,6 +30,8 @@ public class AchievementManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
+        if (sandboxMode) return;
+
         savePath = Path.Combine(Application.persistentDataPath, "achievements.json");
         LoadAchievements();
     }
@@ -34,6 +39,8 @@ public class AchievementManager : MonoBehaviour
     // 🔓 Achievement sofort freischalten
     public void UnlockAchievement(string id)
     {
+        if (sandboxMode) return;
+
         var ach = achievements.Find(a => a.id == id);
         if (ach == null)
         {
@@ -82,6 +89,8 @@ public class AchievementManager : MonoBehaviour
     // 🔁 Fortschritt aktualisieren (z. B. bei Kills, Collects usw.)
     public void UpdateAchievementValue(string id, float amountToAdd)
     {
+        if (sandboxMode) return;
+
         var ach = achievements.Find(a => a.id == id);
         if (ach == null)
         {
@@ -154,6 +163,8 @@ public class AchievementManager : MonoBehaviour
 
    public void SaveAchievements()
     {
+        if (sandboxMode) return;
+
         if (string.IsNullOrEmpty(savePath))
         {
             Debug.LogError("❌ savePath is NULL or empty before writing achievements!");
@@ -208,6 +219,8 @@ public class AchievementManager : MonoBehaviour
     }
     public void ResetAllProgress()
     {
+        if (sandboxMode) return;
+
         // 1. Achievements zurücksetzen
         foreach (var ach in achievements)
         {
