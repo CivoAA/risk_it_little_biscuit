@@ -17,7 +17,7 @@ public class ExplosiveStarEvo : Weapon
             spawnCounter -= Time.deltaTime;
             if (spawnCounter <= 0)
             {
-                spawnCounter = stats[weaponLevel].cooldown;
+                spawnCounter = CurrentCooldown;
 
                 // Anzahl der Sterne aus AttackSpeed holen
                 int spawnCount = Mathf.Max(1, Mathf.RoundToInt(stats[weaponLevel].AttackSpeed));
@@ -57,7 +57,7 @@ public class ExplosiveStarEvo : Weapon
     IEnumerator MoveAndDestroy(GameObject star)
     {
         float moveSpeed = 9f;
-        float duration = stats[weaponLevel].duration;
+        float duration = CurrentDuration;
         float elapsed = 0f;
 
         float angleDeg;

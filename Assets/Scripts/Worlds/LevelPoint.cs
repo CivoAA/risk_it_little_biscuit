@@ -78,6 +78,10 @@ public class LevelPoint : MonoBehaviour
         buttonValueTables[23] = new List<float> { 0f, 1f }; // Crit Chance
         buttonValueTables[24] = new List<float> { 0f, 1f }; // Crit Damage
 
+        // Begleiter: die Stufe ist hier kein An/Aus, sondern die Staerke
+        // (siehe Companion.SetTier). 0 = nicht gekauft.
+        buttonValueTables[25] = new List<float> { 0f, 1f, 2f, 3f };
+
         UpdateExtraData();
     }
 
@@ -109,6 +113,7 @@ public class LevelPoint : MonoBehaviour
         { 22, 24 }, // Damage
         { 23, 25 }, // Crit Chance
         { 24, 26 }, // Crit Damage
+        { 25, 27 }, // Begleiter (CompanionSpawner.ExtraDataIndex)
     };
 
     public void UpdateExtraData()

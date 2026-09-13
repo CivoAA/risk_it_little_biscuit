@@ -22,7 +22,7 @@ public class Voidspike : Weapon
             spawnCounter -= Time.deltaTime;
             if (spawnCounter <= 0)
             {
-                spawnCounter = stats[weaponLevel].cooldown;
+                spawnCounter = CurrentCooldown;
                 StartCoroutine(SpawnVoidSpike());
             }
                 //Vector2 myPos = transform.position;
@@ -34,6 +34,8 @@ public class Voidspike : Weapon
     IEnumerator SpawnVoidSpike()
     {
         int count = Mathf.RoundToInt(stats[weaponLevel].shots + PlayerController.Instance.playerShots); // Wie oft spawnen?
+        // Bewusst ohne CurrentDuration: das ist der Abstand zwischen zwei Spikes,
+        // ein laengerer Wert waere hier eine Verschlechterung.
         float spawnDelay = stats[weaponLevel].duration;   // Zeit zwischen Spawns
         float lifeTime = 0.6f;      // Lebensdauer pro Spike
         Scene gameScene = SceneManager.GetSceneByName("Game");

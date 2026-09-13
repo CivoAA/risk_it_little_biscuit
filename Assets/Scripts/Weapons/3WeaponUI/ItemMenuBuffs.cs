@@ -23,24 +23,48 @@ public class ItemMenuBuffs : MonoBehaviour
     public DodgeChance dodgeChance;
     public Damage damage;
     public Luck luck;
+    public CooldownReduction cooldownReduction;
+    public DurationBuff durationBuff;
+    public GlassCannon glassCannon;
+    public SecondChance secondChance;
+
+    /// <summary>
+    /// Wie GameObject.Find(...).GetComponent&lt;T&gt;(), aber ohne
+    /// NullReferenceException, wenn das Objekt (noch) nicht in der Szene liegt.
+    /// </summary>
+    private static T FindInScene<T>(string objectName) where T : Component
+    {
+        GameObject go = GameObject.Find(objectName);
+        if (go == null)
+        {
+            Debug.LogWarning("ItemMenuBuffs: " + objectName + " liegt nicht in der Szene – Eintrag wird übersprungen.");
+            return null;
+        }
+
+        return go.GetComponent<T>();
+    }
 
     void Start()
     {
-        armor           = GameObject.Find("Armor").GetComponent<Armor>();
-        buffs           = GameObject.Find("Max HP").GetComponent<Buffs>();
-        experienceGain  = GameObject.Find("Experience Gain").GetComponent<ExperienceGain>();
-        hPReg           = GameObject.Find("HP Regeneration").GetComponent<HPReg>();
-        moveSpeedBuff   = GameObject.Find("Move Speed").GetComponent<MoveSpeedBuff>();
-        currencyGain    = GameObject.Find("Currency Gain").GetComponent<CurrencyGain>();
-        AOERange        = GameObject.Find("AOE Range").GetComponent<AOERange>();
-        pickupRange     = GameObject.Find("Pickup Range").GetComponent<PickupRange>();
-        lifeSteal       = GameObject.Find("Life Steal").GetComponent<LifeSteal>();
-        extraShot       = GameObject.Find("Extra Shot").GetComponent<ExtraShot>();
-        critChance      = GameObject.Find("Crit Chance").GetComponent<CritChance>();
-        critDamage      = GameObject.Find("Crit Damage").GetComponent<CritDamage>();
-        dodgeChance     = GameObject.Find("Dodge Chance").GetComponent<DodgeChance>();
-        damage          = GameObject.Find("Damage").GetComponent<Damage>();
-        luck            = GameObject.Find("Luck").GetComponent<Luck>();
+        armor             = FindInScene<Armor>("Armor");
+        buffs             = FindInScene<Buffs>("Max HP");
+        experienceGain    = FindInScene<ExperienceGain>("Experience Gain");
+        hPReg             = FindInScene<HPReg>("HP Regeneration");
+        moveSpeedBuff     = FindInScene<MoveSpeedBuff>("Move Speed");
+        currencyGain      = FindInScene<CurrencyGain>("Currency Gain");
+        AOERange          = FindInScene<AOERange>("AOE Range");
+        pickupRange       = FindInScene<PickupRange>("Pickup Range");
+        lifeSteal         = FindInScene<LifeSteal>("Life Steal");
+        extraShot         = FindInScene<ExtraShot>("Extra Shot");
+        critChance        = FindInScene<CritChance>("Crit Chance");
+        critDamage        = FindInScene<CritDamage>("Crit Damage");
+        dodgeChance       = FindInScene<DodgeChance>("Dodge Chance");
+        damage            = FindInScene<Damage>("Damage");
+        luck              = FindInScene<Luck>("Luck");
+        cooldownReduction = FindInScene<CooldownReduction>("Cooldown");
+        durationBuff      = FindInScene<DurationBuff>("Duration");
+        glassCannon       = FindInScene<GlassCannon>("Glass Cannon");
+        secondChance      = FindInScene<SecondChance>("Second Chance");
     }
 
     void Update()
@@ -59,24 +83,34 @@ public class ItemMenuBuffs : MonoBehaviour
 
     public void UpdateUI()
     {
-        var weapons = new (int level, int maxLevel, Sprite sprite)[]
+        // Fehlende Buffs fallen hier raus, statt die ganze Liste zu sprengen.
+        var weapons = new List<(int level, int maxLevel, Sprite sprite)>();
+
+        void Collect(Weapon buff)
         {
-            (armor.weaponLevel,            armor.maxweaponLevel,           armor.weaponIcon),
-            (buffs.weaponLevel,            buffs.maxweaponLevel,           buffs.weaponIcon),
-            (experienceGain.weaponLevel,   experienceGain.maxweaponLevel,  experienceGain.weaponIcon),
-            (hPReg.weaponLevel,            hPReg.maxweaponLevel,           hPReg.weaponIcon),
-            (moveSpeedBuff.weaponLevel,    moveSpeedBuff.maxweaponLevel,   moveSpeedBuff.weaponIcon),
-            (AOERange.weaponLevel,         AOERange.maxweaponLevel,        AOERange.weaponIcon),
-            (pickupRange.weaponLevel,      pickupRange.maxweaponLevel,     pickupRange.weaponIcon),
-            (lifeSteal.weaponLevel,        lifeSteal.maxweaponLevel,       lifeSteal.weaponIcon),
-            (critChance.weaponLevel,       critChance.maxweaponLevel,      critChance.weaponIcon),
-            (critDamage.weaponLevel,       critDamage.maxweaponLevel,      critDamage.weaponIcon),
-            (extraShot.weaponLevel,        extraShot.maxweaponLevel,       extraShot.weaponIcon),
-            (dodgeChance.weaponLevel,      dodgeChance.maxweaponLevel,     dodgeChance.weaponIcon),
-            (damage.weaponLevel,           damage.maxweaponLevel,          damage.weaponIcon),
-            (luck.weaponLevel,             luck.maxweaponLevel,            luck.weaponIcon),
-            (currencyGain.weaponLevel,     currencyGain.maxweaponLevel,    currencyGain.weaponIcon)
-        };
+            if (buff == null) return;
+            weapons.Add((buff.weaponLevel, buff.maxweaponLevel, buff.weaponIcon));
+        }
+
+        Collect(armor);
+        Collect(buffs);
+        Collect(experienceGain);
+        Collect(hPReg);
+        Collect(moveSpeedBuff);
+        Collect(AOERange);
+        Collect(pickupRange);
+        Collect(lifeSteal);
+        Collect(critChance);
+        Collect(critDamage);
+        Collect(extraShot);
+        Collect(dodgeChance);
+        Collect(damage);
+        Collect(luck);
+        Collect(currencyGain);
+        Collect(cooldownReduction);
+        Collect(durationBuff);
+        Collect(glassCannon);
+        Collect(secondChance);
 
         List<Sprite> currentWeapons = new List<Sprite>();
 

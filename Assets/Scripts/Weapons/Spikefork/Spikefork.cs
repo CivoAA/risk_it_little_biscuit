@@ -65,7 +65,7 @@ public class Spikefork : Weapon
         }
 
         // Cooldown setzen
-        spawnCounter = stats[weaponLevel].cooldown;
+        spawnCounter = CurrentCooldown;
         shooting = false;
     }
 

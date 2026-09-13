@@ -25,7 +25,7 @@ public class FireBall : Weapon
         spawnCounter -= Time.deltaTime;
         if (spawnCounter <= 0)
         {
-            spawnCounter = stats[weaponLevel].cooldown;
+            spawnCounter = CurrentCooldown;
             StartCoroutine(SpawnFireBalls());
         }
     }

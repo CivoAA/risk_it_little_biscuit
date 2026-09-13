@@ -50,7 +50,7 @@ public class BobaWeapon : Weapon
         }
 
         // Cooldown korrekt setzen NACHDEM alle Schüsse abgefeuert wurden
-        spawnCounter = stats[weaponLevel].cooldown;
+        spawnCounter = CurrentCooldown;
         shooting = false;
     }
 

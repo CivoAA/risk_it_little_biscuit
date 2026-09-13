@@ -56,7 +56,7 @@ public class ShurikenWeapon : Weapon
         }
 
         // Cooldown korrekt setzen
-        spawnCounter = stats[weaponLevel].cooldown;
+        spawnCounter = CurrentCooldown;
         shooting = false;
     }
 

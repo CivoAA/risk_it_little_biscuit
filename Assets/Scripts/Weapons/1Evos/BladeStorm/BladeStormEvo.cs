@@ -82,7 +82,7 @@ public class BladeStormEvo : Weapon
         // der Cooldown-Wert war praktisch wirkungslos.
         if (!AllBladesInOrbit())
         {
-            attackCounter = CurrentStats.cooldown;
+            attackCounter = CurrentCooldown;
             return;
         }
 

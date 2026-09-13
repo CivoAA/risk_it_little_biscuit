@@ -31,6 +31,34 @@ public class PlayerController : MonoBehaviour
     public float lifeStealChance;
     public float lifeStealMultiplire = 0.1f;
     public float powerUpShrinkSpeed = 1f;
+
+    [Header("Globale Waffen-Multiplikatoren")]
+    [Tooltip("1 = unveraendert. Der Cooldown-Buff zieht hier ab, 0.8 bedeutet -20% Cooldown.")]
+    public float cooldownMultiplier = 1f;
+    [Tooltip("Untergrenze, damit der Cooldown-Buff die Waffen nicht auf quasi 0 druecken kann.")]
+    public float minCooldownMultiplier = 0.35f;
+    [Tooltip("1 = unveraendert. Der Duration-Buff addiert hier drauf, 1.3 bedeutet +30% Wirkdauer.")]
+    public float durationMultiplier = 1f;
+
+    [Header("Zweite Chance")]
+    [Tooltip("Verbleibende Wiederbelebungen. Wird vom Buff 'Zweite Chance' gesetzt.")]
+    public int secondChanceCharges;
+    [Tooltip("Anteil der Max-HP, mit dem der Spieler zurueckkommt.")]
+    public float secondChanceHealthPercent = 0.3f;
+    [Tooltip("Unverwundbarkeit direkt nach der Wiederbelebung.")]
+    public float secondChanceImmunity = 2f;
+
+    /// <summary>Cooldown-Faktor inklusive Untergrenze - Waffen lesen nur diesen Wert.</summary>
+    public float CooldownMultiplier
+    {
+        get { return Mathf.Max(minCooldownMultiplier, cooldownMultiplier); }
+    }
+
+    /// <summary>Duration-Faktor. Nach unten abgesichert, damit Flaechen nie 0s leben.</summary>
+    public float DurationMultiplier
+    {
+        get { return Mathf.Max(0.1f, durationMultiplier); }
+    }
     public int WeaponSlots = 5;
     public int BuffSlots = 3;
     public int EvoSlots = 0;
@@ -285,7 +313,7 @@ public class PlayerController : MonoBehaviour
                 hitsoundinterval = 0;
             }
 
-            if (playerHealth <= 0)
+            if (playerHealth <= 0 && !TryUseSecondChance())
             {
                 gameObject.SetActive(false);
                 GameManager.Instance.GameOver();
@@ -294,6 +322,33 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
+    /// <summary>
+    /// Faengt einen toedlichen Treffer ab, solange noch eine Ladung des Buffs
+    /// "Zweite Chance" uebrig ist. Gibt true zurueck, wenn der Tod verhindert
+    /// wurde - dann laeuft TakeDamage ohne GameOver weiter.
+    /// </summary>
+    private bool TryUseSecondChance()
+    {
+        if (secondChanceCharges <= 0) return false;
+
+        secondChanceCharges--;
+        playerHealth = Mathf.Max(1f, playerMaxHealth * Mathf.Clamp01(secondChanceHealthPercent));
+
+        // Kurze Unverwundbarkeit, sonst toetet der naechste Kontaktschaden im
+        // selben Gegnerpulk sofort wieder.
+        isImmune = true;
+        immunityTimer = Mathf.Max(immunityDuration, secondChanceImmunity);
+
+        UIController.Instance.UpdateHealthSlider();
+        DamageNumberController.Instance?.CreateText("Second Chance!", transform.position);
+        if (AudioController.Instance != null)
+        {
+            AudioController.Instance.PalySound(AudioController.Instance.LevelUpSound);
+        }
+
+        return true;
+    }
     public void GetExperience(int experienceToGet)
     {
         experience += experienceToGet * experienceMultiplier;
@@ -562,7 +617,11 @@ public class PlayerController : MonoBehaviour
             "jam_jar",
             "void_spike",
             "fire_ball",
-            "boomerang"
+            "boomerang",
+            // Neue Waffen: bewusst ohne Shop-Eintrag sofort verfuegbar.
+            "crumb_trail",
+            "vortex",
+            "turret"
         };
 
         if (defaultUnlockedWeapons.Contains(weapon.weaponID))
@@ -599,7 +658,12 @@ public class PlayerController : MonoBehaviour
             "buff_move_speed",
             "buff_pickup_range",
             "buff_armor",
-            "buff_dodge"
+            "buff_dodge",
+            // Neue Buffs: ebenfalls sofort verfuegbar.
+            "buff_cooldown",
+            "buff_duration",
+            "buff_glass_cannon",
+            "buff_second_chance"
         };
 
         if (defaultUnlockedBuffs.Contains(buff.weaponID))

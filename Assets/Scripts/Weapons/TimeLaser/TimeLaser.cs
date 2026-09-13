@@ -32,7 +32,7 @@ public class TimeLaser : Weapon
         int shots = Mathf.RoundToInt((stats[weaponLevel].shots + PlayerController.Instance.playerShots) * 0.5f);
 
         // Sofort Cooldown setzen, damit neuer Schuss nach Ablauf wieder möglich ist
-        spawnCounter = stats[weaponLevel].cooldown;
+        spawnCounter = CurrentCooldown;
 
         for (int i = 0; i < shots; i++)
         {

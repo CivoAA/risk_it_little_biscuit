@@ -49,7 +49,7 @@ public class ShuriBlastEvo : Weapon
             yield return new WaitForSeconds(0.3f);
         }
 
-        spawnCounter = stats[weaponLevel].cooldown;
+        spawnCounter = CurrentCooldown;
         shooting = false;
     }
 

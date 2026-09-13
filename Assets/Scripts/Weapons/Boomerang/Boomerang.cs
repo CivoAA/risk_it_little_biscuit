@@ -50,7 +50,7 @@ public class Boomerang : Weapon
             yield return new WaitForSeconds(0.2f);
         }
 
-        spawnCounter = stats[weaponLevel].cooldown;
+        spawnCounter = CurrentCooldown;
         shooting = false;
     }
 

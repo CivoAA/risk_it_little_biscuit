@@ -22,6 +22,39 @@ public class Enemy : MonoBehaviour
     [SerializeField] private bool Death_Boss = false;
     private float pushCounter;
 
+    // Zug von aussen (Wirbel). Wird als Geschwindigkeit auf die normale
+    // Laufbewegung addiert und laeuft nach kurzer Zeit von selbst aus, damit
+    // ein zerstoerter Wirbel keinen Gegner dauerhaft mitzieht.
+    private Vector2 externalVelocity;
+    private float externalVelocityTimer;
+
+    /// <summary>
+    /// Aktuelle Laufgeschwindigkeit. Grundlage fuer den Vorhalt der Schuetzen,
+    /// siehe <see cref="Aim.PredictDirection"/>.
+    /// </summary>
+    public Vector2 Velocity
+    {
+        get { return rb != null ? rb.linearVelocity : Vector2.zero; }
+    }
+
+    /// <summary>Bosse und Minibosse lassen sich nicht ziehen oder wegschieben.</summary>
+    public bool IsBoss
+    {
+        get { return MiniBoss || BossBoss || Death_Boss; }
+    }
+
+    /// <summary>
+    /// Zieht den Gegner fuer kurze Zeit in eine Richtung. Der Aufrufer muss das
+    /// jeden Frame erneuern (der Wirbel tut das), sonst laeuft der Zug aus.
+    /// </summary>
+    public void ApplyPull(Vector2 velocity, float holdTime = 0.2f)
+    {
+        if (IsBoss) return;
+
+        externalVelocity = velocity;
+        externalVelocityTimer = holdTime;
+    }
+
     protected virtual void Start()
     {
         baseMoveSpeed = moveSpeed;
@@ -55,11 +88,21 @@ public class Enemy : MonoBehaviour
                     moveSpeed = Mathf.Abs(moveSpeed);
                 }
             }
+            // Zug von aussen auslaufen lassen
+            if (externalVelocityTimer > 0f)
+            {
+                externalVelocityTimer -= Time.fixedDeltaTime;
+                if (externalVelocityTimer <= 0f)
+                {
+                    externalVelocity = Vector2.zero;
+                }
+            }
+
             //move towards palyer
             if (!BossBoss)
             {
                 direction = (PlayerController.Instance.transform.position - transform.position).normalized;
-                rb.linearVelocity = new Vector2(direction.x * moveSpeed, direction.y * moveSpeed);
+                rb.linearVelocity = new Vector2(direction.x * moveSpeed, direction.y * moveSpeed) + externalVelocity;
             }
         }
         else

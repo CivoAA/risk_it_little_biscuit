@@ -48,6 +48,6 @@ public class CandyBomb : Weapon
             yield return new WaitForSeconds(0.8f);
         }
 
-        spawnCounter = stats[weaponLevel].cooldown;
+        spawnCounter = CurrentCooldown;
     }
 }
