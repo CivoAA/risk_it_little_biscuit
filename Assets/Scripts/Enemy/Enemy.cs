@@ -22,12 +22,12 @@ public class Enemy : MonoBehaviour
     [SerializeField] private bool Death_Boss = false;
     private float pushCounter;
 
-    void Start()
+    protected virtual void Start()
     {
         baseMoveSpeed = moveSpeed;
     }
 
-    void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
         if (PlayerController.Instance.gameObject.activeSelf)
         {
@@ -68,7 +68,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    void OnCollisionStay2D(Collision2D collision)
+    protected virtual void OnCollisionStay2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
@@ -78,7 +78,7 @@ public class Enemy : MonoBehaviour
 
     }
 
-    void OnTriggerStay2D(Collider2D other)
+    protected virtual void OnTriggerStay2D(Collider2D other)
     {
         if (other.CompareTag("PlayerHitbox"))
         {
@@ -86,7 +86,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void TakeDamage(float damage, float? slowMultiplier = null)
+    public virtual void TakeDamage(float damage, float? slowMultiplier = null)
     {
         float finalDamage = damage * PlayerController.Instance.damageMultiplier;
         float critChance = PlayerController.Instance.critChance;

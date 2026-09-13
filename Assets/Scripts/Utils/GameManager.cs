@@ -103,6 +103,14 @@ public class GameManager : MonoBehaviour
 
     public void Restart()
     {
+        // Test-Szene (läuft ohne World Map): einfach die aktive Szene neu laden.
+        if (MenuManager.Instance == null)
+        {
+            Time.timeScale = 1f;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            return;
+        }
+
         SaveGame.Instance.LoadGame();
         WM_UIController.Instance.UpdateCurrencyText();
         Time.timeScale = 1f;
@@ -197,6 +205,10 @@ public class GameManager : MonoBehaviour
     public void GoToMainMenu()
     {
         Time.timeScale = 1f;
+
+        // Test-Szene (läuft ohne MenuManager): nichts zu entladen.
+        if (MenuManager.Instance == null) return;
+
         AudioController.Instance.SwitchMusic("Main Menu");
         MenuManager.Instance.UnloadScene("Game");
         MenuManager.Instance.ActivateScene("Main Menu");
