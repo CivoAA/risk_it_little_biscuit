@@ -22,7 +22,7 @@ public class AreaWeaponJamJar : Weapon
             spawnCounter -= Time.deltaTime;
             if (spawnCounter <= 0)
             {
-                spawnCounter = stats[weaponLevel].cooldown;
+                spawnCounter = CurrentCooldown;
 
                 Vector2 randomPoint = RandomSpawnPoint();
                 JamJar = Instantiate(JamJarprefab, transform.position, transform.rotation, transform);

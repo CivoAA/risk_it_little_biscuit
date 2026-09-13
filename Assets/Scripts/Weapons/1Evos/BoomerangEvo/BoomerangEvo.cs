@@ -47,7 +47,7 @@ public class BoomerangEvo : Weapon
 
         AudioController.Instance?.PalySound(AudioController.Instance.Werfen);
 
-        spawnCounter = stats[weaponLevel].cooldown;
+        spawnCounter = CurrentCooldown;
         shooting = false;
 
         yield return null;

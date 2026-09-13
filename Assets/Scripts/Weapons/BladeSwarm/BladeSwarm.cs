@@ -46,6 +46,8 @@ public class BladeSwarm : Weapon
         durationCounter -= Time.deltaTime;
         if (durationCounter <= 0f && !shooting)
         {
+            // Bewusst ohne CurrentDuration: duration ist hier der Abstand bis zur
+            // naechsten Klinge - der Duration-Buff wuerde die Waffe verlangsamen.
             durationCounter = stats[weaponLevel].duration;
             SpawnBlade();
         }
@@ -55,7 +57,7 @@ public class BladeSwarm : Weapon
             if (target != Vector2.zero)
             {
                 shooting = true;
-                attackCounter = stats[weaponLevel].cooldown;
+                attackCounter = CurrentCooldown;
                 StartCoroutine(FireAllBladesAtTarget(target));
             }
         }

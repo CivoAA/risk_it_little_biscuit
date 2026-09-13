@@ -21,7 +21,7 @@ public class Deathstrike : Weapon
         spawnCounter -= Time.deltaTime;
         if (spawnCounter <= 0f)
         {
-            spawnCounter = stats[weaponLevel].cooldown;
+            spawnCounter = CurrentCooldown;
             StartCoroutine(SpawnDeathstrike());
         }
     }

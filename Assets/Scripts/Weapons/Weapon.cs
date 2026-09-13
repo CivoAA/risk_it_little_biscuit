@@ -38,6 +38,41 @@ public class Weapon : MonoBehaviour
         get { return IsActive ? stats[weaponLevel] : null; }
     }
 
+    /// <summary>
+    /// Cooldown der aktuellen Stufe nach dem globalen Cooldown-Buff
+    /// (<see cref="PlayerController.CooldownMultiplier"/>). Waffen und Evos
+    /// setzen ihren Timer ausschliesslich hierueber, damit der Buff nicht an
+    /// einzelnen Waffen vorbeilaeuft.
+    /// </summary>
+    public float CurrentCooldown
+    {
+        get
+        {
+            if (!IsActive) return 0f;
+            float mult = PlayerController.Instance != null
+                ? PlayerController.Instance.CooldownMultiplier
+                : 1f;
+            return CurrentStats.cooldown * mult;
+        }
+    }
+
+    /// <summary>
+    /// Wirkdauer der aktuellen Stufe nach dem globalen Duration-Buff.
+    /// Bewusst NICHT dort verwenden, wo duration als Abstand zwischen zwei
+    /// Spawns dient (Void Spike, Blade Swarm) - laenger waere dort schlechter.
+    /// </summary>
+    public float CurrentDuration
+    {
+        get
+        {
+            if (!IsActive) return 0f;
+            float mult = PlayerController.Instance != null
+                ? PlayerController.Instance.DurationMultiplier
+                : 1f;
+            return CurrentStats.duration * mult;
+        }
+    }
+
     public void LevelUP()
     {
         if (weaponLevel < stats.Count - 1)

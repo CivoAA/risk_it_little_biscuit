@@ -20,7 +20,7 @@ public class AreaWeaponPrefabJamJar : MonoBehaviour
         //Destroy(gameObject, weapon.duration);
         targetSize = Vector3.one * weapon.CurrentStats.range * PlayerController.Instance.AOERange;
         transform.localScale = Vector3.zero;
-        timer = weapon.CurrentStats.duration;
+        timer = weapon.CurrentDuration;
         AudioController.Instance.PalySound(AudioController.Instance.JarJamBreakingGlass, 0.1f);
         AudioController.Instance.PalySound(AudioController.Instance.areaWeaponSpawn, 0.5f);
     }

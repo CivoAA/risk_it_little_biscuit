@@ -17,7 +17,7 @@ public class AreaWeapon : Weapon
             spawnCounter -= Time.deltaTime;
             if (spawnCounter <= 0)
             {
-                spawnCounter = stats[weaponLevel].cooldown;
+                spawnCounter = CurrentCooldown;
                 Instantiate(prefab, transform.position, transform.rotation, transform);
                 // transform weglassen um object an stelle leigen zu lassen 
             }

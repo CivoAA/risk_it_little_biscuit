@@ -31,6 +31,9 @@ public class ItemMenu : MonoBehaviour
     public CandyBomb candyBomb;
     public Boomerang boomerang;
     public TimeLaser timeLaser;
+    public CrumbTrail crumbTrail;
+    public Vortex vortex;
+    public Turret turret;
 
     // Evos
     public BobaEvo BobaSawEvo;
@@ -40,34 +43,57 @@ public class ItemMenu : MonoBehaviour
     public BladeStormEvo BladeStormEvo;
     public BoomerangEvo boomerangEvo;
     public BombSawEvo bombSawEvo;
+    public StickyShatterEvo stickyShatterEvo;
+
+    /// <summary>
+    /// Wie GameObject.Find(...).GetComponent&lt;T&gt;(), aber ohne
+    /// NullReferenceException, wenn das Objekt (noch) nicht in der Szene liegt.
+    /// Sonst legt eine einzige fehlende Waffe das komplette Item-Menue lahm,
+    /// bevor sie überhaupt in der Szene angelegt ist.
+    /// </summary>
+    private static T FindInScene<T>(string objectName) where T : Component
+    {
+        GameObject go = GameObject.Find(objectName);
+        if (go == null)
+        {
+            Debug.LogWarning("ItemMenu: " + objectName + " liegt nicht in der Szene – Eintrag wird übersprungen.");
+            return null;
+        }
+
+        return go.GetComponent<T>();
+    }
 
     void Start()
     {
         // Waffen finden
-        bobaGun = GameObject.Find("Boba Gun").GetComponent<BobaGun>();
-        areaWeaponJamJar = GameObject.Find("Throwing Jam Jar").GetComponent<AreaWeaponJamJar>();
-        shurikenWeapon = GameObject.Find("Shurikookie").GetComponent<ShurikenWeapon>();
-        keckssaegeWeapon = GameObject.Find("CookieSaw").GetComponent<KeckssaegeWeapon>();
-        bobaWeapon = GameObject.Find("Butterblast").GetComponent<BobaWeapon>();
-        areaWeapon = GameObject.Find("Coffe Pool").GetComponent<AreaWeapon>();
-        SpikeFork = GameObject.Find("Spike Fork").GetComponent<Spikefork>();
-        deathstrike = GameObject.Find("Deathstrike").GetComponent<Deathstrike>();
-        RandomVoidSpike = GameObject.Find("Void Spike").GetComponent<RandomVoidSpike>();
-        CelestialStar = GameObject.Find("Celestial Star").GetComponent<CelestialStar>();
-        FireBall = GameObject.Find("Fire Ball").GetComponent<FireBall>();
-        BladeSwarm = GameObject.Find("Blade Swarm").GetComponent<BladeSwarm>();
-        candyBomb = GameObject.Find("Candy Bomb").GetComponent<CandyBomb>();
-        boomerang = GameObject.Find("Boomerang").GetComponent<Boomerang>();
-        timeLaser = GameObject.Find("Time Laser").GetComponent<TimeLaser>();
+        bobaGun = FindInScene<BobaGun>("Boba Gun");
+        areaWeaponJamJar = FindInScene<AreaWeaponJamJar>("Throwing Jam Jar");
+        shurikenWeapon = FindInScene<ShurikenWeapon>("Shurikookie");
+        keckssaegeWeapon = FindInScene<KeckssaegeWeapon>("CookieSaw");
+        bobaWeapon = FindInScene<BobaWeapon>("Butterblast");
+        areaWeapon = FindInScene<AreaWeapon>("Coffe Pool");
+        SpikeFork = FindInScene<Spikefork>("Spike Fork");
+        deathstrike = FindInScene<Deathstrike>("Deathstrike");
+        RandomVoidSpike = FindInScene<RandomVoidSpike>("Void Spike");
+        CelestialStar = FindInScene<CelestialStar>("Celestial Star");
+        FireBall = FindInScene<FireBall>("Fire Ball");
+        BladeSwarm = FindInScene<BladeSwarm>("Blade Swarm");
+        candyBomb = FindInScene<CandyBomb>("Candy Bomb");
+        boomerang = FindInScene<Boomerang>("Boomerang");
+        timeLaser = FindInScene<TimeLaser>("Time Laser");
+        crumbTrail = FindInScene<CrumbTrail>("Crumb Trail");
+        vortex = FindInScene<Vortex>("Vortex");
+        turret = FindInScene<Turret>("Turret");
 
         // Evos
-        ShuriBlastEvo = GameObject.Find("Shuri Blast Evo").GetComponent<ShuriBlastEvo>();
-        BobaSawEvo = GameObject.Find("Boba Saw Evo").GetComponent<BobaEvo>();
-        ExplosiveStarEvo = GameObject.Find("Explosive Star Evo").GetComponent<ExplosiveStarEvo>();
-        BloodyFork = GameObject.Find("Bloody Fork Evo").GetComponent<BloodyFork>();
-        BladeStormEvo = GameObject.Find("Blade Storm Evo").GetComponent<BladeStormEvo>();
-        boomerangEvo = GameObject.Find("Boomerang Evo").GetComponent<BoomerangEvo>();
-        bombSawEvo = GameObject.Find("Bomb Saw Evo").GetComponent<BombSawEvo>(); 
+        ShuriBlastEvo = FindInScene<ShuriBlastEvo>("Shuri Blast Evo");
+        BobaSawEvo = FindInScene<BobaEvo>("Boba Saw Evo");
+        ExplosiveStarEvo = FindInScene<ExplosiveStarEvo>("Explosive Star Evo");
+        BloodyFork = FindInScene<BloodyFork>("Bloody Fork Evo");
+        BladeStormEvo = FindInScene<BladeStormEvo>("Blade Storm Evo");
+        boomerangEvo = FindInScene<BoomerangEvo>("Boomerang Evo");
+        bombSawEvo = FindInScene<BombSawEvo>("Bomb Saw Evo");
+        stickyShatterEvo = FindInScene<StickyShatterEvo>("Sticky Shatter Evo");
 
         UpdateUI();
     }
@@ -98,34 +124,44 @@ public class ItemMenu : MonoBehaviour
 
     public void UpdateUI()
     {
-        // Schritt 1: Waffen + Evos definieren (mit isEvo)
-        var allWeapons = new (int level, int maxLevel, Sprite sprite, bool isEvo)[]
-        {
-            (shurikenWeapon.weaponLevel,   shurikenWeapon.maxweaponLevel,   shurikenWeapon.weaponIcon,   false),
-            (areaWeaponJamJar.weaponLevel, areaWeaponJamJar.maxweaponLevel, areaWeaponJamJar.weaponIcon, false),
-            (bobaWeapon.weaponLevel,       bobaWeapon.maxweaponLevel,       bobaWeapon.weaponIcon,       false),
-            (bobaGun.weaponLevel,          bobaGun.maxweaponLevel,          bobaGun.weaponIcon,          false),
-            (areaWeapon.weaponLevel,       areaWeapon.maxweaponLevel,       areaWeapon.weaponIcon,       false),
-            (keckssaegeWeapon.weaponLevel, keckssaegeWeapon.maxweaponLevel, keckssaegeWeapon.weaponIcon, false),
-            (SpikeFork.weaponLevel,        SpikeFork.maxweaponLevel,        SpikeFork.weaponIcon,        false),
-            (deathstrike.weaponLevel,      deathstrike.maxweaponLevel,      deathstrike.weaponIcon,      false),
-            (RandomVoidSpike.weaponLevel,  RandomVoidSpike.maxweaponLevel,  RandomVoidSpike.weaponIcon,  false),
-            (CelestialStar.weaponLevel,    CelestialStar.maxweaponLevel,    CelestialStar.weaponIcon,    false),
-            (FireBall.weaponLevel,         FireBall.maxweaponLevel,         FireBall.weaponIcon,         false),
-            (BladeSwarm.weaponLevel,       BladeSwarm.maxweaponLevel,       BladeSwarm.weaponIcon,       false),
-            (candyBomb.weaponLevel,        candyBomb.maxweaponLevel,        candyBomb.weaponIcon,        false),
-            (boomerang.weaponLevel,        boomerang.maxweaponLevel,        boomerang.weaponIcon,        false),
-            (timeLaser.weaponLevel,        timeLaser.maxweaponLevel,        timeLaser.weaponIcon,        false),
+        // Schritt 1: Waffen + Evos sammeln (mit isEvo). Fehlende Objekte fallen
+        // dabei einfach raus, statt die ganze Liste zu sprengen.
+        var allWeapons = new List<(int level, int maxLevel, Sprite sprite, bool isEvo)>();
 
-            // 🔥 Evo-Waffen
-            (ShuriBlastEvo.weaponLevel,    ShuriBlastEvo.maxweaponLevel,    ShuriBlastEvo.weaponIcon,    true),
-            (ExplosiveStarEvo.weaponLevel, ExplosiveStarEvo.maxweaponLevel, ExplosiveStarEvo.weaponIcon, true),
-            (BloodyFork.weaponLevel,       BloodyFork.maxweaponLevel,       BloodyFork.weaponIcon,       true),
-            (BobaSawEvo.weaponLevel,       BobaSawEvo.maxweaponLevel,       BobaSawEvo.weaponIcon,       true),
-            (BladeStormEvo.weaponLevel,    BladeStormEvo.maxweaponLevel,    BladeStormEvo.weaponIcon,    true),
-            (boomerangEvo.weaponLevel,     boomerangEvo.maxweaponLevel,     boomerangEvo.weaponIcon,     true),
-            (bombSawEvo.weaponLevel,       bombSawEvo.maxweaponLevel,       bombSawEvo.weaponIcon,       true)
-        };
+        void Collect(Weapon weapon, bool isEvo)
+        {
+            if (weapon == null) return;
+            allWeapons.Add((weapon.weaponLevel, weapon.maxweaponLevel, weapon.weaponIcon, isEvo));
+        }
+
+        Collect(shurikenWeapon, false);
+        Collect(areaWeaponJamJar, false);
+        Collect(bobaWeapon, false);
+        Collect(bobaGun, false);
+        Collect(areaWeapon, false);
+        Collect(keckssaegeWeapon, false);
+        Collect(SpikeFork, false);
+        Collect(deathstrike, false);
+        Collect(RandomVoidSpike, false);
+        Collect(CelestialStar, false);
+        Collect(FireBall, false);
+        Collect(BladeSwarm, false);
+        Collect(candyBomb, false);
+        Collect(boomerang, false);
+        Collect(timeLaser, false);
+        Collect(crumbTrail, false);
+        Collect(vortex, false);
+        Collect(turret, false);
+
+        // 🔥 Evo-Waffen
+        Collect(ShuriBlastEvo, true);
+        Collect(ExplosiveStarEvo, true);
+        Collect(BloodyFork, true);
+        Collect(BobaSawEvo, true);
+        Collect(BladeStormEvo, true);
+        Collect(boomerangEvo, true);
+        Collect(bombSawEvo, true);
+        Collect(stickyShatterEvo, true);
 
         // Schritt 2: Bereits angezeigte Waffen
         List<Sprite> currentSprites = new List<Sprite>();
@@ -164,7 +200,7 @@ public class ItemMenu : MonoBehaviour
         // Schritt 6: Neue Waffen hinzufügen
         foreach (var newSprite in newWeapons)
         {
-            var weaponInfo = System.Array.Find(allWeapons, w => w.sprite == newSprite);
+            var weaponInfo = allWeapons.Find(w => w.sprite == newSprite);
             bool isEvo = weaponInfo.isEvo;
 
             if (isEvo)
@@ -174,7 +210,7 @@ public class ItemMenu : MonoBehaviour
 
                 foreach (var sprite in currentSprites)
                 {
-                    var info = System.Array.Find(allWeapons, w => w.sprite == sprite);
+                    var info = allWeapons.Find(w => w.sprite == sprite);
                     if (info.isEvo)
                         evoCount++;
                     else

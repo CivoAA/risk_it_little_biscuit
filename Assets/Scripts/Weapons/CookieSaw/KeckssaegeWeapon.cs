@@ -19,7 +19,7 @@ public class KeckssaegeWeapon : Weapon
             spawnCounter -= Time.deltaTime;
             if (spawnCounter <= 0)
             {
-                spawnCounter = stats[weaponLevel].cooldown;
+                spawnCounter = CurrentCooldown;
 
                 // Orbit-Pivot erstellen
                 GameObject orbit = new GameObject("OrbitPivot");
@@ -31,7 +31,7 @@ public class KeckssaegeWeapon : Weapon
                 orbit.transform.position = transform.position;
 
                 // nach Ablauf der Duration das ganze Pivot (mit Kindern) zerstören
-                Destroy(orbit, stats[weaponLevel].duration);
+                Destroy(orbit, CurrentDuration);
             
                 
                 // berechne diagonale Distanz so, dass sie "mittig" zwischen den Kanten liegt

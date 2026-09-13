@@ -666,6 +666,70 @@ MonoBehaviour:
     AchievmentName: 'Max Level: Cookiesaw'
     AchievmentNameDescription: Reach the maximum level of the Cookiesaw weapon.
     icon: {fileID: 0}
+  - id: Max_Level_CrumbTrail
+    note: Level waffe auf max level
+    unlocked: 0
+    value: 0
+    maxvalue: 1
+    AchievmentName: 'Max Level: Crumb Trail'
+    AchievmentNameDescription: Reach the maximum level of the Crumb Trail weapon.
+    icon: {fileID: 0}
+  - id: Max_Level_Vortex
+    note: Level waffe auf max level
+    unlocked: 0
+    value: 0
+    maxvalue: 1
+    AchievmentName: 'Max Level: Vortex'
+    AchievmentNameDescription: Reach the maximum level of the Vortex weapon.
+    icon: {fileID: 0}
+  - id: Max_Level_Turret
+    note: Level waffe auf max level
+    unlocked: 0
+    value: 0
+    maxvalue: 1
+    AchievmentName: 'Max Level: Turret'
+    AchievmentNameDescription: Reach the maximum level of the Turret weapon.
+    icon: {fileID: 0}
+  - id: Sticky_Shatter_Evo
+    note: 'bekomme die Evo '
+    unlocked: 0
+    value: 0
+    maxvalue: 1
+    AchievmentName: Sticky Shatter Evo
+    AchievmentNameDescription: Obtained the Sticky Shatter Evo for the first time!
+    icon: {fileID: 0}
+  - id: Max_Level_Cooldown
+    note: Level buff auf max level
+    unlocked: 0
+    value: 0
+    maxvalue: 1
+    AchievmentName: 'Max Level: Cooldown'
+    AchievmentNameDescription: Reach the maximum level of the Cooldown buff.
+    icon: {fileID: 0}
+  - id: Max_Level_Duration
+    note: Level buff auf max level
+    unlocked: 0
+    value: 0
+    maxvalue: 1
+    AchievmentName: 'Max Level: Duration'
+    AchievmentNameDescription: Reach the maximum level of the Duration buff.
+    icon: {fileID: 0}
+  - id: Max_Level_GlassCannon
+    note: Level buff auf max level
+    unlocked: 0
+    value: 0
+    maxvalue: 1
+    AchievmentName: 'Max Level: Glass Cannon'
+    AchievmentNameDescription: Reach the maximum level of the Glass Cannon buff.
+    icon: {fileID: 0}
+  - id: Max_Level_SecondChance
+    note: Level buff auf max level
+    unlocked: 0
+    value: 0
+    maxvalue: 1
+    AchievmentName: 'Max Level: Second Chance'
+    AchievmentNameDescription: Reach the maximum level of the Second Chance buff.
+    icon: {fileID: 0}
 --- !u!4 &110982999
 Transform:
   m_ObjectHideFlags: 0

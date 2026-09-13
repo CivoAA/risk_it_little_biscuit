@@ -39,7 +39,7 @@ public class BloodyFork : Weapon
         }
 
         // Cooldown erst NACH den Schüssen starten
-        spawnCounter = stats[weaponLevel].cooldown;
+        spawnCounter = CurrentCooldown;
         shooting = false;
     }
 
