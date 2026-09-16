@@ -79,6 +79,9 @@ public class AudioController : MonoBehaviour
 
     public void SwitchMusic(string sceneName)
     {
+        // nicht jede Szene hat die beiden Musikquellen verdrahtet (z.B. Game/World Map)
+        if (audioSources == null || audioSources.Length < 2) return;
+
         if (sceneName == "Main Menu" || sceneName == "World Map")
         {
             // 0 = MainMenu-Musik AN
@@ -93,6 +96,12 @@ public class AudioController : MonoBehaviour
             audioSources[0].mute = true;
             // 1 = Game-Musik AN
             audioSources[1].mute = false;
+        }
+        // Hub bringt seine eigene Musik mit (Hub_Music in der Szene) -> beide hier aus
+        else if (sceneName == "hub")
+        {
+            audioSources[0].mute = true;
+            audioSources[1].mute = true;
         }
     }
 
