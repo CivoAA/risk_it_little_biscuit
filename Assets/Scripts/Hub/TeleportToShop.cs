@@ -33,13 +33,15 @@ public class TeleportToShop : HubInteractable
         player.position = target;
     }
 
-    void OnDrawGizmosSelected()
+    protected override void OnDrawGizmosSelected()
     {
+        base.OnDrawGizmosSelected();   // Interaktionszone
+
         // Sprungweite im Editor sichtbar machen
         Vector3 from = transform.position;
         Vector3 to = from + Vector3.up * (tilesUp * unitsPerTile);
         Gizmos.color = new Color(1f, 0.75f, 0.2f, 0.9f);
         Gizmos.DrawLine(from, to);
-        Gizmos.DrawWireCube(to, new Vector3(1f, 1f, 0f));
+        Gizmos.DrawWireCube(to, new Vector3(1f, 1f, 0.01f));
     }
 }

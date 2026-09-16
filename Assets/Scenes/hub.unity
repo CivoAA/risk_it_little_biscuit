@@ -19771,7 +19771,7 @@ Transform:
   m_GameObject: {fileID: 1990000030}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 61.47, y: 13.4, z: 0}
+  m_LocalPosition: {x: 61.55, y: 12.16, z: 0}
   m_LocalScale: {x: 3.6706743, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -19789,7 +19789,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af1120f686504cf88cecee4bf3ef5bbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shape: 1
   interactRadius: 2
+  interactSize: {x: 4.5, y: 1.5}
+  interactOffset: {x: 0, y: 0}
   interactKey: 101
   showPrompt: 1
   promptText: '[E] Lesen'
@@ -19832,7 +19835,7 @@ Transform:
   m_GameObject: {fileID: 1990000040}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 57.41, y: 12.92, z: 0}
+  m_LocalPosition: {x: 57.487, y: 12.92, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -19850,7 +19853,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06db7342ac794d47954c2d846fce2322, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactRadius: 0.5
+  shape: 0
+  interactRadius: 0.7
+  interactSize: {x: 3, y: 1.5}
+  interactOffset: {x: 0, y: 0}
   interactKey: 101
   showPrompt: 1
   promptText: '[E] Betreten'
