@@ -33,6 +33,25 @@ public abstract class HubInteractable : MonoBehaviour
     [SerializeField] protected bool showPrompt = true;
     [SerializeField] protected string promptText = "[E] Lesen";
 
+    public enum OutlineMode
+    {
+        /// <summary>Dauerhaft sichtbar - markiert das Objekt als benutzbar.</summary>
+        Immer = 0,
+        /// <summary>Erscheint erst, wenn der Spieler in der Zone steht.</summary>
+        NurInReichweite = 1,
+    }
+
+    [Header("Umrandung")]
+    [Tooltip("Bewusst pro Objekt an- oder abschaltbar - nicht jedes Ding soll leuchten.")]
+    [SerializeField] protected bool showOutline = false;
+    [SerializeField] protected OutlineMode outlineMode = OutlineMode.Immer;
+    [SerializeField] protected Color outlineColor = new Color32(0xB8, 0x86, 0x0B, 0xFF);
+    [Tooltip("Die Sprite-Teile, die umrandet werden sollen - bei mehrteiligen Objekten " +
+             "einfach alle eintragen. Leer = alle SpriteRenderer an diesem Objekt und in " +
+             "seinen Kindern. Tilemap-Kacheln gehen hier nicht, das muessen echte Sprites sein.")]
+    [SerializeField] protected SpriteRenderer[] outlineTargets;
+
+    protected SpriteOutline outline;
     protected Transform player;
 
     protected virtual void Start()
@@ -40,6 +59,35 @@ public abstract class HubInteractable : MonoBehaviour
         GameObject p = GameObject.FindGameObjectWithTag("Player");
         if (p != null) player = p.transform;
         else Debug.LogWarning($"{name}: kein GameObject mit Tag 'Player' gefunden - Interaktion bleibt aus.");
+
+        SetupOutline();
+    }
+
+    void SetupOutline()
+    {
+        if (!showOutline) return;
+
+        // Entweder die eingetragenen Teile, oder alles was am Objekt selbst haengt
+        SpriteRenderer[] parts = (outlineTargets != null && outlineTargets.Length > 0)
+            ? outlineTargets
+            : GetComponentsInChildren<SpriteRenderer>(true);
+
+        if (parts == null || parts.Length == 0)
+        {
+            Debug.LogWarning($"{name}: Umrandung ist an, aber es gibt keine SpriteRenderer. " +
+                             "Trag die Teile unter 'Outline Targets' ein. Kacheln aus einer " +
+                             "Tilemap gehen nicht - das Objekt muss aus echten Sprites bestehen.");
+            return;
+        }
+
+        // Die Umrandung sitzt auf diesem Objekt und steuert alle Teile
+        outline = GetComponent<SpriteOutline>();
+        if (outline == null) outline = gameObject.AddComponent<SpriteOutline>();
+        outline.OutlineColor = outlineColor;
+        outline.SetTargets(parts);
+
+        // Bei "Immer" gleich anschalten, sonst uebernimmt Update()
+        outline.SetVisible(outlineMode == OutlineMode.Immer);
     }
 
     /// <summary>Spielerposition in den lokalen Achsen der Zone, Offset bereits abgezogen.</summary>
@@ -72,6 +120,9 @@ public abstract class HubInteractable : MonoBehaviour
     {
         // Waehrend ein Dialog offen ist, reagiert nichts im Hub
         bool active = PlayerInRange && !HubUI.DialogueOpen;
+
+        if (outline != null && outlineMode == OutlineMode.NurInReichweite)
+            outline.SetVisible(active);
 
         if (showPrompt && active) HubUI.Instance.RequestPrompt(promptText);
         if (active && Input.GetKeyDown(interactKey)) OnInteract();

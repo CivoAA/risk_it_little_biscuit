@@ -48,6 +48,15 @@ public class HubUI : MonoBehaviour
     [SerializeField] private Color textColor   = new Color32(0xF7, 0xEC, 0xD6, 0xFF);
     [SerializeField] private Color hintColor   = new Color32(0xD9, 0xA4, 0x41, 0xFF);
 
+    [Header("Sound")]
+    [Tooltip("Spielt bei jedem Linksklick in der Textbox, auch beim Schliessen.")]
+    [SerializeField] private AudioClip pageTurnClip;
+    [Tooltip("Leer lassen - wird beim Start automatisch geholt oder angelegt.")]
+    [SerializeField] private AudioSource sfxSource;
+    [SerializeField, Range(0f, 1f)] private float sfxVolume = 1f;
+    [Tooltip("Zufaellige Tonhoehe pro Klick, damit das Blaettern nicht stumpf wird. 0 = aus.")]
+    [SerializeField, Range(0f, 0.5f)] private float sfxPitchJitter = 0.08f;
+
     GameObject dialogueRoot, promptRoot;
     TextMeshProUGUI bodyText, hintText, promptLabel;
 
@@ -62,7 +71,16 @@ public class HubUI : MonoBehaviour
     {
         if (_instance != null && _instance != this) { Destroy(gameObject); return; }
         _instance = this;
+        EnsureSfxSource();
         Build();
+    }
+
+    void EnsureSfxSource()
+    {
+        if (sfxSource == null) sfxSource = GetComponent<AudioSource>();
+        if (sfxSource == null) sfxSource = gameObject.AddComponent<AudioSource>();
+        sfxSource.playOnAwake = false;
+        sfxSource.loop = false;
     }
 
     void OnDestroy()
@@ -192,13 +210,16 @@ public class HubUI : MonoBehaviour
         dialogueRoot.SetActive(true);
         ShowPage();
         FreezePlayer(true);
+
+        // Auch die erste Seite klingt - sonst kommt der Ton erst ab dem zweiten Blaettern
+        PlaySfx(pageTurnClip);
     }
 
     void ShowPage()
     {
         bodyText.text = pages[pageIndex];
         bool last = pageIndex >= pages.Length - 1;
-        string action = last ? "Klick zum Schliessen" : "Klick fuer weiter";
+        string action = last ? "Klick zum Schließen" : "Klick für weiter";
         hintText.text = (pageIndex + 1) + "/" + pages.Length + "   " + action;
     }
 
@@ -222,10 +243,19 @@ public class HubUI : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
+            PlaySfx(pageTurnClip);
             pageIndex++;
             if (pageIndex >= pages.Length) CloseDialogue();
             else ShowPage();
         }
+    }
+
+    void PlaySfx(AudioClip clip)
+    {
+        if (clip == null || sfxSource == null) return;
+        // PlayOneShot statt Play: ueberlappt sauber, wenn schnell geklickt wird
+        sfxSource.pitch = 1f + Random.Range(-sfxPitchJitter, sfxPitchJitter);
+        sfxSource.PlayOneShot(clip, sfxVolume);
     }
 
     void LateUpdate()
