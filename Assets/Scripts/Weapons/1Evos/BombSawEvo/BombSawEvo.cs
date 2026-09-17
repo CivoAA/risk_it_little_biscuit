@@ -13,6 +13,10 @@ public class BombSawEvo : Weapon
             spawnCounter -= Time.deltaTime;
             if (spawnCounter <= 0)
             {
+                // Die Evo feuert nur, wenn man sie besitzt - also ist das hier der
+                // Moment, in dem das Achievement aufgeht (wie bei den anderen Evos).
+                Achievements.Unlock(Ach.BombSawEvo);
+
                 spawnCounter = CurrentCooldown;
 
                 // Orbit-Pivot erstellen

@@ -36,7 +36,7 @@ public class CrumbTrail : Weapon
 
         if (weaponLevel == maxweaponLevel)
         {
-            AchievementManager.Instance?.UnlockAchievement("Max_Level_CrumbTrail");
+            Achievements.Unlock(Ach.MaxCrumbTrail);
         }
 
         spawnCounter -= Time.deltaTime;

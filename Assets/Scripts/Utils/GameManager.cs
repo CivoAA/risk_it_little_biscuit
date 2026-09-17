@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        AchievementManager.Instance.UnlockAchievement("First_Death");
+        Achievements.Unlock(Ach.FirstDeath);
         currency = (int)(((PlayerController.Instance.playerLevels
         .Take(Mathf.Max(0, PlayerController.Instance.currentLevel - 2))
         .Sum() / 100f + (10 * (PlayerController.Instance.currentLevel - 1)) + gameTime) / 2f)* currencyGainMultiplire);
@@ -67,18 +67,22 @@ public class GameManager : MonoBehaviour
             float overflow = currency - 2500;
             currency = (int)(2500 + (overflow * 0.1f));
         }
-        SaveGame.Instance.AddCurrency(currency);
+        Shop.AddCurrency(currency);
         gameActiv = false;
+
+        // Der Lauf ist vorbei - was sich an Skillpunkten angesammelt hat, jetzt
+        // wegschreiben statt auf den naechsten 5-Sekunden-Takt zu warten.
+        Skills.Flush();
         if (!bossSpawned)
         {
-            gainedThroughAchievements = SkillSaveManager.Instance.currentData.skillCurrency - skillCurrencyBeforeGame;
+            gainedThroughAchievements = Skills.Currency - skillCurrencyBeforeGame;
             SessionProgressTracker.Instance.EvaluateAfterGame();
             StartCoroutine(ShowGameOverScreen());
         }
         else
         {
-            AchievementManager.Instance.UnlockAchievement("First_Win");
-            gainedThroughAchievements = SkillSaveManager.Instance.currentData.skillCurrency - skillCurrencyBeforeGame;
+            Achievements.Unlock(Ach.FirstWin);
+            gainedThroughAchievements = Skills.Currency - skillCurrencyBeforeGame;
             SessionProgressTracker.Instance.EvaluateAfterGame();
             StartCoroutine(ShowWinScreen());
         }
@@ -111,8 +115,9 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        SaveGame.Instance.LoadGame();
-        WM_UIController.Instance.UpdateCurrencyText();
+        // Der Shop-Stand ist ohnehin aktuell - nur die Anzeige muss nachziehen.
+        WM_UIController.Instance?.UpdateCurrencyText();
+        WM_UIController.Instance?.RefreshButtonTexts();
         Time.timeScale = 1f;
         MenuManager.Instance.ActivateScene("World Map");
         MenuManager.Instance.UnloadScene("Game");

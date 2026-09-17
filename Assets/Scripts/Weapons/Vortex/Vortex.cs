@@ -35,7 +35,7 @@ public class Vortex : Weapon
 
         if (weaponLevel == maxweaponLevel)
         {
-            AchievementManager.Instance?.UnlockAchievement("Max_Level_Vortex");
+            Achievements.Unlock(Ach.MaxVortex);
         }
 
         spawnCounter -= Time.deltaTime;

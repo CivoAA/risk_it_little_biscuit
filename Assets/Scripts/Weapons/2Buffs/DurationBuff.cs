@@ -29,7 +29,7 @@ public class DurationBuff : Weapon
 
         if (weaponLevel == maxweaponLevel)
         {
-            AchievementManager.Instance?.UnlockAchievement("Max_Level_Duration");
+            Achievements.Unlock(Ach.MaxDuration);
         }
     }
 }

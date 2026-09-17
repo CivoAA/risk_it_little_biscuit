@@ -15,8 +15,8 @@ public class FireBall : Weapon
     {
         if (weaponLevel == maxweaponLevel)
         {
-            AchievementManager.Instance.UnlockAchievement("Max_Level_FireBall");
-            UnlockManager.Instance.Unlock("unlock_celestial_star");
+            Achievements.Unlock(Ach.MaxFireBall);
+            Unlocks.Grant(Unlocks.CelestialStar);
         }
         if (weaponLevel < 0) return;
 

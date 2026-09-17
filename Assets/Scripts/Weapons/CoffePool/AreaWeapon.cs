@@ -10,7 +10,7 @@ public class AreaWeapon : Weapon
     {
         if (weaponLevel == maxweaponLevel)
         {
-            AchievementManager.Instance.UnlockAchievement("Max_Level_CoffePool");
+            Achievements.Unlock(Ach.MaxCoffeePool);
         }
         if (weaponLevel >= 0)
         {

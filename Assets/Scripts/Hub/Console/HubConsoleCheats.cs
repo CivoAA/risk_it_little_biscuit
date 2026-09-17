@@ -28,15 +28,8 @@ public static class HubConsoleCheats
         {
             int betrag = ArgAsInt(args, 0, 500);
 
-            if (SaveGame.Instance == null || SaveGame.Instance.currentData == null)
-            {
-                sink.PrintError("Kein Spielstand geladen. Hier gibt es nichts zu holen.");
-                return;
-            }
-
-            SaveGame.Instance.currentData.currency += betrag;
-            SaveGame.Instance.SaveGameData();
-            sink.Print($"+{betrag} Muenzen. Neuer Stand: {SaveGame.Instance.currentData.currency}");
+            Shop.AddCurrency(betrag);
+            sink.Print($"+{betrag} Muenzen. Neuer Stand: {Shop.Currency}");
         }, hidden: true);
 
         // ------------------------------------------------------------------
@@ -44,17 +37,11 @@ public static class HubConsoleCheats
         // ------------------------------------------------------------------
         HubConsole.Add("alleswirdgut", "schaltet alle Unlocks frei", (args, sink) =>
         {
-            if (UnlockManager.Instance == null)
-            {
-                sink.PrintError("Kein UnlockManager in dieser Runde.");
-                return;
-            }
-
             int neu = 0;
-            foreach (Unlock u in UnlockManager.Instance.unlocks)
+            foreach (UnlockDef u in Unlocks.All)
             {
-                if (u == null || u.isUnlocked) continue;
-                UnlockManager.Instance.Unlock(u.id);
+                if (u.IsUnlocked) continue;
+                Unlocks.Grant(u);
                 neu++;
             }
 
@@ -74,20 +61,14 @@ public static class HubConsoleCheats
                 return;
             }
 
-            if (UnlockManager.Instance == null)
-            {
-                sink.PrintError("Kein UnlockManager in dieser Runde.");
-                return;
-            }
-
             string id = args[0];
-            if (UnlockManager.Instance.GetUnlock(id) == null)
+            if (Unlocks.Find(id) == null)
             {
                 sink.PrintError($"'{id}' steht auf keiner Liste.");
                 return;
             }
 
-            UnlockManager.Instance.Unlock(id);
+            Unlocks.Grant(id);
             sink.Print($"'{id}' ist jetzt offen.");
         }, usage: "<id>", hidden: true);
 
@@ -96,20 +77,9 @@ public static class HubConsoleCheats
         // ------------------------------------------------------------------
         HubConsole.Add("status", "zeigt Muenzen und Fortschritt", (args, sink) =>
         {
-            if (SaveGame.Instance != null && SaveGame.Instance.currentData != null)
-                sink.Print($"Muenzen: {SaveGame.Instance.currentData.currency}");
-            else
-                sink.Print("Muenzen: -");
+            sink.Print($"Muenzen: {Shop.Currency}");
 
-            if (UnlockManager.Instance != null)
-            {
-                int offen = 0;
-                int gesamt = UnlockManager.Instance.unlocks.Count;
-                foreach (Unlock u in UnlockManager.Instance.unlocks)
-                    if (u != null && u.isUnlocked) offen++;
-
-                sink.Print($"Freigeschaltet: {offen} von {gesamt}");
-            }
+            sink.Print($"Freigeschaltet: {Unlocks.UnlockedCount} von {Unlocks.TotalCount}");
         });
 
         // ------------------------------------------------------------------

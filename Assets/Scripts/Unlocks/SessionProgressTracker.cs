@@ -1,17 +1,46 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Sammelt, was in einem Lauf neu dazugekommen ist - für die Anzeige im
+/// Game-Over- und Sieg-Bildschirm.
+///
+/// Wie das Achievement-System legt sich dieses Objekt vor der ersten Szene
+/// selbst an und überlebt jeden Szenenwechsel. Es steht damit in keiner Szene
+/// und ist trotzdem überall da: World Map, Game-Szene und Test-Szene
+/// gleichermassen. Früher lag es nur in "World Map.unity" - wer die Game-Szene
+/// oder die Test-Szene direkt startete, bekam beim Tod eine
+/// NullReferenceException mitten in <see cref="GameManager.GameOver"/>.
+///
+/// Achievements und Unlocks melden beide per Ereignis, sobald etwas aufgeht.
+/// Der Vorher-Nachher-Vergleich für Unlocks bleibt trotzdem stehen: er fängt
+/// den Fall ab, dass ein Unlock ausserhalb eines Laufs vergeben wurde.
+/// </summary>
+[DisallowMultipleComponent]
 public class SessionProgressTracker : MonoBehaviour
 {
     public static SessionProgressTracker Instance;
 
-    private HashSet<string> achievementsBefore;
     private HashSet<string> unlocksBefore;
 
-    public List<string> newAchievements = new();
-    public List<string> newUnlocks = new();
+    public readonly List<AchievementDef> newAchievements = new List<AchievementDef>();
+    public readonly List<string> newUnlocks = new List<string>();
 
-    void Awake()
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    private static void Bootstrap()
+    {
+        if (Instance != null) return;
+
+        GameObject go = new GameObject("~SessionProgressTracker")
+        {
+            hideFlags = HideFlags.HideInHierarchy
+        };
+
+        Instance = go.AddComponent<SessionProgressTracker>();
+        DontDestroyOnLoad(go);
+    }
+
+    private void Awake()
     {
         if (Instance != null && Instance != this)
         {
@@ -22,49 +51,58 @@ public class SessionProgressTracker : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    private void OnDestroy()
+    {
+        if (Instance == this) Instance = null;
+    }
+
+    private void OnEnable()
+    {
+        Achievements.Unlocked += OnAchievementUnlocked;
+        Unlocks.Granted += OnUnlockGranted;
+    }
+
+    private void OnDisable()
+    {
+        Achievements.Unlocked -= OnAchievementUnlocked;
+        Unlocks.Granted -= OnUnlockGranted;
+    }
+
+    private void OnAchievementUnlocked(AchievementDef def)
+    {
+        if (def != null && !newAchievements.Contains(def)) newAchievements.Add(def);
+    }
+
+    private void OnUnlockGranted(UnlockDef def)
+    {
+        if (def != null && !newUnlocks.Contains(def.Id)) newUnlocks.Add(def.Id);
+    }
+
     public void SnapshotBeforeGame()
     {
-        achievementsBefore = new HashSet<string>();
-        unlocksBefore = new HashSet<string>();
-
-        foreach (var ach in AchievementManager.Instance.achievements)
-        {
-            if (ach.unlocked)
-                achievementsBefore.Add(ach.id);
-        }
-
-        foreach (var unlock in UnlockManager.Instance.unlocks)
-        {
-            if (unlock.isUnlocked)
-                unlocksBefore.Add(unlock.id);
-        }
-
         newAchievements.Clear();
         newUnlocks.Clear();
+
+        unlocksBefore = new HashSet<string>();
+
+        foreach (UnlockDef unlock in Unlocks.All)
+        {
+            if (unlock.IsUnlocked) unlocksBefore.Add(unlock.Id);
+        }
     }
 
     public void EvaluateAfterGame()
     {
-        // Absicherung: Wenn das Spiel ohne SnapshotBeforeGame gestartet wurde
-        // (z. B. direkter Szenenstart im Editor), wäre achievementsBefore null.
-        if (achievementsBefore == null || unlocksBefore == null)
-        {
-            Debug.LogWarning("SessionProgressTracker: Kein Snapshot vorhanden – EvaluateAfterGame wird übersprungen.");
-            newAchievements.Clear();
-            newUnlocks.Clear();
-            return;
-        }
+        // Ohne Snapshot (z.B. direkter Szenenstart im Editor) gibt es nichts zu
+        // vergleichen - die Listen stimmen trotzdem, sie kommen per Ereignis.
+        if (unlocksBefore == null) return;
 
-        foreach (var ach in AchievementManager.Instance.achievements)
+        foreach (UnlockDef unlock in Unlocks.All)
         {
-            if (ach.unlocked && !achievementsBefore.Contains(ach.id))
-                newAchievements.Add(ach.id);
-        }
-
-        foreach (var unlock in UnlockManager.Instance.unlocks)
-        {
-            if (unlock.isUnlocked && !unlocksBefore.Contains(unlock.id))
-                newUnlocks.Add(unlock.id);
+            if (unlock.IsUnlocked && !unlocksBefore.Contains(unlock.Id) && !newUnlocks.Contains(unlock.Id))
+            {
+                newUnlocks.Add(unlock.Id);
+            }
         }
     }
 }

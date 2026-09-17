@@ -202,18 +202,17 @@ public class UIController : MonoBehaviour
 
     void CollectVisuals()
     {
-        foreach (string id in SessionProgressTracker.Instance.newAchievements)
+        foreach (AchievementDef def in SessionProgressTracker.Instance.newAchievements)
         {
-            var ach = AchievementManager.Instance.achievements.Find(a => a.id == id);
-            if (ach != null)
-                unlockedVisuals.Add((ach.icon, ach.AchievmentName));
+            if (def != null)
+                unlockedVisuals.Add((def.Icon, def.Name));
         }
 
         foreach (string id in SessionProgressTracker.Instance.newUnlocks)
         {
-            var unlock = UnlockManager.Instance.unlocks.Find(u => u.id == id);
+            UnlockDef unlock = Unlocks.Find(id);
             if (unlock != null)
-                unlockedVisuals.Add((unlock.unlockedIcon, unlock.displayName));
+                unlockedVisuals.Add((unlock.Icon, unlock.Description));
         }
     }
 

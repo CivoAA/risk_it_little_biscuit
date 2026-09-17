@@ -33,7 +33,7 @@ public class Turret : Weapon
 
         if (weaponLevel == maxweaponLevel)
         {
-            AchievementManager.Instance?.UnlockAchievement("Max_Level_Turret");
+            Achievements.Unlock(Ach.MaxTurret);
         }
 
         spawnCounter -= Time.deltaTime;

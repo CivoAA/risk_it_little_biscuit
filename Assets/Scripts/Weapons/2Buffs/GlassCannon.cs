@@ -56,7 +56,7 @@ public class GlassCannon : Weapon
 
         if (weaponLevel == maxweaponLevel)
         {
-            AchievementManager.Instance?.UnlockAchievement("Max_Level_GlassCannon");
+            Achievements.Unlock(Ach.MaxGlassCannon);
         }
     }
 }

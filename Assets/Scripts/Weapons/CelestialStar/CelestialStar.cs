@@ -12,7 +12,7 @@ public class CelestialStar : Weapon
     {   
         if (weaponLevel == maxweaponLevel)
         {
-            AchievementManager.Instance.UnlockAchievement("Max_Level_CelestialStar");
+            Achievements.Unlock(Ach.MaxCelestialStar);
         }
         if (weaponLevel >= 0)
         {

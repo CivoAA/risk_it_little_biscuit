@@ -14,7 +14,7 @@ public class Voidspike : Weapon
     {
         if (weaponLevel == maxweaponLevel)
         {
-            AchievementManager.Instance.UnlockAchievement("Max_Level_VoidSpike");
+            Achievements.Unlock(Ach.MaxVoidSpike);
         }
         if (weaponLevel >= 0)
         {

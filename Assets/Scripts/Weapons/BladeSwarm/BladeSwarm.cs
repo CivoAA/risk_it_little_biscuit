@@ -38,8 +38,8 @@ public class BladeSwarm : Weapon
 
         if (weaponLevel == maxweaponLevel)
         {
-            AchievementManager.Instance.UnlockAchievement("Max_Level_BladeSwarm");
-            UnlockManager.Instance.Unlock("unlock_blade_swarm");
+            Achievements.Unlock(Ach.MaxBladeSwarm);
+            Unlocks.Grant(Unlocks.BladeSwarm);
         }
 
         attackCounter -= Time.deltaTime;

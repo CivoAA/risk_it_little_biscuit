@@ -21,7 +21,7 @@ public class PlayerSkinSwitcher : MonoBehaviour
     }
     void Start()
     {
-        skinIndex = (int)MapsManager.Instance.extraData[0];
+        skinIndex = Shop.RunSkinIndex;
         skinIndexlast = 99;
     }
 

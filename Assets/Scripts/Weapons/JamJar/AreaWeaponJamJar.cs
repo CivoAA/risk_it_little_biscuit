@@ -15,7 +15,7 @@ public class AreaWeaponJamJar : Weapon
     {
         if (weaponLevel == maxweaponLevel)
         {
-            AchievementManager.Instance.UnlockAchievement("Max_Level_ThrowingJamJar");
+            Achievements.Unlock(Ach.MaxThrowingJamJar);
         }
         if (weaponLevel >= 0)
         {

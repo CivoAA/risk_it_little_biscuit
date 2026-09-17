@@ -20,7 +20,7 @@ public class ShuriBlastEvo : Weapon
             if (spawnCounter <= 0 && !shooting)
             {
                 // Achievment Unlocken
-                AchievementManager.Instance.UnlockAchievement("Shuri_Blast_Evo");
+                Achievements.Unlock(Ach.ShuriBlastEvo);
                 StartCoroutine(SpawnShuriken());
             }
         }

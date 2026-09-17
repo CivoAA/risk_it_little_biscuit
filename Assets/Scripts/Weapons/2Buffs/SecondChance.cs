@@ -36,7 +36,7 @@ public class SecondChance : Weapon
 
         if (weaponLevel == maxweaponLevel)
         {
-            AchievementManager.Instance?.UnlockAchievement("Max_Level_SecondChance");
+            Achievements.Unlock(Ach.MaxSecondChance);
         }
     }
 }

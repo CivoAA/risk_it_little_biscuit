@@ -22,7 +22,7 @@ public class CurrencyReward : Weapon
         {
             if (weaponLevel > lastLevel)
             {
-                SaveGame.Instance.AddCurrency(25);
+                Shop.AddCurrency(25);
             }
             else if (weaponLevel < lastLevel)
             {

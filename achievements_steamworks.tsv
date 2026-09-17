@@ -1,0 +1,40 @@
+API Name	Display Name	Description	Hidden
+First_Game	Play your first game	Enter your first game.	No
+First_Win	Congratulations!	You have beaten a level for the first time!	No
+First_Death	DIE!!!!!!	Die for the first time.	No
+Death	Death	Be death itself!	No
+Kill_100	Enemy Breaker I	Defeat 100 enemies.	No
+Kill_1000	Enemy Breaker II	Defeat 1,000 enemies.	No
+Kill_10000	Enemy Breaker III	Defeat 10,000 enemies and prove your might.	No
+Kill_10_Miniboss	Challenger	Defeat 10 Mini Bosses. Each Mini Boss (marked with a crown) rewards +1 Skill Point!	No
+Kill_100_Miniboss	Conqueror	Defeat 100 Mini Bosses.	No
+Blade_Swarm_Evo	Blade Swarm Evo	Obtained the Blade Storm Evo for the first time!	No
+Bloody_Fork_Evo	Bloody Fork Evo	Obtained the Bloody Fork Evo for the first time!	No
+Explosive_Star_Evo	Explosive Star Evo	Obtained the Explosive Star Evo for the first time!	No
+Shuri_Blast_Evo	Shuri Blast Evo	Obtained the Shuri Blast Evo for the first time!	No
+Boba_Saw_Evo	Boba Saw Evo	Obtained the Boba Saw Evo for the first time!	No
+Boomerang_Evo	Boomerang Evo	Obtained the Boomerang Evo for the first time!	No
+BombSaw_Evo	Bomb Saw Evo	Obtained the Bomb Saw Evo for the first time!	No
+Sticky_Shatter_Evo	Sticky Shatter Evo	Obtained the Sticky Shatter Evo for the first time!	No
+Max_Level_CoffePool	Max Level: Coffee Pool	Reach the maximum level of the Coffee Pool weapon.	No
+Max_Level_Cookiesaw	Max Level: Cookiesaw	Reach the maximum level of the Cookiesaw weapon.	No
+Max_Level_Butterblast	Max Level: Butterblast	Reach the maximum level of the Butterblast weapon.	No
+Max_Level_ThrowingJamJar	Max Level: Throwing Jam Jar	Reach the maximum level of the Throwing Jam Jar weapon.	No
+Max_Level_VoidSpike	Max Level: Void Spike	Reach the maximum level of the Void Spike weapon.	No
+Max_Level_FireBall	Max Level: Fireball	Reach the maximum level of the Fireball weapon.	No
+Max_Level_Boomerang	Max Level: Boomerang	Reach the maximum level of the Boomerang weapon.	No
+Max_Level_CrumbTrail	Max Level: Crumb Trail	Reach the maximum level of the Crumb Trail weapon.	No
+Max_Level_Vortex	Max Level: Vortex	Reach the maximum level of the Vortex weapon.	No
+Max_Level_Turret	Max Level: Turret	Reach the maximum level of the Turret weapon.	No
+Max_Level_BobaGun	Max Level: Boba Gun	Reach the maximum level of the BobaGun weapon.	No
+Max_Level_Shurikookie	Max Level: Shurikookie	Reach the maximum level of the Shurikookie weapon.	No
+Max_Level_SpikeFork	Max Level: Spike Fork	Reach the maximum level of the Spike Fork weapon.	No
+Max_Level_Deathstrike	Max Level: Deathstrike	Reach the maximum level of the Deathstrike weapon.	No
+Max_Level_CelestialStar	Max Level: Celestial Star	Reach the maximum level of the Celestial Star weapon.	No
+Max_Level_BladeSwarm	Max Level: Blade Swarm	Reach the maximum level of the Blade Swarm weapon.	No
+Max_Level_CandyBomb	Max Level: Candy Bomb	Reach the maximum level of the Candy Bomb weapon.	No
+Max_Level_ExtraShot	Max Level: Extra Shot	Reach the maximum level of the Extra Shot buff.	No
+Max_Level_Cooldown	Max Level: Cooldown	Reach the maximum level of the Cooldown buff.	No
+Max_Level_Duration	Max Level: Duration	Reach the maximum level of the Duration buff.	No
+Max_Level_GlassCannon	Max Level: Glass Cannon	Reach the maximum level of the Glass Cannon buff.	No
+Max_Level_SecondChance	Max Level: Second Chance	Reach the maximum level of the Second Chance buff.	No

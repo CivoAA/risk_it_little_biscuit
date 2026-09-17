@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 /// Spielen      -> lädt die Levelauswahl
 /// Endless      -> lädt die World Map
 /// Optionen     -> öffnet das Options-Panel (baut sich selbst, siehe OptionsPanel)
-/// Achievements -> noch ohne Funktion
+/// Achievements -> öffnet die Achievement-Liste (baut sich selbst, siehe AchievementPanel)
 /// Beenden      -> beendet das Spiel
 /// </summary>
 public class MainMenuController : MonoBehaviour
@@ -44,11 +44,14 @@ public class MainMenuController : MonoBehaviour
         OptionsPanel.Open();
     }
 
-    /// <summary>Achievements - bewusst noch ohne Funktion.</summary>
+    /// <summary>
+    /// Achievements. Das Panel baut sich selbst - der gleiche Aufruf funktioniert
+    /// aus jeder Szene heraus (Hub, World Map, im Spiel).
+    /// </summary>
     public void OpenAchievements()
     {
         PlayClick();
-        Debug.Log("[MainMenu] Achievements sind noch nicht angebunden.");
+        AchievementPanel.Open();
     }
 
     // ---------- Beenden ----------

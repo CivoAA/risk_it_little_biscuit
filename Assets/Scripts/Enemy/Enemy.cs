@@ -157,26 +157,18 @@ public class Enemy : MonoBehaviour
             if (Death_Boss)
             {
                 PlayerController.Instance.attractAllXP = true;
-                AchievementManager.Instance.UnlockAchievement("Death");
+                Achievements.Unlock(Ach.Death);
                 // 💰 Belohnung: +50 SkillCurrency
-                if (SkillSaveManager.Instance != null)
-                {
-                    SkillSaveManager.Instance.AddSkillCurrency(50);
-                    WM_UIController.Instance?.UpdateSkillCurrencyText();
-                    Debug.Log($"💰 Gain 50 SkillCurrency !");
-                }
-                else
-                {
-                    Debug.LogWarning("⚠️ SkillSaveManager.Instance ist NULL – keine Belohnung vergeben!");
-                }
+                Skills.AddCurrency(50);
+                WM_UIController.Instance?.UpdateSkillCurrencyText();
                 SpawnChest.Instance.Spawn(transform.position);
             }
             else if (MiniBoss)
             {
                 SpawnChest.Instance.Spawn(transform.position);
-                UnlockManager.Instance.Unlock("unlock_weapon_evo");
-                AchievementManager.Instance.UpdateAchievementValue("Kill_10_Miniboss", 1f);
-                AchievementManager.Instance.UpdateAchievementValue("Kill_100_Miniboss", 1f);
+                // Evo-Slot ist jetzt von Anfang an im Shop sichtbar - hier gibt es nichts mehr freizuschalten.
+                Achievements.Progress(Ach.Kill10Miniboss, 1f);
+                Achievements.Progress(Ach.Kill100Miniboss, 1f);
                 int blockerLayer = LayerMask.NameToLayer("Enemy_barrier");
                 foreach (Enemy enemy in FindObjectsByType<Enemy>(FindObjectsSortMode.None))
                 {
@@ -186,22 +178,14 @@ public class Enemy : MonoBehaviour
                     }
                 }
                 // 💰 Belohnung: +1 SkillCurrency
-                if (SkillSaveManager.Instance != null)
-                {
-                    SkillSaveManager.Instance.AddSkillCurrency(1);
-                    WM_UIController.Instance?.UpdateSkillCurrencyText();
-                    Debug.Log($"💰 Gain 1 SkillCurrency !");
-                }
-                else
-                {
-                    Debug.LogWarning("⚠️ SkillSaveManager.Instance ist NULL – keine Belohnung vergeben!");
-                }
+                Skills.AddCurrency(1);
+                WM_UIController.Instance?.UpdateSkillCurrencyText();
             }
             else
             {
-                AchievementManager.Instance.UpdateAchievementValue("Kill_100", 1f);
-                AchievementManager.Instance.UpdateAchievementValue("Kill_1000", 1f);
-                AchievementManager.Instance.UpdateAchievementValue("Kill_10000", 1f);
+                Achievements.Progress(Ach.Kill100, 1f);
+                Achievements.Progress(Ach.Kill1000, 1f);
+                Achievements.Progress(Ach.Kill10000, 1f);
             }
             if (BossBoss)
             {
@@ -211,16 +195,8 @@ public class Enemy : MonoBehaviour
                 GameManager.Instance.bossSpawned = true;
                 SpawnDeath.Instance.Spawn(spawnPos1);
                 // 💰 Belohnung: +10 SkillCurrency
-                if (SkillSaveManager.Instance != null)
-                {
-                    SkillSaveManager.Instance.AddSkillCurrency(10);
-                    WM_UIController.Instance?.UpdateSkillCurrencyText();
-                    Debug.Log($"💰 Gain 10 SkillCurrency !");
-                }
-                else
-                {
-                    Debug.LogWarning("⚠️ SkillSaveManager.Instance ist NULL – keine Belohnung vergeben!");
-                }
+                Skills.AddCurrency(10);
+                WM_UIController.Instance?.UpdateSkillCurrencyText();
             }
             Destroy(gameObject);
             GameObject DestroyEffect = Instantiate(destroyEffect, transform.position, transform.rotation);

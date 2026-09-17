@@ -2,50 +2,58 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System.Collections.Generic;
-using System;
 
+/// <summary>
+/// Der Shop in der World Map. Die Knöpfe hängen im Inspector an
+/// <see cref="SelectUpgrade"/> und <see cref="BuyButton"/>; Inhalt, Preise und
+/// Werte kommen aus dem Katalog <see cref="Shop"/> - genau wie beim Hub-Shop.
+///
+/// Die Liste <see cref="buttons"/> ist reine Szenen-Verdrahtung: Position i
+/// gehört zum i-ten Eintrag im Katalog. Namen, Beschreibungen, Preise und
+/// Symbole stehen hier bewusst nicht mehr.
+/// </summary>
 public class WM_GameManager : MonoBehaviour
 {
     public TMP_Text descriptionBuy;
     public Image IconBuy;
     public GameObject BuyPanle;
-    private String TextPrice;
-    [SerializeField] private List<Image> Icons;
-    public List<String> description;
+
+    [Tooltip("Ein Knopf je Katalogeintrag, in derselben Reihenfolge wie Shop.cs.")]
     public List<GameObject> buttons;
-    private int buttonIndex;
+
+    private int selectedIndex = -1;
+
+    private ShopItemDef Selected =>
+        (selectedIndex >= 0 && selectedIndex < Shop.All.Count) ? Shop.All[selectedIndex] : null;
+
+    private void OnEnable()
+    {
+        Shop.Changed += OnShopChanged;
+    }
+
+    private void OnDisable()
+    {
+        Shop.Changed -= OnShopChanged;
+    }
+
+    private void OnShopChanged()
+    {
+        WM_UIController.Instance?.RefreshButtonTexts();
+        WM_UIController.Instance?.UpdateCurrencyText();
+        if (Selected != null) ShowDetail(Selected);
+    }
+
+    // ----------------------------------------------------------- Kaufen
+
     public void BuyButton()
     {
-        var data = SaveGame.Instance.currentData;
-        if (data == null || data.buttons == null) return;
-        if (buttonIndex < 0 || buttonIndex >= data.buttons.Count) return;
+        ShopItemDef def = Selected;
+        if (def == null) return;
 
-        var btn = data.buttons[buttonIndex];
-
-        // ✅ MAX-Check (wichtig, damit cost[level] nie out of range geht)
-        if (btn.cost == null || btn.level >= btn.cost.Count)
+        if (Shop.TryBuy(def))
         {
-            AudioController.Instance?.PalySound(AudioController.Instance.PlayerHit);
-            return;
-        }
-
-        int price = btn.cost[btn.level];
-
-        if (price <= data.currency)
-        {
-            SaveGame.Instance.RemoveCurrency(price);
-            SaveGame.Instance.SaveUpgradeButton(buttonIndex);
-
-            WM_UIController.Instance.RefreshButtonTexts();
-            WM_UIController.Instance.UpdateCurrencyText();
-
             AudioController.Instance?.PalySound(AudioController.Instance.MenuClick);
-
-            // UI sofort aktualisieren
-            SelectUpgrade(buttonIndex);
-
-            // Werte fürs Spiel neu berechnen
-            LevelPoint.Instance.UpdateExtraData();
+            // Anzeige zieht über Shop.Changed nach.
         }
         else
         {
@@ -53,169 +61,104 @@ public class WM_GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>Im Inspector an den Shop-Knöpfen. Der Index ist die Position im Katalog.</summary>
     public void SelectUpgrade(int index)
     {
-        var data = SaveGame.Instance.currentData;
-        if (data == null || data.buttons == null) return;
-        if (index < 0 || index >= data.buttons.Count) return;
+        if (index < 0 || index >= Shop.All.Count) return;
 
-        buttonIndex = index;
+        selectedIndex = index;
 
-        var btn = data.buttons[index];
-        bool isMax = (btn.cost == null) || (btn.level >= btn.cost.Count);
+        if (BuyPanle != null && !BuyPanle.activeSelf) BuyPanle.SetActive(true);
 
-        // Panel an
-        if (!BuyPanle.activeSelf)
-            BuyPanle.SetActive(true);
-
-        // Icon setzen (sicher)
-        if (Icons != null && index >= 0 && index < Icons.Count && Icons[index] != null)
-            IconBuy.sprite = Icons[index].sprite;
-
-        // Normalfall: Werte aus LevelPoint.buttonValueTables
-        if (LevelPoint.Instance == null || LevelPoint.Instance.buttonValueTables == null)
-        {
-            descriptionBuy.text = "No data available.";
-            return;
-        }
-
-        if (!LevelPoint.Instance.buttonValueTables.TryGetValue(index, out var values) || values == null || values.Count == 0)
-        {
-            descriptionBuy.text = "No values defined for this upgrade.";
-            return;
-        }
-
-        // currentValue immer sicher lesen (clamp auf letztes)
-        float currentValue = (btn.level >= values.Count) ? values[values.Count - 1] : values[btn.level];
-
-        if (isMax)
-        {
-            // Max erreicht -> kein price/next
-            descriptionBuy.text = description[index] + currentValue + " Max Level Reached";
-            return;
-        }
-
-        // nextValue nur, wenn vorhanden
-        int nextLevel = btn.level + 1;
-        float nextValue = (nextLevel >= values.Count) ? values[values.Count - 1] : values[nextLevel];
-
-        int nextPrice = btn.cost[btn.level];
-
-        string textPrice =
-            currentValue
-            + " | "
-            + nextValue
-            + " Price: <color=#FFFFFF>"
-            + nextPrice
-            + "</color>";
-
-        descriptionBuy.text = description[index] + textPrice;
+        ShowDetail(Shop.All[index]);
     }
+
+    private void ShowDetail(ShopItemDef def)
+    {
+        if (IconBuy != null)
+        {
+            Sprite icon = def.Icon;
+            IconBuy.sprite = icon;
+            IconBuy.enabled = icon != null;
+        }
+
+        if (descriptionBuy == null) return;
+
+        string text = def.Description;
+        float current = Shop.CurrentValue(def);
+
+        if (Shop.IsMaxed(def))
+        {
+            descriptionBuy.text = $"{text} {Nice(current)} Max Level Reached";
+            return;
+        }
+
+        descriptionBuy.text = $"{text} {Nice(current)} | {Nice(Shop.NextValue(def))}" +
+                              $" Price: <color=#FFFFFF>{Shop.NextPrice(def)}</color>";
+    }
+
+    /// <summary>0,35 statt 0,3500001 - und ganze Zahlen ohne Komma.</summary>
+    private static string Nice(float v) =>
+        Mathf.Approximately(v, Mathf.Round(v)) ? Mathf.RoundToInt(v).ToString() : v.ToString("0.##");
+
+    // ----------------------------------------------------------- Szenen
 
     public void ActivateScene(string sceneName)
     {
         MenuManager.Instance.ActivateScene(sceneName);
     }
+
     public void DeactivateScene(string sceneName)
     {
         MenuManager.Instance.DeactivateScene(sceneName);
     }
+
+    // ----------------------------------------------------------- Charakter
+
     public void SelectChar()
     {
-        LevelPoint.Instance.extraData[0] = WM_UIController.Instance.currentIndex;
-        LevelPoint.Instance.Startweapon(WM_UIController.Instance.currentIndex);
-        if (PlayerSkinSwitcher.Instance != null)
-        {
-            PlayerSkinSwitcher.Instance.skinIndex = WM_UIController.Instance.currentIndex;
-        }
-        if (WM_PlayerSkinSwitcher.Instance != null)
-        {
-            WM_PlayerSkinSwitcher.Instance.skinIndex = WM_UIController.Instance.currentIndex;
-        }
-        SaveGame.Instance.currentData.skinIndex = WM_UIController.Instance.currentIndex;
-        SaveGame.Instance.SaveGameData();
+        WM_UIController.Instance?.SelectChar();
     }
+
+    // ----------------------------------------------------------- Debug-Knöpfe
+
     public void OnResetButtonPressed()
     {
-        SaveGame.Instance.ResetAllUpgrades();
-        WM_UIController.Instance.RefreshButtonTexts();
-        WM_UIController.Instance.UpdateCurrencyText();
-        LevelPoint.Instance.UpdateExtraData();
-        AudioController.Instance.PalySound(AudioController.Instance.MenuClick);
+        Shop.ResetAllUpgrades();
+        AudioController.Instance?.PalySound(AudioController.Instance.MenuClick);
     }
+
     public void ResetCurrencyToZero()
     {
-        if (SaveGame.Instance == null || SaveGame.Instance.currentData == null)
-            return;
-
-        SaveGame.Instance.currentData.currency = 0;
-        SaveGame.Instance.SaveGameData();
-
-        WM_UIController.Instance?.UpdateCurrencyText();
+        Shop.SetCurrency(0);
         AudioController.Instance?.PalySound(AudioController.Instance.MenuClick);
-
         Debug.Log("💸 Currency wurde auf 0 gesetzt.");
     }
+
     public void Give1000Currency()
     {
-        if (SaveGame.Instance == null)
-            return;
-
-        SaveGame.Instance.AddCurrency(1000); // speichert & aktualisiert UI
+        Shop.AddCurrency(1000);
         AudioController.Instance?.PalySound(AudioController.Instance.MenuClick);
-
         Debug.Log("💰 1000 Currency hinzugefügt.");
     }
 
+    // ----------------------------------------------------------- Sichtbarkeit
+
+    /// <summary>
+    /// Blendet die Knöpfe aus, deren Eintrag noch nicht freigeschaltet ist.
+    /// Welcher Eintrag welche Unlock-ID braucht, steht am Katalogeintrag - hier
+    /// stand früher eine handgepflegte switch-Liste mit festen Indizes.
+    /// </summary>
     public void RefreshUnlockButtons()
     {
+        if (buttons == null) return;
+
         for (int i = 0; i < buttons.Count; i++)
         {
-            if (buttons[i] == null)
-                continue;
+            if (buttons[i] == null) continue;
 
-            // 🔓 Standardmäßig aktivieren
-            bool isVisible = true;
-
-            // 🔐 Sonderregeln für bestimmte Buttons
-            switch (i)
-            {
-                case 5:
-                    isVisible = UnlockManager.Instance.IsUnlocked("unlock_buff_slot");
-                    break;
-                case 6:
-                    isVisible = UnlockManager.Instance.IsUnlocked("unlock_weapon_slot");
-                    break;
-                case 7:
-                    isVisible = UnlockManager.Instance.IsUnlocked("unlock_evo_slot");
-                    break;
-                case 8:
-                    isVisible = UnlockManager.Instance.IsUnlocked("unlock_boba_gun");
-                    break;
-                case 9:
-                    isVisible = UnlockManager.Instance.IsUnlocked("unlock_shurikookie");
-                    break;
-                case 10:
-                    isVisible = UnlockManager.Instance.IsUnlocked("unlock_spike_fork");
-                    break;
-                case 12:
-                    isVisible = UnlockManager.Instance.IsUnlocked("unlock_celestial_star");
-                    break;
-                case 13:
-                    isVisible = UnlockManager.Instance.IsUnlocked("unlock_blade_swarm");
-                    break;
-                case 14:
-                    isVisible = UnlockManager.Instance.IsUnlocked("unlock_candy_bomb");
-                    break;
-                case 15:
-                    isVisible = UnlockManager.Instance.IsUnlocked("unlock_time_laser");
-                    break;
-                case 20:
-                    isVisible = UnlockManager.Instance.IsUnlocked("unlock_extra_shot");
-                    break;
-            }
-            buttons[i].SetActive(isVisible);
+            bool visible = i < Shop.All.Count && Shop.IsVisible(Shop.All[i]);
+            buttons[i].SetActive(visible);
         }
     }
-
 }

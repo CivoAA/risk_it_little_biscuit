@@ -16,7 +16,7 @@ public class BobaEvo : Weapon
             if (spawnCounter <= 0)
             {
                 // Achievment Unlocken
-                AchievementManager.Instance.UnlockAchievement("Boba_Saw_Evo");
+                Achievements.Unlock(Ach.BobaSawEvo);
                 spawnCounter = CurrentCooldown;
                 StartCoroutine(SpawnShuriken());
             }
@@ -26,7 +26,7 @@ public class BobaEvo : Weapon
     IEnumerator SpawnShuriken()
     {
         // Achievment Unlocken
-        AchievementManager.Instance.UnlockAchievement("Boba_Saw_Evo");
+        Achievements.Unlock(Ach.BobaSawEvo);
         float duration = CurrentDuration;
         float elapsed = 0f;
 

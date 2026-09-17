@@ -44,7 +44,7 @@ public class BladeStormEvo : Weapon
         }
 
         // Achievment Unlocken
-        AchievementManager.Instance.UnlockAchievement("Blade_Swarm_Evo");
+        Achievements.Unlock(Ach.BladeSwarmEvo);
 
         int desired = Mathf.Clamp(
             Mathf.RoundToInt(CurrentStats.shots + PlayerController.Instance.playerShots),

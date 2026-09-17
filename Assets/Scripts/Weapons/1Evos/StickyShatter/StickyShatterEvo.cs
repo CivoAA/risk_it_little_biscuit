@@ -40,7 +40,7 @@ public class StickyShatterEvo : Weapon
         if (!IsActive) return;
 
         // Die Evo hat nur eine Stufe: aktiv sein heisst, sie wurde erhalten.
-        AchievementManager.Instance?.UnlockAchievement("Sticky_Shatter_Evo");
+        Achievements.Unlock(Ach.StickyShatterEvo);
 
         spawnCounter -= Time.deltaTime;
         if (spawnCounter <= 0f)
