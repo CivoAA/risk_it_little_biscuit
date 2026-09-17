@@ -116,11 +116,29 @@ public class GameManager : MonoBehaviour
         }
 
         // Der Shop-Stand ist ohnehin aktuell - nur die Anzeige muss nachziehen.
+        // Der WM_UIController haengt in der World Map und fehlt, wenn der Lauf
+        // aus dem Hub kam - die ?. fangen das ab.
         WM_UIController.Instance?.UpdateCurrencyText();
         WM_UIController.Instance?.RefreshButtonTexts();
         Time.timeScale = 1f;
-        MenuManager.Instance.ActivateScene("World Map");
-        MenuManager.Instance.UnloadScene("Game");
+
+        // Zurueck dorthin, wo der Lauf gestartet wurde: Hub oder World Map.
+        // Den Eintrag setzt die Levelauswahl bzw. PlayerWorldInteraction.
+        // Nicht GetActiveScene(): additiv geladen bleibt der Hub bzw. die World
+        // Map die aktive Szene - gemeint ist die Szene, in der dieser Manager
+        // steht, also die des laufenden Levels.
+        string back = string.IsNullOrEmpty(GameSession.ReturnScene) ? GameSession.HubScene : GameSession.ReturnScene;
+        string here = gameObject.scene.name;
+
+        // Reihenfolge: erst das Level stilllegen, dann das Ziel anschalten, dann
+        // entladen. Jede Szene bringt ihr eigenes Global Light 2D mit - waeren
+        // beide gleichzeitig aktiv, meldet das 2D-Licht "More than one global
+        // light on layer ...". Das Entladen allein deckt die Luecke nicht ab,
+        // weil UnloadSceneAsync erst am Frame-Ende fertig ist. So laeuft es
+        // herum wie beim Betreten, wo ebenfalls erst die Startszene ausgeht.
+        MenuManager.Instance.DeactivateScene(here);
+        MenuManager.Instance.ActivateScene(back);
+        MenuManager.Instance.UnloadScene(here);
     }
     public void Pause()
     {

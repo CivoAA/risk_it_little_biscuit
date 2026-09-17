@@ -95,7 +95,13 @@ public class LevelUpButton : MonoBehaviour
         if (rotateCoroutine != null)
             StopCoroutine(rotateCoroutine);
 
-        rotateCoroutine = StartCoroutine(RotatePartnerIcons());
+        // PlayerController.RandomWeapon() bestueckt die Knoepfe, bevor
+        // UIController.LevelUpPanelOpen() das Panel aufmacht - der Knopf selbst
+        // ist dann zwar schon aktiv, sein Elternteil aber noch nicht, und eine
+        // Coroutine auf einem inaktiven Objekt laesst sich nicht starten.
+        // Das erledigt in dem Fall OnEnable(), sobald das Panel aufgeht.
+        if (gameObject.activeInHierarchy)
+            rotateCoroutine = StartCoroutine(RotatePartnerIcons());
     }
 
     private void OnEnable()

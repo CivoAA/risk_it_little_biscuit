@@ -44,7 +44,9 @@ public class MenuManager : MonoBehaviour
 
     public void NewGame()
     {
-        SceneManager.LoadScene("World Map", LoadSceneMode.Additive);
+        // Start und Ziel eines Laufs ist der Hub. Die World Map wird nicht mehr
+        // angesteuert - sie laeuft nur noch, wenn man sie direkt startet.
+        SceneManager.LoadScene(GameSession.HubScene, LoadSceneMode.Additive);
         Scene currentScene = SceneManager.GetActiveScene();
         SceneManager.UnloadSceneAsync(currentScene);
     }

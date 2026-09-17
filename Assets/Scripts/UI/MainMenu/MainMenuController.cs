@@ -5,8 +5,8 @@ using UnityEngine.SceneManagement;
 /// Steuert das Hauptmenü. Die fünf Knöpfe hängen jeweils an einer der öffentlichen
 /// Methoden hier drunter - im Inspector unter OnClick auswählen.
 ///
-/// Spielen      -> lädt die Levelauswahl
-/// Endless      -> lädt die World Map
+/// Spielen      -> lädt den Hub (dort steht die Levelauswahl)
+/// Endless      -> lädt denselben Hub, nur mit vorgewähltem Endless-Haken
 /// Optionen     -> öffnet das Options-Panel (baut sich selbst, siehe OptionsPanel)
 /// Achievements -> öffnet die Achievement-Liste (baut sich selbst, siehe AchievementPanel)
 /// Beenden      -> beendet das Spiel
@@ -15,10 +15,11 @@ public class MainMenuController : MonoBehaviour
 {
     [Header("Szenen")]
     [SerializeField, Tooltip("Szene, die \"Spielen\" lädt. Muss in den Build Settings stehen.")]
-    private string levelSelectSceneName = "levelauswahl";
+    private string levelSelectSceneName = "hub";
 
-    [SerializeField, Tooltip("Szene, die \"Endless\" lädt. Muss in den Build Settings stehen.")]
-    private string endlessSceneName = "World Map";
+    [SerializeField, Tooltip("Szene, die \"Endless\" lädt. Muss in den Build Settings stehen. " +
+                             "Derselbe Hub wie bei \"Spielen\" - der Unterschied steckt nur in GameSession.SelectedMode.")]
+    private string endlessSceneName = "hub";
 
     private bool isLoading;
 
