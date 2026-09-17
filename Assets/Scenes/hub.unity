@@ -6771,163 +6771,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b0511425a71468e8302807423f083f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entries:
-  - saveIndex: 0
-    displayName: Currency Gain
-    description: Increase your Currency gain by
-    icon: {fileID: 3034270509330349809, guid: b3cc14aba86c53a47a9d948fad7b6537, type: 3}
-    requiredUnlockId: 
-    cost: 3200000064000000c8000000f4010000
-  - saveIndex: 1
-    displayName: Rerolls
-    description: Increase your Rerolles by
-    icon: {fileID: -7956701862507893397, guid: cab7dc548134764438fa091f66308f16, type: 3}
-    requiredUnlockId: 
-    cost: 0a0000003200000064000000fa000000f4010000
-  - saveIndex: 2
-    displayName: Banish
-    description: Increase your Banishs by
-    icon: {fileID: -255680066822586878, guid: fc32379a3b297384b99ec38bc2929170, type: 3}
-    requiredUnlockId: 
-    cost: 0a0000003200000064000000fa000000f4010000
-  - saveIndex: 3
-    displayName: Start XP
-    description: Increase your Start XP by
-    icon: {fileID: 5119234347030366931, guid: 6c688ce29e31abb4f80c42987c486a7b, type: 3}
-    requiredUnlockId: 
-    cost: f4010000ee020000e8030000e8030000
-  - saveIndex: 4
-    displayName: Shrink Speed
-    description: Increase your Schrink Speed by
-    icon: {fileID: 4559809923287296307, guid: 25963bbf49b5e5f4988b34b565d2198b, type: 3}
-    requiredUnlockId: 
-    cost: 96000000fa000000f401000058020000
-  - saveIndex: 5
-    displayName: Buff Slot
-    description: Increases your Buff Slots by
-    icon: {fileID: 9080109636741447190, guid: 2dce3e1fe0d59bb47b0de12a08947e31, type: 3}
-    requiredUnlockId: unlock_buff_slot
-    cost: 20030000e8030000d0070000
-  - saveIndex: 6
-    displayName: Weapon Slot
-    description: Increases your Weapon Slots by
-    icon: {fileID: 5979599604843032145, guid: 290d747089480fc418587b838c7651e9, type: 3}
-    requiredUnlockId: unlock_weapon_slot
-    cost: e8030000dc050000d0070000
-  - saveIndex: 7
-    displayName: Evo Slot
-    description: Increase your Evo Slots by
-    icon: {fileID: -1433950367025202558, guid: 607e7129e3243d64780c4d4ab2497106, type: 3}
-    requiredUnlockId: unlock_evo_slot
-    cost: 64000000e8030000d0070000d007000088130000
-  - saveIndex: 8
-    displayName: Boba Gun
-    description: Unlocks Boba Gun
-    icon: {fileID: -7921170617176873643, guid: f2e24c76f4a97d04c84a2f1484e46206, type: 3}
-    requiredUnlockId: unlock_boba_gun
-    cost: e8030000
-  - saveIndex: 9
-    displayName: Shurikookie
-    description: Unlocks Shurikookie
-    icon: {fileID: 847447752303975085, guid: 863ea6275bdf68748b60fd8befe3359c, type: 3}
-    requiredUnlockId: unlock_shurikookie
-    cost: e8030000
-  - saveIndex: 10
-    displayName: Spikefork
-    description: Unlocks Spikefork
-    icon: {fileID: -4897606249738732535, guid: 655e1a96ded8249469254d83eaf29c8b, type: 3}
-    requiredUnlockId: unlock_spike_fork
-    cost: e8030000
-  - saveIndex: 11
-    displayName: Deathstrike
-    description: Unlocks Deathstrike
-    icon: {fileID: -2766862982360408101, guid: 7112e87cf0e15b84c8077985d854d7d5, type: 3}
-    requiredUnlockId: 
-    cost: e8030000
-  - saveIndex: 12
-    displayName: Celestial Star
-    description: Unlocks Celestial Star
-    icon: {fileID: 3612300725893733613, guid: 2b7d6e8ca16bc8b4b96c01bb354aecde, type: 3}
-    requiredUnlockId: unlock_celestial_star
-    cost: e8030000
-  - saveIndex: 13
-    displayName: Blade Swarm
-    description: Unlocks Blade Swarm
-    icon: {fileID: 396381500548982342, guid: 7189c0012439c5746b0716dd70690a0f, type: 3}
-    requiredUnlockId: unlock_blade_swarm
-    cost: e8030000
-  - saveIndex: 14
-    displayName: Candy Bomb
-    description: Unlocks Candy Bomb
-    icon: {fileID: -8819958107757182163, guid: 07f04cd99d4fdf34b9b1440ebbeff8b9, type: 3}
-    requiredUnlockId: unlock_candy_bomb
-    cost: e8030000
-  - saveIndex: 15
-    displayName: Time Laser
-    description: Unlocks Time Laser
-    icon: {fileID: -8079531964657431639, guid: 36c9afe7f8e457444bdf5ec56d49030d, type: 3}
-    requiredUnlockId: unlock_time_laser
-    cost: e8030000
-  - saveIndex: 16
-    displayName: XP Gain Buff
-    description: Unlocks XP Gain Buff
-    icon: {fileID: 1724444151, guid: 6c0d6489430d43c4897a9a230e3b4618, type: 3}
-    requiredUnlockId: 
-    cost: 20030000
-  - saveIndex: 17
-    displayName: Currency Buff
-    description: Unlocks Currency Gain Buff
-    icon: {fileID: 3034270509330349809, guid: b3cc14aba86c53a47a9d948fad7b6537, type: 3}
-    requiredUnlockId: 
-    cost: 20030000
-  - saveIndex: 18
-    displayName: Life Steal
-    description: Unlocks Life Steal Buff
-    icon: {fileID: -3314898254599218544, guid: b191aa108cfe55444bcffe2627337901, type: 3}
-    requiredUnlockId: 
-    cost: 20030000
-  - saveIndex: 19
-    displayName: Luck
-    description: Unlocks Luck Buff
-    icon: {fileID: 735264250583090601, guid: fcafbf6faf2d7844496d54565435e669, type: 3}
-    requiredUnlockId: 
-    cost: 20030000
-  - saveIndex: 20
-    displayName: Extra Shot
-    description: Unlocks Extra Shot Buff
-    icon: {fileID: -1820588904890853658, guid: d6c2d928f0d444041abb619d45b1f145, type: 3}
-    requiredUnlockId: unlock_extra_shot
-    cost: 20030000
-  - saveIndex: 21
-    displayName: AOE Range
-    description: Unlocks AOE Range Buff
-    icon: {fileID: 167885153293235384, guid: 7f34c66f28098ba418ff9cc4c08b98a3, type: 3}
-    requiredUnlockId: 
-    cost: 20030000
-  - saveIndex: 22
-    displayName: Damage
-    description: Unlocks Damage Buff
-    icon: {fileID: -7124281494648153315, guid: 250d3209866358845a36afd049e658f5, type: 3}
-    requiredUnlockId: 
-    cost: 20030000
-  - saveIndex: 23
-    displayName: Crit Chance
-    description: Unlocks Crit Chance Buff
-    icon: {fileID: -4179903832558941785, guid: 3d68c4b97f9eea54fb281b7cff07c2fc, type: 3}
-    requiredUnlockId: 
-    cost: 20030000
-  - saveIndex: 24
-    displayName: Crit Damage
-    description: Unlocks Crit Damage Buff
-    icon: {fileID: 2663837945686808296, guid: a8634f4cda7e4c94f852fc603ae4ccdd, type: 3}
-    requiredUnlockId: 
-    cost: 20030000
-  - saveIndex: 25
-    displayName: Begleiter
-    description: Unlocks Begleiter
-    icon: {fileID: -2683667644670979637, guid: 4cae7aca66cf3a34b9089ceea2b9084b, type: 3}
-    requiredUnlockId: 
-    cost: a00f0000a00f0000a00f0000
   titleLabel: SHOP
   goldLabel: 'GOLD:'
   priceLabel: 'PRICE:'
@@ -12709,7 +12552,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levels:
   - displayName: Waldrand
-    description: 'Ein ruhiger Anfang. Hier beginnt deine Geschichte.'
+    description: Ein ruhiger Anfang. Hier beginnt deine Geschichte.
     preview: {fileID: 0}
     mapId: 0
     sceneToLoad: Game
@@ -12733,7 +12576,7 @@ MonoBehaviour:
     endlessAvailable: 1
     endlessUnlockId: 
   - displayName: Bergruine
-    description: 'Hoch oben, wo der Wind die Kekse frisst.'
+    description: Hoch oben, wo der Wind die Kekse frisst.
     preview: {fileID: 0}
     mapId: 3
     sceneToLoad: 
@@ -12741,17 +12584,382 @@ MonoBehaviour:
     endlessAvailable: 1
     endlessUnlockId: 
   - displayName: Backstube
-    description: 'Wo alles herkommt. Und wo es endet.'
+    description: Wo alles herkommt. Und wo es endet.
     preview: {fileID: 0}
     mapId: 4
     sceneToLoad: 
     storyUnlockId: Level5_Story
     endlessAvailable: 1
     endlessUnlockId: 
+  titleLabel: LEVELAUSWAHL
+  endlessLabel: ENDLESS MODE
+  playLabel: SPIELEN
+  backLabel: "ZUR\xDCCK"
+  comingSoonLabel: BALD
+  lockedDescription: Noch verschlossen.
+  detailTitleFormat: '{0} - {1}'
   cardFrameSprite: {fileID: 2151125790990887211, guid: 38bd01e77153b0f4a83222cc5e348af6, type: 3}
   selectionSprite: {fileID: 8556669091631943787, guid: 30dddd75d43f52447a4d82190191716d, type: 3}
+  backgroundSprite: {fileID: 0}
   font: {fileID: 11400000, guid: 49e9b75b6bc4414e9a5c275b07d73196, type: 2}
+  referenceResolution: {x: 320, y: 180}
+  bannerArea:
+    serializedVersion: 2
+    x: 8
+    y: 8
+    width: 152
+    height: 18
+  cardsArea:
+    serializedVersion: 2
+    x: 8
+    y: 38
+    width: 204
+    height: 79
+  cardSize: {x: 64, y: 79}
+  cardGap: 6
+  trackY: 128
+  trackNodeSize: 5
+  scrollLeftArea:
+    serializedVersion: 2
+    x: 24
+    y: 124
+    width: 5
+    height: 9
+  scrollRightArea:
+    serializedVersion: 2
+    x: 191
+    y: 124
+    width: 5
+    height: 9
+  backArea:
+    serializedVersion: 2
+    x: 8
+    y: 151
+    width: 62
+    height: 15
+  detailArea:
+    serializedVersion: 2
+    x: 216
+    y: 20
+    width: 96
+    height: 148
+  cardFrameArea:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 64
+    height: 79
+  cardNumberArea:
+    serializedVersion: 2
+    x: 2
+    y: 3
+    width: 60
+    height: 15
+  cardPreviewArea:
+    serializedVersion: 2
+    x: 6
+    y: 20
+    width: 52
+    height: 50
+  selectionArea:
+    serializedVersion: 2
+    x: -3
+    y: -3
+    width: 69
+    height: 85
+  markerGap: 1
+  detailTitleArea:
+    serializedVersion: 2
+    x: 222
+    y: 27
+    width: 84
+    height: 12
+  detailPreviewArea:
+    serializedVersion: 2
+    x: 222
+    y: 43
+    width: 84
+    height: 48
+  detailTextArea:
+    serializedVersion: 2
+    x: 222
+    y: 96
+    width: 84
+    height: 34
+  dividerArea:
+    serializedVersion: 2
+    x: 222
+    y: 133
+    width: 84
+    height: 1
+  endlessBoxArea:
+    serializedVersion: 2
+    x: 222
+    y: 138
+    width: 9
+    height: 9
+  endlessLabelArea:
+    serializedVersion: 2
+    x: 235
+    y: 138
+    width: 71
+    height: 9
+  playArea:
+    serializedVersion: 2
+    x: 222
+    y: 151
+    width: 84
+    height: 15
   showEndlessToggle: 1
+  titleFontSize: 11
+  cardNumberFontSize: 12
+  detailTitleFontSize: 9
+  detailFontSize: 7
+  buttonFontSize: 9
+  detailLineSpacing: 4
+  backdropColor: {r: 0.12941177, g: 0.101960786, b: 0.10980392, a: 1}
+  previewEmpty: {r: 0.11764706, g: 0.09411765, b: 0.13333334, a: 1}
+  cardTint: {r: 0.72, g: 0.72, b: 0.72, a: 1}
+  cardTintHover: {r: 0.88, g: 0.88, b: 0.88, a: 1}
+  cardTintSelected: {r: 1, g: 1, b: 1, a: 1}
+  cardTintLocked: {r: 0.42, g: 0.4, b: 0.45, a: 1}
+  cardFill: {r: 0.22745098, g: 0.17254902, b: 0.17254902, a: 1}
+  cardBorder: {r: 0.41960785, g: 0.31764707, b: 0.2784314, a: 1}
+  selectionBorder: {r: 0.9411765, g: 0.9019608, b: 0.8, a: 1}
+  lockedVeil: {r: 0, g: 0, b: 0, a: 0.55}
+  panelFill: {r: 0.9098039, g: 0.87058824, b: 0.7607843, a: 1}
+  panelBorder: {r: 0.7529412, g: 0.68235296, b: 0.5411765, a: 1}
+  panelInk: {r: 0.2, g: 0.14901961, b: 0.16862746, a: 1}
+  panelInkDim: {r: 0.41960785, g: 0.31764707, b: 0.2784314, a: 1}
+  textOnDark: {r: 0.9098039, g: 0.87058824, b: 0.7607843, a: 1}
+  lockedText: {r: 0.54901963, g: 0.5019608, b: 0.47058824, a: 1}
+  playFillReady: {r: 0.5254902, g: 0.64705884, b: 0.47843137, a: 1}
+  playFillLocked: {r: 0.6039216, g: 0.5647059, b: 0.5254902, a: 1}
+  endlessFill: {r: 0.5254902, g: 0.64705884, b: 0.47843137, a: 1}
+  hoverLift: 0.3
+  playKey: 13
+  playKeyAlt: 101
+  endlessKey: 9
+  closeKey: 27
+  openClip: {fileID: 0}
+  closeClip: {fileID: 0}
+  moveClip: {fileID: 0}
+  toggleClip: {fileID: 0}
+  startClip: {fileID: 0}
+  denyClip: {fileID: 0}
+  sfxSource: {fileID: 0}
+  sfxVolume: 1
+--- !u!1 &1990000061
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1990000062}
+  - component: {fileID: 1990000063}
+  - component: {fileID: 1990000064}
+  m_Layer: 0
+  m_Name: Skilltree
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1990000062
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1990000061}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 47, y: 13.6, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1990000063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1990000061}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0297bc3b44a04799abc7422058029305, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  interactRadius: 1.5
+  interactSize: {x: 1.5, y: 2.5}
+  interactOffset: {x: 0, y: -1.2}
+  interactKey: 101
+  showPrompt: 1
+  promptText: '[E] Skilltree'
+  showOutline: 0
+  outlineMode: 0
+  outlineColor: {r: 0.72156864, g: 0.5254902, b: 0.043137256, a: 1}
+  outlineTargets: []
+  skilltree: {fileID: 1990000064}
+--- !u!114 &1990000064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1990000061}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cd6e5ac3ef946c883fb675eed56cb28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  categories:
+  - displayName: ENTWICKLUNG
+    pathLabel: ENTWICKLUNGSPFAD
+    description: 'Wachse ueber dich hinaus: mehr Erfahrung, mehr Leben, mehr Moeglichkeiten.'
+    quote: '"Jeder Schritt zaehlt."'
+    color: {r: 0.23529412, g: 0.43529412, b: 0.7529412, a: 1}
+    icon: {fileID: 0}
+  - displayName: KAMPF
+    pathLabel: KAMPFPFAD
+    description: Schaerfe deine Waffen und triff haerter, wo es weh tut.
+    quote: '"Angriff ist die beste Verteidigung."'
+    color: {r: 0.69803923, g: 0.25490198, b: 0.25490198, a: 1}
+    icon: {fileID: 0}
+  - displayName: "GL\xDCCK"
+    pathLabel: "GL\xDCCKSPFAD"
+    description: Bessere Funde, seltenere Beute und der eine Wurf, der alles dreht.
+    quote: '"Glueck ist kein Zufall."'
+    color: {r: 0.24313726, g: 0.56078434, b: 0.30980393, a: 1}
+    icon: {fileID: 0}
+  - displayName: SPIRIT
+    pathLabel: SPIRITPFAD
+    description: Sammle Seelen schneller und hole aus jedem Lauf mehr heraus.
+    quote: '"Der Geist ueberdauert."'
+    color: {r: 0.78431374, g: 0.6039216, b: 0.17254902, a: 1}
+    icon: {fileID: 0}
+  titleLabel: SKILLTREE
+  backLabel: "ZUR\xDCCK"
+  pathLabelFormat: '{0}PFAD'
+  backgroundSprite: {fileID: 0}
+  panelSprite: {fileID: 0}
+  font: {fileID: 11400000, guid: 49e9b75b6bc4414e9a5c275b07d73196, type: 2}
+  referenceResolution: {x: 320, y: 180}
+  panelArea:
+    serializedVersion: 2
+    x: 8
+    y: 10
+    width: 304
+    height: 142
+  titleArea:
+    serializedVersion: 2
+    x: 96
+    y: 2
+    width: 128
+    height: 19
+  categoryArea:
+    serializedVersion: 2
+    x: 14
+    y: 32
+    width: 80
+    height: 24
+  categoryGap: 6
+  contentArea:
+    serializedVersion: 2
+    x: 102
+    y: 28
+    width: 130
+    height: 118
+  contentHeaderArea:
+    serializedVersion: 2
+    x: 108
+    y: 33
+    width: 118
+    height: 15
+  contentBodyArea:
+    serializedVersion: 2
+    x: 106
+    y: 54
+    width: 122
+    height: 88
+  detailArea:
+    serializedVersion: 2
+    x: 240
+    y: 28
+    width: 64
+    height: 118
+  backArea:
+    serializedVersion: 2
+    x: 8
+    y: 157
+    width: 62
+    height: 15
+  detailOrbArea:
+    serializedVersion: 2
+    x: 256
+    y: 34
+    width: 32
+    height: 32
+  detailNameArea:
+    serializedVersion: 2
+    x: 242
+    y: 70
+    width: 60
+    height: 12
+  detailDivider1:
+    serializedVersion: 2
+    x: 248
+    y: 86
+    width: 48
+    height: 1
+  detailTextArea:
+    serializedVersion: 2
+    x: 244
+    y: 92
+    width: 56
+    height: 28
+  detailDivider2:
+    serializedVersion: 2
+    x: 248
+    y: 124
+    width: 48
+    height: 1
+  detailQuoteArea:
+    serializedVersion: 2
+    x: 244
+    y: 129
+    width: 56
+    height: 15
+  titleFontSize: 12
+  categoryFontSize: 8
+  headerFontSize: 8
+  detailNameFontSize: 9
+  detailFontSize: 6
+  buttonFontSize: 7
+  detailLineSpacing: 4
+  backdropColor: {r: 0.12941177, g: 0.101960786, b: 0.10980392, a: 1}
+  panelFill: {r: 0.9098039, g: 0.87058824, b: 0.7607843, a: 1}
+  panelInset: {r: 0.9411765, g: 0.9019608, b: 0.8, a: 1}
+  panelBorder: {r: 0.7529412, g: 0.68235296, b: 0.5411765, a: 1}
+  panelInk: {r: 0.2, g: 0.14901961, b: 0.16862746, a: 1}
+  panelInkDim: {r: 0.41960785, g: 0.31764707, b: 0.2784314, a: 1}
+  textOnColor: {r: 0.95686275, g: 0.9254902, b: 0.84705883, a: 1}
+  backFill: {r: 0.2901961, g: 0.21176471, b: 0.18039216, a: 1}
+  backBorder: {r: 0.16470589, g: 0.11764706, b: 0.101960786, a: 1}
+  backInk: {r: 0.9098039, g: 0.87058824, b: 0.7607843, a: 1}
+  borderShade: 0.42
+  hoverLift: 0.25
+  closeKey: 27
+  openClip: {fileID: 0}
+  closeClip: {fileID: 0}
+  moveClip: {fileID: 0}
+  sfxSource: {fileID: 0}
+  sfxVolume: 1
 --- !u!1 &2033158017
 GameObject:
   m_ObjectHideFlags: 0
@@ -13632,3 +13840,4 @@ SceneRoots:
   - {fileID: 914265106}
   - {fileID: 755509538}
   - {fileID: 1990000052}
+  - {fileID: 1990000062}

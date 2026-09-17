@@ -22,7 +22,7 @@ public sealed class HubPixelSprites : System.IDisposable
 
     readonly List<Object> created = new List<Object>();
 
-    Sprite frame, arrowDown, arrowLeft, arrowRight, padlock, check;
+    Sprite frame, arrowDown, arrowLeft, arrowRight, padlock, check, disc, plus;
 
     /// <summary>1px-Rahmen als 3x3-Sprite mit 9-Slice-Raendern: die Linie bleibt
     /// genau einen Design-Pixel breit, egal wie gross die Flaeche wird.</summary>
@@ -49,6 +49,18 @@ public sealed class HubPixelSprites : System.IDisposable
         if (y == 9) return x >= 1 && x <= 5;          // Buegel oben
         return x == 1 || x == 5;                      // Buegel seitlich
     }));
+
+    /// <summary>Gefuellte Scheibe - Platzhalter fuer Kategorie-Symbole und die
+    /// grosse Kugel im Beschreibungsfeld, solange es dafuer keine Icons gibt.</summary>
+    public Sprite Disc => disc != null ? disc : (disc = Build("HubDisc", 16, 16, (x, y) =>
+    {
+        float dx = x - 7.5f, dy = y - 7.5f;
+        return dx * dx + dy * dy <= 7.5f * 7.5f;
+    }));
+
+    /// <summary>Kleines Kreuz, wie es auf den Bannern und Trennlinien sitzt.</summary>
+    public Sprite Plus => plus != null ? plus : (plus = Build("HubPlus", 5, 5,
+        (x, y) => x == 2 || y == 2));
 
     /// <summary>Haken in der Endless-Box.</summary>
     public Sprite Check => check != null ? check : (check = Build("HubCheck", 7, 7, (x, y) =>
@@ -96,6 +108,6 @@ public sealed class HubPixelSprites : System.IDisposable
             else Object.DestroyImmediate(o);
         }
         created.Clear();
-        frame = arrowDown = arrowLeft = arrowRight = padlock = check = null;
+        frame = arrowDown = arrowLeft = arrowRight = padlock = check = disc = plus = null;
     }
 }
