@@ -23,6 +23,13 @@ public class RandomObjectSpawner3x3 : MonoBehaviour
 
     private void Update()
     {
+        // Die Inspector-Referenz gilt, solange Spieler und Spawner in derselben
+        // Szene liegen. Sobald die Maps in eigene Szenen wandern, faellt sie weg
+        // (szenenuebergreifende Referenzen speichert Unity nicht) - dann kommt
+        // der Spieler hier ueber sein Singleton.
+        if (player == null && PlayerController.Instance != null)
+            player = PlayerController.Instance.transform;
+
         if (player == null) return;
 
         int playerBlockX = Mathf.FloorToInt(player.position.x / blockSize);

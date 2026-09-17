@@ -59,6 +59,9 @@ public class PlayerWorldInteraction : MonoBehaviour
                     // waeren die Souls dafuer schon vor dem Merken gezaehlt und wuerden in
                     // der "Cookie Souls: +X"-Anzeige des ersten Laufs fehlen.
                     MapsManager.Instance.selectedMap = currentMap.mapID;
+                    // Nach dem Lauf geht es wieder hierher zurueck - nicht in den Hub,
+                    // falls von dort zuletzt gestartet wurde.
+                    GameSession.ReturnScene = "World Map";
                     Shop.CaptureRun(); // Shop-Stand für diesen Lauf einfrieren
                     MenuManager.Instance.ActivateScene(currentMap.sceneToLoad);
                     MenuManager.Instance.DeactivateScene("World Map");

@@ -5,6 +5,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 using UnityEngine.UI;
+#if UNITY_EDITOR
+using UnityEditor.SceneManagement;
+#endif
 
 /// <summary>
 /// Lädt die World Map und prüft, dass der Skilltree wirklich aus dem Katalog
@@ -28,7 +31,7 @@ public class SkillTreeViewTests
     [UnityTest]
     public IEnumerator SkillTree_baut_sich_aus_dem_Katalog()
     {
-        yield return SceneManager.LoadSceneAsync("World Map", LoadSceneMode.Single);
+        yield return LadeWorldMap();
         yield return null;
 
         GameObject canvas = FindInactiveByName("SkillTreeCanvas");
@@ -70,7 +73,7 @@ public class SkillTreeViewTests
     [UnityTest]
     public IEnumerator Wurzeln_sind_anklickbar_gesperrte_Knoten_nicht()
     {
-        yield return SceneManager.LoadSceneAsync("World Map", LoadSceneMode.Single);
+        yield return LadeWorldMap();
         yield return null;
 
         GameObject canvas = FindInactiveByName("SkillTreeCanvas");
@@ -100,6 +103,23 @@ public class SkillTreeViewTests
                 $"Knopf anklickbar = {button.interactable}.");
         }
     }
+
+    /// <summary>
+    /// Laedt die World Map. Sie steht bewusst nicht mehr in den Build Settings -
+    /// das Spiel steuert sie nicht mehr an, der Hub hat sie abgeloest. Als
+    /// Testkulisse wird sie darum ueber ihren Pfad geladen statt ueber den Namen.
+    /// </summary>
+    private static IEnumerator LadeWorldMap()
+    {
+#if UNITY_EDITOR
+        yield return EditorSceneManager.LoadSceneAsyncInPlayMode(
+            WorldMapPath, new LoadSceneParameters(LoadSceneMode.Single));
+#else
+        yield return SceneManager.LoadSceneAsync("World Map", LoadSceneMode.Single);
+#endif
+    }
+
+    private const string WorldMapPath = "Assets/Scenes/World Map.unity";
 
     private static GameObject FindInactiveByName(string name)
     {

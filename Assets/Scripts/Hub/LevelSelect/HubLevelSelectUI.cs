@@ -597,7 +597,11 @@ public class HubLevelSelectUI : MonoBehaviour
         // Auf dem ersten offenen Level starten, damit man nie vor einer
         // gesperrten Karte steht und sich fragt, warum nichts geht.
         selected = FirstUnlocked();
-        endlessChosen = showEndlessToggle && !StoryUnlocked(Current) && EndlessUnlocked(Current);
+
+        // Der Haken steht vorn, wenn im Hauptmenue "Endless" gedrueckt wurde oder
+        // wenn die Story dieses Levels noch zu ist und nur Endless offen steht.
+        endlessChosen = showEndlessToggle && EndlessUnlocked(Current)
+                        && (GameSession.IsEndless || !StoryUnlocked(Current));
         ScrollToSelected();
         hover = Hit.None;
         hoverCard = -1;
@@ -992,16 +996,9 @@ public class HubLevelSelectUI : MonoBehaviour
 
         // 4. Welche Welt gespielt wird, steht im MapsManager - er ueberlebt den
         //    Szenenwechsel, und WorldSelector in der Zielszene schaltet daraufhin
-        //    worlds[selectedMap] frei.
-        if (MapsManager.Instance != null)
-        {
-            MapsManager.Instance.selectedMap = e.mapId;
-        }
-        else
-        {
-            Debug.LogWarning("[Levelauswahl] Kein MapsManager - die Welt wird ohne Auswahl geladen. " +
-                             "Der gehoert zu den Managern aus der World Map.");
-        }
+        //    worlds[selectedMap] frei. Als Szenen-Objekt steht er nur in der
+        //    World Map; kommt der Spieler aus dem Hub, legt Ensure() ihn an.
+        MapsManager.Ensure().selectedMap = e.mapId;
 
         // 5. Shop-Stand fuer diesen Lauf einfrieren. Die gekauften Upgrades
         //    liefen frueher als float[30] extraData ueber den MapsManager; die
@@ -1012,7 +1009,10 @@ public class HubLevelSelectUI : MonoBehaviour
 
         // 6. Umschalten. Den Szenennamen erst merken, dann schliessen - nach dem
         //    Wechsel steht die Auswahl sonst noch offen im Hub herum.
+        //    Der Name ist zugleich das Rueckreiseziel: GameManager.Restart()
+        //    bringt den Spieler nach dem Lauf genau hierher zurueck.
         string hubScene = gameObject.scene.name;
+        GameSession.ReturnScene = hubScene;
         Close();
 
         // Der uebliche Weg: additiv laden und den Hub stilllegen, genau wie die

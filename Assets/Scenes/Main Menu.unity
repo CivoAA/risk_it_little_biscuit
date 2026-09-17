@@ -408,8 +408,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af8bfb90f57bced4c903ac4a54c54220, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainMenuController
-  levelSelectSceneName: levelauswahl
-  endlessSceneName: World Map
+  levelSelectSceneName: hub
+  endlessSceneName: hub
 --- !u!114 &241260810
 MonoBehaviour:
   m_ObjectHideFlags: 0
