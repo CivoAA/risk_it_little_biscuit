@@ -118,8 +118,8 @@ public abstract class HubInteractable : MonoBehaviour
 
     protected virtual void Update()
     {
-        // Waehrend ein Dialog offen ist, reagiert nichts im Hub
-        bool active = PlayerInRange && !HubUI.DialogueOpen;
+        // Waehrend ein Dialog oder ein anderes Fenster offen ist, reagiert nichts im Hub
+        bool active = PlayerInRange && !HubUI.InputBlocked;
 
         if (outline != null && outlineMode == OutlineMode.NurInReichweite)
             outline.SetVisible(active);

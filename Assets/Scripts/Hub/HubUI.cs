@@ -27,6 +27,19 @@ public class HubUI : MonoBehaviour
 
     public static bool DialogueOpen { get; private set; }
 
+    // Andere Fenster (Konsole, spaeter Shop) melden sich hier an. Gezaehlt statt
+    // gebooled, damit sich zwei Fenster nicht gegenseitig wieder aufsperren.
+    static int openModals;
+
+    /// <summary>Solange das stimmt, reagiert nichts im Hub auf [E].</summary>
+    public static bool InputBlocked => DialogueOpen || openModals > 0;
+
+    /// <summary>Ein eigenes Fenster hat aufgemacht.</summary>
+    public static void PushModal() => openModals++;
+
+    /// <summary>Ein eigenes Fenster hat zugemacht.</summary>
+    public static void PopModal() => openModals = Mathf.Max(0, openModals - 1);
+
     [Header("Font")]
     [Tooltip("PixelArtFont. Leer = TMP-Standardfont.")]
     [SerializeField] private TMP_FontAsset font;
@@ -85,8 +98,14 @@ public class HubUI : MonoBehaviour
 
     void OnDestroy()
     {
-        if (_instance == this) { _instance = null; DialogueOpen = false; }
+        if (_instance == this) { _instance = null; DialogueOpen = false; openModals = 0; }
     }
+
+    /// <summary>
+    /// Fuer eigene Fenster: friert den Spieler mit derselben Logik ein wie die
+    /// Textbox, inklusive Animator-Parameter.
+    /// </summary>
+    public void SetPlayerFrozen(bool frozen) => FreezePlayer(frozen);
 
     // ---------------------------------------------------------------- Aufbau
 
