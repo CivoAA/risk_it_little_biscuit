@@ -54,6 +54,20 @@ public abstract class HubInteractable : MonoBehaviour
     protected SpriteOutline outline;
     protected Transform player;
 
+    // Input.GetKeyDown ist im ganzen Frame wahr, also fuer jedes Update() dieses
+    // Frames. Versetzt eine Interaktion den Spieler - wie der Teleporter -, dann
+    // steht er womoeglich schon in der Zone des naechsten Objekts, und das feuert
+    // im selben Tastendruck gleich mit. Ein Druck loest darum genau eine
+    // Interaktion aus, wer zuerst drankommt gewinnt.
+    static int consumedFrame = -1;
+
+    static bool ConsumeInteractPress()
+    {
+        if (consumedFrame == Time.frameCount) return false;
+        consumedFrame = Time.frameCount;
+        return true;
+    }
+
     protected virtual void Start()
     {
         GameObject p = GameObject.FindGameObjectWithTag("Player");
@@ -125,7 +139,7 @@ public abstract class HubInteractable : MonoBehaviour
             outline.SetVisible(active);
 
         if (showPrompt && active) HubUI.Instance.RequestPrompt(promptText);
-        if (active && Input.GetKeyDown(interactKey)) OnInteract();
+        if (active && Input.GetKeyDown(interactKey) && ConsumeInteractPress()) OnInteract();
     }
 
     protected abstract void OnInteract();
