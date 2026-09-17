@@ -101,7 +101,7 @@ public class TimeWaveManager : MonoBehaviour
         if (!timeLaserUnlocked && timer >= 666f)
         {
             timeLaserUnlocked = true;
-            UnlockManager.Instance.Unlock("unlock_time_laser");
+            Unlocks.Grant(Unlocks.TimeLaser);
         }
     }
 

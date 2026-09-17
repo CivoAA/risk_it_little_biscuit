@@ -13,10 +13,13 @@ using UnityEngine.UI;
 /// Pixeln des Bildes mit Nullpunkt links oben - wer das Bild nachschaerft, zieht
 /// die Rechtecke einfach nach.
 ///
-/// Inhalt und Kaufvorgang sind dieselben wie im Shop der World Map: Preise, Level
-/// und Muenzen kommen aus <see cref="SaveGame"/>, gekauft wird ueber genau die
-/// Aufrufe, die auch WM_GameManager.BuyButton macht. Beide Shops zeigen damit
-/// immer denselben Stand.
+/// Was im Shop steht, kommt aus dem Katalog <see cref="Shop"/> - eine Zeile C#
+/// pro Eintrag, in der Reihenfolge, in der sie in der Liste erscheinen. Preise,
+/// Stufen und Muenzen laufen ueber dieselbe Stelle wie im Shop der World Map,
+/// beide zeigen also immer denselben Stand.
+///
+/// Dieses Skript kennt keinen einzigen Eintrag beim Namen: neue Items tauchen
+/// hier von allein auf, sobald sie im Katalog stehen.
 /// </summary>
 [DisallowMultipleComponent]
 public class HubShopUI : MonoBehaviour
@@ -24,35 +27,8 @@ public class HubShopUI : MonoBehaviour
     /// <summary>Steht offen? Der Hub sperrt solange seine Interaktionen.</summary>
     public static bool IsOpen { get; private set; }
 
-    /// <summary>Ein Eintrag in der Liste. Texte und Symbol sind frei einstellbar.</summary>
-    [System.Serializable]
-    public class ShopEntry
-    {
-        [Tooltip("Index in SaveGame -> Default Buttons. Bestimmt Preis, Level und was der Kauf bewirkt.")]
-        public int saveIndex;
-
-        [Tooltip("Name in der Liste und ueber der Beschreibung.")]
-        public string displayName = "";
-
-        [Tooltip("Beschreibung im rechten Feld.")]
-        [TextArea(2, 4)]
-        public string description = "";
-
-        [Tooltip("Symbol in der Liste und im rechten Feld.")]
-        public Sprite icon;
-
-        [Tooltip("Optional: erst sichtbar, wenn diese Unlock-ID offen ist. Leer = immer sichtbar.")]
-        public string requiredUnlockId = "";
-
-        [Tooltip("Preis je Stufe, als Rueckfallebene. Sobald ein Spielstand geladen ist, " +
-                 "gewinnen dessen Preise - diese Liste ist nur da, damit der Shop auch " +
-                 "ohne SaveGame vollstaendig aussieht (z.B. hub-Szene allein gestartet).")]
-        public List<int> cost = new List<int>();
-    }
-
-    [Header("Inhalt")]
-    [Tooltip("Reihenfolge in der Liste. Namen und Beschreibungen sind hier frei aenderbar.")]
-    [SerializeField] private List<ShopEntry> entries = new List<ShopEntry>();
+    // Inhalt und Reihenfolge stehen im Katalog Shop.cs - hier gibt es dazu
+    // bewusst kein Inspector-Feld mehr.
 
     [Header("Beschriftungen")]
     [SerializeField] private string titleLabel = "SHOP";
@@ -211,7 +187,7 @@ public class HubShopUI : MonoBehaviour
     readonly List<Row> rows = new List<Row>();
 
     // Nur die Eintraege, die gerade freigeschaltet sind - der Rest taucht gar nicht auf
-    readonly List<ShopEntry> shown = new List<ShopEntry>();
+    readonly List<ShopItemDef> shown = new List<ShopItemDef>();
     int selected;
     int scrollTop;
     int openedOnFrame = -1;
@@ -633,26 +609,16 @@ public class HubShopUI : MonoBehaviour
     }
 
     /// <summary>
-    /// Sammelt die Eintraege ein, die gerade sichtbar sein duerfen - dieselbe
-    /// Regel wie WM_GameManager.RefreshUnlockButtons, nur ueber die Unlock-ID
-    /// am Eintrag statt ueber fest verdrahtete Indizes.
+    /// Sammelt die Eintraege ein, die gerade sichtbar sein duerfen. Die Regel
+    /// steht am Katalogeintrag (requiredUnlock), nicht hier.
     /// </summary>
     void RebuildShownList()
     {
         shown.Clear();
-        if (entries == null) return;
 
-        foreach (ShopEntry e in entries)
+        foreach (ShopItemDef def in Shop.All)
         {
-            if (e == null) continue;
-
-            if (!string.IsNullOrWhiteSpace(e.requiredUnlockId))
-            {
-                if (UnlockManager.Instance == null) continue;
-                if (!UnlockManager.Instance.IsUnlocked(e.requiredUnlockId)) continue;
-            }
-
-            shown.Add(e);
+            if (Shop.IsVisible(def)) shown.Add(def);
         }
     }
 
@@ -723,7 +689,7 @@ public class HubShopUI : MonoBehaviour
             if (index >= shown.Count) { row.Go.SetActive(false); continue; }
 
             row.Go.SetActive(true);
-            ShopEntry entry = shown[index];
+            ShopItemDef entry = shown[index];
             bool isSelected = index == selected;
 
             row.Highlight.color = isSelected ? highlightColor : Color.clear;
@@ -732,22 +698,19 @@ public class HubShopUI : MonoBehaviour
             if (row.Frame != null)
                 row.Frame.color = isSelected ? rowFrameSelectedColor : rowFrameColor;
 
-            row.Icon.sprite = entry.icon;
-            row.Icon.enabled = entry.icon != null;
+            Sprite icon = entry.Icon;
+            row.Icon.sprite = icon;
+            row.Icon.enabled = icon != null;
 
-            row.Name.text = entry.displayName;
+            row.Name.text = entry.Name;
             row.Name.color = isSelected ? rowSelectedColor : rowTextColor;
 
-            ButtonData data = FindData(entry.saveIndex);
-            List<int> costs = CostsOf(entry, data);
-            int level = LevelOf(data);
-            bool maxed = IsMaxed(costs, level);
-            int price = NextPrice(costs, level);
+            bool maxed = Shop.IsMaxed(entry);
+            int price = Shop.NextPrice(entry);
 
-            if (!HasCosts(costs))
+            if (entry.MaxLevel == 0)
             {
-                // Weder Spielstand noch hinterlegte Preise - hier laesst sich
-                // schlicht nichts sagen
+                // Eintrag ohne Preisliste - hier laesst sich nichts sagen
                 row.Price.text = "-";
                 row.Price.color = rowLockedColor;
                 row.Coin.enabled = false;
@@ -787,53 +750,46 @@ public class HubShopUI : MonoBehaviour
             return;
         }
 
-        ShopEntry entry = shown[selected];
+        ShopItemDef entry = shown[selected];
 
-        detailIcon.sprite = entry.icon;
-        detailIcon.enabled = entry.icon != null;
-        detailNameText.text = entry.displayName;
+        Sprite icon = entry.Icon;
+        detailIcon.sprite = icon;
+        detailIcon.enabled = icon != null;
+        detailNameText.text = entry.Name;
 
-        ButtonData data = FindData(entry.saveIndex);
-        List<int> costs = CostsOf(entry, data);
-        int level = LevelOf(data);
-        bool maxed = IsMaxed(costs, level);
-        int price = NextPrice(costs, level);
+        bool hasCosts = entry.MaxLevel > 0;
+        bool maxed = Shop.IsMaxed(entry);
+        int price = Shop.NextPrice(entry);
 
-        detailText.text = BuildDescription(entry, costs, level, maxed);
+        detailText.text = BuildDescription(entry, maxed);
 
-        priceValueText.text = !HasCosts(costs) ? "-" : maxed ? maxLabel : price.ToString();
-        priceValueText.color = (HasCosts(costs) && !maxed && price > Currency)
+        priceValueText.text = !hasCosts ? "-" : maxed ? maxLabel : price.ToString();
+        priceValueText.color = (hasCosts && !maxed && price > Currency)
             ? tooExpensiveColor : rowTextColor;
 
-        // Kaufen geht nur mit echtem Spielstand - ohne den waere nichts zu speichern
-        SetBuyEnabled(data != null && !maxed && price <= Currency);
+        SetBuyEnabled(Shop.CanBuy(entry));
     }
 
     /// <summary>
     /// Beschreibung, Stufe und der Sprung, den der naechste Kauf bringt -
     /// derselbe Inhalt wie im alten Shop, nur auf drei Zeilen verteilt.
     /// </summary>
-    string BuildDescription(ShopEntry entry, List<int> costs, int level, bool maxed)
+    string BuildDescription(ShopItemDef entry, bool maxed)
     {
         var lines = new List<string>();
 
-        if (!string.IsNullOrEmpty(entry.description)) lines.Add(entry.description.Trim());
+        string text = entry.Description;
+        if (!string.IsNullOrEmpty(text)) lines.Add(text.Trim());
 
-        if (HasCosts(costs)) lines.Add(string.Format(levelFormat, level, costs.Count));
+        if (entry.MaxLevel > 0)
+            lines.Add(string.Format(levelFormat, Shop.LevelOf(entry), entry.MaxLevel));
 
-        List<float> values = ValueTable(entry.saveIndex);
-        if (values != null && values.Count > 0)
+        if (entry.Values.Count > 0)
         {
-            float current = values[Mathf.Clamp(level, 0, values.Count - 1)];
-            if (maxed)
-            {
-                lines.Add(string.Format(upgradeFormat, Nice(current), maxLabel));
-            }
-            else
-            {
-                float next = values[Mathf.Clamp(level + 1, 0, values.Count - 1)];
-                lines.Add(string.Format(upgradeFormat, Nice(current), Nice(next)));
-            }
+            string current = Nice(Shop.CurrentValue(entry));
+            lines.Add(maxed
+                ? string.Format(upgradeFormat, current, maxLabel)
+                : string.Format(upgradeFormat, current, Nice(Shop.NextValue(entry))));
         }
 
         return string.Join("\n", lines);
@@ -891,24 +847,9 @@ public class HubShopUI : MonoBehaviour
     {
         if (selected < 0 || selected >= shown.Count) { PlayDenySound(); return; }
 
-        ShopEntry entry = shown[selected];
-        ButtonData data = FindData(entry.saveIndex);
-
-        // Gekauft wird immer gegen den Spielstand, nie gegen die Ersatzpreise -
-        // ohne SaveGame gaebe es nichts zu speichern.
-        if (data == null || IsMaxed(data.cost, data.level)) { PlayDenySound(); return; }
-
-        int price = NextPrice(data.cost, data.level);
-        if (price > Currency) { PlayDenySound(); return; }
-
-        // Genau die Aufrufe, die auch WM_GameManager.BuyButton macht - damit
-        // stehen beide Shops und der Spielstand immer auf demselben Stand.
-        SaveGame.Instance.RemoveCurrency(price);
-        SaveGame.Instance.SaveUpgradeButton(entry.saveIndex);
-
-        LevelPoint.Instance?.UpdateExtraData();
-        WM_UIController.Instance?.RefreshButtonTexts();
-        WM_UIController.Instance?.UpdateCurrencyText();
+        // Der Katalog entscheidet, ob der Kauf durchgeht - Preis abziehen, Stufe
+        // erhoehen und Speichern passiert dort an einer Stelle, fuer beide Shops.
+        if (!Shop.TryBuy(shown[selected])) { PlayDenySound(); return; }
 
         PlayBuySound();
         Refresh();
@@ -916,43 +857,7 @@ public class HubShopUI : MonoBehaviour
 
     // ----------------------------------------------------------- Spielstand
 
-    bool HasSave => SaveGame.Instance != null && SaveGame.Instance.currentData != null;
-
-    int Currency => HasSave ? SaveGame.Instance.currentData.currency : 0;
-
-    ButtonData FindData(int saveIndex)
-    {
-        if (!HasSave || SaveGame.Instance.currentData.buttons == null) return null;
-        return SaveGame.Instance.currentData.buttons.Find(b => b.index == saveIndex);
-    }
-
-    /// <summary>
-    /// Preistabelle des Eintrags. Der Spielstand gewinnt, solange es einen gibt -
-    /// wer dort die Kosten aendert, soll das sofort im Shop sehen. Ohne Spielstand
-    /// kommen die im Inspector hinterlegten Preise zum Zug.
-    /// </summary>
-    static List<int> CostsOf(ShopEntry entry, ButtonData data) =>
-        (data != null && data.cost != null && data.cost.Count > 0) ? data.cost : entry.cost;
-
-    /// <summary>Ohne Spielstand steht alles auf Stufe 0.</summary>
-    static int LevelOf(ButtonData data) => data != null ? data.level : 0;
-
-    static bool HasCosts(List<int> costs) => costs != null && costs.Count > 0;
-
-    static bool IsMaxed(List<int> costs, int level) => !HasCosts(costs) || level >= costs.Count;
-
-    static int NextPrice(List<int> costs, int level) =>
-        IsMaxed(costs, level) ? 0 : costs[level];
-
-    /// <summary>
-    /// Die Wertetabellen liegen in LevelPoint. Fehlt die Szene, bleibt die
-    /// Zeile mit dem Wert-Sprung einfach weg - der Rest funktioniert trotzdem.
-    /// </summary>
-    static List<float> ValueTable(int saveIndex)
-    {
-        if (LevelPoint.Instance == null || LevelPoint.Instance.buttonValueTables == null) return null;
-        return LevelPoint.Instance.buttonValueTables.TryGetValue(saveIndex, out var values) ? values : null;
-    }
+    int Currency => Shop.Currency;
 
     void PlaySfx(AudioClip clip)
     {

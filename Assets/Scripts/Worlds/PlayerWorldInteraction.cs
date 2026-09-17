@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class PlayerWorldInteraction : MonoBehaviour
 {
-    [SerializeField] private LevelPoint currentPoint;
     [SerializeField] private MapName currentMap;
 
     public GameObject rogueLikeCanvas; // Skill Tree!!! 
@@ -54,10 +53,13 @@ public class PlayerWorldInteraction : MonoBehaviour
             {
                 case InteractionType.Map:
                     SessionProgressTracker.Instance.SnapshotBeforeGame(); //Sichern der Achivments und Unlocks bevor das spiel Startet
-                    SkillSaveManager.Instance.ApplyToScene();
-                    AchievementManager.Instance.UnlockAchievement("First_Game");
+                    Skills.SetActiveTreeForCharacter(Shop.SkinIndex);
+                    // Ach.FirstGame loest PlayerController.StartStats() aus - also erst,
+                    // nachdem skillCurrencyBeforeGame steht. Stuende der Aufruf auch hier,
+                    // waeren die Souls dafuer schon vor dem Merken gezaehlt und wuerden in
+                    // der "Cookie Souls: +X"-Anzeige des ersten Laufs fehlen.
                     MapsManager.Instance.selectedMap = currentMap.mapID;
-                    MapsManager.Instance.extraData = LevelPoint.Instance.extraData;
+                    Shop.CaptureRun(); // Shop-Stand für diesen Lauf einfrieren
                     MenuManager.Instance.ActivateScene(currentMap.sceneToLoad);
                     MenuManager.Instance.DeactivateScene("World Map");
                     break;
@@ -88,8 +90,7 @@ public class PlayerWorldInteraction : MonoBehaviour
                     }
                     else
                     {
-                        if (SkillSaveManager.Instance != null)
-                            SkillSaveManager.Instance.ApplyToScene();
+                        Skills.SetActiveTreeForCharacter(Shop.SkinIndex);
                         rogueLikeCanvas.SetActive(true);
                         Time.timeScale = 0f;
                     }
@@ -105,7 +106,7 @@ public class PlayerWorldInteraction : MonoBehaviour
                     {
                         CharCaves.SetActive(true);
                         Time.timeScale = 0f;
-                        WM_UIController.Instance.currentIndex = (int)LevelPoint.Instance.extraData[0];
+                        WM_UIController.Instance.currentIndex = Shop.SkinIndex;
                         WM_UIController.Instance.UpdateCarousel();
                     }
                     break;

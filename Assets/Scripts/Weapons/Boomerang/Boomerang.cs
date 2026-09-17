@@ -15,7 +15,7 @@ public class Boomerang : Weapon
     {
         if (weaponLevel == maxweaponLevel)
         {
-            AchievementManager.Instance.UnlockAchievement("Max_Level_Boomerang");
+            Achievements.Unlock(Ach.MaxBoomerang);
         }
         if (weaponLevel >= 0)
         {

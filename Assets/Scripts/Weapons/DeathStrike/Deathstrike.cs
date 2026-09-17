@@ -14,7 +14,7 @@ public class Deathstrike : Weapon
     {
         if (weaponLevel == maxweaponLevel)
         {
-            AchievementManager.Instance.UnlockAchievement("Max_Level_Deathstrike");
+            Achievements.Unlock(Ach.MaxDeathstrike);
         }
         if (weaponLevel < 0) return;
 

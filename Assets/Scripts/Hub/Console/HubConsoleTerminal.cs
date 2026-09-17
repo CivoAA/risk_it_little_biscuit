@@ -23,7 +23,7 @@ public class HubConsoleTerminal : HubInteractable
         [TextArea(1, 4)]
         public string antwort = "Freigeschaltet.";
 
-        [Tooltip("Optional: ID aus dem UnlockManager, die freigeschaltet wird. Leer = keine.")]
+        [Tooltip("Optional: Unlock-ID aus Unlocks.cs, die freigeschaltet wird. Leer = keine.")]
         public string unlockId = "";
 
         [Tooltip("Optional: so viele Muenzen dazu. 0 = keine.")]
@@ -104,33 +104,21 @@ public class HubConsoleTerminal : HubInteractable
 
         if (!string.IsNullOrWhiteSpace(entry.unlockId))
         {
-            if (UnlockManager.Instance == null)
-            {
-                sink.PrintError("Kein UnlockManager in dieser Runde.");
-            }
-            else if (UnlockManager.Instance.GetUnlock(entry.unlockId) == null)
+            if (Unlocks.Find(entry.unlockId) == null)
             {
                 sink.PrintError($"Unlock '{entry.unlockId}' steht auf keiner Liste.");
             }
             else
             {
-                UnlockManager.Instance.Unlock(entry.unlockId);
+                Unlocks.Grant(entry.unlockId);
                 etwasPassiert = true;
             }
         }
 
         if (entry.muenzen != 0)
         {
-            if (SaveGame.Instance == null || SaveGame.Instance.currentData == null)
-            {
-                sink.PrintError("Kein Spielstand geladen - Muenzen bleiben aus.");
-            }
-            else
-            {
-                SaveGame.Instance.currentData.currency += entry.muenzen;
-                SaveGame.Instance.SaveGameData();
-                etwasPassiert = true;
-            }
+            Shop.AddCurrency(entry.muenzen);
+            etwasPassiert = true;
         }
 
         if (!string.IsNullOrEmpty(entry.antwort)) sink.Print(entry.antwort);

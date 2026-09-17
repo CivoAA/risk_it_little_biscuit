@@ -13,14 +13,14 @@ public class BoomerangEvo : Weapon
     {
         if (weaponLevel >= 0)
         {
-            AchievementManager.Instance.UnlockAchievement("Boomerang_Evo");
+            Achievements.Unlock(Ach.BoomerangEvo);
             spawnCounter -= Time.deltaTime;
 
             if (spawnCounter <= 0 && !shooting)
             {
                 shooting = true;
                 StartCoroutine(SpawnBoomerangRing());
-                AchievementManager.Instance.UnlockAchievement("Boomerang_Evo");
+                Achievements.Unlock(Ach.BoomerangEvo);
             }
         }
     }

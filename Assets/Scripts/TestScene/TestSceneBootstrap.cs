@@ -4,15 +4,15 @@ using UnityEngine;
 /// Macht die Test-Szene alleine lauffähig.
 ///
 /// Im echten Spiel liegt die Game-Szene additiv über der World Map und benutzt
-/// deren Manager (MapsManager, AchievementManager, UnlockManager, ...). In der
+/// deren Manager (MapsManager, ...). In der
 /// Test-Szene gibt es die nicht, deshalb legt dieses Skript vor allen anderen
 /// Awake-Aufrufen Ersatz-Manager an:
 ///
-/// * <see cref="MapsManager"/> mit vollständigen extraData (alle Waffen/Buffs
-///   freigeschaltet), damit im Level-Up-Panel wirklich alles auftauchen kann.
-/// * <see cref="AchievementManager"/> und <see cref="UnlockManager"/> im
-///   Sandbox-Modus: sie schalten nichts frei und schreiben nichts in die
-///   Speicherdateien. Dein echter Fortschritt bleibt also unberührt.
+/// * <see cref="MapsManager"/> plus einen Shop-Stand, in dem alle Waffen und
+///   Buffs gekauft sind, damit im Level-Up-Panel wirklich alles auftauchen kann.
+/// * Achievements und Unlocks im Sandbox-Modus: sie schalten
+///   nichts frei und schreiben nichts in die Speicherdateien. Dein echter
+///   Fortschritt bleibt also unberührt.
 ///
 /// Wird nur in der Test-Szene verwendet. Ist einer der Manager schon vorhanden
 /// (z. B. weil die Szene später doch aus der World Map geladen wird), wird
@@ -22,10 +22,10 @@ using UnityEngine;
 public class TestSceneBootstrap : MonoBehaviour
 {
     [Header("Spielstart")]
-    [Tooltip("extraData[0] – Skin des Spielers (0 = normal).")]
+    [Tooltip("Skin des Spielers (0 = normal).")]
     public int skinIndex = 0;
 
-    [Tooltip("extraData[1] – Index der Startwaffe in PlayerController.activeWeapon.")]
+    [Tooltip("Index der Startwaffe in PlayerController.activeWeapon.")]
     public int startWeaponIndex = 0;
 
     [Tooltip("Alle Waffen/Buffs/Evos beim Start auf 'nicht besessen' setzen, " +
@@ -42,11 +42,20 @@ public class TestSceneBootstrap : MonoBehaviour
     {
         EnsureMapsManager();
 
+        Shop.SandboxMode = true;
+
         if (createSandboxManagers)
         {
-            EnsureAchievementManager();
-            EnsureUnlockManager();
+            EnableAchievementSandbox();
+            EnableUnlockSandbox();
+            Skills.SandboxMode = true;
         }
+
+        // Im echten Spiel macht das die World Map beim Betreten der Karte. Ohne
+        // diesen Schnitt wuerde die Liste "neu freigeschaltet" am Game-Over-Schirm
+        // ueber jedes Restart hinweg weiterwachsen - der Tracker ueberlebt den
+        // Szenenwechsel.
+        SessionProgressTracker.Instance.SnapshotBeforeGame();
     }
 
     void Update()
@@ -78,55 +87,31 @@ public class TestSceneBootstrap : MonoBehaviour
         go.SetActive(false);
         MapsManager maps = go.AddComponent<MapsManager>();
         maps.selectedMap = 0;
-        maps.extraData = BuildExtraData();
         go.SetActive(true);
+
+        // Alle Waffen und Buffs gelten als gekauft, damit im Level-Up-Panel
+        // wirklich alles auftauchen kann. Die mehrstufigen Upgrades bleiben auf
+        // 0, damit die Werte mit einem frischen Spielstand vergleichbar sind.
+        Shop.CaptureRunUnlockAll(skinIndex, startWeaponIndex);
     }
 
     /// <summary>
-    /// extraData-Layout siehe LevelPoint / PlayerController.StartStats:
-    /// 0 Skin, 1 Startwaffe, 2..9 Shop-Extras, 10..17 Waffen-Unlocks,
-    /// 18..26 Buff-Unlocks. In der Test-Szene ist alles freigeschaltet.
+    /// Achievements laufen weiter mit, werden aber nicht mehr gespeichert und
+    /// nicht an Steam gemeldet. Kein Ersatzobjekt nötig - das System ist statisch
+    /// und läuft ohnehin schon.
     /// </summary>
-    private float[] BuildExtraData()
+    private void EnableAchievementSandbox()
     {
-        float[] data = new float[32];
-        data[0] = skinIndex;
-        data[1] = startWeaponIndex;
-
-        // 2..9 bleiben 0: keine Shop-Boni, damit die Werte vergleichbar sind.
-        for (int i = 10; i <= 26; i++)
-        {
-            data[i] = 1f;
-        }
-
-        return data;
+        Achievements.SandboxMode = true;
     }
 
-    private void EnsureAchievementManager()
+    /// <summary>
+    /// Unlocks laufen weiter mit, werden aber nicht gespeichert. Kein Ersatzobjekt
+    /// noetig - das System ist statisch und laeuft ohnehin schon.
+    /// </summary>
+    private void EnableUnlockSandbox()
     {
-        if (AchievementManager.Instance != null)
-        {
-            return;
-        }
-
-        // Inaktiv anlegen, damit sandboxMode vor dem Awake gesetzt werden kann.
-        GameObject go = new GameObject("AchievementManager (Sandbox)");
-        go.SetActive(false);
-        go.AddComponent<AchievementManager>().sandboxMode = true;
-        go.SetActive(true);
-    }
-
-    private void EnsureUnlockManager()
-    {
-        if (UnlockManager.Instance != null)
-        {
-            return;
-        }
-
-        GameObject go = new GameObject("UnlockManager (Sandbox)");
-        go.SetActive(false);
-        go.AddComponent<UnlockManager>().sandboxMode = true;
-        go.SetActive(true);
+        Unlocks.SandboxMode = true;
     }
 
     // ------------------------------------------------------------------

@@ -22,6 +22,14 @@ public class WM_UIController : MonoBehaviour
 
     private const int defaultButtonCount = 8;
     private int lastCurrency = int.MinValue;
+    private int lastSkillCurrency = int.MinValue;
+
+    // Die Nachsuche per GameObject.Find lief frueher in jedem Frame, in dem das
+    // Textfeld fehlte - zusammen mit einer LogWarning pro Frame. Beides passiert
+    // jetzt nur noch einmal je Szene.
+    private bool currencyTextSearched;
+    private bool skillCurrencyTextSearched;
+
     public static WM_UIController Instance { get; private set; }
 
     void Awake()
@@ -35,7 +43,7 @@ public class WM_UIController : MonoBehaviour
     }
     void Start()
     {
-        currentIndex = SaveGame.Instance.currentData.skinIndex;
+        currentIndex = Shop.SkinIndex;
         UpdateCarousel();
     }
     void OnEnable()
@@ -51,6 +59,13 @@ public class WM_UIController : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        // Eine neue Szene bringt neue Textfelder mit: Suche und zuletzt
+        // angezeigte Werte zuruecksetzen, damit beides frisch gefuellt wird.
+        currencyTextSearched = false;
+        skillCurrencyTextSearched = false;
+        lastCurrency = int.MinValue;
+        lastSkillCurrency = int.MinValue;
+
         // Coroutine starten, damit die Scene einmal vollständig initialisiert ist
         StartCoroutine(AssignUIRoutine(scene));
     }
@@ -60,27 +75,9 @@ public class WM_UIController : MonoBehaviour
         // einen Frame warten, UI-Instanzen werden so meist fertig erstellt
         yield return null;
 
-        // kurz warten, falls SaveGame noch nicht ready ist (max. 10 Frames)
-        int tries = 0;
-        while ((SaveGame.Instance == null || SaveGame.Instance.currentData == null) && tries < 10)
-        {
-            tries++;
-            yield return null;
-        }
-
-        if (SaveGame.Instance == null)
-        {
-            Debug.LogError("WM_UIController: SaveGame.Instance ist null. UI-Zuweisung abgebrochen.");
-            yield break;
-        }
-        if (SaveGame.Instance.currentData == null)
-        {
-            Debug.LogError("WM_UIController: SaveGame.Instance.currentData ist null. UI-Zuweisung abgebrochen.");
-            yield break;
-        }
-
-        // Ziel-Anzahl an Button-Slots (mind. defaultButtonCount, ggf. mehr wenn Save mehr Buttons hat)
-        int targetCount = Mathf.Max(defaultButtonCount, SaveGame.Instance.currentData.buttons?.Count ?? defaultButtonCount);
+        // Ein Textfeld je Shop-Eintrag. Der Katalog gibt die Anzahl vor und ist
+        // schon vor der ersten Szene geladen - warten muss hier niemand mehr.
+        int targetCount = Mathf.Max(defaultButtonCount, Shop.All.Count);
 
         // Liste auf passende Größe bringen (vorhandene Einträge bleiben erhalten)
         while (buttonTexts.Count < targetCount)
@@ -115,11 +112,7 @@ public class WM_UIController : MonoBehaviour
             // Wenn bereits im Inspector gesetzt/gespeichert → verwenden (überschreiben, falls nötig)
             if (buttonTexts[i] != null)
             {
-                // Text setzen, falls Save-Eintrag existiert
-                if (i < SaveGame.Instance.currentData.buttons.Count)
-                    buttonTexts[i].text = SaveGame.Instance.currentData.buttons[i].level.ToString();
-                else
-                    buttonTexts[i].text = "0";
+                buttonTexts[i].text = LevelTextAt(i);
                 continue;
             }
 
@@ -144,10 +137,7 @@ public class WM_UIController : MonoBehaviour
             if (foundText != null)
             {
                 buttonTexts[i] = foundText;
-                if (i < SaveGame.Instance.currentData.buttons.Count)
-                    buttonTexts[i].text = SaveGame.Instance.currentData.buttons[i].level.ToString(); //<------------------ heir wird der text eigegeben
-                else
-                    buttonTexts[i].text = "0";
+                buttonTexts[i].text = LevelTextAt(i);
             }
             else
             {
@@ -177,7 +167,7 @@ public class WM_UIController : MonoBehaviour
         {
             UpdateCurrencyText();
             UpdateSkillCurrencyText();
-            //SkillSaveManager.Instance.ApplyToScene();
+
         }
     }
 
@@ -192,47 +182,46 @@ public class WM_UIController : MonoBehaviour
         return false;
     }
 
+    /// <summary>Gekaufte Stufe des i-ten Shop-Eintrags, als Text fuer den Button.</summary>
+    private static string LevelTextAt(int i)
+    {
+        if (i < 0 || i >= Shop.All.Count) return "0";
+        return Shop.LevelOf(Shop.All[i]).ToString();
+    }
+
     public void UpdateCurrencyText()
     {
-        if (SaveGame.Instance == null || SaveGame.Instance.currentData == null)
-            return;
-
-        int cur = SaveGame.Instance.currentData.currency;
-
-        // Wenn das Textfeld noch nicht gefunden wurde, such es hier nachträglich
-        if (currencyText == null)
+        // Wenn das Textfeld noch nicht gefunden wurde, einmal nachträglich suchen.
+        // GameObject.Find geht über die ganze Szene - das darf nicht in jedem
+        // Frame passieren, nur weil das Feld gerade fehlt.
+        if (currencyText == null && !currencyTextSearched)
         {
+            currencyTextSearched = true;
+
             var found = GameObject.Find("Text currency");
             if (found != null)
                 currencyText = found.GetComponentInChildren<TMP_Text>(true);
+
+            if (currencyText == null)
+                Debug.LogWarning("⚠️ currencyText nicht gefunden! Kann Text nicht aktualisieren.");
         }
 
-        // Jetzt Text immer aktualisieren, egal ob lastCurrency gleich ist oder nicht
-        if (currencyText != null)
-        {
-            currencyText.text = cur.ToString();
-            lastCurrency = cur;
-        }
-        else
-        {
-            Debug.LogWarning("⚠️ currencyText nicht gefunden! Kann Text nicht aktualisieren.");
-        }
+        if (currencyText == null) return;
+
+        int cur = Shop.Currency;
+        if (cur == lastCurrency) return;
+
+        currencyText.text = cur.ToString();
+        lastCurrency = cur;
     }
 
 
     // kann aufgerufen werden, wenn du manuell alle Button-Texte neu setzen willst
     public void RefreshButtonTexts()
     {
-        if (SaveGame.Instance == null || SaveGame.Instance.currentData == null) return;
         for (int i = 0; i < buttonTexts.Count; i++)
         {
-            if (buttonTexts[i] != null)
-            {
-                if (i < SaveGame.Instance.currentData.buttons.Count)
-                    buttonTexts[i].text = SaveGame.Instance.currentData.buttons[i].level.ToString();
-                else
-                    buttonTexts[i].text = "0";
-            }
+            if (buttonTexts[i] != null) buttonTexts[i].text = LevelTextAt(i);
         }
     }
     public void Next() // Rechts klicken
@@ -265,50 +254,37 @@ public class WM_UIController : MonoBehaviour
     }
     public void SelectChar()
     {
-        if (LevelPoint.Instance != null)
-        {
-            if (LevelPoint.Instance.extraData != null)
-                LevelPoint.Instance.extraData[0] = currentIndex;
-            LevelPoint.Instance.Startweapon(currentIndex);
-        }
+        // Speichert gleich mit - die Startwaffe leitet sich daraus ab (Characters.cs).
+        Shop.SkinIndex = currentIndex;
+
+        // Sobald es Skilltrees pro Charakter gibt, wechselt hier der Baum mit.
+        Skills.SetActiveTreeForCharacter(currentIndex);
 
         if (PlayerSkinSwitcher.Instance != null)
             PlayerSkinSwitcher.Instance.skinIndex = currentIndex;
 
         if (WM_PlayerSkinSwitcher.Instance != null)
             WM_PlayerSkinSwitcher.Instance.skinIndex = currentIndex;
-
-        if (SaveGame.Instance != null && SaveGame.Instance.currentData != null)
-        {
-            SaveGame.Instance.currentData.skinIndex = currentIndex;
-            SaveGame.Instance.SaveGameData();
-        }
     }
 
     public void UpdateSkillCurrencyText()
     {
-        if (SkillSaveManager.Instance == null)
+        // falls nicht im Inspector gesetzt, einmal per Name versuchen
+        if (skillCurrencyText == null && !skillCurrencyTextSearched)
         {
-            Debug.LogWarning("⚠ SkillSaveManager.Instance ist NULL!");
-            return;
-        }
+            skillCurrencyTextSearched = true;
 
-        // 🔧 HIER war der Fehler: saveData → currentData
-        int currency = SkillSaveManager.Instance.currentData.skillCurrency;
-
-        // falls nicht im Inspector gesetzt, versuch's per Name
-        if (skillCurrencyText == null)
-        {
             var go = GameObject.Find("Text SkillCurrency");
             if (go != null) skillCurrencyText = go.GetComponentInChildren<TMP_Text>(true);
         }
 
-        if (skillCurrencyText != null)
-        {
-            skillCurrencyText.text = currency.ToString();
-            // Debug optional:
-            // Debug.Log($"💰 Skill Currency Anzeige aktualisiert: {currency}");
-        }
+        if (skillCurrencyText == null) return;
+
+        int currency = Skills.Currency;
+        if (currency == lastSkillCurrency) return;
+
+        skillCurrencyText.text = currency.ToString();
+        lastSkillCurrency = currency;
     }
 
 

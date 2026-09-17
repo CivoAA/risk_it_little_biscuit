@@ -199,14 +199,9 @@ public class PlayerController : MonoBehaviour
 
     public void StartStats()
     {
-        // Absicherung: MapsManager und extraData müssen vorhanden sein
-        if (MapsManager.Instance == null || MapsManager.Instance.extraData == null || MapsManager.Instance.extraData.Length < 10)
+        if (activeWeapon != null && activeWeapon.Length > 0)
         {
-            Debug.LogWarning("PlayerController.StartStats: MapsManager/extraData fehlt oder ist zu kurz – Start-Extras werden übersprungen.");
-        }
-        else
-        {
-            int startWeaponIndex = Mathf.Clamp((int)MapsManager.Instance.extraData[1], 0, activeWeapon.Length - 1); // in LevelPoint hinterlegt
+            int startWeaponIndex = Mathf.Clamp(Shop.RunStartWeapon, 0, activeWeapon.Length - 1);
             Weapon startWeapon = activeWeapon[startWeaponIndex];
             startWeapon.weaponLevel = 0;
             startWeapon.posssibleEvo = true;
@@ -224,51 +219,51 @@ public class PlayerController : MonoBehaviour
                     recipe.RequiredWeapon1.posssibleEvo = true;
                 }
             }
-
-            var ex = MapsManager.Instance.extraData;
-
-            // ✅ neue Shop-Extras (2..9)
-            GameManager.Instance.currencyGainMultiplire += ex[2]; // Currency Gain
-            rerollAmount += Mathf.RoundToInt(ex[3]); // Reroll
-            banishAmount += Mathf.RoundToInt(ex[4]); // Banish
-            experience += ex[5]; // Start XP
-            powerUpShrinkSpeed += ex[6]; // Shrink Speed
-            BuffSlots += Mathf.RoundToInt(ex[7]); // Buff Slot
-            WeaponSlots += Mathf.RoundToInt(ex[8]); // Weapon Slot
-            EvoSlots += Mathf.RoundToInt(ex[9]); // Evo Slot
         }
 
-        if (GameManager.Instance != null && SkillSaveManager.Instance != null)
+        // Shop-Extras. Welcher Eintrag welchen Wert liefert, steht in Shop.cs -
+        // hier stand früher ein Zugriff auf feste Plätze in einem float[30].
+        if (GameManager.Instance != null)
+            GameManager.Instance.currencyGainMultiplire += Shop.Get(Shop.CurrencyGain);
+
+        rerollAmount       += Shop.GetInt(Shop.Rerolls);
+        banishAmount       += Shop.GetInt(Shop.Banish);
+        experience         += Shop.Get(Shop.StartXp);
+        powerUpShrinkSpeed += Shop.Get(Shop.ShrinkSpeed);
+        BuffSlots          += Shop.GetInt(Shop.BuffSlot);
+        WeaponSlots        += Shop.GetInt(Shop.WeaponSlot);
+        EvoSlots           += Shop.GetInt(Shop.EvoSlot);
+
+        if (GameManager.Instance != null)
         {
-            GameManager.Instance.skillCurrencyBeforeGame = SkillSaveManager.Instance.currentData.skillCurrency;
+            GameManager.Instance.skillCurrencyBeforeGame = Skills.Currency;
         }
-        AchievementManager.Instance?.UnlockAchievement("First_Game");
+        Achievements.Unlock(Ach.FirstGame);
 
-        if (SkillStatsManager.Instance != null)
-        {
-            playerMaxHealth += SkillStatsManager.Instance.bonusMaxHealth;
-            playerHealth = playerMaxHealth;
-            moveSpeed += SkillStatsManager.Instance.bonusSpeed;
-            experienceMultiplier += SkillStatsManager.Instance.bonusXpMultiplier;
-            playerHealthReg += SkillStatsManager.Instance.bonusHealthReg;
-            playerShots += SkillStatsManager.Instance.bonusExtraShots;
-            playerArmor += SkillStatsManager.Instance.bonusArmor;
-            AOERange += SkillStatsManager.Instance.bonusAOERange;
-            lifeStealChance += SkillStatsManager.Instance.bonusLifeSteal;
-            damageMultiplier += SkillStatsManager.Instance.bonusDamage;
-            critDamage += SkillStatsManager.Instance.bonusCritDamage;
-            critChance += SkillStatsManager.Instance.bonusCritChance;
-            dodgeChance += SkillStatsManager.Instance.bonusDodgeChance;
-            pickupRange += SkillStatsManager.Instance.bonusPickupRange;
-            luck += SkillStatsManager.Instance.bonusLuck;
-            banishAmount += Mathf.RoundToInt(SkillStatsManager.Instance.bonusBanish);
-            rerollAmount += Mathf.RoundToInt(SkillStatsManager.Instance.bonusReroll);
-            experience += SkillStatsManager.Instance.startXPAmount;
-            powerUpShrinkSpeed += SkillStatsManager.Instance.shrinkSpeed;
-            WeaponSlots += Mathf.RoundToInt(SkillStatsManager.Instance.weaponSlots);
-            BuffSlots += Mathf.RoundToInt(SkillStatsManager.Instance.buffSlots);
-            EvoSlots += Mathf.RoundToInt(SkillStatsManager.Instance.evoSlots);
-        }
+        // Skilltree-Boni. Die Summen kommen aus dem gerade aktiven Baum
+        // (später: dem Baum des gewählten Charakters).
+        playerMaxHealth      += Skills.Bonus(SkillType.IncreaseMaxHealth);
+        playerHealth          = playerMaxHealth;
+        moveSpeed            += Skills.Bonus(SkillType.IncreaseSpeed);
+        experienceMultiplier += Skills.Bonus(SkillType.xpMultiplier);
+        playerHealthReg      += Skills.Bonus(SkillType.IncreaseHealthReg);
+        playerShots          += Skills.Bonus(SkillType.IncreaseExtraShot);
+        playerArmor          += Skills.Bonus(SkillType.IncreaseArmor);
+        AOERange             += Skills.Bonus(SkillType.IncreaseAOERange);
+        lifeStealChance      += Skills.Bonus(SkillType.IncreaseLifeSteal);
+        damageMultiplier     += Skills.Bonus(SkillType.IncreaseDamage);
+        critDamage           += Skills.Bonus(SkillType.IncreaseCritDamage);
+        critChance           += Skills.Bonus(SkillType.IncreaseCritChance);
+        dodgeChance          += Skills.Bonus(SkillType.IncreaseDodgeChance);
+        pickupRange          += Skills.Bonus(SkillType.IncreasePickupRange);
+        luck                 += Skills.Bonus(SkillType.IncreaseLuck);
+        banishAmount         += Skills.BonusInt(SkillType.BanishAmount);
+        rerollAmount         += Skills.BonusInt(SkillType.RerollAmount);
+        experience           += Skills.Bonus(SkillType.StartXPAmount);
+        powerUpShrinkSpeed   += Skills.Bonus(SkillType.IncreaseShrinkSpeed);
+        WeaponSlots          += Skills.BonusInt(SkillType.IncreaseWeaponSlots);
+        BuffSlots            += Skills.BonusInt(SkillType.IncreaseBuffSlots);
+        EvoSlots             += Skills.BonusInt(SkillType.IncreaseEvoSlots);
     }
 
     public void PlayerHealthReg()
@@ -317,7 +312,7 @@ public class PlayerController : MonoBehaviour
             {
                 gameObject.SetActive(false);
                 GameManager.Instance.GameOver();
-                WM_UIController.Instance.UpdateCurrencyText();
+                WM_UIController.Instance?.UpdateCurrencyText();
             }
         }
     }
@@ -382,11 +377,19 @@ public class PlayerController : MonoBehaviour
 
         if(currentLevel == 30)
         {
-            UnlockManager.Instance.Unlock("unlock_weapon_slot");
+            Unlocks.Grant(Unlocks.WeaponSlot);
         }
         if(currentLevel == 10)
         {
-            UnlockManager.Instance.Unlock("unlock_buff_slot");
+            Unlocks.Grant(Unlocks.BuffSlot);
+        }
+
+        // Wer im Lauf auf zwei Schuss kommt, schaltet den Extra-Shot-Kauf frei.
+        // Die Bedingung stand frueher in UnlocksChecker, einem Skript, das an
+        // keinem Objekt haengt - der Unlock war deshalb nie erreichbar.
+        if (playerShots >= 2)
+        {
+            Unlocks.Grant(Unlocks.ExtraShot);
         }
     }
 
@@ -599,10 +602,10 @@ public class PlayerController : MonoBehaviour
     {
         if (weapon == null) return false;
 
-        // 1. Startwaffe ist immer freigeschaltet (mit Absicherung gegen fehlende Daten)
-        if (MapsManager.Instance != null && MapsManager.Instance.extraData != null && MapsManager.Instance.extraData.Length > 1)
+        // 1. Startwaffe ist immer freigeschaltet
+        if (activeWeapon != null && activeWeapon.Length > 0)
         {
-            int startIdx = Mathf.Clamp(Mathf.RoundToInt(MapsManager.Instance.extraData[1]), 0, activeWeapon.Length - 1);
+            int startIdx = Mathf.Clamp(Shop.RunStartWeapon, 0, activeWeapon.Length - 1);
             string startWeaponID = activeWeapon[startIdx]?.weaponID;
             if (startWeaponID == weapon.weaponID)
                 return true;
@@ -627,23 +630,10 @@ public class PlayerController : MonoBehaviour
         if (defaultUnlockedWeapons.Contains(weapon.weaponID))
             return true;
 
-        // 3. Mapping WeaponID → extraData Index (nur für Upgrades)
-        Dictionary<string, int> weaponToIndex = new Dictionary<string, int>
-        {
-            { "boba_gun",        10 },
-            { "shurikookie",     11 },
-            { "spike_fork",      12 },
-            { "deathstrike",     13 },
-            { "celestial_star",  14 },
-            { "blade_swarm",     15 },
-            { "candy_bomb",      16 },
-            { "time_laser",      17 },
-        };
-
-        if (!weaponToIndex.TryGetValue(weapon.weaponID, out int index))
-            return false;
-
-        return MapsManager.Instance.extraData.Length > index && MapsManager.Instance.extraData[index] >= 1f;
+        // 3. Alles Weitere muss im Shop gekauft sein. Welche Waffe zu welchem
+        //    Shop-Eintrag gehört, steht am Eintrag selbst (unlocksWeapon in Shop.cs) -
+        //    hier stand früher eine zweite, handgepflegte Tabelle.
+        return Shop.IsWeaponUnlocked(weapon.weaponID);
     }
 
     private bool IsBuffUnlocked(Weapon buff)
@@ -669,23 +659,8 @@ public class PlayerController : MonoBehaviour
         if (defaultUnlockedBuffs.Contains(buff.weaponID))
             return true;
 
-        // Freischaltbare Buffs → Mapping
-        Dictionary<string, int> buffToIndex = new Dictionary<string, int>
-        {
-            { "buff_xp_gain",       18 },
-            { "buff_currency",      19 },
-            { "buff_life_steal",    20 },
-            { "buff_luck",          21 },
-            { "buff_extra_shot",    22 },
-            { "buff_aoe_range",     23 },
-            { "buff_damage",        24 },
-            { "buff_crit_chance",   25 },
-            { "buff_crit_damage",   26 },
-        };
-
-        if (!buffToIndex.TryGetValue(buff.weaponID, out int index)) return false;
-
-        return MapsManager.Instance.extraData.Length > index && MapsManager.Instance.extraData[index] >= 1f;
+        // Freischaltbare Buffs: dieselbe Regel wie bei den Waffen.
+        return Shop.IsWeaponUnlocked(buff.weaponID);
     }
 
 

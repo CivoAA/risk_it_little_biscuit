@@ -4,15 +4,11 @@ using UnityEngine.SceneManagement;
 /// <summary>
 /// Holt den in der Overworld gekauften Begleiter in den Run.
 ///
-/// Die Shop-Stufe steht in <see cref="MapsManager.extraData"/> an
-/// <see cref="ExtraDataIndex"/> - befuellt wird sie von LevelPoint. Stufe 0
-/// bedeutet "nicht gekauft", dann passiert hier nichts.
+/// Die Shop-Stufe kommt aus <see cref="Shop.Companion"/>. Stufe 0 bedeutet
+/// "nicht gekauft", dann passiert hier nichts.
 /// </summary>
 public class CompanionSpawner : MonoBehaviour
 {
-    /// <summary>Index in MapsManager.extraData. Muss zum Mapping in LevelPoint passen.</summary>
-    public const int ExtraDataIndex = 27;
-
     [SerializeField] private GameObject companionPrefab;
 
     [Tooltip("Versatz zum Spieler beim Spawn.")]
@@ -49,11 +45,5 @@ public class CompanionSpawner : MonoBehaviour
         if (script != null) script.SetTier(tier);
     }
 
-    private int ShopTier()
-    {
-        if (MapsManager.Instance == null || MapsManager.Instance.extraData == null) return 0;
-        if (MapsManager.Instance.extraData.Length <= ExtraDataIndex) return 0;
-
-        return Mathf.RoundToInt(MapsManager.Instance.extraData[ExtraDataIndex]);
-    }
+    private int ShopTier() => Shop.GetInt(Shop.Companion);
 }

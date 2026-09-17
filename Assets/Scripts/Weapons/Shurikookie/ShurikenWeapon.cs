@@ -14,8 +14,8 @@ public class ShurikenWeapon : Weapon
     {
         if (weaponLevel == maxweaponLevel)
         {
-            AchievementManager.Instance.UnlockAchievement("Max_Level_Shurikookie");
-            UnlockManager.Instance.Unlock("unlock_shurikookie");
+            Achievements.Unlock(Ach.MaxShurikookie);
+            Unlocks.Grant(Unlocks.Shurikookie);
         }
         // Input speichern (letzte Bewegungsrichtung merken)
         inputDir = PlayerController.Instance.playerMoveDirection;

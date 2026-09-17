@@ -13,7 +13,7 @@ public class ExplosiveStarEvo : Weapon
         if (weaponLevel >= 0)
         {
             // Achievment Unlocken
-            AchievementManager.Instance.UnlockAchievement("Explosive_Star_Evo");
+            Achievements.Unlock(Ach.ExplosiveStarEvo);
             spawnCounter -= Time.deltaTime;
             if (spawnCounter <= 0)
             {
@@ -25,7 +25,7 @@ public class ExplosiveStarEvo : Weapon
                 // Coroutine starten, die alle Sterne spawnt
                 StartCoroutine(SpawnMultipleStars(spawnCount));
                 // Achievment Unlocken
-                AchievementManager.Instance.UnlockAchievement("Explosive_Star_Evo");
+                Achievements.Unlock(Ach.ExplosiveStarEvo);
             }
         }
     }

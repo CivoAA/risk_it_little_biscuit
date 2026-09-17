@@ -15,7 +15,7 @@ public class BobaWeapon : Weapon
     {
         if (weaponLevel == maxweaponLevel)
         {
-            AchievementManager.Instance.UnlockAchievement("Max_Level_Butterblast");
+            Achievements.Unlock(Ach.MaxButterblast);
         }
         if (weaponLevel >= 0)
         {

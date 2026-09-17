@@ -13,7 +13,7 @@ public class BloodyFork : Weapon
         if (weaponLevel >= 0)
         {
             // Achievment Unlocken
-            AchievementManager.Instance.UnlockAchievement("Bloody_Fork_Evo");
+            Achievements.Unlock(Ach.BloodyForkEvo);
             spawnCounter -= Time.deltaTime;
             if (spawnCounter <= 0 && !shooting)
             {

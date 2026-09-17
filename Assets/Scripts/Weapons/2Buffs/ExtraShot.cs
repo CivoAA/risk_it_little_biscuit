@@ -8,7 +8,7 @@ public class ExtraShot : Weapon
     {
         if (weaponLevel == maxweaponLevel)
         {
-            AchievementManager.Instance.UnlockAchievement("Max_Level_ExtraShot");
+            Achievements.Unlock(Ach.MaxExtraShot);
         }
         if (weaponLevel != lastAppliedLevel && weaponLevel >= 0)
         {

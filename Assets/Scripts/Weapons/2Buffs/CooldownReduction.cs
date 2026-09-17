@@ -31,7 +31,7 @@ public class CooldownReduction : Weapon
 
         if (weaponLevel == maxweaponLevel)
         {
-            AchievementManager.Instance?.UnlockAchievement("Max_Level_Cooldown");
+            Achievements.Unlock(Ach.MaxCooldown);
         }
     }
 }

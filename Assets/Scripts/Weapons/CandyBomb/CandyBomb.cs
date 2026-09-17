@@ -11,7 +11,7 @@ public class CandyBomb : Weapon
     {
         if (weaponLevel == maxweaponLevel)
         {
-            AchievementManager.Instance.UnlockAchievement("Max_Level_CandyBomb");
+            Achievements.Unlock(Ach.MaxCandyBomb);
         }
         if (weaponLevel >= 0)
         {
