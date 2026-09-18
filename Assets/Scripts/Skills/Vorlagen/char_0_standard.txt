@@ -1,0 +1,162 @@
+# ---------------------------------------------------------------------------
+#  BEISPIELBAUM - Charakter 0 (Standard)
+#
+#  Diese Datei ist NICHT die Wahrheit im Spiel. Sie ist die Vorlage, aus der
+#  beim ersten Start einmalig das Asset Assets/Resources/SkillTrees/char_0.asset
+#  gebaut wird. Ab da wird im Editor gearbeitet (Tools -> Skilltree -> Editor),
+#  und diese Datei bleibt liegen, wie sie ist.
+#
+#  Neu einlesen (ueberschreibt das Asset):
+#    Tools -> Skilltree -> Baum aus Textdatei bauen...
+#
+#  Die Werte hier sind absichtlich schlicht - es geht darum zu zeigen, was das
+#  System kann, nicht um Balance:
+#    - je Kategorie ein Startknoten ganz links, von dem die drei Bahnen abgehen.
+#      Er steht hier absichtlich NICHT in der Datei: beim Einlesen legt ihn
+#      SkillTreeAsset.EnsureStartNodes an, und jeder Knoten ohne req= haengt
+#      sich daran. Die Spalten fangen darum bei 1 an.
+#    - drei Bahnen je Kategorie, die nach rechts laufen
+#    - verschiedene Formen (Kreis, Rechteck, Raute, Sechseck, Stern, Kreuz)
+#    - ein Knoten mit ZWEI Vorgaengern (kampf_oben_3 braucht oben UND Mitte)
+#    - ein Knoten, der einen Schalter gibt statt nur Werte (das Waffen-Upgrade)
+#    - ein Knoten mit mehreren Belohnungen gleichzeitig
+#
+#  Das Format steht in SkillTreeTextIO.
+# ---------------------------------------------------------------------------
+
+tree id=char_0 name="Standard" character=0
+
+category Kampf  color=#B24141 name="KAMPF"  path="KAMPFPFAD"
+        desc="Schaerfe deine Waffen und triff haerter, wo es weh tut."
+        quote="\"Angriff ist die beste Verteidigung.\""
+
+category Geist  color=#3C6FC0 name="GEIST"  path="GEISTPFAD"
+        desc="Meistere die Kraefte in dir und halte laenger durch als alle anderen."
+        quote="\"Der Geist ueberdauert.\""
+
+category Wissen color=#3E8F4F name="WISSEN" path="WISSENSPFAD"
+        desc="Lerne schneller, waehle klueger und hole aus jedem Lauf mehr heraus."
+        quote="\"Wissen veraendert die Welt.\""
+
+category Glueck color=#C89A2C name="GLÜCK"  path="GLÜCKSPFAD"
+        desc="Bessere Funde, seltenere Beute und der eine Wurf, der alles dreht."
+        quote="\"Glueck ist kein Zufall.\""
+
+
+# ---------------------------------------------------------------- KAMPF
+# Die mittlere Bahn ist der Einstieg, oben geht es auf Kritisch, unten auf
+# Standfestigkeit. Ganz rechts stehen die beiden Waffen-Upgrades.
+
+node id=kampf_mitte_1 cat=Kampf lane=Mitte step=1 shape=Kreis    price=10
+     name="Schlagkraft"      stat=IncreaseDamage:0.1
+
+node id=kampf_oben_1  cat=Kampf lane=Oben  step=2 shape=Rechteck price=15
+     name="Scharfer Blick"   stat=IncreaseCritChance:0.05  req=kampf_mitte_1
+
+node id=kampf_mitte_2 cat=Kampf lane=Mitte step=2 shape=Kreis    price=15
+     name="Nachschlag"       stat=IncreaseDamage:0.1       req=kampf_mitte_1
+
+node id=kampf_unten_1 cat=Kampf lane=Unten step=2 shape=Rechteck price=15
+     name="Harte Schale"     stat=IncreaseArmor:0.25       req=kampf_mitte_1
+
+node id=kampf_oben_2  cat=Kampf lane=Oben  step=3 shape=Raute    price=20
+     name="Tiefer Schnitt"   stat=IncreaseCritDamage:0.25  req=kampf_oben_1
+
+node id=kampf_mitte_3 cat=Kampf lane=Mitte step=3 shape=Kreis    price=20
+     name="Doppelwurf"       stat=IncreaseExtraShot:1      req=kampf_mitte_2
+
+node id=kampf_unten_2 cat=Kampf lane=Unten step=3 shape=Raute    price=20
+     name="Zaeh"             stat=IncreaseMaxHealth:10     req=kampf_unten_1
+
+# Zwei Vorgaenger: oben UND Mitte muessen offen sein. Genau dafuer ist im Editor
+# der Knopf "Verbinden" da.
+node id=kampf_oben_3  cat=Kampf lane=Oben  step=4 shape=Stern    price=60
+     name="Vier Richtungen"
+     grant=shurikookie_vier_richtungen  stat=IncreaseDamage:0.1
+     req=kampf_oben_2,kampf_mitte_3
+
+node id=kampf_mitte_4 cat=Kampf lane=Mitte step=4 shape=Sechseck price=30
+     name="Wucht"            stat=IncreaseDamage:0.2       req=kampf_mitte_3
+
+node id=kampf_unten_3 cat=Kampf lane=Unten step=4 shape=Stern    price=60
+     name="Abpraller"
+     grant=shurikookie_abpraller
+     req=kampf_unten_2,kampf_mitte_3
+
+
+# ---------------------------------------------------------------- GEIST
+
+node id=geist_mitte_1 cat=Geist lane=Mitte step=1 shape=Kreis    price=10
+     name="Atem"             stat=IncreaseMaxHealth:10
+
+node id=geist_oben_1  cat=Geist lane=Oben  step=2 shape=Rechteck price=15
+     name="Ruhiger Puls"     stat=IncreaseHealthReg:1      req=geist_mitte_1
+
+node id=geist_mitte_2 cat=Geist lane=Mitte step=2 shape=Kreis    price=15
+     name="Leichter Schritt" stat=IncreaseSpeed:0.1        req=geist_mitte_1
+
+node id=geist_unten_1 cat=Geist lane=Unten step=2 shape=Rechteck price=15
+     name="Ausweichen"       stat=IncreaseDodgeChance:0.03 req=geist_mitte_1
+
+node id=geist_oben_2  cat=Geist lane=Oben  step=3 shape=Sechseck price=25
+     name="Lebensdurst"      stat=IncreaseLifeSteal:0.2    req=geist_oben_1
+
+node id=geist_mitte_3 cat=Geist lane=Mitte step=3 shape=Kreis    price=25
+     name="Rueckenwind"      stat=IncreaseSpeed:0.1        req=geist_mitte_2
+
+node id=geist_unten_2 cat=Geist lane=Unten step=3 shape=Sechseck price=25
+     name="Schattenhaft"     stat=IncreaseDodgeChance:0.03 req=geist_unten_1
+
+# Ein Knoten mit mehreren Werten gleichzeitig - im Hub stehen sie untereinander.
+node id=geist_mitte_4 cat=Geist lane=Mitte step=4 shape=Stern    price=50
+     name="Zweites Leben"
+     grant=zweites_leben  stat=IncreaseMaxHealth:20  stat=IncreaseHealthReg:1
+     req=geist_oben_2,geist_mitte_3,geist_unten_2
+
+
+# ---------------------------------------------------------------- WISSEN
+
+node id=wissen_mitte_1 cat=Wissen lane=Mitte step=1 shape=Kreis    price=10
+     name="Lerneifer"        stat=xpMultiplier:0.1
+
+node id=wissen_oben_1  cat=Wissen lane=Oben  step=2 shape=Rechteck price=15
+     name="Sammler"          stat=IncreasePickupRange:0.2  req=wissen_mitte_1
+
+node id=wissen_mitte_2 cat=Wissen lane=Mitte step=2 shape=Kreis    price=15
+     name="Studium"          stat=xpMultiplier:0.1         req=wissen_mitte_1
+
+node id=wissen_unten_1 cat=Wissen lane=Unten step=2 shape=Rechteck price=15
+     name="Vorrat"           stat=StartXPAmount:10         req=wissen_mitte_1
+
+node id=wissen_oben_2  cat=Wissen lane=Oben  step=3 shape=Kreuz    price=30
+     name="Zweite Wahl"      stat=RerollAmount:1           req=wissen_oben_1
+
+node id=wissen_mitte_3 cat=Wissen lane=Mitte step=3 shape=Kreis    price=30
+     name="Platz im Gepaeck" stat=IncreaseWeaponSlots:1    req=wissen_mitte_2
+
+node id=wissen_unten_2 cat=Wissen lane=Unten step=3 shape=Kreuz    price=30
+     name="Verbannen"        stat=BanishAmount:1           req=wissen_unten_1
+
+
+# ---------------------------------------------------------------- GLUECK
+
+node id=glueck_mitte_1 cat=Glueck lane=Mitte step=1 shape=Kreis    price=10
+     name="Handschmeichler"  stat=IncreaseLuck:5
+
+node id=glueck_oben_1  cat=Glueck lane=Oben  step=2 shape=Raute    price=15
+     name="Guter Fund"       stat=IncreaseLuck:5           req=glueck_mitte_1
+
+node id=glueck_mitte_2 cat=Glueck lane=Mitte step=2 shape=Kreis    price=15
+     name="Rueckenwind"      stat=IncreaseLuck:5           req=glueck_mitte_1
+
+node id=glueck_unten_1 cat=Glueck lane=Unten step=2 shape=Raute    price=15
+     name="Magnet"           stat=IncreasePickupRange:0.2  req=glueck_mitte_1
+
+node id=glueck_oben_2  cat=Glueck lane=Oben  step=3 shape=Stern    price=45
+     name="Freie Truhe"      grant=erste_truhe_gratis      req=glueck_oben_1
+
+node id=glueck_mitte_3 cat=Glueck lane=Mitte step=3 shape=Sechseck price=30
+     name="Gluecksstraehne"  stat=IncreaseLuck:10          req=glueck_mitte_2
+
+node id=glueck_unten_2 cat=Glueck lane=Unten step=3 shape=Kreuz    price=30
+     name="Reiche Ernte"     stat=IncreaseEvoSlots:1       req=glueck_unten_1
