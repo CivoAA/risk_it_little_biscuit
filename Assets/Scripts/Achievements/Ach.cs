@@ -237,6 +237,24 @@ public static class Ach
         return ById.TryGetValue(id, out AchievementDef def) ? def : null;
     }
 
+    /// <summary>
+    /// Das Achievement, das diesen Unlock mitvergibt (<see cref="AchievementDef.GrantsUnlock"/>).
+    /// Null, wenn der Unlock nicht an einem Achievement hängt - die meisten
+    /// fallen im Spiel an, nicht an der Achievement-Liste. Die Unlock-Anzeige
+    /// nennt damit die Bedingung, statt nur "???" zu zeigen.
+    /// </summary>
+    public static AchievementDef FindByUnlock(string unlockId)
+    {
+        if (string.IsNullOrEmpty(unlockId)) return null;
+
+        foreach (AchievementDef def in Registry)
+        {
+            if (def.GrantsUnlock == unlockId) return def;
+        }
+
+        return null;
+    }
+
     private static void EnsureIndex()
     {
         if (ById.Count == Registry.Count) return;

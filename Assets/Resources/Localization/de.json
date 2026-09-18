@@ -8,6 +8,13 @@
     { "key": "ui.achievements.reward", "value": "Belohnung:" },
     { "key": "ui.achievements.souls", "value": "Cookie Souls" },
 
+    { "key": "ui.unlocks.title", "value": "FREISCHALTUNGEN" },
+    { "key": "ui.unlocks.close", "value": "ZURUECK" },
+    { "key": "ui.unlocks.counter", "value": "{0} / {1}" },
+    { "key": "ui.unlocks.empty", "value": "Hier ist noch nichts." },
+    { "key": "ui.unlocks.from", "value": "Aus: {0}" },
+    { "key": "ui.unlocks.hint", "value": "Spiel weiter, dann taucht das hier auf." },
+
     { "key": "ach.cat.Progression", "value": "FORTSCHRITT" },
     { "key": "ach.cat.Combat", "value": "KAMPF" },
     { "key": "ach.cat.Weapons", "value": "WAFFEN" },

@@ -96,6 +96,20 @@ public static class HubConsoleCheats
         }, hidden: true);
 
         // ------------------------------------------------------------------
+        // Unlock-Liste aufmachen.  ->  "unlocks"
+        // Im Hub gibt es dafuer noch keinen Knopf - das Fenster soll spaeter bei
+        // den Achievements haengen (siehe HUB_UNLOCKS_TODO.md). Bis dahin ist das
+        // hier der Weg, es anzuschauen.
+        // ------------------------------------------------------------------
+        HubConsole.Add("unlocks", "zeigt die Unlock-Liste", (args, sink) =>
+        {
+            // Erst zu, dann auf: zwei Fenster uebereinander, die beide auf Escape
+            // hoeren, ist nur Verwirrung.
+            sink.Close();
+            UnlockPanel.Open();
+        }, hidden: true);
+
+        // ------------------------------------------------------------------
         // Ab hier: deine eigenen Codes.
         // ------------------------------------------------------------------
     }
