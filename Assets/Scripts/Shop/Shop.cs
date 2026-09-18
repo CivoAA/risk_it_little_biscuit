@@ -284,6 +284,11 @@ public static class Shop
             if (Store.SkinIndex == value) return;
             Store.SkinIndex = value;
             Store.Flush();
+
+            // Jeder Charakter hat seinen eigenen Skilltree - der Wechsel zieht
+            // also auch die Boni und die freigeschalteten Schalter mit.
+            Skills.SetActiveTreeForCharacter(value);
+
             RaiseChanged();
         }
     }

@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -43,14 +44,7 @@ public class ShurikenWeapon : Weapon
         {
             AudioController.Instance.PalySound(AudioController.Instance.Werfen, 0.1f);
 
-            GameObject shuriken = Instantiate(prefab, transform.position, transform.rotation);
-            Scene gameScene = RunScene.Current;
-            if (gameScene.IsValid() && gameScene.isLoaded)
-            {
-                SceneManager.MoveGameObjectToScene(shuriken, gameScene);
-            }
-
-            StartCoroutine(MoveAndDestroy(shuriken));
+            foreach (Vector2 dir in ThrowDirections()) SpawnOne(dir);
 
             yield return new WaitForSeconds(0.2f);
         }
@@ -60,16 +54,48 @@ public class ShurikenWeapon : Weapon
         shooting = false;
     }
 
-    IEnumerator MoveAndDestroy(GameObject shuriken)
+    /// <summary>
+    /// Wohin geworfen wird. Normalerweise in Laufrichtung - wer im Skilltree
+    /// "Vier Richtungen" freigeschaltet hat, wirft zusaetzlich nach links, rechts
+    /// und hinten.
+    ///
+    /// SO HAENGT MAN EIN SKILLTREE-UPGRADE AN EINE WAFFE: eine Id in SkillGrants
+    /// eintragen, im Skilltree-Editor einem Knoten den Schalter geben und hier
+    /// danach fragen. Mehr braucht es nicht.
+    /// </summary>
+    IEnumerable<Vector2> ThrowDirections()
     {
-        float moveSpeed = 10f;
-
         // Richtung normalisieren (falls Spieler stillsteht → Standard nach links)
         if (moveDir == Vector2.zero) moveDir = Vector2.left;
         moveDir.Normalize();
 
-        // Zielposition berechnen (+10f in Bewegungsrichtung)
-        Vector2 targetPos = (Vector2)transform.position + moveDir * 10f;
+        yield return moveDir;
+
+        if (!Skills.HasGrant(SkillGrants.ShurikookieVierRichtungen)) yield break;
+
+        yield return new Vector2(-moveDir.y, moveDir.x);
+        yield return -moveDir;
+        yield return new Vector2(moveDir.y, -moveDir.x);
+    }
+
+    void SpawnOne(Vector2 direction)
+    {
+        GameObject shuriken = Instantiate(prefab, transform.position, transform.rotation);
+        Scene gameScene = RunScene.Current;
+        if (gameScene.IsValid() && gameScene.isLoaded)
+        {
+            SceneManager.MoveGameObjectToScene(shuriken, gameScene);
+        }
+
+        StartCoroutine(MoveAndDestroy(shuriken, direction));
+    }
+
+    IEnumerator MoveAndDestroy(GameObject shuriken, Vector2 direction)
+    {
+        float moveSpeed = 10f;
+
+        // Zielposition berechnen (+10f in Wurfrichtung)
+        Vector2 targetPos = (Vector2)transform.position + direction * 10f;
 
         while (shuriken != null && Vector3.Distance(shuriken.transform.position, targetPos) > 0.001f)
         {

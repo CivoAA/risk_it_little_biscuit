@@ -173,7 +173,7 @@ public class CatalogTests
     }
 
     [Test]
-    public void Skills_jeder_Ast_hat_eine_Wurzel_und_ist_erreichbar()
+    public void Skills_jeder_Ast_faengt_am_Startknoten_an()
     {
         foreach (SkillTreeDef tree in SkillTrees.All)
         {
@@ -182,22 +182,30 @@ public class CatalogTests
                 Assert.Greater(branch.Nodes.Count, 0, $"Ast '{branch.Id}' ist leer.");
 
                 int roots = 0;
+                SkillNodeDef start = null;
                 foreach (SkillNodeDef node in branch.Nodes)
                 {
+                    if (node.IsStart) start = node;
                     if (node.IsRoot) roots++;
 
                     foreach (SkillNodeDef parent in node.Requires)
                     {
                         Assert.AreSame(branch, parent.Branch,
-                            $"'{node.Key}' hängt an '{parent.Key}' aus einem anderen Ast.");
-                        Assert.Less(parent.Depth, node.Depth,
-                            $"'{node.Key}' liegt nicht unter seiner Vorbedingung '{parent.Key}' - " +
-                            "das wäre ein Kreis im Baum.");
+                            $"'{node.Key}' hängt an '{parent.Key}' aus einer anderen Kategorie.");
+                        Assert.Less(parent.Step, node.Step,
+                            $"'{node.Key}' steht nicht rechts von seiner Vorbedingung " +
+                            $"'{parent.Key}' - die Linie liefe rückwärts.");
                     }
                 }
 
-                Assert.Greater(roots, 0,
-                    $"Ast '{branch.Id}' hat keine Wurzel - nichts darin wäre je kaufbar.");
+                Assert.NotNull(start,
+                    $"Ast '{branch.Id}' hat keinen Startknoten - dort faengt jede Kategorie an.");
+
+                // Genau ein Anfang: der Startknoten. Alles andere haengt daran,
+                // sonst waere es im Hub ohne Linie sofort kaufbar.
+                Assert.AreEqual(1, roots,
+                    $"Ast '{branch.Id}' hat {roots} Knoten ohne Vorbedingung - erlaubt ist nur " +
+                    "der Startknoten.");
             }
         }
     }

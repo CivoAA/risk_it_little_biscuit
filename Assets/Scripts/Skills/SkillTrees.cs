@@ -2,123 +2,68 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// DER SKILLTREE-KATALOG. Hier - und nur hier - werden Bäume gebaut.
+/// DIE SKILLTREES DES SPIELS.
 ///
-/// Ein Knoten hinzufügen: eine Zeile in den passenden Ast. Die Position auf dem
-/// Bildschirm rechnet das Spiel aus den Vorbedingungen aus (siehe
-/// <see cref="SkillTreeLayout"/>) - du musst keine Koordinaten angeben.
+/// Gebaut werden sie nicht mehr hier, sondern in den Assets unter
+/// Assets/Resources/SkillTrees/ - ein <see cref="SkillTreeAsset"/> je Charakter.
+/// Diese Klasse liest sie beim ersten Zugriff ein und macht daraus die
+/// Laufzeitform (<see cref="SkillTreeDef"/>).
 ///
-/// Einen ganzen Ast wegwerfen: den Block löschen. Einen neuen anlegen:
-/// Branch(...) aufrufen und Knoten dranhängen.
+/// EINEN BAUM ANLEGEN ODER AENDERN:
+///   Tools -> Skilltree -> Editor. Dort Baum waehlen oder neu anlegen, Kategorie
+///   oben umschalten, auf einen Knoten klicken und mit dem Plus den naechsten
+///   dranhaengen.
 ///
-/// EIN BAUM PRO CHARAKTER (später):
-/// <code>
-///   Tree("char_boba", "Boba")
-///       .Branch("wind", "Wind")
-///           .Root("move_speed_1", SkillType.IncreaseSpeed, 0.1f, 10)
-///           ...
-/// </code>
-/// Die Schlüssel im Spielstand sind "baum.ast.knoten", also kollidiert nichts
-/// zwischen zwei Charakteren - derselbe Knotenname darf in jedem Baum vorkommen.
-/// Welcher Baum gerade gilt, bestimmt <see cref="Skills.ActiveTree"/>.
+/// EINEN BAUM PER TEXT ANLEGEN (auch fuer Claude):
+///   Tools -> Skilltree -> Baum aus Textdatei bauen. Das Format steht in
+///   <see cref="SkillTreeTextIO"/>; exportieren geht ueber denselben Weg, damit
+///   man einen bestehenden Baum als Vorlage nehmen kann.
 ///
-/// SCHLÜSSEL NIEMALS ÄNDERN: Baum-, Ast- und Knotennamen landen zusammen als
-/// Schlüssel in skills.json.
+/// WELCHER BAUM GILT:
+///   <see cref="ForCharacter"/> sucht das Asset, dessen characterIndex passt.
+///   Findet es keins, bekommt der Charakter den Notbaum von hier - damit steht
+///   das Fenster im Hub nie leer da.
+///
+/// SCHLUESSEL NIEMALS AENDERN: treeId, Kategorie und Knoten-Id landen zusammen
+/// als Schluessel in skills.json.
 /// </summary>
 public static class SkillTrees
 {
-    // Muss textlich vor allen Tree(...)-Feldern stehen.
-    private static readonly List<SkillTreeDef> Registry = new List<SkillTreeDef>();
+    /// <summary>Ordner unter Resources, in dem die Baum-Assets liegen.</summary>
+    public const string ResourceFolder = "SkillTrees";
 
-    // ==================================================================
-    //  Der Baum, den heute alle Charaktere teilen
-    // ==================================================================
+    private static readonly List<SkillTreeDef> registry = new List<SkillTreeDef>();
+    private static bool loaded;
 
-    public static readonly SkillTreeDef Default = BuildDefault();
-
-    private static SkillTreeDef BuildDefault()
+    public static IReadOnlyList<SkillTreeDef> All
     {
-        SkillTreeBuilder tree = Tree("default", "Skill Tree");
-
-        // ---------------------------------------------------------- Wind
-        tree.Branch("wind", "Wind", icon: nameof(SkillType.IncreaseSpeed))
-            .Root("move_speed_1", SkillType.IncreaseSpeed, 0.1f, 10)
-            .Node("move_speed_2", SkillType.IncreaseSpeed, 0.1f, 10, "move_speed_1")
-            .Node("move_speed_3", SkillType.IncreaseSpeed, 0.1f, 10, "move_speed_2")
-
-            .Node("dodge_1", SkillType.IncreaseDodgeChance, 0.03f, 10, "move_speed_3")
-            .Node("dodge_2", SkillType.IncreaseDodgeChance, 0.03f, 10, "dodge_1")
-            .Node("dodge_3", SkillType.IncreaseDodgeChance, 0.03f, 10, "dodge_2")
-
-            .Node("move_speed_4", SkillType.IncreaseSpeed, 0.1f, 10, "move_speed_3")
-            .Node("move_speed_5", SkillType.IncreaseSpeed, 0.1f, 10, "move_speed_4")
-            .Node("armor_1", SkillType.IncreaseArmor, 0.25f, 10, "move_speed_5")
-            .Node("armor_2", SkillType.IncreaseArmor, 0.25f, 10, "armor_1")
-            .Node("armor_3", SkillType.IncreaseArmor, 0.25f, 10, "armor_2")
-            .Node("armor_4", SkillType.IncreaseArmor, 0.25f, 10, "armor_3");
-
-        // --------------------------------------------------------- Sword
-        tree.Branch("sword", "Sword", icon: nameof(SkillType.IncreaseDamage))
-            .Root("damage_1", SkillType.IncreaseDamage, 0.25f, 10)
-            .Node("damage_2", SkillType.IncreaseDamage, 0.25f, 10, "damage_1")
-
-            .Node("crit_chance", SkillType.IncreaseCritChance, 0.05f, 50, "damage_2")
-            .Node("crit_damage", SkillType.IncreaseCritDamage, 0.5f, 50, "damage_2")
-
-            .Node("damage_3", SkillType.IncreaseDamage, 0.1f, 10, "damage_2")
-            .Node("damage_4", SkillType.IncreaseDamage, 0.1f, 10, "damage_3")
-            .Node("damage_5", SkillType.IncreaseDamage, 0.1f, 10, "damage_4")
-            .Node("damage_6", SkillType.IncreaseDamage, 0.1f, 10, "damage_5")
-            .Node("damage_7", SkillType.IncreaseDamage, 0.1f, 10, "damage_6");
-
-        // --------------------------------------------------------- Heart
-        tree.Branch("heart", "Heart", icon: nameof(SkillType.IncreaseMaxHealth))
-            .Root("max_hp_1", SkillType.IncreaseMaxHealth, 5f, 10)
-
-            .Node("max_hp_2", SkillType.IncreaseMaxHealth, 5f, 10, "max_hp_1")
-            .Node("life_steal_1", SkillType.IncreaseLifeSteal, 0.2f, 10, "max_hp_2")
-            .Node("life_steal_2", SkillType.IncreaseLifeSteal, 0.2f, 10, "life_steal_1")
-            .Node("life_steal_3", SkillType.IncreaseLifeSteal, 0.2f, 10, "life_steal_2")
-
-            .Node("max_hp_3", SkillType.IncreaseMaxHealth, 5f, 10, "max_hp_1")
-            .Node("health_reg_1", SkillType.IncreaseHealthReg, 1f, 10, "max_hp_3")
-            .Node("health_reg_2", SkillType.IncreaseHealthReg, 1f, 10, "health_reg_1")
-            .Node("health_reg_3", SkillType.IncreaseHealthReg, 1f, 10, "health_reg_2")
-
-            .Node("max_hp_4", SkillType.IncreaseMaxHealth, 10f, 20, "life_steal_3", "health_reg_3");
-
-        // --------------------------------------------------------- Clock
-        tree.Branch("clock", "Clock", icon: nameof(SkillType.xpMultiplier))
-            .Root("xp_mult_1", SkillType.xpMultiplier, 0.3f, 10)
-
-            .Node("luck_1", SkillType.IncreaseLuck, 5f, 10, "xp_mult_1")
-            .Node("luck_2", SkillType.IncreaseLuck, 5f, 10, "luck_1")
-
-            .Node("pickup_range_1", SkillType.IncreasePickupRange, 0.2f, 10, "xp_mult_1")
-            .Node("pickup_range_2", SkillType.IncreasePickupRange, 0.2f, 10, "pickup_range_1")
-
-            .Node("xp_mult_2", SkillType.xpMultiplier, 0.3f, 10, "luck_2", "pickup_range_2")
-
-            .Node("luck_3", SkillType.IncreaseLuck, 5f, 10, "xp_mult_2")
-            .Node("luck_4", SkillType.IncreaseLuck, 5f, 10, "luck_3")
-
-            .Node("pickup_range_3", SkillType.IncreasePickupRange, 0.2f, 10, "xp_mult_2")
-            .Node("pickup_range_4", SkillType.IncreasePickupRange, 0.2f, 10, "pickup_range_3")
-
-            .Node("xp_mult_3", SkillType.xpMultiplier, 0.3f, 10, "luck_4", "pickup_range_4");
-
-        return tree.Done();
+        get
+        {
+            EnsureLoaded();
+            return registry;
+        }
     }
 
-    // ==================================================================
-    //  Ab hier nur noch Mechanik.
-    // ==================================================================
+    /// <summary>
+    /// Der Baum, den ein Charakter ohne eigenes Asset bekommt. Enthaelt nur die
+    /// drei Startknoten je Kategorie - genug, damit man sieht, dass etwas fehlt.
+    /// </summary>
+    public static SkillTreeDef Default
+    {
+        get
+        {
+            EnsureLoaded();
 
-    public static IReadOnlyList<SkillTreeDef> All => Registry;
+            SkillTreeDef found = Find("default");
+            return found ?? registry[registry.Count - 1];
+        }
+    }
 
     public static SkillTreeDef Find(string id)
     {
-        foreach (SkillTreeDef t in Registry)
+        EnsureLoaded();
+
+        foreach (SkillTreeDef t in registry)
         {
             if (t.Id == id) return t;
         }
@@ -126,157 +71,203 @@ public static class SkillTrees
     }
 
     /// <summary>
-    /// Der Baum für einen Charakter. Solange es nur einen gibt, bekommen alle
-    /// denselben; sobald "char_[index]" im Katalog steht, gewinnt der.
+    /// Der Baum eines Charakters. Zuerst wird ueber den Charakter-Index gesucht,
+    /// danach ueber die Id "char_[index]" - so funktioniert beides.
     /// </summary>
     public static SkillTreeDef ForCharacter(int skinIndex)
     {
+        EnsureLoaded();
+
+        foreach (SkillTreeDef t in registry)
+        {
+            if (t.CharacterIndex == skinIndex) return t;
+        }
+
         return Find($"char_{skinIndex}") ?? Default;
     }
 
-    private static SkillTreeBuilder Tree(string id, string nameEn)
+    /// <summary>
+    /// Wirft den eingelesenen Stand weg. Ruft der Editor, wenn ein Asset
+    /// gespeichert wurde - im Spiel wird das nie gebraucht.
+    /// </summary>
+    public static void Reload()
     {
-        SkillTreeDef def = new SkillTreeDef(id, nameEn);
-        Registry.Add(def);
-        return new SkillTreeBuilder(def);
-    }
-}
-
-// ======================================================================
-//  Baukasten - nur dafür da, dass der Katalog oben lesbar bleibt.
-// ======================================================================
-
-public sealed class SkillTreeBuilder
-{
-    private readonly SkillTreeDef tree;
-
-    internal SkillTreeBuilder(SkillTreeDef tree) => this.tree = tree;
-
-    public SkillBranchBuilder Branch(string id, string nameEn, string icon = null)
-    {
-        SkillBranchDef def = new SkillBranchDef(id, nameEn, icon) { Tree = tree };
-        tree.Branches.Add(def);
-        return new SkillBranchBuilder(this, def);
+        registry.Clear();
+        loaded = false;
+        EnsureLoaded();
     }
 
-    public SkillTreeDef Done()
+    // ==================================================================
+    //  Einlesen
+    // ==================================================================
+
+    private static void EnsureLoaded()
     {
+        if (loaded) return;
+        loaded = true;
+
+        SkillTreeAsset[] assets = Resources.LoadAll<SkillTreeAsset>(ResourceFolder);
+
+        if (assets != null)
+        {
+            // Nach Charakter sortieren, damit die Reihenfolge nicht davon abhaengt,
+            // in welcher Reihenfolge Unity die Dateien ausliefert.
+            System.Array.Sort(assets, (a, b) =>
+            {
+                int byIndex = a.characterIndex.CompareTo(b.characterIndex);
+                return byIndex != 0 ? byIndex : string.CompareOrdinal(a.treeId, b.treeId);
+            });
+
+            foreach (SkillTreeAsset asset in assets)
+            {
+                SkillTreeDef def = Build(asset);
+                if (def != null) registry.Add(def);
+            }
+        }
+
+        // Immer einen Notbaum anhaengen, damit Default nie null ist.
+        registry.Add(BuildFallback());
+    }
+
+    /// <summary>Macht aus einem Asset die Laufzeitform.</summary>
+    public static SkillTreeDef Build(SkillTreeAsset asset)
+    {
+        if (asset == null) return null;
+
+        if (string.IsNullOrWhiteSpace(asset.treeId))
+        {
+            Debug.LogError($"[Skills] Baum-Asset '{asset.name}' hat keine treeId - wird uebersprungen.");
+            return null;
+        }
+
+        string treeName = string.IsNullOrWhiteSpace(asset.displayName) ? asset.treeId : asset.displayName;
+        var tree = new SkillTreeDef(asset.treeId, treeName, asset.characterIndex);
+
+        foreach (SkillCategory category in (SkillCategory[])System.Enum.GetValues(typeof(SkillCategory)))
+        {
+            SkillCategoryData style = asset.CategoryOf(category);
+
+            var branch = new SkillBranchDef(category, style.displayName, style.pathLabel,
+                                            style.description, style.quote, style.color, style.icon)
+            {
+                Tree = tree,
+            };
+
+            tree.Branches.Add(branch);
+
+            // Erst alle Knoten anlegen, dann die Vorbedingungen verdrahten - so
+            // darf ein Knoten auch auf einen zeigen, der weiter vorn in der Liste
+            // steht (etwa quer von der Bahn darunter).
+            var byId = new Dictionary<string, SkillNodeDef>();
+
+            foreach (SkillNodeData data in asset.NodesOf(category))
+            {
+                if (data == null || string.IsNullOrWhiteSpace(data.id)) continue;
+
+                if (byId.ContainsKey(data.id))
+                {
+                    Debug.LogError($"[Skills] '{asset.treeId}.{branch.Id}': Knoten-Id '{data.id}' " +
+                                   "kommt doppelt vor - der zweite wird verworfen.");
+                    continue;
+                }
+
+                var rewards = new List<SkillReward>();
+                foreach (SkillRewardData r in data.rewards)
+                {
+                    if (r != null) rewards.Add(r.ToRuntime());
+                }
+
+                var node = new SkillNodeDef(data.id, data.lane, data.step, data.shape, data.price,
+                                            rewards, data.displayName, data.description, data.icon)
+                {
+                    Branch = branch,
+                    Key    = $"{tree.Id}.{branch.Id}.{data.id}",
+                };
+
+                branch.Nodes.Add(node);
+                byId[data.id] = node;
+            }
+
+            foreach (SkillNodeData data in asset.NodesOf(category))
+            {
+                if (data == null || !byId.TryGetValue(data.id, out SkillNodeDef node)) continue;
+
+                foreach (string parentId in data.requires)
+                {
+                    if (string.IsNullOrWhiteSpace(parentId)) continue;
+
+                    if (!byId.TryGetValue(parentId, out SkillNodeDef parent))
+                    {
+                        Debug.LogError($"[Skills] '{asset.treeId}.{branch.Id}.{data.id}': " +
+                                       $"Vorbedingung '{parentId}' gibt es in dieser Kategorie nicht.");
+                        continue;
+                    }
+
+                    if (parent == node) continue;
+
+                    node.Requires.Add(parent);
+                    parent.Unlocks.Add(node);
+                }
+            }
+        }
+
         SkillTreeLayout.Compute(tree);
         return tree;
     }
-}
-
-public sealed class SkillBranchBuilder
-{
-    private readonly SkillTreeBuilder owner;
-    private readonly SkillBranchDef branch;
-    private SkillNodeDef last;
-
-    internal SkillBranchBuilder(SkillTreeBuilder owner, SkillBranchDef branch)
-    {
-        this.owner = owner;
-        this.branch = branch;
-    }
-
-    /// <summary>Anfang des Astes - ohne Vorbedingung, also von Beginn an kaufbar.</summary>
-    public SkillBranchBuilder Root(string id, SkillType effect, float value, int price)
-    {
-        return Add(id, effect, value, price, new string[0]);
-    }
 
     /// <summary>
-    /// Ein Knoten. <paramref name="after"/> zählt die Knoten auf, die vorher offen
-    /// sein müssen - meist einer, bei zusammenlaufenden Pfaden mehrere.
+    /// Der Notbaum: je Kategorie der Startknoten und die drei leeren Bahnen
+    /// daran. Er sorgt dafuer, dass das Fenster im Hub etwas anzeigt, solange
+    /// noch kein Asset existiert - und dass nichts abstuerzt, wenn eins fehlt.
     /// </summary>
-    public SkillBranchBuilder Node(string id, SkillType effect, float value, int price,
-                                   params string[] after)
+    private static SkillTreeDef BuildFallback()
     {
-        return Add(id, effect, value, price, after);
-    }
+        var tree = new SkillTreeDef("default", "Skilltree", -1);
 
-    /// <summary>Eigener Beschreibungstext für den zuletzt angelegten Knoten.</summary>
-    public SkillBranchBuilder Describe(string text)
-    {
-        if (last != null) LastDescription = text;
-        return this;
-    }
-
-    /// <summary>Feste Position statt Auto-Layout, für den zuletzt angelegten Knoten.</summary>
-    public SkillBranchBuilder At(float x, float y)
-    {
-        if (last != null) LastPosition = new Vector2(x, y);
-        return this;
-    }
-
-    /// <summary>Nächsten Ast anlegen.</summary>
-    public SkillBranchBuilder Branch(string id, string nameEn, string icon = null)
-        => owner.Branch(id, nameEn, icon);
-
-    public SkillTreeDef Done() => owner.Done();
-
-    // Describe/At müssen den fertigen Knoten nachträglich ändern können; die Felder
-    // sind readonly, deshalb wird der Knoten ersetzt statt verändert.
-    private string LastDescription
-    {
-        set => Replace(value, last.Position);
-    }
-
-    private Vector2? LastPosition
-    {
-        set => Replace(last.DescriptionOverride, value);
-    }
-
-    private void Replace(string description, Vector2? position)
-    {
-        SkillNodeDef old = last;
-        SkillNodeDef fresh = new SkillNodeDef(old.LocalId, old.Effect, old.Value, old.Price,
-                                              description, position)
+        foreach (SkillCategory category in (SkillCategory[])System.Enum.GetValues(typeof(SkillCategory)))
         {
-            Key = old.Key,
-            Branch = branch,
-        };
+            SkillCategoryStyle.Style s = SkillCategoryStyle.For(category);
 
-        fresh.Requires.AddRange(old.Requires);
-
-        foreach (SkillNodeDef parent in fresh.Requires)
-        {
-            parent.Unlocks.Remove(old);
-            parent.Unlocks.Add(fresh);
-        }
-
-        int index = branch.Nodes.IndexOf(old);
-        if (index >= 0) branch.Nodes[index] = fresh;
-
-        last = fresh;
-    }
-
-    private SkillBranchBuilder Add(string id, SkillType effect, float value, int price,
-                                   string[] after)
-    {
-        SkillNodeDef node = new SkillNodeDef(id, effect, value, price, null, null)
-        {
-            Branch = branch,
-            Key = $"{branch.Tree.Id}.{branch.Id}.{id}",
-        };
-
-        foreach (string parentId in after)
-        {
-            SkillNodeDef parent = branch.Find(parentId);
-
-            if (parent == null)
+            var branch = new SkillBranchDef(category, s.Name, s.PathLabel, s.Description,
+                                            s.Quote, s.Color, null)
             {
-                Debug.LogError($"[Skills] '{branch.Id}.{id}': Vorbedingung '{parentId}' gibt es " +
-                               "im Ast nicht (oder sie steht weiter unten - Knoten müssen nach " +
-                               "ihren Vorbedingungen kommen).");
-                continue;
-            }
+                Tree = tree,
+            };
 
-            node.Requires.Add(parent);
-            parent.Unlocks.Add(node);
+            tree.Branches.Add(branch);
+
+            SkillNodeDef start = FallbackNode(tree, branch, SkillTreeAsset.StartIdOf(category),
+                                              SkillLane.Mitte, 0, 0, "Hier beginnt der Pfad.");
+
+            // Drei leere Bahnen am Start - genau die Form, die ein richtiger Baum
+            // auch hat, nur ohne Inhalt.
+            foreach (SkillLane lane in (SkillLane[])System.Enum.GetValues(typeof(SkillLane)))
+            {
+                string id = $"{branch.Id}_{lane.ToString().ToLowerInvariant()}_1";
+
+                SkillNodeDef node = FallbackNode(tree, branch, id, lane, 1, 10,
+                                                 "Noch kein Baum fuer diesen Charakter.");
+
+                node.Requires.Add(start);
+                start.Unlocks.Add(node);
+            }
         }
+
+        SkillTreeLayout.Compute(tree);
+        return tree;
+    }
+
+    private static SkillNodeDef FallbackNode(SkillTreeDef tree, SkillBranchDef branch, string id,
+                                             SkillLane lane, int step, int price, string description)
+    {
+        var node = new SkillNodeDef(id, lane, step, SkillShape.Kreis, price,
+                                    new List<SkillReward>(), null, description, null)
+        {
+            Branch = branch,
+            Key    = $"{tree.Id}.{branch.Id}.{id}",
+        };
 
         branch.Nodes.Add(node);
-        last = node;
-        return this;
+        return node;
     }
 }

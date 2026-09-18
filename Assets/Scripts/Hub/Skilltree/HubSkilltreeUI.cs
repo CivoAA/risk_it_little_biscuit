@@ -4,27 +4,28 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// ---------------------------------------------------------------------------
-///  DER SKILLTREE IM HUB - Stand: nur die Oberflaeche.
+///  DER SKILLTREE IM HUB.
 ///
-///  Was hier steht, ist der Rahmen: Titelschild, die vier Kategorien links, das
-///  grosse Feld in der Mitte und die Beschreibungskarte rechts. Die Knoten zum
-///  Skillen kommen spaeter in das Feld in der Mitte - es heisst in der Hierarchie
-///  darum schon "Body" und ist absichtlich leer.
+///  Das Fenster ist der Rahmen: Titelschild, die vier Kategorien links, das
+///  grosse Feld in der Mitte und die Beschreibungskarte rechts. Die Knoten im
+///  Feld baut <see cref="HubSkilltreeGraph"/> - der Aufbau steht also nicht hier,
+///  sondern dort.
 ///
-///  Eine Kategorie eintragen oder aendern:
-///    1. Im Inspector unter "Kategorien" eine Zeile ergaenzen oder anpassen.
-///    2. Farbe setzen - alles andere (Rahmen, Banner, Schriftfarbe) rechnet sich
-///       daraus aus. Bei hellen Farben wie Gelb springt die Schrift von selbst
-///       auf Dunkel um, siehe InkOn().
-///    3. Symbol ist optional. Leer = eine Scheibe in der Kategoriefarbe.
+///  WO DER INHALT HERKOMMT:
+///    Nicht mehr aus dem Inspector. Kategorien, Farben, Texte und Knoten stehen
+///    im Baum-Asset des Charakters unter Assets/Resources/SkillTrees/. Gebaut
+///    wird das unter Tools -> Skilltree -> Editor. Beim Oeffnen holt sich das
+///    Fenster ueber Skills.Sync() den Baum des gerade gewaehlten Charakters -
+///    jeder Charakter hat also seinen eigenen.
 ///
 ///  Der Hintergrund um das Papier herum ist bewusst nur eine ruhige Flaeche -
 ///  die Pixelart dafuer kommt nach und wird dann in "Hintergrundbild"
 ///  eingetragen; sie legt sich ueber die vollen 320x180.
 ///
-///  Bedienung: Klick, W/S bzw. Hoch/Runter, Mausrad, ESC. Hover und Klick
-///  rechnet dieses Skript wie die Levelauswahl selbst aus der Mausposition aus
-///  (UpdateHover/ClickAt) - wer einen Knopf ergaenzt, muss ihn in BEIDEN
+///  Bedienung: Klick, W/S bzw. Hoch/Runter fuer die Kategorie, A/D bzw.
+///  Links/Rechts und Mausrad zum Scrollen im Baum, ESC zum Schliessen. Hover und
+///  Klick rechnet dieses Skript wie die Levelauswahl selbst aus der Mausposition
+///  aus (UpdateHover/ClickAt) - wer einen Knopf ergaenzt, muss ihn in BEIDEN
 ///  Methoden eintragen, sonst reagiert er nicht.
 /// ---------------------------------------------------------------------------
 [DisallowMultipleComponent]
@@ -33,75 +34,17 @@ public class HubSkilltreeUI : MonoBehaviour
     /// <summary>Steht offen? Der Hub sperrt solange seine Interaktionen.</summary>
     public static bool IsOpen { get; private set; }
 
-    /// <summary>Ein Pfad im Skilltree.</summary>
-    [System.Serializable]
-    public class Category
-    {
-        [Tooltip("Steht auf dem Knopf links und ueber der Beschreibung rechts.")]
-        public string displayName = "";
-
-        [Tooltip("Ueberschrift im grossen Feld. Leer = Name plus 'PFAD'.")]
-        public string pathLabel = "";
-
-        [Tooltip("Text in der Beschreibungskarte rechts.")]
-        [TextArea(2, 4)]
-        public string description = "";
-
-        [Tooltip("Der Spruch unter der Beschreibung. Leer = die Zeile faellt weg.")]
-        [TextArea(1, 3)]
-        public string quote = "";
-
-        [Tooltip("Faerbt Knopf, Banner und Kugel. Alles andere leitet sich daraus ab.")]
-        public Color color = Color.white;
-
-        [Tooltip("Optional. Leer = eine Scheibe in der Kategoriefarbe.")]
-        public Sprite icon;
-    }
-
-    [Header("Kategorien")]
-    [Tooltip("Reihenfolge von oben nach unten.")]
-    [SerializeField]
-    private List<Category> categories = new List<Category>
-    {
-        new Category
-        {
-            displayName = "ENTWICKLUNG",
-            pathLabel   = "ENTWICKLUNGSPFAD",
-            description = "Wachse ueber dich hinaus: mehr Erfahrung, mehr Leben, mehr Moeglichkeiten.",
-            quote       = "\"Jeder Schritt zaehlt.\"",
-            color       = new Color32(0x3C, 0x6F, 0xC0, 0xFF),
-        },
-        new Category
-        {
-            displayName = "KAMPF",
-            pathLabel   = "KAMPFPFAD",
-            description = "Schaerfe deine Waffen und triff haerter, wo es weh tut.",
-            quote       = "\"Angriff ist die beste Verteidigung.\"",
-            color       = new Color32(0xB2, 0x41, 0x41, 0xFF),
-        },
-        new Category
-        {
-            displayName = "GLÜCK",
-            pathLabel   = "GLÜCKSPFAD",
-            description = "Bessere Funde, seltenere Beute und der eine Wurf, der alles dreht.",
-            quote       = "\"Glueck ist kein Zufall.\"",
-            color       = new Color32(0x3E, 0x8F, 0x4F, 0xFF),
-        },
-        new Category
-        {
-            displayName = "SPIRIT",
-            pathLabel   = "SPIRITPFAD",
-            description = "Sammle Seelen schneller und hole aus jedem Lauf mehr heraus.",
-            quote       = "\"Der Geist ueberdauert.\"",
-            color       = new Color32(0xC8, 0x9A, 0x2C, 0xFF),
-        },
-    };
-
     [Header("Beschriftungen")]
     [SerializeField] private string titleLabel = "SKILLTREE";
     [SerializeField] private string backLabel  = "ZURÜCK";
-    [Tooltip("Nur wenn eine Kategorie keinen eigenen Pfadnamen hat. {0} = Name.")]
+    [Tooltip("Nur wenn eine Kategorie im Baum-Asset keinen eigenen Pfadnamen hat. {0} = Name.")]
     [SerializeField] private string pathLabelFormat = "{0}PFAD";
+    [Tooltip("Die Punkteanzeige unten rechts. {0} = Anzahl.")]
+    [SerializeField] private string pointsFormat = "SKILLPUNKTE: {0}";
+    [Tooltip("Unter der Beschreibung eines Knotens. {0} = Preis.")]
+    [SerializeField] private string priceFormat = "KOSTET {0} SP";
+    [SerializeField] private string boughtLabel = "GEKAUFT";
+    [SerializeField] private string lockedLabel = "GESPERRT";
 
     [Header("Grafik")]
     [Tooltip("Die Pixelart hinter dem Papier - legt sich ueber die vollen 320x180. " +
@@ -120,29 +63,31 @@ public class HubSkilltreeUI : MonoBehaviour
     [Tooltip("Die grosse Papierflaeche.")]
     [SerializeField] private Rect panelArea = new Rect(8f, 10f, 304f, 142f);
     [Tooltip("Das Titelschild. Es liegt bewusst ueber der Oberkante des Papiers.")]
-    [SerializeField] private Rect titleArea = new Rect(96f, 2f, 128f, 19f);
+    [SerializeField] private Rect titleArea = new Rect(94f, 3f, 132f, 22f);
     [Tooltip("Der oberste Kategorieknopf. Die anderen ruecken um Hoehe plus Abstand nach.")]
-    [SerializeField] private Rect categoryArea = new Rect(14f, 32f, 80f, 24f);
+    [SerializeField] private Rect categoryArea = new Rect(14f, 38f, 76f, 22f);
     [SerializeField] private float categoryGap = 6f;
-    [Tooltip("Das grosse Feld in der Mitte - hier kommen spaeter die Knoten hinein.")]
-    [SerializeField] private Rect contentArea = new Rect(102f, 28f, 130f, 118f);
+    [Tooltip("Das grosse Feld in der Mitte.")]
+    [SerializeField] private Rect contentArea = new Rect(96f, 30f, 142f, 118f);
     [Tooltip("Das farbige Banner oben im grossen Feld.")]
-    [SerializeField] private Rect contentHeaderArea = new Rect(108f, 33f, 118f, 15f);
-    [Tooltip("Die freie Flaeche darunter. Bleibt leer, bis es Inhalte gibt.")]
-    [SerializeField] private Rect contentBodyArea = new Rect(106f, 54f, 122f, 88f);
-    [SerializeField] private Rect detailArea = new Rect(240f, 28f, 64f, 118f);
-    [SerializeField] private Rect backArea = new Rect(8f, 157f, 62f, 15f);
+    [SerializeField] private Rect contentHeaderArea = new Rect(104f, 35f, 126f, 14f);
+    [Tooltip("Die Flaeche darunter - hier baut sich der Baum auf und wird gescrollt.")]
+    [SerializeField] private Rect contentBodyArea = new Rect(100f, 54f, 134f, 90f);
+    [SerializeField] private Rect detailArea = new Rect(244f, 30f, 62f, 118f);
+    [SerializeField] private Rect backArea = new Rect(8f, 156f, 62f, 16f);
+    [Tooltip("Die Skillpunkte, unten rechts neben dem Zurueck-Knopf.")]
+    [SerializeField] private Rect pointsArea = new Rect(198f, 156f, 106f, 16f);
 
     [Header("Beschreibungskarte (Pixel im 320x180-Bild)")]
-    [SerializeField] private Rect detailOrbArea   = new Rect(256f, 34f, 32f, 32f);
-    [SerializeField] private Rect detailNameArea  = new Rect(242f, 70f, 60f, 12f);
-    [SerializeField] private Rect detailDivider1  = new Rect(248f, 86f, 48f, 1f);
-    [SerializeField] private Rect detailTextArea  = new Rect(244f, 92f, 56f, 28f);
-    [SerializeField] private Rect detailDivider2  = new Rect(248f, 124f, 48f, 1f);
-    [SerializeField] private Rect detailQuoteArea = new Rect(244f, 129f, 56f, 15f);
+    [SerializeField] private Rect detailOrbArea   = new Rect(259f, 38f, 32f, 32f);
+    [SerializeField] private Rect detailNameArea  = new Rect(246f, 74f, 58f, 12f);
+    [SerializeField] private Rect detailDivider1  = new Rect(251f, 90f, 48f, 1f);
+    [SerializeField] private Rect detailTextArea  = new Rect(248f, 96f, 54f, 28f);
+    [SerializeField] private Rect detailDivider2  = new Rect(251f, 128f, 48f, 1f);
+    [SerializeField] private Rect detailQuoteArea = new Rect(248f, 133f, 54f, 14f);
 
     [Header("Schriftgroessen")]
-    [SerializeField] private float titleFontSize      = 12f;
+    [SerializeField] private float titleFontSize      = 13f;
     [SerializeField] private float categoryFontSize   = 8f;
     [SerializeField] private float headerFontSize     = 8f;
     [SerializeField] private float detailNameFontSize = 9f;
@@ -199,18 +144,26 @@ public class HubSkilltreeUI : MonoBehaviour
     }
 
     /// <summary>Was gerade unter der Maus liegt.</summary>
-    enum Hit { None, Category, Back }
+    enum Hit { None, Category, Back, ScrollLeft, ScrollRight, Node }
 
     readonly List<Tab> tabs = new List<Tab>();
     readonly HubPixelSprites pixels = new HubPixelSprites();
 
     GameObject root;
     RectTransform screen;
+    Transform tabHolder;
     Image headerFill, headerFrame, headerPlusLeft, headerPlusRight;
     Image orbRing, orbFill;
     Image divider2a, divider2b, dividerPlus2;
     Image backFillImage;
-    TextMeshProUGUI headerText, detailName, detailText, detailQuote;
+    TextMeshProUGUI headerText, detailName, detailText, detailQuote, pointsText;
+
+    HubSkilltreeGraph graph;
+    SkillShapeSprites orbShapes;
+
+    /// <summary>Die Kategorien des gerade gezeigten Baums - Reihenfolge wie SkillCategory.</summary>
+    readonly List<SkillBranchDef> branches = new List<SkillBranchDef>();
+    SkillTreeDef shownTree;
 
     Hit hover = Hit.None;
     int hoverTab = -1;
@@ -219,7 +172,8 @@ public class HubSkilltreeUI : MonoBehaviour
     int openedOnFrame = -1;
     bool built;
 
-    Category Current => (selected >= 0 && selected < categories.Count) ? categories[selected] : null;
+    SkillBranchDef Current =>
+        (selected >= 0 && selected < branches.Count) ? branches[selected] : null;
 
     // ---------------------------------------------------------------- Aufbau
 
@@ -240,6 +194,10 @@ public class HubSkilltreeUI : MonoBehaviour
     void OnDestroy()
     {
         pixels.Dispose();
+        orbShapes?.Dispose();
+        graph?.Dispose();
+
+        Skills.Changed -= OnSkillsChanged;
 
         // Szenenwechsel mit offenem Fenster: die Sperre wieder abmelden, sonst
         // reagiert der Hub beim naechsten Mal auf gar nichts mehr.
@@ -254,6 +212,7 @@ public class HubSkilltreeUI : MonoBehaviour
         built = true;
 
         if (font == null) font = PixelUI.FindPixelFont();
+        orbShapes = new SkillShapeSprites();
 
         var canvasGO = new GameObject("SkilltreeCanvas", typeof(Canvas), typeof(CanvasScaler));
         canvasGO.transform.SetParent(transform, false);
@@ -295,10 +254,38 @@ public class HubSkilltreeUI : MonoBehaviour
 
         BuildPanel();
         BuildTitle();
-        BuildTabs();
+
+        // Die Kategorieknoepfe haengen am Baum und werden darum erst in Open()
+        // gefuellt. Der Behaelter steht schon, damit die Reihenfolge der Ebenen
+        // stimmt: Knoepfe vor dem Feld, Feld vor der Karte.
+        GameObject tabRoot = HubUiKit.NewRect("Kategorien", screen);
+        // Muss ueber die vollen 320x180 gehen: die Knoepfe werden mit
+        // HubUiKit.Place gesetzt, und das rechnet ab der linken OBEREN Ecke des
+        // Elters. Ohne das sitzt der Behaelter als Punkt in der Bildmitte - die
+        // Knoepfe landen dann mitten im Baum, und die Trefferpruefung in
+        // UpdateHover sucht sie trotzdem links (TabArea).
+        HubUiKit.Stretch((RectTransform)tabRoot.transform);
+        tabHolder = tabRoot.transform;
+
         BuildContent();
         BuildDetail();
         BuildBackButton();
+
+        // Das Feld mit den Knoten kommt zuletzt, damit die Blaetterpfeile ueber
+        // dem Rahmen liegen.
+        graph = new HubSkilltreeGraph(screen, contentBodyArea, new HubSkilltreeGraph.Palette
+        {
+            PanelFill   = panelFill,
+            PanelInset  = panelInset,
+            PanelBorder = panelBorder,
+            PanelInk    = panelInk,
+            PanelInkDim = panelInkDim,
+            TextOnColor = textOnColor,
+            BorderShade = borderShade,
+            HoverLift   = hoverLift,
+        });
+
+        Skills.Changed += OnSkillsChanged;
 
         root.SetActive(false);
     }
@@ -335,17 +322,26 @@ public class HubSkilltreeUI : MonoBehaviour
         Plus("TitlePlusRight", screen, new Rect(titleArea.xMax - 12f, plusY, 5f, 5f), panelInkDim);
     }
 
+    /// <summary>
+    /// Legt die Kategorieknoepfe neu an. Laeuft bei jedem Oeffnen, weil Farbe und
+    /// Beschriftung aus dem Baum des Charakters kommen - und der kann zwischen
+    /// zwei Besuchen ein anderer sein.
+    /// </summary>
     void BuildTabs()
     {
+        foreach (Tab t in tabs)
+        {
+            if (t.Go != null) Destroy(t.Go);
+        }
         tabs.Clear();
 
-        for (int i = 0; i < categories.Count; i++)
+        for (int i = 0; i < branches.Count; i++)
         {
-            Category c = categories[i];
+            SkillBranchDef c = branches[i];
             var tab = new Tab();
             Rect area = TabArea(i);
 
-            tab.Go = HubUiKit.NewRect("Kategorie " + (i + 1), screen);
+            tab.Go = HubUiKit.NewRect("Kategorie " + (i + 1), tabHolder);
             HubUiKit.Place((RectTransform)tab.Go.transform, area);
 
             // Alles darin rechnet ab der linken oberen Ecke des Knopfes.
@@ -353,23 +349,23 @@ public class HubSkilltreeUI : MonoBehaviour
 
             tab.Glow  = Frame("Glow", tab.Go.transform, Grow(local, 1f), panelFill);
             tab.Fill  = Fill("Fill", tab.Go.transform, local, panelInset);
-            tab.Outer = Frame("Outer", tab.Go.transform, local, c.color);
-            tab.Inner = Frame("Inner", tab.Go.transform, Inset(local, 2f), c.color);
+            tab.Outer = Frame("Outer", tab.Go.transform, local, c.Color);
+            tab.Inner = Frame("Inner", tab.Go.transform, Inset(local, 2f), c.Color);
 
             var iconBox = new Rect(4f, (area.height - 14f) * 0.5f, 14f, 14f);
             tab.IconFill = Fill("IconBox", tab.Go.transform, iconBox, panelFill);
             tab.Icon = HubUiKit.NewImage("Icon", tab.Go.transform,
-                                         c.icon != null ? c.icon : pixels.Disc, c.color);
+                                         c.Icon != null ? c.Icon : pixels.Disc, c.Color);
             HubUiKit.Place((RectTransform)tab.Icon.transform, Inset(iconBox, 1f));
 
             tab.Label = HubUiKit.NewText("Label", tab.Go.transform, font, categoryFontSize,
                                          panelInk, TextAlignmentOptions.Left);
             HubUiKit.Place((RectTransform)tab.Label.transform,
                            new Rect(22f, 0f, area.width - 26f, area.height));
-            tab.Label.text = c.displayName;
+            tab.Label.text = c.Name;
 
             // Der Zeiger steht rechts heraus und zeigt auf das grosse Feld.
-            tab.Pointer = HubUiKit.NewImage("Pointer", tab.Go.transform, pixels.ArrowRight, c.color);
+            tab.Pointer = HubUiKit.NewImage("Pointer", tab.Go.transform, pixels.ArrowRight, c.Color);
             tab.Pointer.preserveAspect = false;
             HubUiKit.Place((RectTransform)tab.Pointer.transform,
                            new Rect(area.width, (area.height - 9f) * 0.5f, 5f, 9f));
@@ -395,11 +391,6 @@ public class HubSkilltreeUI : MonoBehaviour
         headerText = HubUiKit.NewText("HeaderLabel", screen, font, headerFontSize,
                                       Color.white, TextAlignmentOptions.Center);
         HubUiKit.Place((RectTransform)headerText.transform, contentHeaderArea);
-
-        // Absichtlich leer: hier kommen die Knoten zum Skillen hinein. Das Objekt
-        // steht schon da, damit spaeter klar ist, wo sie hingehoeren.
-        GameObject body = HubUiKit.NewRect("Body", screen);
-        HubUiKit.Place((RectTransform)body.transform, contentBodyArea);
     }
 
     void BuildDetail()
@@ -407,10 +398,13 @@ public class HubSkilltreeUI : MonoBehaviour
         Fill("Detail", screen, detailArea, panelInset);
         Frame("DetailFrame", screen, detailArea, panelBorder);
 
-        // Zwei Scheiben uebereinander: die untere schaut als Rand heraus.
+        // Zwei Scheiben uebereinander: die untere schaut als Rand heraus. Zeigt
+        // die Maus auf einen Knoten, tauschen beide auf dessen Form.
         orbRing = HubUiKit.NewImage("OrbRing", screen, pixels.Disc, Color.white);
+        orbRing.preserveAspect = false;
         HubUiKit.Place((RectTransform)orbRing.transform, detailOrbArea);
         orbFill = HubUiKit.NewImage("Orb", screen, pixels.Disc, Color.white);
+        orbFill.preserveAspect = false;
         HubUiKit.Place((RectTransform)orbFill.transform, Inset(detailOrbArea, 2f));
 
         detailName = HubUiKit.NewText("DetailName", screen, font, detailNameFontSize,
@@ -441,6 +435,10 @@ public class HubSkilltreeUI : MonoBehaviour
                                                  backInk, TextAlignmentOptions.Center);
         HubUiKit.Place((RectTransform)label.transform, backArea);
         label.text = "< " + backLabel;
+
+        pointsText = HubUiKit.NewText("Points", screen, font, buttonFontSize,
+                                      backInk, TextAlignmentOptions.Right);
+        HubUiKit.Place((RectTransform)pointsText.transform, pointsArea);
     }
 
     // ----------------------------------------------------------- Bausteine
@@ -500,6 +498,10 @@ public class HubSkilltreeUI : MonoBehaviour
 
         Build();
 
+        // Der Baum haengt am gewaehlten Charakter - erst holen, dann anzeigen.
+        Skills.Sync();
+        LoadTree();
+
         IsOpen = true;
         openedOnFrame = Time.frameCount;
         root.SetActive(true);
@@ -526,6 +528,32 @@ public class HubSkilltreeUI : MonoBehaviour
         PlaySfx(closeClip);
     }
 
+    /// <summary>Uebernimmt den aktiven Baum in die Knoepfe und ins Feld.</summary>
+    void LoadTree()
+    {
+        SkillTreeDef tree = Skills.ActiveTree;
+
+        // Derselbe Baum wie beim letzten Mal? Dann reicht der Zustand.
+        if (tree == shownTree && tabs.Count == branches.Count && tabs.Count > 0) return;
+
+        shownTree = tree;
+
+        branches.Clear();
+        if (tree != null) branches.AddRange(tree.Branches);
+
+        selected = Mathf.Clamp(selected, 0, Mathf.Max(0, branches.Count - 1));
+
+        BuildTabs();
+        graph.Show(Current);
+    }
+
+    void OnSkillsChanged()
+    {
+        if (!IsOpen) return;
+        graph.Refresh();
+        Refresh();
+    }
+
     // -------------------------------------------------------------- Laufzeit
 
     void Update()
@@ -541,11 +569,16 @@ public class HubSkilltreeUI : MonoBehaviour
 
         if (Input.GetKeyDown(closeKey)) { Close(); return; }
 
+        // Hoch/Runter wechselt die Kategorie, Links/Rechts scrollt im Baum -
+        // genau so, wie der Baum aufgebaut ist.
         if (Input.GetKeyDown(KeyCode.UpArrow)   || Input.GetKeyDown(KeyCode.W)) Move(-1);
         if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)) Move(+1);
 
+        if (Input.GetKeyDown(KeyCode.LeftArrow)  || Input.GetKeyDown(KeyCode.A)) ScrollTree(-1f);
+        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) ScrollTree(+1f);
+
         float wheel = Input.mouseScrollDelta.y;
-        if (!Mathf.Approximately(wheel, 0f)) Move(wheel > 0f ? -1 : +1);
+        if (!Mathf.Approximately(wheel, 0f)) ScrollTree(wheel > 0f ? -1f : +1f);
     }
 
     /// <summary>
@@ -575,12 +608,21 @@ public class HubSkilltreeUI : MonoBehaviour
         hover = Hit.None;
         hoverTab = -1;
 
-        if (MousePixel(out Vector2 m))
+        bool valid = MousePixel(out Vector2 m);
+
+        // Der Graph prueft selbst, ob ein Knoten getroffen ist - er weiss als
+        // Einziger, wie weit gerade gescrollt wurde.
+        bool graphChanged = graph.UpdateHover(valid, m);
+
+        if (valid)
         {
             if (backArea.Contains(m)) hover = Hit.Back;
+            else if (graph.Hovered != null) hover = Hit.Node;
+            else if (graph.CanScrollLeft && graph.ScrollLeftArea.Contains(m)) hover = Hit.ScrollLeft;
+            else if (graph.CanScrollRight && graph.ScrollRightArea.Contains(m)) hover = Hit.ScrollRight;
             else
             {
-                for (int i = 0; i < categories.Count; i++)
+                for (int i = 0; i < branches.Count; i++)
                 {
                     if (!TabArea(i).Contains(m)) continue;
                     hover = Hit.Category;
@@ -590,7 +632,7 @@ public class HubSkilltreeUI : MonoBehaviour
             }
         }
 
-        if (hover != was || hoverTab != wasTab) Refresh();
+        if (hover != was || hoverTab != wasTab || graphChanged) Refresh();
     }
 
     void ClickAt(Hit what, int tab)
@@ -600,17 +642,53 @@ public class HubSkilltreeUI : MonoBehaviour
             case Hit.Category:
                 if (tab != selected) Select(tab);
                 break;
+
+            case Hit.Node:
+                BuyHovered();
+                break;
+
+            case Hit.ScrollLeft:
+                ScrollTree(-1f);
+                break;
+
+            case Hit.ScrollRight:
+                ScrollTree(+1f);
+                break;
+
             case Hit.Back:
                 Close();
                 break;
         }
     }
 
+    void BuyHovered()
+    {
+        bool bought = graph.ClickHovered(out bool hitNode);
+        if (!hitNode) return;
+
+        AudioController ac = AudioController.Instance;
+
+        // Gekauft klingt wie ein Menueklick, abgelehnt wie ein Treffer - denselben
+        // Unterschied macht der Shop auch.
+        if (ac != null) ac.PalySound(bought ? ac.MenuClick : ac.PlayerHit);
+
+        Refresh();
+    }
+
+    void ScrollTree(float steps)
+    {
+        if (!graph.Scroll(steps)) return;
+
+        // Nach dem Scrollen liegt unter der Maus etwas anderes.
+        UpdateHover();
+        Refresh();
+    }
+
     void Move(int delta)
     {
-        if (categories.Count == 0) return;
+        if (branches.Count == 0) return;
 
-        int next = Mathf.Clamp(selected + delta, 0, categories.Count - 1);
+        int next = Mathf.Clamp(selected + delta, 0, branches.Count - 1);
         if (next == selected) return;
 
         Select(next);
@@ -620,6 +698,8 @@ public class HubSkilltreeUI : MonoBehaviour
     {
         selected = index;
         PlaySfx(moveClip);
+
+        graph.Show(Current);
         Refresh();
     }
 
@@ -632,94 +712,158 @@ public class HubSkilltreeUI : MonoBehaviour
         RefreshDetail();
 
         backFillImage.color = hover == Hit.Back ? Lift(backFill, hoverLift) : backFill;
+
+        if (pointsText != null) pointsText.text = string.Format(pointsFormat, Skills.Currency);
     }
 
     void RefreshTabs()
     {
-        for (int i = 0; i < tabs.Count && i < categories.Count; i++)
+        for (int i = 0; i < tabs.Count && i < branches.Count; i++)
         {
             Tab t = tabs[i];
-            Category c = categories[i];
+            SkillBranchDef c = branches[i];
 
             bool isSelected = i == selected;
             bool isHover = hover == Hit.Category && hoverTab == i;
 
-            Color border = Shade(c.color, borderShade);
+            Color border = Shade(c.Color, borderShade);
 
             t.Glow.gameObject.SetActive(isSelected);
             t.Pointer.gameObject.SetActive(isSelected);
-            t.Pointer.color = c.color;
+            t.Pointer.color = c.Color;
 
             if (isSelected)
             {
                 // Gewaehlt: der Knopf traegt seine Farbe, die Schrift wird hell -
                 // oder dunkel, wenn die Farbe dafuer zu hell ist (Gelb).
-                t.Fill.color     = c.color;
+                t.Fill.color     = c.Color;
                 t.Outer.color    = border;
-                t.Inner.color    = Lift(c.color, 0.35f);
-                t.Label.color    = InkOn(c.color);
-                t.IconFill.color = Lift(c.color, 0.55f);
+                t.Inner.color    = Lift(c.Color, 0.35f);
+                t.Label.color    = InkOn(c.Color);
+                t.IconFill.color = Lift(c.Color, 0.55f);
             }
             else
             {
                 t.Fill.color     = isHover ? Lift(panelInset, hoverLift * 0.5f) : panelInset;
-                t.Outer.color    = isHover ? c.color : Shade(c.color, borderShade * 0.5f);
-                t.Inner.color    = Lift(c.color, 0.5f);
+                t.Outer.color    = isHover ? c.Color : Shade(c.Color, borderShade * 0.5f);
+                t.Inner.color    = Lift(c.Color, 0.5f);
                 t.Label.color    = border;
                 t.IconFill.color = panelFill;
             }
 
             // Die Ersatzscheibe bleibt in der Kategoriefarbe - auf dem gewaehlten
             // Knopf in der dunklen, sonst verschwindet sie im hellen Kaestchen.
-            t.Icon.color = c.icon != null ? Color.white
-                                          : (isSelected ? border : c.color);
+            t.Icon.color = c.Icon != null ? Color.white
+                                          : (isSelected ? border : c.Color);
         }
     }
 
     void RefreshContent()
     {
-        Category c = Current;
+        SkillBranchDef c = Current;
         if (c == null)
         {
             headerText.text = "";
             return;
         }
 
-        Color border = Shade(c.color, borderShade);
-        Color ink = InkOn(c.color);
+        Color border = Shade(c.Color, borderShade);
+        Color ink = InkOn(c.Color);
 
-        headerFill.color  = c.color;
+        headerFill.color  = c.Color;
         headerFrame.color = border;
         headerText.color  = ink;
         headerPlusLeft.color = headerPlusRight.color = ink;
 
-        headerText.text = string.IsNullOrWhiteSpace(c.pathLabel)
-            ? string.Format(pathLabelFormat, c.displayName)
-            : c.pathLabel;
+        headerText.text = string.IsNullOrWhiteSpace(c.Path)
+            ? string.Format(pathLabelFormat, c.Name)
+            : c.Path;
     }
 
+    /// <summary>
+    /// Die Karte rechts zeigt, worum es geht. Der Reihe nach:
+    ///   - Maus auf einem Knoten: dieser Knoten - Form, Name, Wirkung, Preis.
+    ///   - Maus auf einem Kategorieknopf links: DIESE Kategorie, auch wenn sie
+    ///     noch gar nicht gewaehlt ist. So sieht man vor dem Klick, was einen
+    ///     dort erwartet.
+    ///   - Sonst: die gewaehlte Kategorie.
+    /// </summary>
     void RefreshDetail()
     {
-        Category c = Current;
+        // Die Karte folgt der Maus ueber die Knoepfe links, das grosse Feld
+        // daneben bleibt aber auf der gewaehlten Kategorie.
+        SkillBranchDef c = (hover == Hit.Category && hoverTab >= 0 && hoverTab < branches.Count)
+            ? branches[hoverTab]
+            : Current;
+
         if (c == null)
         {
             detailName.text = detailText.text = detailQuote.text = "";
             return;
         }
 
-        orbRing.color = Shade(c.color, borderShade);
-        orbFill.color = c.color;
+        Color border = Shade(c.Color, borderShade);
 
-        detailName.text  = c.displayName;
-        detailName.color = Shade(c.color, borderShade);
-        detailText.text  = c.description;
+        // Ein Knoten unter der Maus gewinnt - dann steht die Maus ohnehin nicht
+        // gleichzeitig auf einem Knopf links.
+        SkillNodeDef node = graph.Hovered;
 
-        // Ohne Spruch braucht es auch die zweite Trennlinie nicht.
-        bool hasQuote = !string.IsNullOrWhiteSpace(c.quote);
-        detailQuote.text = hasQuote ? c.quote : "";
-        divider2a.gameObject.SetActive(hasQuote);
-        divider2b.gameObject.SetActive(hasQuote);
-        dividerPlus2.gameObject.SetActive(hasQuote);
+        if (node != null)
+        {
+            bool unlocked = Skills.IsUnlocked(node);
+            bool open = !unlocked && Skills.RequirementsMet(node);
+
+            orbRing.sprite = orbShapes.Outline(node.Shape);
+            orbFill.sprite = orbShapes.Fill(node.Shape);
+
+            orbRing.color = unlocked || open ? border : Shade(panelBorder, 0.35f);
+            orbFill.color = unlocked ? c.Color : open ? panelFill : panelBorder;
+
+            detailName.text  = node.Name;
+            detailName.color = border;
+            detailText.text  = node.Description;
+
+            // Der Startknoten wird nicht gekauft - "GEKAUFT" waere dort Unsinn.
+            detailQuote.text = node.IsStart ? ""
+                             : unlocked     ? boughtLabel
+                             : open         ? string.Format(priceFormat, node.Price)
+                                            : MissingText(node);
+        }
+        else
+        {
+            orbRing.sprite = pixels.Disc;
+            orbFill.sprite = pixels.Disc;
+
+            orbRing.color = border;
+            orbFill.color = c.Color;
+
+            detailName.text  = c.Name;
+            detailName.color = border;
+            detailText.text  = c.Description;
+            detailQuote.text = c.Quote;
+        }
+
+        // Ohne Text unten braucht es auch die zweite Trennlinie nicht.
+        bool hasFooter = !string.IsNullOrWhiteSpace(detailQuote.text);
+        divider2a.gameObject.SetActive(hasFooter);
+        divider2b.gameObject.SetActive(hasFooter);
+        dividerPlus2.gameObject.SetActive(hasFooter);
+    }
+
+    /// <summary>Welche Knoten noch fehlen. Mehr als zwei werden nicht aufgezaehlt.</summary>
+    string MissingText(SkillNodeDef node)
+    {
+        var missing = new List<string>();
+
+        foreach (SkillNodeDef parent in node.Requires)
+        {
+            if (!Skills.IsUnlocked(parent)) missing.Add(parent.Name);
+        }
+
+        if (missing.Count == 0) return lockedLabel;
+        if (missing.Count > 2) return lockedLabel;
+
+        return lockedLabel + ": " + string.Join(" + ", missing);
     }
 
     // ---------------------------------------------------------------- Farben

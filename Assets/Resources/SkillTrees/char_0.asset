@@ -1,0 +1,705 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c18eae5cd8ed3a4fada04a73f1fddc8, type: 3}
+  m_Name: char_0
+  m_EditorClassIdentifier: Assembly-CSharp::SkillTreeAsset
+  treeId: char_0
+  displayName: Standard
+  characterIndex: 0
+  categories:
+  - category: 0
+    displayName: KAMPF
+    pathLabel: KAMPFPFAD
+    description: Schaerfe deine Waffen und triff haerter, wo es weh tut.
+    quote: '"Angriff ist die beste Verteidigung."'
+    color: {r: 0.69803923, g: 0.25490198, b: 0.25490198, a: 1}
+    icon: {fileID: 0}
+  - category: 1
+    displayName: GEIST
+    pathLabel: GEISTPFAD
+    description: Meistere die Kraefte in dir und halte laenger durch als alle anderen.
+    quote: '"Der Geist ueberdauert."'
+    color: {r: 0.23529412, g: 0.43529412, b: 0.7529412, a: 1}
+    icon: {fileID: 0}
+  - category: 2
+    displayName: WISSEN
+    pathLabel: WISSENSPFAD
+    description: Lerne schneller, waehle klueger und hole aus jedem Lauf mehr heraus.
+    quote: '"Wissen veraendert die Welt."'
+    color: {r: 0.24313726, g: 0.56078434, b: 0.30980393, a: 1}
+    icon: {fileID: 0}
+  - category: 3
+    displayName: "GL\xDCCK"
+    pathLabel: "GL\xDCCKSPFAD"
+    description: Bessere Funde, seltenere Beute und der eine Wurf, der alles dreht.
+    quote: '"Glueck ist kein Zufall."'
+    color: {r: 0.78431374, g: 0.6039216, b: 0.17254902, a: 1}
+    icon: {fileID: 0}
+  nodes:
+  - id: kampf_mitte_1
+    category: 0
+    lane: 1
+    step: 1
+    shape: 0
+    price: 10
+    displayName: Schlagkraft
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 9
+      value: 0.1
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - kampf_start
+  - id: kampf_oben_1
+    category: 0
+    lane: 0
+    step: 2
+    shape: 1
+    price: 15
+    displayName: Scharfer Blick
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 11
+      value: 0.05
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - kampf_mitte_1
+  - id: kampf_mitte_2
+    category: 0
+    lane: 1
+    step: 2
+    shape: 0
+    price: 15
+    displayName: Nachschlag
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 9
+      value: 0.1
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - kampf_mitte_1
+  - id: kampf_unten_1
+    category: 0
+    lane: 2
+    step: 2
+    shape: 1
+    price: 15
+    displayName: Harte Schale
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 6
+      value: 0.25
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - kampf_mitte_1
+  - id: kampf_oben_2
+    category: 0
+    lane: 0
+    step: 3
+    shape: 2
+    price: 20
+    displayName: Tiefer Schnitt
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 10
+      value: 0.25
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - kampf_oben_1
+  - id: kampf_mitte_3
+    category: 0
+    lane: 1
+    step: 3
+    shape: 0
+    price: 20
+    displayName: Doppelwurf
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 5
+      value: 1
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - kampf_mitte_2
+  - id: kampf_unten_2
+    category: 0
+    lane: 2
+    step: 3
+    shape: 2
+    price: 20
+    displayName: Zaeh
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 1
+      value: 10
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - kampf_unten_1
+  - id: kampf_oben_3
+    category: 0
+    lane: 0
+    step: 4
+    shape: 3
+    price: 60
+    displayName: Vier Richtungen
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 1
+      stat: 1
+      value: 10
+      grantId: shurikookie_vier_richtungen
+      descriptionOverride: 
+    - kind: 0
+      stat: 9
+      value: 0.1
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - kampf_oben_2
+    - kampf_mitte_3
+  - id: kampf_mitte_4
+    category: 0
+    lane: 1
+    step: 4
+    shape: 4
+    price: 30
+    displayName: Wucht
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 9
+      value: 0.2
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - kampf_mitte_3
+  - id: kampf_unten_3
+    category: 0
+    lane: 2
+    step: 4
+    shape: 3
+    price: 60
+    displayName: Abpraller
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 1
+      stat: 1
+      value: 10
+      grantId: shurikookie_abpraller
+      descriptionOverride: 
+    requires:
+    - kampf_unten_2
+    - kampf_mitte_3
+  - id: geist_mitte_1
+    category: 1
+    lane: 1
+    step: 1
+    shape: 0
+    price: 10
+    displayName: Atem
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 1
+      value: 10
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - geist_start
+  - id: geist_oben_1
+    category: 1
+    lane: 0
+    step: 2
+    shape: 1
+    price: 15
+    displayName: Ruhiger Puls
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 4
+      value: 1
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - geist_mitte_1
+  - id: geist_mitte_2
+    category: 1
+    lane: 1
+    step: 2
+    shape: 0
+    price: 15
+    displayName: Leichter Schritt
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 2
+      value: 0.1
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - geist_mitte_1
+  - id: geist_unten_1
+    category: 1
+    lane: 2
+    step: 2
+    shape: 1
+    price: 15
+    displayName: Ausweichen
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 12
+      value: 0.03
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - geist_mitte_1
+  - id: geist_oben_2
+    category: 1
+    lane: 0
+    step: 3
+    shape: 4
+    price: 25
+    displayName: Lebensdurst
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 8
+      value: 0.2
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - geist_oben_1
+  - id: geist_mitte_3
+    category: 1
+    lane: 1
+    step: 3
+    shape: 0
+    price: 25
+    displayName: Rueckenwind
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 2
+      value: 0.1
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - geist_mitte_2
+  - id: geist_unten_2
+    category: 1
+    lane: 2
+    step: 3
+    shape: 4
+    price: 25
+    displayName: Schattenhaft
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 12
+      value: 0.03
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - geist_unten_1
+  - id: geist_mitte_4
+    category: 1
+    lane: 1
+    step: 4
+    shape: 3
+    price: 50
+    displayName: Zweites Leben
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 1
+      stat: 1
+      value: 10
+      grantId: zweites_leben
+      descriptionOverride: 
+    - kind: 0
+      stat: 1
+      value: 20
+      grantId: 
+      descriptionOverride: 
+    - kind: 0
+      stat: 4
+      value: 1
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - geist_oben_2
+    - geist_mitte_3
+    - geist_unten_2
+  - id: wissen_mitte_1
+    category: 2
+    lane: 1
+    step: 1
+    shape: 0
+    price: 10
+    displayName: Lerneifer
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 3
+      value: 0.1
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - wissen_start
+  - id: wissen_oben_1
+    category: 2
+    lane: 0
+    step: 2
+    shape: 1
+    price: 15
+    displayName: Sammler
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 13
+      value: 0.2
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - wissen_mitte_1
+  - id: wissen_mitte_2
+    category: 2
+    lane: 1
+    step: 2
+    shape: 0
+    price: 15
+    displayName: Studium
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 3
+      value: 0.1
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - wissen_mitte_1
+  - id: wissen_unten_1
+    category: 2
+    lane: 2
+    step: 2
+    shape: 1
+    price: 15
+    displayName: Vorrat
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 17
+      value: 10
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - wissen_mitte_1
+  - id: wissen_oben_2
+    category: 2
+    lane: 0
+    step: 3
+    shape: 6
+    price: 30
+    displayName: Zweite Wahl
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 16
+      value: 1
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - wissen_oben_1
+  - id: wissen_mitte_3
+    category: 2
+    lane: 1
+    step: 3
+    shape: 0
+    price: 30
+    displayName: Platz im Gepaeck
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 19
+      value: 1
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - wissen_mitte_2
+  - id: wissen_unten_2
+    category: 2
+    lane: 2
+    step: 3
+    shape: 6
+    price: 30
+    displayName: Verbannen
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 15
+      value: 1
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - wissen_unten_1
+  - id: glueck_mitte_1
+    category: 3
+    lane: 1
+    step: 1
+    shape: 0
+    price: 10
+    displayName: Handschmeichler
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 14
+      value: 5
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - glueck_start
+  - id: glueck_oben_1
+    category: 3
+    lane: 0
+    step: 2
+    shape: 2
+    price: 15
+    displayName: Guter Fund
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 14
+      value: 5
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - glueck_mitte_1
+  - id: glueck_mitte_2
+    category: 3
+    lane: 1
+    step: 2
+    shape: 0
+    price: 15
+    displayName: Rueckenwind
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 14
+      value: 5
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - glueck_mitte_1
+  - id: glueck_unten_1
+    category: 3
+    lane: 2
+    step: 2
+    shape: 2
+    price: 15
+    displayName: Magnet
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 13
+      value: 0.2
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - glueck_mitte_1
+  - id: glueck_oben_2
+    category: 3
+    lane: 0
+    step: 3
+    shape: 3
+    price: 45
+    displayName: Freie Truhe
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 1
+      stat: 1
+      value: 10
+      grantId: erste_truhe_gratis
+      descriptionOverride: 
+    requires:
+    - glueck_oben_1
+  - id: glueck_mitte_3
+    category: 3
+    lane: 1
+    step: 3
+    shape: 4
+    price: 30
+    displayName: Gluecksstraehne
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 14
+      value: 10
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - glueck_mitte_2
+  - id: glueck_unten_2
+    category: 3
+    lane: 2
+    step: 3
+    shape: 6
+    price: 30
+    displayName: Reiche Ernte
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 21
+      value: 1
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - glueck_unten_1
+  - id: kampf_start
+    category: 0
+    lane: 1
+    step: 0
+    shape: 0
+    price: 0
+    displayName: Start
+    description: Hier beginnt der Pfad.
+    icon: {fileID: 0}
+    rewards: []
+    requires: []
+  - id: geist_start
+    category: 1
+    lane: 1
+    step: 0
+    shape: 0
+    price: 0
+    displayName: Start
+    description: Hier beginnt der Pfad.
+    icon: {fileID: 0}
+    rewards: []
+    requires: []
+  - id: wissen_start
+    category: 2
+    lane: 1
+    step: 0
+    shape: 0
+    price: 0
+    displayName: Start
+    description: Hier beginnt der Pfad.
+    icon: {fileID: 0}
+    rewards: []
+    requires: []
+  - id: glueck_start
+    category: 3
+    lane: 1
+    step: 0
+    shape: 0
+    price: 0
+    displayName: Start
+    description: Hier beginnt der Pfad.
+    icon: {fileID: 0}
+    rewards: []
+    requires: []
+  - id: glueck_oben_3
+    category: 3
+    lane: 0
+    step: 4
+    shape: 0
+    price: 30
+    displayName: 
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 1
+      value: 10
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - glueck_mitte_1
+  - id: glueck_unten_3
+    category: 3
+    lane: 2
+    step: 4
+    shape: 0
+    price: 30
+    displayName: 
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 1
+      value: 10
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - glueck_mitte_1
+  - id: glueck_mitte_4
+    category: 3
+    lane: 1
+    step: 4
+    shape: 0
+    price: 30
+    displayName: 
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 1
+      value: 10
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - glueck_mitte_1
