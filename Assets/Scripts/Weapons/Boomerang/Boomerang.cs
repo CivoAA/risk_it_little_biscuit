@@ -39,7 +39,7 @@ public class Boomerang : Weapon
 
             GameObject boomerang = Instantiate(prefab, transform.position, transform.rotation);
             boomerang.transform.localScale *= (PlayerController.Instance.AOERange * 0.7f);
-            Scene gameScene = SceneManager.GetSceneByName("Game");
+            Scene gameScene = RunScene.Current;
             if (gameScene.IsValid() && gameScene.isLoaded)
             {
                 SceneManager.MoveGameObjectToScene(boomerang, gameScene);

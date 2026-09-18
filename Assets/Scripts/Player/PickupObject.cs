@@ -44,7 +44,7 @@ public class PickupObject : MonoBehaviour
             // Danach zerstören
             Destroy(gameObject);
             GameObject DestroyEffect =Instantiate(destroyEffect, transform.position, transform.rotation);
-            Scene gameScene = SceneManager.GetSceneByName("Game");
+            Scene gameScene = RunScene.Current;
             if (gameScene.IsValid() && gameScene.isLoaded)
             {
                 SceneManager.MoveGameObjectToScene(DestroyEffect, gameScene);

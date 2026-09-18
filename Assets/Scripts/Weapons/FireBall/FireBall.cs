@@ -41,7 +41,7 @@ public class FireBall : Weapon
             AudioController.Instance.PalySound(AudioController.Instance.BOBA);
 
             GameObject fireBall = Instantiate(prefab, transform.position, transform.rotation);
-            Scene gameScene = SceneManager.GetSceneByName("Game");
+            Scene gameScene = RunScene.Current;
             if (gameScene.IsValid() && gameScene.isLoaded)
             {
                 SceneManager.MoveGameObjectToScene(fireBall, gameScene);

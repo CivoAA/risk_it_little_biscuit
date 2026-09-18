@@ -41,7 +41,7 @@ public class CelestialStar : Weapon
             star.transform.localScale *= PlayerController.Instance.AOERange;
 
             // in Game-Szene verschieben
-            Scene gameScene = SceneManager.GetSceneByName("Game");
+            Scene gameScene = RunScene.Current;
             if (gameScene.IsValid() && gameScene.isLoaded)
             {
                 SceneManager.MoveGameObjectToScene(star, gameScene);

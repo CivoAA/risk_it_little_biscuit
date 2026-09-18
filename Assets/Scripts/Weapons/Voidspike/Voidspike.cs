@@ -38,7 +38,7 @@ public class Voidspike : Weapon
         // ein laengerer Wert waere hier eine Verschlechterung.
         float spawnDelay = stats[weaponLevel].duration;   // Zeit zwischen Spawns
         float lifeTime = 0.6f;      // Lebensdauer pro Spike
-        Scene gameScene = SceneManager.GetSceneByName("Game");
+        Scene gameScene = RunScene.Current;
         for (int i = 0; i < count; i++)
         {
             UpdateTarget();

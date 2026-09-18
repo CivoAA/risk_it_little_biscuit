@@ -20,7 +20,7 @@ public class ExplosiveStarEvoPrefab : MonoBehaviour
         {
             GameObject fireBallExplosion = Instantiate(prefab, transform.position, transform.rotation);
             fireBallExplosion.transform.localScale *= weapon.CurrentStats.range * (PlayerController.Instance.AOERange * 0.7f);
-            Scene gameScene = SceneManager.GetSceneByName("Game");
+            Scene gameScene = RunScene.Current;
             if (gameScene.IsValid() && gameScene.isLoaded)
             {
                 SceneManager.MoveGameObjectToScene(fireBallExplosion, gameScene);

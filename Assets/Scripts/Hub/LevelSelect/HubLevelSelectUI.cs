@@ -32,13 +32,14 @@ using UnityEngine.UI;
 ///     Position in der Liste (Eintrag 1 = Karte "1").
 ///
 ///  2. Am Eintrag ausfuellen:
-///       Scene To Load  Name der Szene, die das Level enthaelt, z.B. "Game".
-///                      Die Szene MUSS in File > Build Settings stehen, sonst
-///                      bleibt der Knopf grau und zeigt "BALD" (siehe IsLinked).
-///       Map Id         Welche Welt in dieser Szene hochkommt. Das ist derselbe
-///                      Index wie MapName.mapID in der World Map; WorldSelector
-///                      in Game.unity schaltet danach seine Welten frei
-///                      (worlds[mapId]). Neue Welt = neuer Eintrag dort.
+///       Map Id         Welche Welt gespielt wird. Daraus ergibt sich die
+///                      Szene: Map-ID 3 laedt "Map_World3" (siehe
+///                      MapSceneSystem). Die Szene MUSS in File > Build
+///                      Settings stehen, sonst bleibt der Knopf grau und zeigt
+///                      "BALD" (siehe IsLinked). Map-ID -1 = noch keine Welt.
+///       Scene To Load  Nur noch Rueckfallebene: steht hier etwas und es gibt
+///                      keine Map-Szene zur Map-ID, wird diese Szene geladen.
+///                      Normalerweise leer lassen.
 ///       Display Name / Description   Text im rechten Feld.
 ///       Preview        Bild fuer Kartenfenster und Beschreibungsfeld. Leer =
 ///                      das Fenster bleibt frei.
@@ -82,12 +83,13 @@ public class HubLevelSelectUI : MonoBehaviour
                  "Fenster bleibt frei.")]
         public Sprite preview;
 
-        [Tooltip("Welche Welt geladen wird - derselbe Index wie MapName.mapID in der World Map.")]
+        [Tooltip("Welche Welt geladen wird: Map-ID 3 laedt die Szene Map_World3. " +
+                 "-1 = dieses Level hat noch keine Welt und zeigt 'BALD'.")]
         public int mapId;
 
-        [Tooltip("Szene, die das Level enthaelt. Muss in den Build Settings stehen. " +
-                 "Leer oder unbekannt = das Level zeigt sich als 'noch nicht da'.")]
-        public string sceneToLoad = "Game";
+        [Tooltip("Rueckfallebene, falls es zur Map-ID keine Map-Szene gibt. " +
+                 "Normalerweise leer.")]
+        public string sceneToLoad = "";
 
         [Tooltip("Optional: Story ist erst offen, wenn diese Unlock-ID freigeschaltet ist. Leer = immer offen.")]
         public string storyUnlockId = "";
@@ -950,8 +952,14 @@ public class HubLevelSelectUI : MonoBehaviour
     /// </summary>
     bool IsLinked(LevelEntry e)
     {
-        if (e == null || string.IsNullOrWhiteSpace(e.sceneToLoad)) return false;
-        return Application.CanStreamedLevelBeLoaded(e.sceneToLoad);
+        if (e == null) return false;
+
+        // Nicht sceneToLoad direkt fragen: das Level liegt in seiner eigenen
+        // Map-Szene (Map_World<mapId>), der Eintrag ist nur die Rueckfallebene.
+        string scene = MapSceneSystem.ResolveScene(e.sceneToLoad, e.mapId);
+        if (string.IsNullOrWhiteSpace(scene)) return false;
+
+        return Application.CanStreamedLevelBeLoaded(scene);
     }
 
     // -------------------------------------------------------------- Starten
@@ -964,10 +972,15 @@ public class HubLevelSelectUI : MonoBehaviour
         bool mayPlay = endlessChosen ? EndlessUnlocked(e) : StoryUnlocked(e);
         if (!mayPlay) { PlayDenySound(); return; }
 
+        // Welche Szene das Level wirklich laedt: die Map-Szene zur Map-ID
+        // (Map_World<mapId>). Der Eintrag im Inspector ist nur noch die
+        // Rueckfallebene fuer Welten ohne eigene Szene.
+        string sceneToLoad = MapSceneSystem.ResolveScene(e.sceneToLoad, e.mapId);
+
         if (!IsLinked(e))
         {
             Debug.Log($"[Levelauswahl] Level {selected + 1} ist noch nicht verknuepft " +
-                      $"(Szene \"{e.sceneToLoad}\"). Szenenname im Inspector eintragen und " +
+                      $"(Szene \"{sceneToLoad}\"). Szenenname im Inspector eintragen und " +
                       "in die Build Settings aufnehmen.");
             PlayDenySound();
             return;
@@ -1017,15 +1030,17 @@ public class HubLevelSelectUI : MonoBehaviour
 
         // Der uebliche Weg: additiv laden und den Hub stilllegen, genau wie die
         // World Map es mit sich selbst macht. Der MenuManager ueberlebt das.
+        // Im neuen System ist das die Map-Szene - GameCore holt sie sich selbst
+        // dazu (MapBootstrap), hier ist also nichts weiter zu tun.
         if (MenuManager.Instance != null)
         {
-            MenuManager.Instance.ActivateScene(e.sceneToLoad);
+            MenuManager.Instance.ActivateScene(sceneToLoad);
             MenuManager.Instance.DeactivateScene(hubScene);
             return;
         }
 
         // Rueckfallebene ohne MenuManager (hub allein gestartet): hart umschalten.
-        SceneManager.LoadScene(e.sceneToLoad, LoadSceneMode.Single);
+        SceneManager.LoadScene(sceneToLoad, LoadSceneMode.Single);
     }
 
     // ----------------------------------------------------------------- Ton

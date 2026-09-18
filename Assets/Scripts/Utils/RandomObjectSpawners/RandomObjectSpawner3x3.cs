@@ -72,28 +72,39 @@ public class RandomObjectSpawner3x3 : MonoBehaviour
             GameObject prefab = spawnablePrefabs[Random.Range(0, spawnablePrefabs.Length)];
             GameObject spawnedObject = Instantiate(prefab, new Vector3(randomX, randomY, 0f), Quaternion.identity);
 
-            Scene gameScene = SceneManager.GetSceneByName("Game");
+            Scene gameScene = RunScene.Current;
             if (gameScene.IsValid() && gameScene.isLoaded)
             {
                 SceneManager.MoveGameObjectToScene(spawnedObject, gameScene);
             }
             else
             {
-                Debug.LogWarning("⚠️ Game Scene ist nicht geladen! Objekt bleibt in aktueller Scene.");
+                Debug.LogWarning("⚠️ Keine Lauf-Szene gefunden! Objekt bleibt in aktueller Scene.");
             }
         }
     }
 
     private bool IsInNoSpawnZone(float x, float y)
     {
-        if (bottomLeftNoSpawnPoint == null || topRightNoSpawnPoint == null)
-            return false;
+        if (bottomLeftNoSpawnPoint != null && topRightNoSpawnPoint != null)
+        {
+            float left = bottomLeftNoSpawnPoint.position.x;
+            float right = topRightNoSpawnPoint.position.x;
+            float bottom = bottomLeftNoSpawnPoint.position.y;
+            float top = topRightNoSpawnPoint.position.y;
 
-        float left = bottomLeftNoSpawnPoint.position.x;
-        float right = topRightNoSpawnPoint.position.x;
-        float bottom = bottomLeftNoSpawnPoint.position.y;
-        float top = topRightNoSpawnPoint.position.y;
+            return (x >= left && x <= right && y >= bottom && y <= top);
+        }
 
-        return (x >= left && x <= right && y >= bottom && y <= top);
+        // Die beiden Ecken hingen am Kamerarand und stehen seit dem
+        // Szenen-Split in GameCore - die Referenz von hier aus ist damit leer.
+        // Ohne Ersatz waere die Antwort "nein, spawn ruhig", und dann poppen
+        // Props mitten im Bild neben dem Spieler auf.
+        if (ViewBounds.TryGetWorldRect(out Rect view))
+        {
+            return view.Contains(new Vector2(x, y));
+        }
+
+        return false;
     }
 }

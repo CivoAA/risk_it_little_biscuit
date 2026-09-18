@@ -68,7 +68,7 @@ public class CrumbTrail : Weapon
 
         GameObject crumb = Instantiate(prefab, pos, Quaternion.identity);
 
-        Scene gameScene = SceneManager.GetSceneByName("Game");
+        Scene gameScene = RunScene.Current;
         if (gameScene.IsValid() && gameScene.isLoaded)
         {
             SceneManager.MoveGameObjectToScene(crumb, gameScene);

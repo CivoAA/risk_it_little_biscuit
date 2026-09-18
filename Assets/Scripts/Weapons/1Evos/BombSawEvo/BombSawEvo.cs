@@ -21,7 +21,7 @@ public class BombSawEvo : Weapon
 
                 // Orbit-Pivot erstellen
                 GameObject orbit = new GameObject("OrbitPivotEvo");
-                Scene gameScene = SceneManager.GetSceneByName("Game");
+                Scene gameScene = RunScene.Current;
                 if (gameScene.IsValid() && gameScene.isLoaded)
                 {
                     SceneManager.MoveGameObjectToScene(orbit, gameScene);

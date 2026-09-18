@@ -40,7 +40,7 @@ public class ExplosiveStarEvo : Weapon
             GameObject star = Instantiate(prefab, (Vector3)randomPoint, transform.rotation);
 
             // in Game-Szene verschieben
-            Scene gameScene = SceneManager.GetSceneByName("Game");
+            Scene gameScene = RunScene.Current;
             if (gameScene.IsValid() && gameScene.isLoaded)
             {
                 SceneManager.MoveGameObjectToScene(star, gameScene);

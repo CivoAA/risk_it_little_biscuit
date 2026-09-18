@@ -39,7 +39,7 @@ public class ShuriBlastEvo : Weapon
             AudioController.Instance.PalySound(AudioController.Instance.BOBA);
 
             GameObject BOBA = Instantiate(prefab, transform.position, transform.rotation);
-            Scene gameScene = SceneManager.GetSceneByName("Game");
+            Scene gameScene = RunScene.Current;
             if (gameScene.IsValid() && gameScene.isLoaded)
             {
                 SceneManager.MoveGameObjectToScene(BOBA, gameScene);

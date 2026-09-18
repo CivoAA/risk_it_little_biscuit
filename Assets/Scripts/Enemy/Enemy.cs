@@ -43,6 +43,54 @@ public class Enemy : MonoBehaviour
         get { return MiniBoss || BossBoss || Death_Boss; }
     }
 
+    // ---------------------------------------------------------------- Register
+
+    private static readonly System.Collections.Generic.List<Enemy> alive =
+        new System.Collections.Generic.List<Enemy>();
+
+    /// <summary>
+    /// Alle Gegner, die gerade leben. Der <see cref="SpawnDirector"/> rechnet
+    /// daraus den Druck auf dem Feld aus - und zwar auch ueber Gegner, die er
+    /// nicht selbst gesetzt hat (Mini-Muffins aus einem Muffin zum Beispiel).
+    /// Ohne die wuerde er nachlegen, obwohl es schon voll ist.
+    /// </summary>
+    public static System.Collections.Generic.IReadOnlyList<Enemy> Alive => alive;
+
+    /// <summary>
+    /// Was dieser Gegner im Druck-Budget wiegt. Setzt der Director beim
+    /// Spawnen; wer anders erzeugt wird, zaehlt als 1.
+    /// </summary>
+    [System.NonSerialized] public float RunThreat = 1f;
+
+    /// <summary>
+    /// Darf der Director diesen Gegner nachziehen, wenn der Spieler wegrennt?
+    /// Fuer Kaefig und Ring-Gegner eines Encirclements: nein - die gehoeren an
+    /// ihren Platz.
+    /// </summary>
+    [System.NonSerialized] public bool CanRecycle;
+
+    protected virtual void OnEnable()
+    {
+        alive.Add(this);
+    }
+
+    protected virtual void OnDisable()
+    {
+        alive.Remove(this);
+    }
+
+    /// <summary>
+    /// Haengt die Lauf-Schwierigkeit an: mehr Leben, mehr Schaden, mehr
+    /// Belohnung. Ruft <see cref="RunDifficulty"/> direkt nach dem Spawnen auf,
+    /// also bevor der Gegner das erste Mal laeuft.
+    /// </summary>
+    public void ApplyRunScaling(float healthFactor, float damageFactor, float rewardFactor)
+    {
+        health = Mathf.Max(1f, health * healthFactor);
+        damage *= damageFactor;
+        experienceToGive = Mathf.Max(0, Mathf.RoundToInt(experienceToGive * rewardFactor));
+    }
+
     /// <summary>
     /// Zieht den Gegner fuer kurze Zeit in eine Richtung. Der Aufrufer muss das
     /// jeden Frame erneuern (der Wirbel tut das), sonst laeuft der Zug aus.
@@ -153,7 +201,14 @@ public class Enemy : MonoBehaviour
         if (health <= 0)
         {
             TrySpawnPickup();
-            SpawnExp.Instance.SpawnEP(transform.position, experienceToGive);
+
+            // Ohne Null-Pruefung reisst ein fehlender Spawner den ganzen
+            // Todesfall mit: die NullReference fliegt, das Destroy unten laeuft
+            // nie, und der Gegner steht mit negativem Leben weiter herum.
+            if (SpawnExp.Instance != null)
+            {
+                SpawnExp.Instance.SpawnEP(transform.position, experienceToGive);
+            }
             if (Death_Boss)
             {
                 PlayerController.Instance.attractAllXP = true;
@@ -161,11 +216,11 @@ public class Enemy : MonoBehaviour
                 // 💰 Belohnung: +50 SkillCurrency
                 Skills.AddCurrency(50);
                 WM_UIController.Instance?.UpdateSkillCurrencyText();
-                SpawnChest.Instance.Spawn(transform.position);
+                if (SpawnChest.Instance != null) SpawnChest.Instance.Spawn(transform.position);
             }
             else if (MiniBoss)
             {
-                SpawnChest.Instance.Spawn(transform.position);
+                if (SpawnChest.Instance != null) SpawnChest.Instance.Spawn(transform.position);
                 // Evo-Slot ist jetzt von Anfang an im Shop sichtbar - hier gibt es nichts mehr freizuschalten.
                 Achievements.Progress(Ach.Kill10Miniboss, 1f);
                 Achievements.Progress(Ach.Kill100Miniboss, 1f);
@@ -193,14 +248,14 @@ public class Enemy : MonoBehaviour
                 Vector3 spawnPos1 = transform.position;
                 spawnPos1.x += 50;
                 GameManager.Instance.bossSpawned = true;
-                SpawnDeath.Instance.Spawn(spawnPos1);
+                if (SpawnDeath.Instance != null) SpawnDeath.Instance.Spawn(spawnPos1);
                 // 💰 Belohnung: +10 SkillCurrency
                 Skills.AddCurrency(10);
                 WM_UIController.Instance?.UpdateSkillCurrencyText();
             }
             Destroy(gameObject);
             GameObject DestroyEffect = Instantiate(destroyEffect, transform.position, transform.rotation);
-            Scene gameScene = SceneManager.GetSceneByName("Game");
+            Scene gameScene = RunScene.Current;
             if (gameScene.IsValid() && gameScene.isLoaded)
             {
                 SceneManager.MoveGameObjectToScene(DestroyEffect, gameScene);
@@ -232,7 +287,7 @@ public class Enemy : MonoBehaviour
     }
     private void TrySpawnPickup()
     {
-        Scene gameScene = SceneManager.GetSceneByName("Game");
+        Scene gameScene = RunScene.Current;
         // Magnet: 1 zu 500 (0.2%)
         if (UnityEngine.Random.Range(1, 501) == 1)
         {

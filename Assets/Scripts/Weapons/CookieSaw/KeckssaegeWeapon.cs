@@ -23,7 +23,7 @@ public class KeckssaegeWeapon : Weapon
 
                 // Orbit-Pivot erstellen
                 GameObject orbit = new GameObject("OrbitPivot");
-                Scene gameScene = SceneManager.GetSceneByName("Game");
+                Scene gameScene = RunScene.Current;
                 if (gameScene.IsValid() && gameScene.isLoaded)
                 {
                     SceneManager.MoveGameObjectToScene(orbit, gameScene);

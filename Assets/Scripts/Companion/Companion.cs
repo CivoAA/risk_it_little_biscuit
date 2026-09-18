@@ -131,7 +131,7 @@ public class Companion : MonoBehaviour
 
         GameObject shot = Instantiate(projectilePrefab, transform.position, Quaternion.Euler(0f, 0f, angle));
 
-        Scene gameScene = SceneManager.GetSceneByName("Game");
+        Scene gameScene = RunScene.Current;
         if (gameScene.IsValid() && gameScene.isLoaded)
         {
             SceneManager.MoveGameObjectToScene(shot, gameScene);

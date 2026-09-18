@@ -44,7 +44,7 @@ public class ShurikenWeapon : Weapon
             AudioController.Instance.PalySound(AudioController.Instance.Werfen, 0.1f);
 
             GameObject shuriken = Instantiate(prefab, transform.position, transform.rotation);
-            Scene gameScene = SceneManager.GetSceneByName("Game");
+            Scene gameScene = RunScene.Current;
             if (gameScene.IsValid() && gameScene.isLoaded)
             {
                 SceneManager.MoveGameObjectToScene(shuriken, gameScene);
