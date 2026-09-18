@@ -61,6 +61,26 @@ public class HubUI : MonoBehaviour
     [SerializeField] private Color textColor   = new Color32(0xF7, 0xEC, 0xD6, 0xFF);
     [SerializeField] private Color hintColor   = new Color32(0xD9, 0xA4, 0x41, 0xFF);
 
+    [Header("Muenzen (oben rechts)")]
+    [Tooltip("Zeigt den Kontostand dauerhaft im Hub an.")]
+    [SerializeField] private bool showCoins = true;
+    [Tooltip("Leer lassen - dann wird die Muenze aus dem Hub-Shop uebernommen, " +
+             "damit an beiden Stellen dasselbe Bild haengt.")]
+    [SerializeField] private Sprite coinSprite;
+    [Tooltip("Abstand zur rechten und oberen Bildschirmkante.")]
+    [SerializeField] private Vector2 coinMargin = new Vector2(8f, 7f);
+    [SerializeField] private float coinIconSize = 9f;
+    [SerializeField] private float coinFontSize = 8f;
+    [Tooltip("Luft zwischen Muenze und Zahl.")]
+    [SerializeField] private float coinGap = 3f;
+    [Tooltip("Platz fuer die Zahl. Muss zu sechsstelligen Betraegen passen.")]
+    [SerializeField] private float coinTextWidth = 44f;
+    [SerializeField] private Color coinTextColor = new Color32(0xF0, 0xD4, 0x9B, 0xFF);
+    [Tooltip("Platte hinter der Anzeige, damit sie auf hellem Boden lesbar bleibt. " +
+             "Alpha auf 0 = keine Platte.")]
+    [SerializeField] private Color coinPanelColor = new Color32(0x2A, 0x1C, 0x14, 0xC8);
+    [SerializeField] private Vector2 coinPanelPadding = new Vector2(4f, 2f);
+
     [Header("Sound")]
     [Tooltip("Spielt bei jedem Linksklick in der Textbox, auch beim Schliessen.")]
     [SerializeField] private AudioClip pageTurnClip;
@@ -70,8 +90,9 @@ public class HubUI : MonoBehaviour
     [Tooltip("Zufaellige Tonhoehe pro Klick, damit das Blaettern nicht stumpf wird. 0 = aus.")]
     [SerializeField, Range(0f, 0.5f)] private float sfxPitchJitter = 0.08f;
 
-    GameObject dialogueRoot, promptRoot;
-    TextMeshProUGUI bodyText, hintText, promptLabel;
+    GameObject dialogueRoot, promptRoot, coinRoot;
+    TextMeshProUGUI bodyText, hintText, promptLabel, coinValueText;
+    int shownCoins = int.MinValue;
 
     string[] pages;
     int pageIndex;
@@ -96,9 +117,30 @@ public class HubUI : MonoBehaviour
         sfxSource.loop = false;
     }
 
+    void OnEnable()
+    {
+        // Kaufen, Cheats, Belohnungen - alles laeuft ueber dasselbe Ereignis.
+        // Damit muss die Anzeige nichts pro Frame nachschlagen.
+        Shop.Changed += RefreshCoins;
+        RefreshCoins();
+    }
+
+    void OnDisable() => Shop.Changed -= RefreshCoins;
+
     void OnDestroy()
     {
         if (_instance == this) { _instance = null; DialogueOpen = false; openModals = 0; }
+    }
+
+    void RefreshCoins()
+    {
+        if (coinValueText == null) return;
+
+        int coins = Shop.Currency;
+        if (coins == shownCoins) return;
+
+        shownCoins = coins;
+        coinValueText.text = coins.ToString();
     }
 
     /// <summary>
@@ -179,6 +221,75 @@ public class HubUI : MonoBehaviour
         promptLabel.alignment = TextAlignmentOptions.Center;
 
         promptRoot.SetActive(false);
+
+        // ---- Muenzanzeige ------------------------------------------------
+        BuildCoins(canvasGO.transform);
+    }
+
+    /// <summary>
+    /// Muenze und Kontostand in der oberen rechten Ecke. Sitzt am selben Canvas
+    /// wie der Rest, rechnet also auch in 320x180 - ein Pixel hier ist derselbe
+    /// Pixel wie im Shop.
+    /// </summary>
+    void BuildCoins(Transform parent)
+    {
+        coinRoot = NewRect("Coins", parent);
+
+        float rowHeight = Mathf.Max(coinIconSize, coinFontSize + 2f);
+
+        var cRect = (RectTransform)coinRoot.transform;
+        cRect.anchorMin = cRect.anchorMax = cRect.pivot = new Vector2(1f, 1f);
+        cRect.sizeDelta = new Vector2(coinIconSize + coinGap + coinTextWidth, rowHeight);
+        cRect.anchoredPosition = new Vector2(-coinMargin.x, -coinMargin.y);
+
+        // Platte zuerst, damit sie hinter Muenze und Zahl liegt. Sie ragt um
+        // coinPanelPadding ueber den Inhalt hinaus - deshalb negative Insets.
+        if (coinPanelColor.a > 0f)
+        {
+            var plate = NewRect("Plate", coinRoot.transform);
+            var plateRect = (RectTransform)plate.transform;
+            plateRect.anchorMin = Vector2.zero;
+            plateRect.anchorMax = Vector2.one;
+            plateRect.offsetMin = new Vector2(-coinPanelPadding.x, -coinPanelPadding.y);
+            plateRect.offsetMax = new Vector2(coinPanelPadding.x, coinPanelPadding.y);
+
+            var plateImage = plate.AddComponent<Image>();
+            plateImage.color = coinPanelColor;
+            plateImage.raycastTarget = false;
+        }
+
+        // Ohne zugewiesenes Bild nimmt die Anzeige die Muenze des Shops. Findet
+        // sich auch dort keine, bleibt eben nur die Zahl stehen.
+        Sprite coin = coinSprite;
+        if (coin == null)
+        {
+            var shop = FindAnyObjectByType<HubShopUI>();
+            if (shop != null) coin = shop.CoinSprite;
+        }
+
+        var icon = NewRect("Coin", coinRoot.transform);
+        var iRect = (RectTransform)icon.transform;
+        iRect.anchorMin = iRect.anchorMax = new Vector2(0f, 0.5f);
+        iRect.pivot = new Vector2(0f, 0.5f);
+        iRect.sizeDelta = new Vector2(coinIconSize, coinIconSize);
+        iRect.anchoredPosition = Vector2.zero;
+
+        var iconImage = icon.AddComponent<Image>();
+        iconImage.sprite = coin;
+        iconImage.preserveAspect = true;
+        iconImage.enabled = coin != null;
+        iconImage.raycastTarget = false;
+
+        coinValueText = NewText("Value", coinRoot.transform, coinFontSize, coinTextColor);
+        var vRect = (RectTransform)coinValueText.transform;
+        vRect.anchorMin = Vector2.zero;
+        vRect.anchorMax = Vector2.one;
+        vRect.offsetMin = new Vector2(coinIconSize + coinGap, 0f);
+        vRect.offsetMax = Vector2.zero;
+        coinValueText.alignment = TextAlignmentOptions.Right;
+
+        RefreshCoins();
+        coinRoot.SetActive(showCoins);
     }
 
     GameObject NewRect(string n, Transform parent)
@@ -285,6 +396,12 @@ public class HubUI : MonoBehaviour
         if (promptRoot != null && promptRoot.activeSelf != promptRequestedThisFrame)
             promptRoot.SetActive(promptRequestedThisFrame);
         promptRequestedThisFrame = false;
+
+        // Shop, Skilltree, Konsole und die Textbox bringen ihre eigene Anzeige
+        // mit oder wollen das Bild fuer sich - solange tritt die Ecke zurueck.
+        bool coinsWanted = showCoins && !InputBlocked;
+        if (coinRoot != null && coinRoot.activeSelf != coinsWanted)
+            coinRoot.SetActive(coinsWanted);
     }
 
     void FreezePlayer(bool freeze)

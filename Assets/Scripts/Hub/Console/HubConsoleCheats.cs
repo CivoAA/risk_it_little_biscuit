@@ -22,11 +22,11 @@ public static class HubConsoleCheats
     public static void Register()
     {
         // ------------------------------------------------------------------
-        // Beispiel 1: Muenzen schenken.  ->  "gibkekse"  oder  "gibkekse 2000"
+        // Beispiel 1: Muenzen schenken.  ->  "gibkekse" (500.000) oder "gibkekse 2000"
         // ------------------------------------------------------------------
         HubConsole.Add("gibkekse", "Muenzen aufs Konto", (args, sink) =>
         {
-            int betrag = ArgAsInt(args, 0, 500);
+            int betrag = ArgAsInt(args, 0, 500000);
 
             Shop.AddCurrency(betrag);
             sink.Print($"+{betrag} Muenzen. Neuer Stand: {Shop.Currency}");
@@ -81,6 +81,19 @@ public static class HubConsoleCheats
 
             sink.Print($"Freigeschaltet: {Unlocks.UnlockedCount} von {Unlocks.TotalCount}");
         });
+
+        // ------------------------------------------------------------------
+        // Shop leerraeumen.  ->  "resetcookie"
+        // Alle gekauften Stufen zurueck auf 0, das Ausgegebene kommt aufs Konto.
+        // ------------------------------------------------------------------
+        HubConsole.Add("resetcookie", "setzt den Shop zurueck", (args, sink) =>
+        {
+            int erstattet = Shop.ResetAllUpgrades();
+
+            sink.Print(erstattet > 0
+                ? $"Shop zurueckgesetzt. {erstattet} Muenzen erstattet, neuer Stand: {Shop.Currency}"
+                : $"Shop war schon leer. Stand: {Shop.Currency}");
+        }, hidden: true);
 
         // ------------------------------------------------------------------
         // Ab hier: deine eigenen Codes.

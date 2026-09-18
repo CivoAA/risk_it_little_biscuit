@@ -330,14 +330,18 @@ public static class Shop
         return true;
     }
 
-    /// <summary>Alle Käufe zurücknehmen und das Ausgegebene erstatten.</summary>
-    public static void ResetAllUpgrades()
+    /// <summary>
+    /// Alle Käufe zurücknehmen und das Ausgegebene erstatten. Gibt zurück,
+    /// wie viel erstattet wurde.
+    /// </summary>
+    public static int ResetAllUpgrades()
     {
         int refund = Store.RefundEverything();
         Store.Flush();
 
         RaiseChanged();
         Debug.Log($"[Shop] Alle Upgrades zurückgesetzt, {refund} erstattet. Neuer Stand: {Currency}");
+        return refund;
     }
 
     public static void SetCurrency(int amount)

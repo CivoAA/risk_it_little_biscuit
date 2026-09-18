@@ -27,6 +27,12 @@ public class HubShopUI : MonoBehaviour
     /// <summary>Steht offen? Der Hub sperrt solange seine Interaktionen.</summary>
     public static bool IsOpen { get; private set; }
 
+    /// <summary>
+    /// Die Muenze aus dem Shop. Die Anzeige im Hub holt sie sich hier, damit
+    /// dasselbe Bild an beiden Stellen haengt und nichts doppelt gepflegt wird.
+    /// </summary>
+    public Sprite CoinSprite => coinSprite;
+
     // Inhalt und Reihenfolge stehen im Katalog Shop.cs - hier gibt es dazu
     // bewusst kein Inspector-Feld mehr.
 
@@ -44,6 +50,9 @@ public class HubShopUI : MonoBehaviour
     [SerializeField] private string upgradeFormat = "{0}  >  {1}";
     [Tooltip("Zeichen links neben dem gewaehlten Eintrag.")]
     [SerializeField] private string selectionMarker = ">";
+    [Tooltip("Zeichen links neben einem fertig gekauften Eintrag. Leer lassen, wenn " +
+             "die Pixelschrift das Zeichen nicht hat - die Zeile ist auch ohne markiert.")]
+    [SerializeField] private string boughtMarker = "";
 
     [Header("Grafik")]
     [Tooltip("Der gepixelte Rahmen. 320x180, fuellt den Bildschirm.")]
@@ -71,6 +80,9 @@ public class HubShopUI : MonoBehaviour
 
     [Header("Liste")]
     [SerializeField] private int visibleRows = 6;
+    [Tooltip("Fertig gekaufte Eintraege wandern ans Ende der Liste. Umsortiert wird " +
+             "erst beim naechsten Oeffnen - sonst rutscht die Liste beim Kaufen weg.")]
+    [SerializeField] private bool sortBoughtToBottom = true;
     [Tooltip("Ganze Pixel halten die Schrift scharf - das Listenfeld hat keine " +
              "eingebackenen Trennlinien, an die sich die Zeilen halten muessten.")]
     [SerializeField] private float rowHeight = 20f;
@@ -130,6 +142,15 @@ public class HubShopUI : MonoBehaviour
     [SerializeField] private Color backTextColor  = new Color32(0x3B, 0x24, 0x33, 0xFF);
     [Tooltip("Preis in der Liste, wenn das Geld nicht reicht.")]
     [SerializeField] private Color tooExpensiveColor = new Color32(0xA8, 0x3C, 0x3C, 0xFF);
+    [Tooltip("Name eines fertig gekauften Eintrags - blasser als der Rest.")]
+    [SerializeField] private Color rowBoughtColor = new Color32(0x97, 0x71, 0x5E, 0xFF);
+    [Tooltip("Rahmen eines fertig gekauften Eintrags.")]
+    [SerializeField] private Color rowBoughtFrameColor = new Color32(0xC4, 0xA5, 0x7B, 0xFF);
+    [Tooltip("Leichter Schleier ueber der ganzen Zeile, solange sie nicht gewaehlt ist. " +
+             "Das ist die eigentliche Markierung - sie haengt an keinem Schriftzeichen.")]
+    [SerializeField] private Color rowBoughtTint = new Color32(0x97, 0x71, 0x5E, 0x33);
+    [Tooltip("Symbol eines gekauften Eintrags. Weiss = unveraendert.")]
+    [SerializeField] private Color boughtIconTint = new Color(1f, 1f, 1f, 0.55f);
     [Tooltip("Der Kaufknopf, wenn gerade nichts zu kaufen ist.")]
     [SerializeField] private Color buyDisabledColor = new Color32(0x6E, 0x6E, 0x6E, 0x80);
     [Tooltip("Der Rand neben den 320x180, wenn der Bildschirm nicht 16:9 ist. " +
@@ -141,6 +162,9 @@ public class HubShopUI : MonoBehaviour
     [SerializeField] private Color buttonHoverTint = new Color(1f, 1f, 1f, 0.16f);
 
     [Header("Steuerung")]
+    [Tooltip("Aus: gekauft wird nur ueber den BUY-Knopf. An: die beiden Tasten " +
+             "darunter kaufen den gewaehlten Eintrag zusaetzlich.")]
+    [SerializeField] private bool allowKeyboardBuy = false;
     [SerializeField] private KeyCode buyKey   = KeyCode.Return;
     [SerializeField] private KeyCode buyKeyAlt = KeyCode.E;
     [SerializeField] private KeyCode closeKey = KeyCode.Escape;
@@ -611,6 +635,15 @@ public class HubShopUI : MonoBehaviour
     /// <summary>
     /// Sammelt die Eintraege ein, die gerade sichtbar sein duerfen. Die Regel
     /// steht am Katalogeintrag (requiredUnlock), nicht hier.
+    ///
+    /// Fertig gekauftes rutscht ans Ende: erst alles, was man noch kaufen kann,
+    /// dann die abgehakten - beide Gruppen in Katalogreihenfolge. Zwei Durchgaenge
+    /// statt Sort(), weil Sort() nicht stabil ist und die Katalogreihenfolge
+    /// innerhalb der Gruppen sonst durcheinandergeraet.
+    ///
+    /// Gerufen wird das nur beim Oeffnen. Wer gerade etwas kauft, dem soll die
+    /// Zeile nicht unter dem Finger wegspringen - der neue Platz gilt ab dem
+    /// naechsten Besuch.
     /// </summary>
     void RebuildShownList()
     {
@@ -618,9 +651,24 @@ public class HubShopUI : MonoBehaviour
 
         foreach (ShopItemDef def in Shop.All)
         {
-            if (Shop.IsVisible(def)) shown.Add(def);
+            if (!Shop.IsVisible(def)) continue;
+            if (sortBoughtToBottom && IsFullyBought(def)) continue;
+            shown.Add(def);
+        }
+
+        if (!sortBoughtToBottom) return;
+
+        foreach (ShopItemDef def in Shop.All)
+        {
+            if (Shop.IsVisible(def) && IsFullyBought(def)) shown.Add(def);
         }
     }
+
+    /// <summary>
+    /// Alle Stufen gekauft - da ist nichts mehr zu holen. Eintraege ohne
+    /// Preisliste zaehlen nicht dazu: bei denen war nie etwas zu kaufen.
+    /// </summary>
+    static bool IsFullyBought(ShopItemDef def) => def.MaxLevel > 0 && Shop.IsMaxed(def);
 
     // -------------------------------------------------------------- Laufzeit
 
@@ -639,7 +687,7 @@ public class HubShopUI : MonoBehaviour
         float wheel = Input.mouseScrollDelta.y;
         if (!Mathf.Approximately(wheel, 0f)) Move(wheel > 0f ? -1 : +1);
 
-        if (Input.GetKeyDown(buyKey) || Input.GetKeyDown(buyKeyAlt)) TryBuy();
+        if (allowKeyboardBuy && (Input.GetKeyDown(buyKey) || Input.GetKeyDown(buyKeyAlt))) TryBuy();
 
         // Das Gold kann sich auch ausserhalb aendern (Konsole, anderer Shop).
         // Dann stimmt nicht nur die Zahl oben nicht mehr, sondern auch, welche
@@ -659,13 +707,15 @@ public class HubShopUI : MonoBehaviour
         Refresh();
     }
 
+    /// <summary>
+    /// Ein Klick auf eine Zeile waehlt sie aus - mehr nicht. Gekauft wird
+    /// ausschliesslich ueber BUY, damit niemand im Vorbeiklicken sein Geld los ist.
+    /// </summary>
     void ClickRow(int slot)
     {
         int index = scrollTop + slot;
         if (index < 0 || index >= shown.Count) return;
-
-        // Zweiter Klick auf die schon gewaehlte Zeile kauft
-        if (index == selected) { TryBuy(); return; }
+        if (index == selected) return;
 
         selected = index;
         PlaySfx(moveClip);
@@ -691,19 +741,26 @@ public class HubShopUI : MonoBehaviour
             row.Go.SetActive(true);
             ShopItemDef entry = shown[index];
             bool isSelected = index == selected;
+            bool bought = IsFullyBought(entry);
 
-            row.Highlight.color = isSelected ? highlightColor : Color.clear;
-            row.Marker.text = isSelected ? selectionMarker : "";
+            row.Highlight.color = isSelected ? highlightColor
+                                : bought ? rowBoughtTint : Color.clear;
+
+            row.Marker.text = isSelected ? selectionMarker : bought ? boughtMarker : "";
+            row.Marker.color = isSelected ? rowSelectedColor : rowBoughtColor;
 
             if (row.Frame != null)
-                row.Frame.color = isSelected ? rowFrameSelectedColor : rowFrameColor;
+                row.Frame.color = isSelected ? rowFrameSelectedColor
+                                : bought ? rowBoughtFrameColor : rowFrameColor;
 
             Sprite icon = entry.Icon;
             row.Icon.sprite = icon;
             row.Icon.enabled = icon != null;
+            row.Icon.color = bought ? boughtIconTint : Color.white;
 
             row.Name.text = entry.Name;
-            row.Name.color = isSelected ? rowSelectedColor : rowTextColor;
+            row.Name.color = isSelected ? rowSelectedColor
+                           : bought ? rowBoughtColor : rowTextColor;
 
             bool maxed = Shop.IsMaxed(entry);
             int price = Shop.NextPrice(entry);
