@@ -8,6 +8,10 @@ using TMPro;
 /// aus dem Katalog <see cref="Unlocks"/> - Inhalt und Reihenfolge stehen damit in
 /// Unlocks.cs und nicht mehr im Inspector.
 ///
+/// Wer die Anzeige woanders braucht (Hauptmenue, Hub, im Spiel), nimmt besser
+/// <see cref="UnlockPanel"/>: das baut sich selbst und braucht weder Szene noch
+/// Prefab.
+///
 /// Die Eintraege werden einmal angelegt und danach nur noch neu beschriftet.
 /// </summary>
 public class UnlockUIManager : MonoBehaviour
