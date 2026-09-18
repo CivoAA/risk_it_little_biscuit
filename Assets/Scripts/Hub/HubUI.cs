@@ -61,25 +61,28 @@ public class HubUI : MonoBehaviour
     [SerializeField] private Color textColor   = new Color32(0xF7, 0xEC, 0xD6, 0xFF);
     [SerializeField] private Color hintColor   = new Color32(0xD9, 0xA4, 0x41, 0xFF);
 
-    [Header("Muenzen (oben rechts)")]
+    [Header("Geld (oben rechts)")]
     [Tooltip("Zeigt den Kontostand dauerhaft im Hub an.")]
     [SerializeField] private bool showCoins = true;
-    [Tooltip("Leer lassen - dann wird die Muenze aus dem Hub-Shop uebernommen, " +
-             "damit an beiden Stellen dasselbe Bild haengt.")]
-    [SerializeField] private Sprite coinSprite;
+    [Tooltip("geld.png - Beutel und Schild in einem. Die Muenze steckt schon im Bild, " +
+             "daneben kommt nichts mehr.")]
+    [SerializeField] private Sprite moneySprite;
     [Tooltip("Abstand zur rechten und oberen Bildschirmkante.")]
-    [SerializeField] private Vector2 coinMargin = new Vector2(8f, 7f);
-    [SerializeField] private float coinIconSize = 9f;
+    [SerializeField] private Vector2 coinMargin = new Vector2(4f, 4f);
+    [Tooltip("Groesse des Bildes in Bildpixeln. 60x25 ist die Originalgroesse von geld.png - " +
+             "so bleibt jeder gemalte Pixel ein Bildschirmpixel.")]
+    [SerializeField] private Vector2 moneySize = new Vector2(60f, 25f);
+    [Tooltip("1 = Originalgroesse. Groesser macht das Schild groesser, die Zahl waechst mit.")]
+    [SerializeField] private float moneyScale = 1f;
+    [Tooltip("Das helle Feld im Schild, gemessen in Pixeln von geld.png mit Nullpunkt " +
+             "links oben. Da hinein kommt die Zahl - rundherum liegen die Nieten.")]
+    [SerializeField] private Rect moneyTextArea = new Rect(21f, 9f, 29f, 10f);
     [SerializeField] private float coinFontSize = 8f;
-    [Tooltip("Luft zwischen Muenze und Zahl.")]
-    [SerializeField] private float coinGap = 3f;
-    [Tooltip("Platz fuer die Zahl. Muss zu sechsstelligen Betraegen passen.")]
-    [SerializeField] private float coinTextWidth = 44f;
-    [SerializeField] private Color coinTextColor = new Color32(0xF0, 0xD4, 0x9B, 0xFF);
-    [Tooltip("Platte hinter der Anzeige, damit sie auf hellem Boden lesbar bleibt. " +
-             "Alpha auf 0 = keine Platte.")]
-    [SerializeField] private Color coinPanelColor = new Color32(0x2A, 0x1C, 0x14, 0xC8);
-    [SerializeField] private Vector2 coinPanelPadding = new Vector2(4f, 2f);
+    [Tooltip("So klein darf die Zahl werden, bevor sie ueber das Schild laeuft. " +
+             "Sechsstellige Betraege brauchen das.")]
+    [SerializeField, Range(3f, 8f)] private float coinMinFontSize = 5f;
+    [Tooltip("Dunkel - das Feld im Schild ist hell.")]
+    [SerializeField] private Color coinTextColor = new Color32(0x3B, 0x24, 0x33, 0xFF);
 
     [Header("Sound")]
     [Tooltip("Spielt bei jedem Linksklick in der Textbox, auch beim Schliessen.")]
@@ -227,69 +230,60 @@ public class HubUI : MonoBehaviour
     }
 
     /// <summary>
-    /// Muenze und Kontostand in der oberen rechten Ecke. Sitzt am selben Canvas
-    /// wie der Rest, rechnet also auch in 320x180 - ein Pixel hier ist derselbe
-    /// Pixel wie im Shop.
+    /// Das Geldschild in der oberen rechten Ecke. Das ist ein einziges Bild -
+    /// Beutel, Rahmen und die Muenze sind schon hineingemalt, daneben steht
+    /// nichts mehr. Dieses Skript legt nur die Zahl in das helle Feld.
+    ///
+    /// Der Kasten fuer die Zahl steht in Pixeln von geld.png im Inspector und
+    /// wird hier in Anker umgerechnet. Dadurch wandert die Zahl automatisch
+    /// mit, wenn das Schild ueber <see cref="moneyScale"/> groesser wird.
     /// </summary>
     void BuildCoins(Transform parent)
     {
-        coinRoot = NewRect("Coins", parent);
-
-        float rowHeight = Mathf.Max(coinIconSize, coinFontSize + 2f);
+        coinRoot = NewRect("Money", parent);
 
         var cRect = (RectTransform)coinRoot.transform;
         cRect.anchorMin = cRect.anchorMax = cRect.pivot = new Vector2(1f, 1f);
-        cRect.sizeDelta = new Vector2(coinIconSize + coinGap + coinTextWidth, rowHeight);
+        cRect.sizeDelta = moneySize * Mathf.Max(0.01f, moneyScale);
         cRect.anchoredPosition = new Vector2(-coinMargin.x, -coinMargin.y);
 
-        // Platte zuerst, damit sie hinter Muenze und Zahl liegt. Sie ragt um
-        // coinPanelPadding ueber den Inhalt hinaus - deshalb negative Insets.
-        if (coinPanelColor.a > 0f)
-        {
-            var plate = NewRect("Plate", coinRoot.transform);
-            var plateRect = (RectTransform)plate.transform;
-            plateRect.anchorMin = Vector2.zero;
-            plateRect.anchorMax = Vector2.one;
-            plateRect.offsetMin = new Vector2(-coinPanelPadding.x, -coinPanelPadding.y);
-            plateRect.offsetMax = new Vector2(coinPanelPadding.x, coinPanelPadding.y);
-
-            var plateImage = plate.AddComponent<Image>();
-            plateImage.color = coinPanelColor;
-            plateImage.raycastTarget = false;
-        }
-
-        // Ohne zugewiesenes Bild nimmt die Anzeige die Muenze des Shops. Findet
-        // sich auch dort keine, bleibt eben nur die Zahl stehen.
-        Sprite coin = coinSprite;
-        if (coin == null)
-        {
-            var shop = FindAnyObjectByType<HubShopUI>();
-            if (shop != null) coin = shop.CoinSprite;
-        }
-
-        var icon = NewRect("Coin", coinRoot.transform);
-        var iRect = (RectTransform)icon.transform;
-        iRect.anchorMin = iRect.anchorMax = new Vector2(0f, 0.5f);
-        iRect.pivot = new Vector2(0f, 0.5f);
-        iRect.sizeDelta = new Vector2(coinIconSize, coinIconSize);
-        iRect.anchoredPosition = Vector2.zero;
-
-        var iconImage = icon.AddComponent<Image>();
-        iconImage.sprite = coin;
-        iconImage.preserveAspect = true;
-        iconImage.enabled = coin != null;
-        iconImage.raycastTarget = false;
+        var plate = coinRoot.AddComponent<Image>();
+        plate.sprite = moneySprite;
+        plate.enabled = moneySprite != null;
+        plate.raycastTarget = false;
+        // Das Bild fuellt den Kasten genau aus. Nicht das Seitenverhaeltnis halten:
+        // sonst sitzt das Schild bei einer krummen moneySize kleiner in der Mitte,
+        // waehrend die Zahl weiter am Kasten klebt - und steht dann daneben.
+        plate.preserveAspect = false;
 
         coinValueText = NewText("Value", coinRoot.transform, coinFontSize, coinTextColor);
-        var vRect = (RectTransform)coinValueText.transform;
-        vRect.anchorMin = Vector2.zero;
-        vRect.anchorMax = Vector2.one;
-        vRect.offsetMin = new Vector2(coinIconSize + coinGap, 0f);
-        vRect.offsetMax = Vector2.zero;
-        coinValueText.alignment = TextAlignmentOptions.Right;
+        PlaceInSprite((RectTransform)coinValueText.transform, moneyTextArea);
+        coinValueText.alignment = TextAlignmentOptions.Center;
+
+        // Lieber kleiner werden als ueber die Nieten laufen: 500.000 ist breiter
+        // als das Feld, eine zweite Zeile passt in 10 Pixel Hoehe aber nicht.
+        coinValueText.textWrappingMode = TextWrappingModes.NoWrap;
+        coinValueText.enableAutoSizing = true;
+        coinValueText.fontSizeMin = Mathf.Min(coinMinFontSize, coinFontSize);
+        coinValueText.fontSizeMax = coinFontSize;
 
         RefreshCoins();
         coinRoot.SetActive(showCoins);
+    }
+
+    /// <summary>
+    /// Rechnet einen Kasten in Bildpixeln (Nullpunkt links oben) in Anker um.
+    /// Anker sind 0..1 und zaehlen von unten - deshalb das Umdrehen von y.
+    /// </summary>
+    void PlaceInSprite(RectTransform r, Rect area)
+    {
+        float w = Mathf.Max(1f, moneySize.x);
+        float h = Mathf.Max(1f, moneySize.y);
+
+        r.anchorMin = new Vector2(area.x / w, 1f - (area.y + area.height) / h);
+        r.anchorMax = new Vector2((area.x + area.width) / w, 1f - area.y / h);
+        r.offsetMin = Vector2.zero;
+        r.offsetMax = Vector2.zero;
     }
 
     GameObject NewRect(string n, Transform parent)

@@ -12027,16 +12027,20 @@ MonoBehaviour:
   panelColor: {r: 0.16470589, g: 0.10980392, b: 0.078431375, a: 0.98039216}
   textColor: {r: 0.96862745, g: 0.9254902, b: 0.8392157, a: 1}
   hintColor: {r: 0.8509804, g: 0.6431373, b: 0.25490195, a: 1}
+  moneySprite: {fileID: 5841870835367478668, guid: 170d5a021157a524abbb6c0dd823661c, type: 3}
   showCoins: 1
-  coinSprite: {fileID: 0}
-  coinMargin: {x: 8, y: 7}
-  coinIconSize: 9
+  coinMargin: {x: 4, y: 4}
+  moneySize: {x: 60, y: 25}
+  moneyScale: 1
+  moneyTextArea:
+    serializedVersion: 2
+    x: 21
+    y: 9
+    width: 29
+    height: 10
   coinFontSize: 8
-  coinGap: 3
-  coinTextWidth: 44
-  coinTextColor: {r: 0.9411765, g: 0.83137256, b: 0.60784316, a: 1}
-  coinPanelColor: {r: 0.16470589, g: 0.10980392, b: 0.078431375, a: 0.78431374}
-  coinPanelPadding: {x: 4, y: 2}
+  coinMinFontSize: 5
+  coinTextColor: {r: 0.23137255, g: 0.14117648, b: 0.2, a: 1}
   pageTurnClip: {fileID: 8300000, guid: 35cf7766e9e2aa542811e896fde57989, type: 3}
   sfxSource: {fileID: 1990000023}
   sfxVolume: 1

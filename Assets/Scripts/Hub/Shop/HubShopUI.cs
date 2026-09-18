@@ -27,12 +27,6 @@ public class HubShopUI : MonoBehaviour
     /// <summary>Steht offen? Der Hub sperrt solange seine Interaktionen.</summary>
     public static bool IsOpen { get; private set; }
 
-    /// <summary>
-    /// Die Muenze aus dem Shop. Die Anzeige im Hub holt sie sich hier, damit
-    /// dasselbe Bild an beiden Stellen haengt und nichts doppelt gepflegt wird.
-    /// </summary>
-    public Sprite CoinSprite => coinSprite;
-
     // Inhalt und Reihenfolge stehen im Katalog Shop.cs - hier gibt es dazu
     // bewusst kein Inspector-Feld mehr.
 
