@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46655bfd6f534d744bce3fe8be9ff00d, type: 3}
+  m_Name: World3_Preset
+  m_EditorClassIdentifier: Assembly-CSharp::WorldGenPreset
+  seed: 12345
+  backgroundTiles:
+  - tile: {fileID: 11400000, guid: 2202bf3a02b816f4186473be7a33c401, type: 2}
+    weight: 1
+  - tile: {fileID: 11400000, guid: ae71112161c120b41b3041e029c5eafa, type: 2}
+    weight: 1
+  - tile: {fileID: 11400000, guid: 0dbcd7fbbdf98c44baffa0c2ae4ef8e7, type: 2}
+    weight: 1
+  - tile: {fileID: 11400000, guid: 17c373c7a64f38948a71330c9cc41931, type: 2}
+    weight: 1
+  - tile: {fileID: 11400000, guid: e0ba4cc28e607c242a7ec86121c4dfd6, type: 2}
+    weight: 1
+  - tile: {fileID: 11400000, guid: d2d743ad7becb4b4ebfbe3e0911a5fff, type: 2}
+    weight: 1
+  - tile: {fileID: 11400000, guid: bcc3a88b4d5073f4a894133467a152a7, type: 2}
+    weight: 12
+  patchGroups:
+  - name: Lila
+    weight: 1
+    density: 0.7
+    tiles:
+    - tile: {fileID: 11400000, guid: a555f788aad00c642bae9becd0e70562, type: 2}
+      weight: 1
+    - tile: {fileID: 11400000, guid: d043bec3b26e39348a7f5555cda86dbe, type: 2}
+      weight: 1
+  - name: Blau
+    weight: 1
+    density: 0.7
+    tiles:
+    - tile: {fileID: 11400000, guid: 0a8e48b3cb8e07449ab828e046ab9329, type: 2}
+      weight: 1
+    - tile: {fileID: 11400000, guid: 04ec9f809bee9a040b11d459ad07caf6, type: 2}
+      weight: 1
+  - name: Rot
+    weight: 1
+    density: 0.7
+    tiles:
+    - tile: {fileID: 11400000, guid: 18d59fdac7f4640488506fdc0fc30d3d, type: 2}
+      weight: 1
+    - tile: {fileID: 11400000, guid: 34ff5d3d0528de146bf80bde8bb6af7a, type: 2}
+      weight: 1
+  patchSize: 24
+  patchSpacing: 0
+  props:
+  - prefab: {fileID: 4522651892511990369, guid: 034e41797e46a734ca1463a2166cb992, type: 3}
+    weight: 1
+  propsPerChunk: 32
+  propMinDistance: 3.4
+  propClumping: 0.4
+  propClumpSize: 14
+  propEdgeMargin: 1
+  startClearRadius: 8
+  propScaleRange: {x: 1, y: 1}
+  propRandomFlipX: 1
+  reshufflePropsOnMove: 1
+  reshuffleCountJitter: 0.408
