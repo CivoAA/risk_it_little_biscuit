@@ -53,7 +53,7 @@ public class TimeLaser : Weapon
                     GameObject laser = Instantiate(prefab, transform.position, Quaternion.Euler(0f, 0f, angle));
 
                     // Erst in die Szene verschieben
-                    Scene gameScene = SceneManager.GetSceneByName("Game");
+                    Scene gameScene = RunScene.Current;
                     if (gameScene.IsValid() && gameScene.isLoaded)
                     {
                         SceneManager.MoveGameObjectToScene(laser, gameScene);

@@ -16,6 +16,14 @@ public static class GameSession
 
     public static GameMode SelectedMode { get; set; } = GameMode.Story;
 
+    /// <summary>
+    /// Wie hart der nächste Lauf wird. 1 = normal, darüber kommen mehr und
+    /// zähere Gegner - und es gibt mehr dafür. Wer ein Level startet, setzt den
+    /// Wert; steht nichts drin, läuft es normal. Ausgewertet wird er in
+    /// <see cref="RunDifficulty"/>.
+    /// </summary>
+    public static float Chaos { get; set; } = 1f;
+
     public static bool IsEndless => SelectedMode == GameMode.Endless;
 
     /// <summary>

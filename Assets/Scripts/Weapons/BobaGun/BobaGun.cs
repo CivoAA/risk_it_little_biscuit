@@ -51,7 +51,7 @@ public class BobaGun : Weapon
 
             GameObject boba4 = Instantiate(prefab, PlayerController.Instance.transform.position, transform.rotation);
             StartCoroutine(MoveAndDestroy(boba4, PlayerController.Instance.transform.position + bottomRight));
-            Scene gameScene = SceneManager.GetSceneByName("Game");
+            Scene gameScene = RunScene.Current;
             if (gameScene.IsValid() && gameScene.isLoaded)
             {
                 SceneManager.MoveGameObjectToScene(boba1, gameScene);

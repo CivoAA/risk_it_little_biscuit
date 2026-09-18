@@ -68,26 +68,37 @@ public class RandomObjectSpawner : MonoBehaviour
             GameObject prefab = spawnablePrefabs[Random.Range(0, spawnablePrefabs.Length)];
             GameObject spawnedObject = Instantiate(prefab, new Vector3(randomX, randomY, 0f), Quaternion.identity);
 
-            Scene gameScene = SceneManager.GetSceneByName("Game");
+            Scene gameScene = RunScene.Current;
             if (gameScene.IsValid() && gameScene.isLoaded)
             {
                 SceneManager.MoveGameObjectToScene(spawnedObject, gameScene);
             }
             else
             {
-                Debug.LogWarning("⚠️ Game Scene ist nicht geladen! Objekt bleibt in aktueller Scene.");
+                Debug.LogWarning("⚠️ Keine Lauf-Szene gefunden! Objekt bleibt in aktueller Scene.");
             }
         }
     }
 
     private bool IsInNoSpawnZone(float x)
     {
-        if (leftNoSpawnPoint == null || rightNoSpawnPoint == null)
-            return false;
+        if (leftNoSpawnPoint != null && rightNoSpawnPoint != null)
+        {
+            float left = Mathf.Min(leftNoSpawnPoint.position.x, rightNoSpawnPoint.position.x);
+            float right = Mathf.Max(leftNoSpawnPoint.position.x, rightNoSpawnPoint.position.x);
 
-        float left = Mathf.Min(leftNoSpawnPoint.position.x, rightNoSpawnPoint.position.x);
-        float right = Mathf.Max(leftNoSpawnPoint.position.x, rightNoSpawnPoint.position.x);
+            return x >= left && x <= right;
+        }
 
-        return x >= left && x <= right;
+        // Die beiden Punkte hingen am Kamerarand und stehen seit dem
+        // Szenen-Split in GameCore - die Referenz von hier aus ist damit leer.
+        // Ohne Ersatz waere die Antwort "nein, spawn ruhig", und dann poppen
+        // Baeume mitten im Bild neben dem Spieler auf.
+        if (ViewBounds.TryGetWorldRect(out Rect view))
+        {
+            return x >= view.xMin && x <= view.xMax;
+        }
+
+        return false;
     }
 }

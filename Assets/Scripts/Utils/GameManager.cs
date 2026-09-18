@@ -136,9 +136,14 @@ public class GameManager : MonoBehaviour
         // light on layer ...". Das Entladen allein deckt die Luecke nicht ab,
         // weil UnloadSceneAsync erst am Frame-Ende fertig ist. So laeuft es
         // herum wie beim Betreten, wo ebenfalls erst die Startszene ausgeht.
+        // Im neuen System besteht ein Lauf aus zwei Szenen: GameCore (hier) und
+        // die Map-Szene daneben. Wer nur GameCore wegraeumt, laesst die Welt
+        // stehen. Im alten System sind beide Aufrufe ein No-Op.
         MenuManager.Instance.DeactivateScene(here);
+        MapSceneSystem.DeactivateRunMap();
         MenuManager.Instance.ActivateScene(back);
         MenuManager.Instance.UnloadScene(here);
+        MapSceneSystem.UnloadRunMap();
     }
     public void Pause()
     {
@@ -233,7 +238,13 @@ public class GameManager : MonoBehaviour
         if (MenuManager.Instance == null) return;
 
         AudioController.Instance.SwitchMusic("Main Menu");
+
+        // Altes System: eine Szene. Neues System: GameCore + Map-Szene. Was
+        // nicht geladen ist, ueberspringt UnloadScene von selbst.
         MenuManager.Instance.UnloadScene("Game");
+        MenuManager.Instance.UnloadScene(MapSceneSystem.CoreScene);
+        MapSceneSystem.UnloadRunMap();
+
         MenuManager.Instance.ActivateScene("Main Menu");
     }
 }

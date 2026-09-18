@@ -89,8 +89,9 @@ public class AudioController : MonoBehaviour
             // 1 = Game-Musik AUS
             audioSources[1].mute = true;
         }
-        // Game
-        else if (sceneName == "Game")
+        // Game - im neuen System heisst die Lauf-Szene GameCore; die Map-Szene
+        // selbst bringt keine Musik mit und taucht hier nie auf.
+        else if (sceneName == "Game" || sceneName == MapSceneSystem.CoreScene)
         {
             // 0 = MainMenu-Musik AUS
             audioSources[0].mute = true;

@@ -54,7 +54,7 @@ public class StickyShatterEvo : Weapon
     {
         GameObject jar = Instantiate(jarPrefab, transform.position, transform.rotation);
 
-        Scene gameScene = SceneManager.GetSceneByName("Game");
+        Scene gameScene = RunScene.Current;
         if (gameScene.IsValid() && gameScene.isLoaded)
         {
             SceneManager.MoveGameObjectToScene(jar, gameScene);

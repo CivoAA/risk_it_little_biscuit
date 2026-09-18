@@ -38,7 +38,7 @@ public class CandyBomb : Weapon
             candyBomb.transform.localScale = Vector3.one * totalScale;
 
             // 🔹 In "Game"-Szene verschieben (falls nötig)
-            Scene gameScene = SceneManager.GetSceneByName("Game");
+            Scene gameScene = RunScene.Current;
             if (gameScene.IsValid() && gameScene.isLoaded)
             {
                 SceneManager.MoveGameObjectToScene(candyBomb, gameScene);

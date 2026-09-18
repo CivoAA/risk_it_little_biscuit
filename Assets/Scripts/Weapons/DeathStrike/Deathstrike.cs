@@ -30,7 +30,7 @@ public class Deathstrike : Weapon
     {
         int count = Mathf.Clamp(Mathf.RoundToInt(stats[weaponLevel].shots + PlayerController.Instance.playerShots), 1, 20);
 
-        Scene gameScene = SceneManager.GetSceneByName("Game");
+        Scene gameScene = RunScene.Current;
 
         enemiesInRange.RemoveAll(e => e == null);
         if (enemiesInRange.Count == 0) yield break;

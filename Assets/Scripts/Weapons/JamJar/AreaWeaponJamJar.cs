@@ -47,7 +47,7 @@ public class AreaWeaponJamJar : Weapon
 
         // Am Ziel: Effekt spawnen + Jar zerstören
         GameObject JamJam = Instantiate(prefab, targetPos, rot);
-        Scene gameScene = SceneManager.GetSceneByName("Game");
+        Scene gameScene = RunScene.Current;
         if (gameScene.IsValid() && gameScene.isLoaded)
         {
             SceneManager.MoveGameObjectToScene(JamJam, gameScene);

@@ -19,7 +19,7 @@ public class SpawnChest : MonoBehaviour
     public void Spawn(Vector2 Pos)
     {
         GameObject LootChest = Instantiate(prefab, Pos, transform.rotation);
-        Scene gameScene = SceneManager.GetSceneByName("Game");
+        Scene gameScene = RunScene.Current;
         if (gameScene.IsValid() && gameScene.isLoaded)
         {
             SceneManager.MoveGameObjectToScene(LootChest, gameScene);

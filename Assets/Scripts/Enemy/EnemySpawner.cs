@@ -98,7 +98,7 @@ public class EnemySpawner : MonoBehaviour
     private void SpawnEnemy(WaveConfig waveConfig)
     {
         GameObject enemy = Instantiate(waveConfig.stats[waveNumber].enemyPrefab, RandomSpawnPoint(), transform.rotation);
-        Scene gameScene = SceneManager.GetSceneByName("Game");
+        Scene gameScene = RunScene.Current;
         if (gameScene.IsValid() && gameScene.isLoaded)
         {
             SceneManager.MoveGameObjectToScene(enemy, gameScene);

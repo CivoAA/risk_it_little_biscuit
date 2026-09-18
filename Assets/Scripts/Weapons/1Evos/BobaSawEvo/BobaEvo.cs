@@ -45,7 +45,7 @@ public class BobaEvo : Weapon
 
                 // Projektil am Spieler spawnen
                 GameObject boba = Instantiate(prefab, PlayerController.Instance.transform.position, Quaternion.identity);
-                Scene gameScene = SceneManager.GetSceneByName("Game");
+                Scene gameScene = RunScene.Current;
                 if (gameScene.IsValid() && gameScene.isLoaded)
                 {
                     SceneManager.MoveGameObjectToScene(boba, gameScene);

@@ -35,7 +35,7 @@ public class CompanionSpawner : MonoBehaviour
         Vector3 spawnPos = transform.position + (Vector3)spawnOffset;
         GameObject companion = Instantiate(companionPrefab, spawnPos, Quaternion.identity);
 
-        Scene gameScene = SceneManager.GetSceneByName("Game");
+        Scene gameScene = RunScene.Current;
         if (gameScene.IsValid() && gameScene.isLoaded)
         {
             SceneManager.MoveGameObjectToScene(companion, gameScene);

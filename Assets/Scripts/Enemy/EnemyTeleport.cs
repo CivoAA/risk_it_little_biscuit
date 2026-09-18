@@ -7,6 +7,15 @@ public class EnemyTeleport : MonoBehaviour
     public float offsetX = 15f;     // X-Versatz beim Teleport
     public float offsetY = 10f;     // Y-Versatz beim Teleport
 
+    void Awake()
+    {
+        // Laeuft ein SpawnDirector, macht der das Nachziehen gebuendelt und
+        // ueber das Spawn-Muster der Phase - dann waere das hier ein zweiter,
+        // widersprechender Mechanismus. Das Skript bleibt am Prefab, damit die
+        // Test-Szene und alte Aufbauten weiter funktionieren.
+        if (SpawnDirector.Active != null) enabled = false;
+    }
+
     void Update()
     {
         if (PlayerController.Instance == null)

@@ -23,8 +23,8 @@ public class SpawnDeath : MonoBehaviour
         // Prefab instantiieren
         GameObject death = Instantiate(prefab, spawnPos, Quaternion.identity);
 
-        // In die Game-Szene verschieben, falls sie geladen ist
-        Scene gameScene = SceneManager.GetSceneByName("Game");
+        // In die Lauf-Szene verschieben, falls sie geladen ist
+        Scene gameScene = RunScene.Current;
         if (gameScene.IsValid() && gameScene.isLoaded)
         {
             SceneManager.MoveGameObjectToScene(death, gameScene);

@@ -40,8 +40,8 @@ public class SpawnExp : MonoBehaviour
             xp.xpValue = expAmount;
         }
 
-        // optional ins "Game"-Scene verschieben
-        Scene gameScene = SceneManager.GetSceneByName("Game");
+        // optional in die Lauf-Szene verschieben
+        Scene gameScene = RunScene.Current;
         if (gameScene.IsValid() && gameScene.isLoaded)
         {
             SceneManager.MoveGameObjectToScene(exp, gameScene);

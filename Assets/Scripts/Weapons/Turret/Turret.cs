@@ -50,7 +50,7 @@ public class Turret : Weapon
         int count = Mathf.Max(1, Mathf.RoundToInt(
             CurrentStats.shots + PlayerController.Instance.playerShots));
 
-        Scene gameScene = SceneManager.GetSceneByName("Game");
+        Scene gameScene = RunScene.Current;
 
         for (int i = 0; i < count; i++)
         {

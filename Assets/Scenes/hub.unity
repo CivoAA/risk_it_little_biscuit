@@ -12551,42 +12551,42 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levels:
-  - displayName: Waldrand
-    description: Ein ruhiger Anfang. Hier beginnt deine Geschichte.
+  - displayName: Kueche
+    description: Mehl, Zucker und Aerger. Hier faengt alles an.
     preview: {fileID: 0}
     mapId: 0
-    sceneToLoad: Game
+    sceneToLoad: 
     storyUnlockId: 
     endlessAvailable: 1
     endlessUnlockId: 
-  - displayName: Nachtwald
-    description: "Zwischen den B\xE4umen wird es dunkel. Und voller."
-    preview: {fileID: 0}
-    mapId: 1
-    sceneToLoad: Game
-    storyUnlockId: 
-    endlessAvailable: 1
-    endlessUnlockId: 
-  - displayName: Dorf
-    description: "Die D\xE4cher brennen. Bleib nicht stehen."
-    preview: {fileID: 0}
-    mapId: 2
-    sceneToLoad: Game
-    storyUnlockId: 
-    endlessAvailable: 1
-    endlessUnlockId: 
-  - displayName: Bergruine
-    description: Hoch oben, wo der Wind die Kekse frisst.
+  - displayName: Wald
+    description: Zwischen den Baeumen wird es voll.
     preview: {fileID: 0}
     mapId: 3
     sceneToLoad: 
     storyUnlockId: 
     endlessAvailable: 1
     endlessUnlockId: 
-  - displayName: Backstube
-    description: Wo alles herkommt. Und wo es endet.
+  - displayName: 
+    description: 
     preview: {fileID: 0}
-    mapId: 4
+    mapId: -1
+    sceneToLoad: 
+    storyUnlockId: 
+    endlessAvailable: 1
+    endlessUnlockId: 
+  - displayName: 
+    description: 
+    preview: {fileID: 0}
+    mapId: -1
+    sceneToLoad: 
+    storyUnlockId: 
+    endlessAvailable: 1
+    endlessUnlockId: 
+  - displayName: 
+    description: 
+    preview: {fileID: 0}
+    mapId: -1
     sceneToLoad: 
     storyUnlockId: Level5_Story
     endlessAvailable: 1
