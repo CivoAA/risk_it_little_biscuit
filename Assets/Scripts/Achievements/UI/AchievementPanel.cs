@@ -86,7 +86,10 @@ public class AchievementPanel : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        font = PixelUI.FindPixelFont();
+        // Dieselben Katalogtexte wie im Erfolgsbuch, also auch dieselbe
+        // Schrift: ThaleahFat kann keine Umlaute, und in de.json stehen
+        // seit der Umstellung echte.
+        font = PixelUI.FindTextFont() ?? PixelUI.FindPixelFont();
         Build();
     }
 

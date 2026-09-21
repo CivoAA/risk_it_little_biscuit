@@ -43,6 +43,10 @@ public class AchievementsBookPanel : MonoBehaviour
     // Reiter
     private const float TabX = 16f, TabY = 9f, TabW = 60f, TabH = 14f, TabStep = 62f;
 
+    // Der aktive Reiter reicht so viel tiefer, dass er die Oberkante der
+    // Buchseite ueberdeckt. tab_active.png ist genau darum 60x16 gross.
+    private const float TabOverlap = 2f;
+
     // Zurueck-Knopf rechts in derselben Zeile, rechte Kante buendig mit dem Buch
     private static readonly Vector4 Back = new Vector4(251f, 9f, 52f, 14f);
 
@@ -64,15 +68,24 @@ public class AchievementsBookPanel : MonoBehaviour
     private const float TileS = 32f, TileStepX = 33f, TileStepY = 36f;
     private const int TileCols = 4;
 
-    // Detailseite
-    private static readonly Vector4 SlotXL  = new Vector4(217f, 32f, 32f, 32f);
-    private static readonly Vector4 Title   = new Vector4(168f, 67f, 131f, 14f);
-    private static readonly Vector4 Desc    = new Vector4(168f, 84f, 131f, 34f);
-    private static readonly Vector4 Prog    = new Vector4(168f, 120f, 131f, 9f);
-    private static readonly Vector4 Divider = new Vector4(168f, 132f, 131f, 1f);
-    private static readonly Vector4 Reward  = new Vector4(169f, 138f, 128f, 20f);
-    private static readonly Vector4 RewIco  = new Vector4(173f, 142f, 12f, 12f);
-    private static readonly Vector4 RewTxt  = new Vector4(189f, 141f, 104f, 14f);
+    // Detailseite. Alles haengt an DetailLeft/DetailW, damit die Spalte in
+    // einem Stueck bleibt: Titel, Text, Trennlinie und Belohnungsbox stehen auf
+    // derselben Kante, der Icon-Rahmen sitzt genau in ihrer Mitte.
+    //
+    // Die Spalte beginnt bei 182 und nicht mehr bei 168: die rechte Seite
+    // laeuft zum Bund hin in den Falzschatten (bis x=179, siehe GUTTER in
+    // Tools/erfolgsbuch_ui.py), und der Text fing vorher sichtbar in diesem
+    // dunklen Streifen an.
+    private const float DetailLeft = 182f, DetailW = 117f;
+
+    private static readonly Vector4 SlotXL  = new Vector4(224f, 32f, 32f, 32f);
+    private static readonly Vector4 Title   = new Vector4(DetailLeft, 67f, DetailW, 14f);
+    private static readonly Vector4 Desc    = new Vector4(DetailLeft, 84f, DetailW, 34f);
+    private static readonly Vector4 Prog    = new Vector4(DetailLeft, 120f, DetailW, 9f);
+    private static readonly Vector4 Divider = new Vector4(DetailLeft, 132f, DetailW, 1f);
+    private static readonly Vector4 Reward  = new Vector4(DetailLeft, 138f, DetailW, 20f);
+    private static readonly Vector4 RewIco  = new Vector4(DetailLeft + 4f, 142f, 12f, 12f);
+    private static readonly Vector4 RewTxt  = new Vector4(DetailLeft + 20f, 141f, DetailW - 24f, 14f);
 
     private const float SizeTitle = 12f, SizeText = 8f, SizeSmall = 6f;
 
@@ -642,7 +655,11 @@ public class AchievementsBookPanel : MonoBehaviour
 
         Img("Divider", page, Divider.x, Divider.y, Divider.z, Divider.w, null).color = LineColor;
 
+        // Die Box ist nativ 128 breit, die Detailspalte ist schmaler. Als
+        // 9-Slice bleiben die Goldfassung links und die Kante rechts scharf,
+        // nur die leere Mitte dazwischen wird gestaucht.
         rewardBox = Img("RewardBox", page, Reward.x, Reward.y, Reward.z, Reward.w, Gfx("reward_box"));
+        rewardBox.type = Image.Type.Sliced;
         rewardIcon = Img("RewardIcon", page, RewIco.x, RewIco.y, RewIco.z, RewIco.w, null);
         rewardText = Label("RewardText", page, RewTxt.x, RewTxt.y, RewTxt.z, RewTxt.w,
                            "", SizeSmall, TextMid, TextAlignmentOptions.TopLeft);
@@ -678,6 +695,13 @@ public class AchievementsBookPanel : MonoBehaviour
             bool active = i == tab;
             tabImages[i].sprite = Gfx(active ? "tab_active" : "tab_inactive");
             tabLabels[i].color = active ? TextDark : TextOnTab;
+
+            // Der aktive Reiter ist 2px hoeher und deckt damit Kontur (y=23)
+            // und Lichtkante (y=24) der Buchseite zu. Erst dadurch haengt er an
+            // der Seite, statt als eigene Karte darueber zu schweben - die
+            // Beschriftung bleibt oben verankert und wandert nicht mit.
+            tabImages[i].rectTransform.sizeDelta =
+                new Vector2(TabW, active ? TabH + TabOverlap : TabH);
         }
 
         ApplyMode();
@@ -708,6 +732,8 @@ public class AchievementsBookPanel : MonoBehaviour
                     Desc = def.Description,
                     RowProgress = done ? "" : counted ? count : "",
                     DetailProgress = done ? "" : counted ? count : "",
+                    // Ohne "Belohnung:" davor - die Goldfassung mit dem Abzeichen
+                    // sagt das schon, und die Detailspalte ist schmal.
                     Reward = def.Souls > 0
                         ? $"+{def.Souls} {Loc.Get("ui.achievements.souls", "Cookie Souls")}"
                         : "",
@@ -739,11 +765,16 @@ public class AchievementsBookPanel : MonoBehaviour
                 Desc = desc,
                 RowProgress = "",
                 DetailProgress = "",
-                Reward = "",
+
+                // Ein Unlock vergibt nichts, die Box blieb hier bisher leer.
+                // Freigeschaltet bekommt sie jetzt trotzdem etwas zu sagen -
+                // die untere Haelfte der Seite stand sonst ohne Grund leer,
+                // und "hab ich" ist genau die Auskunft, die man hier sucht.
+                Reward = done ? Loc.Get("ui.unlocks.owned", "Unlocked") : "",
                 Done = done,
                 IconRow = BookIcon(def.IconKey, 21),
                 IconDetail = BookIcon(def.IconKey, 32) ?? def.Icon,
-                RewardIcon = null,
+                RewardIcon = done ? BookIcon("_badge_unlocked", 12) : null,
             });
         }
     }
@@ -816,7 +847,13 @@ public class AchievementsBookPanel : MonoBehaviour
                          Gfx("slot_small_unlocked"));
         Image icon = Img("Icon", frame.rectTransform, SlotDX, SlotDY, SlotS, SlotS, null);
 
-        TMP_Text title = Label("Title", frame.rectTransform, RowTextDX, 1f, RowTextW, 11f,
+        // Zeilenlokal y=2, nicht y=1: der Auswahlrahmen liegt als letztes Kind
+        // ueber dem Text und hat bei y=1 seine Innenkante. Die Punkte ueber
+        // einem A/O/U mit Umlaut sitzen ganz oben in der Zeile und kaemen ihr
+        // sonst ins Gehege. 10 ist immer noch groesser als SizeText - die
+        // Zone darf nie flacher werden als die Schrift, sonst wirft TMP die
+        // Zeile still weg.
+        TMP_Text title = Label("Title", frame.rectTransform, RowTextDX, 2f, RowTextW, 10f,
                                "", SizeText, TextMid, TextAlignmentOptions.Left);
         title.overflowMode = TextOverflowModes.Ellipsis;
 
@@ -868,7 +905,12 @@ public class AchievementsBookPanel : MonoBehaviour
 
             Entry e = entries[i];
 
-            tile.Frame.sprite = Gfx(e.Done ? "slot_large_unlocked" : "slot_large_locked");
+            // Das Gitter gibt es nur fuer Unlocks, und dort ist "hab ich" der
+            // eigentliche Inhalt der Kachel. Ein vergoldeter Rahmen sagt das
+            // von selbst - vorher war der Unterschied nur, dass die Kachel
+            // *nicht* die blasse Vertiefung war, und eine Abwesenheit sieht man
+            // schlecht.
+            tile.Frame.sprite = Gfx(e.Done ? "slot_large_owned" : "slot_large_locked");
             tile.Icon.sprite = e.IconDetail;              // die 32er-Variante
             tile.Icon.enabled = e.IconDetail != null;
             tile.Icon.color = e.Done ? Color.white : IconLockedTint;
@@ -950,7 +992,9 @@ public class AchievementsBookPanel : MonoBehaviour
             return;
         }
 
-        detailSlot.sprite = Gfx(e.Done ? "slot_large_unlocked" : "slot_large_locked");
+        detailSlot.sprite = Gfx(e.Done
+            ? (GridMode ? "slot_large_owned" : "slot_large_unlocked")
+            : "slot_large_locked");
 
         detailIcon.sprite = e.IconDetail;
         detailIcon.enabled = e.IconDetail != null;
@@ -961,13 +1005,14 @@ public class AchievementsBookPanel : MonoBehaviour
         detailDesc.text = e.Desc;
         detailProgress.text = e.DetailProgress;
 
-        // Unlocks haben keine Belohnung - dann verschwindet die ganze Box, statt
-        // leer herumzustehen.
+        // Offene Erfolge haben eine Belohnung, freigeschaltete Unlocks eine
+        // Statuszeile - beides steht in derselben Box. Ist nichts davon da,
+        // verschwindet sie ganz, statt leer herumzustehen. Der Text kommt
+        // fertig aus CollectEntries, weil "Belohnung:" nur vor einer Belohnung
+        // stehen darf und nicht vor "Freigeschaltet".
         bool hasReward = !string.IsNullOrEmpty(e.Reward);
         rewardBox.enabled = hasReward;
-        rewardText.text = hasReward
-            ? $"{Loc.Get("ui.achievements.reward", "Reward:")} {e.Reward}"
-            : "";
+        rewardText.text = e.Reward;
         rewardIcon.sprite = e.RewardIcon;
         rewardIcon.enabled = hasReward && e.RewardIcon != null;
     }
@@ -1028,21 +1073,13 @@ public class AchievementsBookPanel : MonoBehaviour
 
     /// <summary>
     /// Jersey10 zuerst: die Pixelfont des Projekts (ThaleahFat) kann keine
-    /// Umlaute, und in diesem Fenster steht deutscher Text.
+    /// Umlaute, und in diesem Fenster steht deutscher Text. Die Auswahl steht
+    /// in <see cref="PixelUI.FindTextFont"/>, damit die anderen Fenster mit
+    /// denselben Katalogtexten nicht wieder auf ThaleahFat zurueckfallen.
     /// </summary>
     private static TMP_FontAsset FindFont()
     {
-        TMP_FontAsset fallback = null;
-
-        foreach (TMP_FontAsset f in Resources.FindObjectsOfTypeAll<TMP_FontAsset>())
-        {
-            if (f == null) continue;
-            if (f.name.StartsWith("Jersey10")) return f;
-            if (fallback == null && (f.name == "PixelArtFont" || f.name.StartsWith("ThaleahFat")))
-                fallback = f;
-        }
-
-        return fallback != null ? fallback : PixelUI.FindPixelFont();
+        return PixelUI.FindTextFont() ?? PixelUI.FindPixelFont();
     }
 
     private static Color Hex(int rgb) => new Color32(

@@ -14,6 +14,7 @@
     { "key": "ui.unlocks.empty", "value": "Nothing here yet." },
     { "key": "ui.unlocks.from", "value": "From: {0}" },
     { "key": "ui.unlocks.hint", "value": "Keep playing to find this one." },
+    { "key": "ui.unlocks.owned", "value": "Unlocked" },
 
     { "key": "ach.cat.Progression", "value": "PROGRESS" },
     { "key": "ach.cat.Combat", "value": "COMBAT" },

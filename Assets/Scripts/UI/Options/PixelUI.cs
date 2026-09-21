@@ -27,10 +27,38 @@ public static class PixelUI
     public static readonly Color BarEmpty   = new Color(0.203f, 0.082f, 0.050f);
 
     /// <summary>
+    /// Die Pixel-Font für Oberflächen mit deutschem Text: Jersey10 zuerst,
+    /// ThaleahFat nur als Rückfall.
+    ///
+    /// ThaleahFat hat 116 Glyphen und darunter kein einziges Ä, Ö, Ü oder ß -
+    /// deutscher Text musste deshalb bisher "ZURUECK" und "Glueckwunsch"
+    /// schreiben. Jersey10 liegt im selben Stil vor, ist auf
+    /// <c>AtlasPopulationMode: Dynamic</c> importiert und rendert die Umlaute
+    /// bei Bedarf aus der TTF nach.
+    /// </summary>
+    public static TMP_FontAsset FindTextFont()
+    {
+        TMP_FontAsset fallback = null;
+
+        foreach (TMP_FontAsset f in Resources.FindObjectsOfTypeAll<TMP_FontAsset>())
+        {
+            if (f == null) continue;
+            if (f.name.StartsWith("Jersey10")) return f;
+            if (fallback == null && (f.name == "PixelArtFont" || f.name.StartsWith("ThaleahFat")))
+                fallback = f;
+        }
+
+        return fallback;
+    }
+
+    /// <summary>
     /// Sucht die Pixel-Font des Projekts (ThaleahFat). Die liegt nicht in einem
     /// Resources-Ordner, ist aber geladen, sobald irgendein TMP-Text im Spiel sie
     /// benutzt - Game.unity und World Map.unity tun das. Wird sie nicht gefunden,
     /// fällt TMP auf seine Standardschrift zurück.
+    ///
+    /// Für Oberflächen mit deutschem Text ist <see cref="FindTextFont"/> die
+    /// richtige Wahl - diese hier kann keine Umlaute.
     /// </summary>
     public static TMP_FontAsset FindPixelFont()
     {

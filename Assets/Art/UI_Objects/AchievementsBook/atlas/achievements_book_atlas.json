@@ -19,10 +19,11 @@
   "row_normal": { "frame": { "x": 133, "y": 326, "w": 132, "h": 21 }, "rotated": false, "trimmed": false, "spriteSourceSize": { "x": 0, "y": 0, "w": 132, "h": 21 }, "sourceSize": { "w": 132, "h": 21 }, "duration": 100 },
   "row_selected": { "frame": { "x": 266, "y": 326, "w": 132, "h": 21 }, "rotated": false, "trimmed": false, "spriteSourceSize": { "x": 0, "y": 0, "w": 132, "h": 21 }, "sourceSize": { "w": 132, "h": 21 }, "duration": 100 },
   "slot_large_locked": { "frame": { "x": 300, "y": 181, "w": 32, "h": 32 }, "rotated": false, "trimmed": false, "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 32 }, "sourceSize": { "w": 32, "h": 32 }, "duration": 100 },
+  "slot_large_owned": { "frame": { "x": 300, "y": 214, "w": 32, "h": 32 }, "rotated": false, "trimmed": false, "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 32 }, "sourceSize": { "w": 32, "h": 32 }, "duration": 100 },
   "slot_large_unlocked": { "frame": { "x": 333, "y": 181, "w": 32, "h": 32 }, "rotated": false, "trimmed": false, "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 32 }, "sourceSize": { "w": 32, "h": 32 }, "duration": 100 },
   "slot_small_locked": { "frame": { "x": 399, "y": 326, "w": 21, "h": 21 }, "rotated": false, "trimmed": false, "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 21 }, "sourceSize": { "w": 21, "h": 21 }, "duration": 100 },
   "slot_small_unlocked": { "frame": { "x": 421, "y": 326, "w": 21, "h": 21 }, "rotated": false, "trimmed": false, "spriteSourceSize": { "x": 0, "y": 0, "w": 21, "h": 21 }, "sourceSize": { "w": 21, "h": 21 }, "duration": 100 },
-  "tab_active": { "frame": { "x": 161, "y": 348, "w": 60, "h": 14 }, "rotated": false, "trimmed": false, "spriteSourceSize": { "x": 0, "y": 0, "w": 60, "h": 14 }, "sourceSize": { "w": 60, "h": 14 }, "duration": 100 },
+  "tab_active": { "frame": { "x": 161, "y": 348, "w": 60, "h": 16 }, "rotated": false, "trimmed": false, "spriteSourceSize": { "x": 0, "y": 0, "w": 60, "h": 16 }, "sourceSize": { "w": 60, "h": 16 }, "duration": 100 },
   "tab_inactive": { "frame": { "x": 222, "y": 348, "w": 60, "h": 14 }, "rotated": false, "trimmed": false, "spriteSourceSize": { "x": 0, "y": 0, "w": 60, "h": 14 }, "sourceSize": { "w": 60, "h": 14 }, "duration": 100 }
  },
  "meta": {
