@@ -471,6 +471,16 @@ public class SpawnDirector : MonoBehaviour
 
     // -------------------------------------------------------------------- UI
 
+    /// <summary>
+    /// Text ins Wellenfeld schreiben, der nicht aus dem Plan kommt. Der
+    /// Keks-Koenig meldet damit seinen Phasenwechsel - das gehoert in
+    /// dieselbe Zeile wie "KEKS-KOENIG", nicht in ein zweites Feld daneben.
+    /// </summary>
+    public void Say(string text)
+    {
+        Announce(text);
+    }
+
     private void Announce(string text)
     {
         if (string.IsNullOrEmpty(text)) return;

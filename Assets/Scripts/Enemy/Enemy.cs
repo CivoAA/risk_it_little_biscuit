@@ -43,6 +43,41 @@ public class Enemy : MonoBehaviour
         get { return MiniBoss || BossBoss || Death_Boss; }
     }
 
+    /// <summary>
+    /// Leben beim Spawn, nach der Lauf-Skalierung. Bezugspunkt fuer
+    /// <see cref="HealthFraction"/>.
+    /// </summary>
+    private float maxHealth;
+
+    /// <summary>
+    /// Wie viel Leben noch steht, 1 = voll. Der Keks-Koenig haengt daran
+    /// seinen Phasenwechsel auf. Ohne das muesste jeder Boss sein Leben ein
+    /// zweites Mal selbst mitzaehlen, und die beiden Staende liefen
+    /// auseinander, sobald irgendwo anders Schaden dazukommt.
+    /// </summary>
+    public float HealthFraction
+    {
+        get
+        {
+            // Fragt jemand schon vor Start (Start-Reihenfolge ist nicht
+            // garantiert), gilt der aktuelle Stand als voll.
+            if (maxHealth <= 0f) maxHealth = health;
+            return maxHealth > 0f ? Mathf.Clamp01(health / maxHealth) : 1f;
+        }
+    }
+
+    /// <summary>
+    /// Setzt das Leben auf einen Anteil des Startwerts. Nur fuer die
+    /// Test-Szene: damit laesst sich die zweite Phase eines Bosses anspringen,
+    /// ohne ihn vorher von Hand halb totzuschlagen. Toetet nie - das soll der
+    /// Spieler schon selbst machen.
+    /// </summary>
+    public void DebugSetHealthFraction(float fraction)
+    {
+        if (maxHealth <= 0f) maxHealth = health;
+        health = Mathf.Max(1f, maxHealth * Mathf.Clamp01(fraction));
+    }
+
     // ---------------------------------------------------------------- Register
 
     private static readonly System.Collections.Generic.List<Enemy> alive =
@@ -89,6 +124,11 @@ public class Enemy : MonoBehaviour
         health = Mathf.Max(1f, health * healthFactor);
         damage *= damageFactor;
         experienceToGive = Mathf.Max(0, Mathf.RoundToInt(experienceToGive * rewardFactor));
+
+        // Der Bezugspunkt muss NACH der Skalierung stehen, sonst waere ein
+        // Boss in einem harten Lauf sofort unter 50% und die zweite Phase
+        // liefe von Anfang an.
+        maxHealth = health;
     }
 
     /// <summary>
@@ -106,6 +146,10 @@ public class Enemy : MonoBehaviour
     protected virtual void Start()
     {
         baseMoveSpeed = moveSpeed;
+
+        // Wer ohne Director gesetzt wird (Test-Szene, alte Aufbauten), laeuft
+        // nie durch ApplyRunScaling - dann gilt der Prefab-Wert.
+        if (maxHealth <= 0f) maxHealth = health;
     }
 
     protected virtual void FixedUpdate()
