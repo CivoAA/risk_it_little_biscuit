@@ -37,11 +37,24 @@ public class TestSceneHUD : MonoBehaviour
         NumberGroupSizes = new[] { 3 }
     };
 
+    /// <summary>
+    /// Ruestung, die den Spieler unsterblich macht. Der Schadensrechner nimmt
+    /// 0.9 hoch Ruestung - bei 100000 ist das glatt 0, und TakeDamage steigt
+    /// aus, bevor ueberhaupt Leben abgezogen wird.
+    /// </summary>
+    private const float GodArmor = 100000f;
+
     private DamageMeter meter;
     private DummyArena arena;
+    private TestSceneBossSpawner bossSpawner;
     private TextMeshProUGUI statsText;
     private TextMeshProUGUI hintText;
     private TextMeshProUGUI dummyButtonLabel;
+    private TextMeshProUGUI godButtonLabel;
+
+    private bool godMode;
+    private string defaultHint = string.Empty;
+    private float hintUntil;
 
     private GameObject loadoutPanel;
     private RectTransform listContent;
@@ -73,6 +86,12 @@ public class TestSceneHUD : MonoBehaviour
         if (arena == null)
         {
             arena = gameObject.AddComponent<DummyArena>();
+        }
+
+        bossSpawner = FindFirstObjectByType<TestSceneBossSpawner>();
+        if (bossSpawner == null)
+        {
+            bossSpawner = gameObject.AddComponent<TestSceneBossSpawner>();
         }
 
         BuildUi();
@@ -127,12 +146,54 @@ public class TestSceneHUD : MonoBehaviour
             "<color=#666666>――――――――――</color>\n" +
             $"Total   {Num(meter.totalDamage)}  in {Clock(meter.Elapsed)}\n" +
             $"Ø DPS   {Num(meter.AverageDps)}\n" +
-            $"Hits    {meter.hitCount}  ({meter.CritRate * 100f:0}% Crit)";
+            $"Hits    {meter.hitCount}  ({meter.CritRate * 100f:0}% Crit)" +
+            BossLine();
 
         if (dummyButtonLabel != null && arena != null)
         {
             dummyButtonLabel.text = "Dummies: " + arena.CurrentCount;
         }
+
+        if (godButtonLabel != null)
+        {
+            godButtonLabel.text = godMode
+                ? "Unsterblich: <color=#7CFF7C>AN</color>"
+                : "Unsterblich: AUS";
+        }
+
+        // Kurzmeldungen der Boss-Knoepfe laufen nach ein paar Sekunden wieder
+        // aus, damit der Tastenhinweis nicht dauerhaft ueberschrieben bleibt.
+        if (hintText != null && hintUntil > 0f && Time.unscaledTime >= hintUntil)
+        {
+            hintUntil = 0f;
+            hintText.text = defaultHint;
+        }
+    }
+
+    /// <summary>
+    /// Leben und Phase des Test-Bosses. Ohne die beiden Werte muesste man den
+    /// Phasenwechsel daran erraten, dass er ploetzlich dreimal chargt.
+    /// </summary>
+    private string BossLine()
+    {
+        if (bossSpawner == null || !bossSpawner.Alive)
+        {
+            return string.Empty;
+        }
+
+        Enemy boss = bossSpawner.Boss;
+        if (boss == null)
+        {
+            return string.Empty;
+        }
+
+        EnemyKeckKönig king = bossSpawner.King;
+        string phase = king != null && king.IsPhaseTwo
+            ? "<color=#FF6A4A>Phase 2</color>"
+            : "Phase 1";
+
+        return "\n<color=#666666>――――――――――</color>\n" +
+               $"<b>Boss</b>  <color=#FFD24A>{boss.HealthFraction * 100f:0} %</color>   {phase}";
     }
 
     private static string Num(float value)
@@ -289,6 +350,62 @@ public class TestSceneHUD : MonoBehaviour
         }
     }
 
+    private void SpawnBoss()
+    {
+        if (bossSpawner != null) SetHint(bossSpawner.Spawn());
+    }
+
+    private void ClearBoss()
+    {
+        if (bossSpawner == null) return;
+        SetHint(bossSpawner.Clear() ? "Boss entfernt." : "Da stand keiner.");
+    }
+
+    /// <summary>
+    /// Springt die zweite Phase an, statt 2500 Leben von Hand wegzuschlagen.
+    /// Der Boss wechselt erst zwischen zwei Attacken - mitten im Sprint
+    /// umzuschalten waere im Kampf nicht lesbar.
+    /// </summary>
+    private void BossToHalf()
+    {
+        if (bossSpawner == null) return;
+
+        Enemy boss = bossSpawner.Boss;
+        if (boss == null)
+        {
+            SetHint("Kein Boss da - erst spawnen.");
+            return;
+        }
+
+        boss.DebugSetHealthFraction(0.5f);
+        SetHint("Boss auf 50 % - Phase 2 startet nach der laufenden Attacke.");
+    }
+
+    private void ToggleGodMode()
+    {
+        PlayerController player = PlayerController.Instance;
+        if (player == null) return;
+
+        godMode = !godMode;
+
+        // Auf- und wieder abziehen statt den alten Wert zu merken: sonst
+        // verschwaende eine Ruestung, die waehrenddessen dazukommt, beim
+        // Abschalten wieder.
+        player.playerArmor += godMode ? GodArmor : -GodArmor;
+
+        SetHint(godMode
+            ? "Unsterblich an. Schaden wird komplett weggerechnet."
+            : "Unsterblich aus.");
+    }
+
+    private void SetHint(string message)
+    {
+        if (hintText == null) return;
+
+        hintText.text = message;
+        hintUntil = Time.unscaledTime + 4f;
+    }
+
     private void RestartScene()
     {
         Time.timeScale = 1f;
@@ -401,8 +518,19 @@ public class TestSceneHUD : MonoBehaviour
         dummyButtonLabel = dummyButton.GetComponentInChildren<TextMeshProUGUI>();
         MakeButton("Re-Center", row3.transform, 148f, RecenterDummies);
 
-        hintText = Label($"[{toggleLoadoutKey}] Waffen-Menü   [ESC] Pause", panel, fontSize - 8,
-            TextAlignmentOptions.MidlineLeft);
+        // Bosskampf: spawnen, Phase 2 anspringen, wieder wegraeumen - und der
+        // Schalter, mit dem man das alles in Ruhe angucken kann.
+        GameObject row4 = Row(panel);
+        MakeButton("Boss spawnen", row4.transform, 158f, SpawnBoss);
+        MakeButton("Boss auf 50%", row4.transform, 158f, BossToHalf);
+
+        GameObject row5 = Row(panel);
+        Button godButton = MakeButton("Unsterblich: AUS", row5.transform, 200f, ToggleGodMode);
+        godButtonLabel = godButton.GetComponentInChildren<TextMeshProUGUI>();
+        MakeButton("Boss weg", row5.transform, 118f, ClearBoss);
+
+        defaultHint = $"[{toggleLoadoutKey}] Waffen-Menü   [ESC] Pause";
+        hintText = Label(defaultHint, panel, fontSize - 8, TextAlignmentOptions.MidlineLeft);
         hintText.color = new Color(0.6f, 0.62f, 0.66f, 1f);
     }
 
