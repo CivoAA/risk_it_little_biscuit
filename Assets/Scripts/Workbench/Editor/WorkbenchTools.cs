@@ -1,0 +1,312 @@
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+
+/// <summary>
+/// Werkzeuge rund um die Werkbank: Objekt in die Szene setzen, Prefab bauen,
+/// und - das Wichtigste - den Katalog gegen das Player-Prefab pruefen.
+///
+/// Der Katalog in <see cref="WeaponCatalog"/> ist eine Abschrift der
+/// Weapon-Bauteile am Player-Prefab. Abschriften laufen auseinander, also
+/// gibt es hier den Abgleich: er liest das Prefab, vergleicht Ids, Arten und
+/// Rezepte und meldet jede Abweichung samt der Zeile, die im Katalog fehlt.
+/// </summary>
+public static class WorkbenchTools
+{
+    private const string PrefabPath = "Assets/Prefabs/MapObjects/Werkbank.prefab";
+    private const string PlayerPrefab = "Assets/Prefabs/Player.prefab";
+    private const string IconFolder = "Assets/Resources/Workbench";
+
+    // ==================================================================
+    //  Szene
+    // ==================================================================
+
+    [MenuItem("Tools/Werkbank/Interaktionszone in Szene setzen")]
+    private static void PlaceInScene()
+    {
+        GameObject go = Create();
+        if (go == null) return;
+
+        Undo.RegisterCreatedObjectUndo(go, "Werkbank setzen");
+        Selection.activeGameObject = go;
+        EditorSceneManager.MarkSceneDirty(go.scene);
+
+        SceneView view = SceneView.lastActiveSceneView;
+        if (view != null) view.FrameSelected();
+
+        Debug.Log($"[Werkbank] '{go.name}' gesetzt bei {go.transform.position}. " +
+                  "Das Objekt bringt keine Grafik mit - auf die vorhandene Werkbank " +
+                  "schieben. Zone und Hinweistext stehen im Inspector.");
+    }
+
+    [MenuItem("Tools/Werkbank/Zonen-Prefab erzeugen")]
+    private static void CreatePrefab()
+    {
+        GameObject go = Create();
+        if (go == null) return;
+
+        go.transform.position = Vector3.zero;
+
+        // AssetDatabase rechnet immer mit Schraegstrichen, GetDirectoryName
+        // liefert unter Windows aber Backslashes.
+        string dir = Path.GetDirectoryName(PrefabPath).Replace('\\', '/');
+        if (!AssetDatabase.IsValidFolder(dir))
+        {
+            Debug.LogError($"[Werkbank] Ordner '{dir}' gibt es nicht.");
+            Object.DestroyImmediate(go);
+            return;
+        }
+
+        GameObject prefab = PrefabUtility.SaveAsPrefabAsset(go, PrefabPath);
+        Object.DestroyImmediate(go);
+
+        if (prefab == null)
+        {
+            Debug.LogError("[Werkbank] Prefab konnte nicht gespeichert werden.");
+            return;
+        }
+
+        Selection.activeObject = prefab;
+        EditorGUIUtility.PingObject(prefab);
+        Debug.Log($"[Werkbank] Prefab liegt unter {PrefabPath}.");
+    }
+
+    [MenuItem("Tools/Werkbank/Fenster oeffnen (nur im Play Mode)")]
+    private static void OpenPanel()
+    {
+        if (!Application.isPlaying)
+        {
+            Debug.LogWarning("[Werkbank] Geht nur im Play Mode - das Fenster baut sich zur Laufzeit auf.");
+            return;
+        }
+        WorkbenchPanel.Toggle();
+    }
+
+    /// <summary>
+    /// Nur die Zone, keine Grafik: die Werkbank steht schon als Pixelart in der
+    /// Szene, dieses Objekt legt sich bloss darueber und faengt das [E] ab.
+    /// Deshalb auch keine Umrandung - es gibt keinen SpriteRenderer dafuer.
+    /// </summary>
+    private static GameObject Create()
+    {
+        GameObject go = new GameObject("Werkbank");
+
+        WorkbenchTrigger trigger = go.AddComponent<WorkbenchTrigger>();
+
+        // Die Zonen-Felder liegen geschuetzt in HubInteractable - ueber
+        // SerializedObject lassen sie sich trotzdem sauber vorbelegen.
+        SerializedObject so = new SerializedObject(trigger);
+        Set(so, "shape", p => p.enumValueIndex = 1);                            // Rechteck
+        Set(so, "interactSize", p => p.vector2Value = new Vector2(3f, 2.5f));
+        Set(so, "interactOffset", p => p.vector2Value = new Vector2(0f, -1.2f));
+        Set(so, "promptText", p => p.stringValue = "[E] Werkbank");
+        Set(so, "showPrompt", p => p.boolValue = true);
+        Set(so, "showOutline", p => p.boolValue = false);
+        so.ApplyModifiedPropertiesWithoutUndo();
+
+        go.transform.position = SuggestPosition();
+        return go;
+    }
+
+    private static void Set(SerializedObject so, string field, System.Action<SerializedProperty> apply)
+    {
+        SerializedProperty p = so.FindProperty(field);
+        if (p != null) apply(p);
+        else Debug.LogWarning($"[Werkbank] Feld '{field}' gibt es in HubInteractable nicht mehr.");
+    }
+
+    /// <summary>Neben den Spieler, sonst in die Mitte der Szenenansicht.</summary>
+    private static Vector3 SuggestPosition()
+    {
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null) return player.transform.position + new Vector3(2f, 0f, 0f);
+
+        SceneView view = SceneView.lastActiveSceneView;
+        if (view != null) return new Vector3(view.pivot.x, view.pivot.y, 0f);
+
+        return Vector3.zero;
+    }
+
+    // ==================================================================
+    //  Katalog gegen das Player-Prefab
+    // ==================================================================
+
+    private class PrefabEntry
+    {
+        public string Id;
+        public string Name;
+        public PoolKind Kind;
+    }
+
+    [MenuItem("Tools/Werkbank/Katalog gegen Player-Prefab pruefen")]
+    private static void CheckCatalog()
+    {
+        GameObject player = AssetDatabase.LoadAssetAtPath<GameObject>(PlayerPrefab);
+        if (player == null)
+        {
+            Debug.LogError($"[Werkbank] {PlayerPrefab} nicht gefunden.");
+            return;
+        }
+
+        Dictionary<string, PrefabEntry> fromPrefab = new Dictionary<string, PrefabEntry>();
+        Dictionary<Weapon, string> idOf = new Dictionary<Weapon, string>();
+
+        foreach (Weapon w in player.GetComponentsInChildren<Weapon>(true))
+        {
+            if (w == null || string.IsNullOrEmpty(w.weaponID)) continue;
+
+            idOf[w] = w.weaponID;
+            fromPrefab[w.weaponID] = new PrefabEntry
+            {
+                Id = w.weaponID,
+                Name = w.gameObject.name,
+                Kind = w.weaponID.StartsWith("evo_") ? PoolKind.Evo
+                     : w.weaponID.StartsWith("buff_") ? PoolKind.Buff
+                     : PoolKind.Weapon,
+            };
+        }
+
+        List<string> problems = new List<string>();
+
+        foreach (PrefabEntry e in fromPrefab.Values)
+        {
+            WeaponDef def = WeaponCatalog.Find(e.Id);
+            if (def == null)
+            {
+                problems.Add($"FEHLT im Katalog: {e.Id}\n" +
+                             $"    Def(\"{e.Id}\", \"{e.Name}\", PoolKind.{e.Kind});");
+                continue;
+            }
+
+            if (def.Kind != e.Kind)
+                problems.Add($"Art weicht ab: {e.Id} - Katalog {def.Kind}, Prefab {e.Kind}");
+
+            if (def.NameEn != e.Name)
+                problems.Add($"Name weicht ab: {e.Id} - Katalog \"{def.NameEn}\", Prefab \"{e.Name}\"");
+        }
+
+        foreach (WeaponDef def in WeaponCatalog.All)
+        {
+            if (!fromPrefab.ContainsKey(def.Id))
+                problems.Add($"Steht im Katalog, aber nicht mehr im Prefab: {def.Id}");
+        }
+
+        CheckRecipes(player, idOf, problems);
+
+        if (problems.Count == 0)
+        {
+            Debug.Log($"[Werkbank] Katalog stimmt mit dem Player-Prefab ueberein " +
+                      $"({fromPrefab.Count} Eintraege, {WeaponCatalog.Evos.Count} Rezepte).");
+            return;
+        }
+
+        Debug.LogWarning($"[Werkbank] {problems.Count} Abweichung(en):\n  " +
+                         string.Join("\n  ", problems));
+    }
+
+    private static void CheckRecipes(GameObject player, Dictionary<Weapon, string> idOf,
+                                     List<string> problems)
+    {
+        PlayerController pc = player.GetComponent<PlayerController>();
+        if (pc == null || pc.EvoCombinations == null)
+        {
+            problems.Add("Kein PlayerController mit EvoCombinations am Prefab.");
+            return;
+        }
+
+        HashSet<string> seen = new HashSet<string>();
+
+        foreach (EvoRecipe r in pc.EvoCombinations)
+        {
+            if (r == null || r.EvoWeapon == null) continue;
+
+            string evo = Id(idOf, r.EvoWeapon);
+            string a = Id(idOf, r.RequiredWeapon1);
+            string b = Id(idOf, r.RequiredWeapon2);
+            seen.Add(evo);
+
+            EvoDef def = WeaponCatalog.Evos.FirstOrDefault(e => e.Id == evo);
+            if (def == null)
+            {
+                problems.Add($"Rezept fehlt im Katalog: {evo}\n" +
+                             $"    Evo(\"{evo}\", \"{a}\", \"{b}\");");
+                continue;
+            }
+
+            bool same = (def.IngredientA == a && def.IngredientB == b)
+                     || (def.IngredientA == b && def.IngredientB == a);
+
+            if (!same)
+            {
+                problems.Add($"Rezept weicht ab: {evo} - Katalog {def.IngredientA} + " +
+                             $"{def.IngredientB}, Prefab {a} + {b}");
+            }
+        }
+
+        foreach (EvoDef def in WeaponCatalog.Evos)
+        {
+            if (!seen.Contains(def.Id))
+                problems.Add($"Rezept steht im Katalog, aber nicht mehr im Prefab: {def.Id}");
+        }
+    }
+
+    private static string Id(Dictionary<Weapon, string> idOf, Weapon w)
+    {
+        if (w == null) return "?";
+        return idOf.TryGetValue(w, out string id) ? id : (w.weaponID ?? "?");
+    }
+
+    // ==================================================================
+    //  Icons
+    // ==================================================================
+
+    [MenuItem("Tools/Werkbank/Icons pruefen")]
+    private static void CheckIcons()
+    {
+        List<string> missing = new List<string>();
+
+        foreach (WeaponDef def in WeaponCatalog.All)
+        {
+            foreach (int size in new[] { 14, 10 })
+            {
+                string path = $"{IconFolder}/{def.Id}_{size}.png";
+                if (AssetDatabase.LoadAssetAtPath<Sprite>(path) == null)
+                    missing.Add(path);
+            }
+        }
+
+        if (missing.Count == 0)
+        {
+            Debug.Log($"[Werkbank] Alle {WeaponCatalog.All.Count * 2} Icons liegen unter {IconFolder}.");
+            return;
+        }
+
+        Debug.LogWarning($"[Werkbank] {missing.Count} Icon(s) fehlen:\n  " +
+                         string.Join("\n  ", missing) +
+                         "\n  Erzeugt werden sie aus dem weaponIcon am Player-Prefab, " +
+                         "siehe WORKBENCH_UI.md, Abschnitt Icons.");
+    }
+
+    // ==================================================================
+    //  Spielstand
+    // ==================================================================
+
+    [MenuItem("Tools/Werkbank/Verteiler zuruecksetzen")]
+    private static void ResetLoadout()
+    {
+        Loadout.ResetAll();
+        WorkbenchPanel.RefreshIfOpen();
+        Debug.Log("[Werkbank] Verteiler aller Charaktere geleert und abgeschaltet.");
+    }
+
+    [MenuItem("Tools/Werkbank/Spielstand im Explorer zeigen")]
+    private static void ShowSave()
+    {
+        string path = Path.Combine(Application.persistentDataPath, "loadout.json");
+        if (File.Exists(path)) EditorUtility.RevealInFinder(path);
+        else Debug.Log($"[Werkbank] Noch kein Spielstand - erwartet unter {path}.");
+    }
+}

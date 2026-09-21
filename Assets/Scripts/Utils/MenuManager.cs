@@ -17,8 +17,9 @@ public class MenuManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        Application.targetFrameRate = 60;
-        QualitySettings.vSyncCount = 0; 
+        // Bildrate und VSync stehen in den Optionen - hier nur anwenden,
+        // nicht ueberschreiben.
+        GameSettings.Apply();
     }
     void Update()
     {

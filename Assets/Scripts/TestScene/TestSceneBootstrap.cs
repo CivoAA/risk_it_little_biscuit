@@ -44,6 +44,11 @@ public class TestSceneBootstrap : MonoBehaviour
 
         Shop.SandboxMode = true;
 
+        // Die Testszene stellt ihren Charakter frei ein (CaptureRunUnlockAll).
+        // Der Verteiler haengt am Charakter - ohne das hier schriebe das
+        // Umschalten in die echte loadout.json.
+        Loadout.SandboxMode = true;
+
         if (createSandboxManagers)
         {
             EnableAchievementSandbox();

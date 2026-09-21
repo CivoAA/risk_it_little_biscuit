@@ -110,6 +110,91 @@ public static class HubConsoleCheats
         }, hidden: true);
 
         // ------------------------------------------------------------------
+        // Erfolge verteilen.  ->  "giberfolge"           der naechste offene
+        //                         "giberfolge alle"      alle auf einmal
+        //                         "giberfolge First_Win" ein bestimmter
+        //
+        // Geht ueber Achievements.Unlock, also mit allem was dranhaengt:
+        // Cookie Souls, mitvergebene Unlocks und die Steam-Meldung.
+        // ------------------------------------------------------------------
+        HubConsole.Add("giberfolge", "schaltet Erfolge frei", (args, sink) =>
+        {
+            string was = args != null && args.Length > 0 ? args[0] : null;
+
+            // Ohne Argument: der erste, der noch zu ist.
+            if (string.IsNullOrEmpty(was))
+            {
+                foreach (AchievementDef d in Ach.All)
+                {
+                    if (d.IsUnlocked) continue;
+
+                    Achievements.Unlock(d);
+                    int offen = Achievements.TotalCount - Achievements.UnlockedCount;
+                    sink.Print($"'{d.Id}' freigeschaltet. Noch {offen} zu holen.");
+                    return;
+                }
+
+                sink.Print("Alles schon geschafft. Respekt.");
+                return;
+            }
+
+            if (was.Equals("alle", System.StringComparison.OrdinalIgnoreCase))
+            {
+                // Ueber Ach.All laufen und nicht ueber Achievements.Locked():
+                // der Katalog bleibt beim Freischalten unveraendert, der
+                // Spielstand nicht.
+                int neu = 0;
+                foreach (AchievementDef d in Ach.All)
+                {
+                    if (d.IsUnlocked) continue;
+                    Achievements.Unlock(d);
+                    neu++;
+                }
+
+                sink.Print(neu > 0
+                    ? $"{neu} Erfolge freigeschaltet. Das war's dann wohl."
+                    : "War schon alles offen. Gierig.");
+                return;
+            }
+
+            AchievementDef def = Ach.Find(was);
+            if (def == null)
+            {
+                sink.PrintError($"'{was}' steht auf keiner Liste. " +
+                                "-> giberfolge / giberfolge alle / giberfolge <id>");
+                return;
+            }
+
+            if (def.IsUnlocked)
+            {
+                sink.Print($"'{def.Id}' war schon offen.");
+                return;
+            }
+
+            Achievements.Unlock(def);
+            sink.Print($"'{def.Id}' freigeschaltet.");
+        }, usage: "[alle|<id>]", hidden: true);
+
+        // ------------------------------------------------------------------
+        // Erfolge zuruecksetzen.  ->  "erfolgeweg"
+        // ------------------------------------------------------------------
+        HubConsole.Add("erfolgeweg", "setzt alle Erfolge zurueck", (args, sink) =>
+        {
+            int vorher = Achievements.UnlockedCount;
+
+            Achievements.ResetAll();
+
+            // ResetAll feuert kein Ereignis - ein offenes Buch muss von Hand
+            // nachgeladen werden, sonst steht dort noch der alte Stand.
+            AchievementsBookPanel.RefreshIfOpen();
+
+            sink.Print(vorher > 0
+                ? $"{vorher} Erfolge zurueckgesetzt. Bei Steam bleiben sie stehen, " +
+                  "das geht nur dort."
+                : "Da war nichts zurueckzusetzen.");
+        }, hidden: true);
+
+        // ------------------------------------------------------------------
         // Ab hier: deine eigenen Codes.
         // ------------------------------------------------------------------
     }

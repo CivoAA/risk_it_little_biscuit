@@ -12083,8 +12083,8 @@ MonoBehaviour:
   panelColor: {r: 0.16470589, g: 0.10980392, b: 0.078431375, a: 0.98039216}
   textColor: {r: 0.96862745, g: 0.9254902, b: 0.8392157, a: 1}
   hintColor: {r: 0.8509804, g: 0.6431373, b: 0.25490195, a: 1}
-  moneySprite: {fileID: 5841870835367478668, guid: 170d5a021157a524abbb6c0dd823661c, type: 3}
   showCoins: 1
+  moneySprite: {fileID: 5841870835367478668, guid: 170d5a021157a524abbb6c0dd823661c, type: 3}
   coinMargin: {x: 4, y: 4}
   moneySize: {x: 60, y: 25}
   moneyScale: 1
@@ -12891,6 +12891,177 @@ MonoBehaviour:
   moveClip: {fileID: 0}
   sfxSource: {fileID: 0}
   sfxVolume: 1
+--- !u!1 &1990000900
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1990000901}
+  - component: {fileID: 1990000902}
+  - component: {fileID: 1990000903}
+  m_Layer: 0
+  m_Name: Kapsel_Erfolgsbuch
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1990000901
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1990000900}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 51.03069, y: 8.658166, z: 0}
+  m_LocalScale: {x: 2.3846, y: 2.3846, z: 2.3846}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &1990000902
+SpriteRenderer:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1990000900}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 711437065
+  m_SortingLayer: 4
+  m_SortingOrder: 1
+  m_MaskInteraction: 0
+  m_Sprite: {fileID: 21300000, guid: f111e2930bc11d4b43bd27fd1fb7f19f, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1.5}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_SpriteSortPoint: 0
+--- !u!114 &1990000903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1990000900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2749965132a27db4e9142a33507fc973, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  interactRadius: 1.5
+  interactSize: {x: 2, y: 2.5}
+  interactOffset: {x: 0, y: -1.2}
+  interactKey: 101
+  showPrompt: 1
+  promptText: '[E] Erfolge'
+  showOutline: 1
+  outlineMode: 1
+  outlineColor: {r: 0.72156864, g: 0.5254902, b: 0.043137256, a: 1}
+  outlineTargets: []
+  startTab: 0
+--- !u!1 &1990001000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1990001001}
+  - component: {fileID: 1990001003}
+  m_Layer: 0
+  m_Name: Werkbank
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1990001001
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1990001000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 53.876, y: 36.189, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1990001003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1990001000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f766d7aa4f051ef112b8bc52ef444157, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  interactRadius: 1.5
+  interactSize: {x: 2, y: 2}
+  interactOffset: {x: 0, y: -1.2}
+  interactKey: 101
+  showPrompt: 1
+  promptText: '[E] Werkbank'
+  showOutline: 0
+  outlineMode: 1
+  outlineColor: {r: 0.72156864, g: 0.5254902, b: 0.043137256, a: 1}
+  outlineTargets: []
 --- !u!1 &2033158017
 GameObject:
   m_ObjectHideFlags: 0
@@ -13773,3 +13944,5 @@ SceneRoots:
   - {fileID: 1990000052}
   - {fileID: 1990000062}
   - {fileID: 983745286}
+  - {fileID: 1990000901}
+  - {fileID: 1990001001}

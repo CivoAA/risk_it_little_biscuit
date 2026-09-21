@@ -22,28 +22,28 @@ MonoBehaviour:
     description: Schaerfe deine Waffen und triff haerter, wo es weh tut.
     quote: '"Angriff ist die beste Verteidigung."'
     color: {r: 0.69803923, g: 0.25490198, b: 0.25490198, a: 1}
-    icon: {fileID: 0}
+    icon: {fileID: 21300000, guid: 5c83bc25ff3a469d85c868257bfed173, type: 3}
   - category: 1
     displayName: GEIST
     pathLabel: GEISTPFAD
     description: Meistere die Kraefte in dir und halte laenger durch als alle anderen.
     quote: '"Der Geist ueberdauert."'
     color: {r: 0.23529412, g: 0.43529412, b: 0.7529412, a: 1}
-    icon: {fileID: 0}
+    icon: {fileID: 21300000, guid: f6b413de56154698a1c99bc219168b26, type: 3}
   - category: 2
     displayName: WISSEN
     pathLabel: WISSENSPFAD
     description: Lerne schneller, waehle klueger und hole aus jedem Lauf mehr heraus.
     quote: '"Wissen veraendert die Welt."'
     color: {r: 0.24313726, g: 0.56078434, b: 0.30980393, a: 1}
-    icon: {fileID: 0}
+    icon: {fileID: 21300000, guid: 5f4a3fbbfe784fa0bffda7c899d88f41, type: 3}
   - category: 3
     displayName: "GL\xDCCK"
     pathLabel: "GL\xDCCKSPFAD"
     description: Bessere Funde, seltenere Beute und der eine Wurf, der alles dreht.
     quote: '"Glueck ist kein Zufall."'
     color: {r: 0.78431374, g: 0.6039216, b: 0.17254902, a: 1}
-    icon: {fileID: 0}
+    icon: {fileID: 21300000, guid: 35894fd0e8c840379c23367db38a9df5, type: 3}
   nodes:
   - id: kampf_mitte_1
     category: 0

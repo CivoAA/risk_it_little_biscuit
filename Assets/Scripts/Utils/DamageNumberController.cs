@@ -20,12 +20,19 @@ public class DamageNumberController : MonoBehaviour
 
     public void CreateNumber(float value, Vector3 location)
     {
+        // "Schadenszahlen" in den Optionen: aus heisst ruhigeres Bild. Betrifft
+        // nur die Zahlen - Hinweise wie "Dodge" oder "No more Rerolles left"
+        // laufen ueber CreateText und bleiben.
+        if (!GameSettings.DamageNumbers) return;
+
         DamageNumber damageNumber = Instantiate(prefab, location, transform.rotation, transform);
         damageNumber.SetValue(Mathf.RoundToInt(value));
     }
 
     public void CreateNumberCrit(float value, Vector3 location)
     {
+        if (!GameSettings.DamageNumbers) return;
+
         DamageNumber damageNumber = Instantiate(prefabCrit, location, transform.rotation, transform);
         damageNumber.SetValue(Mathf.RoundToInt(value));
     }

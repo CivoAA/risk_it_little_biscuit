@@ -1,0 +1,25 @@
+GIMP Palette
+Name: Pausenmenue
+Columns: 8
+# Kernpalette (17) + Sekundaertoene (4)
+242 220 188	Pergament
+233 207 168	Pergament dunkler: Zebra, rechte Spalte
+224 196 159	Pergament Reserve
+217 177 137	Pergamentschatten, Trennlinie, Fuehrungslinie
+185 151 114	Rahmen der Stats-Tafel
+140  90  60	Holz hell: aktiver Knopf
+111  70  48	Holz: Kopfleiste, Knopf, gedimmter Wert
+ 90  52  33	Holz dunkel: Chip, Kopfleisten-Trennlinie
+ 77  46  30	Holz sehr dunkel: Knopfschatten, Werttext
+ 59  43  51	Kontur
+ 43  32  40	Abdunklung
+ 28  20  25	Vignette
+184  58  82	UEBERLEBEN, Auswahlpfeil, Bestaetigen
+232 185  60	OFFENSIVE
+127 166  90	NUTZEN
+255 244 224	Highlight
+247 232 207	Highlight zweite Stufe
+138  90  61	Highlight Kopfleiste und Knopf
+168 122  82	Highlight aktiver Knopf
+122  79  55	Highlight Wert-Chip
+212  86 108	Highlight Bestaetigen-Knopf

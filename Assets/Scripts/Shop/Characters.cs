@@ -28,6 +28,26 @@ public static class Characters
     private static readonly int[] StartWeaponByskin = { 2, 6, 11, 1 };
 
     /// <summary>
+    /// Dieselbe Startwaffe noch einmal, diesmal als <c>Weapon.weaponID</c>.
+    ///
+    /// Warum zweimal: der Index oben zeigt in ein Array, das es nur im Spiel
+    /// gibt (<see cref="PlayerController.activeWeapon"/>). Der Hub hat den
+    /// Spieler nicht - die Werkbank muss trotzdem wissen, welche Waffe beim
+    /// gewaehlten Charakter fest im Verteiler liegt.
+    ///
+    /// BEIDE LISTEN MUESSEN DASSELBE MEINEN. Dass sie das tun, prueft
+    /// <c>WorkbenchTests.Startwaffen_stimmen_mit_dem_Player_Prefab_ueberein</c>
+    /// gegen das Prefab - eine verschobene Zeile faellt dort sofort auf.
+    /// </summary>
+    private static readonly string[] StartWeaponIdByskin =
+    {
+        "shurikookie",   // 0 - Brauner Keks
+        "spike_fork",    // 1 - Grauer Keks
+        "blade_swarm",   // 2 - Roter Keks
+        "jam_jar",       // 3 - Marmelade
+    };
+
+    /// <summary>
     /// Anzeigename je Charakter, nur fuer Editor und Menues - nichts davon landet
     /// im Spielstand. Leer gelassen heisst schlicht "Charakter N".
     /// </summary>
@@ -45,6 +65,16 @@ public static class Characters
     {
         if (StartWeaponByskin.Length == 0) return 0;
         return StartWeaponByskin[Mathf.Clamp(skinIndex, 0, StartWeaponByskin.Length - 1)];
+    }
+
+    /// <summary>
+    /// Startwaffe des Charakters als weaponID. Leer, wenn der Charakter keine
+    /// hat - dann ist in der Werkbank auch kein Platz reserviert.
+    /// </summary>
+    public static string StartWeaponId(int skinIndex)
+    {
+        if (StartWeaponIdByskin.Length == 0) return "";
+        return StartWeaponIdByskin[Mathf.Clamp(skinIndex, 0, StartWeaponIdByskin.Length - 1)];
     }
 
     public static string NameOf(int skinIndex)

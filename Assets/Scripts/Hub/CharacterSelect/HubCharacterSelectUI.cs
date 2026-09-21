@@ -16,9 +16,11 @@ using UnityEngine.UI;
 ///
 /// Die Wahl liegt in Shop.SkinIndex, also im Spielstand. Das Setzen zieht schon
 /// von allein den Skilltree des Charakters nach (Shop.SkinIndex ->
-/// Skills.SetActiveTreeForCharacter), und das Skilltree-Fenster im Hub ruft beim
-/// Oeffnen ohnehin Skills.Sync() - jeder Charakter ist damit ueber seinen
-/// eigenen Baum erreichbar, ohne dass hier etwas dafuer noetig waere.
+/// Skills.SetActiveTreeForCharacter) und ebenso seinen Verteiler
+/// (-> Loadout.SyncCharacter). Skilltree-Fenster und Werkbank rufen beim
+/// Oeffnen ohnehin noch einmal nach - jeder Charakter ist damit ueber seinen
+/// eigenen Baum und seinen eigenen Build erreichbar, ohne dass hier etwas
+/// dafuer noetig waere.
 ///
 /// EIN CHARAKTER DAZU: nichts an dieser Datei - nur in Characters.cs eintragen.
 /// Die Knoepfe kommen aus Characters.Count.

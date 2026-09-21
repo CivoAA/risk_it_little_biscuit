@@ -1,3 +1,6 @@
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
 /// <summary>Welchen Modus der Spieler im Hauptmenü gewählt hat.</summary>
 public enum GameMode
 {
@@ -14,6 +17,9 @@ public static class GameSession
     /// <summary>Die Szene, die Start und Ziel eines Laufs ist.</summary>
     public const string HubScene = "hub";
 
+    /// <summary>Das Hauptmenü.</summary>
+    public const string MainMenuScene = "Main Menu";
+
     public static GameMode SelectedMode { get; set; } = GameMode.Story;
 
     /// <summary>
@@ -29,9 +35,42 @@ public static class GameSession
     /// <summary>
     /// Szene, in die der Spieler nach Sieg oder Niederlage zurückkehrt. Wer ein
     /// Level startet, trägt hier seine eigene Szene ein: die Hub-Levelauswahl
-    /// den Hub, die World Map sich selbst. Steht nichts drin, gilt der Hub - die
-    /// World Map wird nicht mehr angesteuert, sie läuft nur noch, wenn man sie
-    /// direkt startet.
+    /// den Hub, die World Map sich selbst.
+    ///
+    /// <b>Leer heißt: dieser Lauf wurde nicht von irgendwo aus gestartet.</b>
+    /// Das ist der Fall, wenn jemand die Test-Szene oder eine Map-Szene direkt
+    /// aus dem Editor startet - dann gibt es kein Zurück und
+    /// <see cref="GameManager.Restart"/> lädt einfach neu. Stünde hier
+    /// vorbelegt der Hub, würde die Test-Szene in den Hub springen.
     /// </summary>
-    public static string ReturnScene { get; set; } = HubScene;
+    public static string ReturnScene { get; set; }
+
+    /// <summary>
+    /// Statics überleben in Unity das Verlassen des Play-Modus, wenn "Reload
+    /// Domain" aus ist. Ohne das Zurücksetzen schleppt die Test-Szene das
+    /// Rückreiseziel des vorherigen Laufs mit.
+    /// </summary>
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetRuntimeState()
+    {
+        ReturnScene = null;
+        SelectedMode = GameMode.Story;
+        Chaos = 1f;
+    }
+
+    /// <summary>
+    /// Zurück ins Hauptmenü - von überall, egal wie viele Szenen gerade
+    /// nebeneinander liegen. Bewusst hart mit Single: das entlädt Level,
+    /// Map-Szene und Hub in einem Rutsch. Die DontDestroyOnLoad-Manager
+    /// (AudioController, MenuManager, SteamManager) überleben das, genauso wie
+    /// auf dem Weg Hauptmenü -> Hub.
+    /// </summary>
+    public static void LoadMainMenu()
+    {
+        Time.timeScale = 1f;
+        ReturnScene = null;
+
+        if (AudioController.Instance != null) AudioController.Instance.SwitchMusic("Main Menu");
+        SceneManager.LoadScene(MainMenuScene, LoadSceneMode.Single);
+    }
 }

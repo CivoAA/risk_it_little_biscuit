@@ -1,0 +1,29 @@
+GIMP Palette
+Name: Werkbank
+Columns: 8
+# Kernpalette (17) + Sekundaertoene (8)
+242 220 188	Pergament
+224 196 159	Aktiver Reiter, leerer Slot
+217 177 137	Trennlinie, Slotschatten
+185 151 114	Slotkontur, Zeichen
+140  90  60	Waffenkachel, Knopf
+111  70  48	Holz hell
+ 90  52  33	Rahmenleiste, inaktiver Reiter
+ 77  46  30	Bibliothek
+ 59  43  51	Kontur, Evo-Leiste
+184  58  82	Rot hell
+150  56  76	Buffkachel
+232 185  60	Auswahlrahmen
+201 146  42	Hauptknopf
+247 215 106	Hauptknopf Lichtkante
+255 244 224	Pergament Lichtkante
+127 166  90	Evo moeglich
+ 47  63  36	Evo moeglich, Flaeche
+ 85  65  76	Lichtkante dunkel
+ 43  32  40	Overlay
+ 66  40  26	bereits im Verteiler
+122  79  55	Holz Lichtkante
+238 214 180	leerer Slot Lichtkante
+247 232 207	Reiter Lichtkante
+168 144 112	Hauptknopf gesperrt
+ 51  38  48	Evo unvollstaendig

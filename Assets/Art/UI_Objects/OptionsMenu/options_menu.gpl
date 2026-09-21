@@ -1,0 +1,25 @@
+GIMP Palette
+Name: Optionen
+Columns: 7
+# 21 Farben, identisch zur Vorgabe
+242 220 188	Pergament
+233 207 168	Reiterleiste, Zebra, Fussleiste
+224 196 159	Chip inaktiv, leere Balkenzelle
+238 214 180	Highlight auf Pergament
+217 177 137	Trennlinien, Schatten, Scrollschiene
+185 151 114	Rahmen auf Pergament
+140  90  60	Balken gefuellt, Scrollgriff
+168 122  82	Highlight Balken
+111  70  48	Holz: Reiter inaktiv, Chip aktiv
+138  90  61	Highlight Holz
+ 90  52  33	Schatten Balken, Kopfleisten-Trennlinie
+ 77  46  30	Schatten Holz, Werttext
+ 59  43  51	Kontur
+ 43  32  40	Abdunklung
+ 28  20  25	Vignette
+232 185  60	AUDIO-Punkt, UEBERNEHMEN
+247 215 106	Highlight UEBERNEHMEN
+201 146  42	Schatten UEBERNEHMEN
+127 166  90	ANZEIGE-Punkt
+255 244 224	Highlight
+247 232 207	Highlight zweite Stufe

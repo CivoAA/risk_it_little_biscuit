@@ -242,6 +242,14 @@ public class HubUI : MonoBehaviour
     {
         coinRoot = NewRect("Money", parent);
 
+        // Eigene Sortierung ueber dem Pausenmenue (200): dessen Abdunklung legt
+        // sich sonst auch ueber den Kontostand, und der soll dort stehenbleiben.
+        // Alle anderen Hub-Fenster blenden die Ecke ohnehin aus (siehe
+        // LateUpdate), es kommt also nichts anderes darueber.
+        var coinCanvas = coinRoot.AddComponent<Canvas>();
+        coinCanvas.overrideSorting = true;
+        coinCanvas.sortingOrder = 205;
+
         var cRect = (RectTransform)coinRoot.transform;
         cRect.anchorMin = cRect.anchorMax = cRect.pivot = new Vector2(1f, 1f);
         cRect.sizeDelta = moneySize * Mathf.Max(0.01f, moneyScale);
@@ -357,6 +365,14 @@ public class HubUI : MonoBehaviour
 
     void Update()
     {
+        // Escape im Hub oeffnet das Pausenmenue. InputBlocked deckt beide Faelle
+        // ab, in denen es nicht darf: ein anderes Fenster ist offen (die
+        // schliessen sich mit Escape selbst) oder die Textbox laeuft - und
+        // solange das Menue steht, zaehlt es als Modal und sperrt sich hier
+        // selbst aus.
+        if (!InputBlocked && Input.GetKeyDown(KeyCode.Escape))
+            PauseMenuPanel.Open(PauseMenuPanel.PauseMode.Hub);
+
         if (!DialogueOpen) return;
 
         // Hinweis blinken lassen
@@ -387,13 +403,17 @@ public class HubUI : MonoBehaviour
         // Immediate Mode: wer den Hinweis will, meldet sich jeden Frame.
         // Meldet sich niemand, verschwindet er von selbst - so streiten sich
         // mehrere Objekte nicht darum, wer ihn wieder ausschaltet.
-        if (promptRoot != null && promptRoot.activeSelf != promptRequestedThisFrame)
-            promptRoot.SetActive(promptRequestedThisFrame);
+        // "Tipps" in den Optionen schaltet ihn ganz ab.
+        bool promptWanted = promptRequestedThisFrame && GameSettings.Tips;
+        if (promptRoot != null && promptRoot.activeSelf != promptWanted)
+            promptRoot.SetActive(promptWanted);
         promptRequestedThisFrame = false;
 
         // Shop, Skilltree, Konsole und die Textbox bringen ihre eigene Anzeige
         // mit oder wollen das Bild fuer sich - solange tritt die Ecke zurueck.
-        bool coinsWanted = showCoins && !InputBlocked;
+        // Das Pausenmenue ist die Ausnahme: seine Tafel steht mittig, die Ecke
+        // bleibt frei und der Kontostand darf stehenbleiben.
+        bool coinsWanted = showCoins && (!InputBlocked || PauseMenuPanel.IsOpen);
         if (coinRoot != null && coinRoot.activeSelf != coinsWanted)
             coinRoot.SetActive(coinsWanted);
     }

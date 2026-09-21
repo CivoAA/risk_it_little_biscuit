@@ -611,7 +611,15 @@ public class PlayerController : MonoBehaviour
                 return true;
         }
 
-        // 2. Standardwaffen → immer freigeschaltet
+        // 2. Der Verteiler von der Werkbank. Solange der Spieler dort nichts
+        //    uebernommen hat, sagt Loadout zu allem ja - ein alter Spielstand
+        //    verhaelt sich also genau wie vorher. Die Startwaffe oben kommt
+        //    bewusst vor dieser Schranke: die bekommt man sowieso, und ohne
+        //    Aufstiegsmoeglichkeit waere sie ein toter Slot.
+        if (!Loadout.AllowsInRun(weapon.weaponID))
+            return false;
+
+        // 3. Standardwaffen → immer freigeschaltet
         HashSet<string> defaultUnlockedWeapons = new HashSet<string>
         {
             "coffee_pool",
@@ -630,7 +638,7 @@ public class PlayerController : MonoBehaviour
         if (defaultUnlockedWeapons.Contains(weapon.weaponID))
             return true;
 
-        // 3. Alles Weitere muss im Shop gekauft sein. Welche Waffe zu welchem
+        // 4. Alles Weitere muss im Shop gekauft sein. Welche Waffe zu welchem
         //    Shop-Eintrag gehört, steht am Eintrag selbst (unlocksWeapon in Shop.cs) -
         //    hier stand früher eine zweite, handgepflegte Tabelle.
         return Shop.IsWeaponUnlocked(weapon.weaponID);
@@ -639,6 +647,10 @@ public class PlayerController : MonoBehaviour
     private bool IsBuffUnlocked(Weapon buff)
     {
         if (buff == null) return false;
+
+        // Der Verteiler von der Werkbank, dieselbe Regel wie bei den Waffen.
+        if (!Loadout.AllowsInRun(buff.weaponID))
+            return false;
 
         // Standardmäßig immer freigeschaltete Buffs
         HashSet<string> defaultUnlockedBuffs = new HashSet<string>

@@ -48,7 +48,9 @@ public class GameManager : MonoBehaviour
                 UIController.Instance.UpdateTimer(gameTime);
             }
 
-            if (Input.GetKeyDown(KeyCode.Escape))
+            // Das Pausenmenue hoert selbst auf Escape - sonst wuerde es sich
+            // im selben Frame wieder schliessen.
+            if (Input.GetKeyDown(KeyCode.Escape) && !PauseMenuPanel.IsOpen)
             {
                 Pause();
             }
@@ -59,14 +61,7 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         Achievements.Unlock(Ach.FirstDeath);
-        currency = (int)(((PlayerController.Instance.playerLevels
-        .Take(Mathf.Max(0, PlayerController.Instance.currentLevel - 2))
-        .Sum() / 100f + (10 * (PlayerController.Instance.currentLevel - 1)) + gameTime) / 2f)* currencyGainMultiplire);
-        if (currency > 2500)
-        {
-            float overflow = currency - 2500;
-            currency = (int)(2500 + (overflow * 0.1f));
-        }
+        currency = EstimateCurrency();
         Shop.AddCurrency(currency);
         gameActiv = false;
 
@@ -88,6 +83,28 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Was der Lauf bis jetzt an Waehrung wert waere. Genau die Formel, mit der
+    /// <see cref="GameOver"/> abrechnet - damit der GOLD-Chip im Pausenmenue
+    /// nicht auseinanderlaeuft mit dem, was am Ende gutgeschrieben wird.
+    /// </summary>
+    public int EstimateCurrency()
+    {
+        PlayerController player = PlayerController.Instance;
+        if (player == null) return currency;
+
+        int level = player.currentLevel;
+        float fromLevels = player.playerLevels != null
+            ? player.playerLevels.Take(Mathf.Max(0, level - 2)).Sum() / 100f
+            : 0f;
+
+        int value = (int)(((fromLevels + (10 * (level - 1)) + gameTime) / 2f) * currencyGainMultiplire);
+
+        // Ueber 2500 zaehlt nur noch ein Zehntel weiter.
+        if (value > 2500) value = (int)(2500 + ((value - 2500) * 0.1f));
+        return Mathf.Max(0, value);
+    }
+
     IEnumerator ShowGameOverScreen()
     {
         AudioController.Instance.PalySound(AudioController.Instance.GameOver);
@@ -105,124 +122,131 @@ public class GameManager : MonoBehaviour
         UIController.Instance.StartRewardCycleDisplay_Win();
     }
 
+    /// <summary>
+    /// Lauf beenden und dorthin zurück, wo er gestartet wurde. Drei Wege, je
+    /// nachdem wie der Lauf überhaupt zustande kam:
+    ///
+    ///  1. Ziel liegt geladen daneben (der Normalfall: Hub oder World Map
+    ///     haben additiv gestartet) - nur umschalten, das Ziel behält seinen
+    ///     Zustand.
+    ///  2. Ziel ist bekannt, aber nicht geladen (Hub direkt aus dem Editor
+    ///     gestartet, also ohne MenuManager - dann lädt die Levelauswahl hart
+    ///     mit Single) - also auch hart zurück.
+    ///  3. Kein Ziel bekannt (Test-Szene, Map-Szene direkt gestartet) - neu
+    ///     laden, es gibt kein Zurück.
+    /// </summary>
     public void Restart()
     {
-        // Test-Szene (läuft ohne World Map): einfach die aktive Szene neu laden.
-        if (MenuManager.Instance == null)
-        {
-            Time.timeScale = 1f;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-            return;
-        }
+        Time.timeScale = 1f;
 
         // Der Shop-Stand ist ohnehin aktuell - nur die Anzeige muss nachziehen.
         // Der WM_UIController haengt in der World Map und fehlt, wenn der Lauf
         // aus dem Hub kam - die ?. fangen das ab.
         WM_UIController.Instance?.UpdateCurrencyText();
         WM_UIController.Instance?.RefreshButtonTexts();
-        Time.timeScale = 1f;
 
-        // Zurueck dorthin, wo der Lauf gestartet wurde: Hub oder World Map.
-        // Den Eintrag setzt die Levelauswahl bzw. PlayerWorldInteraction.
+        string back = GameSession.ReturnScene;
         // Nicht GetActiveScene(): additiv geladen bleibt der Hub bzw. die World
         // Map die aktive Szene - gemeint ist die Szene, in der dieser Manager
         // steht, also die des laufenden Levels.
-        string back = string.IsNullOrEmpty(GameSession.ReturnScene) ? GameSession.HubScene : GameSession.ReturnScene;
         string here = gameObject.scene.name;
 
-        // Reihenfolge: erst das Level stilllegen, dann das Ziel anschalten, dann
-        // entladen. Jede Szene bringt ihr eigenes Global Light 2D mit - waeren
-        // beide gleichzeitig aktiv, meldet das 2D-Licht "More than one global
-        // light on layer ...". Das Entladen allein deckt die Luecke nicht ab,
-        // weil UnloadSceneAsync erst am Frame-Ende fertig ist. So laeuft es
-        // herum wie beim Betreten, wo ebenfalls erst die Startszene ausgeht.
-        // Im neuen System besteht ein Lauf aus zwei Szenen: GameCore (hier) und
-        // die Map-Szene daneben. Wer nur GameCore wegraeumt, laesst die Welt
-        // stehen. Im alten System sind beide Aufrufe ein No-Op.
-        MenuManager.Instance.DeactivateScene(here);
-        MapSceneSystem.DeactivateRunMap();
-        MenuManager.Instance.ActivateScene(back);
-        MenuManager.Instance.UnloadScene(here);
-        MapSceneSystem.UnloadRunMap();
+        Scene target = string.IsNullOrEmpty(back) ? default : SceneManager.GetSceneByName(back);
+        bool targetLoaded = target.IsValid() && target.isLoaded && target.name != here;
+
+        if (MenuManager.Instance != null && targetLoaded)
+        {
+            // Reihenfolge: erst das Level stilllegen, dann das Ziel anschalten,
+            // dann entladen. Jede Szene bringt ihr eigenes Global Light 2D mit
+            // - waeren beide gleichzeitig aktiv, meldet das 2D-Licht "More than
+            // one global light on layer ...". Das Entladen allein deckt die
+            // Luecke nicht ab, weil UnloadSceneAsync erst am Frame-Ende fertig
+            // ist. Im neuen System besteht ein Lauf aus zwei Szenen: GameCore
+            // (hier) und die Map-Szene daneben - wer nur GameCore wegraeumt,
+            // laesst die Welt stehen.
+            MenuManager.Instance.DeactivateScene(here);
+            MapSceneSystem.DeactivateRunMap();
+            MenuManager.Instance.ActivateScene(back);
+            MenuManager.Instance.UnloadScene(here);
+            MapSceneSystem.UnloadRunMap();
+            return;
+        }
+
+        if (!string.IsNullOrEmpty(back) && Application.CanStreamedLevelBeLoaded(back))
+        {
+            SceneManager.LoadScene(back, LoadSceneMode.Single);
+            return;
+        }
+
+        if (!string.IsNullOrEmpty(back))
+        {
+            Debug.LogWarning($"[GameManager] Rueckreiseziel \"{back}\" steht nicht in den " +
+                             "Build Settings - der Lauf startet stattdessen neu.");
+        }
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
     public void Pause()
     {
-        bool canToggle = true;
-        if (UIController.Instance.GameOverPanel.activeSelf == true)
+        // Offen? Dann macht Escape wieder zu - das Menue raeumt beim Zerstoeren
+        // selbst auf (Time.timeScale, OnPauseMenuClosed).
+        if (PauseMenuPanel.IsOpen)
         {
-            canToggle = false;
+            PauseMenuPanel.Close();
+            return;
         }
-        else if (UIController.Instance.LevelUpPanel.activeSelf == true)
-        {
-            canToggle = false;
-        }
-        else if (UIController.Instance.GambaPanel.activeSelf == true)
-        {
-            canToggle = false;
-        }
-        else if (UIController.Instance.PowerUpPanel.activeSelf == true)
-        {
-            canToggle = false;
-        }
-        else if (UIController.Instance.WinPanel.activeSelf == true)
-        {
-            canToggle = false;
-        }
-        else if (UIController.Instance.EvoPanel.activeSelf == true)
-        {
-            canToggle = false;
-        }
-        
 
-        if (canToggle)
-        {
-            bool isPaused = UIController.Instance.PausePanel.activeSelf;
+        if (!CanPause()) return;
 
-            if (!isPaused)
-            {
-                // Pause aktivieren
-                UIController.Instance.PausePanel.SetActive(true);
-                Time.timeScale = 0f;
-                AudioController.Instance.PalySound(AudioController.Instance.pause);
+        AudioController.Instance.PalySound(AudioController.Instance.pause);
+        ShowItemLevels(true);
+        PauseMenuPanel.Open(PauseMenuPanel.PauseMode.Run);
+    }
 
-                if (itemMenu != null)
-                {
-                    foreach (TMP_Text t in itemMenu.levelTexts)
-                    {
-                        if (t != null) t.alpha = 1f; // Text wieder einblenden
-                    }
-                }
-                if (itemMenuBuffs != null)
-                {
-                    foreach (TMP_Text t in itemMenuBuffs.levelTexts)
-                    {
-                        if (t != null) t.alpha = 1f; // Text wieder einblenden
-                    }
-                }
-            }
-            else
-            {
-                UIController.Instance.PausePanel.SetActive(false);
-                Time.timeScale = 1f;
-                AudioController.Instance.PalySound(AudioController.Instance.unpause);
+    /// <summary>
+    /// Alles, was das Bild schon fuer sich beansprucht, blockt die Pause:
+    /// Level-Up, PowerUp, Evo, Gamba und die Abschlussbildschirme.
+    /// </summary>
+    private bool CanPause()
+    {
+        UIController ui = UIController.Instance;
+        if (ui == null) return false;
 
-                // 🔹 LevelTexts wieder sichtbar machen
-                if (itemMenu != null)
-                {
-                    foreach (TMP_Text t in itemMenu.levelTexts)
-                    {
-                        if (t != null) t.alpha = 0f; // Text ausblenden
-                    }
-                }
-                if (itemMenuBuffs != null)
-                {
-                    foreach (TMP_Text t in itemMenuBuffs.levelTexts)
-                    {
-                        if (t != null) t.alpha = 0f; // Text ausblenden
-                    }
-                }
-            }
-        }
+        return !ui.GameOverPanel.activeSelf
+            && !ui.WinPanel.activeSelf
+            && !ui.LevelUpPanel.activeSelf
+            && !ui.PowerUpPanel.activeSelf
+            && !ui.EvoPanel.activeSelf
+            && !ui.GambaPanel.activeSelf;
+    }
+
+    /// <summary>
+    /// Das Pausenmenue hat zugemacht - egal ob ueber "WEITER", Escape oder weil
+    /// die Szene wechselt.
+    /// </summary>
+    public void OnPauseMenuClosed()
+    {
+        ShowItemLevels(false);
+        if (AudioController.Instance != null)
+            AudioController.Instance.PalySound(AudioController.Instance.unpause);
+    }
+
+    /// <summary>
+    /// Die Stufenzahlen an den Waffen- und Buff-Symbolen. Im Lauf stoeren sie,
+    /// in der Pause will man sie sehen.
+    /// </summary>
+    private void ShowItemLevels(bool visible)
+    {
+        float alpha = visible ? 1f : 0f;
+
+        if (itemMenu != null)
+            foreach (TMP_Text t in itemMenu.levelTexts)
+                if (t != null) t.alpha = alpha;
+
+        if (itemMenuBuffs != null)
+            foreach (TMP_Text t in itemMenuBuffs.levelTexts)
+                if (t != null) t.alpha = alpha;
     }
 
     public void QuitGame()
@@ -232,19 +256,10 @@ public class GameManager : MonoBehaviour
 
     public void GoToMainMenu()
     {
-        Time.timeScale = 1f;
-
-        // Test-Szene (läuft ohne MenuManager): nichts zu entladen.
-        if (MenuManager.Instance == null) return;
-
-        AudioController.Instance.SwitchMusic("Main Menu");
-
-        // Altes System: eine Szene. Neues System: GameCore + Map-Szene. Was
-        // nicht geladen ist, ueberspringt UnloadScene von selbst.
-        MenuManager.Instance.UnloadScene("Game");
-        MenuManager.Instance.UnloadScene(MapSceneSystem.CoreScene);
-        MapSceneSystem.UnloadRunMap();
-
-        MenuManager.Instance.ActivateScene("Main Menu");
+        // Hart mit Single statt Szene fuer Szene: das raeumt Level, Map-Szene
+        // und Hub in einem Rutsch ab. Der alte Weg ueber MenuManager hat das
+        // Hauptmenue additiv neben den noch geladenen Hub gelegt - und ohne
+        // MenuManager (Hub direkt aus dem Editor gestartet) gar nichts getan.
+        GameSession.LoadMainMenu();
     }
 }

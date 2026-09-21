@@ -67,7 +67,8 @@ public static class Loc
         Apply(saved);
     }
 
-    private static string SystemDefault()
+    /// <summary>Die Sprache, die ohne eigene Wahl gelten würde.</summary>
+    public static string SystemDefault()
     {
         return Application.systemLanguage == SystemLanguage.German ? "de" : DefaultLanguage;
     }

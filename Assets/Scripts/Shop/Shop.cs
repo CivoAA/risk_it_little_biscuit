@@ -289,6 +289,10 @@ public static class Shop
             // also auch die Boni und die freigeschalteten Schalter mit.
             Skills.SetActiveTreeForCharacter(value);
 
+            // Und seinen eigenen Verteiler. Der Wechsel blaettert nur um; was
+            // der andere zusammengestellt hatte, bleibt, wie es war.
+            Loadout.SyncCharacter();
+
             RaiseChanged();
         }
     }
