@@ -15,6 +15,18 @@ public static class AchievementsBookSceneTools
     private const string SpritePath = "Assets/Art/World-Objects/kapsel_erfolgsbuch.png";
     private const string PrefabPath = "Assets/Prefabs/MapObjects/KapselErfolgsbuch.prefab";
 
+    /// <summary>Die drei Blasen-Bilder der Kapsel, Reihenfolge = Abspielreihenfolge.</summary>
+    private static readonly string[] FramePaths =
+    {
+        "Assets/Art/World-Objects/kapsel_erfolgsbuch.png",
+        "Assets/Art/World-Objects/kapsel_erfolgsbuch_2.png",
+        "Assets/Art/World-Objects/kapsel_erfolgsbuch_3.png",
+    };
+
+    /// <summary>Das Sprite ist mit 80x128 bei 32 PPU gezeichnet - so gross steht
+    /// die Kapsel im Hub (rund 2,4 x 3,8 Einheiten).</summary>
+    private const float Scale = 0.95f;
+
     [MenuItem("Tools/Achievements/Buch-Objekt in Szene setzen")]
     private static void PlaceInScene()
     {
@@ -88,9 +100,13 @@ public static class AchievementsBookSceneTools
 
         GameObject go = new GameObject("Kapsel_Erfolgsbuch");
 
+        go.transform.localScale = Vector3.one * Scale;
+
         SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
         sr.sprite = sprite;
         sr.sortingOrder = 1;
+
+        AddBubbleLoop(go);
 
         AchievementsBookTrigger trigger = go.AddComponent<AchievementsBookTrigger>();
 
@@ -108,6 +124,30 @@ public static class AchievementsBookSceneTools
 
         go.transform.position = SuggestPosition();
         return go;
+    }
+
+    /// <summary>Haengt die Blasen-Animation an. Fehlt ein Bild, laeuft die Kapsel
+    /// einfach ohne Animation weiter - dafuer ist sie nicht zu schade.</summary>
+    private static void AddBubbleLoop(GameObject go)
+    {
+        var frames = new Sprite[FramePaths.Length];
+        for (int i = 0; i < FramePaths.Length; i++)
+        {
+            frames[i] = AssetDatabase.LoadAssetAtPath<Sprite>(FramePaths[i]);
+            if (frames[i] != null) continue;
+
+            Debug.LogWarning($"[Buch] Frame fehlt: {FramePaths[i]} - Kapsel bleibt still.");
+            return;
+        }
+
+        SerializedObject so = new SerializedObject(go.AddComponent<SpriteFrameLoop>());
+        SerializedProperty list = so.FindProperty("frames");
+        list.arraySize = frames.Length;
+        for (int i = 0; i < frames.Length; i++)
+            list.GetArrayElementAtIndex(i).objectReferenceValue = frames[i];
+        Set(so, "frameTime", p => p.floatValue = 0.3f);
+        Set(so, "randomStart", p => p.boolValue = true);
+        so.ApplyModifiedPropertiesWithoutUndo();
     }
 
     private static void Set(SerializedObject so, string field, System.Action<SerializedProperty> apply)

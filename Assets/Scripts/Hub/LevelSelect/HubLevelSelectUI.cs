@@ -79,9 +79,12 @@ public class HubLevelSelectUI : MonoBehaviour
         [TextArea(2, 4)]
         public string description = "";
 
-        [Tooltip("Bild im Fenster der Karte und im Beschreibungsfeld. Leer = das " +
-                 "Fenster bleibt frei.")]
+        [Tooltip("Bild im Fenster der Karte (50x50). Leer = das Fenster bleibt frei.")]
         public Sprite preview;
+
+        [Tooltip("Breites Bild fuer das Beschreibungsfeld rechts (82x46). Leer = " +
+                 "dort wird das Kartenbild genommen.")]
+        public Sprite previewWide;
 
         [Tooltip("Welche Welt geladen wird: Map-ID 3 laedt die Szene Map_World3. " +
                  "-1 = dieses Level hat noch keine Welt und zeigt 'BALD'.")]
@@ -815,7 +818,7 @@ public class HubLevelSelectUI : MonoBehaviour
             c.Selection.gameObject.SetActive(isSelected);
             c.Number.color = !open ? lockedText : (isSelected ? selectionBorder : textOnDark);
 
-            ApplyPreview(e, open, c.PreviewFill, c.Preview);
+            ApplyPreview(e, open, c.PreviewFill, c.Preview, cardPreviewArea, false);
             c.Veil.gameObject.SetActive(!open);
             c.Lock.gameObject.SetActive(!open);
         }
@@ -883,7 +886,7 @@ public class HubLevelSelectUI : MonoBehaviour
         detailTitle.color = open ? panelInk : panelInkDim;
 
         detailText.text = open ? e.description : lockedDescription;
-        ApplyPreview(e, open, detailPreviewFill, detailPreview);
+        ApplyPreview(e, open, detailPreviewFill, detailPreview, detailPreviewArea, true);
 
         // ---- Haken --------------------------------------------------------
         if (showEndlessToggle)
@@ -906,19 +909,43 @@ public class HubLevelSelectUI : MonoBehaviour
         playText.text = (open && !linked) ? comingSoonLabel : playLabel;
     }
 
-    void ApplyPreview(LevelEntry e, bool open, Image window, Image image)
+    void ApplyPreview(LevelEntry e, bool open, Image window, Image image, Rect box, bool wide)
     {
-        bool hasSprite = e != null && e.preview != null;
+        Sprite sprite = null;
+        if (e != null) sprite = (wide && e.previewWide != null) ? e.previewWide : e.preview;
 
-        image.gameObject.SetActive(hasSprite);
-        if (hasSprite)
+        image.gameObject.SetActive(sprite != null);
+        if (sprite != null)
         {
-            image.sprite = e.preview;
+            image.sprite = sprite;
+            FitCentered((RectTransform)image.transform, box, sprite.rect.size);
             // Gesperrt wird abgedunkelt - der Schleier darueber macht den Rest.
             image.color = open ? Color.white : new Color(0.55f, 0.55f, 0.55f, 1f);
         }
 
         window.color = previewEmpty;
+    }
+
+    /// <summary>
+    /// Setzt ein Bild mittig in einen Kasten, in ganzen Pixeln und nie vergroessert.
+    ///
+    /// Unitys <c>Image.preserveAspect</c> hilft hier nicht: es verschiebt das
+    /// verkleinerte Bild um <c>(Kastenbreite - Bildbreite) * pivot.x</c>, und
+    /// <see cref="HubUiKit.Place"/> setzt den Pivot auf links oben - der Faktor ist
+    /// also 0 und das Bild klebt am linken Rand. Im 52px breiten Kartenfenster sass
+    /// das 50px-Bild dadurch einen Pixel zu weit links, neben dem Loch im Rahmen.
+    /// </summary>
+    static void FitCentered(RectTransform rect, Rect box, Vector2 sprite)
+    {
+        if (sprite.x <= 0f || sprite.y <= 0f) { HubUiKit.Place(rect, box); return; }
+
+        // Pixelart wird nicht hochskaliert - lieber Luft ringsherum als Matsch.
+        float scale = Mathf.Min(1f, Mathf.Min(box.width / sprite.x, box.height / sprite.y));
+        float w = Mathf.Floor(sprite.x * scale);
+        float h = Mathf.Floor(sprite.y * scale);
+
+        HubUiKit.Place(rect, new Rect(box.x + Mathf.Floor((box.width  - w) * 0.5f),
+                                      box.y + Mathf.Floor((box.height - h) * 0.5f), w, h));
     }
 
     /// <summary>Hellt eine Farbe auf, ohne ihre Deckkraft anzutasten.</summary>

@@ -109,23 +109,47 @@ public class AudioController : MonoBehaviour
     public void SetMasterVolume(float value)
     {
         masterVolume = value;
-        if (!mainMixer.SetFloat("MasterVolume", ToDb(value)))
-            Debug.LogWarning("AudioMixer-Parameter 'MasterVolume' nicht gefunden.");
+        SetMixerVolume("MasterVolume", value);
     }
 
     public void SetMusicVolume(float value)
     {
         musicVolume = value;
-        if (!mainMixer.SetFloat("MusicVolume", ToDb(value)))
-            Debug.LogWarning("AudioMixer-Parameter 'MusicVolume' nicht gefunden.");
+        SetMixerVolume("MusicVolume", value);
     }
 
     public void SetEffectsVolume(float value)
     {
         effectsVolume = value;
-        if (!mainMixer.SetFloat("EffectsVolume", ToDb(value)))
-            Debug.LogWarning("AudioMixer-Parameter 'EffectsVolume' nicht gefunden.");
+        SetMixerVolume("EffectsVolume", value);
     }
+
+    /// <summary>
+    /// Schreibt einen Lautstaerkewert in den Mixer. Faellt der Mixer aus - in
+    /// manchen Szenen ist am AudioController keiner eingetragen -, bleibt der
+    /// Wert trotzdem gesetzt und gespeichert; hier darf nichts fliegen, sonst
+    /// bricht der Klick im Optionen-Fenster mitten im Listener ab und die
+    /// Leiste bewegt sich nicht mehr.
+    /// </summary>
+    private void SetMixerVolume(string parameter, float value)
+    {
+        if (mainMixer == null)
+        {
+            if (!missingMixerLogged)
+            {
+                missingMixerLogged = true;
+                Debug.LogWarning($"[Audio] Am AudioController in Szene '{gameObject.scene.name}' " +
+                                 "ist kein AudioMixer eingetragen - die Lautstaerke wird gemerkt, " +
+                                 "aber nicht hoerbar. Master.mixer im Inspector zuweisen.");
+            }
+            return;
+        }
+
+        if (!mainMixer.SetFloat(parameter, ToDb(value)))
+            Debug.LogWarning($"AudioMixer-Parameter '{parameter}' nicht gefunden.");
+    }
+
+    private bool missingMixerLogged;
 
     // keep your original methods (names preserved)
     public void PalySound(AudioSource sound, float? volume = null)

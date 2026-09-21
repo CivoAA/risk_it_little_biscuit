@@ -469,20 +469,23 @@ public class OptionsPanel : MonoBehaviour
 
     private void BuildAudioRows()
     {
-        AudioSettingsManager audio = AudioSettingsManager.Instance;
-
+        // Nicht merken, sondern bei jedem Zugriff frisch holen: der Manager
+        // liegt in der Szene nur im Hauptmenue, und ein einmal gemerktes null
+        // haette alle drei Leisten fuer immer taub gemacht.
         BarRow(Loc.Get("ui.options.audio.master", "Gesamtlautstärke"),
-               () => audio != null ? audio.currentSettings.masterVolume : GameSettings.DefaultVolume,
-               v => { if (audio != null) audio.SetMasterVolume(v); });
+               () => Audio != null ? Audio.currentSettings.masterVolume : GameSettings.DefaultVolume,
+               v => { if (Audio != null) Audio.SetMasterVolume(v); });
 
         BarRow(Loc.Get("ui.options.audio.music", "Musik"),
-               () => audio != null ? audio.currentSettings.musicVolume : GameSettings.DefaultVolume,
-               v => { if (audio != null) audio.SetMusicVolume(v); });
+               () => Audio != null ? Audio.currentSettings.musicVolume : GameSettings.DefaultVolume,
+               v => { if (Audio != null) Audio.SetMusicVolume(v); });
 
         BarRow(Loc.Get("ui.options.audio.sfx", "Geräusche"),
-               () => audio != null ? audio.currentSettings.effectsVolume : GameSettings.DefaultVolume,
-               v => { if (audio != null) audio.SetEffectsVolume(v); });
+               () => Audio != null ? Audio.currentSettings.effectsVolume : GameSettings.DefaultVolume,
+               v => { if (Audio != null) Audio.SetEffectsVolume(v); });
     }
+
+    private static AudioSettingsManager Audio => AudioSettingsManager.Instance;
 
     private void BuildDisplayRows()
     {

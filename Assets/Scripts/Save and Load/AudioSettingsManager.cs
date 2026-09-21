@@ -13,34 +13,70 @@ public class AudioSettingsData
 
 public class AudioSettingsManager : MonoBehaviour
 {
-    public static AudioSettingsManager Instance;
+    private static AudioSettingsManager instance;
+    private static bool quitting;
+
+    /// <summary>
+    /// Der Ton-Speicher. In der Szene liegt er nur im Hauptmenü (auf dem
+    /// "Audio Controller"), darum legt er sich hier selbst an, wenn keiner da
+    /// ist - sonst laufen alle Lautstärke-Aufrufe aus dem Hub, aus GameCore
+    /// oder aus einer direkt gestarteten Szene still ins Leere, und das
+    /// Optionen-Fenster reagiert auf keinen Klick.
+    /// </summary>
+    public static AudioSettingsManager Instance
+    {
+        get
+        {
+            if (instance != null) return instance;
+            if (quitting) return null;
+
+            instance = FindAnyObjectByType<AudioSettingsManager>();
+            if (instance != null) return instance;
+
+            GameObject go = new GameObject("AudioSettingsManager");
+            instance = go.AddComponent<AudioSettingsManager>();
+            return instance;
+        }
+    }
 
     public AudioSettingsData currentSettings = new AudioSettingsData();
     private string savePath;
 
     void Awake()
     {
-        if (Instance == null)
+        if (instance != null && instance != this)
         {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-
-            savePath = Application.persistentDataPath + "/audioSettings.json";
-
-            // JSON laden
-            LoadSettings();
-
-            // beim Start und bei jedem Szenenwechsel anwenden
-            SceneManager.sceneLoaded += OnSceneLoaded;
-
-            // ganz simpel: nach 2 Frames sicher in den Mixer schreiben
-            StartCoroutine(ApplySettingsDelayed());
+            // Nur die doppelte Komponente abräumen: das Objekt gehört dem
+            // AudioController, der hängt hier nur mit drauf.
+            Destroy(this);
+            return;
         }
-        else
+
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        savePath = Application.persistentDataPath + "/audioSettings.json";
+
+        // JSON laden
+        LoadSettings();
+
+        // beim Start und bei jedem Szenenwechsel anwenden
+        SceneManager.sceneLoaded += OnSceneLoaded;
+
+        // ganz simpel: nach 2 Frames sicher in den Mixer schreiben
+        StartCoroutine(ApplySettingsDelayed());
+    }
+
+    void OnDestroy()
+    {
+        if (instance == this)
         {
-            Destroy(gameObject);
+            instance = null;
+            SceneManager.sceneLoaded -= OnSceneLoaded;
         }
     }
+
+    void OnApplicationQuit() => quitting = true;
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -76,6 +112,10 @@ public class AudioSettingsManager : MonoBehaviour
 
     public void SaveSettings()
     {
+        // Wer den Manager selbst angelegt hat, kommt hier vor Awake vorbei.
+        if (string.IsNullOrEmpty(savePath))
+            savePath = Application.persistentDataPath + "/audioSettings.json";
+
         try
         {
             string json = JsonUtility.ToJson(currentSettings, true);
