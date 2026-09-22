@@ -29,6 +29,7 @@ public sealed class SkillShapeSprites : System.IDisposable
     readonly List<Object> created = new List<Object>();
     readonly Dictionary<SkillShape, Sprite> fills = new Dictionary<SkillShape, Sprite>();
     readonly Dictionary<SkillShape, Sprite> outlines = new Dictionary<SkillShape, Sprite>();
+    readonly Dictionary<SkillShape, Sprite> glosses = new Dictionary<SkillShape, Sprite>();
 
     Sprite padlock, check, line, dot;
 
@@ -71,6 +72,66 @@ public sealed class SkillShapeSprites : System.IDisposable
         s = Build("SkillOutline_" + shape, edge);
         outlines[shape] = s;
         return s;
+    }
+
+    /// <summary>
+    /// Das Glanzlicht auf derselben Form: ein zwei Pixel breiter Bogen links
+    /// oben, wie ihn eine Kugel im Licht bekommt. Darueber gelegt und weiss
+    /// eingefaerbt wird aus einer flachen Scheibe eine Kugel.
+    ///
+    /// Gerechnet wird es aus der Form selbst - zweimal nach innen geschrumpft
+    /// ergibt den aeusseren Rand des Bogens, viermal den inneren. So sitzt der
+    /// Glanz auf jeder Form dort, wo er hingehoert, auch auf Stern und Raute.
+    /// </summary>
+    public Sprite Gloss(SkillShape shape)
+    {
+        if (glosses.TryGetValue(shape, out Sprite s) && s != null) return s;
+
+        bool[,] outer = Erode(Mask(shape), 2);
+        bool[,] inner = Erode(outer, 2);
+
+        var arc = new bool[Size, Size];
+        const float c = (Size - 1) * 0.5f;
+
+        for (int y = 0; y < Size; y++)
+        {
+            for (int x = 0; x < Size; x++)
+            {
+                if (!outer[x, y] || inner[x, y]) continue;
+
+                // y zaehlt von unten: oben links liegt also zwischen 105 und 170 Grad.
+                float angle = Mathf.Atan2(y - c, x - c) * Mathf.Rad2Deg;
+                arc[x, y] = angle >= 103f && angle <= 172f;
+            }
+        }
+
+        s = Build("SkillGloss_" + shape, arc);
+        glosses[shape] = s;
+        return s;
+    }
+
+    /// <summary>Schrumpft eine Maske um <paramref name="steps"/> Pixel nach innen.</summary>
+    static bool[,] Erode(bool[,] src, int steps)
+    {
+        bool[,] cur = src;
+
+        for (int i = 0; i < steps; i++)
+        {
+            var next = new bool[Size, Size];
+
+            for (int y = 1; y < Size - 1; y++)
+            {
+                for (int x = 1; x < Size - 1; x++)
+                {
+                    next[x, y] = cur[x, y] && cur[x - 1, y] && cur[x + 1, y] &&
+                                 cur[x, y - 1] && cur[x, y + 1];
+                }
+            }
+
+            cur = next;
+        }
+
+        return cur;
     }
 
     /// <summary>Schloss auf gesperrten Knoten - wie im Konzeptbild.</summary>
@@ -228,6 +289,7 @@ public sealed class SkillShapeSprites : System.IDisposable
         created.Clear();
         fills.Clear();
         outlines.Clear();
+        glosses.Clear();
         padlock = check = line = dot = null;
     }
 }
