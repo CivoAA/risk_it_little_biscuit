@@ -110,9 +110,16 @@ public class Phase
     /// Der Kreis-Moment: Vorwarnung, dann schliesst sich ein Ring um den
     /// Spieler. <paramref name="boss"/> darf None sein - dann ist es nur der
     /// Ring ohne Miniboss.
+    ///
+    /// Die letzten drei Werte haben Vorgaben, die fuer fast jeden Ring passen.
+    /// Sie stehen trotzdem als Parameter da, damit die Wellenplan-Werkstatt
+    /// einen Plan verlustfrei zurueckschreiben kann: was sie nicht als
+    /// Parameter ausdruecken kann, wuerde sie beim Speichern verlieren.
     /// </summary>
     public Phase Encircle(float time, EnemyId boss, EnemyId ringEnemy, int ringCount,
-                          float radius, bool cage = false, string announce = "")
+                          float radius, bool cage = false, string announce = "",
+                          float pressureScale = 0.35f, float holdTime = 25f,
+                          float warnTime = 1.5f)
     {
         Beats.Add(new Beat
         {
@@ -124,8 +131,9 @@ public class Phase
             Radius = radius,
             Cage = cage,
             Pattern = Patterns.Ring,
-            PressureScale = 0.35f,   // waehrend des Kampfes tritt das Grundrauschen zurueck
-            Duration = 25f,
+            PressureScale = pressureScale,   // waehrend des Kampfes tritt das Grundrauschen zurueck
+            Duration = holdTime,
+            WarnTime = warnTime,
             Announce = announce,
         });
         return this;
@@ -144,7 +152,7 @@ public class Phase
         return this;
     }
 
-    public Phase Boss(float time, EnemyId boss, string announce = "")
+    public Phase Boss(float time, EnemyId boss, string announce = "", float pressureScale = 0.4f)
     {
         Beats.Add(new Beat
         {
@@ -152,7 +160,7 @@ public class Phase
             Kind = BeatKind.Boss,
             Enemy = boss,
             Pattern = Patterns.Scatter,
-            PressureScale = 0.4f,
+            PressureScale = pressureScale,
             Duration = 999f,
             Announce = announce,
         });

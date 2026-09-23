@@ -49,6 +49,42 @@ public static class Patterns
 
     /// <summary>Dort, wo der Spieler gleich sein wird.</summary>
     public static readonly ISpawnPattern Ambush = new AmbushPattern();
+
+    // ------------------------------------------------------------- Namen
+    //
+    // Die Wellenplan-Werkstatt muss ein Muster als Text speichern koennen und
+    // aus dem Text wieder das Muster holen. Ohne diese beiden Methoden muesste
+    // sie die Instanzen per Reflection raten - und jedes neue Muster waere
+    // dort still unsichtbar.
+
+    /// <summary>Alle Muster in fester Reihenfolge - fuer Auswahlfelder.</summary>
+    public static readonly string[] Names =
+    {
+        "Scatter", "Ring", "Arc", "Column", "Cluster", "Ambush",
+    };
+
+    public static ISpawnPattern ByName(string name)
+    {
+        switch ((name ?? "").Trim())
+        {
+            case "Ring": return Ring;
+            case "Arc": return Arc;
+            case "Column": return Column;
+            case "Cluster": return Cluster;
+            case "Ambush": return Ambush;
+            default: return Scatter;
+        }
+    }
+
+    public static string NameOf(ISpawnPattern pattern)
+    {
+        if (pattern == Ring) return "Ring";
+        if (pattern == Arc) return "Arc";
+        if (pattern == Column) return "Column";
+        if (pattern == Cluster) return "Cluster";
+        if (pattern == Ambush) return "Ambush";
+        return "Scatter";
+    }
 }
 
 // ---------------------------------------------------------------- Umsetzungen
