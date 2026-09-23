@@ -2,48 +2,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Die Gegner, die ein Wellenplan ansprechen kann. Namen statt Prefab-Felder -
-/// damit ein Plan reiner Text bleibt und nicht bei jeder Aenderung durch den
-/// Inspector muss.
-/// </summary>
-public enum EnemyId
-{
-    None = 0,
-
-    // Grundgegner
-    Marshmello,
-    EliteMarshmello,
-    EvilSlime,
-    MausMitMesser,
-    MiniMilch,
-    SaureMilch,
-    Muffin,
-    Suppe,
-    Pancake,
-    Fetti,
-
-    /// <summary>Eine der zehn Slime-Varianten, zufaellig gewaehlt.</summary>
-    Slime,
-
-    // Besonderes
-    Blocker,              // bewegt sich kaum - das ist der Kaefig, nicht der Gegner
-    MiniBossMarshmello,
-    MesserMaus1,
-    MesserMaus2,
-    KeksKoenig,
-}
-
-/// <summary>
-/// Haelt die Prefabs zu den <see cref="EnemyId"/>s und weiss, wie schwer ein
-/// Gegner wiegt.
+/// Haelt die Prefabs zu den <see cref="EnemyId"/>s.
 ///
-/// Das Gewicht ("Threat") ist die Waehrung des <see cref="SpawnDirector"/>:
-/// er haelt nicht eine Stueckzahl auf dem Feld, sondern eine Summe. Ein Fetti
-/// zaehlt so viel wie acht Marshmellos - dadurch bleibt der Druck gleich,
-/// egal aus welchen Gegnern eine Phase besteht.
+/// Was ein Gegner KANN (Leben, Schaden, Tempo, Gewicht) steht seit dem
+/// Remaster im <see cref="EnemyCatalog"/> im Code. Hier bleibt nur die eine
+/// Sache, die nicht in Code passt: welches Prefab-Asset zu welcher Id gehoert.
+/// Das ist eine Referenz auf eine Datei, und die kann nur Unity aufloesen.
 ///
-/// Die Prefab-Liste fuellt der Installer (Tools -> Spawns) aus dem alten
-/// TimeWaveManager, damit niemand 16 Felder von Hand zieht.
+/// Die Liste fuellt der Installer (Tools -> Spawns) beziehungsweise die
+/// Gegner-Werkstatt (Tools -> Gegner), damit niemand 20 Felder von Hand zieht.
 /// </summary>
 [DisallowMultipleComponent]
 public class SpawnCatalog : MonoBehaviour
@@ -55,7 +22,7 @@ public class SpawnCatalog : MonoBehaviour
         public GameObject prefab;
     }
 
-    [Tooltip("Ein Prefab je Gegnerart. Fuellt der Installer.")]
+    [Tooltip("Ein Prefab je Gegnerart. Fuellt der Installer oder die Werkstatt.")]
     [SerializeField] private List<Entry> entries = new List<Entry>();
 
     [Tooltip("Die zehn Slime-Varianten fuer EnemyId.Slime.")]
@@ -64,37 +31,16 @@ public class SpawnCatalog : MonoBehaviour
     private Dictionary<EnemyId, GameObject> lookup;
 
     /// <summary>
-    /// Wie schwer ein Gegner auf dem Feld wiegt. Grob an den Werten der
-    /// Prefabs entlang (Leben x Bedrohlichkeit), nicht exakt - das ist der
-    /// Regler, an dem sich Balancing am schnellsten anfuehlt.
+    /// Wie schwer ein Gegner auf dem Feld wiegt.
+    ///
+    /// Bleibt als Durchreiche stehen, weil der <see cref="SpawnDirector"/> und
+    /// die Wellenplaene seit jeher hierueber fragen. Die Zahl selbst steht
+    /// jetzt beim Gegner im <see cref="EnemyCatalog"/> - dort, wo auch sein
+    /// Leben steht, damit beim Balancing beides zusammen im Blick ist.
     /// </summary>
     public static float Threat(EnemyId id)
     {
-        switch (id)
-        {
-            case EnemyId.Marshmello: return 1f;
-            case EnemyId.EvilSlime: return 1.5f;
-            case EnemyId.MiniMilch: return 2f;
-            case EnemyId.Slime: return 2f;
-            case EnemyId.MausMitMesser: return 3f;
-            case EnemyId.Muffin: return 3f;
-            case EnemyId.EliteMarshmello: return 4f;
-            case EnemyId.SaureMilch: return 4f;
-            case EnemyId.Pancake: return 4f;
-            case EnemyId.Suppe: return 5f;
-            case EnemyId.Fetti: return 8f;
-            case EnemyId.MiniBossMarshmello: return 15f;
-            case EnemyId.MesserMaus1: return 40f;
-            case EnemyId.MesserMaus2: return 40f;
-            case EnemyId.KeksKoenig: return 100f;
-
-            // Der Kaefig eines Encirclements zaehlt nicht zum Druck - sonst
-            // wuerde der Director waehrend des Kampfes nichts mehr nachlegen
-            // und danach auf einen Schlag alles nachholen.
-            case EnemyId.Blocker: return 0f;
-
-            default: return 1f;
-        }
+        return EnemyCatalog.Threat(id);
     }
 
     public GameObject Prefab(EnemyId id)
@@ -127,7 +73,7 @@ public class SpawnCatalog : MonoBehaviour
     }
 
 #if UNITY_EDITOR
-    /// <summary>Nur fuer den Installer.</summary>
+    /// <summary>Nur fuer den Installer und die Werkstatt.</summary>
     public void EditorSet(EnemyId id, GameObject prefab)
     {
         if (prefab == null || id == EnemyId.None) return;
