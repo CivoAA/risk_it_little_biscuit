@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 /// <summary>
-/// Die eigentliche Arbeit hinter Tools -> Map -> Welt-Generator: fuellt die
+/// Die eigentliche Arbeit hinter Tools -> Welt -> Welt-Generator: fuellt die
 /// neun Chunks einer Welt mit zufaelligen Tiles und verteilt Props darauf.
 ///
 /// Das 3x3-Raster (<see cref="WorldManager3x3"/>) schiebt die neun Tilemaps im

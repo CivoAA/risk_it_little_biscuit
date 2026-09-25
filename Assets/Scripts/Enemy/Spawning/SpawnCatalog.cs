@@ -9,8 +9,8 @@ using UnityEngine;
 /// Sache, die nicht in Code passt: welches Prefab-Asset zu welcher Id gehoert.
 /// Das ist eine Referenz auf eine Datei, und die kann nur Unity aufloesen.
 ///
-/// Die Liste fuellt der Installer (Tools -> Spawns) beziehungsweise die
-/// Gegner-Werkstatt (Tools -> Gegner), damit niemand 20 Felder von Hand zieht.
+/// Die Liste fuellt die Gegner-Werkstatt (Tools -> Gegner), damit niemand
+/// 20 Felder von Hand zieht.
 /// </summary>
 [DisallowMultipleComponent]
 public class SpawnCatalog : MonoBehaviour
@@ -22,7 +22,7 @@ public class SpawnCatalog : MonoBehaviour
         public GameObject prefab;
     }
 
-    [Tooltip("Ein Prefab je Gegnerart. Fuellt der Installer oder die Werkstatt.")]
+    [Tooltip("Ein Prefab je Gegnerart. Fuellt die Gegner-Werkstatt.")]
     [SerializeField] private List<Entry> entries = new List<Entry>();
 
     [Tooltip("Die zehn Slime-Varianten fuer EnemyId.Slime.")]
@@ -73,7 +73,7 @@ public class SpawnCatalog : MonoBehaviour
     }
 
 #if UNITY_EDITOR
-    /// <summary>Nur fuer den Installer und die Werkstatt.</summary>
+    /// <summary>Nur fuer die Gegner-Werkstatt.</summary>
     public void EditorSet(EnemyId id, GameObject prefab)
     {
         if (prefab == null || id == EnemyId.None) return;
@@ -88,28 +88,6 @@ public class SpawnCatalog : MonoBehaviour
 
         entries.Add(new Entry { id = id, prefab = prefab });
         lookup = null;
-    }
-
-    /// <summary>Nur fuer den Installer.</summary>
-    public void EditorSetSlimes(IEnumerable<GameObject> variants)
-    {
-        slimeVariants = new List<GameObject>();
-        foreach (GameObject variant in variants)
-        {
-            if (variant != null) slimeVariants.Add(variant);
-        }
-    }
-
-    /// <summary>Nur fuer den Installer: was fehlt noch?</summary>
-    public List<EnemyId> EditorMissing()
-    {
-        var missing = new List<EnemyId>();
-        foreach (EnemyId id in System.Enum.GetValues(typeof(EnemyId)))
-        {
-            if (id == EnemyId.None) continue;
-            if (!Has(id)) missing.Add(id);
-        }
-        return missing;
     }
 #endif
 }

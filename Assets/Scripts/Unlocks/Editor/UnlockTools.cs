@@ -8,14 +8,15 @@ using UnityEditor.Callbacks;
 using UnityEngine;
 
 /// <summary>
-/// Werkzeuge rund um den Unlock-Katalog. Alles unter Tools -> Unlocks.
+/// Werkzeuge rund um den Unlock-Katalog. Menue unter Tools -> Unlocks,
+/// der Spielstand unter Tools -> Spielstand.
 /// Die Prüfung läuft ausserdem automatisch nach jedem Compile.
 /// </summary>
 public static class UnlockTools
 {
     private const string LocFolder = "Assets/Resources/Localization";
 
-    [MenuItem("Tools/Unlocks/Katalog prüfen")]
+    [MenuItem("Tools/Unlocks/Katalog prüfen", false, 203)]
     public static void Validate()
     {
         var errors = new List<string>();
@@ -157,7 +158,7 @@ public static class UnlockTools
         return keys;
     }
 
-    [MenuItem("Tools/Unlocks/Spielstand zurücksetzen")]
+    [MenuItem("Tools/Spielstand/Unlocks zurücksetzen", false, 324)]
     public static void ResetSave()
     {
         string path = Path.Combine(Application.persistentDataPath, "unlocks.json");

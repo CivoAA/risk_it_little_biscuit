@@ -8,7 +8,7 @@ using UnityEngine;
 /// </summary>
 public static class CatalogTools
 {
-    [MenuItem("Tools/Alle Kataloge prüfen", priority = -100)]
+    [MenuItem("Tools/Alle Kataloge prüfen", priority = 0)]
     public static void ValidateAll()
     {
         Debug.Log("===== Katalog-Prüfung =====");

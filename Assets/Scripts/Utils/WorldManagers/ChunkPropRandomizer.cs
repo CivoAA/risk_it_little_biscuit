@@ -10,7 +10,7 @@ using UnityEngine;
 /// Es wird nichts erzeugt oder zerstoert - die vorhandenen Kinder des
 /// Prop-Containers werden nur neu positioniert, skaliert und teilweise
 /// ausgeblendet. Die Werte setzt normalerweise der Welt-Generator
-/// (Tools -> Map -> Welt-Generator) beim Verteilen der Props.
+/// (Tools -> Welt -> Welt-Generator) beim Verteilen der Props.
 /// </summary>
 [DisallowMultipleComponent]
 public class ChunkPropRandomizer : MonoBehaviour

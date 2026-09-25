@@ -6,7 +6,7 @@ using UnityEngine.Tilemaps;
 /// <summary>
 /// Rezept fuer eine 3x3-Endloswelt: welche Tiles wie haeufig auf dem Boden
 /// landen und wie viele Props (Baeume) pro Chunk verteilt werden.
-/// Gelesen wird das Preset vom Welt-Generator (Tools -> Map -> Welt-Generator);
+/// Gelesen wird das Preset vom Welt-Generator (Tools -> Welt -> Welt-Generator);
 /// zur Laufzeit braucht nur der <see cref="ChunkPropRandomizer"/> ein paar der
 /// Prop-Werte, die der Generator direkt an die Chunks weiterreicht.
 /// </summary>

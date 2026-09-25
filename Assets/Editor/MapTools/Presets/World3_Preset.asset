@@ -14,56 +14,86 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WorldGenPreset
   seed: 12345
   backgroundTiles:
-  - tile: {fileID: 11400000, guid: 2202bf3a02b816f4186473be7a33c401, type: 2}
+  - tile: {fileID: 11400000, guid: ff69f645ab64dc14d96d1579217c4a7b, type: 2}
     weight: 1
-  - tile: {fileID: 11400000, guid: ae71112161c120b41b3041e029c5eafa, type: 2}
+  - tile: {fileID: 11400000, guid: fe5f513748ce99949ab5bc75cefa58d6, type: 2}
     weight: 1
-  - tile: {fileID: 11400000, guid: 0dbcd7fbbdf98c44baffa0c2ae4ef8e7, type: 2}
+  - tile: {fileID: 11400000, guid: 8c546b8d7adbb274093547cfabe971f8, type: 2}
+    weight: 4
+  - tile: {fileID: 11400000, guid: 935816e4a898a5c499b553cedf5e07ba, type: 2}
     weight: 1
-  - tile: {fileID: 11400000, guid: 17c373c7a64f38948a71330c9cc41931, type: 2}
+  - tile: {fileID: 11400000, guid: f8097113ac3922c46a297d84f41c679d, type: 2}
     weight: 1
-  - tile: {fileID: 11400000, guid: e0ba4cc28e607c242a7ec86121c4dfd6, type: 2}
+  - tile: {fileID: 11400000, guid: 92af663c5dbabee4da9f026a6223b5d8, type: 2}
     weight: 1
-  - tile: {fileID: 11400000, guid: d2d743ad7becb4b4ebfbe3e0911a5fff, type: 2}
+  - tile: {fileID: 11400000, guid: 1873d3254ccf31d4da47b817db49fa1e, type: 2}
     weight: 1
-  - tile: {fileID: 11400000, guid: bcc3a88b4d5073f4a894133467a152a7, type: 2}
-    weight: 12
+  - tile: {fileID: 11400000, guid: d00229af443f7814289bfd072ec2ae5b, type: 2}
+    weight: 1
+  - tile: {fileID: 11400000, guid: ab2651e1eb0810542b7bcac02e0aadb9, type: 2}
+    weight: 1
   patchGroups:
   - name: Lila
     weight: 1
     density: 0.7
     tiles:
-    - tile: {fileID: 11400000, guid: a555f788aad00c642bae9becd0e70562, type: 2}
+    - tile: {fileID: 11400000, guid: 6cb0a783ec8f29246acbc1a9e6ce44a8, type: 2}
       weight: 1
-    - tile: {fileID: 11400000, guid: d043bec3b26e39348a7f5555cda86dbe, type: 2}
+    - tile: {fileID: 11400000, guid: a934e8bae79baa3429354ba1a7cde4e8, type: 2}
+      weight: 1
+    - tile: {fileID: 11400000, guid: 86af350dc8e577e4cb0e92361542e483, type: 2}
+      weight: 1
+    - tile: {fileID: 11400000, guid: 43d5114fdeddd294e90c141381d5e47f, type: 2}
+      weight: 1
+    - tile: {fileID: 11400000, guid: 099370376e2e0104b89434df6e09f549, type: 2}
+      weight: 1
+    - tile: {fileID: 11400000, guid: 1a7daadfb426a3241b5f694c1353b21c, type: 2}
       weight: 1
   - name: Blau
     weight: 1
     density: 0.7
     tiles:
-    - tile: {fileID: 11400000, guid: 0a8e48b3cb8e07449ab828e046ab9329, type: 2}
+    - tile: {fileID: 11400000, guid: a1aa81356440d794ca4a61141e4b88d6, type: 2}
       weight: 1
-    - tile: {fileID: 11400000, guid: 04ec9f809bee9a040b11d459ad07caf6, type: 2}
+    - tile: {fileID: 11400000, guid: 0bda2c844897d324fab4dfb9ef9b7b44, type: 2}
+      weight: 1
+    - tile: {fileID: 11400000, guid: f6269161ee4a21f42a4c7e92f4396235, type: 2}
+      weight: 1
+    - tile: {fileID: 11400000, guid: 467b6bb29c1092a4fb49f210a6f3fb0b, type: 2}
+      weight: 1
+    - tile: {fileID: 11400000, guid: 8be0c92f56c9eb447871425428346e4a, type: 2}
+      weight: 1
+    - tile: {fileID: 11400000, guid: 0393357ba7c75db49a0792a9672106ed, type: 2}
       weight: 1
   - name: Rot
     weight: 1
     density: 0.7
     tiles:
-    - tile: {fileID: 11400000, guid: 18d59fdac7f4640488506fdc0fc30d3d, type: 2}
+    - tile: {fileID: 11400000, guid: f96e0913ad01af84e87ab2c8fb0ee8fa, type: 2}
       weight: 1
-    - tile: {fileID: 11400000, guid: 34ff5d3d0528de146bf80bde8bb6af7a, type: 2}
+    - tile: {fileID: 11400000, guid: 0373c1f7cf0c1344abcd96efa3629a87, type: 2}
+      weight: 1
+    - tile: {fileID: 11400000, guid: b086720b6e574e84abdfd2edc7dd1e63, type: 2}
+      weight: 1
+    - tile: {fileID: 11400000, guid: 95f9ea50ef8287c4f868c2fe6b987b58, type: 2}
+      weight: 1
+    - tile: {fileID: 11400000, guid: 6a6ef6e0aba1c194f97016b35b501589, type: 2}
+      weight: 1
+    - tile: {fileID: 11400000, guid: b2fcb77e93b35104cb323203f157faa5, type: 2}
       weight: 1
   patchSize: 24
   patchSpacing: 0
   props:
   - prefab: {fileID: 4522651892511990369, guid: 034e41797e46a734ca1463a2166cb992, type: 3}
     weight: 1
-  propsPerChunk: 32
-  propMinDistance: 3.4
-  propClumping: 0.4
+  - prefab: {fileID: 4522651892511990369, guid: 7668a4fa5d63ed6469f4fad744023b26, type: 3}
+    weight: 1
+  propsPerChunk: 42
+  propMinDistance: 6.7
+  propClumping: 0.445
   propClumpSize: 14
   propEdgeMargin: 1
-  startClearRadius: 8
+  startClearRadius: 10.7
   propScaleRange: {x: 1, y: 1}
   propRandomFlipX: 1
   reshufflePropsOnMove: 1

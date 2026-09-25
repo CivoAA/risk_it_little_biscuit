@@ -36,9 +36,6 @@ public static class RunDifficulty
     /// <summary>Mehr Schaden - vorsichtiger als Leben, sonst wird es unfair statt schwer.</summary>
     public static float DamageFactor => 1f + (chaos - 1f) * 0.5f;
 
-    /// <summary>Wie oft aus einem normalen Gegner ein Elite-Gegner wird (0..1).</summary>
-    public static float EliteChance => Mathf.Clamp01((chaos - 1f) * 0.15f);
-
     /// <summary>Erfahrung und Waehrung. Muss ueber 1 bleiben, sonst lohnt Chaos nicht.</summary>
     public static float RewardFactor => Mathf.Pow(chaos, 1.2f);
 

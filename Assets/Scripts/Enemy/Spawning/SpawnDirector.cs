@@ -34,7 +34,7 @@ public class SpawnDirector : MonoBehaviour
     public static SpawnDirector Active { get; private set; }
 
     [Header("Bausteine")]
-    [Tooltip("Prefabs je Gegnerart. Fuellt der Installer aus dem alten TimeWaveManager.")]
+    [Tooltip("Prefabs je Gegnerart. Fuellt die Gegner-Werkstatt.")]
     [SerializeField] private SpawnCatalog catalog;
 
     [Tooltip("Optional: Textfeld fuer Phase und Ansagen (das alte Wave-Feld).")]

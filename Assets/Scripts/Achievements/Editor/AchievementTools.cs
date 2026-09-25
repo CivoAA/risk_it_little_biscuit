@@ -10,7 +10,8 @@ using UnityEditor.Callbacks;
 using UnityEngine;
 
 /// <summary>
-/// Werkzeuge rund um den Achievement-Katalog. Alles unter Tools -> Achievements.
+/// Werkzeuge rund um den Achievement-Katalog. Menue unter Tools -> Erfolge,
+/// der Spielstand unter Tools -> Spielstand.
 ///
 ///   Katalog prüfen        - findet doppelte Ids, fehlende Grafiken, fehlende
 ///                           Übersetzungen und Achievements, die im Code nie
@@ -30,7 +31,7 @@ public static class AchievementTools
     //  Prüfung
     // ==================================================================
 
-    [MenuItem("Tools/Achievements/Katalog prüfen")]
+    [MenuItem("Tools/Erfolge/Katalog prüfen", false, 201)]
     public static void Validate()
     {
         List<string> errors = new List<string>();
@@ -186,7 +187,7 @@ public static class AchievementTools
     //  Steamworks
     // ==================================================================
 
-    [MenuItem("Tools/Achievements/Steamworks-Liste ausgeben")]
+    [MenuItem("Tools/Erfolge/Steamworks-Liste ausgeben", false, 212)]
     public static void PrintSteamList()
     {
         var sb = new StringBuilder();
@@ -217,7 +218,7 @@ public static class AchievementTools
     //  Übersetzung
     // ==================================================================
 
-    [MenuItem("Tools/Achievements/Sprachdatei-Vorlage erzeugen")]
+    [MenuItem("Tools/Erfolge/Sprachdatei-Vorlage erzeugen", false, 213)]
     public static void ExportLocTemplate()
     {
         var sb = new StringBuilder();
@@ -251,10 +252,25 @@ public static class AchievementTools
     }
 
     // ==================================================================
+    //  Play Mode
+    // ==================================================================
+
+    [MenuItem("Tools/Erfolge/Buch öffnen (nur im Play Mode)", false, 224)]
+    private static void OpenBook()
+    {
+        if (!Application.isPlaying)
+        {
+            Debug.LogWarning("[Buch] Geht nur im Play Mode - das Fenster baut sich zur Laufzeit auf.");
+            return;
+        }
+        AchievementsBookPanel.Toggle();
+    }
+
+    // ==================================================================
     //  Fortschritt
     // ==================================================================
 
-    [MenuItem("Tools/Achievements/Spielstand anzeigen")]
+    [MenuItem("Tools/Spielstand/Erfolge anzeigen", false, 311)]
     public static void ShowSave()
     {
         string path = Path.Combine(Application.persistentDataPath, "achievements.json");
@@ -269,7 +285,7 @@ public static class AchievementTools
         EditorUtility.RevealInFinder(path);
     }
 
-    [MenuItem("Tools/Achievements/Spielstand zurücksetzen")]
+    [MenuItem("Tools/Spielstand/Erfolge zurücksetzen", false, 321)]
     public static void ResetSave()
     {
         string path = Path.Combine(Application.persistentDataPath, "achievements.json");

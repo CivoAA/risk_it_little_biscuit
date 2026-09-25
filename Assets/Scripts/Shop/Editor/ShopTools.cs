@@ -9,7 +9,8 @@ using UnityEditor.Callbacks;
 using UnityEngine;
 
 /// <summary>
-/// Werkzeuge rund um den Shop-Katalog. Alles unter Tools -> Shop.
+/// Werkzeuge rund um den Shop-Katalog. Menue unter Tools -> Shop,
+/// der Spielstand unter Tools -> Spielstand.
 ///
 ///   Katalog prüfen    - doppelte Ids, krumme Preis-/Werte-Listen, fehlende
 ///                       Grafiken, fehlende Übersetzungen, Einträge ohne Wirkung.
@@ -27,7 +28,7 @@ public static class ShopTools
     //  Prüfung
     // ==================================================================
 
-    [MenuItem("Tools/Shop/Katalog prüfen")]
+    [MenuItem("Tools/Shop/Katalog prüfen", false, 202)]
     public static void Validate()
     {
         var errors = new List<string>();
@@ -193,7 +194,7 @@ public static class ShopTools
     //  Übersicht
     // ==================================================================
 
-    [MenuItem("Tools/Shop/Übersicht ausgeben")]
+    [MenuItem("Tools/Shop/Übersicht ausgeben", false, 203)]
     public static void PrintOverview()
     {
         var sb = new StringBuilder();
@@ -214,7 +215,7 @@ public static class ShopTools
         EditorUtility.RevealInFinder(outPath);
     }
 
-    [MenuItem("Tools/Shop/Fehlende Grafiken auflisten")]
+    [MenuItem("Tools/Shop/Fehlende Grafiken auflisten", false, 204)]
     public static void ListMissingIcons()
     {
         var missing = new List<string>();
@@ -238,7 +239,7 @@ public static class ShopTools
     //  Spielstand
     // ==================================================================
 
-    [MenuItem("Tools/Shop/Spielstand anzeigen")]
+    [MenuItem("Tools/Spielstand/Shop anzeigen", false, 312)]
     public static void ShowSave()
     {
         string path = Path.Combine(Application.persistentDataPath, "save.json");
@@ -253,7 +254,7 @@ public static class ShopTools
         EditorUtility.RevealInFinder(path);
     }
 
-    [MenuItem("Tools/Shop/Spielstand zurücksetzen")]
+    [MenuItem("Tools/Spielstand/Shop zurücksetzen", false, 322)]
     public static void ResetSave()
     {
         string path = Path.Combine(Application.persistentDataPath, "save.json");

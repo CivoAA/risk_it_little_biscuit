@@ -44,7 +44,7 @@ Assets/Scripts/Workbench/
   LoadoutStore.cs                 loadout.json, ein Verteiler je Charakter
   WorkbenchTrigger.cs             [E] an der Werkbank
   UI/WorkbenchPanel.cs            das Fenster, baut sich per Code auf
-  Editor/WorkbenchTools.cs        Menü: Objekt setzen, Katalog prüfen
+  Editor/WorkbenchTools.cs        Menü: Katalog und Icons prüfen
 
 Assets/Tests/EditMode/
   WorkbenchTests.cs               Katalog gegen Prefab, Verteiler-Regeln
@@ -572,8 +572,6 @@ also die Felder im Inspector nehmen, nicht die Scale.
 
 `showOutline` ist aus: ohne SpriteRenderer gibt es nichts zu umranden.
 
-Neu setzen: `Tools ▸ Werkbank ▸ Interaktionszone in Szene setzen`.
-
 Im Fenster:
 
 | Taste | Wirkung |
@@ -594,13 +592,11 @@ Im Fenster:
 
 | Menü | Tut |
 |---|---|
-| `Tools ▸ Werkbank ▸ Interaktionszone in Szene setzen` | Zonen-Objekt anlegen |
-| `Tools ▸ Werkbank ▸ Zonen-Prefab erzeugen` | dasselbe als Prefab |
 | `Tools ▸ Werkbank ▸ Fenster öffnen` | im Play Mode, ohne hinzulaufen |
 | `Tools ▸ Werkbank ▸ Katalog gegen Player-Prefab prüfen` | Abweichungen samt fehlender Zeilen |
 | `Tools ▸ Werkbank ▸ Icons prüfen` | fehlende `<id>_14` / `<id>_10` |
-| `Tools ▸ Werkbank ▸ Verteiler zurücksetzen` | leert `loadout.json` — die Verteiler **aller** Charaktere |
-| `Tools ▸ Werkbank ▸ Spielstand im Explorer zeigen` | zeigt `loadout.json` |
+| `Tools ▸ Spielstand ▸ Werkbank-Verteiler zurücksetzen` | leert `loadout.json` — die Verteiler **aller** Charaktere |
+| `Tools ▸ Spielstand ▸ Werkbank-Datei im Explorer zeigen` | zeigt `loadout.json` |
 
 ---
 

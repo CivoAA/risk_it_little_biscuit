@@ -48,13 +48,4 @@ public class MapDefinition : MonoBehaviour
         if (Active == this) Active = null;
         MapSceneSystem.ClearRunMapScene(gameObject.scene.name);
     }
-
-#if UNITY_EDITOR
-    /// <summary>Nur fuer den MapSceneSplitter - fuellt die Felder beim Aufteilen.</summary>
-    public void EditorSetup(string name, int mapId)
-    {
-        mapName = name;
-        legacyMapId = mapId;
-    }
-#endif
 }

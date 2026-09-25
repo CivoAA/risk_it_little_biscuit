@@ -12,7 +12,7 @@ using UnityEngine.SceneManagement;
 ///
 /// Die alte Game.unity, in der alle Welten uebereinander lagen und ein
 /// WorldSelector die richtige freischaltete, wird nicht mehr angesteuert. Sie
-/// liegt nur noch als Vorlage fuer den <c>MapSceneSplitter</c> herum.
+/// liegt nur noch als Vorlage fuer die Test-Szene herum.
 /// </summary>
 public static class MapSceneSystem
 {
@@ -60,7 +60,7 @@ public static class MapSceneSystem
         if (missingWarned.Add(mapScene))
         {
             Debug.LogWarning($"[MapSceneSystem] Map-Szene \"{mapScene}\" ist nicht in den Build Settings - " +
-                             $"es laeuft weiter ueber \"{fallbackScene}\". Tools -> Maps -> Game-Szene aufteilen ausfuehren.");
+                             $"es laeuft weiter ueber \"{fallbackScene}\". Szene in die Build Settings aufnehmen.");
         }
 
         return fallbackScene;
