@@ -7,7 +7,7 @@ using UnityEngine;
 /// Phase laeuft der Grunddruck von <c>Pressure(von, bis)</c> hoch, und an den
 /// Beats passiert etwas Besonderes. "Druck" ist keine Stueckzahl, sondern die
 /// Summe der Gewichte aus <see cref="EnemyCatalog.Threat"/>: Druck 60 sind 60
-/// Marshmellos, 15 Elite-Marshmellos oder 7 Fettis. Der
+/// Marshmellos, gut 20 Elite-Marshmellos oder 8 Fettis. Der
 /// <see cref="SpawnDirector"/> fuellt auf diesen Wert auf und haelt ihn.
 ///
 /// Warum nicht mehr wie frueher "spawne 150 Stueck alle 0,7s": weil jede
@@ -30,28 +30,25 @@ public static class WavePlans
     /// Holt den Plan zur Karte. Unbekannt = der Plan von World0.
     ///
     /// Gespielt werden zurzeit World0 (Kueche, Karte 1) und World3 (Wald,
-    /// Karte 2). Die Plaene fuer World1 und World2 bleiben liegen, bis
-    /// entschieden ist, ob die Welten wirklich verschwinden.
+    /// Karte 2). World1 und World2 sind rausgeflogen.
     /// </summary>
     public static RunPlan For(string planId)
     {
         switch ((planId ?? "").Trim().ToLowerInvariant())
         {
-            case "world1": return World1();
-            case "world2": return World2();
             case "world3": return World3();
             default: return World0();
         }
     }
 
     /// <summary>Alle Plaene, die es gibt - fuer die Werkstatt und den Vergleich.</summary>
-    public static readonly string[] AllIds = { "World0", "World1", "World2", "World3" };
+    public static readonly string[] AllIds = { "World0", "World3" };
 
     // ================================================================
     // WERKSTATT-ANFANG - alles hier drin schreibt das Tool neu.
     // ================================================================
 
-    // ------------------------------------------------------------- World 0
+    // ------------------------------------------------------------- World0
 
     /// <summary>
     /// Kueche - die Einstiegskarte (Karte 1 in der Levelauswahl). Dicht am
@@ -114,129 +111,7 @@ public static class WavePlans
         return plan;
     }
 
-    // ------------------------------------------------------------- World 1
-
-    /// <summary>
-    /// Nachtwald - offenes 3x3-Gelaende. Spielt mit Flanken: Kolonnen und
-    /// Boegen in Laufrichtung statt gleichmaessigem Regen.
-    /// </summary>
-    public static RunPlan World1()
-    {
-        var plan = new RunPlan("World1");
-
-        plan.Phase("Daemmerung", 300f)
-            .Pool(EnemyId.Marshmello, 55f)
-            .Pool(EnemyId.EvilSlime, 45f)
-            .Pressure(15f, 65f)
-            .Base(Patterns.Arc)
-            .Burst(40f, EnemyId.Marshmello, 22f, Patterns.Column, 0f)
-            .Burst(85f, EnemyId.MausMitMesser, 20f, Patterns.Ambush, 0f)
-            .Calm(130f, 8f, 0.15f)
-            .Encircle(160f, EnemyId.MiniBossMarshmello, EnemyId.EvilSlime, 20, 13f, false, "RING!", 0.35f, 25f, 1.5f)
-            .Burst(230f, EnemyId.EliteMarshmello, 35f, Patterns.Column, 0f);
-
-        plan.Phase("Dickicht", 300f)
-            .Pool(EnemyId.EliteMarshmello, 50f)
-            .Pool(EnemyId.MausMitMesser, 30f)
-            .Pool(EnemyId.MiniMilch, 20f)
-            .Pressure(70f, 145f)
-            .Base(Patterns.Column)
-            .Burst(45f, EnemyId.SaureMilch, 35f, Patterns.Arc, 0f)
-            .Encircle(110f, EnemyId.MesserMaus1, EnemyId.MausMitMesser, 24, 14f, true, "MESSERMAUS!", 0.35f, 25f, 1.5f)
-            .Calm(175f, 10f, 0.15f)
-            .Burst(205f, EnemyId.Muffin, 40f, Patterns.Cluster, 0f)
-            .Burst(260f, EnemyId.EliteMarshmello, 50f, Patterns.Ambush, 0f);
-
-        plan.Phase("Sturm", 290f)
-            .Pool(EnemyId.Pancake, 40f)
-            .Pool(EnemyId.Suppe, 30f)
-            .Pool(EnemyId.Muffin, 30f)
-            .Pressure(145f, 235f)
-            .Base(Patterns.Scatter)
-            .Burst(45f, EnemyId.Fetti, 45f, Patterns.Column, 0f)
-            .Calm(105f, 8f, 0.15f)
-            .Encircle(140f, EnemyId.MesserMaus2, EnemyId.Pancake, 26, 15f, true, "MESSERRATTE!", 0.35f, 25f, 1.5f)
-            .Burst(215f, EnemyId.Fetti, 65f, Patterns.Arc, 0f);
-
-        plan.Phase("Keks-Koenig", 600f)
-            .Pool(EnemyId.Slime, 100f)
-            .Pressure(90f, 120f)
-            .Base(Patterns.Scatter)
-            .Boss(2f, EnemyId.KeksKoenig, "KEKS-KOENIG", 0.4f);
-
-        plan.EndlessPhase("Endlos")
-            .Pool(EnemyId.Slime, 70f)
-            .Pool(EnemyId.Fetti, 15f)
-            .Pool(EnemyId.Suppe, 15f)
-            .Pressure(140f, 140f)
-            .Base(Patterns.Scatter)
-            .Encircle(60f, EnemyId.None, EnemyId.Slime, 26, 14f, false, "RING!", 0.35f, 25f, 1.5f);
-
-        return plan;
-    }
-
-    // ------------------------------------------------------------- World 2
-
-    /// <summary>
-    /// Dorf - enger gedacht. Hier kommt alles in Rudeln: weniger Dauerregen,
-    /// dafuer Blocks, die man umlaufen muss.
-    /// </summary>
-    public static RunPlan World2()
-    {
-        var plan = new RunPlan("World2");
-
-        plan.Phase("Gassen", 300f)
-            .Pool(EnemyId.Marshmello, 50f)
-            .Pool(EnemyId.MiniMilch, 50f)
-            .Pressure(14f, 60f)
-            .Base(Patterns.Cluster)
-            .Burst(50f, EnemyId.EvilSlime, 20f, Patterns.Ring, 12f)
-            .Calm(100f, 8f, 0.15f)
-            .Encircle(135f, EnemyId.MiniBossMarshmello, EnemyId.MiniMilch, 20, 12f, false, "RING!", 0.35f, 25f, 1.5f)
-            .Burst(200f, EnemyId.MausMitMesser, 28f, Patterns.Ambush, 0f)
-            .Burst(255f, EnemyId.Marshmello, 35f, Patterns.Cluster, 0f);
-
-        plan.Phase("Marktplatz", 300f)
-            .Pool(EnemyId.SaureMilch, 40f)
-            .Pool(EnemyId.Muffin, 35f)
-            .Pool(EnemyId.EliteMarshmello, 25f)
-            .Pressure(65f, 140f)
-            .Base(Patterns.Cluster)
-            .Encircle(60f, EnemyId.MesserMaus1, EnemyId.SaureMilch, 22, 13f, true, "MESSERMAUS!", 0.35f, 25f, 1.5f)
-            .Calm(120f, 12f, 0.15f)
-            .Burst(155f, EnemyId.Pancake, 40f, Patterns.Column, 0f)
-            .Encircle(215f, EnemyId.MiniBossMarshmello, EnemyId.Muffin, 24, 14f, false, "RING!", 0.35f, 25f, 1.5f)
-            .Burst(270f, EnemyId.Suppe, 45f, Patterns.Ambush, 0f);
-
-        plan.Phase("Backstube", 290f)
-            .Pool(EnemyId.Suppe, 40f)
-            .Pool(EnemyId.Fetti, 25f)
-            .Pool(EnemyId.Pancake, 35f)
-            .Pressure(140f, 215f)
-            .Base(Patterns.Cluster)
-            .Burst(55f, EnemyId.Fetti, 50f, Patterns.Ring, 13f)
-            .Calm(115f, 8f, 0.15f)
-            .Encircle(150f, EnemyId.MesserMaus2, EnemyId.Suppe, 26, 15f, true, "MESSERRATTE!", 0.35f, 25f, 1.5f)
-            .Burst(230f, EnemyId.Fetti, 70f, Patterns.Cluster, 0f);
-
-        plan.Phase("Keks-Koenig", 600f)
-            .Pool(EnemyId.Slime, 100f)
-            .Pressure(90f, 120f)
-            .Base(Patterns.Scatter)
-            .Boss(2f, EnemyId.KeksKoenig, "KEKS-KOENIG", 0.4f);
-
-        plan.EndlessPhase("Endlos")
-            .Pool(EnemyId.Slime, 70f)
-            .Pool(EnemyId.Fetti, 15f)
-            .Pool(EnemyId.Suppe, 15f)
-            .Pressure(140f, 140f)
-            .Base(Patterns.Scatter)
-            .Encircle(60f, EnemyId.None, EnemyId.Slime, 26, 14f, false, "RING!", 0.35f, 25f, 1.5f);
-
-        return plan;
-    }
-
-    // ------------------------------------------------------------- World 3
+    // ------------------------------------------------------------- World3
 
     /// <summary>
     /// Wald - Karte 2 in der Levelauswahl. Eigener Gegnersatz: hier laeuft
@@ -265,34 +140,27 @@ public static class WavePlans
             .Burst(40f, EnemyId.Fluegeldolch, 20f, Patterns.Arc, 0f)
             .Burst(85f, EnemyId.Fliegenpilz, 24f, Patterns.Column, 0f)
             .Calm(120f, 8f, 0.15f)
-            .Encircle(150f, EnemyId.Pilzkoenig, EnemyId.Fliegenpilz, 20, 12.5f, false, "PILZKOENIG!", 0.35f, 25f, 1.5f)
             .Burst(215f, EnemyId.Fluegeldolch, 28f, Patterns.Ambush, 0f)
             .Burst(265f, EnemyId.Fliegenpilz, 32f, Patterns.Cluster, 0f);
 
         plan.Phase("Dickicht", 300f)
             .Pool(EnemyId.Eichel, 40f)
-            .Pool(EnemyId.Kirschslime, 30f)
             .Pool(EnemyId.WeisseMessermaus, 30f)
             .Pressure(70f, 150f)
             .Base(Patterns.Column)
             .Burst(45f, EnemyId.WeisseMessermaus, 30f, Patterns.Cluster, 0f)
-            .Burst(95f, EnemyId.Sturmeichel, 32f, Patterns.Arc, 0f)
+            .Burst(95f, EnemyId.Marshmello, 32f, Patterns.Arc, 0f)
             .Calm(140f, 10f, 0.15f)
-            .Encircle(175f, EnemyId.Rattenkoenigin, EnemyId.WeisseMessermaus, 24, 14f, true, "RATTENKOENIGIN!", 0.35f, 25f, 1.5f)
             .Burst(240f, EnemyId.Kirschslime, 40f, Patterns.Ring, 13f)
-            .Burst(280f, EnemyId.Dolchschwarm, 35f, Patterns.Ambush, 0f);
+            .Burst(280f, EnemyId.Marshmello, 35f, Patterns.Ambush, 0f);
 
         plan.Phase("Sturm", 290f)
             .Pool(EnemyId.Milchpanzer, 35f)
             .Pool(EnemyId.Kirschslime, 30f)
-            .Pool(EnemyId.Sturmeichel, 20f)
-            .Pool(EnemyId.Dolchschwarm, 15f)
             .Pressure(165f, 290f)
             .Base(Patterns.Scatter)
             .Burst(40f, EnemyId.Milchpanzer, 55f, Patterns.Arc, 0f)
             .Calm(100f, 8f, 0.15f)
-            .Encircle(135f, EnemyId.Milchkoloss, EnemyId.Milchpanzer, 24, 15f, true, "MILCHKOLOSS!", 0.35f, 25f, 1.5f)
-            .Burst(200f, EnemyId.Dolchschwarm, 50f, Patterns.Column, 0f)
             .Burst(250f, EnemyId.Milchpanzer, 70f, Patterns.Cluster, 0f);
 
         plan.Phase("Keks-Koenig", 600f)
@@ -304,14 +172,12 @@ public static class WavePlans
         plan.EndlessPhase("Endlos")
             .Pool(EnemyId.Kirschslime, 60f)
             .Pool(EnemyId.Milchpanzer, 25f)
-            .Pool(EnemyId.Sturmeichel, 15f)
             .Pressure(175f, 175f)
             .Base(Patterns.Scatter)
             .Encircle(60f, EnemyId.None, EnemyId.Kirschslime, 26, 14f, false, "RING!", 0.35f, 25f, 1.5f);
 
         return plan;
     }
-
     // ================================================================
     // WERKSTATT-ENDE
     // ================================================================

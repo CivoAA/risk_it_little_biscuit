@@ -34,7 +34,7 @@ public static class TestSceneBuilder
         "Managers/TileMapGenerator1", // erzeugt die Map
     };
 
-    [MenuItem("Tools/Test Scene/Test-Szene neu bauen", false, 0)]
+    [MenuItem("Tools/Szenen/Test-Szene neu bauen", false, 100)]
     public static void BuildMenu()
     {
         if (System.IO.File.Exists(TargetScenePath))

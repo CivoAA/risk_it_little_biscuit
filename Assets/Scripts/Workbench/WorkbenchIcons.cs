@@ -19,7 +19,7 @@ using UnityEngine;
 /// Fehlt eine Datei, kommt das Symbol am Player-Prefab als Rueckfallebene -
 /// das ist dann zwar 64x64 und wird von Unity heruntergerechnet, aber es
 /// steht etwas da. Welche Dateien fehlen, listet
-/// Tools > Werkbank > Icons pruefen.
+/// Tools > Werkbank > Icons prüfen.
 /// </summary>
 public static class WorkbenchIcons
 {

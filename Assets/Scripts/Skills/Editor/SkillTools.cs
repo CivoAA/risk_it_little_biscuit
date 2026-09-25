@@ -7,7 +7,8 @@ using UnityEditor.Callbacks;
 using UnityEngine;
 
 /// <summary>
-/// Werkzeuge rund um die Skilltrees. Alles unter Tools -> Skilltree.
+/// Werkzeuge rund um die Skilltrees. Menue unter Tools -> Skilltree,
+/// der Spielstand unter Tools -> Spielstand.
 /// Die Pruefung laeuft ausserdem automatisch nach jedem Compile.
 ///
 /// Gebaut werden die Baeume im Fenster (Tools -> Skilltree -> Editor) oder als
@@ -18,7 +19,7 @@ public static class SkillTools
 {
     private const string IconFolder = "Assets/Resources/Skills";
 
-    [MenuItem("Tools/Skilltree/Baeume pruefen")]
+    [MenuItem("Tools/Skilltree/Bäume prüfen", false, 201)]
     public static void Validate()
     {
         var errors = new List<string>();
@@ -225,7 +226,7 @@ public static class SkillTools
         }
     }
 
-    [MenuItem("Tools/Skilltree/Uebersicht ausgeben")]
+    [MenuItem("Tools/Skilltree/Übersicht ausgeben", false, 202)]
     public static void PrintOverview()
     {
         SkillTrees.Reload();
@@ -259,7 +260,7 @@ public static class SkillTools
         Debug.Log("[Skills]\n" + sb);
     }
 
-    [MenuItem("Tools/Skilltree/Spielstand zuruecksetzen")]
+    [MenuItem("Tools/Spielstand/Skilltree zurücksetzen", false, 323)]
     public static void ResetSave()
     {
         string path = Path.Combine(Application.persistentDataPath, "skills.json");

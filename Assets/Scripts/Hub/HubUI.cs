@@ -38,7 +38,16 @@ public class HubUI : MonoBehaviour
     public static void PushModal() => openModals++;
 
     /// <summary>Ein eigenes Fenster hat zugemacht.</summary>
-    public static void PopModal() => openModals = Mathf.Max(0, openModals - 1);
+    public static void PopModal()
+    {
+        openModals = Mathf.Max(0, openModals - 1);
+        lastModalClosedFrame = Time.frameCount;
+    }
+
+    // Fenster schliessen sich selbst mit Escape. Laeuft deren Update vor
+    // unserem, ist der Zaehler schon wieder 0, wenn wir denselben Tastendruck
+    // sehen - ohne diese Sperre ginge sofort das Pausenmenue auf.
+    static int lastModalClosedFrame = -1;
 
     [Header("Font")]
     [Tooltip("PixelArtFont. Leer = TMP-Standardfont.")]
@@ -370,7 +379,8 @@ public class HubUI : MonoBehaviour
         // schliessen sich mit Escape selbst) oder die Textbox laeuft - und
         // solange das Menue steht, zaehlt es als Modal und sperrt sich hier
         // selbst aus.
-        if (!InputBlocked && Input.GetKeyDown(KeyCode.Escape))
+        if (!InputBlocked && Time.frameCount != lastModalClosedFrame
+            && Input.GetKeyDown(KeyCode.Escape))
             PauseMenuPanel.Open(PauseMenuPanel.PauseMode.Hub);
 
         if (!DialogueOpen) return;

@@ -46,7 +46,6 @@ Assets/Art/World-Objects/
 Assets/Scripts/Achievements/
   UI/AchievementsBookPanel.cs     das Fenster, baut sich per Code auf
   AchievementsBookTrigger.cs      [E] an der Kapsel
-  Editor/AchievementsBookSceneTools.cs   Menü zum Setzen des Objekts
 ```
 
 > Die Runtime-Sprites liegen unter **Resources**, weil sich das Fenster wie
@@ -696,13 +695,7 @@ bei `(55.5, 13.4)`, in der Reihe mit Skilltree, Levelauswahl und Charakterwahl,
 in der Lücke zwischen Bücherhaufen und Shop-Teleport. Play drücken, hinlaufen,
 **[E]**.
 
-Für andere Szenen (World Map, Testszene):
-
-> **Tools ▸ Achievements ▸ Buch-Objekt in Szene setzen**
-
-- **Tools ▸ Achievements ▸ Buch-Prefab erzeugen** legt dasselbe als Prefab unter
-  `Assets/Prefabs/MapObjects/KapselErfolgsbuch.prefab` ab.
-- **Tools ▸ Achievements ▸ Buch oeffnen (nur im Play Mode)** macht das Fenster
+- **Tools ▸ Erfolge ▸ Buch öffnen (nur im Play Mode)** macht das Fenster
   ohne Objekt auf.
 - Aus Code: `AchievementsBookPanel.Toggle()` bzw. `Open(0)` / `Open(1)`.
 

@@ -94,13 +94,13 @@ public sealed class EvoDef
 /// activeWeapon-Liste, aus der sich die Werkbank bedienen koennte.
 ///
 /// Damit die Abschrift nicht auseinanderlaeuft, gibt es
-/// <c>Tools > Werkbank > Katalog gegen Player-Prefab pruefen</c>. Das Menue
+/// <c>Tools > Werkbank > Katalog gegen Player-Prefab prüfen</c>. Das Menue
 /// liest das Prefab und meldet jede Abweichung. Nach jeder neuen Waffe: einmal
 /// laufen lassen und die gemeldete Zeile hier eintragen.
 ///
 /// Eine Waffe hinzufuegen:
 ///   1. Unten eine Zeile schreiben (Id exakt wie weaponID im Prefab).
-///   2. Icons erzeugen lassen: Tools > Werkbank > Icons pruefen zeigt, welche
+///   2. Icons erzeugen lassen: Tools > Werkbank > Icons prüfen zeigt, welche
 ///      <id>_14.png / <id>_10.png in Assets/Resources/Workbench/ fehlen.
 ///   3. Gehoert sie zu einer Evo, das Rezept unten ergaenzen.
 /// </summary>

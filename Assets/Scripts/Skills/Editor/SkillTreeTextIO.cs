@@ -59,7 +59,7 @@ public static class SkillTreeTextIO
     //  Menue
     // ==================================================================
 
-    [MenuItem("Tools/Skilltree/Baum aus Textdatei bauen...")]
+    [MenuItem("Tools/Skilltree/Baum aus Textdatei bauen...", false, 213)]
     public static void ImportMenu()
     {
         string path = EditorUtility.OpenFilePanel("Skilltree-Text waehlen", Application.dataPath, "txt");
@@ -74,7 +74,7 @@ public static class SkillTreeTextIO
         }
     }
 
-    [MenuItem("Tools/Skilltree/Gewaehlten Baum als Text speichern...")]
+    [MenuItem("Tools/Skilltree/Gewählten Baum als Text speichern...", false, 214)]
     public static void ExportMenu()
     {
         var asset = Selection.activeObject as SkillTreeAsset;
@@ -94,7 +94,7 @@ public static class SkillTreeTextIO
         Debug.Log($"[Skills] '{asset.treeId}' geschrieben nach {path}");
     }
 
-    [MenuItem("Tools/Skilltree/Ordner im Projekt zeigen")]
+    [MenuItem("Tools/Skilltree/Ordner im Projekt zeigen", false, 215)]
     public static void PingFolder()
     {
         Object folder = AssetDatabase.LoadAssetAtPath<Object>(AssetFolder);

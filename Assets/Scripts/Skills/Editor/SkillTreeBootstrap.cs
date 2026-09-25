@@ -76,7 +76,7 @@ public static class SkillTreeBootstrap
         SkillTrees.Reload();
     }
 
-    [MenuItem("Tools/Skilltree/Beispielbaum (Charakter 0) neu anlegen")]
+    [MenuItem("Tools/Skilltree/Beispielbaum (Charakter 0) neu anlegen", false, 226)]
     static void Rebuild()
     {
         if (!File.Exists(TemplatePath))

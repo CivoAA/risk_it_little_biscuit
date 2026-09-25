@@ -2,11 +2,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 
 /// <summary>
-/// Werkzeuge rund um die Werkbank: Objekt in die Szene setzen, Prefab bauen,
+/// Werkzeuge rund um die Werkbank: Fenster im Play Mode oeffnen, Icons pruefen
 /// und - das Wichtigste - den Katalog gegen das Player-Prefab pruefen.
 ///
 /// Der Katalog in <see cref="WeaponCatalog"/> ist eine Abschrift der
@@ -16,65 +15,14 @@ using UnityEngine;
 /// </summary>
 public static class WorkbenchTools
 {
-    private const string PrefabPath = "Assets/Prefabs/MapObjects/Werkbank.prefab";
     private const string PlayerPrefab = "Assets/Prefabs/Player.prefab";
     private const string IconFolder = "Assets/Resources/Workbench";
 
     // ==================================================================
-    //  Szene
+    //  Play Mode
     // ==================================================================
 
-    [MenuItem("Tools/Werkbank/Interaktionszone in Szene setzen")]
-    private static void PlaceInScene()
-    {
-        GameObject go = Create();
-        if (go == null) return;
-
-        Undo.RegisterCreatedObjectUndo(go, "Werkbank setzen");
-        Selection.activeGameObject = go;
-        EditorSceneManager.MarkSceneDirty(go.scene);
-
-        SceneView view = SceneView.lastActiveSceneView;
-        if (view != null) view.FrameSelected();
-
-        Debug.Log($"[Werkbank] '{go.name}' gesetzt bei {go.transform.position}. " +
-                  "Das Objekt bringt keine Grafik mit - auf die vorhandene Werkbank " +
-                  "schieben. Zone und Hinweistext stehen im Inspector.");
-    }
-
-    [MenuItem("Tools/Werkbank/Zonen-Prefab erzeugen")]
-    private static void CreatePrefab()
-    {
-        GameObject go = Create();
-        if (go == null) return;
-
-        go.transform.position = Vector3.zero;
-
-        // AssetDatabase rechnet immer mit Schraegstrichen, GetDirectoryName
-        // liefert unter Windows aber Backslashes.
-        string dir = Path.GetDirectoryName(PrefabPath).Replace('\\', '/');
-        if (!AssetDatabase.IsValidFolder(dir))
-        {
-            Debug.LogError($"[Werkbank] Ordner '{dir}' gibt es nicht.");
-            Object.DestroyImmediate(go);
-            return;
-        }
-
-        GameObject prefab = PrefabUtility.SaveAsPrefabAsset(go, PrefabPath);
-        Object.DestroyImmediate(go);
-
-        if (prefab == null)
-        {
-            Debug.LogError("[Werkbank] Prefab konnte nicht gespeichert werden.");
-            return;
-        }
-
-        Selection.activeObject = prefab;
-        EditorGUIUtility.PingObject(prefab);
-        Debug.Log($"[Werkbank] Prefab liegt unter {PrefabPath}.");
-    }
-
-    [MenuItem("Tools/Werkbank/Fenster oeffnen (nur im Play Mode)")]
+    [MenuItem("Tools/Werkbank/Fenster öffnen (nur im Play Mode)", false, 216)]
     private static void OpenPanel()
     {
         if (!Application.isPlaying)
@@ -83,51 +31,6 @@ public static class WorkbenchTools
             return;
         }
         WorkbenchPanel.Toggle();
-    }
-
-    /// <summary>
-    /// Nur die Zone, keine Grafik: die Werkbank steht schon als Pixelart in der
-    /// Szene, dieses Objekt legt sich bloss darueber und faengt das [E] ab.
-    /// Deshalb auch keine Umrandung - es gibt keinen SpriteRenderer dafuer.
-    /// </summary>
-    private static GameObject Create()
-    {
-        GameObject go = new GameObject("Werkbank");
-
-        WorkbenchTrigger trigger = go.AddComponent<WorkbenchTrigger>();
-
-        // Die Zonen-Felder liegen geschuetzt in HubInteractable - ueber
-        // SerializedObject lassen sie sich trotzdem sauber vorbelegen.
-        SerializedObject so = new SerializedObject(trigger);
-        Set(so, "shape", p => p.enumValueIndex = 1);                            // Rechteck
-        Set(so, "interactSize", p => p.vector2Value = new Vector2(3f, 2.5f));
-        Set(so, "interactOffset", p => p.vector2Value = new Vector2(0f, -1.2f));
-        Set(so, "promptText", p => p.stringValue = "[E] Werkbank");
-        Set(so, "showPrompt", p => p.boolValue = true);
-        Set(so, "showOutline", p => p.boolValue = false);
-        so.ApplyModifiedPropertiesWithoutUndo();
-
-        go.transform.position = SuggestPosition();
-        return go;
-    }
-
-    private static void Set(SerializedObject so, string field, System.Action<SerializedProperty> apply)
-    {
-        SerializedProperty p = so.FindProperty(field);
-        if (p != null) apply(p);
-        else Debug.LogWarning($"[Werkbank] Feld '{field}' gibt es in HubInteractable nicht mehr.");
-    }
-
-    /// <summary>Neben den Spieler, sonst in die Mitte der Szenenansicht.</summary>
-    private static Vector3 SuggestPosition()
-    {
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (player != null) return player.transform.position + new Vector3(2f, 0f, 0f);
-
-        SceneView view = SceneView.lastActiveSceneView;
-        if (view != null) return new Vector3(view.pivot.x, view.pivot.y, 0f);
-
-        return Vector3.zero;
     }
 
     // ==================================================================
@@ -141,7 +44,7 @@ public static class WorkbenchTools
         public PoolKind Kind;
     }
 
-    [MenuItem("Tools/Werkbank/Katalog gegen Player-Prefab pruefen")]
+    [MenuItem("Tools/Werkbank/Katalog gegen Player-Prefab prüfen", false, 204)]
     private static void CheckCatalog()
     {
         GameObject player = AssetDatabase.LoadAssetAtPath<GameObject>(PlayerPrefab);
@@ -263,7 +166,7 @@ public static class WorkbenchTools
     //  Icons
     // ==================================================================
 
-    [MenuItem("Tools/Werkbank/Icons pruefen")]
+    [MenuItem("Tools/Werkbank/Icons prüfen", false, 205)]
     private static void CheckIcons()
     {
         List<string> missing = new List<string>();
@@ -294,7 +197,7 @@ public static class WorkbenchTools
     //  Spielstand
     // ==================================================================
 
-    [MenuItem("Tools/Werkbank/Verteiler zuruecksetzen")]
+    [MenuItem("Tools/Spielstand/Werkbank-Verteiler zurücksetzen", false, 325)]
     private static void ResetLoadout()
     {
         Loadout.ResetAll();
@@ -302,7 +205,7 @@ public static class WorkbenchTools
         Debug.Log("[Werkbank] Verteiler aller Charaktere geleert und abgeschaltet.");
     }
 
-    [MenuItem("Tools/Werkbank/Spielstand im Explorer zeigen")]
+    [MenuItem("Tools/Spielstand/Werkbank-Datei im Explorer zeigen", false, 313)]
     private static void ShowSave()
     {
         string path = Path.Combine(Application.persistentDataPath, "loadout.json");

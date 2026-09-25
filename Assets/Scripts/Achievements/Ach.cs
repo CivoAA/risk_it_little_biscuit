@@ -9,7 +9,7 @@ using System.Collections.Generic;
 ///      bzw. Achievements.Progress(Ach.MeinDing, 1f) aufrufen.
 ///   3. Ein PNG namens [IconKey].png nach Assets/Resources/Achievements/ legen.
 ///      Fehlt es, zeigt die Anzeige so lange den Platzhalter - es bricht nichts.
-///   4. Für Steam: Tools -> Achievements -> Steamworks-Liste exportieren und die
+///   4. Für Steam: Tools -> Erfolge -> Steamworks-Liste ausgeben und die
 ///      Ausgabe im Steamworks-Backend eintragen. Ohne das funktioniert alles im
 ///      Spiel, es gibt nur kein Steam-Popup.
 ///

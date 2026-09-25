@@ -74,7 +74,8 @@ public class EnemyWorkshop : EditorWindow
         public string name;
         public float health, damage, speed;
         public int exp;
-        public float threat, pushTime;
+        public float pushTime;
+        public bool archived;
         public EnemyRole role;
         public EnemyFacing facing;
         public string sheet;
@@ -94,7 +95,7 @@ public class EnemyWorkshop : EditorWindow
                 damage = def.Damage,
                 speed = def.Speed,
                 exp = def.Exp,
-                threat = def.Threat,
+                archived = def.Archived,
                 pushTime = def.PushTime,
                 role = def.Role,
                 facing = def.Facing,
@@ -106,12 +107,19 @@ public class EnemyWorkshop : EditorWindow
                 prefab = def.Prefab,
             };
         }
+
+        /// <summary>Dieselbe Rechnung wie im Katalog - live, waehrend man tippt.</summary>
+        public float Threat
+        {
+            get { return EnemyCatalog.AutoThreat(health, damage, speed, role); }
+        }
     }
 
     private List<Draft> drafts = new List<Draft>();
     private int selected;
     private int tab;
     private bool dirty;
+    private bool showArchive;
 
     private Vector2 listScroll;
     private Vector2 bodyScroll;
@@ -133,7 +141,7 @@ public class EnemyWorkshop : EditorWindow
 
     // ------------------------------------------------------------------ Start
 
-    [MenuItem("Tools/Gegner/Werkstatt", false, 0)]
+    [MenuItem("Tools/Gegner/Werkstatt", false, 102)]
     public static void Open()
     {
         EnemyWorkshop window = GetWindow<EnemyWorkshop>("Gegner");
@@ -159,7 +167,7 @@ public class EnemyWorkshop : EditorWindow
             // Dieselbe Regel wie im Fenster: vorhandene Prefabs bleiben
             // unangetastet. Ein Batch-Lauf soll nichts kaputt machen koennen,
             // was niemand mehr zurueckholen kann.
-            if (string.IsNullOrEmpty(d.sheet) || PrefabExists(d)) continue;
+            if (d.archived || string.IsNullOrEmpty(d.sheet) || PrefabExists(d)) continue;
 
             Debug.Log("[Gegner-Werkstatt] " + window.BuildPrefab(d));
             built++;
@@ -202,6 +210,7 @@ public class EnemyWorkshop : EditorWindow
         selected = Mathf.Clamp(selected, 0, Mathf.Max(0, drafts.Count - 1));
         dirty = false;
         framesFor = "";
+        startWeapons = null;
     }
 
     // ------------------------------------------------------------------- GUI
@@ -286,19 +295,23 @@ public class EnemyWorkshop : EditorWindow
 
         for (int i = 0; i < drafts.Count; i++)
         {
-            Draft d = drafts[i];
+            if (!drafts[i].archived) DrawListEntry(i);
+        }
 
-            bool hasPrefab = !string.IsNullOrEmpty(d.prefab)
-                             && AssetDatabase.LoadAssetAtPath<GameObject>(d.prefab) != null;
-            string mark = hasPrefab ? "" : (string.IsNullOrEmpty(d.sheet) ? "  (kein Bild)" : "  (kein Prefab)");
+        // Das Archiv liegt zugeklappt unten: weg aus dem Blick, aber nicht weg.
+        int archivedCount = drafts.Count(x => x.archived);
+        if (archivedCount > 0)
+        {
+            EditorGUILayout.Space(6f);
+            showArchive = EditorGUILayout.Foldout(showArchive,
+                "Archiv (" + archivedCount + ")", true);
 
-            bool on = i == selected;
-            bool now = GUILayout.Toggle(on, d.name + mark, "Button");
-            if (now && !on)
+            if (showArchive)
             {
-                selected = i;
-                framesFor = "";
-                GUI.FocusControl(null);
+                for (int i = 0; i < drafts.Count; i++)
+                {
+                    if (drafts[i].archived) DrawListEntry(i);
+                }
             }
         }
 
@@ -320,6 +333,22 @@ public class EnemyWorkshop : EditorWindow
         EditorGUILayout.EndVertical();
     }
 
+    private void DrawListEntry(int i)
+    {
+        Draft d = drafts[i];
+
+        string mark = PrefabExists(d) ? "" : (string.IsNullOrEmpty(d.sheet) ? "  (kein Bild)" : "  (kein Prefab)");
+
+        bool on = i == selected;
+        bool now = GUILayout.Toggle(on, d.name + mark, "Button");
+        if (now && !on)
+        {
+            selected = i;
+            framesFor = "";
+            GUI.FocusControl(null);
+        }
+    }
+
     private void DrawDetail(Draft d)
     {
         EditorGUILayout.BeginVertical();
@@ -332,6 +361,9 @@ public class EnemyWorkshop : EditorWindow
         EditorGUILayout.LabelField("Id im Code", d.id.ToString());
         d.name = EditorGUILayout.TextField(new GUIContent(
             "Anzeigename", "Nur hier im Fenster sichtbar, nicht im Spiel."), d.name);
+
+        DrawArchiveBox(d);
+        DrawDeleteButton(d);
 
         EditorGUILayout.Space(6f);
 
@@ -369,15 +401,12 @@ public class EnemyWorkshop : EditorWindow
         d.pushTime = EditorGUILayout.FloatField(new GUIContent(
             "Rueckstoss (s)", "Wie lange ein Treffer ihn zurueckdrueckt. 0 = gar nicht."), d.pushTime);
 
-        d.threat = EditorGUILayout.FloatField(new GUIContent(
-            "Gewicht", "Was er im Druck-Budget des Spawn-Directors zaehlt. "
-                     + "Marshmello = 1, Fetti = 8."), d.threat);
-
         d.role = (EnemyRole)EditorGUILayout.EnumPopup(new GUIContent(
             "Rolle", "Entscheidet ueber Truhe, Seelen und welche Erfolge zaehlen."), d.role);
 
         DrawRoleHint(d.role);
-        DrawBalanceHint(d);
+        DrawThreat(d);
+        DrawWeaponCheck(d);
 
         EditorGUILayout.Space(6f);
 
@@ -563,9 +592,6 @@ public class EnemyWorkshop : EditorWindow
             case EnemyRole.Normal:
                 text = "Zaehlt auf Kill100 / Kill1000 / Kill10000.";
                 break;
-            case EnemyRole.Elite:
-                text = "Wie Normal - zaehlt auf dieselben Erfolge, ist nur dicker.";
-                break;
             case EnemyRole.MiniBoss:
                 text = "Truhe, 1 Seele, Kill10Miniboss / Kill100Miniboss. "
                      + "Raeumt beim Sterben die Kaefig-Wand weg. Nicht schiebbar.";
@@ -586,43 +612,234 @@ public class EnemyWorkshop : EditorWindow
     }
 
     /// <summary>
-    /// Ein Gegner, der mehr wiegt als er aushaelt, macht das Feld leer; einer,
-    /// der zu wenig wiegt, macht es zu. Deshalb hier ein grober Vergleich mit
-    /// dem Marshmello, an dem die ganze Kurve haengt.
+    /// Das Gewicht ist nicht mehr einstellbar - es folgt aus Leben, Schaden und
+    /// Tempo. Hier steht, wie es zustande kommt, damit man sieht, an welchem
+    /// Wert man drehen muss, wenn ein Gegner zu dicht oder zu duenn kommt.
     /// </summary>
-    private void DrawBalanceHint(Draft d)
+    private static void DrawThreat(Draft d)
     {
-        if (d.role == EnemyRole.Blocker || d.threat <= 0f) return;
+        float threat = d.Threat;
 
-        EnemyDef basis = EnemyCatalog.Get(EnemyId.Marshmello);
-        if (basis == null) return;
+        EditorGUILayout.LabelField(new GUIContent("Gewicht (automatisch)",
+            "Was er im Druck-Budget des Spawn-Directors zaehlt. Marshmello = 1."),
+            new GUIContent(threat.ToString("0.#", CultureInfo.InvariantCulture)),
+            EditorStyles.boldLabel);
 
-        float taken = d.health / Mathf.Max(1f, basis.Health);
-        float weighed = d.threat / Mathf.Max(0.01f, basis.Threat);
+        string text;
+        if (d.role == EnemyRole.Blocker)
+        {
+            text = "Kaefig-Wand: wiegt nichts.";
+        }
+        else
+        {
+            text = string.Format(CultureInfo.InvariantCulture,
+                "= Leben x{0:0.00}  *  Schaden x{1:0.00}  *  Tempo x{2:0.00}   (gegen Marshmello)\n"
+              + "Bei Druck 100 stehen davon etwa {3:0} gleichzeitig auf dem Feld.",
+                Mathf.Pow(Mathf.Max(1f, d.health) / EnemyCatalog.RefHealth, EnemyCatalog.HealthExponent),
+                Mathf.Pow(Mathf.Max(0.5f, d.damage) / EnemyCatalog.RefDamage, EnemyCatalog.DamageExponent),
+                Mathf.Pow(Mathf.Max(0.3f, d.speed) / EnemyCatalog.RefSpeed, EnemyCatalog.SpeedExponent),
+                100f / Mathf.Max(0.1f, threat));
 
-        if (weighed <= 0f) return;
+            if (d.role == EnemyRole.MiniBoss || d.role == EnemyRole.Boss || d.role == EnemyRole.DeathBoss)
+            {
+                text += "\nBosse zaehlen im Director nicht zum Druck - die Zahl ist nur zum Vergleich.";
+            }
+        }
 
-        float ratio = taken / weighed;
-        if (ratio > 3f)
+        EditorGUILayout.HelpBox(text, MessageType.None);
+    }
+
+    // ------------------------------------------------------- Startwaffen
+
+    private const string PlayerPrefab = "Assets/Prefabs/Player.prefab";
+
+    private struct StartWeapon
+    {
+        public string character;
+        public string weapon;
+        public float damage;
+    }
+
+    private List<StartWeapon> startWeapons;
+
+    /// <summary>
+    /// Die Startwaffe jedes Charakters auf Stufe 1, direkt aus dem Player-Prefab
+    /// gelesen - aendert jemand dort den Schaden, stimmt die Anzeige sofort mit.
+    /// </summary>
+    private List<StartWeapon> StartWeapons()
+    {
+        if (startWeapons != null) return startWeapons;
+
+        startWeapons = new List<StartWeapon>();
+
+        GameObject player = AssetDatabase.LoadAssetAtPath<GameObject>(PlayerPrefab);
+        if (player == null) return startWeapons;
+
+        Weapon[] weapons = player.GetComponentsInChildren<Weapon>(true);
+
+        for (int c = 0; c < Characters.Count; c++)
+        {
+            string id = Characters.StartWeaponId(c);
+            Weapon weapon = weapons.FirstOrDefault(w => w.weaponID == id);
+            if (weapon == null || weapon.stats == null || weapon.stats.Count == 0) continue;
+
+            startWeapons.Add(new StartWeapon
+            {
+                character = Characters.NameOf(c),
+                weapon = id,
+                damage = weapon.stats[0].damage,
+            });
+        }
+
+        return startWeapons;
+    }
+
+    /// <summary>
+    /// Wie viele Treffer der Gegner am Anfang eines Laufs aushaelt - je
+    /// Startwaffe, auf Stufe 1, ohne Buffs und Krits. Der Marshmello faellt mit
+    /// jeder davon beim ersten Treffer; daran sieht man am schnellsten, ob ein
+    /// neuer Gegner fuer seine Phase zu zaeh ist.
+    /// </summary>
+    private void DrawWeaponCheck(Draft d)
+    {
+        if (d.role == EnemyRole.Blocker) return;
+
+        List<StartWeapon> list = StartWeapons();
+        if (list.Count == 0) return;
+
+        var sb = new StringBuilder("Treffer bis tot, Startwaffen auf Stufe 1 (Chaos 1):");
+        foreach (StartWeapon w in list)
+        {
+            int hits = Mathf.CeilToInt(d.health / Mathf.Max(0.01f, w.damage));
+            sb.Append(string.Format(CultureInfo.InvariantCulture,
+                "\n  {0} ({1}): {2:0.#} Schaden je Treffer -> {3} Treffer",
+                w.character, w.weapon, w.damage, hits));
+        }
+
+        EditorGUILayout.HelpBox(sb.ToString(), MessageType.None);
+    }
+
+    // ---------------------------------------------------------------- Archiv
+
+    private void DrawArchiveBox(Draft d)
+    {
+        if (d.archived)
         {
             EditorGUILayout.HelpBox(
-                string.Format(CultureInfo.InvariantCulture,
-                    "Er haelt {0:0.#}x so viel aus wie ein Marshmello, wiegt aber nur "
-                  + "{1:0.#}x so viel. Der Director legt dann zu wenig nach - das Feld "
-                  + "wirkt leer. Gewicht eher Richtung {2:0.#}.",
-                    taken, weighed, taken * basis.Threat / 3f),
-                MessageType.Warning);
+                "Liegt im Archiv. Werte, Bild und Prefab sind alle noch da - er taucht "
+              + "nur in den Listen nicht mehr auf.", MessageType.Info);
+
+            if (GUILayout.Button("Aus dem Archiv holen"))
+            {
+                d.archived = false;
+                dirty = true;
+            }
+            return;
         }
-        else if (ratio < 0.33f)
+
+        if (GUILayout.Button(new GUIContent("Ins Archiv legen",
+                "Nicht loeschen, nur weglegen. Zurueckholen geht jederzeit."),
+                GUILayout.Width(130f)))
         {
-            EditorGUILayout.HelpBox(
-                string.Format(CultureInfo.InvariantCulture,
-                    "Er wiegt {0:0.#}x so viel wie ein Marshmello, haelt aber nur "
-                  + "{1:0.#}x so viel aus. Der Director haelt dann zu wenig auf dem "
-                  + "Feld - es wirkt leer, obwohl der Druck stimmt.",
-                    weighed, taken),
-                MessageType.Warning);
+            List<string> used = PlanUsage(d.id);
+            if (used.Count > 0 && !EditorUtility.DisplayDialog("Ins Archiv?",
+                    d.name + " steht noch in einem Wellenplan:\n\n  "
+                  + string.Join("\n  ", used) + "\n\n"
+                  + "Dort spawnt er weiter, bis du ihn in der Wellenplan-Werkstatt "
+                  + "austauschst. Im Archiv ist er nur aus den Listen raus.",
+                    "Trotzdem ins Archiv", "Abbrechen"))
+            {
+                return;
+            }
+
+            d.archived = true;
+            showArchive = true;
+            dirty = true;
         }
+    }
+
+    // --------------------------------------------------------------- Loeschen
+
+    /// <summary>
+    /// Endgueltig weg - anders als das Archiv. Nimmt den Eintrag aus dem
+    /// Katalog und auf Wunsch das Prefab mit. Die Id bleibt im Enum stehen:
+    /// der SpawnCatalog in GameCore speichert sie als Zahl, und ein
+    /// geloeschter Name wuerde alle Ids dahinter verrutschen lassen.
+    /// </summary>
+    private void DrawDeleteButton(Draft d)
+    {
+        if (!GUILayout.Button(new GUIContent("Loeschen",
+                "Endgueltig aus dem Katalog nehmen, auf Wunsch mit Prefab."),
+                GUILayout.Width(130f)))
+        {
+            return;
+        }
+
+        // Steht er noch in einem Plan, wuerde dort stumm eine Luecke
+        // entstehen. Erst austauschen, dann loeschen.
+        List<string> used = PlanUsage(d.id);
+        if (used.Count > 0)
+        {
+            Report(d.name + " steht noch in einem Wellenplan:\n\n  "
+                 + string.Join("\n  ", used) + "\n\n"
+                 + "Erst in der Wellenplan-Werkstatt austauschen, dann loeschen.");
+            return;
+        }
+
+        // Teilt sich ein anderer Eintrag das Prefab, bleibt die Datei liegen.
+        bool prefabShared = drafts.Any(x => x != d && x.prefab == d.prefab);
+        bool prefabExists = !prefabShared && PrefabExists(d);
+
+        string message = d.name + " endgueltig loeschen?\n\n"
+                       + "Der Katalog wird dabei sofort gespeichert"
+                       + (dirty ? " - auch deine anderen ungespeicherten Aenderungen." : ".")
+                       + (prefabExists ? "\n\nPrefab: " + d.prefab : "");
+
+        int choice = prefabExists
+            ? EditorUtility.DisplayDialogComplex("Gegner loeschen", message,
+                  "Mit Prefab loeschen", "Abbrechen", "Nur Katalog-Eintrag")
+            : (EditorUtility.DisplayDialog("Gegner loeschen", message, "Loeschen", "Abbrechen") ? 2 : 1);
+
+        if (choice == 1) return;
+
+        drafts.Remove(d);
+        dirty = true;
+        SaveCatalog();
+
+        if (choice == 0) AssetDatabase.DeleteAsset(d.prefab);
+
+        selected = Mathf.Clamp(selected, 0, Mathf.Max(0, drafts.Count - 1));
+        framesFor = "";
+
+        // Der Rest des Fensters wuerde sonst noch den geloeschten Eintrag zeichnen.
+        GUIUtility.ExitGUI();
+    }
+
+    /// <summary>Wo der Gegner in den Wellenplaenen vorkommt, als lesbare Zeilen.</summary>
+    private static List<string> PlanUsage(EnemyId id)
+    {
+        var result = new List<string>();
+
+        foreach (string planId in WavePlans.AllIds)
+        {
+            RunPlan plan = WavePlans.For(planId);
+
+            var phases = new List<Phase>(plan.Phases);
+            if (plan.Endless != null) phases.Add(plan.Endless);
+
+            foreach (Phase phase in phases)
+            {
+                bool inPool = phase.Enemies.Any(e => e.Id == id);
+                bool inBeat = phase.Beats.Any(b => b.Enemy == id || b.RingEnemy == id);
+
+                if (inPool || inBeat)
+                {
+                    result.Add(planId + " / " + phase.Name + (inPool ? " (Pool)" : " (Beat)"));
+                }
+            }
+        }
+
+        return result;
     }
 
     private void DrawBuildButtons(Draft d)
@@ -748,7 +965,7 @@ public class EnemyWorkshop : EditorWindow
             for (int i = 0; i < drafts.Count; i++)
             {
                 Draft d = drafts[i];
-                if (string.IsNullOrEmpty(d.sheet)) continue;
+                if (d.archived || string.IsNullOrEmpty(d.sheet)) continue;
 
                 if (PrefabExists(d))
                 {
@@ -1331,9 +1548,25 @@ public class EnemyWorkshop : EditorWindow
         sb.AppendLine("    private static void Build()");
         sb.AppendLine("    {");
 
-        foreach (Draft d in drafts)
+        foreach (Draft d in drafts.Where(x => !x.archived))
         {
             AppendEntry(sb, d);
+        }
+
+        // Das Archiv steht mit im Code - sonst waere es geloescht und nicht
+        // weggelegt. Es kommt nur ans Ende, damit es beim Lesen nicht stoert.
+        if (drafts.Any(x => x.archived))
+        {
+            sb.AppendLine();
+            sb.AppendLine("        // ---------------------------------------------------------- Archiv");
+            sb.AppendLine("        //");
+            sb.AppendLine("        // Weggelegt, nicht geloescht. In der Werkstatt unter \"Archiv\"");
+            sb.AppendLine("        // zurueckholen.");
+
+            foreach (Draft d in drafts.Where(x => x.archived))
+            {
+                AppendEntry(sb, d);
+            }
         }
 
         sb.AppendLine("    }");
@@ -1358,7 +1591,6 @@ public class EnemyWorkshop : EditorWindow
                     + ", damage: " + F(d.damage)
                     + ", speed: " + F(d.speed)
                     + ", exp: " + d.exp.ToString(CultureInfo.InvariantCulture)
-                    + ", threat: " + F(d.threat)
                     + ", pushTime: " + F(d.pushTime) + ",");
         sb.AppendLine("            role: EnemyRole." + d.role
                     + ", facing: EnemyFacing." + d.facing + ",");
@@ -1366,7 +1598,8 @@ public class EnemyWorkshop : EditorWindow
         sb.AppendLine("            colliderRadius: " + F(d.colliderRadius)
                     + ", colliderOffset: new Vector2(" + F(d.colliderOffset.x)
                     + ", " + F(d.colliderOffset.y) + "), scale: " + F(d.scale) + ",");
-        sb.AppendLine("            prefab: \"" + Escape(d.prefab) + "\");");
+        sb.AppendLine("            prefab: \"" + Escape(d.prefab) + "\""
+                    + (d.archived ? ", archived: true" : "") + ");");
     }
 
     /// <summary>Zahl als C#-Literal - immer mit Punkt, egal welche Systemsprache.</summary>
@@ -1412,8 +1645,8 @@ public class EnemyWorkshop : EditorWindow
 
         if (catalog == null)
         {
-            Report("In " + CoreScenePath + " steckt kein SpawnCatalog. Erst "
-                 + "Tools -> Spawns -> Spawn-Director in GameCore einbauen.");
+            Report("In " + CoreScenePath + " steckt kein SpawnCatalog - "
+                 + "der gehoert an den Spawn Director.");
             return;
         }
 
@@ -1434,7 +1667,7 @@ public class EnemyWorkshop : EditorWindow
         UnityEditor.SceneManagement.EditorSceneManager.SaveScene(scene, CoreScenePath);
 
         Report(count + " Prefab(s) im SpawnCatalog eingetragen.\n\n"
-             + "Danach die Test-Szene neu bauen: Tools -> Test Scene.");
+             + "Danach die Test-Szene neu bauen: Tools -> Szenen -> Test-Szene neu bauen.");
     }
 
     // ------------------------------------------------------------- Kleinkram

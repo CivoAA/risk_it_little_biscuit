@@ -155,7 +155,7 @@ public class WorkbenchTests
         Assert.IsEmpty(problems,
             "WeaponCatalog und Player-Prefab laufen auseinander:\n  " +
             string.Join("\n  ", problems) +
-            "\n  Tools > Werkbank > Katalog gegen Player-Prefab pruefen zeigt die fehlenden Zeilen.");
+            "\n  Tools > Werkbank > Katalog gegen Player-Prefab prüfen zeigt die fehlenden Zeilen.");
     }
 
     [Test]

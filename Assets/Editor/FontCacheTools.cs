@@ -35,7 +35,7 @@ public static class FontCacheTools
     }
 
     /// <summary>Leert jedes dynamische Font-Asset im Projekt und schreibt das Ergebnis weg.</summary>
-    [MenuItem("Tools/Fonts/Dynamic-Font-Cache leeren", priority = 0)]
+    [MenuItem("Tools/Fonts/Dynamic-Font-Cache leeren", priority = 400)]
     public static void ClearAll()
     {
         string[] guids = AssetDatabase.FindAssets("t:TMP_FontAsset");
@@ -128,7 +128,7 @@ public static class FontCacheTools
             font.ClearFontAssetData(true); // Fallback: löscht zusätzlich die OpenType-Tabellen
     }
 
-    [MenuItem(AutoClearMenu, priority = 20)]
+    [MenuItem(AutoClearMenu, priority = 420)]
     private static void ToggleAutoClear() => AutoClearOnSave = !AutoClearOnSave;
 
     [MenuItem(AutoClearMenu, true)]

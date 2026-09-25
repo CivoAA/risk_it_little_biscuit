@@ -41,8 +41,6 @@ public class WavePlanWorkshop : EditorWindow
         {
             case "World0": return "Karte 1 - Kueche";
             case "World3": return "Karte 2 - Wald";
-            case "World1": return "Nachtwald (liegt still)";
-            case "World2": return "Dorf (liegt still)";
             default: return "keiner Karte zugeordnet";
         }
     }
@@ -109,7 +107,7 @@ public class WavePlanWorkshop : EditorWindow
 
     // ------------------------------------------------------------------ Start
 
-    [MenuItem("Tools/Gegner/Wellenplaene", false, 1)]
+    [MenuItem("Tools/Gegner/Wellenpläne", false, 103)]
     public static void Open()
     {
         WavePlanWorkshop window = GetWindow<WavePlanWorkshop>("Wellenplaene");
@@ -576,7 +574,7 @@ public class WavePlanWorkshop : EditorWindow
             PoolDraft entry = phase.pool[i];
 
             EditorGUILayout.BeginHorizontal();
-            entry.id = (EnemyId)EditorGUILayout.EnumPopup(entry.id);
+            entry.id = EnemyPopup(GUIContent.none, entry.id, false);
             entry.weight = EditorGUILayout.FloatField(entry.weight, GUILayout.Width(55f));
             GUILayout.Label((entry.weight / weightSum * 100f).ToString("0") + "%",
                             EditorStyles.miniLabel, GUILayout.Width(38f));
@@ -668,7 +666,7 @@ public class WavePlanWorkshop : EditorWindow
         switch (beat.kind)
         {
             case BeatKind.Burst:
-                beat.enemy = (EnemyId)EditorGUILayout.EnumPopup("Gegner", beat.enemy);
+                beat.enemy = EnemyPopup(new GUIContent("Gegner"), beat.enemy, false);
                 beat.threat = EditorGUILayout.FloatField(new GUIContent("Bedrohung",
                     "Wird durch das Gewicht des Gegners geteilt: "
                   + Count(beat.threat, beat.enemy) + " Stueck."), beat.threat);
@@ -680,9 +678,9 @@ public class WavePlanWorkshop : EditorWindow
                 break;
 
             case BeatKind.Encirclement:
-                beat.enemy = (EnemyId)EditorGUILayout.EnumPopup(new GUIContent("Miniboss",
-                    "None = nur der Ring, ohne Gegner in der Mitte."), beat.enemy);
-                beat.ringEnemy = (EnemyId)EditorGUILayout.EnumPopup("Ring-Gegner", beat.ringEnemy);
+                beat.enemy = EnemyPopup(new GUIContent("Miniboss",
+                    "None = nur der Ring, ohne Gegner in der Mitte."), beat.enemy, true);
+                beat.ringEnemy = EnemyPopup(new GUIContent("Ring-Gegner"), beat.ringEnemy, false);
                 beat.ringCount = EditorGUILayout.IntField("Anzahl im Ring", beat.ringCount);
                 beat.radius = EditorGUILayout.FloatField("Radius", beat.radius);
                 beat.cage = EditorGUILayout.Toggle(new GUIContent("Kaefig",
@@ -710,7 +708,7 @@ public class WavePlanWorkshop : EditorWindow
                 break;
 
             case BeatKind.Boss:
-                beat.enemy = (EnemyId)EditorGUILayout.EnumPopup("Boss", beat.enemy);
+                beat.enemy = EnemyPopup(new GUIContent("Boss"), beat.enemy, false);
                 beat.pressureScale = EditorGUILayout.Slider("Grunddruck dabei", beat.pressureScale, 0f, 1f);
                 beat.announce = EditorGUILayout.TextField("Ansage", beat.announce);
 
@@ -733,6 +731,35 @@ public class WavePlanWorkshop : EditorWindow
         int index = Mathf.Max(0, System.Array.IndexOf(Patterns.Names, current));
         int picked = EditorGUILayout.Popup(label, index, Patterns.Names);
         return Patterns.Names[Mathf.Clamp(picked, 0, Patterns.Names.Length - 1)];
+    }
+
+    /// <summary>
+    /// Gegnerauswahl ohne das Archiv. Der Gegner, der gerade drinsteht, bleibt
+    /// trotzdem waehlbar - auch wenn er archiviert ist -, sonst wuerde ein alter
+    /// Plan beim blossen Oeffnen still umgestellt. Er traegt dann "(Archiv)".
+    /// </summary>
+    private static EnemyId EnemyPopup(GUIContent label, EnemyId current, bool allowNone)
+    {
+        var ids = new List<EnemyId>();
+        var names = new List<GUIContent>();
+
+        if (allowNone || current == EnemyId.None)
+        {
+            ids.Add(EnemyId.None);
+            names.Add(new GUIContent("(keiner)"));
+        }
+
+        foreach (EnemyDef def in EnemyCatalog.All)
+        {
+            if (def.Archived && def.Id != current) continue;
+
+            ids.Add(def.Id);
+            names.Add(new GUIContent(def.Archived ? def.Name + " (Archiv)" : def.Name));
+        }
+
+        int index = Mathf.Max(0, ids.IndexOf(current));
+        int picked = EditorGUILayout.Popup(label, index, names.ToArray());
+        return ids[Mathf.Clamp(picked, 0, ids.Count - 1)];
     }
 
     /// <summary>Wie viele Gegner eine Bedrohungsmenge ergibt - die Frage kommt immer.</summary>

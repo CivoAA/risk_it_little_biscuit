@@ -50,7 +50,7 @@ public class SkillTreeEditorWindow : EditorWindow
     const float NodeSize       = 48f;    // Kantenlaenge bei Zoom 1
     const float Margin         = 40f;
 
-    [MenuItem("Tools/Skilltree/Editor")]
+    [MenuItem("Tools/Skilltree/Editor", false, 200)]
     public static void Open()
     {
         var window = GetWindow<SkillTreeEditorWindow>("Skilltree");
