@@ -573,6 +573,12 @@ public class WorldGeneratorWindow : EditorWindow
         foreach (var group in preset.patchGroups)
             if (group != null && !oldGroups.ContainsKey(group.name)) oldGroups.Add(group.name, group);
 
+        // Von Hand eingestellte Untergrund-Gewichte ueberleben das Neuladen -
+        // nur neue Tiles bekommen die automatische Vorgabe.
+        var oldBackground = new Dictionary<TileBase, float>();
+        foreach (var entry in preset.backgroundTiles)
+            if (entry != null && entry.tile != null) oldBackground[entry.tile] = entry.weight;
+
         preset.backgroundTiles.Clear();
         preset.patchGroups.Clear();
 
@@ -609,7 +615,8 @@ public class WorldGeneratorWindow : EditorWindow
             preset.backgroundTiles.Add(new WorldGenPreset.TileEntry
             {
                 tile = tile,
-                weight = tile == calmest ? CalmTileWeight(analysis[tile].busy) : 1f
+                weight = oldBackground.TryGetValue(tile, out float kept) ? kept
+                       : tile == calmest ? CalmTileWeight(analysis[tile].busy) : 1f
             });
         }
     }

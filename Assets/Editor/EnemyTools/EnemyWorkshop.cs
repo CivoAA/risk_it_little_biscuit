@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
@@ -71,6 +72,14 @@ public class EnemyWorkshop : EditorWindow
     private class Draft
     {
         public EnemyId id;
+
+        /// <summary>
+        /// Der Name im Code (EnemyId.xxx). Steht getrennt von <see cref="id"/>,
+        /// weil ein frisch angelegter oder umbenannter Gegner diesen Namen hat,
+        /// BEVOR Unity neu kompiliert hat und es den Enum-Wert gibt.
+        /// </summary>
+        public string code;
+
         public string name;
         public float health, damage, speed;
         public int exp;
@@ -90,6 +99,7 @@ public class EnemyWorkshop : EditorWindow
             return new Draft
             {
                 id = def.Id,
+                code = def.Id.ToString(),
                 name = def.Name,
                 health = def.Health,
                 damage = def.Damage,
@@ -124,6 +134,24 @@ public class EnemyWorkshop : EditorWindow
     private Vector2 listScroll;
     private Vector2 bodyScroll;
     private Vector2 legacyScroll;
+
+    // ------------------------------------------------ Anlegen / Umbenennen
+
+    /// <summary>
+    /// Welcher Gegner nach dem Neukompilieren gewaehlt sein soll. SessionState,
+    /// weil Anlegen und Umbenennen den Code aendern - danach laedt Unity alles
+    /// neu, und das Fenster vergisst seine Felder.
+    /// </summary>
+    private const string SelectAfterReloadKey = "EnemyWorkshop.SelectAfterReload";
+
+    private string newEnemyName = "";
+    private bool newEnemyCopy = true;
+
+    private bool renameOpen;
+    private string renameName = "";
+    private string renameId = "";
+    private bool renameIdTouched;
+    private bool renamePrefab = true;
 
     // --------------------------------------------------------- Vorschau-Kram
 
@@ -207,7 +235,17 @@ public class EnemyWorkshop : EditorWindow
     private void Reload()
     {
         drafts = EnemyCatalog.All.Select(Draft.From).ToList();
+
+        string wanted = SessionState.GetString(SelectAfterReloadKey, "");
+        if (!string.IsNullOrEmpty(wanted))
+        {
+            SessionState.EraseString(SelectAfterReloadKey);
+            int index = drafts.FindIndex(x => x.code == wanted);
+            if (index >= 0) selected = index;
+        }
+
         selected = Mathf.Clamp(selected, 0, Mathf.Max(0, drafts.Count - 1));
+        renameOpen = false;
         dirty = false;
         framesFor = "";
         startWeapons = null;
@@ -317,6 +355,8 @@ public class EnemyWorkshop : EditorWindow
 
         EditorGUILayout.EndScrollView();
 
+        DrawNewEnemyBox();
+
         // Bewusst nur die fehlenden: ein Sammelknopf, der auch die 25
         // gewachsenen Prefabs ueberschreibt, waere genau der Unfall, gegen den
         // der Umstieg einzeln und auf Knopfdruck laeuft.
@@ -345,6 +385,7 @@ public class EnemyWorkshop : EditorWindow
         {
             selected = i;
             framesFor = "";
+            renameOpen = false;
             GUI.FocusControl(null);
         }
     }
@@ -354,13 +395,28 @@ public class EnemyWorkshop : EditorWindow
         EditorGUILayout.BeginVertical();
         bodyScroll = EditorGUILayout.BeginScrollView(bodyScroll);
 
-        EditorGUI.BeginChangeCheck();
-
         // ------------------------------------------------------------ Kopf
+        //
+        // Vor dem ChangeCheck: Tippen im Umbenennen-Feld ist noch keine
+        // Aenderung am Gegner - erst der Knopf ist eine.
+        EditorGUILayout.BeginHorizontal();
         EditorGUILayout.LabelField(d.name, EditorStyles.boldLabel);
-        EditorGUILayout.LabelField("Id im Code", d.id.ToString());
-        d.name = EditorGUILayout.TextField(new GUIContent(
-            "Anzeigename", "Nur hier im Fenster sichtbar, nicht im Spiel."), d.name);
+        if (!renameOpen && GUILayout.Button("Umbenennen", GUILayout.Width(110f)))
+        {
+            renameOpen = true;
+            renameName = d.name;
+            renameId = d.code;
+            renameIdTouched = false;
+            renamePrefab = true;
+            GUI.FocusControl(null);
+        }
+        EditorGUILayout.EndHorizontal();
+
+        EditorGUILayout.LabelField("Id im Code", "EnemyId." + d.code);
+
+        if (renameOpen) DrawRenameBox(d);
+
+        EditorGUI.BeginChangeCheck();
 
         DrawArchiveBox(d);
         DrawDeleteButton(d);
@@ -412,8 +468,19 @@ public class EnemyWorkshop : EditorWindow
 
         // ---------------------------------------------------------- Koerper
         EditorGUILayout.LabelField("Koerper", EditorStyles.boldLabel);
-        d.scale = EditorGUILayout.FloatField(new GUIContent(
-            "Groesse", "Skalierung des Prefabs. 1 = so gross wie gezeichnet."), d.scale);
+        if (KeepsOwnScale(d))
+        {
+            d.scale = EditorGUILayout.FloatField(new GUIContent(
+                "Groesse", "Nur Bosse duerfen skaliert werden."), d.scale);
+        }
+        else
+        {
+            EditorGUILayout.LabelField(new GUIContent("Groesse",
+                "Keine Skalierung - die Groesse kommt aus dem Pixelbild."),
+                new GUIContent("1 (so gross wie gezeichnet, " + EnemyCatalog.PixelsPerUnit
+                             + " Pixel = 1 Einheit)"));
+            d.scale = 1f;
+        }
 
         EditorGUILayout.BeginHorizontal();
         d.colliderRadius = EditorGUILayout.FloatField(new GUIContent(
@@ -719,6 +786,350 @@ public class EnemyWorkshop : EditorWindow
         EditorGUILayout.HelpBox(sb.ToString(), MessageType.None);
     }
 
+    // ------------------------------------------------------ Neuer Gegner
+
+    /// <summary>
+    /// Ein neuer Gegner braucht zwei Dinge im Code: einen Namen im Enum
+    /// <see cref="EnemyId"/> und einen Eintrag im Katalog. Beides schreibt
+    /// dieser Knopf in einem Zug; danach kompiliert Unity neu, und der Gegner
+    /// steht in der Liste - gewaehlt, fertig zum Bearbeiten.
+    ///
+    /// Der Enum-Name kommt ans ENDE der Liste. Die Ids stehen in Prefabs und
+    /// im SpawnCatalog als Zahl - ein Name weiter oben wuerde alle dahinter
+    /// verschieben.
+    /// </summary>
+    private void DrawNewEnemyBox()
+    {
+        EditorGUILayout.Space(4f);
+        EditorGUILayout.LabelField("Neuer Gegner", EditorStyles.boldLabel);
+
+        newEnemyName = EditorGUILayout.TextField(newEnemyName);
+
+        Draft template = selected >= 0 && selected < drafts.Count ? drafts[selected] : null;
+        if (template != null)
+        {
+            newEnemyCopy = EditorGUILayout.ToggleLeft(new GUIContent(
+                "Werte von \"" + template.name + "\"",
+                "Leben, Schaden, Tempo, Rolle usw. uebernehmen. Aus = Marshmello-Werte."),
+                newEnemyCopy);
+        }
+
+        bool hasName = !string.IsNullOrWhiteSpace(newEnemyName);
+        string id = ToIdentifier(newEnemyName);
+        string problem = hasName ? IdProblem(id, null, true) : null;
+
+        if (hasName)
+        {
+            EditorGUILayout.LabelField("Id: EnemyId." + id, EditorStyles.miniLabel);
+        }
+
+        if (problem != null) EditorGUILayout.HelpBox(problem, MessageType.Warning);
+
+        using (new EditorGUI.DisabledScope(!hasName || problem != null || EditorApplication.isCompiling))
+        {
+            if (GUILayout.Button("Anlegen"))
+            {
+                CreateEnemy(newEnemyName.Trim(), id, newEnemyCopy ? template : null);
+            }
+        }
+
+        if (EditorApplication.isCompiling)
+        {
+            EditorGUILayout.HelpBox("Unity kompiliert gerade ...", MessageType.None);
+        }
+
+        EditorGUILayout.Space(4f);
+    }
+
+    private void CreateEnemy(string name, string id, Draft template)
+    {
+        if (dirty && !EditorUtility.DisplayDialog("Neuer Gegner",
+                "Beim Anlegen wird der Katalog gespeichert - auch deine anderen "
+              + "ungespeicherten Aenderungen.", "Anlegen", "Abbrechen"))
+        {
+            return;
+        }
+
+        // Marshmello-Werte als Grundlage: der ist das Mass fuer alles andere.
+        var d = new Draft
+        {
+            id = EnemyId.None,
+            code = id,
+            name = name,
+            health = EnemyCatalog.RefHealth,
+            damage = EnemyCatalog.RefDamage,
+            speed = EnemyCatalog.RefSpeed,
+            exp = 1,
+            pushTime = 0.25f,
+            role = EnemyRole.Normal,
+            facing = EnemyFacing.Neutral,
+            sheet = "",
+            fps = 8f,
+            colliderRadius = 0f,
+            colliderOffset = Vector2.zero,
+            scale = 1f,
+            prefab = "",
+        };
+
+        // Bild und Prefab bewusst NICHT: sonst teilen sich zwei Gegner eine
+        // Prefab-Datei, und der naechste Bau ueberschreibt den anderen.
+        if (template != null)
+        {
+            d.health = template.health;
+            d.damage = template.damage;
+            d.speed = template.speed;
+            d.exp = template.exp;
+            d.pushTime = template.pushTime;
+            d.role = template.role;
+            d.facing = template.facing;
+            d.fps = template.fps;
+            if (KeepsOwnScale(d)) d.scale = template.scale;
+        }
+
+        if (!SaveCatalog(d, null, null)) return;
+
+        // Der Code hat sich in jedem Fall geaendert (neuer Katalog-Eintrag),
+        // Unity kompiliert also auch dann neu, wenn die Id schon im Enum stand.
+
+        SessionState.SetString(SelectAfterReloadKey, id);
+        newEnemyName = "";
+
+        Report(name + " ist angelegt (EnemyId." + id + ").\n\n"
+             + "Unity kompiliert jetzt kurz neu, danach steht er gewaehlt in der Liste.\n\n"
+             + "Dann: Sprite-Sheet waehlen, Werte einstellen, \"Katalog speichern\", "
+             + "\"Prefab anlegen\" und \"In GameCore eintragen\". In einen Wellenplan "
+             + "kommt er ueber Tools -> Gegner -> Wellenplaene.");
+
+        GUIUtility.ExitGUI();
+    }
+
+    // -------------------------------------------------------- Umbenennen
+
+    /// <summary>
+    /// Umbenennen auf Wunsch bis in den Code: der Enum-Name wird ueberall im
+    /// Projekt mitgezogen (Wellenplaene, Skripte), die Prefab-Datei wird
+    /// umbenannt statt neu angelegt. Die Zahl hinter dem Enum-Namen bleibt
+    /// dieselbe - Prefabs und SpawnCatalog merken also nichts davon.
+    /// </summary>
+    private void DrawRenameBox(Draft d)
+    {
+        EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+
+        string before = renameName;
+        renameName = EditorGUILayout.TextField("Neuer Name", renameName);
+
+        // Die Id laeuft dem Namen hinterher, bis jemand sie selbst anfasst.
+        if (!renameIdTouched && renameName != before) renameId = ToIdentifier(renameName);
+
+        string typedId = EditorGUILayout.TextField(new GUIContent("Id im Code",
+            "Der Name im Code (EnemyId.xxx). Wird in allen Skripten mitgeaendert."),
+            renameId);
+        if (typedId != renameId)
+        {
+            renameId = typedId;
+            renameIdTouched = true;
+        }
+
+        bool hasPrefab = PrefabExists(d);
+        string newPrefabName = SafeName(renameName);
+        bool prefabNameChanges = hasPrefab
+            && Path.GetFileNameWithoutExtension(d.prefab) != newPrefabName;
+
+        if (prefabNameChanges)
+        {
+            renamePrefab = EditorGUILayout.ToggleLeft(
+                "Prefab-Datei mitumbenennen (" + newPrefabName + ".prefab)", renamePrefab);
+        }
+
+        string problem = string.IsNullOrWhiteSpace(renameName)
+            ? "Der Name ist leer."
+            : IdProblem(renameId, d.code, false);
+
+        if (problem != null) EditorGUILayout.HelpBox(problem, MessageType.Warning);
+
+        if (problem == null && renameId != d.code)
+        {
+            EditorGUILayout.HelpBox("EnemyId." + d.code + " wird in allen Skripten zu EnemyId."
+                                  + renameId + ". Danach kompiliert Unity neu.", MessageType.None);
+        }
+
+        EditorGUILayout.BeginHorizontal();
+        using (new EditorGUI.DisabledScope(problem != null || EditorApplication.isCompiling))
+        {
+            if (GUILayout.Button("Umbenennen"))
+            {
+                RenameEnemy(d, renameName.Trim(), renameId, prefabNameChanges && renamePrefab);
+            }
+        }
+        if (GUILayout.Button("Abbrechen"))
+        {
+            renameOpen = false;
+            GUI.FocusControl(null);
+        }
+        EditorGUILayout.EndHorizontal();
+
+        EditorGUILayout.EndVertical();
+    }
+
+    private void RenameEnemy(Draft d, string name, string id, bool renamePrefabFile)
+    {
+        if (dirty && !EditorUtility.DisplayDialog("Umbenennen",
+                "Beim Umbenennen wird der Katalog gespeichert - auch deine anderen "
+              + "ungespeicherten Aenderungen.", "Umbenennen", "Abbrechen"))
+        {
+            return;
+        }
+
+        string oldCode = d.code;
+        var notes = new StringBuilder();
+
+        if (renamePrefabFile)
+        {
+            // RenameAsset behaelt die guid - alles, was auf das Prefab zeigt,
+            // zeigt danach weiter darauf.
+            string newPrefabName = SafeName(name);
+            string error = AssetDatabase.RenameAsset(d.prefab, newPrefabName);
+            if (string.IsNullOrEmpty(error))
+            {
+                d.prefab = Path.GetDirectoryName(d.prefab).Replace('\\', '/') + "/" + newPrefabName + ".prefab";
+            }
+            else
+            {
+                notes.AppendLine("Prefab-Datei nicht umbenannt: " + error);
+            }
+        }
+
+        d.name = name;
+        d.code = id;
+
+        bool codeChanges = oldCode != id;
+
+        if (!SaveCatalog(null, codeChanges ? oldCode : null, codeChanges ? id : null))
+        {
+            d.code = oldCode;
+            return;
+        }
+
+        if (codeChanges)
+        {
+            List<string> touched = RenameInScripts(oldCode, id);
+            notes.AppendLine("EnemyId." + oldCode + " -> EnemyId." + id
+                           + (touched.Count > 0 ? " auch in:\n  " + string.Join("\n  ", touched) : ""));
+        }
+
+        AssetDatabase.Refresh();
+
+        renameOpen = false;
+        SessionState.SetString(SelectAfterReloadKey, id);
+
+        Report("Umbenannt in \"" + name + "\".\n\n" + notes);
+
+        GUIUtility.ExitGUI();
+    }
+
+    /// <summary>
+    /// Zieht EnemyId.Alt -> EnemyId.Neu in allen Skripten unter Assets nach
+    /// (der Katalog selbst wird in <see cref="SaveCatalog"/> erledigt). Kodierung
+    /// und Zeilenenden bleiben, wie sie waren.
+    /// </summary>
+    private static List<string> RenameInScripts(string oldCode, string newCode)
+    {
+        var touched = new List<string>();
+        var pattern = new Regex(@"\bEnemyId\." + Regex.Escape(oldCode) + @"\b");
+        string catalogFull = Path.GetFullPath(CatalogPath);
+
+        foreach (string file in Directory.GetFiles(Application.dataPath, "*.cs", SearchOption.AllDirectories))
+        {
+            if (Path.GetFullPath(file) == catalogFull) continue;
+
+            byte[] bytes = File.ReadAllBytes(file);
+            bool bom = bytes.Length >= 3 && bytes[0] == 0xEF && bytes[1] == 0xBB && bytes[2] == 0xBF;
+            string text = new UTF8Encoding(false).GetString(bytes, bom ? 3 : 0, bytes.Length - (bom ? 3 : 0));
+
+            if (!pattern.IsMatch(text)) continue;
+
+            File.WriteAllText(file, pattern.Replace(text, "EnemyId." + newCode), new UTF8Encoding(bom));
+            touched.Add("Assets" + file.Substring(Application.dataPath.Length).Replace('\\', '/'));
+        }
+
+        return touched;
+    }
+
+    // ------------------------------------------------------------ Namen
+
+    /// <summary>
+    /// Macht aus einem Anzeigenamen einen Namen, den C# frisst:
+    /// "Pilz-Koenig (Miniboss)" -> "PilzKoenigMiniboss".
+    /// </summary>
+    private static string ToIdentifier(string name)
+    {
+        string s = (name ?? "")
+            .Replace("ä", "ae").Replace("ö", "oe").Replace("ü", "ue")
+            .Replace("Ä", "Ae").Replace("Ö", "Oe").Replace("Ü", "Ue")
+            .Replace("ß", "ss");
+
+        var sb = new StringBuilder();
+        bool upper = true;
+        foreach (char c in s)
+        {
+            if (c < 128 && char.IsLetterOrDigit(c))
+            {
+                sb.Append(upper ? char.ToUpperInvariant(c) : c);
+                upper = false;
+            }
+            else
+            {
+                upper = true;
+            }
+        }
+
+        if (sb.Length > 0 && char.IsDigit(sb[0])) sb.Insert(0, "Gegner");
+        return sb.ToString();
+    }
+
+    /// <summary>
+    /// Warum die Id nicht geht - oder null, wenn sie passt. <paramref name="own"/>
+    /// ist die bisherige Id beim Umbenennen (die darf bleiben).
+    ///
+    /// Beim Anlegen darf eine Id wiederverwendet werden, die noch im Enum
+    /// steht, aber keinen Katalog-Eintrag mehr hat (frueher geloeschte Gegner) -
+    /// dann kommt nur der Eintrag dazu, das Enum bleibt, wie es ist.
+    /// </summary>
+    private string IdProblem(string id, string own, bool creating)
+    {
+        if (string.IsNullOrEmpty(id)) return "Daraus laesst sich keine Id machen - bitte Buchstaben verwenden.";
+
+        if (!Regex.IsMatch(id, "^[A-Za-z_][A-Za-z0-9_]*$"))
+        {
+            return "Die Id darf nur Buchstaben (ohne Umlaute), Ziffern und _ enthalten "
+                 + "und nicht mit einer Ziffer anfangen.";
+        }
+
+        if (id == own) return null;
+
+        // Ohne Ruecksicht auf Gross/Klein: Windows unterscheidet bei den
+        // Prefab-Dateien auch nicht.
+        if (drafts.Any(x => string.Equals(x.code, id, System.StringComparison.OrdinalIgnoreCase)))
+        {
+            return "EnemyId." + id + " gibt es schon.";
+        }
+
+        foreach (string n in System.Enum.GetNames(typeof(EnemyId)))
+        {
+            if (!string.Equals(n, id, System.StringComparison.OrdinalIgnoreCase)) continue;
+
+            if (creating && n == id && n != EnemyId.None.ToString()) return null;
+            return "EnemyId." + n + " steht schon im Code.";
+        }
+
+        return null;
+    }
+
+    private static bool EnumHas(string id)
+    {
+        return System.Enum.GetNames(typeof(EnemyId)).Contains(id);
+    }
+
     // ---------------------------------------------------------------- Archiv
 
     private void DrawArchiveBox(Draft d)
@@ -1022,6 +1433,10 @@ public class EnemyWorkshop : EditorWindow
     /// </summary>
     private string BuildPrefab(Draft d)
     {
+        // Vor dem Laden der Sprites: deren Masse (und damit der Trefferkreis)
+        // haengen an der Pixeldichte.
+        if (!KeepsOwnScale(d)) SetPixelsPerUnit(d.sheet);
+
         Sprite[] sprites = LoadSprites(d.sheet);
         if (sprites.Length == 0) return d.name + ": kein Sprite im Sheet - uebersprungen.";
 
@@ -1443,8 +1858,238 @@ public class EnemyWorkshop : EditorWindow
     /// Die Handvoll Fehler, die ein Gegner-Prefab stumm kaputt machen - alle an
     /// einer Stelle sichtbar, statt einzeln im Spiel aufzufallen.
     /// </summary>
+    // ------------------------------------------------------- Pixelgroesse
+
+    /// <summary>Bosse behalten ihre Skalierung (Keks-Koenig: 1024px-Bild).</summary>
+    private static bool KeepsOwnScale(Draft d)
+    {
+        return d.role == EnemyRole.Boss || d.role == EnemyRole.DeathBoss;
+    }
+
+    private static float PixelsPerUnitOf(string texturePath)
+    {
+        var importer = AssetImporter.GetAtPath(texturePath) as TextureImporter;
+        return importer != null ? importer.spritePixelsToUnits : 0f;
+    }
+
+    /// <summary>Stellt ein Bild auf die gemeinsame Pixeldichte. true = geaendert.</summary>
+    private static bool SetPixelsPerUnit(string texturePath)
+    {
+        if (string.IsNullOrEmpty(texturePath)) return false;
+
+        var importer = AssetImporter.GetAtPath(texturePath) as TextureImporter;
+        if (importer == null || Mathf.Approximately(importer.spritePixelsToUnits, EnemyCatalog.PixelsPerUnit))
+        {
+            return false;
+        }
+
+        importer.spritePixelsToUnits = EnemyCatalog.PixelsPerUnit;
+        importer.SaveAndReimport();
+        return true;
+    }
+
+    /// <summary>
+    /// Bringt alle vorhandenen Gegner auf "so gross wie gezeichnet": Bild auf
+    /// die gemeinsame Pixeldichte, Prefab auf Skalierung 1.
+    ///
+    /// Damit sich dabei nichts verschiebt, wird alles, was am Prefab in
+    /// Einheiten gemessen ist, im selben Verhaeltnis mitgerechnet wie das
+    /// Bild: Trefferkreis, Kind-Objekte (Schatten, Effekte). Das Verhaeltnis
+    /// ist alte Pixeldichte / neue - die alte Skalierung faellt dabei heraus,
+    /// weil sie in beiden Rechnungen gleich drinsteckt.
+    ///
+    /// Mehrmals ausfuehren schadet nicht: was schon passt, wird uebersprungen.
+    /// </summary>
+    private void UnifyPixelSize()
+    {
+        if (!EditorUtility.DisplayDialog("Pixelgroesse vereinheitlichen",
+                "Alle Gegnerbilder (ausser Bossen) werden auf " + EnemyCatalog.PixelsPerUnit
+              + " Pixel pro Einheit gestellt, alle Gegner-Prefabs auf Skalierung 1. "
+              + "Trefferkreise und Kind-Objekte werden passend mitgerechnet.\n\n"
+              + "Gegner werden dadurch so gross, wie sie gezeichnet sind - einige "
+              + "deutlich kleiner oder groesser als jetzt."
+              + (dirty ? "\n\nDer Katalog wird dabei gespeichert - auch deine anderen "
+                       + "ungespeicherten Aenderungen." : ""),
+                "Vereinheitlichen", "Abbrechen"))
+        {
+            return;
+        }
+
+        // Welches Prefab mit welchem Bild. Die Slime-Varianten haengen nicht
+        // einzeln im Katalog, sondern nur ueber EnemyId.Slime - sie werden ueber
+        // ihren Ordner mitgenommen und nach ihrem eigenen Bild gerechnet.
+        var jobs = new Dictionary<string, string>();
+
+        foreach (Draft d in drafts)
+        {
+            if (KeepsOwnScale(d) || !PrefabExists(d)) continue;
+
+            jobs[d.prefab] = d.sheet;
+
+            if (d.id == EnemyId.Slime)
+            {
+                string folder = Path.GetDirectoryName(d.prefab).Replace('\\', '/');
+                foreach (string guid in AssetDatabase.FindAssets("t:Prefab", new[] { folder }))
+                {
+                    string path = AssetDatabase.GUIDToAssetPath(guid);
+                    if (!jobs.ContainsKey(path)) jobs[path] = SheetFromRenderer(path);
+                }
+            }
+        }
+
+        // Erst ALLE alten Pixeldichten merken, dann umstellen: zwei Gegner
+        // koennen sich ein Bild teilen (Mini-Milch und Saure Milch).
+        var oldPpu = new Dictionary<string, float>();
+        foreach (string sheet in jobs.Values)
+        {
+            if (!string.IsNullOrEmpty(sheet) && !oldPpu.ContainsKey(sheet))
+            {
+                oldPpu[sheet] = PixelsPerUnitOf(sheet);
+            }
+        }
+
+        var report = new StringBuilder();
+        int sheetsChanged = 0;
+
+        try
+        {
+            AssetDatabase.StartAssetEditing();
+            foreach (string sheet in oldPpu.Keys)
+            {
+                if (SetPixelsPerUnit(sheet)) sheetsChanged++;
+            }
+        }
+        finally
+        {
+            AssetDatabase.StopAssetEditing();
+        }
+
+        int prefabsChanged = 0;
+        int i = 0;
+
+        try
+        {
+            foreach (KeyValuePair<string, string> job in jobs)
+            {
+                EditorUtility.DisplayProgressBar("Pixelgroesse", job.Key, (float)i++ / jobs.Count);
+
+                float before = !string.IsNullOrEmpty(job.Value) && oldPpu.TryGetValue(job.Value, out float p) && p > 0f
+                    ? p
+                    : EnemyCatalog.PixelsPerUnit;
+
+                string line = RescalePrefab(job.Key, before / EnemyCatalog.PixelsPerUnit);
+                if (line != null)
+                {
+                    report.AppendLine(line);
+                    prefabsChanged++;
+                }
+            }
+        }
+        finally
+        {
+            EditorUtility.ClearProgressBar();
+        }
+
+        foreach (Draft d in drafts)
+        {
+            if (KeepsOwnScale(d)) continue;
+
+            // Ein von Hand eingetragener Trefferkreis ist in Einheiten gemessen
+            // und muss mitwachsen wie der am Prefab.
+            if (d.colliderRadius > 0f && !string.IsNullOrEmpty(d.sheet)
+                && oldPpu.TryGetValue(d.sheet, out float p) && p > 0f)
+            {
+                float k = p / EnemyCatalog.PixelsPerUnit;
+                d.colliderRadius *= k;
+                d.colliderOffset *= k;
+            }
+
+            d.scale = 1f;
+        }
+
+        SaveCatalog();
+        AssetDatabase.SaveAssets();
+        framesFor = "";
+
+        Report(sheetsChanged + " Bild(er) auf " + EnemyCatalog.PixelsPerUnit + " Pixel pro Einheit gestellt, "
+             + prefabsChanged + " Prefab(s) angepasst."
+             + (report.Length > 0 ? "\n\n" + report : "")
+             + "\n\nDanach die Test-Szene neu bauen: Tools -> Szenen -> Test-Szene neu bauen.");
+    }
+
+    private static string SheetFromRenderer(string prefabPath)
+    {
+        GameObject asset = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+        SpriteRenderer renderer = asset != null ? asset.GetComponentInChildren<SpriteRenderer>(true) : null;
+        return renderer != null && renderer.sprite != null
+            ? AssetDatabase.GetAssetPath(renderer.sprite.texture)
+            : "";
+    }
+
+    /// <summary>
+    /// Setzt die Wurzel auf Skalierung 1 und rechnet alles in Einheiten mit
+    /// <paramref name="k"/> (alte / neue Pixeldichte) um. null = nichts zu tun.
+    /// </summary>
+    private static string RescalePrefab(string path, float k)
+    {
+        GameObject root = PrefabUtility.LoadPrefabContents(path);
+        try
+        {
+            Vector3 oldScale = root.transform.localScale;
+            bool scaleOk = oldScale == Vector3.one;
+            if (scaleOk && Mathf.Approximately(k, 1f)) return null;
+
+            root.transform.localScale = Vector3.one;
+
+            if (!Mathf.Approximately(k, 1f))
+            {
+                foreach (Collider2D c in root.GetComponents<Collider2D>())
+                {
+                    c.offset *= k;
+                    if (c is CircleCollider2D circle) circle.radius *= k;
+                    else if (c is BoxCollider2D box) box.size *= k;
+                    else if (c is CapsuleCollider2D capsule) capsule.size *= k;
+                }
+
+                foreach (Transform child in root.transform)
+                {
+                    child.localPosition = new Vector3(child.localPosition.x * k,
+                                                      child.localPosition.y * k,
+                                                      child.localPosition.z);
+                    child.localScale = new Vector3(child.localScale.x * k,
+                                                   child.localScale.y * k,
+                                                   child.localScale.z);
+                }
+            }
+
+            PrefabUtility.SaveAsPrefabAsset(root, path);
+
+            return string.Format(CultureInfo.InvariantCulture,
+                "{0}: Skalierung {1:0.##} -> 1, Pixel x{2:0.##}",
+                Path.GetFileNameWithoutExtension(path), oldScale.x, k);
+        }
+        finally
+        {
+            PrefabUtility.UnloadPrefabContents(root);
+        }
+    }
+
     private void DrawAudit()
     {
+        EditorGUILayout.HelpBox(
+            "Gegner sind so gross, wie sie gezeichnet sind: alle Bilder auf "
+          + EnemyCatalog.PixelsPerUnit + " Pixel pro Einheit, alle Prefabs auf "
+          + "Skalierung 1 (ausser Bossen). Dieser Knopf bringt Vorhandenes auf den Stand.",
+            MessageType.None);
+
+        if (GUILayout.Button("Pixelgroesse vereinheitlichen", GUILayout.Height(26f)))
+        {
+            UnifyPixelSize();
+            GUIUtility.ExitGUI();
+        }
+
+        EditorGUILayout.Space(8f);
+
         EditorGUILayout.HelpBox(
             "Prueft alle Prefabs unter " + EnemyPrefabRoot + " auf die Fehler, die im "
           + "Spiel keine Fehlermeldung geben: fehlender Tag (keine Waffe trifft), "
@@ -1498,6 +2143,26 @@ public class EnemyWorkshop : EditorWindow
             }
         }
 
+        // Mixels: jede Abweichung von "so gross wie gezeichnet".
+        foreach (Draft d in drafts)
+        {
+            if (KeepsOwnScale(d)) continue;
+
+            float ppu = string.IsNullOrEmpty(d.sheet) ? 0f : PixelsPerUnitOf(d.sheet);
+            if (ppu > 0f && !Mathf.Approximately(ppu, EnemyCatalog.PixelsPerUnit))
+            {
+                problems.Add(d.name + ": Bild steht auf " + ppu + " statt "
+                           + EnemyCatalog.PixelsPerUnit + " Pixel pro Einheit (Mixels).");
+            }
+
+            GameObject asset = PrefabExists(d) ? AssetDatabase.LoadAssetAtPath<GameObject>(d.prefab) : null;
+            if (asset != null && asset.transform.localScale != Vector3.one)
+            {
+                problems.Add(d.name + ": Prefab ist skaliert (" + asset.transform.localScale
+                           + ") statt 1 (Mixels).");
+            }
+        }
+
         if (problems.Count == 0)
         {
             Debug.Log("[Gegner-Werkstatt] Pruefung sauber.");
@@ -1517,17 +2182,44 @@ public class EnemyWorkshop : EditorWindow
     /// Schreibt den Datenblock in EnemyCatalog.cs neu. Alles ausserhalb der
     /// beiden Marker bleibt unangetastet - was jemand von Hand daneben
     /// geschrieben hat, ueberlebt also jedes Speichern.
+    ///
+    /// Ausnahmen, beide nur auf Knopfdruck: <paramref name="extra"/> ist ein
+    /// neu angelegter Gegner - sein Name kommt ans Ende des Enums
+    /// <see cref="EnemyId"/>. <paramref name="renameFrom"/>/<paramref name="renameTo"/>
+    /// benennt einen Enum-Namen um, samt allen EnemyId.xxx in der Datei.
     /// </summary>
-    private void SaveCatalog()
+    private bool SaveCatalog(Draft extra = null, string renameFrom = null, string renameTo = null)
     {
         string full = Path.GetFullPath(CatalogPath);
         if (!File.Exists(full))
         {
             Report("EnemyCatalog.cs nicht gefunden unter " + CatalogPath);
-            return;
+            return false;
         }
 
         string[] lines = File.ReadAllLines(full);
+
+        if (extra != null && !EnumHas(extra.code))
+        {
+            lines = AddEnumMember(lines, extra.code);
+            if (lines == null)
+            {
+                Report("Das Enum EnemyId in EnemyCatalog.cs laesst sich nicht finden - "
+                     + "der neue Gegner wurde nicht angelegt.");
+                return false;
+            }
+        }
+
+        if (renameFrom != null)
+        {
+            lines = RenameEnumMember(lines, renameFrom, renameTo);
+            if (lines == null)
+            {
+                Report("EnemyId." + renameFrom + " steht nicht eindeutig im Enum - "
+                     + "es wurde nichts umbenannt.");
+                return false;
+            }
+        }
 
         int start = System.Array.FindIndex(lines, l => l.Contains("WERKSTATT-ANFANG"));
         int end = System.Array.FindIndex(lines, l => l.Contains("WERKSTATT-ENDE"));
@@ -1537,7 +2229,7 @@ public class EnemyWorkshop : EditorWindow
             Report("Die Marker WERKSTATT-ANFANG / WERKSTATT-ENDE fehlen in EnemyCatalog.cs. "
                + "Ohne sie weiss das Tool nicht, welchen Teil es ersetzen darf - es "
                + "schreibt lieber gar nichts.");
-            return;
+            return false;
         }
 
         var sb = new StringBuilder();
@@ -1552,6 +2244,8 @@ public class EnemyWorkshop : EditorWindow
         {
             AppendEntry(sb, d);
         }
+
+        if (extra != null) AppendEntry(sb, extra);
 
         // Das Archiv steht mit im Code - sonst waere es geloescht und nicht
         // weggelegt. Es kommt nur ans Ende, damit es beim Lesen nicht stoert.
@@ -1574,19 +2268,88 @@ public class EnemyWorkshop : EditorWindow
 
         for (int i = end; i < lines.Length; i++) sb.AppendLine(lines[i]);
 
-        File.WriteAllText(full, sb.ToString(), new UTF8Encoding(false));
+        string text = sb.ToString();
+
+        // Verweise ausserhalb des Datenblocks (Kommentare, <see cref>, Hand-Code).
+        if (renameFrom != null)
+        {
+            text = Regex.Replace(text, @"\bEnemyId\." + Regex.Escape(renameFrom) + @"\b",
+                                 "EnemyId." + renameTo);
+        }
+
+        File.WriteAllText(full, text, new UTF8Encoding(false));
         AssetDatabase.ImportAsset(CatalogPath);
 
         dirty = false;
 
-        Debug.Log("[Gegner-Werkstatt] " + drafts.Count + " Eintraege nach " + CatalogPath
-                  + " geschrieben.");
+        Debug.Log("[Gegner-Werkstatt] " + (drafts.Count + (extra != null ? 1 : 0))
+                  + " Eintraege nach " + CatalogPath + " geschrieben.");
+        return true;
+    }
+
+    /// <summary>Anfang und Ende (Zeile mit "}") des Enums EnemyId, oder -1.</summary>
+    private static void FindEnum(string[] lines, out int open, out int close)
+    {
+        open = System.Array.FindIndex(lines, l => Regex.IsMatch(l, @"^\s*public\s+enum\s+EnemyId\b"));
+        close = -1;
+        if (open < 0) return;
+
+        for (int i = open + 1; i < lines.Length; i++)
+        {
+            if (lines[i].Trim() == "}")
+            {
+                close = i;
+                return;
+            }
+        }
+    }
+
+    private static string[] AddEnumMember(string[] lines, string id)
+    {
+        FindEnum(lines, out int open, out int close);
+        if (open < 0 || close < 0) return null;
+
+        var list = new List<string>(lines);
+
+        // Der letzte Eintrag braucht ein Komma, sonst ist der neue ein Syntaxfehler.
+        for (int i = close - 1; i > open; i--)
+        {
+            string code = Regex.Replace(list[i], @"//.*$", "").Trim();
+            if (code.Length == 0 || code == "{") continue;
+            if (!code.EndsWith(",")) list[i] = Regex.Replace(list[i], @"^(\s*[^/\s][^/]*?)(\s*)(//.*)?$", "$1,$2$3");
+            break;
+        }
+
+        list.Insert(close, "    " + id + ",");
+        return list.ToArray();
+    }
+
+    private static string[] RenameEnumMember(string[] lines, string from, string to)
+    {
+        FindEnum(lines, out int open, out int close);
+        if (open < 0 || close < 0) return null;
+
+        var member = new Regex(@"^(\s*)" + Regex.Escape(from) + @"(\s*(=[^,/]*)?,?\s*(//.*)?)$");
+
+        int hit = -1;
+        for (int i = open + 1; i < close; i++)
+        {
+            if (!member.IsMatch(lines[i])) continue;
+            if (hit >= 0) return null;
+            hit = i;
+        }
+
+        if (hit < 0) return null;
+
+        string[] result = (string[])lines.Clone();
+        result[hit] = member.Replace(lines[hit], "${1}" + to + "$2");
+        return result;
     }
 
     private static void AppendEntry(StringBuilder sb, Draft d)
     {
         sb.AppendLine();
-        sb.AppendLine("        Def(EnemyId." + d.id + ", \"" + Escape(d.name) + "\",");
+        sb.AppendLine("        Def(EnemyId." + d.code + ", \"" + Escape(d.name) + "\",");
         sb.AppendLine("            health: " + F(d.health)
                     + ", damage: " + F(d.damage)
                     + ", speed: " + F(d.speed)

@@ -48,7 +48,7 @@ public enum EnemyId
     // der Kueche auch nur ein groesserer Marshmello ist.
     Sturmeichel,
     Dolchschwarm,
-    Pilzkoenig,
+    MinibossFliegenpliz,
     Rattenkoenigin,
     Milchkoloss,
 }
@@ -238,6 +238,19 @@ public static class EnemyCatalog
         }
     }
 
+    // ------------------------------------------------------------ Pixelgroesse
+    //
+    // Jeder Gegner ist so gross, wie er gezeichnet ist - keine Skalierung im
+    // Spiel. Dafuer stehen alle Gegnerbilder auf DERSELBEN Pixeldichte wie der
+    // Hub und die Pixel-Perfect-Kamera (32). Sonst waere ein Pilz-Pixel groesser
+    // als ein Boden-Pixel (Mixels). Die Gegner-Werkstatt stellt die Bilder beim Bauen
+    // darauf ein. Passt die Groesse zum Hintergrund nicht, ist das hier die
+    // eine Zahl dafuer - danach in der Werkstatt "Pixelgroesse vereinheitlichen".
+    //
+    // Ausnahme: Bosse (der Keks-Koenig ist ein 1024px-Bild mit eigener Groesse).
+
+    public const float PixelsPerUnit = 32f;
+
     // ------------------------------------------------------------ Gewicht
     //
     // Frueher stand das Gewicht von Hand bei jedem Gegner - und passte bei
@@ -380,28 +393,35 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Boss/KecksKoenig.prefab");
 
         Def(EnemyId.Eichel, "Eichel",
-            health: 30f, damage: 3f, speed: 1.9f, exp: 25, pushTime: 0.2f,
+            health: 45f, damage: 5f, speed: 1.3f, exp: 18, pushTime: 0.2f,
             role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/eichel.png", fps: 8f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Neu/Eichel.prefab");
 
         Def(EnemyId.Fliegenpilz, "Fliegenpilz",
-            health: 60f, damage: 6f, speed: 1.1f, exp: 55, pushTime: 0.15f,
+            health: 3.8f, damage: 2f, speed: 1.5f, exp: 1, pushTime: 0.25f,
             role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
-            sheet: "Assets/Art/Gegner/new/pilz.png", fps: 6f,
+            sheet: "Assets/Art/Gegner/new/pilz1.png", fps: 6f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Neu/Fliegenpilz.prefab");
 
+        Def(EnemyId.MinibossFliegenpliz, "Miniboss Fliegenpliz",
+            health: 600f, damage: 6f, speed: 1.3f, exp: 0, pushTime: 0f,
+            role: EnemyRole.MiniBoss, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/miniboss/miniboss_pilz.png", fps: 6f,
+            colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Neu/Pilzkoenig.prefab");
+
         Def(EnemyId.Fluegeldolch, "Fluegeldolch",
-            health: 18f, damage: 5f, speed: 3.6f, exp: 30, pushTime: 0.05f,
+            health: 14f, damage: 3f, speed: 2.1f, exp: 6, pushTime: 0.2f,
             role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/image.png", fps: 12f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Neu/Fluegeldolch.prefab");
 
         Def(EnemyId.Kirschslime, "Kirschslime",
-            health: 120f, damage: 5f, speed: 2.1f, exp: 90, pushTime: 0.1f,
+            health: 9f, damage: 3f, speed: 1.6f, exp: 3, pushTime: 0.2f,
             role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/new/new_slime.png", fps: 10f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
@@ -415,7 +435,7 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Neu/Milchpanzer.prefab");
 
         Def(EnemyId.WeisseMessermaus, "Weisse Messermaus",
-            health: 8f, damage: 2f, speed: 2.6f, exp: 6, pushTime: 0.3f,
+            health: 15f, damage: 3f, speed: 2f, exp: 5, pushTime: 0.3f,
             role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/new/MausMesser.png", fps: 6f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,

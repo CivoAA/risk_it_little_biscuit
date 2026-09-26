@@ -98,7 +98,8 @@ public static class WavePlans
             .Pool(EnemyId.Slime, 100f)
             .Pressure(90f, 120f)
             .Base(Patterns.Scatter)
-            .Boss(2f, EnemyId.KeksKoenig, "KEKS-KOENIG", 0.4f);
+            .Boss(2f, EnemyId.KeksKoenig, "KEKS-KOENIG", 0.4f)
+            .Burst(240f, EnemyId.MiniBossMarshmello, 8f, Patterns.Arc, 0f);
 
         plan.EndlessPhase("Endlos")
             .Pool(EnemyId.Slime, 70f)
@@ -114,67 +115,93 @@ public static class WavePlans
     // ------------------------------------------------------------- World3
 
     /// <summary>
-    /// Wald - Karte 2 in der Levelauswahl. Eigener Gegnersatz: hier laeuft
-    /// kein einziger Gegner aus der Kueche herum, nur der Keks-Koenig am Ende
-    /// ist derselbe.
+    /// Wald - Karte 2 in der Levelauswahl. Laeuft im Takt der Kueche: dieselben
+    /// Druckwerte, dieselben Zeitpunkte fuer Ring und Atempausen - nur mit
+    /// Waldgegnern. Die Kueche war gut balanciert, also wird hier nicht neu
+    /// erfunden, sondern uebersetzt:
     ///
-    /// Der Anstieg ist bewusst anders als in der Kueche: der Anfang liegt
-    /// gleichauf (Druck 14 gegen 12), das Ende deutlich darueber (290 gegen
-    /// 220). Wer hier ankommt, hat die Kueche hinter sich und einen Skilltree -
-    /// die Karte darf ihn also hinten fordern, ohne ihn vorne zu erschlagen.
+    ///   Marshmello       -> Fliegenpilz   (5 Leben, sonst gleich)
+    ///   Boeser Slime     -> Kirschslime   (etwas zaeher)
+    ///   Elite-Marshmello -> Eichel
+    ///   Messermaus       -> Pilzkoenig    (Miniboss mit Kaefig)
+    ///   Muffin & Co.     -> Milchpanzer
     ///
-    /// Die Reihenfolge der Gegner folgt der Ansage: Pilz, Fluegeldolch,
-    /// Eichel, Messermaus, Milchpanzer. Der Kirschslime war in der Liste nicht
-    /// dabei - er sitzt hier als Fuellgegner der mittleren Phasen und im
-    /// Finale. Passt das nicht, ist er in der Werkstatt ein Klick.
+    /// Der Anfang ist zweigeteilt, damit erst NUR Pilze kommen und der
+    /// Kirschslime danach dazustoesst. Der Fluegeldolch (Fledermaus) kommt
+    /// erst im Dickicht, und nur als Beimischung - in Rudeln ist er zu viel.
+    ///
+    /// Minibosse kommen nicht nur im Ring, sondern immer wieder zwischendurch:
+    /// ein Burst mit Druck 1 wirft genau EINEN rein (der Director rundet auf
+    /// mindestens einen), Druck 8 / 12 sind zwei bzw. drei Miniboss-Marshmellos.
     /// </summary>
     public static RunPlan World3()
     {
         var plan = new RunPlan("World3");
 
-        plan.Phase("Waldrand", 300f)
-            .Pool(EnemyId.Fliegenpilz, 60f)
-            .Pool(EnemyId.Fluegeldolch, 40f)
-            .Pressure(14f, 58f)
+        plan.Phase("Waldrand", 120f)
+            .Pool(EnemyId.Fliegenpilz, 100f)
+            .Pressure(12f, 30f)
             .Base(Patterns.Scatter)
-            .Burst(40f, EnemyId.Fluegeldolch, 20f, Patterns.Arc, 0f)
-            .Burst(85f, EnemyId.Fliegenpilz, 24f, Patterns.Column, 0f)
-            .Calm(120f, 8f, 0.15f)
-            .Burst(215f, EnemyId.Fluegeldolch, 28f, Patterns.Ambush, 0f)
-            .Burst(265f, EnemyId.Fliegenpilz, 32f, Patterns.Cluster, 0f);
+            .Burst(45f, EnemyId.Fliegenpilz, 14f, Patterns.Arc, 0f)
+            .Burst(90f, EnemyId.Fliegenpilz, 20f, Patterns.Column, 0f);
+
+        plan.Phase("Unterholz", 180f)
+            .Pool(EnemyId.Fliegenpilz, 70f)
+            .Pool(EnemyId.Kirschslime, 30f)
+            .Pressure(30f, 55f)
+            .Base(Patterns.Scatter)
+            .Burst(5f, EnemyId.Kirschslime, 16f, Patterns.Arc, 0f)
+            .Encircle(30f, EnemyId.MiniBossMarshmello, EnemyId.Fliegenpilz, 18, 13f, false, "RING!", 0.35f, 25f, 1.5f)
+            .Calm(75f, 10f, 0.15f)
+            .Burst(105f, EnemyId.Kirschslime, 24f, Patterns.Cluster, 0f)
+            .Burst(135f, EnemyId.MiniBossMarshmello, 1f, Patterns.Ambush, 0f)
+            .Burst(150f, EnemyId.Fliegenpilz, 30f, Patterns.Scatter, 0f);
 
         plan.Phase("Dickicht", 300f)
             .Pool(EnemyId.Eichel, 40f)
-            .Pool(EnemyId.WeisseMessermaus, 30f)
-            .Pressure(70f, 150f)
-            .Base(Patterns.Column)
-            .Burst(45f, EnemyId.WeisseMessermaus, 30f, Patterns.Cluster, 0f)
-            .Burst(95f, EnemyId.Marshmello, 32f, Patterns.Arc, 0f)
-            .Calm(140f, 10f, 0.15f)
-            .Burst(240f, EnemyId.Kirschslime, 40f, Patterns.Ring, 13f)
-            .Burst(280f, EnemyId.Marshmello, 35f, Patterns.Ambush, 0f);
+            .Pool(EnemyId.Kirschslime, 25f)
+            .Pool(EnemyId.WeisseMessermaus, 20f)
+            .Pool(EnemyId.Fluegeldolch, 15f)
+            .Pressure(55f, 125f)
+            .Base(Patterns.Scatter)
+            .Burst(40f, EnemyId.Eichel, 25f, Patterns.Ambush, 0f)
+            .Burst(60f, EnemyId.MiniBossMarshmello, 8f, Patterns.Arc, 0f)
+            .Calm(95f, 10f, 0.15f)
+            .Encircle(125f, EnemyId.MinibossFliegenpliz, EnemyId.Kirschslime, 22, 14f, true, "PILZKOENIG!", 0.35f, 25f, 1.5f)
+            .Burst(195f, EnemyId.WeisseMessermaus, 30f, Patterns.Cluster, 0f)
+            .Burst(225f, EnemyId.MinibossFliegenpliz, 1f, Patterns.Ambush, 0f)
+            .Burst(250f, EnemyId.Eichel, 40f, Patterns.Column, 0f);
 
         plan.Phase("Sturm", 290f)
-            .Pool(EnemyId.Milchpanzer, 35f)
-            .Pool(EnemyId.Kirschslime, 30f)
-            .Pressure(165f, 290f)
+            .Pool(EnemyId.Milchpanzer, 40f)
+            .Pool(EnemyId.Eichel, 35f)
+            .Pool(EnemyId.Fluegeldolch, 25f)
+            .Pressure(125f, 220f)
             .Base(Patterns.Scatter)
-            .Burst(40f, EnemyId.Milchpanzer, 55f, Patterns.Arc, 0f)
-            .Calm(100f, 8f, 0.15f)
-            .Burst(250f, EnemyId.Milchpanzer, 70f, Patterns.Cluster, 0f);
+            .Burst(20f, EnemyId.MinibossFliegenpliz, 1f, Patterns.Ambush, 0f)
+            .Burst(50f, EnemyId.Milchpanzer, 40f, Patterns.Arc, 0f)
+            .Burst(80f, EnemyId.MiniBossMarshmello, 12f, Patterns.Arc, 0f)
+            .Calm(110f, 8f, 0.15f)
+            .Encircle(145f, EnemyId.MinibossFliegenpliz, EnemyId.Eichel, 26, 15f, true, "PILZKOENIG!", 0.35f, 25f, 1.5f)
+            .Burst(225f, EnemyId.Milchpanzer, 60f, Patterns.Cluster, 0f)
+            .Burst(265f, EnemyId.MinibossFliegenpliz, 1f, Patterns.Ambush, 0f);
 
         plan.Phase("Keks-Koenig", 600f)
-            .Pool(EnemyId.Kirschslime, 100f)
-            .Pressure(100f, 135f)
+            .Pool(EnemyId.Eichel, 60f)
+            .Pool(EnemyId.Fluegeldolch, 40f)
+            .Pressure(90f, 120f)
             .Base(Patterns.Scatter)
             .Boss(2f, EnemyId.KeksKoenig, "KEKS-KOENIG", 0.4f);
 
         plan.EndlessPhase("Endlos")
-            .Pool(EnemyId.Kirschslime, 60f)
-            .Pool(EnemyId.Milchpanzer, 25f)
-            .Pressure(175f, 175f)
+            .Pool(EnemyId.Eichel, 45f)
+            .Pool(EnemyId.Milchpanzer, 30f)
+            .Pool(EnemyId.Fluegeldolch, 25f)
+            .Pressure(140f, 140f)
             .Base(Patterns.Scatter)
-            .Encircle(60f, EnemyId.None, EnemyId.Kirschslime, 26, 14f, false, "RING!", 0.35f, 25f, 1.5f);
+            .Burst(30f, EnemyId.MinibossFliegenpliz, 1f, Patterns.Ambush, 0f)
+            .Encircle(60f, EnemyId.None, EnemyId.Eichel, 26, 14f, false, "RING!", 0.35f, 25f, 1.5f)
+            .Burst(90f, EnemyId.MiniBossMarshmello, 12f, Patterns.Arc, 0f);
 
         return plan;
     }

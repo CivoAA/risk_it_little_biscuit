@@ -1,19 +1,19 @@
 fileFormatVersion: 2
-guid: bd7581055f8b4ad47bf6ae52b82276b6
+guid: dee351b9a4ebbf14b82f49a5a0f483f3
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1392266035752994970
-    second: pilz_0
+      213: 940869152096174366
+    second: pilz1_0
   - first:
-      213: -7777000122421177357
-    second: pilz_1
+      213: -2060208086787779091
+    second: pilz1_1
   - first:
-      213: 1391159382688186012
-    second: pilz_2
+      213: -7711666302910854898
+    second: pilz1_2
   - first:
-      213: 4486999968480828187
-    second: pilz_3
+      213: -5971012841916948011
+    second: pilz1_3
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -60,7 +60,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -135,89 +135,89 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: pilz_0
+      name: pilz1_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 21
-        height: 18
+        width: 20
+        height: 20
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a9806ed3592525310800000000000000
-      internalID: 1392266035752994970
+      spriteID: e11c0d64283ae0d00800000000000000
+      internalID: 940869152096174366
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pilz_1
+      name: pilz1_1
       rect:
         serializedVersion: 2
-        x: 32
-        y: 1
-        width: 21
-        height: 18
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 3f39aecc79b821490800000000000000
-      internalID: -7777000122421177357
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: pilz_2
-      rect:
-        serializedVersion: 2
-        x: 64
+        x: 20
         y: 0
-        width: 21
-        height: 18
+        width: 20
+        height: 20
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c9eb41f76146e4310800000000000000
-      internalID: 1391159382688186012
+      spriteID: de590a719aba863e0800000000000000
+      internalID: -2060208086787779091
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pilz_3
+      name: pilz1_2
       rect:
         serializedVersion: 2
-        x: 96
-        y: 1
-        width: 21
-        height: 18
+        x: 40
+        y: 0
+        width: 20
+        height: 20
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b1b1d7cb2b6054e30800000000000000
-      internalID: 4486999968480828187
+      spriteID: e0906ac0b58aaf490800000000000000
+      internalID: -7711666302910854898
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pilz1_3
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 0
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5d1ae30c473b22da0800000000000000
+      internalID: -5971012841916948011
       vertices: []
       indices: 
       edges: []
@@ -226,7 +226,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 463aaf8f38eed2143952372ea9be5e24
     internalID: 0
     vertices: []
     indices: 
@@ -234,12 +234,14 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":20.0,"y":20.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      pilz_0: 1392266035752994970
-      pilz_1: -7777000122421177357
-      pilz_2: 1391159382688186012
-      pilz_3: 4486999968480828187
+      pilz1_0: 940869152096174366
+      pilz1_1: -2060208086787779091
+      pilz1_2: -7711666302910854898
+      pilz1_3: -5971012841916948011
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
