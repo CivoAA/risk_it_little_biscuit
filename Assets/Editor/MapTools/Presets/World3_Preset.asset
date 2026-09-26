@@ -15,13 +15,13 @@ MonoBehaviour:
   seed: 12345
   backgroundTiles:
   - tile: {fileID: 11400000, guid: ff69f645ab64dc14d96d1579217c4a7b, type: 2}
-    weight: 1
+    weight: 5
   - tile: {fileID: 11400000, guid: fe5f513748ce99949ab5bc75cefa58d6, type: 2}
-    weight: 1
+    weight: 5
   - tile: {fileID: 11400000, guid: 8c546b8d7adbb274093547cfabe971f8, type: 2}
-    weight: 4
+    weight: 5
   - tile: {fileID: 11400000, guid: 935816e4a898a5c499b553cedf5e07ba, type: 2}
-    weight: 1
+    weight: 5
   - tile: {fileID: 11400000, guid: f8097113ac3922c46a297d84f41c679d, type: 2}
     weight: 1
   - tile: {fileID: 11400000, guid: 92af663c5dbabee4da9f026a6223b5d8, type: 2}

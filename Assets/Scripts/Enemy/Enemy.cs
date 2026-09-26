@@ -227,11 +227,13 @@ public class Enemy : MonoBehaviour
     protected virtual void OnEnable()
     {
         alive.Add(this);
+        RegisterCollider();
     }
 
     protected virtual void OnDisable()
     {
         alive.Remove(this);
+        UnregisterCollider();
     }
 
     protected virtual void Start()
@@ -313,7 +315,155 @@ public class Enemy : MonoBehaviour
         float speed = baseSpeed * slowFactor;
         if (pushCounter > 0f) speed = -speed;
 
-        rb.linearVelocity = (Vector2)direction * speed + externalVelocity;
+        Vector2 chase = (Vector2)direction * speed;
+        Vector2 push = Separation(ref chase);
+
+        rb.linearVelocity = chase + externalVelocity + push * baseSpeed * SeparationStrength;
+    }
+
+    // ------------------------------------------------------------- Abstand
+
+    /// <summary>
+    /// Ab welchem Anteil der beiden Koerper-Radien sich zwei Gegner
+    /// wegdruecken. 1 = sie beruehren sich gerade so, darunter duerfen sie
+    /// ein Stueck uebereinander stehen. 0.75 heisst: dicht hintereinander,
+    /// aber hoechstens ein Viertel ineinander.
+    /// </summary>
+    private const float SeparationSpacing = 0.75f;
+
+    /// <summary>Wie stark weggedrueckt wird, als Anteil des eigenen Tempos.</summary>
+    private const float SeparationStrength = 2f;
+
+    private static readonly Collider2D[] separationHits = new Collider2D[16];
+    private static readonly Dictionary<Collider2D, Enemy> byCollider = new Dictionary<Collider2D, Enemy>();
+
+    private Collider2D ownCollider;
+    private Sprite radiusSprite;
+    private float bodyRadius;
+
+    /// <summary>
+    /// Mitte des sichtbaren Koerpers in Weltkoordinaten. Der Pivot sitzt bei
+    /// manchen Bildern unten, deshalb nicht einfach transform.position.
+    /// </summary>
+    private Vector2 BodyCenter
+    {
+        get
+        {
+            if (spriteRenderer != null && spriteRenderer.sprite != null)
+                return spriteRenderer.bounds.center;
+            return ownCollider != null ? (Vector2)ownCollider.bounds.center : (Vector2)transform.position;
+        }
+    }
+
+    /// <summary>
+    /// Radius des sichtbaren Koerpers - aus dem Bild, nicht aus dem Collider.
+    ///
+    /// Die Collider taugen dafuer nicht: beim Fliegenpilz etwa ist er noch fuer
+    /// 100 Pixel pro Einheit gebaut, das Bild steht inzwischen auf 20 - der
+    /// Collider ist also ein Fuenftel so gross wie der Pilz. Mit dem Collider
+    /// als Mass standen die Pilze fast deckungsgleich aufeinander.
+    /// Die Sprite-Bounds sind bei "Tight"-Meshes schon um den leeren Rand
+    /// beschnitten. Neu gerechnet wird nur, wenn die Animation das Bild wechselt.
+    /// </summary>
+    private float BodyRadius
+    {
+        get
+        {
+            Sprite sprite = spriteRenderer != null ? spriteRenderer.sprite : null;
+            if (sprite != null)
+            {
+                if (sprite != radiusSprite)
+                {
+                    radiusSprite = sprite;
+                    Vector3 size = Vector3.Scale(sprite.bounds.extents, transform.lossyScale);
+                    bodyRadius = Mathf.Min(Mathf.Abs(size.x), Mathf.Abs(size.y));
+                }
+                return bodyRadius;
+            }
+            return ownCollider != null ? ownCollider.bounds.extents.x : 0.3f;
+        }
+    }
+
+    private void RegisterCollider()
+    {
+        if (ownCollider == null) ownCollider = GetComponent<Collider2D>();
+        if (ownCollider != null) byCollider[ownCollider] = this;
+    }
+
+    private void UnregisterCollider()
+    {
+        if (ownCollider != null) byCollider.Remove(ownCollider);
+    }
+
+    /// <summary>
+    /// Abstand zu den Nachbarn.
+    ///
+    /// Die Kollision allein reicht nicht: jeder Gegner setzt jeden Schritt
+    /// seine Geschwindigkeit fest auf den Spieler zu. Laeuft der Spieler im
+    /// Kreis, druecken alle in denselben Punkt, und der Physik-Loeser schiebt
+    /// pro Schritt nur ein Stueck zurueck - die Gruppe presst sich zu einem
+    /// Klumpen zusammen.
+    ///
+    /// Deshalb zwei Dinge: wer zu tief in einem Nachbarn steckt, wird
+    /// weggeschoben (Rueckgabe). Und der Teil der eigenen Laufrichtung, der
+    /// geradewegs in den Nachbarn vorne hineinfuehrt, wird abgezogen - der
+    /// Hintere reiht sich ein, statt weiter in den Vorderen zu druecken.
+    /// </summary>
+    private Vector2 Separation(ref Vector2 chase)
+    {
+        if (ownCollider == null) return Vector2.zero;
+
+        Vector2 me = BodyCenter;
+        float myRadius = BodyRadius;
+
+        ContactFilter2D filter = new ContactFilter2D();
+        filter.SetLayerMask(1 << gameObject.layer);
+        filter.useTriggers = false;
+
+        // Etwas weiter suchen als der eigene Koerper: der Collider eines
+        // Nachbarn kann deutlich kleiner sein als sein Bild.
+        int count = Physics2D.OverlapCircle(me, myRadius * 3f, filter, separationHits);
+
+        Vector2 push = Vector2.zero;
+        for (int i = 0; i < count; i++)
+        {
+            Collider2D hit = separationHits[i];
+            if (hit == ownCollider) continue;
+
+            Vector2 otherCenter;
+            float otherRadius;
+            if (byCollider.TryGetValue(hit, out Enemy other) && other != null)
+            {
+                otherCenter = other.BodyCenter;
+                otherRadius = other.BodyRadius;
+            }
+            else
+            {
+                otherCenter = hit.bounds.center;
+                otherRadius = hit.bounds.extents.x;
+            }
+
+            Vector2 away = me - otherCenter;
+            float distance = away.magnitude;
+            float desired = (myRadius + otherRadius) * SeparationSpacing;
+            if (distance >= desired) continue;
+
+            // Genau aufeinander: keine Richtung ablesbar, also zufaellig.
+            if (distance < 0.001f)
+            {
+                push += Random.insideUnitCircle.normalized;
+                continue;
+            }
+
+            Vector2 awayDir = away / distance;
+            float depth = 1f - distance / desired;
+            push += awayDir * depth;
+
+            float into = -Vector2.Dot(chase, awayDir);
+            if (into > 0f) chase += awayDir * into * Mathf.Clamp01(depth * 3f);
+        }
+
+        return Vector2.ClampMagnitude(push, 1.5f);
     }
 
     /// <summary>

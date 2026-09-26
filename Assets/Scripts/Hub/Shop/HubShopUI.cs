@@ -71,6 +71,14 @@ public class HubShopUI : MonoBehaviour
     [SerializeField] private Rect priceValueArea = new Rect(226f, 116f, 70f, 12f);
     [SerializeField] private Rect buyArea  = new Rect(168f, 143f, 64f, 16f);
     [SerializeField] private Rect backArea = new Rect(242f, 143f, 60f, 16f);
+    [Tooltip("Zwischen SHOP-Titel und Goldanzeige.")]
+    [SerializeField] private Rect resetArea = new Rect(122f, 12f, 72f, 15f);
+
+    [Header("Reset-Knopf")]
+    [SerializeField] private bool showResetButton = true;
+    [SerializeField] private string resetLabel = "RESET!!!";
+    [SerializeField] private Color resetButtonColor = new Color(0f, 1f, 0f, 1f);
+    [SerializeField] private Color resetTextColor = new Color(1f, 0f, 0f, 1f);
 
     [Header("Liste")]
     [SerializeField] private int visibleRows = 6;
@@ -368,6 +376,19 @@ public class HubShopUI : MonoBehaviour
                                     backTextColor, TextAlignmentOptions.Center);
         HubUiKit.Place((RectTransform)back.transform, backArea);
         back.text = backLabel;
+
+        if (showResetButton)
+        {
+            var resetImage = HubUiKit.NewImage("ResetButton", screen, null, resetButtonColor);
+            HubUiKit.Place((RectTransform)resetImage.transform, resetArea);
+            resetImage.raycastTarget = true;
+            AddClick(resetImage.gameObject, ResetShop);
+
+            var resetText = HubUiKit.NewText("ResetLabel", resetImage.transform, font, buttonFontSize,
+                                             resetTextColor, TextAlignmentOptions.Center);
+            HubUiKit.Stretch((RectTransform)resetText.transform);
+            resetText.text = resetLabel;
+        }
 
         root.SetActive(false);
     }
@@ -901,6 +922,20 @@ public class HubShopUI : MonoBehaviour
         // Der Katalog entscheidet, ob der Kauf durchgeht - Preis abziehen, Stufe
         // erhoehen und Speichern passiert dort an einer Stelle, fuer beide Shops.
         if (!Shop.TryBuy(shown[selected])) { PlayDenySound(); return; }
+
+        PlayBuySound();
+        Refresh();
+    }
+
+    /// <summary>Alles zurueck auf Stufe 0, das Ausgegebene kommt als Gold zurueck.</summary>
+    void ResetShop()
+    {
+        Shop.ResetAllUpgrades();
+
+        // Gekauftes stand unten - jetzt ist wieder alles kaufbar, also neu sortieren
+        RebuildShownList();
+        selected = 0;
+        scrollTop = 0;
 
         PlayBuySound();
         Refresh();
