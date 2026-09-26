@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Steuert das Hauptmenü. Die fünf Knöpfe hängen jeweils an einer der öffentlichen
@@ -88,12 +87,10 @@ public class MainMenuController : MonoBehaviour
         isLoading = true;
         PlayClick();
 
-        // Single-Modus statt additiv: LoadScene ist erst am Frame-Ende fertig, das
-        // Entladen der alten Szene im selben Frame lehnt Unity deshalb ab ("Unloading
-        // the last loaded scene is not supported") - das Menue bliebe sichtbar liegen.
-        // Single ersetzt alles auf einmal; die DontDestroyOnLoad-Manager
-        // (AudioController, SteamManager, ...) ueberleben das unveraendert.
-        SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+        // Blende statt hartem Schnitt: Bild und Menümusik blenden aus, die Szene lädt
+        // dahinter (Single-Modus, siehe SceneFader), dann kommt die neue Musik weich rein.
+        // Die DontDestroyOnLoad-Manager (AudioController, SteamManager, ...) überleben das.
+        SceneFader.Load(sceneName);
     }
 
     private void PlayClick()

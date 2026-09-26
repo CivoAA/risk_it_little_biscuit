@@ -114454,6 +114454,7 @@ MonoBehaviour:
   mapName: World3
   legacyMapId: 3
   planId: 
+  music: {fileID: 8300000, guid: 56b195d28eea480ba70e21313510ac90, type: 3}
 --- !u!4 &1064606359
 Transform:
   m_ObjectHideFlags: 0

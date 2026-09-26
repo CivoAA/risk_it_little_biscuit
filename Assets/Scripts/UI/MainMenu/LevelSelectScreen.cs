@@ -1,7 +1,6 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
@@ -70,6 +69,6 @@ public class LevelSelectScreen : MonoBehaviour
             return;
         }
 
-        SceneManager.LoadScene(menuSceneName, LoadSceneMode.Single);
+        SceneFader.Load(menuSceneName);
     }
 }

@@ -12428,7 +12428,7 @@ MonoBehaviour:
   coinFontSize: 8
   coinMinFontSize: 5
   coinTextColor: {r: 0.23137255, g: 0.14117648, b: 0.2, a: 1}
-  pageTurnClip: {fileID: 8300000, guid: 35cf7766e9e2aa542811e896fde57989, type: 3}
+  pageTurnClip: {fileID: 8300000, guid: 01f1cd7711364eef8c195efd338bcbbd, type: 3}
   sfxSource: {fileID: 1990000023}
   sfxVolume: 1
   sfxPitchJitter: 0.08

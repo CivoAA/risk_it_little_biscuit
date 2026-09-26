@@ -134,8 +134,21 @@ public class GameManager : MonoBehaviour
     ///     mit Single) - also auch hart zurück.
     ///  3. Kein Ziel bekannt (Test-Szene, Map-Szene direkt gestartet) - neu
     ///     laden, es gibt kein Zurück.
+    ///
+    /// Alles davon läuft hinter dem <see cref="SceneFader"/>, wie der Weg
+    /// Hauptmenü -> Hub. Fertig ist der Wechsel, sobald dieser Manager mit
+    /// seiner Szene weg ist.
     /// </summary>
     public void Restart()
+    {
+        if (SceneFader.IsFading) return;
+
+        // Während der Blende steht das Spiel - erst beim Umschalten läuft die Zeit weiter.
+        Time.timeScale = 0f;
+        SceneFader.Switch(RestartNow, () => this == null);
+    }
+
+    private void RestartNow()
     {
         Time.timeScale = 1f;
 
@@ -167,6 +180,9 @@ public class GameManager : MonoBehaviour
             MenuManager.Instance.DeactivateScene(here);
             MapSceneSystem.DeactivateRunMap();
             MenuManager.Instance.ActivateScene(back);
+            // Es wird nichts geladen - von allein schaltet der AudioController
+            // die Lauf-Musik hier nicht ab, und die Hub-Musik startet hart.
+            AudioController.Instance?.ReturnFromRun(target);
             MenuManager.Instance.UnloadScene(here);
             MapSceneSystem.UnloadRunMap();
             return;
@@ -189,6 +205,9 @@ public class GameManager : MonoBehaviour
 
     public void Pause()
     {
+        // Mitten in der Blende zurück zum Hub geht kein Pausenmenü mehr auf
+        if (SceneFader.IsFading) return;
+
         // Offen? Dann macht Escape wieder zu - das Menue raeumt beim Zerstoeren
         // selbst auf (Time.timeScale, OnPauseMenuClosed).
         if (PauseMenuPanel.IsOpen)

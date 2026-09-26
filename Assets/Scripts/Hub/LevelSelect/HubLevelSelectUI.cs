@@ -650,6 +650,9 @@ public class HubLevelSelectUI : MonoBehaviour
     {
         if (!IsOpen) return;
 
+        // Levelstart laeuft schon - waehrend der Blende nichts mehr annehmen
+        if (SceneFader.IsFading) return;
+
         // Das [E], mit dem die Auswahl aufgeht, darf nicht gleich ein Level starten
         if (Time.frameCount == openedOnFrame) return;
 
@@ -1053,6 +1056,17 @@ public class HubLevelSelectUI : MonoBehaviour
         //    bringt den Spieler nach dem Lauf genau hierher zurueck.
         string hubScene = gameObject.scene.name;
         GameSession.ReturnScene = hubScene;
+
+        // Wie Hauptmenue -> Hub: Bild und Hub-Musik blenden aus, der Wechsel
+        // passiert hinter der Blende, dann blendet der Lauf ein. Die Lauf-Musik
+        // setzt danach mit kurzer Pause ein (AudioController). Bis dahin bleibt
+        // die Auswahl offen und haelt den Hub gesperrt.
+        SceneFader.Switch(() => SwitchToLevel(sceneToLoad, hubScene),
+                          () => SceneManager.GetSceneByName(MapSceneSystem.CoreScene).isLoaded);
+    }
+
+    void SwitchToLevel(string sceneToLoad, string hubScene)
+    {
         Close();
 
         // Der uebliche Weg: additiv laden und den Hub stilllegen, genau wie die

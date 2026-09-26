@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 /// <summary>Welchen Modus der Spieler im Hauptmenü gewählt hat.</summary>
 public enum GameMode
@@ -60,17 +59,20 @@ public static class GameSession
 
     /// <summary>
     /// Zurück ins Hauptmenü - von überall, egal wie viele Szenen gerade
-    /// nebeneinander liegen. Bewusst hart mit Single: das entlädt Level,
-    /// Map-Szene und Hub in einem Rutsch. Die DontDestroyOnLoad-Manager
-    /// (AudioController, MenuManager, SteamManager) überleben das, genauso wie
-    /// auf dem Weg Hauptmenü -> Hub.
+    /// nebeneinander liegen. Lädt mit Single und entlädt damit Level, Map-Szene
+    /// und Hub in einem Rutsch; davor blendet <see cref="SceneFader"/> Bild und
+    /// Musik weich aus. Die DontDestroyOnLoad-Manager (AudioController,
+    /// MenuManager, SteamManager) überleben das, genauso wie auf dem Weg
+    /// Hauptmenü -> Hub. Die Menümusik schaltet der AudioController beim Laden
+    /// selbst ein, der Fader blendet sie dann hoch.
     /// </summary>
     public static void LoadMainMenu()
     {
-        Time.timeScale = 1f;
         ReturnScene = null;
 
-        if (AudioController.Instance != null) AudioController.Instance.SwitchMusic("Main Menu");
-        SceneManager.LoadScene(MainMenuScene, LoadSceneMode.Single);
+        // Während der Blende steht das Spiel - das Pausenmenü hat die Zeit beim
+        // Schließen schon wieder auf 1 gesetzt. Erst direkt vor dem Laden läuft sie weiter.
+        Time.timeScale = 0f;
+        SceneFader.Load(MainMenuScene, () => Time.timeScale = 1f);
     }
 }

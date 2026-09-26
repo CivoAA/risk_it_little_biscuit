@@ -6,9 +6,9 @@ using UnityEngine;
 /// Props, der WorldManager der Welt.
 ///
 /// Was hier landet, ist das, was sich von Karte zu Karte wirklich
-/// unterscheidet. Im Moment sind das nur Name und die alte Map-ID; Spawnpunkt,
-/// Musik oder ein Wave-Preset koennen spaeter danebentreten, ohne dass dafuer
-/// eine Szene angefasst werden muss.
+/// unterscheidet: Name, alte Map-ID, Wellenplan und Lauf-Musik. Ein Spawnpunkt
+/// kann spaeter danebentreten, ohne dass dafuer eine Szene angefasst werden
+/// muss.
 /// </summary>
 [DisallowMultipleComponent]
 public class MapDefinition : MonoBehaviour
@@ -27,12 +27,19 @@ public class MapDefinition : MonoBehaviour
              "Leer = der Plan zum Weltnamen.")]
     [SerializeField] private string planId = "";
 
+    [Tooltip("Musik, die waehrend eines Laufs auf dieser Karte spielt. " +
+             "Leer = die allgemeine Lauf-Musik vom AudioController.")]
+    [SerializeField] private AudioClip music;
+
     public string MapName => mapName;
 
     public int LegacyMapId => legacyMapId;
 
     /// <summary>Wellenplan der Karte - liest der <see cref="SpawnDirector"/> beim Start.</summary>
     public string PlanId => string.IsNullOrWhiteSpace(planId) ? mapName : planId;
+
+    /// <summary>Lauf-Musik der Karte; null = allgemeine Lauf-Musik.</summary>
+    public AudioClip Music => music;
 
     void Awake()
     {

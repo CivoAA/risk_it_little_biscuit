@@ -70,6 +70,16 @@ public class HubUI : MonoBehaviour
     [SerializeField] private Color textColor   = new Color32(0xF7, 0xEC, 0xD6, 0xFF);
     [SerializeField] private Color hintColor   = new Color32(0xD9, 0xA4, 0x41, 0xFF);
 
+    [Header("Dialog-Extras")]
+    [Tooltip("Kantenlaenge des Portraits links in der Box (nur wenn ein Portrait mitkommt).")]
+    [SerializeField] private float portraitSize = 32f;
+    [Tooltip("So oft pro Sekunde wechselt beim Tippen der Mund (Portrait <-> Sprech-Portrait).")]
+    [SerializeField] private float mouthFlapRate = 10f;
+    [Tooltip("So weit wippt das Portrait beim Tippen.")]
+    [SerializeField] private float portraitBob = 1f;
+    [Tooltip("So weit wippt der Weiter-Pfeil, wenn die Seite fertig ist.")]
+    [SerializeField] private float arrowBob = 1.5f;
+
     [Header("Geld (oben rechts)")]
     [Tooltip("Zeigt den Kontostand dauerhaft im Hub an.")]
     [SerializeField] private bool showCoins = true;
@@ -104,6 +114,15 @@ public class HubUI : MonoBehaviour
 
     GameObject dialogueRoot, promptRoot, coinRoot;
     TextMeshProUGUI bodyText, hintText, promptLabel, coinValueText;
+
+    // Dialog-Extras: getippter Text, Weiter-Pfeil, Namensschild, Portrait
+    DialogueText typer;
+    RectTransform bodyRect, arrowRect, nameTagRect, portraitRect;
+    Image arrowImage, portraitImage;
+    TextMeshProUGUI nameText;
+    Texture2D arrowTexture;
+    Sprite arrowSprite;
+    Sprite portraitIdle, portraitTalk;
     int shownCoins = int.MinValue;
 
     string[] pages;
@@ -142,6 +161,8 @@ public class HubUI : MonoBehaviour
     void OnDestroy()
     {
         if (_instance == this) { _instance = null; DialogueOpen = false; openModals = 0; }
+        if (arrowSprite != null) Destroy(arrowSprite);
+        if (arrowTexture != null) Destroy(arrowTexture);
     }
 
     void RefreshCoins()
@@ -207,6 +228,52 @@ public class HubUI : MonoBehaviour
         bRect.offsetMax = new Vector2(-padding, -padding);
         bodyText.alignment = TextAlignmentOptions.TopLeft;
         bodyText.lineSpacing = lineSpacing;
+        bodyRect = bRect;
+        typer = bodyText.gameObject.AddComponent<DialogueText>();
+
+        // ---- Portrait (links in der Box, nur wenn eins mitkommt) ----------
+        var portraitGO = NewRect("Portrait", panel.transform);
+        portraitRect = (RectTransform)portraitGO.transform;
+        portraitRect.anchorMin = portraitRect.anchorMax = portraitRect.pivot = new Vector2(0f, 1f);
+        portraitRect.sizeDelta = new Vector2(portraitSize, portraitSize);
+        portraitRect.anchoredPosition = new Vector2(padding, -padding);
+        portraitImage = portraitGO.AddComponent<Image>();
+        portraitImage.preserveAspect = true;
+        portraitImage.raycastTarget = false;
+        portraitGO.SetActive(false);
+
+        // ---- Weiter-Pfeil (unten rechts, wippt wenn die Seite fertig ist) --
+        arrowTexture = new Texture2D(5, 3, TextureFormat.RGBA32, false) { filterMode = FilterMode.Point };
+        string[] arrowRows = { "..#..", ".###.", "#####" }; // von unten nach oben
+        for (int y = 0; y < 3; y++)
+            for (int x = 0; x < 5; x++)
+                arrowTexture.SetPixel(x, y, arrowRows[y][x] == '#' ? Color.white : Color.clear);
+        arrowTexture.Apply();
+        arrowSprite = Sprite.Create(arrowTexture, new Rect(0, 0, 5, 3), new Vector2(0.5f, 0.5f), 100f);
+
+        var arrowGO = NewRect("ContinueArrow", dialogueRoot.transform);
+        arrowRect = (RectTransform)arrowGO.transform;
+        arrowRect.anchorMin = arrowRect.anchorMax = arrowRect.pivot = new Vector2(1f, 0f);
+        arrowRect.sizeDelta = new Vector2(5f, 3f);
+        arrowImage = arrowGO.AddComponent<Image>();
+        arrowImage.sprite = arrowSprite;
+        arrowImage.color = hintColor;
+        arrowImage.raycastTarget = false;
+        arrowGO.SetActive(false);
+
+        // ---- Namensschild (Reiter oben links auf der Box) ------------------
+        var tagGO = NewRect("NameTag", dialogueRoot.transform);
+        nameTagRect = (RectTransform)tagGO.transform;
+        nameTagRect.anchorMin = nameTagRect.anchorMax = nameTagRect.pivot = new Vector2(0f, 0f);
+        tagGO.AddComponent<Image>().color = borderColor;
+        var tagPanel = NewRect("Panel", tagGO.transform);
+        Stretch((RectTransform)tagPanel.transform, borderWidth);
+        tagPanel.AddComponent<Image>().color = panelColor;
+        nameText = NewText("Name", tagPanel.transform, hintFontSize + 1f, borderColor);
+        Stretch((RectTransform)nameText.transform, 0f);
+        nameText.alignment = TextAlignmentOptions.Center;
+        nameText.textWrappingMode = TextWrappingModes.NoWrap;
+        tagGO.SetActive(false);
 
         hintText = NewText("Hint", dialogueRoot.transform, hintFontSize, hintColor);
         var hRect = (RectTransform)hintText.transform;
@@ -214,7 +281,8 @@ public class HubUI : MonoBehaviour
         hRect.anchorMax = new Vector2(1f, 0f);
         hRect.pivot     = new Vector2(1f, 0f);
         hRect.sizeDelta = new Vector2(120f, 10f);
-        hRect.anchoredPosition = new Vector2(-padding, padding * 0.4f);
+        // Platz rechts lassen fuer den Weiter-Pfeil
+        hRect.anchoredPosition = new Vector2(-padding - 8f, padding * 0.4f);
         hintText.alignment = TextAlignmentOptions.BottomRight;
 
         dialogueRoot.SetActive(false);
@@ -340,7 +408,14 @@ public class HubUI : MonoBehaviour
         if (promptLabel != null && promptLabel.text != text) promptLabel.text = text;
     }
 
-    public void ShowDialogue(string[] newPages)
+    /// <summary>
+    /// Oeffnet die Textbox. Seiten duerfen &lt;wave&gt;Wort&lt;/wave&gt; enthalten.
+    /// Sprecher und Portrait sind optional: ohne Namen kein Namensschild, ohne
+    /// Portrait nutzt der Text die volle Breite. Mit Sprech-Portrait wechselt
+    /// beim Tippen der Mund.
+    /// </summary>
+    public void ShowDialogue(string[] newPages, string speaker = null,
+                             Sprite portrait = null, Sprite portraitTalking = null)
     {
         if (newPages == null || newPages.Length == 0) return;
 
@@ -349,6 +424,7 @@ public class HubUI : MonoBehaviour
         DialogueOpen = true;
         promptRoot.SetActive(false);
         dialogueRoot.SetActive(true);
+        SetSpeaker(speaker, portrait, portraitTalking);
         ShowPage();
         FreezePlayer(true);
 
@@ -356,9 +432,32 @@ public class HubUI : MonoBehaviour
         PlaySfx(pageTurnClip);
     }
 
+    void SetSpeaker(string speaker, Sprite portrait, Sprite portraitTalking)
+    {
+        bool hasName = !string.IsNullOrWhiteSpace(speaker);
+        nameTagRect.gameObject.SetActive(hasName);
+        if (hasName)
+        {
+            nameText.text = speaker;
+            float w = Mathf.Ceil(nameText.GetPreferredValues(speaker).x) + 8f + 2f * borderWidth;
+            nameTagRect.sizeDelta = new Vector2(w, hintFontSize + 5f + 2f * borderWidth);
+            // Reiter sitzt auf der Oberkante, die Rahmen ueberlappen sich
+            nameTagRect.anchoredPosition = new Vector2(padding, boxHeight - borderWidth);
+        }
+
+        portraitIdle = portrait;
+        portraitTalk = portraitTalking != null ? portraitTalking : portrait;
+        bool hasPortrait = portrait != null;
+        portraitRect.gameObject.SetActive(hasPortrait);
+        if (hasPortrait) portraitImage.sprite = portrait;
+
+        float left = hasPortrait ? padding + portraitSize + 6f : padding;
+        bodyRect.offsetMin = new Vector2(left, bodyRect.offsetMin.y);
+    }
+
     void ShowPage()
     {
-        bodyText.text = pages[pageIndex];
+        typer.Play(pages[pageIndex]);
         bool last = pageIndex >= pages.Length - 1;
         string action = last ? "Klick zum Schließen" : "Klick für weiter";
         hintText.text = (pageIndex + 1) + "/" + pages.Length + "   " + action;
@@ -391,12 +490,47 @@ public class HubUI : MonoBehaviour
         c.a *= a;
         hintText.color = c;
 
+        AnimateExtras();
+
         if (Input.GetMouseButtonDown(0))
         {
             PlaySfx(pageTurnClip);
+
+            // Erster Klick waehrend des Tippens zeigt die Seite komplett,
+            // erst der naechste blaettert weiter.
+            if (!typer.IsDone)
+            {
+                typer.Complete();
+                return;
+            }
+
             pageIndex++;
             if (pageIndex >= pages.Length) CloseDialogue();
             else ShowPage();
+        }
+    }
+
+    void AnimateExtras()
+    {
+        float t = Time.unscaledTime;
+
+        // Weiter-Pfeil: erst wenn alles dasteht, dann wippt er
+        bool done = typer.IsDone;
+        if (arrowRect.gameObject.activeSelf != done) arrowRect.gameObject.SetActive(done);
+        if (done)
+        {
+            float bob = Mathf.Round(Mathf.Sin(t * 6f) * arrowBob);
+            arrowRect.anchoredPosition = new Vector2(-padding + 1f, padding * 0.4f + 2f + bob);
+        }
+
+        // Portrait: beim Tippen Mund auf/zu und leichtes Wippen
+        if (portraitRect.gameObject.activeSelf)
+        {
+            bool talking = typer.IsTyping;
+            bool mouthOpen = talking && ((int)(t * mouthFlapRate) & 1) == 1;
+            portraitImage.sprite = mouthOpen ? portraitTalk : portraitIdle;
+            float bob = talking ? Mathf.Round(Mathf.Abs(Mathf.Sin(t * 12f)) * portraitBob) : 0f;
+            portraitRect.anchoredPosition = new Vector2(padding, -padding + bob);
         }
     }
 
