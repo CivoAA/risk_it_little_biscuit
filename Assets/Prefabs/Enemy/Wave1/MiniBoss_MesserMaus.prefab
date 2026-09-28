@@ -32,7 +32,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0.68, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4117391413434190507}
@@ -166,8 +166,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.005939007, y: 0.51930183}
-  m_Size: {x: 0.3110729, y: 0.8069817}
+  m_Offset: {x: -0.011878014, y: 1.0386037}
+  m_Size: {x: 0.6221458, y: 1.6139634}
   m_Direction: 0
 --- !u!50 &668582821519045870
 Rigidbody2D:
@@ -228,19 +228,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1197919462641630678, guid: 6d27de1812ef995429b4d7914f2eecd2, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.25
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1197919462641630678, guid: 6d27de1812ef995429b4d7914f2eecd2, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.25
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1197919462641630678, guid: 6d27de1812ef995429b4d7914f2eecd2, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.002
+      value: 0.004
       objectReference: {fileID: 0}
     - target: {fileID: 1197919462641630678, guid: 6d27de1812ef995429b4d7914f2eecd2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.018
+      value: 2.036
       objectReference: {fileID: 0}
     - target: {fileID: 1197919462641630678, guid: 6d27de1812ef995429b4d7914f2eecd2, type: 3}
       propertyPath: m_LocalPosition.z

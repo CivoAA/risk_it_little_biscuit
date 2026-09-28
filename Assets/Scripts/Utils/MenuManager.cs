@@ -17,8 +17,8 @@ public class MenuManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        // Bildrate und VSync stehen in den Optionen - hier nur anwenden,
-        // nicht ueberschreiben.
+        // Aufloesung und Modus stehen in den Optionen, VSync ist fest an -
+        // hier nur anwenden, nicht ueberschreiben.
         GameSettings.Apply();
     }
     void Update()

@@ -499,22 +499,18 @@ public class OptionsPanel : MonoBehaviour
                 () => (int)GameSettings.Mode,
                 i => GameSettings.Mode = (GameSettings.DisplayMode)i);
 
-        string[] resLabels = new string[GameSettings.Resolutions.Length];
-        for (int i = 0; i < resLabels.Length; i++)
-            resLabels[i] = GameSettings.Resolutions[i].x + "x" + GameSettings.Resolutions[i].y;
+        // Kurz als "1080p": vier volle "2560x1440"-Chips passen nicht in die Zeile.
+        string[] resLabels = new string[GameSettings.ResolutionCount];
+        for (int i = 0; i < GameSettings.Resolutions.Length; i++)
+            resLabels[i] = GameSettings.Resolutions[i].y + "p";
+        resLabels[GameSettings.NativeIndex] = Loc.Get("ui.options.res.native", "Nativ");
 
         ChipRow(Loc.Get("ui.options.display.resolution", "Auflösung"), resLabels,
                 () => GameSettings.ResolutionIndex,
                 i => GameSettings.ResolutionIndex = i);
 
-        ChipRow(Loc.Get("ui.options.display.vsync", "V-Sync"), OnOff(),
-                () => GameSettings.VSync ? 0 : 1,
-                i => GameSettings.VSync = i == 0);
-
-        ChipRow(Loc.Get("ui.options.display.fps", "FPS-Limit"),
-                new[] { "60", "120", Loc.Get("ui.options.fps.none", "Ohne") },
-                () => GameSettings.FpsIndex,
-                i => GameSettings.FpsIndex = i);
+        // VSync und FPS-Limit gibt es bewusst nicht: VSync ist fest an (siehe
+        // GameSettings.ApplyFrameRate).
 
         ChipRow(Loc.Get("ui.options.display.damage", "Schadenszahlen"), OnOff(),
                 () => GameSettings.DamageNumbers ? 0 : 1,

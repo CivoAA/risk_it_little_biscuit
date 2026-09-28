@@ -336,8 +336,6 @@
     { "key": "ui.options.audio.sfx", "value": "Geräusche" },
     { "key": "ui.options.display.mode", "value": "Modus" },
     { "key": "ui.options.display.resolution", "value": "Auflösung" },
-    { "key": "ui.options.display.vsync", "value": "V-Sync" },
-    { "key": "ui.options.display.fps", "value": "FPS-Limit" },
     { "key": "ui.options.display.damage", "value": "Schadenszahlen" },
     { "key": "ui.options.display.tips", "value": "Tipps" },
     { "key": "ui.options.display.language", "value": "Sprache" },
@@ -346,7 +344,7 @@
     { "key": "ui.options.mode.fullscreen", "value": "Vollbild" },
     { "key": "ui.options.on", "value": "An" },
     { "key": "ui.options.off", "value": "Aus" },
-    { "key": "ui.options.fps.none", "value": "Ohne" },
+    { "key": "ui.options.res.native", "value": "Nativ" },
 
     { "key": "ui.levelup.title", "value": "LEVEL UP!" },
     { "key": "ui.levelup.pick", "value": "Wähle eine Verbesserung" },

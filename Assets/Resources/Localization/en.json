@@ -336,8 +336,6 @@
     { "key": "ui.options.audio.sfx", "value": "Sound Effects" },
     { "key": "ui.options.display.mode", "value": "Mode" },
     { "key": "ui.options.display.resolution", "value": "Resolution" },
-    { "key": "ui.options.display.vsync", "value": "V-Sync" },
-    { "key": "ui.options.display.fps", "value": "FPS Limit" },
     { "key": "ui.options.display.damage", "value": "Damage Numbers" },
     { "key": "ui.options.display.tips", "value": "Tips" },
     { "key": "ui.options.display.language", "value": "Language" },
@@ -346,7 +344,7 @@
     { "key": "ui.options.mode.fullscreen", "value": "Fullscreen" },
     { "key": "ui.options.on", "value": "On" },
     { "key": "ui.options.off", "value": "Off" },
-    { "key": "ui.options.fps.none", "value": "None" },
+    { "key": "ui.options.res.native", "value": "Native" },
 
     { "key": "ui.levelup.title", "value": "LEVEL UP!" },
     { "key": "ui.levelup.pick", "value": "Choose an upgrade" },
