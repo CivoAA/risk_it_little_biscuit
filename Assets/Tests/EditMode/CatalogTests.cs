@@ -1,3 +1,4 @@
+#if UNITY_INCLUDE_TESTS
 using System.Collections.Generic;
 using System.IO;
 using NUnit.Framework;
@@ -308,4 +309,49 @@ public class CatalogTests
             Assert.IsNotEmpty(def.NameEn, $"Unlock '{def.Id}' hat keinen Namen.");
         }
     }
+
+    // ==================================================================
+    //  Wellenplaene
+    // ==================================================================
+
+    /// <summary>
+    /// Der Wald spielt nur aktive Gegner. Archivierte spawnen zwar weiter,
+    /// wenn ein Plan sie nennt (siehe EnemyDef.Archived) - genau deshalb
+    /// faellt es sonst niemandem auf. Der Kaefig zaehlt mit: er setzt
+    /// Blocker, und die Kaefig-Wand liegt im Archiv.
+    /// </summary>
+    [Test]
+    public void World2_benutzt_keine_archivierten_Gegner()
+    {
+        RunPlan plan = WavePlans.World2();
+
+        var phases = new List<Phase>(plan.Phases);
+        if (plan.Endless != null) phases.Add(plan.Endless);
+
+        for (int p = 0; p < phases.Count; p++)
+        {
+            Phase phase = phases[p];
+
+            foreach (PoolEntry entry in phase.Enemies)
+                AssertActive(entry.Id, $"Phase {p + 1}, Pool");
+
+            foreach (Beat beat in phase.Beats)
+            {
+                string where = $"Phase {p + 1}, {beat.Kind} bei {beat.Time:0}s";
+                AssertActive(beat.Enemy, where);
+                AssertActive(beat.RingEnemy, where);
+                if (beat.Cage) AssertActive(EnemyId.Blocker, where + " (Kaefig)");
+            }
+        }
+    }
+
+    private static void AssertActive(EnemyId id, string where)
+    {
+        if (id == EnemyId.None) return;
+
+        EnemyDef def = EnemyCatalog.Get(id);
+        Assert.IsNotNull(def, $"{where}: {id} steht nicht im Gegner-Katalog.");
+        Assert.IsFalse(def.Archived, $"{where}: {id} ist archiviert.");
+    }
 }
+#endif

@@ -16,8 +16,8 @@ EditorBuildSettings:
     guid: 1d7ec77ba4e22944089d0fbd929a86ac
   - enabled: 1
     path: Assets/Scenes/test_scene.unity
-    guid: 0b41a9cbd004a714a9534bd62a778f8b
-  - enabled: 1
+    guid: 78cb255ae602e884792dc9f4ed3c25eb
+  - enabled: 0
     path: Assets/Scenes/levelauswahl.unity
     guid: 6d3b81e0f5a74c29b84e7d1c0a5f293b
   - enabled: 1

@@ -1,3 +1,4 @@
+#if UNITY_INCLUDE_TESTS
 using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
@@ -132,3 +133,4 @@ public class SkillTreeViewTests
         return null;
     }
 }
+#endif

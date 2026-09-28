@@ -123,7 +123,8 @@ public static class WavePlans
     ///   Marshmello       -> Fliegenpilz   (5 Leben, sonst gleich)
     ///   Boeser Slime     -> Kirschslime   (etwas zaeher)
     ///   Elite-Marshmello -> Eichel
-    ///   Messermaus       -> Pilzkoenig    (Miniboss mit Kaefig)
+    ///   Messermaus       -> Pilzkoenig    (Miniboss im Ring, ohne Kaefig -
+    ///                                     die Kaefig-Wand ist archiviert)
     ///   Muffin & Co.     -> Milchpanzer
     ///
     /// Die Gegner kommen von leicht nach schwer dazu, jede Phase bringt einen
@@ -176,7 +177,7 @@ public static class WavePlans
             .Burst(40f, EnemyId.Eichel, 25f, Patterns.Ambush, 0f)
             .Burst(60f, EnemyId.Fluegeldolch, 20f, Patterns.Arc, 0f)
             .Calm(95f, 10f, 0.15f)
-            .Encircle(125f, EnemyId.MinibossFliegenpliz, EnemyId.Kirschslime, 22, 14f, true, "PILZKOENIG!", 0.35f, 25f, 1.5f)
+            .Encircle(125f, EnemyId.MinibossFliegenpliz, EnemyId.Kirschslime, 22, 14f, false, "PILZKOENIG!", 0.35f, 25f, 1.5f)
             .Burst(195f, EnemyId.WeisseMessermaus, 30f, Patterns.Cluster, 0f)
             .Burst(225f, EnemyId.MiniBossMarshmello, 8f, Patterns.Arc, 0f)
             .Burst(250f, EnemyId.Eichel, 40f, Patterns.Column, 0f);
@@ -192,7 +193,7 @@ public static class WavePlans
             .Burst(50f, EnemyId.Milchpanzer, 40f, Patterns.Arc, 0f)
             .Burst(80f, EnemyId.MiniBossMarshmello, 12f, Patterns.Arc, 0f)
             .Calm(110f, 8f, 0.15f)
-            .Encircle(145f, EnemyId.MinibossFliegenpliz, EnemyId.Eichel, 26, 15f, true, "PILZKOENIG!", 0.35f, 25f, 1.5f)
+            .Encircle(145f, EnemyId.MinibossFliegenpliz, EnemyId.Eichel, 26, 15f, false, "PILZKOENIG!", 0.35f, 25f, 1.5f)
             .Burst(225f, EnemyId.Milchpanzer, 60f, Patterns.Cluster, 0f)
             .Burst(265f, EnemyId.MinibossFliegenpliz, 1f, Patterns.Ambush, 0f);
 

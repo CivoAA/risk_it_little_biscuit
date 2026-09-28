@@ -3194,6 +3194,11 @@ MonoBehaviour:
   spawnHalfWidth: 16.5
   spawnHalfHeight: 14
   recycleDistance: 26
+  offScreenMargin: 1.5
+  refillPerSecond: 0.25
+  tricklePerSecond: 0.04
+  minTricklePerSecond: 0.75
+  overflowCap: 2
   maxSpawnsPerTick: 8
   maxAlive: 400
   planOverride: 
@@ -7473,6 +7478,10 @@ MonoBehaviour:
   EarthHit: {fileID: 0}
   Laser: {fileID: 0}
   audioSources: []
+  runMusicDelay: 1.2
+  runMusicFadeIn: 2.5
+  musicFadeOut: 0.8
+  returnMusicFadeIn: 1.5
 --- !u!82 &447650197
 AudioSource:
   m_ObjectHideFlags: 0
@@ -9604,7 +9613,7 @@ Camera:
   far clip plane: 20
   field of view: 34
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 5.625
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -33632,7 +33641,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1972127194
 MonoBehaviour:
   m_ObjectHideFlags: 0

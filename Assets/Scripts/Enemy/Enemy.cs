@@ -307,7 +307,8 @@ public class Enemy : MonoBehaviour
         // seiner eigenen Attacken weiter.
         if (role == EnemyRole.Boss || rb == null) return;
 
-        direction = (player.transform.position - transform.position).normalized;
+        direction = PursuitDirection(player);
+        UpdateBlocked(player, dt);
 
         // Rueckstoss dreht nur das Vorzeichen, Slow nur den Betrag. Beide
         // rechnen auf baseSpeed und koennen sich deshalb nicht gegenseitig
@@ -319,6 +320,137 @@ public class Enemy : MonoBehaviour
         Vector2 push = Separation(ref chase);
 
         rb.linearVelocity = chase + externalVelocity + push * baseSpeed * SeparationStrength;
+    }
+
+    // ------------------------------------------------------------- Laufweg
+
+    /// <summary>
+    /// Wohin der Gegner laeuft: immer geradewegs auf den Spieler zu.
+    ///
+    /// Ein Versuch mit Vorhalt (auf den Punkt zielen, an dem der Spieler gleich
+    /// sein wird) und seitlichem Versatz ist wieder raus: lief der Spieler auf
+    /// einen Gegner zu, lag der Zielpunkt HINTER dem Gegner, und der wich
+    /// zurueck statt anzugreifen. Gegen das Umkreisen des Haufens hilft jetzt
+    /// <see cref="IsBlocked"/> - wer hinten festhaengt und aus dem Bild faellt,
+    /// wird vom Director nach vorn geholt.
+    /// </summary>
+    private Vector3 PursuitDirection(PlayerController player)
+    {
+        Vector2 toPlayer = (Vector2)(player.transform.position - transform.position);
+        if (toPlayer.sqrMagnitude < 0.0001f) return Vector3.zero;
+        return toPlayer.normalized;
+    }
+
+    // ------------------------------------------------------------- Stau
+
+    /// <summary>Ab so vielen Gegnern zwischen mir und dem Spieler gilt der Weg als dicht.</summary>
+    private const int BlockedEnter = 6;
+
+    /// <summary>Erst unter so vielen ist der Weg wieder frei - sonst flackert der Zustand.</summary>
+    private const int BlockedExit = 3;
+
+    /// <summary>Naeher als das am Spieler ist niemand blockiert - die vorderste Reihe drueckt immer.</summary>
+    private const float BlockedMinDistance = 4f;
+
+    /// <summary>Breite des Korridors zum Spieler, als Vielfaches des eigenen Koerper-Radius.</summary>
+    private const float BlockedCorridorRadii = 4f;
+
+    /// <summary>So oft wird nachgezaehlt. Jeder Gegner mit eigenem Versatz, damit nicht alle im selben Frame.</summary>
+    private const float BlockedCheckInterval = 0.4f;
+
+    private static readonly Collider2D[] corridorHits = new Collider2D[32];
+
+    private float blockedCheckTimer = -1f;
+    private float blockedSince = -1f;
+
+    /// <summary>
+    /// Stehen zu viele andere Gegner zwischen diesem und dem Spieler? Er laeuft
+    /// trotzdem weiter auf den Spieler zu - faellt er dabei aber aus dem Bild,
+    /// setzt ihn der <see cref="SpawnDirector"/> an anderer Stelle neu an.
+    /// </summary>
+    public bool IsBlocked => blockedSince >= 0f;
+
+    /// <summary>Wie lange der Weg schon dicht ist, 0 = frei.</summary>
+    public float BlockedFor => blockedSince >= 0f ? Time.time - blockedSince : 0f;
+
+    /// <summary>
+    /// Nach einem Umsetzen: Stau vergessen und gleich neu zaehlen. Sonst gilt
+    /// der Gegner an der neuen Stelle noch als blockiert und wuerde sofort
+    /// ein zweites Mal umgesetzt.
+    /// </summary>
+    public void ResetBlocked()
+    {
+        blockedSince = -1f;
+        blockedCheckTimer = 0f;
+    }
+
+    private void UpdateBlocked(PlayerController player, float dt)
+    {
+        if (blockedCheckTimer < 0f) blockedCheckTimer = Random.value * BlockedCheckInterval;
+
+        blockedCheckTimer -= dt;
+        if (blockedCheckTimer > 0f) return;
+        blockedCheckTimer = BlockedCheckInterval;
+
+        // Nur Gegner, die der Director auch nachziehen darf - Kaefig und Ring
+        // gehoeren an ihren Platz und sollen weiter druecken.
+        if (IsBoss || !CanRecycle || ownCollider == null)
+        {
+            blockedSince = -1f;
+            return;
+        }
+
+        Vector2 me = BodyCenter;
+        Vector2 toPlayer = (Vector2)player.transform.position - me;
+        float distance = toPlayer.magnitude;
+
+        if (distance < BlockedMinDistance)
+        {
+            blockedSince = -1f;
+            return;
+        }
+
+        int ahead = CountEnemiesAhead(me, toPlayer / distance, distance);
+
+        if (blockedSince < 0f)
+        {
+            if (ahead >= BlockedEnter) blockedSince = Time.time;
+        }
+        else if (ahead < BlockedExit)
+        {
+            blockedSince = -1f;
+        }
+    }
+
+    /// <summary>
+    /// Zaehlt die Gegner in einem Korridor von mir bis kurz vor den Spieler.
+    /// Den letzten Meter lassen wir aus - wer direkt am Spieler klebt, steht
+    /// nicht im Weg, sondern ist schon da.
+    /// </summary>
+    private int CountEnemiesAhead(Vector2 me, Vector2 dir, float distance)
+    {
+        float myRadius = BodyRadius;
+        float length = distance - 1f - myRadius;
+        if (length <= 0f) return 0;
+
+        Vector2 center = me + dir * (myRadius + length * 0.5f);
+        Vector2 size = new Vector2(length, Mathf.Max(0.5f, myRadius * BlockedCorridorRadii));
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+        ContactFilter2D filter = new ContactFilter2D();
+        filter.SetLayerMask(1 << gameObject.layer);
+        filter.useTriggers = false;
+
+        int count = Physics2D.OverlapBox(center, size, angle, filter, corridorHits);
+
+        int enemies = 0;
+        for (int i = 0; i < count; i++)
+        {
+            Collider2D hit = corridorHits[i];
+            if (hit == ownCollider) continue;
+            if (byCollider.TryGetValue(hit, out Enemy other) && other != null) enemies++;
+        }
+        return enemies;
     }
 
     // ------------------------------------------------------------- Abstand

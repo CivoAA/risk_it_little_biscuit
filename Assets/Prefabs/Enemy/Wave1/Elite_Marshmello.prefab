@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6597218184545611430}
   - component: {fileID: 6635107892663025976}
-  - component: {fileID: 8574947909100709480}
   - component: {fileID: 43731253069612989}
   - component: {fileID: 4113024789757184365}
   - component: {fileID: 8318668462090934488}
@@ -40,6 +39,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6635107892663025976
 SpriteRenderer:
+  serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -58,6 +58,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -79,9 +81,11 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1017924483
   m_SortingLayer: 3
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_Sprite: {fileID: -823816615, guid: 031984792d0f48546a98bd7c307e40d8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -91,23 +95,7 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8574947909100709480
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1738388643526561772}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35912d73be5fbca49bff365cb29e2aea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxDistance: 23
-  offsetX: 15
-  offsetY: 10
 --- !u!114 &43731253069612989
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -120,13 +108,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cf2a57836f388849a7ebd06e6eea9ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 2
   spriteRenderer: {fileID: 6635107892663025976}
   rb: {fileID: 8318668462090934488}
+  destroyEffect: {fileID: 5385887812414731569, guid: 2b4ac13679d26284db801190abb9f4e9, type: 3}
   moveSpeed: 1.2
   damage: 6
   health: 50
   experienceToGive: 20
-  destroyEffect: {fileID: 5385887812414731569, guid: 2b4ac13679d26284db801190abb9f4e9, type: 3}
   pushTime: 0.25
   rightlooking: 0
   MiniBoss: 0
@@ -206,8 +195,8 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 1.1047524}
-  m_Radius: 0.685743
+  m_Offset: {x: 0, y: 1}
+  m_Radius: 0.9
 --- !u!95 &4877814217901772953
 Animator:
   serializedVersion: 7
@@ -218,7 +207,7 @@ Animator:
   m_GameObject: {fileID: 1738388643526561772}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 09083aa4d68300348b252f01b2634b59, type: 2}
+  m_Controller: {fileID: 9100000, guid: 29bf8918a6d457d4ebb10c705072c653, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
