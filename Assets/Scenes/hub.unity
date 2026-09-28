@@ -4472,7 +4472,7 @@ MonoBehaviour:
   outlineTargets: []
   partner: {fileID: 0}
   exitOffset: {x: 0, y: 0}
-  teleportClip: {fileID: 8300000, guid: 8ff2a2d7e79f81c40ac447512f879374, type: 3}
+  teleportClip: {fileID: 8300000, guid: a85db79eec454e349877c06e37070b6f, type: 3}
   sfxSource: {fileID: 755509536}
   sfxVolume: 0.301
 --- !u!4 &755509538
@@ -12681,7 +12681,7 @@ MonoBehaviour:
   outlineTargets: []
   partner: {fileID: 0}
   exitOffset: {x: 0, y: 0}
-  teleportClip: {fileID: 8300000, guid: 8ff2a2d7e79f81c40ac447512f879374, type: 3}
+  teleportClip: {fileID: 8300000, guid: a85db79eec454e349877c06e37070b6f, type: 3}
   sfxSource: {fileID: 1990000043}
   sfxVolume: 0.301
 --- !u!82 &1990000043

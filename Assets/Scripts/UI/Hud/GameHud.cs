@@ -400,10 +400,12 @@ public class GameHud : MonoBehaviour
         if (portrait.sprite != s)
         {
             portrait.sprite = s;
-            // Halbe Texelgroesse: 64er-Frames werden 32 HUD-Pixel gross, also
-            // genau 2 Bildpunkte je Texel bei 1080p - kein krummes Abtasten.
-            int w = Mathf.Max(2, Mathf.RoundToInt(s.rect.width / 2f) & ~1);
-            int h = Mathf.Max(2, Mathf.RoundToInt(s.rect.height / 2f) & ~1);
+            // Auf 32 HUD-Pixel in ganzen Stufen: 64er-Frames halb (2 Bildpunkte
+            // je Texel bei 1080p), 32er-Charaktere 1:1, 16er doppelt.
+            float tex = Mathf.Max(s.rect.width, s.rect.height);
+            float k = tex <= 32f ? Mathf.Floor(32f / tex) : 1f / Mathf.Ceil(tex / 32f);
+            int w = Mathf.Max(2, Mathf.RoundToInt(s.rect.width * k) & ~1);
+            int h = Mathf.Max(2, Mathf.RoundToInt(s.rect.height * k) & ~1);
             portraitRect.anchorMin = portraitRect.anchorMax = new Vector2(0.5f, 0.5f);
             portraitRect.sizeDelta = new Vector2(w, h);
             portraitRect.anchoredPosition = new Vector2(0f, 1f);

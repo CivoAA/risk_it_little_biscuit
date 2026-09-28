@@ -44,7 +44,10 @@ public class PlayerSkinSwitcher : MonoBehaviour
                     SetJamJarSkin();
                     break;
                 default:
-                    Debug.Log("Unbekannter Skin!");
+                    // Neuere Charaktere (ab 4) stehen nur in CharacterLooks.
+                    RuntimeAnimatorController look = CharacterLooks.AnimatorFor(skinIndex);
+                    if (look != null) animator.runtimeAnimatorController = look;
+                    else Debug.Log("Unbekannter Skin!");
                     break;
 
             }

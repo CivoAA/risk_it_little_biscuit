@@ -316,7 +316,7 @@ public class HubLevelSelectUI : MonoBehaviour
         if (built) return;
         built = true;
 
-        if (font == null) font = PixelUI.FindPixelFont();
+        if (font == null) font = PixelUI.FindTextFont() ?? PixelUI.FindPixelFont();
 
         var canvasGO = new GameObject("LevelSelectCanvas", typeof(Canvas), typeof(CanvasScaler));
         canvasGO.transform.SetParent(transform, false);

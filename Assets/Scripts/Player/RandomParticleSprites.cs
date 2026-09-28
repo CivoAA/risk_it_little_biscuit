@@ -40,8 +40,9 @@ public class RandomParticleSprites : MonoBehaviour
     {
         if (skinIndex < 0 || skinIndex >= skinSpriteSets.Count)
         {
-            Debug.LogWarning($"{name}: Kein Sprite-Set für Skin {skinIndex}!");
-            return;
+            // Neuer Charakter ohne eigene Kruemel: die des ersten nehmen.
+            if (skinSpriteSets.Count == 0) return;
+            skinIndex = 0;
         }
 
         var sprites = skinSpriteSets[skinIndex].sprites;

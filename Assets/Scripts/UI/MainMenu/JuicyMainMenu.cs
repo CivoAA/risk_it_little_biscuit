@@ -29,8 +29,19 @@ public class JuicyMainMenu : MonoBehaviour
     [Serializable]
     public class Entry
     {
+        [Tooltip("Rückfall-Text. Übersetzt wird über den Schlüssel ui.menu.<label> in Resources/Localization.")]
         public string label;
         public UnityEvent onClick = new UnityEvent();
+
+        public string Text => Loc.Get("ui.menu." + label.ToLowerInvariant(), label.ToUpperInvariant());
+    }
+
+    public enum PlateStyle
+    {
+        /// <summary>Holzknöpfe aus GameHudSkin wie in Optionen und Pause, der erste Eintrag in Gold.</summary>
+        Skin,
+        /// <summary>Die gezeichneten Platten aus plateSprite / plateHoverSprite.</summary>
+        Sprite
     }
 
     [Header("Einträge (oben nach unten)")]
@@ -42,10 +53,16 @@ public class JuicyMainMenu : MonoBehaviour
     private bool showBox = false;
     [SerializeField, Tooltip("An = jeder Eintrag sitzt auf einer Button-Platte (btuuon), beim Hover die helle Platte.")]
     private bool showPlates = true;
+    [SerializeField, Tooltip("Skin = Holzknöpfe im Stil von Optionen/Pause, Sprite = plateSprite/plateHoverSprite.")]
+    private PlateStyle plateStyle = PlateStyle.Skin;
     [SerializeField] private Sprite plateSprite;
     [SerializeField] private Sprite plateHoverSprite;
+    [SerializeField, Tooltip("Höhe der Holzknöpfe (nur Skin). Gerade Zahl, sonst liegt die Mitte auf halben Pixeln.")]
+    private int skinPlateHeight = 14;
+    [SerializeField, Tooltip("Mindestbreite der Holzknöpfe (nur Skin).")]
+    private int skinPlateMinWidth = 92;
     [SerializeField, Tooltip("Mitte der Box relativ zur Canvas-Mitte.")]
-    private Vector2 boxCenter = new Vector2(0f, 4f);
+    private Vector2 boxCenter = new Vector2(0f, 0f);
     [SerializeField] private int minBoxWidth = 104;
     [SerializeField, Tooltip("Luft über dem ersten und unter dem letzten Eintrag.")]
     private int paddingY = 8;
@@ -62,7 +79,8 @@ public class JuicyMainMenu : MonoBehaviour
     [SerializeField] private Color boxShadow = new Color(0f, 0f, 0f, 0.35f);
 
     [Header("Text")]
-    [SerializeField, Tooltip("Leer = die Pixel-Font des Projekts wird gesucht.")]
+    [SerializeField, Tooltip("Leer = die Pixel-Font des Projekts wird gesucht. Texte mit Zeichen, " +
+                             "die sie nicht kennt (Umlaute), bekommen automatisch Jersey10.")]
     private TMP_FontAsset font;
     [SerializeField] private float fontSize = 8f;
     [SerializeField, Tooltip("Schrift in der grauen Box.")]
@@ -90,8 +108,8 @@ public class JuicyMainMenu : MonoBehaviour
     [Header("3. Hover")]
     [SerializeField] private float hoverScale = 1.15f;
     [SerializeField] private float scaleSpeed = 8f;
-    [SerializeField, Tooltip("Seitlicher Versatz des gewählten Eintrags.")]
-    private float hoverOffset = -2f;
+    [SerializeField, Tooltip("Seitlicher Versatz des gewählten Eintrags. Mit Platten wirkte -2 wie verrutscht.")]
+    private float hoverOffset = 0f;
     [SerializeField] private float offsetSpeed = 10f;
     [SerializeField, Tooltip("So viel breiter als der Text wird der Unterstrich.")]
     private float underlinePadding = 4f;
@@ -122,6 +140,12 @@ public class JuicyMainMenu : MonoBehaviour
     [Header("6. Partikel")]
     [SerializeField] private int particleCount = 14;
 
+    [Header("Version")]
+    [SerializeField, Tooltip("Zeigt Application.version (Player Settings > Version) unten rechts.")]
+    private bool showVersion = true;
+    [SerializeField, Tooltip("Abstand zur Ecke unten rechts.")]
+    private Vector2Int versionMargin = new Vector2Int(4, 3);
+
     private class Item
     {
         public RectTransform rect;
@@ -132,6 +156,8 @@ public class JuicyMainMenu : MonoBehaviour
         public RectTransform underline;
         public Image underlineImage;
         public JuicyMenuItem relay;
+        public Sprite plateNormal, platePressed;
+        public Color textColor, hoverColor;
         public float textWidth;
         public float baseY;
         public float scale = 1f;
@@ -163,6 +189,8 @@ public class JuicyMainMenu : MonoBehaviour
     private Color textColor, hoverColor, diamondColor;
     private Sprite plateNormal, platePressed;
     private Vector2 plateSize;
+    private TMP_FontAsset textFont;
+    private CanvasGroup versionGroup;
     private float elapsed;
     private int hoveredIndex = -1;
     private float dimT;
@@ -182,12 +210,38 @@ public class JuicyMainMenu : MonoBehaviour
         }
 
         if (font == null) font = PixelUI.FindPixelFont();
-        showPlates &= plateSprite != null;
-        textColor = showPlates ? plateTextColor : showBox ? boxTextColor : plainTextColor;
-        hoverColor = showPlates ? plateHoverColor : showBox ? boxHoverColor : plainHoverColor;
+        textFont = PixelUI.FindTextFont();
+        if (plateStyle == PlateStyle.Sprite) showPlates &= plateSprite != null;
+        textColor = SkinPlates ? (Color)GameHudSkin.Cream
+                  : showPlates ? plateTextColor : showBox ? boxTextColor : plainTextColor;
+        hoverColor = SkinPlates ? (Color)GameHudSkin.Cream
+                   : showPlates ? plateHoverColor : showBox ? boxHoverColor : plainHoverColor;
         // Die Rauten sitzen neben dem Eintrag auf dem Hintergrund, nicht auf der Platte.
         diamondColor = showBox ? boxHoverColor : plainHoverColor;
         Build();
+        BuildVersion();
+        Loc.LanguageChanged += OnLanguageChanged;
+    }
+
+    private bool SkinPlates => showPlates && plateStyle == PlateStyle.Skin;
+
+    /// <summary>
+    /// Die Menü-Schrift, solange sie jedes Zeichen kennt - sonst die Schrift mit
+    /// Umlauten. ThaleahFat hat kein Ä/Ö/Ü/ß.
+    /// </summary>
+    private TMP_FontAsset FontFor(string text) => OptionsKit.PickFont(text, font, textFont);
+
+    /// <summary>Sprache gewechselt (Optionen): Menü mit neuen Texten neu bauen, ohne neuen Auftritt.</summary>
+    private void OnLanguageChanged()
+    {
+        if (root == null) return;
+        Destroy(root.gameObject);
+        items.Clear();
+        particles.Clear();
+        hoveredIndex = -1;
+        Build();
+        menuGroup.alpha = 1f;
+        elapsed = Mathf.Max(elapsed, 100f);
     }
 
     private void Build()
@@ -196,7 +250,7 @@ public class JuicyMainMenu : MonoBehaviour
 
         // Breite aus dem längsten Text: Platz für Punch-Größe plus Rauten links und rechts.
         float widest = 0f;
-        foreach (Entry e in entries) widest = Mathf.Max(widest, MeasureText(e.label));
+        foreach (Entry e in entries) widest = Mathf.Max(widest, MeasureText(e.Text));
         int w = Mathf.Max(minBoxWidth, Mathf.CeilToInt(widest * punchScale + 2f * (diamondGap + 10f)));
         if (showPlates) BuildPlateSprites(widest, ref w);
         int h = entries.Count * rowStep + 2 * paddingY;
@@ -245,6 +299,18 @@ public class JuicyMainMenu : MonoBehaviour
     /// </summary>
     private void BuildPlateSprites(float widest, ref int boxWidth)
     {
+        if (SkinPlates)
+        {
+            // Holzknopf aus GameHudSkin: 9-Slice mit PPU 100, also ein Texel = ein Pixel.
+            int w = Mathf.Max(skinPlateMinWidth, Mathf.CeilToInt(widest * hoverScale) + 16);
+            if (w % 2 != 0) w++;
+            plateSize = new Vector2(w, skinPlateHeight);
+            plateNormal = GameHudSkin.Button(GameHudSkin.ButtonLook.Wood);
+            platePressed = GameHudSkin.Button(GameHudSkin.ButtonLook.Hover);
+            boxWidth = Mathf.Max(boxWidth, w + 2 * Mathf.CeilToInt(diamondGap + 6f) + 2);
+            return;
+        }
+
         Vector2 native = plateSprite.rect.size;
         int plateW = Mathf.Max((int)native.x, Mathf.CeilToInt(widest) + 12);
         if (plateW % 2 != 0) plateW++;
@@ -277,7 +343,7 @@ public class JuicyMainMenu : MonoBehaviour
     private float MeasureText(string text)
     {
         TMP_Text probe = PixelUI.Label("Probe", root, new Vector2(400f, 40f), Vector2.zero, text,
-                                       fontSize, Color.clear, TextAlignmentOptions.Center, font);
+                                       fontSize, Color.clear, TextAlignmentOptions.Center, FontFor(text));
         float width = probe.GetPreferredValues(text).x;
         Destroy(probe.gameObject);
         return width;
@@ -338,26 +404,37 @@ public class JuicyMainMenu : MonoBehaviour
         item.rect = hit.rectTransform;
         item.group = hit.gameObject.AddComponent<CanvasGroup>();
 
+        // Der erste Eintrag (Start) ist im Holz-Stil der goldene Hauptknopf - wie
+        // FERTIG in den Optionen. Auf Gold steht dunkle Schrift.
+        bool primary = SkinPlates && index == 0;
+        item.plateNormal = primary ? GameHudSkin.Button(GameHudSkin.ButtonLook.Gold) : plateNormal;
+        item.platePressed = primary ? GameHudSkin.Button(GameHudSkin.ButtonLook.GoldHover) : platePressed;
+        item.textColor = primary ? (Color)GameHudSkin.Ink : textColor;
+        item.hoverColor = primary ? (Color)GameHudSkin.Ink : hoverColor;
+
         if (showPlates)
         {
             item.plate = PixelUI.Panel("Plate", item.rect, plateSize, Vector2.zero, Color.white);
-            item.plate.sprite = plateNormal;
-            item.plate.type = plateNormal == plateSprite ? Image.Type.Simple : Image.Type.Sliced;
+            item.plate.sprite = item.plateNormal;
+            item.plate.type = item.plateNormal == plateSprite ? Image.Type.Simple : Image.Type.Sliced;
         }
 
-        item.visual = PixelUI.Rect("Visual", item.rect, new Vector2(width, rowStep), Vector2.zero);
-        item.label = PixelUI.Label("Label", item.visual, new Vector2(width, rowStep), Vector2.zero, entry.label,
-                                   fontSize, textColor, TextAlignmentOptions.Center, font);
+        // Holzknopf: unten liegt ein 2 px dunkles Band, die optische Mitte ist 1 px höher.
+        Vector2 labelPos = SkinPlates ? new Vector2(0f, 1f) : Vector2.zero;
+        string text = entry.Text;
+        item.visual = PixelUI.Rect("Visual", item.rect, new Vector2(width, rowStep), labelPos);
+        item.label = PixelUI.Label("Label", item.visual, new Vector2(width, rowStep), Vector2.zero, text,
+                                   fontSize, item.textColor, TextAlignmentOptions.Center, FontFor(text));
         item.label.textWrappingMode = TextWrappingModes.NoWrap;
         item.label.ForceMeshUpdate();
-        item.textWidth = item.label.GetPreferredValues(entry.label).x;
+        item.textWidth = item.label.GetPreferredValues(text).x;
 
         // Unterstrich knapp unter der Grundlinie.
         float baseline = item.label.textInfo.lineCount > 0
             ? item.label.textInfo.lineInfo[0].baseline
             : -fontSize * 0.5f;
         item.underlineImage = PixelUI.Panel("Underline", item.visual, new Vector2(0f, 1f),
-                                            new Vector2(0f, Mathf.Round(baseline) - 1.5f), textColor);
+                                            new Vector2(0f, Mathf.Round(baseline) - 1.5f), item.textColor);
         item.underline = item.underlineImage.rectTransform;
         // Auf der Platte zeigt die helle Platte die Auswahl - ein Strich darin wäre doppelt.
         item.underlineImage.enabled = !showPlates;
@@ -408,8 +485,42 @@ public class JuicyMainMenu : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Versionsnummer unten rechts, klein und zurückhaltend. Kommt aus
+    /// Application.version - also Player Settings > Version, keine zweite Stelle
+    /// zum Pflegen. Sitzt direkt am Canvas, damit sie an der Ecke klebt, egal
+    /// wie breit das Bild ist.
+    /// </summary>
+    private void BuildVersion()
+    {
+        if (!showVersion || string.IsNullOrEmpty(Application.version)) return;
+
+        string text = "v" + Application.version;
+        Vector2 corner = new Vector2(1f, 0f);
+        RectTransform box = PixelUI.Rect("Version", transform, new Vector2(80f, 12f),
+                                         new Vector2(-versionMargin.x, versionMargin.y), corner);
+        versionGroup = box.gameObject.AddComponent<CanvasGroup>();
+        versionGroup.alpha = 0f;
+        versionGroup.blocksRaycasts = false;
+
+        TMP_FontAsset f = FontFor(text);
+        // Harte Pixel-Kontur statt weichem Schatten: vier Kopien in Tinte, eine obendrauf.
+        Vector2[] offsets = { new Vector2(-1f, 0f), new Vector2(1f, 0f), new Vector2(0f, -1f), new Vector2(0f, 1f) };
+        foreach (Vector2 o in offsets)
+            MakeVersionLabel(box, o, text, GameHudSkin.Ink, f);
+        MakeVersionLabel(box, Vector2.zero, text, GameHudSkin.Cream, f);
+    }
+
+    private void MakeVersionLabel(RectTransform parent, Vector2 offset, string text, Color color, TMP_FontAsset f)
+    {
+        TMP_Text t = PixelUI.Label("Label", parent, parent.sizeDelta, offset, text, fontSize, color,
+                                   TextAlignmentOptions.BottomRight, f);
+        t.textWrappingMode = TextWrappingModes.NoWrap;
+    }
+
     private void OnDestroy()
     {
+        Loc.LanguageChanged -= OnLanguageChanged;
         if (checkerTexture != null) Destroy(checkerTexture);
         if (diamondTexture != null) Destroy(diamondTexture);
         if (diamondSprite != null) Destroy(diamondSprite);
@@ -509,6 +620,7 @@ public class JuicyMainMenu : MonoBehaviour
     {
         float p = Mathf.Clamp01(t / boxPopTime);
         menuGroup.alpha = p;
+        if (versionGroup != null) versionGroup.alpha = p;
         menu.localScale = Vector3.one * Mathf.LerpUnclamped(0.9f, 1f, BackOut(p));
     }
 
@@ -542,7 +654,7 @@ public class JuicyMainMenu : MonoBehaviour
             // darf weiter wachsen, sie ist ein eigenes Kind und wird nicht gerundet).
             if (showPlates) pos = new Vector2(Mathf.Round(pos.x), Mathf.Round(pos.y));
             item.rect.anchoredPosition = pos;
-            if (item.plate != null) item.plate.sprite = isActive ? platePressed : plateNormal;
+            if (item.plate != null) item.plate.sprite = isActive ? item.platePressed : item.plateNormal;
             item.visual.localScale = Vector3.one * item.scale;
 
             // ---------- Wachsender Unterstrich ----------
@@ -555,7 +667,7 @@ public class JuicyMainMenu : MonoBehaviour
             float targetAlpha = isActive ? 1f : Mathf.Lerp(1f, showPlates ? plateDimAlpha : dimAlpha, dimT);
             item.alpha = Damp(item.alpha, targetAlpha, dimSpeed, dt);
 
-            Color c = Color.Lerp(textColor, hoverColor, item.colorT);
+            Color c = Color.Lerp(item.textColor, item.hoverColor, item.colorT);
             c.a = item.alpha;
             item.label.color = c;
             item.underlineImage.color = c;

@@ -1,37 +1,43 @@
 fileFormatVersion: 2
-guid: 706bfd576b1b9db438950d0b81e0621f
+guid: 5c70766b0ce14113b6ce4eeff053d994
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1993196928235088882
-    second: keks_backidle_0
+      213: 3985207242265598267
+    second: Char_Onigiri_0
   - first:
-      213: 1978461959749989431
-    second: keks_backidle_1
+      213: 743000047182632150
+    second: Char_Onigiri_1
   - first:
-      213: 7975571466453840182
-    second: keks_idle_0
+      213: -772744699158573514
+    second: Char_Onigiri_2
   - first:
-      213: 198103324968957987
-    second: keks_idle_1
+      213: 3800431390171574515
+    second: Char_Onigiri_3
   - first:
-      213: 1763888460889456452
-    second: keks_walk_0
+      213: -2890712096533025156
+    second: Char_Onigiri_4
   - first:
-      213: 734056755845785389
-    second: keks_walk_1
+      213: -381862542397309465
+    second: Char_Onigiri_5
   - first:
-      213: 2968207058249334346
-    second: keks_walk_2
+      213: 1413398992682918094
+    second: Char_Onigiri_6
   - first:
-      213: 1704151841363285481
-    second: keks_back_0
+      213: -2285510236059161332
+    second: Char_Onigiri_7
   - first:
-      213: 1112487464878194903
-    second: keks_back_1
+      213: -3589435463037166210
+    second: Char_Onigiri_8
   - first:
-      213: 3513879406194328656
-    second: keks_back_2
+      213: 822143614163023940
+    second: Char_Onigiri_9
+  - first:
+      213: -99303035103318866
+    second: Char_Onigiri_10
+  - first:
+      213: 1481709087597329530
+    second: Char_Onigiri_11
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -78,7 +84,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 16
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -110,17 +116,56 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: keks_backidle_0
+      name: Char_Onigiri_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 48
-        width: 16
-        height: 16
+        y: 96
+        width: 32
+        height: 32
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -129,20 +174,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ed6eb8dfc2ed44180800000000000000
-      internalID: 1993196928235088882
+      spriteID: 79b280044abf478d8c5f9b3b459446c2
+      internalID: 3985207242265598267
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: keks_backidle_1
+      name: Char_Onigiri_1
       rect:
         serializedVersion: 2
-        x: 16
-        y: 48
-        width: 16
-        height: 16
+        x: 32
+        y: 96
+        width: 32
+        height: 32
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -151,20 +196,108 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 7befad057f247d730800000000000000
-      internalID: 1978461959749989431
+      spriteID: 4214ecc8ff5242978f660983e9139278
+      internalID: 743000047182632150
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: keks_idle_0
+      name: Char_Onigiri_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 64
+        width: 32
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e6fba536f9e741ff820e1a86fb709d68
+      internalID: -772744699158573514
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Char_Onigiri_3
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 64
+        width: 32
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dbedf6ec126f4857b4f107b31232b837
+      internalID: 3800431390171574515
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Char_Onigiri_4
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 64
+        width: 32
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8da2b64c52e7436c8873062c24b8cbef
+      internalID: -2890712096533025156
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Char_Onigiri_5
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 64
+        width: 32
+        height: 32
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2b9330b23a654bb6ba712fb7ddfb0490
+      internalID: -381862542397309465
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Char_Onigiri_6
       rect:
         serializedVersion: 2
         x: 0
         y: 32
-        width: 16
-        height: 16
+        width: 32
+        height: 32
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -173,20 +306,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 701cb1ea970620320800000000000000
-      internalID: 7975571466453840182
+      spriteID: 349f3e22efa8407ea854061d68a7bfb2
+      internalID: 1413398992682918094
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: keks_idle_1
+      name: Char_Onigiri_7
       rect:
         serializedVersion: 2
-        x: 16
+        x: 32
         y: 32
-        width: 16
-        height: 16
+        width: 32
+        height: 32
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -195,20 +328,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 92b3c87ba970c2950800000000000000
-      internalID: 198103324968957987
+      spriteID: e0fe3b9a26974c2392926eb623cf3772
+      internalID: -2285510236059161332
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: keks_walk_0
+      name: Char_Onigiri_8
       rect:
         serializedVersion: 2
-        x: 0
-        y: 16
-        width: 16
-        height: 16
+        x: 64
+        y: 32
+        width: 32
+        height: 32
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -217,20 +350,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 803ccbc49a645bd10800000000000000
-      internalID: 1763888460889456452
+      spriteID: d2a4466cde7543f492c36053383d81c8
+      internalID: -3589435463037166210
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: keks_walk_1
+      name: Char_Onigiri_9
       rect:
         serializedVersion: 2
-        x: 16
-        y: 16
-        width: 16
-        height: 16
+        x: 96
+        y: 32
+        width: 32
+        height: 32
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -239,42 +372,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8fc54d6fbc318d2c0800000000000000
-      internalID: 734056755845785389
+      spriteID: afd5388e0f1c400f827aa958d3a11009
+      internalID: 822143614163023940
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: keks_walk_2
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 16
-        width: 16
-        height: 16
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 88efc1ba9cd237f80800000000000000
-      internalID: 2968207058249334346
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: keks_back_0
+      name: Char_Onigiri_10
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 16
-        height: 16
+        width: 32
+        height: 32
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -283,42 +394,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3fa245063e3aba910800000000000000
-      internalID: 1704151841363285481
+      spriteID: 58578e3ba07346db93a13dea27331d5d
+      internalID: -99303035103318866
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: keks_back_1
-      rect:
-        serializedVersion: 2
-        x: 16
-        y: 0
-        width: 16
-        height: 16
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 6f8f67562c4ec1070800000000000000
-      internalID: 1112487464878194903
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: keks_back_2
+      name: Char_Onigiri_11
       rect:
         serializedVersion: 2
         x: 32
         y: 0
-        width: 16
-        height: 16
+        width: 32
+        height: 32
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -327,36 +416,28 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8a60572244d28db50800000000000000
-      internalID: 3513879406194328656
+      spriteID: dcdad2a597bb4432a4f8fba1763a3223
+      internalID: 1481709087597329530
       vertices: []
       indices: 
       edges: []
       weights: []
-    outline: []
-    customData: 
-    physicsShape: []
-    bones: []
-    spriteID: 
-    internalID: 0
-    vertices: []
-    indices: 
-    edges: []
-    weights: []
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      keks_backidle_0: 1993196928235088882
-      keks_backidle_1: 1978461959749989431
-      keks_idle_0: 7975571466453840182
-      keks_idle_1: 198103324968957987
-      keks_walk_0: 1763888460889456452
-      keks_walk_1: 734056755845785389
-      keks_walk_2: 2968207058249334346
-      keks_back_0: 1704151841363285481
-      keks_back_1: 1112487464878194903
-      keks_back_2: 3513879406194328656
+      Char_Onigiri_0: 3985207242265598267
+      Char_Onigiri_1: 743000047182632150
+      Char_Onigiri_10: -99303035103318866
+      Char_Onigiri_11: 1481709087597329530
+      Char_Onigiri_2: -772744699158573514
+      Char_Onigiri_3: 3800431390171574515
+      Char_Onigiri_4: -2890712096533025156
+      Char_Onigiri_5: -381862542397309465
+      Char_Onigiri_6: 1413398992682918094
+      Char_Onigiri_7: -2285510236059161332
+      Char_Onigiri_8: -3589435463037166210
+      Char_Onigiri_9: 822143614163023940
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
