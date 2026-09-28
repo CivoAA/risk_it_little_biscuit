@@ -55,9 +55,13 @@ public static class HubConsoleCheats
         // ------------------------------------------------------------------
         HubConsole.Add("freischalten", "schaltet ein einzelnes Unlock frei", (args, sink) =>
         {
+            // Ohne Argument: alle IDs mit Stand, damit man nicht in Unlocks.cs
+            // nachschlagen muss.
             if (args.Length == 0)
             {
-                sink.PrintError("Und was? -> freischalten <id>");
+                sink.Print("freischalten <id> - bekannte IDs:");
+                foreach (UnlockDef u in Unlocks.All)
+                    sink.Print($"  {(u.IsUnlocked ? "[x]" : "[ ]")} {u.Id}");
                 return;
             }
 
