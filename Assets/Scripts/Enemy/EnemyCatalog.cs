@@ -429,7 +429,7 @@ public static class EnemyCatalog
 
         Def(EnemyId.Milchpanzer, "Milchpanzer",
             health: 450f, damage: 10f, speed: 1.4f, exp: 350, pushTime: 0f,
-            role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesRight,
             sheet: "Assets/Art/Gegner/new/wirklich_saure_milch_1.png", fps: 8f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Neu/Milchpanzer.prefab");

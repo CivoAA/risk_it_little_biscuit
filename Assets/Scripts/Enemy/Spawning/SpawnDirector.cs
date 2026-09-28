@@ -51,6 +51,28 @@ public class SpawnDirector : MonoBehaviour
     [Tooltip("Weiter weg wird ein Gegner nach vorn geholt statt stehen gelassen.")]
     [SerializeField] private float recycleDistance = 26f;
 
+    [Tooltip("So weit ausserhalb des sichtbaren Bildes muss ein Gegner mindestens erscheinen.")]
+    [SerializeField] private float offScreenMargin = 1.5f;
+
+    [Tooltip("So lange muss ein Gegner im Stau stehen (zu viele Gegner zwischen ihm und dem Spieler), " +
+             "bevor er ausserhalb des Bildes neu angesetzt wird.")]
+    [SerializeField] private float blockedRecycleDelay = 1f;
+
+    [Header("Nachschub")]
+    [Tooltip("Unter dem Ziel-Druck: Anteil des Ziels, der pro Sekunde nachkommt. " +
+             "0.25 = in 4 s von leer auf voll - statt alles auf einmal.")]
+    [SerializeField] private float refillPerSecond = 0.25f;
+
+    [Tooltip("Auch AM Ziel kommt immer etwas nach: Anteil des Ziels pro Sekunde. " +
+             "Wer nicht hinterherkommt, wird ueberrannt, statt Kreise zu laufen.")]
+    [SerializeField] private float tricklePerSecond = 0.04f;
+
+    [Tooltip("Mindestens so viel Bedrohung pro Sekunde fliesst nach, auch bei kleinem Ziel.")]
+    [SerializeField] private float minTricklePerSecond = 0.75f;
+
+    [Tooltip("Bis zu diesem Vielfachen des Ziel-Drucks laeuft der Dauer-Nachschub weiter.")]
+    [SerializeField] private float overflowCap = 2f;
+
     [Header("Drosseln")]
     [Tooltip("Hoechstens so viele Gegner pro Nachschub-Takt - sonst gibt es Ruckler.")]
     [SerializeField] private int maxSpawnsPerTick = 8;
@@ -78,6 +100,12 @@ public class SpawnDirector : MonoBehaviour
 
     private float spawnTimer;
     private float maintenanceTimer;
+
+    /// <summary>Angesparte Bedrohung, die der Nachschub setzen darf.</summary>
+    private float spawnBudget;
+
+    /// <summary>Der naechste Nachschub-Gegner - bleibt stehen, bis das Budget fuer ihn reicht.</summary>
+    private EnemyId pendingEnemy = EnemyId.None;
 
     private const float SpawnTick = 0.1f;
     private const float MaintenanceTick = 0.25f;
@@ -200,6 +228,7 @@ public class SpawnDirector : MonoBehaviour
         phaseIndex = plan.Phases.Count;
         phaseTime = 0f;
         nextBeat = 0;
+        pendingEnemy = EnemyId.None;
     }
 
     private void EnterPhase(int index)
@@ -210,6 +239,7 @@ public class SpawnDirector : MonoBehaviour
         phase = plan.Phases[index];
         phaseTime = 0f;
         nextBeat = 0;
+        pendingEnemy = EnemyId.None;
 
         Debug.Log($"[SpawnDirector] Phase {index + 1}/{plan.Phases.Count} " +
                   $"({phase.Duration:0}s, Druck {phase.PressureStart:0} -> {phase.PressureEnd:0})");
@@ -315,6 +345,17 @@ public class SpawnDirector : MonoBehaviour
 
     // ------------------------------------------------------------- Nachschub
 
+    /// <summary>
+    /// Der laufende Nachschub. Frueher: bis zum Ziel auffuellen (80 Gegner pro
+    /// Sekunde moeglich) und dann gar nichts mehr, bis wieder etwas stirbt.
+    /// Kam der Spieler nicht hinterher - oder hatte ein Burst das Feld ueber
+    /// das Ziel gehoben -, stand der Nachschub still, und man konnte in Ruhe
+    /// Kreise um den Haufen laufen.
+    ///
+    /// Jetzt fliesst es: unter dem Ziel zuegig, aber verteilt ueber ein paar
+    /// Sekunden; am Ziel und darueber in einem duennen, steten Strom bis zum
+    /// <see cref="overflowCap"/>. Wer nicht raeumt, wird langsam ueberrannt.
+    /// </summary>
     private void TopUpPressure()
     {
         if (phase == null) return;
@@ -324,21 +365,43 @@ public class SpawnDirector : MonoBehaviour
         float target = phase.PressureAt(phaseTime) * RunDifficulty.CountFactor * pressureScale;
         float current = CurrentThreat(out int aliveCount);
 
-        if (current >= target || aliveCount >= maxAlive) return;
+        float rate;
+        if (current < target) rate = Mathf.Max(target * refillPerSecond, minTricklePerSecond);
+        else if (current < target * overflowCap) rate = Mathf.Max(target * tricklePerSecond, minTricklePerSecond * pressureScale);
+        else rate = 0f;
+
+        if (rate <= 0f || aliveCount >= maxAlive)
+        {
+            spawnBudget = 0f;
+            return;
+        }
+
+        if (pendingEnemy == EnemyId.None) pendingEnemy = phase.PickEnemy();
+        float nextThreat = Mathf.Max(0.1f, SpawnCatalog.Threat(pendingEnemy));
+
+        // Nicht endlos ansparen: hoechstens eine Sekunde Nachschub oder genau
+        // der naechste schwere Gegner, sonst kommt nach einer Pause doch
+        // wieder alles auf einmal.
+        spawnBudget = Mathf.Min(spawnBudget + rate * SpawnTick, Mathf.Max(rate, nextThreat));
 
         int spawned = 0;
-        while (current < target && spawned < maxSpawnsPerTick && aliveCount + spawned < maxAlive)
+        while (spawnBudget >= nextThreat && spawned < maxSpawnsPerTick && aliveCount + spawned < maxAlive)
         {
-            EnemyId id = phase.PickEnemy();
-
             points.Clear();
             phase.BasePattern.Fill(points, Context(), 1, 0f);
             if (points.Count == 0) break;
 
-            if (Spawn(id, points[0], true) == null) break;
+            if (Spawn(pendingEnemy, points[0], true) == null)
+            {
+                pendingEnemy = EnemyId.None;
+                break;
+            }
 
-            current += SpawnCatalog.Threat(id);
+            spawnBudget -= nextThreat;
             spawned++;
+
+            pendingEnemy = phase.PickEnemy();
+            nextThreat = Mathf.Max(0.1f, SpawnCatalog.Threat(pendingEnemy));
         }
     }
 
@@ -387,6 +450,12 @@ public class SpawnDirector : MonoBehaviour
     /// nicht an eine zufaellige Stelle neben dem Spieler. Das ersetzt
     /// EnemyTeleport und haelt nebenbei den Druck stabil: der Gegner bleibt am
     /// Leben und zaehlt weiter.
+    ///
+    /// Dazu kommen die Gegner im Stau (<see cref="Enemy.IsBlocked"/>): wer
+    /// hinten am Haufen haengt und aus dem Bild gefallen ist, kommt von
+    /// anderer Seite wieder.
+    /// Einfach nur ausserhalb des Bildes zu sein reicht dafuer NICHT - wer
+    /// freie Bahn hat, laeuft weiter auf den Spieler zu.
     /// </summary>
     private void RecycleStragglers()
     {
@@ -394,6 +463,10 @@ public class SpawnDirector : MonoBehaviour
 
         Vector2 player = PlayerController.Instance.transform.position;
         float limitSqr = recycleDistance * recycleDistance;
+
+        bool hasView = ViewBounds.TryGetWorldRect(out Rect view);
+        Rect visible = new Rect(view.xMin - offScreenMargin, view.yMin - offScreenMargin,
+                                view.width + offScreenMargin * 2f, view.height + offScreenMargin * 2f);
 
         SpawnContext ctx = Context();
         IReadOnlyList<Enemy> alive = Enemy.Alive;
@@ -404,11 +477,18 @@ public class SpawnDirector : MonoBehaviour
             if (enemy == null || enemy.IsBoss || !enemy.CanRecycle) continue;
 
             Vector2 pos = enemy.transform.position;
-            if ((pos - player).sqrMagnitude < limitSqr) continue;
+            bool tooFar = (pos - player).sqrMagnitude >= limitSqr;
+            bool stuckOffScreen = hasView
+                && enemy.BlockedFor >= blockedRecycleDelay
+                && !visible.Contains(pos);
+            if (!tooFar && !stuckOffScreen) continue;
 
             points.Clear();
             phase.BasePattern.Fill(points, ctx, 1, 0f);
-            if (points.Count > 0) enemy.transform.position = points[0];
+            if (points.Count == 0) continue;
+
+            enemy.transform.position = KeepOffScreen(points[0]);
+            enemy.ResetBlocked();
         }
     }
 
@@ -425,6 +505,32 @@ public class SpawnDirector : MonoBehaviour
             HalfWidth = spawnHalfWidth,
             HalfHeight = spawnHalfHeight,
         };
+    }
+
+    /// <summary>
+    /// Kein Gegner taucht mitten im Bild auf. Das Spawn-Rechteck allein reicht
+    /// dafuer nicht: Hinterhalt, Miniboss im Ring und Rudel setzen ihre Punkte
+    /// naeher an den Spieler, und die Kamera laeuft dem Spieler hinterher.
+    /// Liegt ein Punkt im Bild (plus Rand), wird er von der Bildmitte aus in
+    /// derselben Richtung bis knapp hinter den Rand geschoben - die Absicht des
+    /// Musters (vorn, links, im Ring) bleibt dabei erhalten.
+    /// </summary>
+    private Vector2 KeepOffScreen(Vector2 point)
+    {
+        if (!ViewBounds.TryGetWorldRect(out Rect view)) return point;
+
+        Rect safe = new Rect(view.xMin - offScreenMargin, view.yMin - offScreenMargin,
+                             view.width + offScreenMargin * 2f, view.height + offScreenMargin * 2f);
+        if (!safe.Contains(point)) return point;
+
+        Vector2 center = safe.center;
+        Vector2 dir = point - center;
+        if (dir.sqrMagnitude < 0.0001f) dir = Random.insideUnitCircle.normalized;
+
+        float tx = Mathf.Abs(dir.x) > 0.0001f ? (safe.width * 0.5f) / Mathf.Abs(dir.x) : float.MaxValue;
+        float ty = Mathf.Abs(dir.y) > 0.0001f ? (safe.height * 0.5f) / Mathf.Abs(dir.y) : float.MaxValue;
+
+        return center + dir * Mathf.Min(tx, ty);
     }
 
     /// <summary>Setzt eine bestimmte Bedrohungsmenge auf einmal - fuer Bursts.</summary>
@@ -449,6 +555,8 @@ public class SpawnDirector : MonoBehaviour
             Debug.LogWarning($"[SpawnDirector] Kein Prefab fuer {id} im Katalog - uebersprungen.");
             return null;
         }
+
+        position = KeepOffScreen(position);
 
         GameObject spawned = Instantiate(prefab, position, Quaternion.identity);
 
