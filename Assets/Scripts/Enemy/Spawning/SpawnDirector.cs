@@ -579,6 +579,14 @@ public class SpawnDirector : MonoBehaviour
 
     // -------------------------------------------------------------------- UI
 
+    // Fuer das GameHud: dieselben Daten, die UpdateText ins alte Wave-Feld
+    // schreibt. Phasen haben keine Namen mehr - es gibt nur noch Ansagen.
+
+    /// <summary>Was gerade im Wellenfeld stuende: die laufende Ansage, sonst nichts.</summary>
+    public string CurrentLabel => IsAnnouncing ? announce : "";
+
+    public bool IsAnnouncing => runTime < announceUntil && !string.IsNullOrEmpty(announce);
+
     /// <summary>
     /// Text ins Wellenfeld schreiben, der nicht aus dem Plan kommt. Der
     /// Keks-Koenig meldet damit seinen Phasenwechsel - das gehoert in

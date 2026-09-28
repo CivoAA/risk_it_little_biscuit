@@ -121,6 +121,22 @@ public class AudioController : MonoBehaviour
         if (IsRunScene(scene.name)) StopRunMusic(true);
     }
 
+    /// <summary>
+    /// Laeuft gerade wirklich ein Lauf? GameCore geladen und nicht stillgelegt
+    /// (GameManager.RestartNow schaltet ihre Wurzeln vor dem Entladen ab).
+    /// </summary>
+    private static bool IsRunLive()
+    {
+        foreach (string name in new[] { MapSceneSystem.CoreScene, "Game" })
+        {
+            Scene scene = SceneManager.GetSceneByName(name);
+            if (!scene.IsValid() || !scene.isLoaded) continue;
+            foreach (GameObject root in scene.GetRootGameObjects())
+                if (root.activeSelf) return true;
+        }
+        return false;
+    }
+
     private static bool IsRunScene(string sceneName)
     {
         // Im neuen System heisst die Lauf-Szene GameCore; "Game" ist die alte.
@@ -151,6 +167,12 @@ public class AudioController : MonoBehaviour
         // laeuft, sagt ihre MapDefinition (siehe RunMusicIn).
         else if (IsRunScene(sceneName))
         {
+            // Beim Aufgeben wird die Lauf-Szene erst stillgelegt, dann entladen.
+            // Wird sie dazwischen kurz zur aktiven Szene, kaeme hier ein
+            // "Lauf beginnt" an - und 1,2 s spaeter, wenn die Karte schon weg
+            // ist, spielte der Standard-Clip ("Off to Osaka") neben der Hub-Musik.
+            if (!IsRunLive()) return;
+
             // 0 = MainMenu-Musik AUS
             audioSources[0].mute = true;
             // 1 = Lauf-Musik AN - nach kurzer Pause, eingeblendet
@@ -190,6 +212,15 @@ public class AudioController : MonoBehaviour
     {
         // Echtzeit: der Lauf kann in der Zeit schon pausiert sein (timeScale 0).
         yield return new WaitForSecondsRealtime(runMusicDelay);
+
+        // In der Pause kann der Lauf schon wieder vorbei sein (aufgegeben,
+        // zurueck in den Hub). Dann nichts spielen.
+        if (!runMusicActive || !IsRunLive())
+        {
+            runMusicActive = false;
+            runMusicRoutine = null;
+            yield break;
+        }
 
         // Erst jetzt nachsehen - bis hierher ist die Map-Szene sicher geladen
         // und hat sich als MapDefinition.Active eingetragen.

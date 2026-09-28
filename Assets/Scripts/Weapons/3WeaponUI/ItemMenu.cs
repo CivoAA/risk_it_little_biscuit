@@ -3,8 +3,23 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine.UI;
 
+/// <summary>Was in einem Waffen- oder Buff-Slot liegt - fuer das <see cref="GameHud"/>.</summary>
+public struct ItemSlotInfo
+{
+    public Sprite Icon;
+    public int Level;      // 0-basiert wie Weapon.weaponLevel
+    public int MaxLevel;   // Weapon.maxweaponLevel
+    public bool IsEvo;
+}
+
 public class ItemMenu : MonoBehaviour
 {
+    /// <summary>
+    /// Die Slots in Anzeigereihenfolge (Evos links), nach jedem UpdateUI neu.
+    /// Das GameHud zeichnet daraus - die alten Slot-Bilder laufen unsichtbar mit.
+    /// </summary>
+    public readonly List<ItemSlotInfo> CurrentSlots = new List<ItemSlotInfo>();
+
     public UnityEngine.UI.Image[] weaponSlots;
     public List<TMP_Text> levelTexts = new List<TMP_Text>();
     public List<GameObject> weaponSlot = new List<GameObject>();
@@ -227,6 +242,7 @@ public class ItemMenu : MonoBehaviour
         }
 
         // Schritt 7: Slots setzen
+        CurrentSlots.Clear();
         for (int i = 0; i < weaponSlots.Length; i++)
         {
             if (i < currentSprites.Count)
@@ -246,6 +262,14 @@ public class ItemMenu : MonoBehaviour
                         break;
                     }
                 }
+
+                CurrentSlots.Add(new ItemSlotInfo
+                {
+                    Icon = sprite,
+                    Level = level,
+                    MaxLevel = maxLevel,
+                    IsEvo = allWeapons.Find(w => w.sprite == sprite).isEvo,
+                });
 
                 if (i < levelTexts.Count)
                 {

@@ -17,6 +17,9 @@ public class GameManager : MonoBehaviour
     public int skillCurrencyBeforeGame;
     public int gainedThroughAchievements;
 
+    /// <summary>Besiegte Gegner in diesem Lauf - fuer die Bilanz im Death-Screen.</summary>
+    public int kills;
+
     private int lastTimerSecond = -1;
 
     void Awake()

@@ -11,6 +11,20 @@ public class PowerUpButton : MonoBehaviour
     public PowerUpEntry assignedPowerUp;
     private PowerUpRarity selectedRarity;
     private float selectedValue;
+
+    // Fuer den LevelUpScreen (Mixer-Ansicht): was gewuerfelt wurde und aus welchem Bereich.
+    public PowerUpRarity Rarity => selectedRarity;
+    public float Value => selectedValue;
+    public Vector2 Range
+    {
+        get
+        {
+            PowerUpStats r = assignedPowerUp != null && assignedPowerUp.rarityStats != null
+                ? assignedPowerUp.rarityStats.Find(x => x.rarity == selectedRarity)
+                : null;
+            return r != null ? r.statRange : new Vector2(selectedValue, selectedValue);
+        }
+    }
     public void ActivateButton()
     {
         if (assignedPowerUp == null)

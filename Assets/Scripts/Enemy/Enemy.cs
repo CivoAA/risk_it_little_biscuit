@@ -700,6 +700,7 @@ public class Enemy : MonoBehaviour
 
         GrantRewards();
         SpawnDeathEffect();
+        if (GameManager.Instance != null) GameManager.Instance.kills++;
 
         AudioController.Instance.PalyModifiedSound(AudioController.Instance.enemyDeath);
 

@@ -19,10 +19,18 @@ public class MixerObject : MonoBehaviour
     private Animator animator;
 
 
+    [Tooltip("Aus = alter Mixer-Sprite mit gruenem Kreis statt MixerVisual.")]
+    public bool useNewVisual = true;
+
     private void Start()
     {
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+
+        // Neues Aussehen (Standmixer + Ring am Boden). Liest nur chargeSprite
+        // und den Trigger ab - die Mechanik hier bleibt, wie sie ist.
+        if (useNewVisual && GetComponent<MixerVisual>() == null)
+            gameObject.AddComponent<MixerVisual>();
     }
 
     private void OnTriggerEnter2D(Collider2D other)

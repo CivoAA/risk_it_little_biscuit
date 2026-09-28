@@ -4,6 +4,9 @@ using TMPro;
 
 public class ItemMenuBuffs : MonoBehaviour
 {
+    /// <summary>Die Buff-Slots in Anzeigereihenfolge, nach jedem UpdateUI neu - fuer das GameHud.</summary>
+    public readonly List<ItemSlotInfo> CurrentSlots = new List<ItemSlotInfo>();
+
     public UnityEngine.UI.Image[] weaponSlots;
     public List<TMP_Text> levelTexts = new List<TMP_Text>();
     public List<GameObject> weaponSlot = new List<GameObject>();
@@ -144,6 +147,7 @@ public class ItemMenuBuffs : MonoBehaviour
         }
 
         // Slots und Leveltexte aktualisieren
+        CurrentSlots.Clear();
         for (int i = 0; i < weaponSlots.Length; i++)
         {
             if (i < currentWeapons.Count)
@@ -164,6 +168,8 @@ public class ItemMenuBuffs : MonoBehaviour
                         break;
                     }
                 }
+
+                CurrentSlots.Add(new ItemSlotInfo { Icon = sprite, Level = level, MaxLevel = maxLevel });
 
                 // 🔹 Text aktualisieren
                 if (i < levelTexts.Count)

@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -40,6 +41,12 @@ public class UIController : MonoBehaviour
     [SerializeField] private TMP_Text timerText;
     [SerializeField] private TMP_Text MultiplireTextGamba;
 
+    [Header("HUD")]
+    [Tooltip("Aus = das alte HUD (Slider, Timer-Text, Item-Leisten) statt des GameHud.")]
+    [SerializeField] private bool useNewHud = true;
+    [Tooltip("Aus = die alten Level-Up- und Evo-Panels aus der Szene statt des LevelUpScreen.")]
+    [SerializeField] private bool useNewLevelUp = true;
+
     public LevelUpButton[] levelUpButtons;
     public LevelUpButton GambaButtons;
     public List<Weapon> currentLevelUpWeapons = new List<Weapon>();
@@ -52,7 +59,99 @@ public class UIController : MonoBehaviour
             return;
         }
         Instance = this;
+
+        if (useNewHud) AttachNewHud();
+        if (useNewLevelUp) AttachNewLevelUp();
     }
+
+    void Start()
+    {
+        EnsureEventSystem();
+    }
+
+    /// <summary>
+    /// Ohne aktives EventSystem kommt kein Klick an - Level-Up, Mixer, Evo und
+    /// Gamba waeren tot. Das EventSystem in GameCore ist absichtlich aus: kommt
+    /// der Lauf aus dem Hauptmenue, liegt dessen EventSystem noch geladen daneben,
+    /// und zwei aktive melden Warnungen. Startet der Hub dagegen allein (Editor)
+    /// oder die Map direkt, wird hart per LoadScene(Single) gewechselt und es
+    /// gibt keins. Dann das eigene einschalten.
+    ///
+    /// Laeuft auch bei jedem Oeffnen eines Auswahl-Panels, falls das geliehene
+    /// EventSystem zwischendurch mit seiner Szene verschwunden ist.
+    /// </summary>
+    private void EnsureEventSystem()
+    {
+        if (EventSystem.current != null && EventSystem.current.isActiveAndEnabled) return;
+
+        EventSystem active = FindAnyObjectByType<EventSystem>();   // nur aktive
+        if (active != null)
+        {
+            EventSystem.current = active;
+            return;
+        }
+
+        foreach (EventSystem es in FindObjectsByType<EventSystem>(FindObjectsInactive.Include))
+        {
+            if (es.gameObject.scene != gameObject.scene) continue;
+            es.gameObject.SetActive(true);
+            es.enabled = true;
+            EventSystem.current = es;
+            return;
+        }
+
+        var go = new GameObject("EventSystem (Run)", typeof(EventSystem), typeof(StandaloneInputModule));
+        UnityEngine.SceneManagement.SceneManager.MoveGameObjectToScene(go, gameObject.scene);
+    }
+
+    /// <summary>
+    /// Das GameHud zeichnet Leben, Erfahrung, Zeit, Phase und Items selbst. Die
+    /// alten Anzeigen bleiben aktiv und unsichtbar: ItemMenu und ItemMenuBuffs
+    /// rechnen in ihrem Update weiter die Slots aus, aus denen das HUD liest.
+    /// </summary>
+    private void AttachNewHud()
+    {
+        GameHud.Create(this);
+
+        HideLegacy(playerHealthSlider != null ? playerHealthSlider.gameObject : null);
+        HideLegacy(playerExperienceSlider != null ? playerExperienceSlider.gameObject : null);
+        HideLegacy(timerText != null ? timerText.gameObject : null);
+
+        Transform wave = transform.Find("Wave Text");
+        if (wave != null) HideLegacy(wave.gameObject);
+
+        ItemMenu items = FindAnyObjectByType<ItemMenu>(FindObjectsInactive.Include);
+        if (items != null) HideLegacy(items.gameObject);
+
+        ItemMenuBuffs buffs = FindAnyObjectByType<ItemMenuBuffs>(FindObjectsInactive.Include);
+        if (buffs != null) HideLegacy(buffs.gameObject);
+    }
+
+    /// <summary>
+    /// Der LevelUpScreen zeichnet Level-Up-Auswahl, Evo-Buch, Mixer und Death-Screen selbst. Die
+    /// alten Panels bleiben der Schalter: RandomWeapon bestueckt weiter die
+    /// LevelUpButtons, LevelUpPanelOpen/EvoPanelOpen machen sie an - der
+    /// Screen schaut nur zu. Darum unsichtbar statt aus.
+    /// </summary>
+    private void AttachNewLevelUp()
+    {
+        LevelUpScreen.Create(this);
+        HideLegacy(LevelUpPanel);
+        HideLegacy(EvoPanel);
+        HideLegacy(PowerUpPanel);
+        HideLegacy(GameOverPanel);
+    }
+
+    private static void HideLegacy(GameObject go)
+    {
+        if (go == null) return;
+        CanvasGroup group = go.GetComponent<CanvasGroup>();
+        if (group == null) group = go.AddComponent<CanvasGroup>();
+        group.alpha = 0f;
+        group.interactable = false;
+        group.blocksRaycasts = false;
+    }
+
     public void UpdateHealthSlider()
     {
         playerHealthSlider.maxValue = PlayerController.Instance.playerMaxHealth;
@@ -76,6 +175,7 @@ public class UIController : MonoBehaviour
 
     public void LevelUpPanelOpen()
     {
+        EnsureEventSystem();
         LevelUpPanel.SetActive(true);
         RefreshRerollandBanish();
         Time.timeScale = 0f;
@@ -87,6 +187,7 @@ public class UIController : MonoBehaviour
     }
     public void EvoPanelOpen()
     {
+        EnsureEventSystem();
         EvoPanel.SetActive(true);
         LevelUpPanel.SetActive(false);
     }
@@ -97,6 +198,7 @@ public class UIController : MonoBehaviour
     }
     public void PowerUpPanelOpen()
     {
+        EnsureEventSystem();
         PowerUpPanel.SetActive(true);
         RefreshRerollandBanish();
         Time.timeScale = 0f;
@@ -109,6 +211,7 @@ public class UIController : MonoBehaviour
 
     public void GambaPanelOpen()
     {
+        EnsureEventSystem();
         AudioController.Instance.PalySound(AudioController.Instance.LevelUpSound);
         GambaPanel.SetActive(true);
         Time.timeScale = 0f;

@@ -356,7 +356,7 @@ Camera:
   far clip plane: 100
   field of view: 60
   orthographic: 1
-  orthographic size: 3.4791667
+  orthographic size: 2.8125
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -630,6 +630,9 @@ MonoBehaviour:
   - {fileID: 0}
   pages:
   - Diese Statue zeigt den Held des Zuckers.
+  speaker: 
+  portrait: {fileID: 0}
+  portraitTalking: {fileID: 0}
 --- !u!4 &405929765
 Transform:
   m_ObjectHideFlags: 0
@@ -6639,6 +6642,16 @@ MonoBehaviour:
     y: 143
     width: 60
     height: 16
+  resetArea:
+    serializedVersion: 2
+    x: 122
+    y: 12
+    width: 72
+    height: 15
+  showResetButton: 1
+  resetLabel: RESET!!!
+  resetButtonColor: {r: 0, g: 1, b: 0, a: 1}
+  resetTextColor: {r: 1, g: 0, b: 0, a: 1}
   visibleRows: 6
   sortBoughtToBottom: 1
   rowHeight: 20
@@ -12211,6 +12224,9 @@ MonoBehaviour:
   - {fileID: 0}
   pages:
   - Das ist eine Statue, die den ersten gebackenen Keks zeigt.
+  speaker: 
+  portrait: {fileID: 0}
+  portraitTalking: {fileID: 0}
 --- !u!4 &1966062836
 Transform:
   m_ObjectHideFlags: 0
@@ -12414,6 +12430,10 @@ MonoBehaviour:
   panelColor: {r: 0.16470589, g: 0.10980392, b: 0.078431375, a: 0.98039216}
   textColor: {r: 0.96862745, g: 0.9254902, b: 0.8392157, a: 1}
   hintColor: {r: 0.8509804, g: 0.6431373, b: 0.25490195, a: 1}
+  portraitSize: 32
+  mouthFlapRate: 10
+  portraitBob: 1
+  arrowBob: 1.5
   showCoins: 1
   moneySprite: {fileID: 5841870835367478668, guid: 170d5a021157a524abbb6c0dd823661c, type: 3}
   coinMargin: {x: 4, y: 4}
@@ -12600,6 +12620,9 @@ MonoBehaviour:
     ihre Waffen niederzulegen.
   - "So endete der gro\xDFe Cookie-Krieg. Jener mutige Keks aber wird bis zum heutigen
     Tage als Held des Zuckers gefeiert."
+  speaker: 
+  portrait: {fileID: 0}
+  portraitTalking: {fileID: 0}
 --- !u!1 &1990000040
 GameObject:
   m_ObjectHideFlags: 0
@@ -13221,6 +13244,19 @@ MonoBehaviour:
   backInk: {r: 0.9098039, g: 0.87058824, b: 0.7607843, a: 1}
   borderShade: 0.42
   hoverLift: 0.25
+  plaqueFill: {r: 0.8862745, g: 0.8235294, b: 0.65882355, a: 1}
+  plaqueShade: {r: 0.6901961, g: 0.5764706, b: 0.3882353, a: 1}
+  accentGold: {r: 0.78431374, g: 0.63529414, b: 0.2901961, a: 1}
+  shadowStrength: 0.34
+  backdropOpacity: 0.93
+  glowColor: {r: 1, g: 0.7607843, b: 0.47843137, a: 1}
+  glowStrength: 0.17
+  vignetteStrength: 0.55
+  grainStrength: 0.3
+  animateDecor: 1
+  priceInk: {r: 0.5411765, g: 0.39215687, b: 0.08235294, a: 1}
+  ownedInk: {r: 0.29803923, g: 0.47843137, b: 0.22745098, a: 1}
+  lockedInk: {r: 0.6039216, g: 0.2901961, b: 0.23529412, a: 1}
   closeKey: 27
   openClip: {fileID: 0}
   closeClip: {fileID: 0}
@@ -14176,6 +14212,9 @@ MonoBehaviour:
     weitergeh\u2019n!"
   - "Kr\xFCmel voraus!\nDie Zukunft liegt in unserer Hand!\nKr\xFCmel voraus!\nF\xFCr
     das ganze Zuckerland!"
+  speaker: 
+  portrait: {fileID: 0}
+  portraitTalking: {fileID: 0}
 --- !u!4 &2091785052
 Transform:
   m_ObjectHideFlags: 0
@@ -14249,6 +14288,9 @@ MonoBehaviour:
   - "Bei hundertachtzig Grad hinein,\nnach zehn Minuten duftet\u2019s fein.\nDann
     lass sie ruh\u2019n, greif sp\xE4ter zu \u2014\nund schon sind deine Kekse im
     Nu!"
+  speaker: 
+  portrait: {fileID: 0}
+  portraitTalking: {fileID: 0}
 --- !u!4 &2147167036
 Transform:
   m_ObjectHideFlags: 0

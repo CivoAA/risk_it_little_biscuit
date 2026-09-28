@@ -70,6 +70,18 @@ public class StudioSplash : MonoBehaviour
         IsShowing = false;
     }
 
+    /// <summary>
+    /// Das Logo gehoert zum Spielstart, nicht zum ersten Besuch im Hauptmenue.
+    /// Laeuft nach dem Awake der ersten Szene: lag dort ein Splash, hat er sich
+    /// schon gezeigt; startet das Spiel woanders (Hub oder Karte im Editor),
+    /// darf ein spaeterer Rueckweg ins Menue das Logo nicht nachholen.
+    /// </summary>
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    private static void MarkStartupDone()
+    {
+        shownThisSession = true;
+    }
+
     private void Awake()
     {
         // In Awake, damit schon das allererste Bild abgedeckt ist und das
