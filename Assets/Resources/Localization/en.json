@@ -427,6 +427,27 @@
     { "key": "ui.death.new_none", "value": "NOTHING NEW - NEXT TIME!" },
     { "key": "ui.death.to_hub", "value": "TO THE HUB" },
     { "key": "ui.death.again", "value": "AGAIN" },
-    { "key": "ui.death.menu", "value": "MAIN MENU" }
+    { "key": "ui.death.menu", "value": "MAIN MENU" },
+
+    { "key": "ui.options.btn.done", "value": "DONE" },
+    { "key": "ui.options.btn.feedback", "value": "FEEDBACK" },
+    { "key": "ui.feedback.title", "value": "FEEDBACK" },
+    { "key": "ui.feedback.intro", "value": "Found a bug or have an idea? Let us know!" },
+    { "key": "ui.feedback.kind.bug", "value": "BUG" },
+    { "key": "ui.feedback.kind.feedback", "value": "FEEDBACK" },
+    { "key": "ui.feedback.name", "value": "Name / Discord ID" },
+    { "key": "ui.feedback.name.placeholder", "value": "optional - so we can follow up" },
+    { "key": "ui.feedback.message", "value": "Description" },
+    { "key": "ui.feedback.message.bug", "value": "What happened? What were you doing?" },
+    { "key": "ui.feedback.message.feedback", "value": "What do you like, what is missing?" },
+    { "key": "ui.feedback.info", "value": "Also sent: game version, system and scene." },
+    { "key": "ui.feedback.cancel", "value": "CANCEL" },
+    { "key": "ui.feedback.send", "value": "SEND" },
+    { "key": "ui.feedback.status.sending", "value": "Sending..." },
+    { "key": "ui.feedback.status.sent", "value": "Thanks! It arrived." },
+    { "key": "ui.feedback.status.failed", "value": "Sending failed - please try again later." },
+    { "key": "ui.feedback.status.short", "value": "Please describe it in a bit more detail." },
+    { "key": "ui.feedback.status.wait", "value": "Please wait a moment." },
+    { "key": "ui.feedback.status.nourl", "value": "No webhook configured." }
   ]
 }

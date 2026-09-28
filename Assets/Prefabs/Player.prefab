@@ -601,8 +601,8 @@ MonoBehaviour:
     AttackSpeed: 0
     shots: 0
     description: -27% Cooldown
-  weaponImage: {fileID: -2683667644670979637, guid: 4cae7aca66cf3a34b9089ceea2b9084b, type: 3}
-  weaponIcon: {fileID: -2683667644670979637, guid: 4cae7aca66cf3a34b9089ceea2b9084b, type: 3}
+  weaponImage: {fileID: -340574657508965233, guid: 9b6267daa9484620ac768ae35640ad83, type: 3}
+  weaponIcon: {fileID: -340574657508965233, guid: 9b6267daa9484620ac768ae35640ad83, type: 3}
   weaponIconEvo: {fileID: 0}
   posssibleEvo: 0
   hasBeenRemoved: 0
@@ -1403,8 +1403,8 @@ MonoBehaviour:
     AttackSpeed: 0.4
     shots: 3
     description: Damage +1, maximaler Sog
-  weaponImage: {fileID: -2683667644670979637, guid: 4cae7aca66cf3a34b9089ceea2b9084b, type: 3}
-  weaponIcon: {fileID: -2683667644670979637, guid: 4cae7aca66cf3a34b9089ceea2b9084b, type: 3}
+  weaponImage: {fileID: -147576388723114725, guid: ab04aca7a5f241d19f7d6e6c6564b26b, type: 3}
+  weaponIcon: {fileID: -147576388723114725, guid: ab04aca7a5f241d19f7d6e6c6564b26b, type: 3}
   weaponIconEvo: {fileID: 0}
   posssibleEvo: 0
   hasBeenRemoved: 0
@@ -2552,8 +2552,8 @@ MonoBehaviour:
     AttackSpeed: 0
     shots: 0
     description: +40% Wirkdauer
-  weaponImage: {fileID: -2683667644670979637, guid: 4cae7aca66cf3a34b9089ceea2b9084b, type: 3}
-  weaponIcon: {fileID: -2683667644670979637, guid: 4cae7aca66cf3a34b9089ceea2b9084b, type: 3}
+  weaponImage: {fileID: 558494774044765178, guid: 480c5b404d264392ae3d3bc41d9e1257, type: 3}
+  weaponIcon: {fileID: 558494774044765178, guid: 480c5b404d264392ae3d3bc41d9e1257, type: 3}
   weaponIconEvo: {fileID: -7237997676949662545, guid: 08369b5d3a1717f4282d5b11734b2311, type: 3}
   posssibleEvo: 0
   hasBeenRemoved: 0
@@ -3322,8 +3322,8 @@ MonoBehaviour:
     AttackSpeed: 0
     shots: 0
     description: 2x wiederbeleben mit 40% HP
-  weaponImage: {fileID: -2683667644670979637, guid: 4cae7aca66cf3a34b9089ceea2b9084b, type: 3}
-  weaponIcon: {fileID: -2683667644670979637, guid: 4cae7aca66cf3a34b9089ceea2b9084b, type: 3}
+  weaponImage: {fileID: 3409981706572085427, guid: 65fec8e18e8f4bb9bff3b0a819efbf0c, type: 3}
+  weaponIcon: {fileID: 3409981706572085427, guid: 65fec8e18e8f4bb9bff3b0a819efbf0c, type: 3}
   weaponIconEvo: {fileID: 0}
   posssibleEvo: 0
   hasBeenRemoved: 0
@@ -3998,7 +3998,7 @@ MonoBehaviour:
     description: Faster damage
   weaponImage: {fileID: 2367161928690977624, guid: 399dd036fbace5c4b900ef996679a31c, type: 3}
   weaponIcon: {fileID: -7237997676949662545, guid: 08369b5d3a1717f4282d5b11734b2311, type: 3}
-  weaponIconEvo: {fileID: -2683667644670979637, guid: 4cae7aca66cf3a34b9089ceea2b9084b, type: 3}
+  weaponIconEvo: {fileID: 167885153293235384, guid: 7f34c66f28098ba418ff9cc4c08b98a3, type: 3}
   posssibleEvo: 0
   hasBeenRemoved: 0
   prefab: {fileID: 7273595992386994556, guid: d22bbcf03e7e1d14ab404abc53b70e26, type: 3}
@@ -9505,8 +9505,8 @@ MonoBehaviour:
     AttackSpeed: 0.35
     shots: 5
     description: 
-  weaponImage: {fileID: -2683667644670979637, guid: 4cae7aca66cf3a34b9089ceea2b9084b, type: 3}
-  weaponIcon: {fileID: -2683667644670979637, guid: 4cae7aca66cf3a34b9089ceea2b9084b, type: 3}
+  weaponImage: {fileID: -3861609280852012830, guid: f6f4b38188dc44499e13fe39c2d4c489, type: 3}
+  weaponIcon: {fileID: -3861609280852012830, guid: f6f4b38188dc44499e13fe39c2d4c489, type: 3}
   weaponIconEvo: {fileID: 0}
   posssibleEvo: 0
   hasBeenRemoved: 0
@@ -9605,8 +9605,8 @@ MonoBehaviour:
     AttackSpeed: 0.55
     shots: 3
     description: Damage +1, maximale Standzeit
-  weaponImage: {fileID: -2683667644670979637, guid: 4cae7aca66cf3a34b9089ceea2b9084b, type: 3}
-  weaponIcon: {fileID: -2683667644670979637, guid: 4cae7aca66cf3a34b9089ceea2b9084b, type: 3}
+  weaponImage: {fileID: -2702917980322874063, guid: d2d735727caa4163869f49d1c051bcbe, type: 3}
+  weaponIcon: {fileID: -2702917980322874063, guid: d2d735727caa4163869f49d1c051bcbe, type: 3}
   weaponIconEvo: {fileID: 0}
   posssibleEvo: 0
   hasBeenRemoved: 0
@@ -9858,8 +9858,8 @@ MonoBehaviour:
     AttackSpeed: 0
     shots: 0
     description: +70% Schaden, -30% Max HP
-  weaponImage: {fileID: -2683667644670979637, guid: 4cae7aca66cf3a34b9089ceea2b9084b, type: 3}
-  weaponIcon: {fileID: -2683667644670979637, guid: 4cae7aca66cf3a34b9089ceea2b9084b, type: 3}
+  weaponImage: {fileID: -3627844698242013704, guid: 809b5a194789472183719b5d6f0d38fe, type: 3}
+  weaponIcon: {fileID: -3627844698242013704, guid: 809b5a194789472183719b5d6f0d38fe, type: 3}
   weaponIconEvo: {fileID: 0}
   posssibleEvo: 0
   hasBeenRemoved: 0
@@ -9954,8 +9954,8 @@ MonoBehaviour:
     AttackSpeed: 0.28
     shots: 10
     description: Damage +1, maximale Spur
-  weaponImage: {fileID: -2683667644670979637, guid: 4cae7aca66cf3a34b9089ceea2b9084b, type: 3}
-  weaponIcon: {fileID: -2683667644670979637, guid: 4cae7aca66cf3a34b9089ceea2b9084b, type: 3}
+  weaponImage: {fileID: 2513326656333955715, guid: 22170d08a9894eb3aad93fc5eb2bf3d3, type: 3}
+  weaponIcon: {fileID: 2513326656333955715, guid: 22170d08a9894eb3aad93fc5eb2bf3d3, type: 3}
   weaponIconEvo: {fileID: 0}
   posssibleEvo: 0
   hasBeenRemoved: 0

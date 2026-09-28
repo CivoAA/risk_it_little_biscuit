@@ -1,3 +1,5 @@
+> **Abgelöst (28.09.2026).** Das Pausenmenü ist wie die Optionen auf den Stil von UI 2.0 umgebaut (dunkle Karte, Titelband, Holzknöpfe) und malt seine Grafik über `GameHudSkin`. Aufbau und Inhalt sind gleich geblieben (Menü links, ZEIT/LEVEL/GOLD, Stats jetzt in drei Spalten). Maße stehen in `PauseMenuPanel.cs`; die Sprites unter `Assets/Resources/PauseMenu/ui/` werden nicht mehr geladen. Der Rest dieser Datei beschreibt die alte Pergament-Fassung.
+
 # Pausenmenü — Pixel-UI
 
 Das Fenster, das im laufenden Run und im Hub mit **ESC** aufgeht. Eine

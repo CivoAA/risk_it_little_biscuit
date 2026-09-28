@@ -476,16 +476,16 @@ Silhouette hält das Motiv auf beiden lesbar.
 | `celestial_star` | Himmelsstern |
 | `coffee_pool` | Kaffeepfütze |
 | `cookie_saw` | Keksäge |
-| `crumb_trail` | Krümelspur  <-- noch Platzhalter |
+| `crumb_trail` | Krümelspur |
 | `deathstrike` | Todesstoß |
 | `fire_ball` | Feuerball |
 | `jam_jar` | Marmeladenglas |
 | `shurikookie` | Shurikookie |
 | `spike_fork` | Stachelgabel |
 | `time_laser` | Zeitlaser |
-| `turret` | Geschütz  <-- noch Platzhalter |
+| `turret` | Geschütz |
 | `void_spike` | Leerenstachel |
-| `vortex` | Strudel  <-- noch Platzhalter |
+| `vortex` | Strudel |
 
 ### BUFFS (19)
 
@@ -493,22 +493,22 @@ Silhouette hält das Motiv auf beiden lesbar.
 |---|---|
 | `buff_aoe_range` | Wirkbereich |
 | `buff_armor` | Rüstung |
-| `buff_cooldown` | Abklingzeit  <-- noch Platzhalter |
+| `buff_cooldown` | Abklingzeit |
 | `buff_crit_chance` | Krit-Chance |
 | `buff_crit_damage` | Krit-Schaden |
 | `buff_currency` | Münzen |
 | `buff_damage` | Schaden |
 | `buff_dodge` | Ausweichen |
-| `buff_duration` | Wirkdauer  <-- noch Platzhalter |
+| `buff_duration` | Wirkdauer |
 | `buff_extra_shot` | Extraschuss |
-| `buff_glass_cannon` | Glaskanone  <-- noch Platzhalter |
+| `buff_glass_cannon` | Glaskanone |
 | `buff_life_steal` | Lebensraub |
 | `buff_luck` | Glück |
 | `buff_max_hp` | Max. Leben |
 | `buff_move_speed` | Tempo |
 | `buff_pickup_range` | Sammelweite |
 | `buff_regeneration` | Regeneration |
-| `buff_second_chance` | Zweite Chance  <-- noch Platzhalter |
+| `buff_second_chance` | Zweite Chance |
 | `buff_xp_gain` | Erfahrung |
 
 ### EVOS (8)
@@ -522,7 +522,7 @@ Silhouette hält das Motiv auf beiden lesbar.
 | `evo_boomerang` | Sturmbumerang |
 | `evo_explosive_star` | Explosivstern |
 | `evo_shuril_blast` | Shuri-Blast |
-| `evo_sticky_shatter` | Klebesplitter  <-- noch Platzhalter |
+| `evo_sticky_shatter` | Klebesplitter |
 
 ### Woraus die jetzigen entstanden sind
 

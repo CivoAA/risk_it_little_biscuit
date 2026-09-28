@@ -12,5 +12,7 @@ UserSettings/
 *.csproj
 *.sln
 *.slnx
+
+# Discord-Webhook fuer das Feedback-Fenster (FeedbackReport.cs) - Repo ist oeffentlich
 Assets/Resources/Feedback/
 Assets/Resources/Feedback.meta

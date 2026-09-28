@@ -403,7 +403,7 @@ public static class GameHudSkin
         return c;
     });
 
-    public enum ButtonLook { Wood, Hover, Pressed, Active, Disabled }
+    public enum ButtonLook { Wood, Hover, Pressed, Active, Disabled, Gold, GoldHover, DangerHover }
 
     /// <summary>Holzknopf wie das Uhrenschild, in fuenf Zustaenden. 9-Slice, Rand 4.</summary>
     public static Sprite Button(ButtonLook look) => Get("button" + look, () =>
@@ -415,6 +415,9 @@ public static class GameHudSkin
             case ButtonLook.Pressed:  top = WoodMid;       fill = WoodDark;  band = WoodDark;       low = Hex(0x472818); break;
             case ButtonLook.Active:   top = JamLight;      fill = Jam;       band = Jam;            low = JamDeep; break;
             case ButtonLook.Disabled: top = StoneLight;    fill = StoneDark; band = Stone;          low = Hex(0x3a2e34); break;
+            case ButtonLook.Gold:     top = GoldLight;     fill = Gold;      band = Gold;           low = GoldDark; break;
+            case ButtonLook.GoldHover:top = Cream;         fill = GoldLight; band = GoldLight;      low = Gold; break;
+            case ButtonLook.DangerHover:top = Hex(0xf8c0c8); fill = JamLight; band = JamLight;     low = JamDark; break;
             default:                  top = WoodLight;     fill = WoodMid;   band = Wood;           low = WoodDark; break;
         }
         var c = new Px(10, 10);
@@ -545,6 +548,79 @@ public static class GameHudSkin
         }
         return c;
     });
+
+    // ==================================================================
+    //  Optionen und Feedback (OptionsPanel, FeedbackPanel)
+    // ==================================================================
+
+    /// <summary>
+    /// Eingabefeld: eingelassene dunkle Flaeche mit Schattenkante oben.
+    /// Mit Fokus wird die Kontur golden. 9-Slice, Rand 3.
+    /// </summary>
+    public static Sprite Field(bool focused) => Get("field" + focused, () =>
+    {
+        var c = new Px(8, 8);
+        c.FillRounded(0, 0, 8, 8, 1, focused ? Gold : Ink);
+        c.Fill(1, 1, 6, 6, Hex(0x171116));
+        c.HLine(1, 1, 6, Hex(0x0f0b0e));
+        if (focused)
+        {
+            c.Set(0, 1, GoldDark);
+            c.Set(7, 1, GoldDark);
+        }
+        return c;
+    }, new Vector4(3, 3, 3, 3));
+
+    public enum CellKind { Empty, Full, Hover }
+
+    /// <summary>Eine Zelle der Lautstaerke-Leiste, 7x9: leer (Rinne), voll (Gold), unter der Maus (hell).</summary>
+    public static Sprite VolumeCell(CellKind kind) => Get("volcell" + kind, () =>
+    {
+        var c = new Px(7, 9);
+        c.FillRounded(0, 0, 7, 9, 1, Ink);
+        switch (kind)
+        {
+            case CellKind.Full:
+                c.Fill(1, 1, 5, 7, Gold);
+                c.HLine(1, 1, 5, GoldLight);
+                c.HLine(1, 7, 5, GoldDark);
+                break;
+            case CellKind.Hover:
+                c.Fill(1, 1, 5, 7, GoldLight);
+                c.HLine(1, 1, 5, Cream);
+                c.HLine(1, 7, 5, Gold);
+                break;
+            default:
+                c.Fill(1, 1, 5, 7, Trough);
+                c.HLine(1, 1, 5, TroughLow);
+                break;
+        }
+        return c;
+    });
+
+    /// <summary>Marienkaefer fuer den Feedback-Knopf.</summary>
+    public static Sprite Bug => Get("bug", () => Outlined(new[]
+    {
+        ".k...k.",
+        "..kkk..",
+        ".rrkrr.",
+        "rhrkrkr",
+        "rrrkrrr",
+        "rkrkrkr",
+        ".rrkrr.",
+    }, UiColors));
+
+    /// <summary>Sprechblase fuer die Feedback-Art "Feedback".</summary>
+    public static Sprite Speech => Get("speech", () => Outlined(new[]
+    {
+        ".wwwwww.",
+        "wwwwwwww",
+        "wkwkwkww",
+        "wwwwwwww",
+        ".wwwwwg.",
+        "..ww....",
+        ".w......",
+    }, UiColors));
 
     public static Sprite Speed => Get("speed", () => Outlined(new[]
     {

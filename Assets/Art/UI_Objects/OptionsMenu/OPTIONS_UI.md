@@ -1,3 +1,5 @@
+> **Abgelöst (28.09.2026).** Das Fenster ist auf den Stil von UI 2.0 umgebaut (dunkle Karte, Titelband, Holzknöpfe wie beim Level-Up) und malt seine Grafik jetzt selbst über `GameHudSkin` - Maße stehen direkt in `OptionsPanel.cs`, Bausteine in `OptionsKit.cs`. Dazu kam `FeedbackPanel.cs` (Bug-Report an Discord). Die Sprites unter `Assets/Resources/OptionsMenu/ui/` werden nicht mehr geladen. Der Rest dieser Datei beschreibt die alte Pergament-Fassung.
+
 # Optionen-Bildschirm — Pixel-UI
 
 Geht aus dem Pausenmenü (Run **und** Hub) und aus dem Hauptmenü auf. **Dieselbe

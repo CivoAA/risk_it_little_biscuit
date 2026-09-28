@@ -5,30 +5,26 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /// <summary>
-/// Das Pausenmenue: eine Pergamenttafel ueber dem abgedunkelten Bild.
+/// Das Pausenmenue im Stil von "UI 2.0" - dieselbe dunkle Karte, dasselbe
+/// Titelband und dieselben Holzknoepfe wie <see cref="OptionsPanel"/> und der
+/// Level-Up-Bildschirm.
 ///
 ///   PauseMenuPanel.Open(PauseMenuPanel.PauseMode.Run);   // im Lauf
 ///   PauseMenuPanel.Open(PauseMenuPanel.PauseMode.Hub);   // im Hub
 ///
-/// Baut sich komplett per Code auf - kein Szenenobjekt, kein Prefab, nichts im
-/// Inspector, genau wie <see cref="OptionsPanel"/>, <see cref="AchievementPanel"/>
-/// und <see cref="WorkbenchPanel"/>. Dadurch funktioniert derselbe Aufruf aus
-/// jeder Szene.
+/// Baut sich komplett per Code auf - kein Szenenobjekt, kein Prefab, keine
+/// Bilddatei (Grafik aus <see cref="GameHudSkin"/>, Bausteine aus
+/// <see cref="OptionsKit"/>). Dadurch funktioniert derselbe Aufruf aus jeder
+/// Szene.
 ///
 /// Zwei Auspraegungen:
-///   Run - volle Tafel mit Kopfleiste (ZEIT / LEVEL / GOLD) und Stats-Spalte,
-///         vier Eintraege, Time.timeScale = 0.
-///   Hub - schmale Tafel, mittig, ohne Chips und ohne Stats, drei Eintraege.
-///         Die Zeit laeuft weiter; gesperrt wird der Hub wie bei Shop und
-///         Skilltree ueber HubUI.PushModal.
+///   Run - breite Karte: links vier Knoepfe, rechts ZEIT / LEVEL / GOLD und
+///         darunter die Stats in drei Spalten. Time.timeScale = 0.
+///   Hub - schmale Karte, nur drei Knoepfe. Die Zeit laeuft weiter; gesperrt
+///         wird der Hub wie bei Shop und Skilltree ueber HubUI.PushModal.
 ///
-/// Die Grafik kommt aus Assets/Resources/PauseMenu/ui/ (siehe
-/// Assets/Art/UI_Objects/PauseMenu/PAUSE_MENU_UI.md - dort stehen alle Masse,
-/// Textzonen und 9-Slice-Raender, nach denen hier gerechnet wird). Jede Zahl in
-/// diesem Skript ist ein Pixel im 320x180-Raster, Ursprung oben links. Landet
-/// etwas auf einem halben Pixel, verschmiert es beim Hochskalieren.
-///
-/// Die Statwerte zieht <see cref="ReadStats"/> live aus PlayerController und
+/// Masse in Seitenpixeln (480x270, Ursprung oben links), ganzzahlig skaliert.
+/// Die Statwerte zieht <see cref="BuildStatModel"/> live aus PlayerController und
 /// GameManager - dieselben Felder, die das alte UIPausPanleStats abgefragt hat.
 /// </summary>
 public class PauseMenuPanel : MonoBehaviour
@@ -36,75 +32,34 @@ public class PauseMenuPanel : MonoBehaviour
     public enum PauseMode { Run, Hub }
 
     // ==================================================================
-    //  Masse (alle aus PAUSE_MENU_UI.md)
+    //  Masse (Seitenpixel)
     // ==================================================================
 
-    private const int RefW = 320;
-    private const int RefH = 180;
-    private const string UiPath = "PauseMenu/ui/";
+    // ---- Karte im Lauf ----
+    private const int CardX = 16, CardY = 40, CardW = 448, CardH = 150;
+    private const int RibbonY = 28;
+    private static readonly RectInt RunContent = new RectInt(CardX - 12, RibbonY, CardW + 24, CardY + CardH - RibbonY);
 
-    // ---- Tafel im Lauf: 256x156 mittig, Sprite inkl. 2px Schlagschatten ----
-    private const float BoardX = 32f, BoardY = 12f, BoardW = 258f, BoardH = 158f;
-    private const float HeaderX = 33f, HeaderY = 13f, HeaderW = 254f, HeaderH = 22f;
+    private const int BtnX = 32, BtnW = 128, BtnH = 20, BtnStep = 24, BtnY0 = 58;
+    private const int ArrowGap = 3;
+    private const int HintY = 160;
 
-    private static readonly Vector4 TitleZone = new Vector4(39f, 17f, 54f, 14f);
-    private const float HdrLineX = 98f, HdrLineY = 23f, HdrLineW = 60f;
+    private const int SideX = 174, SideW = 274;
+    private const int ChipY = 58, ChipH = 18, ChipGap = 5;
+    private const int StatsY = 82, StatsH = 96;
+    private const int ColStep = 90, ColW = 88, ColPad = 4;
+    private const int GroupY = 4, StatRowY = 18, StatRowH = 14;
 
-    private const float ChipY = 18f, ChipW = 38f, ChipH = 12f;
-    private static readonly float[] ChipX = { 163f, 203f, 243f };
-
-    private const float DividerX = 159f, DividerY = 35f, DividerH = 130f;
-    private const float ColX = 161f, ColY = 35f, ColW = 126f, ColH = 130f;
-    private const float StatsX = 164f, StatsY = 38f, StatsW = 120f, StatsH = 124f;
-
-    // Innenflaeche der Stats-Tafel: 112 breit, 116 hoch, ab (168, 42).
-    private const float ContentX = 168f, ContentY = 42f, ContentW = 112f;
-    private const float StatsLineX = 206f, StatsLineY = 46f, StatsLineW = 74f;
-
-    // Kopfzeile 8, danach drei Gruppen a 36 (Gruppenkopf 6 + 5 Zeilen a 6).
-    private const float GroupStep = 36f, RowH = 6f, GroupHeadH = 6f;
-    private const float NameDX = 2f, NameW = 60f;
-    private const float LeadDX = 64f, LeadW = 18f;
-    private const float ValueDX = 83f, ValueW = 28f;
-
-    // ---- Menuespalte ----
-    private const float BtnX = 46f, BtnW = 109f, BtnH = 17f, BtnStep = 20f;
-    private const float BtnFirstY = 54f;
-    private const float ArrowX = 39f, ArrowS = 5f, ArrowDY = 5f;
-    private static readonly Vector4 HintZone = new Vector4(46f, 136f, 108f, 10f);
-
-    // ---- Tafel im Hub: 148x126 mittig ----
-    private const float HubBoardX = 86f, HubBoardY = 27f, HubBoardW = 150f, HubBoardH = 128f;
-    private const float HubHeaderX = 87f, HubHeaderY = 28f, HubHeaderW = 146f;
-    private static readonly Vector4 HubTitleZone = new Vector4(87f, 32f, 146f, 14f);
-    private const float HubBtnX = 109f, HubBtnFirstY = 64f, HubArrowX = 102f;
-    private static readonly Vector4 HubHintZone = new Vector4(109f, 126f, 108f, 10f);
+    // ---- Karte im Hub ----
+    private const int HubCardX = 156, HubCardY = 62, HubCardW = 168, HubCardH = 120;
+    private const int HubRibbonY = 50;
+    private static readonly RectInt HubContent = new RectInt(HubCardX - 12, HubRibbonY, HubCardW + 24, HubCardY + HubCardH - HubRibbonY);
+    private const int HubBtnY0 = 80, HubHintY = 154;
 
     // ---- Bestaetigungsdialog ----
-    private const float DlgX = 95f, DlgY = 60f, DlgW = 132f, DlgH = 62f;
-    private static readonly Vector4 DlgTextZone = new Vector4(103f, 68f, 114f, 24f);
-    private const float DlgBtnY = 98f, DlgBtnW = 57f, DlgBtnH = 15f;
-    private static readonly float[] DlgBtnX = { 102f, 162f };
-
-    // ---- Schriftgroessen ----
-    private const float SizeTitle = 14f;
-    private const float SizeButton = 10f;
-    private const float SizeHead = 8f;
-    private const float SizeValue = 8f;
-    private const float SizeName = 7f;
-    private const float SizeSmall = 6f;
-
-    // ---- Palette ----
-    private static readonly Color TextOnWood   = Hex(0xf2dcbc);
-    private static readonly Color TextOnActive = Hex(0xfff4e0);
-    private static readonly Color TextChipKey  = Hex(0xd9b189);
-    private static readonly Color TextInk      = Hex(0x3b2b33);
-    private static readonly Color TextValue    = Hex(0x4d2e1e);
-    private static readonly Color TextDim      = Hex(0x6f4630);
-    private static readonly Color LineColor    = Hex(0xd9b189);
-    private static readonly Color HdrLine      = Hex(0x5a3421);
-    private static readonly Color HdrLineHi    = Hex(0x8a5a3d);
-    private static readonly Color DimColor     = new Color32(0x2b, 0x20, 0x28, 0xCC); // 80 %
+    private const int DlgX = 146, DlgY = 98, DlgW = 188, DlgH = 74;
+    private const int DlgTextY = 108, DlgTextH = 28;
+    private const int DlgBtnY = 144, DlgBtnW = 80, DlgBtnH = 18;
 
     // ==================================================================
     //  Inhalt
@@ -115,9 +70,7 @@ public class PauseMenuPanel : MonoBehaviour
 
     private class Row
     {
-        public Image Frame;
-        public TMP_Text Label;
-        public RectTransform LabelRect;
+        public SkinButton Button;
         public Entry What;
     }
 
@@ -134,7 +87,7 @@ public class PauseMenuPanel : MonoBehaviour
     {
         public string Key;
         public string Fallback;
-        public string Dot;
+        public Color32 Color;
         public StatDef[] Rows;
     }
 
@@ -153,8 +106,11 @@ public class PauseMenuPanel : MonoBehaviour
     public static bool IsOpen => instance != null;
 
     private PauseMode mode;
-    private TMP_FontAsset font;
+    private TMP_FontAsset textFont, pixelFont;
     private RectTransform page;
+    private CanvasScaler scaler;
+    private Canvas canvas;
+    private Vector2Int lastScreen;
 
     private readonly List<Row> rows = new List<Row>();
     private readonly List<StatCells> cells = new List<StatCells>();
@@ -163,7 +119,6 @@ public class PauseMenuPanel : MonoBehaviour
 
     private TMP_Text[] chipValues;
     private Image arrow;
-    private float arrowBaseX;
 
     // Der Tastendruck, der das Menue aufgemacht hat, darf es nicht gleich
     // wieder zumachen.
@@ -178,10 +133,8 @@ public class PauseMenuPanel : MonoBehaviour
     // Dialog
     private RectTransform dialog;
     private System.Action dialogConfirm;
-    private Image[] dialogFrames;
-    private TMP_Text[] dialogLabels;
-    private RectTransform[] dialogLabelRects;
-    private Sprite[][] dialogSprites;
+    private RectTransform dialogPage;
+    private SkinButton[] dialogButtons;
     private int dialogSelected;
 
     private HubUI hub;
@@ -217,12 +170,13 @@ public class PauseMenuPanel : MonoBehaviour
     {
         instance = this;
         openedFrame = Time.frameCount;
-        font = FindFont();
+        textFont = PixelUI.FindTextFont();
+        pixelFont = PixelUI.FindPixelFont();
     }
 
-    private void OnEnable() => Loc.LanguageChanged += RefreshTexts;
+    private void OnEnable() => Loc.LanguageChanged += Rebuild;
 
-    private void OnDisable() => Loc.LanguageChanged -= RefreshTexts;
+    private void OnDisable() => Loc.LanguageChanged -= Rebuild;
 
     private void OnDestroy()
     {
@@ -268,7 +222,21 @@ public class PauseMenuPanel : MonoBehaviour
 
     private void Update()
     {
-        if (OptionsPanel.IsOpen)
+        var size = new Vector2Int(Screen.width, Screen.height);
+        if (page != null && size != lastScreen)
+        {
+            lastScreen = size;
+            OptionsKit.Layout(page, scaler, Content);
+            if (dialogPage != null) dialogPage.anchoredPosition = page.anchoredPosition;
+        }
+
+        // Solange die Optionen offen sind, verschwindet das Menue ganz - sie
+        // liegen sonst als zweite Karte darueber. Danach ist es wieder da.
+        bool optionsOpen = OptionsPanel.IsOpen;
+        if (canvas == null) canvas = GetComponent<Canvas>();
+        if (canvas != null && canvas.enabled == optionsOpen) canvas.enabled = !optionsOpen;
+
+        if (optionsOpen)
         {
             optionsSeenFrame = Time.frameCount;
             return;
@@ -290,6 +258,7 @@ public class PauseMenuPanel : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape) && !escSwallowed)
         {
+            OptionsKit.PlayClick();
             Activate(Entry.Resume);
             return;
         }
@@ -300,7 +269,11 @@ public class PauseMenuPanel : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)
             || Input.GetKeyDown(KeyCode.Space))
         {
-            if (selected >= 0 && selected < rows.Count) Activate(rows[selected].What);
+            if (selected >= 0 && selected < rows.Count)
+            {
+                OptionsKit.PlayClick();
+                Activate(rows[selected].What);
+            }
         }
     }
 
@@ -308,7 +281,7 @@ public class PauseMenuPanel : MonoBehaviour
     {
         if (rows.Count == 0) return;
         Select((selected + delta + rows.Count) % rows.Count);
-        PlayClick();
+        OptionsKit.PlayClick();
     }
 
     private void UpdateDialogInput(bool escSwallowed)
@@ -316,7 +289,7 @@ public class PauseMenuPanel : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape) && !escSwallowed)
         {
             CloseDialog();
-            PlayClick();
+            OptionsKit.PlayClick();
             return;
         }
 
@@ -326,6 +299,7 @@ public class PauseMenuPanel : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)
             || Input.GetKeyDown(KeyCode.Space))
         {
+            OptionsKit.PlayClick();
             if (dialogSelected == 1) ConfirmDialog();
             else CloseDialog();
         }
@@ -335,154 +309,126 @@ public class PauseMenuPanel : MonoBehaviour
     //  Aufbau
     // ==================================================================
 
+    private RectInt Content => mode == PauseMode.Run ? RunContent : HubContent;
+
     private void Build()
     {
-        Canvas canvas = gameObject.AddComponent<Canvas>();
-        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        // Ueber allem, was im Hub aufgehen kann (Shop 130, Levelauswahl 135,
-        // Skilltree 140, Erfolge-Buch 150). Nur die Optionen liegen darueber.
-        canvas.sortingOrder = 200;
+        BuildPage();
 
-        CanvasScaler scaler = gameObject.AddComponent<CanvasScaler>();
-        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        scaler.referenceResolution = new Vector2(RefW, RefH);
-        scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand;
-
-        gameObject.AddComponent<GraphicRaycaster>();
-        EnsureEventSystem();
-
-        BuildBackdrop();
-
-        // Die Tafel bleibt immer exakt im 320x180-Raster und mittig, egal wie
-        // breit der Bildschirm ist.
-        page = Rect("Page", transform, 0f, 0f, RefW, RefH);
-        page.anchorMin = page.anchorMax = page.pivot = new Vector2(0.5f, 0.5f);
-        page.anchoredPosition = Vector2.zero;
-
-        if (mode == PauseMode.Run)
-        {
-            BuildRunBoard();
-            Time.timeScale = 0f;
-        }
-        else
-        {
-            BuildHubBoard();
-            BlockHub(true);
-        }
-
-        Select(0);
+        if (mode == PauseMode.Run) Time.timeScale = 0f;
+        else BlockHub(true);
     }
 
-    /// <summary>
-    /// Abdunklung, Scanlines, Vignette und der umlaufende Rahmen - drei Lagen
-    /// plus Rahmen, damit sich jede einzeln abschalten laesst.
-    /// </summary>
-    private void BuildBackdrop()
+    /// <summary>Alles Sichtbare - laeuft nach einem Sprachwechsel noch einmal.</summary>
+    private void BuildPage()
     {
-        Image dim = Stretch("Dim", transform, Gfx("overlay_dim"));
-        dim.raycastTarget = true;   // faengt Klicks ab, die neben die Tafel gehen
+        // Ueber allem, was im Hub aufgehen kann (Shop 130, Levelauswahl 135,
+        // Skilltree 140, Erfolge-Buch 150). Nur die Optionen liegen darueber.
+        page = OptionsKit.CreatePage(gameObject, 200, 0.8f, out scaler);
 
-        // Gekachelt statt gedehnt: nur so bleiben die Streifen bei jedem
-        // Seitenverhaeltnis genau einen Pixel hoch.
-        Image scan = Stretch("Scanlines", transform, Gfx("overlay_scanlines"));
-        scan.type = Image.Type.Tiled;
+        rows.Clear();
+        cells.Clear();
+        chipValues = null;
+        dialog = null;
+        dialogPage = null;
+        dialogButtons = null;
 
-        Stretch("Vignette", transform, Gfx("overlay_vignette"));
+        if (mode == PauseMode.Run) BuildRunCard();
+        else BuildHubCard();
 
-        Image frame = Stretch("Frame", transform, Gfx("overlay_frame"));
-        frame.type = Image.Type.Sliced;
+        OptionsKit.Layout(page, scaler, Content);
+        lastScreen = new Vector2Int(Screen.width, Screen.height);
+
+        Select(selected);
+        RefreshStats();
+    }
+
+    private void Rebuild()
+    {
+        if (page == null) return;
+        OptionsKit.Clear(transform);
+        BuildPage();
     }
 
     // ---------- Lauf ----------
 
-    private void BuildRunBoard()
+    private void BuildRunCard()
     {
-        Img("Board", page, BoardX, BoardY, BoardW, BoardH, Gfx("board_panel"));
-        Img("Header", page, HeaderX, HeaderY, HeaderW, HeaderH, Gfx("header_bar"));
+        OptionsKit.Img("Card", page, CardX, CardY, CardW, CardH, GameHudSkin.Card, true);
+        OptionsKit.Ribbon(page, CardX + CardW / 2f, RibbonY, Loc.Get("ui.pause.title", "PAUSE"),
+                          pixelFont, textFont);
 
-        Label("Title", page, TitleZone.x, TitleZone.y, TitleZone.z, TitleZone.w,
-              Loc.Get("ui.pause.title", "PAUSE"), SizeTitle, TextOnWood,
-              TextAlignmentOptions.Left);
-
-        Solid("HdrLine", page, HdrLineX, HdrLineY, HdrLineW, 1f, HdrLine);
-        Solid("HdrLineHi", page, HdrLineX, HdrLineY + 1f, HdrLineW, 1f, HdrLineHi);
+        BuildMenu(new[] { Entry.Resume, Entry.Options, Entry.GiveUp, Entry.MainMenu }, BtnX, BtnY0);
+        Hint(BtnX, HintY, BtnW);
 
         BuildChips();
-
-        Img("Column", page, ColX, ColY, ColW, ColH, Gfx("column_right"));
-        Img("Divider", page, DividerX, DividerY, 2f, DividerH, Gfx("divider_v"));
-
         BuildStats();
-        BuildMenu(new[] { Entry.Resume, Entry.Options, Entry.GiveUp, Entry.MainMenu },
-                  BtnX, BtnFirstY, ArrowX);
-
-        Hint(HintZone);
-
-        RefreshStats();
     }
 
+    /// <summary>ZEIT / LEVEL / GOLD als drei gleich breite Schildchen.</summary>
     private void BuildChips()
     {
         string[] keys = { "ui.pause.chip.time", "ui.pause.chip.level", "ui.pause.chip.gold" };
         string[] fallbacks = { "ZEIT", "LEVEL", "GOLD" };
+        Sprite[] icons = { GameHudSkin.Clock, GameHudSkin.Gem, GameHudSkin.Coin };
 
+        int w = (SideW - 2 * ChipGap) / 3;
         chipValues = new TMP_Text[3];
+
         for (int i = 0; i < 3; i++)
         {
-            RectTransform chip = Rect("Chip_" + fallbacks[i], page, ChipX[i], ChipY, ChipW, ChipH);
-            Image img = chip.gameObject.AddComponent<Image>();
-            img.sprite = Gfx("header_chip");
-            img.type = Image.Type.Sliced;
-            img.raycastTarget = false;
+            int x = SideX + i * (w + ChipGap);
+            OptionsKit.Img("Chip_" + fallbacks[i], page, x, ChipY, w, ChipH, GameHudSkin.Well, true);
 
-            Label("Key", chip, 2f, 1f, 14f, 10f, Loc.Get(keys[i], fallbacks[i]),
-                  SizeSmall, TextChipKey, TextAlignmentOptions.Left);
-            chipValues[i] = Label("Value", chip, 17f, 1f, 19f, 10f, "-", SizeValue,
-                                  TextOnActive, TextAlignmentOptions.Right);
+            Sprite icon = icons[i];
+            float iw = icon.rect.width, ih = icon.rect.height;
+            OptionsKit.Img("Icon", page, x + 4, ChipY + Mathf.Round((ChipH - ih) / 2f), iw, ih, icon);
+
+            OptionsKit.Label("Key", page, x + 7 + iw, ChipY + 2, w - 11 - iw, ChipH - 3,
+                             Loc.Get(keys[i], fallbacks[i]), textFont, OptionsKit.SizeText,
+                             GameHudSkin.Stone, TextAlignmentOptions.Left);
+            chipValues[i] = OptionsKit.Label("Value", page, x + 4, ChipY + 2, w - 9, ChipH - 3, "-", textFont,
+                                             OptionsKit.SizeText, GameHudSkin.Cream,
+                                             TextAlignmentOptions.Right);
         }
     }
 
+    /// <summary>Die Stats in drei Spalten - je Gruppe eine, mit farbigem Kopf.</summary>
     private void BuildStats()
     {
-        Img("StatsPanel", page, StatsX, StatsY, StatsW, StatsH, Gfx("stats_panel"));
-        Label("StatsHead", page, ContentX, ContentY, 34f, 8f,
-              Loc.Get("ui.pause.stats.title", "STATS"), SizeHead, TextInk,
-              TextAlignmentOptions.Left);
-        Solid("StatsHeadLine", page, StatsLineX, StatsLineY, StatsLineW, 1f, LineColor);
+        OptionsKit.Img("StatsWell", page, SideX, StatsY, SideW, StatsH, GameHudSkin.Well, true);
 
         groups = BuildStatModel();
 
         for (int g = 0; g < groups.Length; g++)
         {
             StatGroup group = groups[g];
-            float gy = ContentY + 8f + g * GroupStep;
+            int cx = SideX + ColPad + g * ColStep;
+            int cy = StatsY;
 
-            Img("Dot_" + g, page, ContentX, gy + 1f, 4f, 4f, Gfx(group.Dot));
-            Label("Group_" + g, page, ContentX + 6f, gy - 2f, ContentW - 6f, 10f,
-                  Loc.Get(group.Key, group.Fallback), SizeHead, TextInk,
-                  TextAlignmentOptions.Left);
+            OptionsKit.Img("Dot_" + g, page, cx + 3, cy + GroupY + 4, 5, 5, GameHudSkin.White, (Color)group.Color);
+            OptionsKit.Label("Group_" + g, page, cx + 11, cy + GroupY, ColW - 11, 13,
+                             Loc.Get(group.Key, group.Fallback), textFont, OptionsKit.SizeText,
+                             group.Color, TextAlignmentOptions.Left);
 
             for (int r = 0; r < group.Rows.Length; r++)
             {
-                float ry = gy + GroupHeadH + r * RowH;
+                int ry = cy + StatRowY + r * StatRowH;
 
-                // Zebra auf jeder zweiten Zeile.
-                if (r % 2 == 1)
-                    Img("Zebra_" + g + "_" + r, page, ContentX, ry, ContentW, RowH,
-                        Gfx("stats_row_zebra"));
-
-                Solid("Lead_" + g + "_" + r, page, ContentX + LeadDX, ry + 3f, LeadW, 1f,
-                      LineColor);
+                if (r % 2 == 0)
+                    OptionsKit.Img("Zebra_" + g + "_" + r, page, cx, ry, ColW, StatRowH,
+                                   GameHudSkin.White, (Color)GameHudSkin.CardFill);
 
                 StatCells cell = new StatCells
                 {
                     Def = group.Rows[r],
-                    Name = Label("Name_" + g + "_" + r, page, ContentX + NameDX, ry - 2f,
-                                 NameW, 10f, Loc.Get(group.Rows[r].Key, group.Rows[r].Fallback),
-                                 SizeName, TextValue, TextAlignmentOptions.Left),
-                    Value = Label("Value_" + g + "_" + r, page, ContentX + ValueDX, ry - 2f,
-                                  ValueW, 10f, "-", SizeValue, TextValue,
-                                  TextAlignmentOptions.Right),
+                    Name = OptionsKit.Label("Name_" + g + "_" + r, page, cx + 3, ry, ColW - 6, StatRowH,
+                                            Loc.Get(group.Rows[r].Key, group.Rows[r].Fallback), textFont,
+                                            OptionsKit.SizeText, GameHudSkin.Parchment,
+                                            TextAlignmentOptions.Left),
+                    Value = OptionsKit.Label("Value_" + g + "_" + r, page, cx + 3, ry, ColW - 6, StatRowH,
+                                             "-", textFont, OptionsKit.SizeText, GameHudSkin.Cream,
+                                             TextAlignmentOptions.Right),
                 };
                 cells.Add(cell);
             }
@@ -491,94 +437,50 @@ public class PauseMenuPanel : MonoBehaviour
 
     // ---------- Hub ----------
 
-    private void BuildHubBoard()
+    private void BuildHubCard()
     {
-        Image board = Img("Board", page, HubBoardX, HubBoardY, HubBoardW, HubBoardH,
-                          Gfx("board_panel"));
-        board.type = Image.Type.Sliced;
+        OptionsKit.Img("Card", page, HubCardX, HubCardY, HubCardW, HubCardH, GameHudSkin.Card, true);
+        OptionsKit.Ribbon(page, HubCardX + HubCardW / 2f, HubRibbonY, Loc.Get("ui.pause.title", "PAUSE"),
+                          pixelFont, textFont);
 
-        Image header = Img("Header", page, HubHeaderX, HubHeaderY, HubHeaderW, HeaderH,
-                           Gfx("header_bar"));
-        header.type = Image.Type.Sliced;
-
-        // Ohne Chips ist die Leiste leer - dann steht der Titel mittig.
-        Label("Title", page, HubTitleZone.x, HubTitleZone.y, HubTitleZone.z, HubTitleZone.w,
-              Loc.Get("ui.pause.title", "PAUSE"), SizeTitle, TextOnWood,
-              TextAlignmentOptions.Center);
-
-        BuildMenu(new[] { Entry.Resume, Entry.Options, Entry.MainMenu },
-                  HubBtnX, HubBtnFirstY, HubArrowX);
-
-        Hint(HubHintZone);
+        int x = HubCardX + (HubCardW - BtnW) / 2;
+        BuildMenu(new[] { Entry.Resume, Entry.Options, Entry.MainMenu }, x, HubBtnY0);
+        Hint(x, HubHintY, BtnW);
     }
 
     /// <summary>
     /// Die kleine Zeile unter den Knoepfen. "Tipps" in den Optionen laesst sie
     /// weg - wer das abschaltet, kennt die Tastenbelegung.
     /// </summary>
-    private void Hint(Vector4 zone)
+    private void Hint(int x, int y, int w)
     {
         if (!GameSettings.Tips) return;
 
-        Label("Hint", page, zone.x, zone.y, zone.z, zone.w,
-              Loc.Get("ui.pause.hint", "ESC schließt das Menü"), SizeSmall, TextDim,
-              TextAlignmentOptions.Center);
+        OptionsKit.Label("Hint", page, x - 20, y, w + 40, 13,
+                         Loc.Get("ui.pause.hint", "ESC schließt das Menü"), textFont, OptionsKit.SizeText,
+                         GameHudSkin.Stone, TextAlignmentOptions.Center);
     }
 
     // ---------- Menuespalte ----------
 
-    private void BuildMenu(Entry[] entries, float x, float firstY, float arrowX)
+    private void BuildMenu(Entry[] entries, int x, int firstY)
     {
         for (int i = 0; i < entries.Length; i++)
         {
-            float y = firstY + i * BtnStep;
             Entry what = entries[i];
-
-            RectTransform rt = Rect("Btn_" + what, page, x, y, BtnW, BtnH);
-            Image frame = rt.gameObject.AddComponent<Image>();
-            frame.sprite = Gfx("btn_normal");
-            frame.type = Image.Type.Sliced;
-            frame.raycastTarget = true;
-
-            // Die sichtbare Flaeche ist 108x16 und beginnt bei (0,0); im
-            // aktiven Zustand liegt sie um 1px nach rechts unten versetzt.
-            // Die Beschriftung wandert in Select() mit.
-            TMP_Text label = Label("Label", rt, 4f, 3f, 100f, 10f, EntryText(what),
-                                   SizeButton, TextOnWood, TextAlignmentOptions.Left);
-
-            Button button = rt.gameObject.AddComponent<Button>();
-            button.transition = Selectable.Transition.None;
-            button.targetGraphic = frame;
             int index = i;
-            button.onClick.AddListener(() => Activate(entries[index]));
 
-            HoverRelay relay = rt.gameObject.AddComponent<HoverRelay>();
-            relay.Owner = this;
-            relay.Index = i;
+            SkinButton button = SkinButton.Create(page, x, firstY + i * BtnStep, BtnW, BtnH, EntryText(what),
+                                                  textFont, SkinButton.Kind.Wood, () => Activate(what));
+            // Die Auswahl fuehrt: Pfeiltasten und Maus bewegen denselben Zeiger.
+            button.UseSelection = true;
+            button.OnHover = () => Select(index);
 
-            rows.Add(new Row
-            {
-                Frame = frame,
-                Label = label,
-                LabelRect = label.rectTransform,
-                What = what,
-            });
+            rows.Add(new Row { Button = button, What = what });
         }
 
-        arrowBaseX = arrowX;
-        arrow = Img("Arrow", page, arrowX, firstY + ArrowDY, ArrowS, ArrowS, Gfx("arrow_select"));
-    }
-
-    /// <summary>Meldet, ueber welchem Eintrag die Maus steht.</summary>
-    private class HoverRelay : MonoBehaviour, IPointerEnterHandler
-    {
-        public PauseMenuPanel Owner;
-        public int Index;
-
-        public void OnPointerEnter(PointerEventData e)
-        {
-            if (Owner != null) Owner.Select(Index);
-        }
+        Sprite a = GameHudSkin.Arrow;
+        arrow = OptionsKit.Img("Arrow", page, 0, 0, a.rect.width, a.rect.height, a);
     }
 
     private void Select(int index)
@@ -586,23 +488,16 @@ public class PauseMenuPanel : MonoBehaviour
         if (rows.Count == 0) return;
         selected = Mathf.Clamp(index, 0, rows.Count - 1);
 
-        for (int i = 0; i < rows.Count; i++)
-        {
-            bool on = i == selected;
-            Row row = rows[i];
-            row.Frame.sprite = Gfx(on ? "btn_active" : "btn_normal");
-            row.Label.color = on ? TextOnActive : TextOnWood;
-            // Der aktive Knopf sitzt 1px nach rechts unten - die Schrift auch.
-            row.LabelRect.anchoredPosition = new Vector2(on ? 5f : 4f, on ? -4f : -3f);
-        }
+        for (int i = 0; i < rows.Count; i++) rows[i].Button.Selected = i == selected;
 
         if (arrow != null)
         {
-            // Der Pfeil zeigt immer auf den aktiven Knopf - und ruckt mit ihm
-            // um denselben Pixel nach rechts unten.
-            float top = rows[selected].Frame.rectTransform.anchoredPosition.y;
-            arrow.rectTransform.anchoredPosition =
-                new Vector2(arrowBaseX + 1f, top - ArrowDY - 1f);
+            // Der Pfeil zeigt links auf den gewaehlten Knopf.
+            RectTransform b = (RectTransform)rows[selected].Button.transform;
+            Rect r = arrow.sprite.rect;
+            float x = b.anchoredPosition.x - ArrowGap - r.width;
+            float y = -b.anchoredPosition.y + Mathf.Round((BtnH - 1 - r.height) / 2f);
+            OptionsKit.Move(arrow.rectTransform, x, y, r.width, r.height);
         }
     }
 
@@ -621,10 +516,9 @@ public class PauseMenuPanel : MonoBehaviour
         }
     }
 
+    /// <summary>Den Klick-Sound spielt der Aufrufer (SkinButton bzw. die Tastatur).</summary>
     private void Activate(Entry what)
     {
-        PlayClick();
-
         switch (what)
         {
             case Entry.Resume:
@@ -634,6 +528,9 @@ public class PauseMenuPanel : MonoBehaviour
             case Entry.Options:
                 OptionsPanel.Open();
                 optionsSeenFrame = Time.frameCount;
+                // Sofort weg, nicht erst im naechsten Update.
+                if (canvas == null) canvas = GetComponent<Canvas>();
+                if (canvas != null) canvas.enabled = false;
                 break;
 
             case Entry.GiveUp:
@@ -683,111 +580,58 @@ public class PauseMenuPanel : MonoBehaviour
         if (dialog != null) return;
 
         dialogConfirm = onConfirm;
-        dialogSelected = 0;
 
-        // Eigene Ebene ueber der Tafel: als letztes Kind gezeichnet, und der
-        // vollflaechige Schatten faengt jeden Klick daneben ab.
-        dialog = Rect("Dialog", transform, 0f, 0f, RefW, RefH);
-        dialog.anchorMin = Vector2.zero;
-        dialog.anchorMax = Vector2.one;
-        dialog.sizeDelta = Vector2.zero;
-        dialog.anchoredPosition = Vector2.zero;
-        dialog.pivot = new Vector2(0.5f, 0.5f);
-
-        Image shade = dialog.gameObject.AddComponent<Image>();
-        shade.color = DimColor;
+        // Eigene Ebene ueber der Karte: als letztes Kind gezeichnet, und die
+        // vollflaechige Abdunklung faengt jeden Klick daneben ab.
+        Image shade = OptionsKit.Stretch("Dialog", transform, GameHudSkin.White,
+                                         new Color(0.06f, 0.04f, 0.05f, 0.7f));
         shade.raycastTarget = true;
+        dialog = shade.rectTransform;
 
-        RectTransform inner = Rect("Page", dialog, 0f, 0f, RefW, RefH);
-        inner.anchorMin = inner.anchorMax = inner.pivot = new Vector2(0.5f, 0.5f);
-        inner.anchoredPosition = Vector2.zero;
+        // Gleiche Seite wie die Karte darunter, damit der Dialog pixelgenau mittig sitzt.
+        dialogPage = OptionsKit.Rect("Page", dialog, 0, 0, OptionsKit.RefW, OptionsKit.RefH);
+        dialogPage.anchorMin = dialogPage.anchorMax = new Vector2(0f, 1f);
+        dialogPage.anchoredPosition = page.anchoredPosition;
 
-        Img("Panel", inner, DlgX, DlgY, DlgW, DlgH, Gfx("dialog_panel"));
-        Label("Question", inner, DlgTextZone.x, DlgTextZone.y, DlgTextZone.z, DlgTextZone.w,
-              question, SizeHead, TextInk, TextAlignmentOptions.Center).textWrappingMode
-            = TextWrappingModes.Normal;
+        OptionsKit.Img("Card", dialogPage, DlgX, DlgY, DlgW, DlgH, GameHudSkin.Card, true);
+        TextMeshProUGUI q = OptionsKit.Label("Question", dialogPage, DlgX + 10, DlgTextY, DlgW - 20, DlgTextH,
+                                             question, textFont, OptionsKit.SizeText, GameHudSkin.Parchment,
+                                             TextAlignmentOptions.Center);
+        q.textWrappingMode = TextWrappingModes.Normal;
 
-        dialogFrames = new Image[2];
-        dialogLabels = new TMP_Text[2];
-        dialogLabelRects = new RectTransform[2];
-        dialogSprites = new[]
-        {
-            new[] { Gfx("btn_normal"), Gfx("btn_active") },
-            new[] { Gfx("btn_danger"), Gfx("btn_danger_active") },
-        };
-
-        string[] labels =
-        {
-            Loc.Get("ui.pause.dialog.cancel", "ABBRECHEN"),
-            Loc.Get("ui.pause.dialog.confirm", "BESTÄTIGEN"),
-        };
-
+        int gap = DlgW - 20 - 2 * DlgBtnW;
+        dialogButtons = new SkinButton[2];
+        dialogButtons[0] = SkinButton.Create(dialogPage, DlgX + 10, DlgBtnY, DlgBtnW, DlgBtnH,
+                                             Loc.Get("ui.pause.dialog.cancel", "ABBRECHEN"), textFont,
+                                             SkinButton.Kind.Wood, CloseDialog);
+        dialogButtons[1] = SkinButton.Create(dialogPage, DlgX + 10 + DlgBtnW + gap, DlgBtnY, DlgBtnW, DlgBtnH,
+                                             Loc.Get("ui.pause.dialog.confirm", "BESTÄTIGEN"), textFont,
+                                             SkinButton.Kind.Danger, ConfirmDialog);
         for (int i = 0; i < 2; i++)
         {
-            RectTransform rt = Rect("Btn_" + i, inner, DlgBtnX[i], DlgBtnY, DlgBtnW, DlgBtnH);
-            Image img = rt.gameObject.AddComponent<Image>();
-            img.type = Image.Type.Sliced;
-            img.raycastTarget = true;
-
-            TMP_Text label = Label("Label", rt, 3f, 2f, 50f, 10f, labels[i], SizeValue,
-                                   TextOnWood, TextAlignmentOptions.Center);
-
-            Button button = rt.gameObject.AddComponent<Button>();
-            button.transition = Selectable.Transition.None;
-            button.targetGraphic = img;
             int index = i;
-            button.onClick.AddListener(() =>
-            {
-                PlayClick();
-                if (index == 1) ConfirmDialog();
-                else CloseDialog();
-            });
-
-            DialogHover relay = rt.gameObject.AddComponent<DialogHover>();
-            relay.Owner = this;
-            relay.Index = i;
-
-            dialogFrames[i] = img;
-            dialogLabels[i] = label;
-            dialogLabelRects[i] = label.rectTransform;
+            dialogButtons[i].UseSelection = true;
+            dialogButtons[i].OnHover = () => SelectDialog(index);
         }
 
         SelectDialog(0);
     }
 
-    private class DialogHover : MonoBehaviour, IPointerEnterHandler
-    {
-        public PauseMenuPanel Owner;
-        public int Index;
-
-        public void OnPointerEnter(PointerEventData e)
-        {
-            if (Owner != null) Owner.SelectDialog(Index);
-        }
-    }
-
     private void SelectDialog(int index)
     {
-        if (dialogFrames == null) return;
+        if (dialogButtons == null) return;
         dialogSelected = Mathf.Clamp(index, 0, 1);
-
-        for (int i = 0; i < 2; i++)
-        {
-            bool on = i == dialogSelected;
-            dialogFrames[i].sprite = dialogSprites[i][on ? 1 : 0];
-            dialogLabels[i].color = on ? TextOnActive : TextOnWood;
-            dialogLabelRects[i].anchoredPosition = new Vector2(on ? 4f : 3f, on ? -3f : -2f);
-        }
+        for (int i = 0; i < 2; i++) dialogButtons[i].Selected = i == dialogSelected;
     }
 
     private void CloseDialog()
     {
         if (dialog == null) return;
+        dialog.SetParent(null, false);
         Destroy(dialog.gameObject);
         dialog = null;
-        dialogFrames = null;
-        dialogLabels = null;
-        dialogLabelRects = null;
+        dialogPage = null;
+        dialogButtons = null;
         dialogConfirm = null;
     }
 
@@ -795,7 +639,6 @@ public class PauseMenuPanel : MonoBehaviour
     {
         System.Action action = dialogConfirm;
         CloseDialog();
-        PlayClick();
         action?.Invoke();
     }
 
@@ -816,7 +659,7 @@ public class PauseMenuPanel : MonoBehaviour
         {
             new StatGroup
             {
-                Key = "ui.pause.group.survival", Fallback = "ÜBERLEBEN", Dot = "group_dot_red",
+                Key = "ui.pause.group.survival", Fallback = "ÜBERLEBEN", Color = GameHudSkin.JamLight,
                 Rows = new[]
                 {
                     Stat("maxhp",     "Max HP",          "F0", () => p() != null ? p().playerMaxHealth : 0f),
@@ -828,7 +671,7 @@ public class PauseMenuPanel : MonoBehaviour
             },
             new StatGroup
             {
-                Key = "ui.pause.group.offense", Fallback = "OFFENSIVE", Dot = "group_dot_yellow",
+                Key = "ui.pause.group.offense", Fallback = "OFFENSIVE", Color = GameHudSkin.Gold,
                 Rows = new[]
                 {
                     Stat("damage",     "Schaden",       "F1", () => p() != null ? p().damageMultiplier : 0f),
@@ -840,7 +683,7 @@ public class PauseMenuPanel : MonoBehaviour
             },
             new StatGroup
             {
-                Key = "ui.pause.group.utility", Fallback = "NUTZEN", Dot = "group_dot_green",
+                Key = "ui.pause.group.utility", Fallback = "NUTZEN", Color = GameHudSkin.Mint,
                 Rows = new[]
                 {
                     Stat("speed",  "Tempo",           "F1", () => p() != null ? p().moveSpeed : 0f),
@@ -882,7 +725,7 @@ public class PauseMenuPanel : MonoBehaviour
 
     private void RefreshStats()
     {
-        if (groups == null) return;
+        if (groups == null || mode != PauseMode.Run) return;
 
         int i = 0;
         foreach (StatGroup group in groups)
@@ -894,13 +737,13 @@ public class PauseMenuPanel : MonoBehaviour
                 float value = def.Value();
                 string text = value.ToString(def.Format);
 
-                // Nullwerte gedimmt, aber weiterhin gut lesbar - nicht heller.
-                Color color = Mathf.Approximately(value, 0f) ? TextDim : TextValue;
+                // Nullwerte gedimmt, aber weiterhin lesbar.
+                bool zero = Mathf.Approximately(value, 0f);
 
                 StatCells cell = cells[i++];
                 if (cell.Value.text != text) cell.Value.text = text;
-                cell.Value.color = color;
-                cell.Name.color = color;
+                cell.Value.color = zero ? GameHudSkin.Stone : GameHudSkin.Cream;
+                cell.Name.color = zero ? GameHudSkin.Stone : GameHudSkin.Parchment;
             }
         }
 
@@ -921,165 +764,5 @@ public class PauseMenuPanel : MonoBehaviour
         chipValues[0].text = minutes + ":" + seconds.ToString("00");
         chipValues[1].text = player != null ? player.currentLevel.ToString() : "-";
         chipValues[2].text = manager != null ? manager.EstimateCurrency().ToString() : "-";
-    }
-
-    /// <summary>Nach einem Sprachwechsel: alles Beschriftete neu setzen.</summary>
-    private void RefreshTexts()
-    {
-        foreach (Row row in rows) row.Label.text = EntryText(row.What);
-        foreach (StatCells cell in cells) cell.Name.text = Loc.Get(cell.Def.Key, cell.Def.Fallback);
-        RefreshStats();
-    }
-
-    // ==================================================================
-    //  Kleinkram
-    // ==================================================================
-
-    private static readonly Dictionary<string, Sprite> spriteCache = new Dictionary<string, Sprite>();
-
-    private static Sprite Gfx(string name)
-    {
-        // != null statt TryGetValue allein: raeumt Unity die Resources zwischen
-        // zwei Szenen auf, steht im Cache eine zerstoerte Referenz.
-        if (spriteCache.TryGetValue(name, out Sprite cached) && cached != null) return cached;
-
-        Sprite s = Resources.Load<Sprite>(UiPath + name);
-        if (s == null)
-        {
-            Debug.LogWarning($"[Pause] Sprite '{name}' fehlt - erwartet wird " +
-                             $"Assets/Resources/{UiPath}{name}.png");
-        }
-        spriteCache[name] = s;
-        return s;
-    }
-
-    /// <summary>
-    /// Jersey10 zuerst: die andere Pixelfont des Projekts (ThaleahFat) kann
-    /// keine Umlaute, und hier steht deutscher Text.
-    /// </summary>
-    private static TMP_FontAsset FindFont()
-    {
-        TMP_FontAsset best = null;
-
-        foreach (TMP_FontAsset f in Resources.FindObjectsOfTypeAll<TMP_FontAsset>())
-        {
-            if (f == null) continue;
-            if (!HasUmlaut(f)) continue;
-            if (f.name.StartsWith("Jersey10")) return f;
-            if (best == null) best = f;
-        }
-
-        if (best != null) return best;
-
-        Debug.LogWarning("[Pause] Keine geladene Schrift kann Umlaute - der Text bekommt " +
-                         "Luecken. Erwartet wird Jersey10 aus Assets/Imports/Jersey10_PixelFont.");
-        return PixelUI.FindPixelFont();
-    }
-
-    /// <summary>
-    /// Dynamische Schriften melden ein Zeichen erst, wenn es im Atlas liegt -
-    /// deshalb mit tryAddCharacter fragen, sonst sagen alle erstmal nein.
-    /// </summary>
-    private static bool HasUmlaut(TMP_FontAsset font)
-    {
-        try
-        {
-            return font.HasCharacter('ü', true, true);
-        }
-        catch
-        {
-            return font.HasCharacter('ü');
-        }
-    }
-
-    private static Color Hex(int rgb) => new Color32(
-        (byte)((rgb >> 16) & 0xFF), (byte)((rgb >> 8) & 0xFF), (byte)(rgb & 0xFF), 0xFF);
-
-    /// <summary>Rechteck im 320x180-Raster: x/y zaehlen von oben links.</summary>
-    private static RectTransform Rect(string name, Transform parent, float x, float y,
-                                      float w, float h)
-    {
-        GameObject go = new GameObject(name, typeof(RectTransform));
-        go.transform.SetParent(parent, false);
-
-        RectTransform rt = (RectTransform)go.transform;
-        rt.anchorMin = rt.anchorMax = rt.pivot = new Vector2(0f, 1f);
-        rt.sizeDelta = new Vector2(w, h);
-        rt.anchoredPosition = new Vector2(x, -y);
-        return rt;
-    }
-
-    private static Image Img(string name, Transform parent, float x, float y, float w, float h,
-                             Sprite sprite)
-    {
-        RectTransform rt = Rect(name, parent, x, y, w, h);
-        Image img = rt.gameObject.AddComponent<Image>();
-        img.sprite = sprite;
-        img.raycastTarget = false;
-        return img;
-    }
-
-    /// <summary>Einfarbige Flaeche - fuer die 1px-Linien, die kein Sprite brauchen.</summary>
-    private static Image Solid(string name, Transform parent, float x, float y, float w, float h,
-                               Color color)
-    {
-        RectTransform rt = Rect(name, parent, x, y, w, h);
-        Image img = rt.gameObject.AddComponent<Image>();
-        img.color = color;
-        img.raycastTarget = false;
-        return img;
-    }
-
-    private static Image Stretch(string name, Transform parent, Sprite sprite)
-    {
-        GameObject go = new GameObject(name, typeof(RectTransform));
-        go.transform.SetParent(parent, false);
-
-        RectTransform rt = (RectTransform)go.transform;
-        rt.anchorMin = Vector2.zero;
-        rt.anchorMax = Vector2.one;
-        rt.sizeDelta = Vector2.zero;
-        rt.anchoredPosition = Vector2.zero;
-
-        Image img = rt.gameObject.AddComponent<Image>();
-        img.sprite = sprite;
-        img.raycastTarget = false;
-        return img;
-    }
-
-    /// <summary>
-    /// Die Hoehe muss groesser sein als die Schriftgroesse. Ist das Rechteck zu
-    /// flach, wirft TextMeshPro die Zeile still weg und es steht gar nichts da.
-    /// </summary>
-    private TMP_Text Label(string name, Transform parent, float x, float y, float w, float h,
-                           string text, float size, Color color, TextAlignmentOptions align)
-    {
-        RectTransform rt = Rect(name, parent, x, y, w, h);
-
-        TextMeshProUGUI label = rt.gameObject.AddComponent<TextMeshProUGUI>();
-        if (font != null) label.font = font;
-        label.text = text;
-        label.fontSize = size;
-        label.color = color;
-        label.alignment = align;
-        label.raycastTarget = false;
-        label.enableAutoSizing = false;
-        label.margin = Vector4.zero;
-        label.textWrappingMode = TextWrappingModes.NoWrap;
-        label.overflowMode = TextOverflowModes.Overflow;
-        return label;
-    }
-
-    private static void PlayClick()
-    {
-        AudioController audio = AudioController.Instance;
-        if (audio != null && audio.MenuClick != null) audio.PalySound(audio.MenuClick);
-    }
-
-    private static void EnsureEventSystem()
-    {
-        if (EventSystem.current != null) return;
-        GameObject es = new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
-        DontDestroyOnLoad(es);
     }
 }
