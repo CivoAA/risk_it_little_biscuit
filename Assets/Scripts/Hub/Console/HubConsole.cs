@@ -216,14 +216,28 @@ public static class HubConsole
             foreach (Command c in order)
             {
                 if (c.Hidden) continue;
-                string left = string.IsNullOrEmpty(c.Usage) ? c.Name : c.Name + " " + c.Usage;
-                sink.Print("  " + left.PadRight(20) + c.Description);
+                PrintCommand(c, sink);
             }
             sink.Print("");
             sink.Print("Und ein paar Dinge, die hier nicht stehen.");
         });
         AddAlias("help", "hilfe");
         AddAlias("?", "hilfe");
+
+        // Die volle Liste mit allen Cheats - selbst versteckt, sonst waere das
+        // Verstecken in "hilfe" sinnlos.
+        Add("allebefehle", "zeigt alle Befehle, auch die Cheats", (args, sink) =>
+        {
+            sink.Print("Befehle:");
+            foreach (Command c in order)
+                if (!c.Hidden) PrintCommand(c, sink);
+
+            sink.Print("");
+            sink.Print("Cheats:");
+            foreach (Command c in order)
+                if (c.Hidden) PrintCommand(c, sink);
+        }, hidden: true);
+        AddAlias("cheats", "allebefehle");
 
         Add("clear", "leert den Bildschirm", (args, sink) => sink.Clear());
         AddAlias("cls", "clear");
@@ -232,5 +246,11 @@ public static class HubConsole
         Add("ende", "schliesst das Terminal", (args, sink) => sink.Close());
         AddAlias("exit", "ende");
         AddAlias("quit", "ende");
+    }
+
+    static void PrintCommand(Command c, IHubConsoleSink sink)
+    {
+        string left = string.IsNullOrEmpty(c.Usage) ? c.Name : c.Name + " " + c.Usage;
+        sink.Print("  " + left.PadRight(20) + c.Description);
     }
 }

@@ -192,9 +192,9 @@ Kachel bei genau drei Farben plus Kontur.
 | Knopfzeile | 9 | 150 | 165 | 14 |
 | Reiter (3) | 180 | 30 | 40 | 12 |
 | Bibliothek | 180 | 42 | 131 | 122 |
-| Bibliotheks-Sichtfenster | 186 | 57 | 119 | 62 |
+| Bibliotheks-Sichtfenster | 186 | 57 | 119 | 48 |
 | Bibliotheks-Raster (7 Spalten) | 190 | 57 | 110 | — |
-| Info-Box | 186 | 128 | 119 | 30 |
+| Info-Box (9-Slice) | 186 | 108 | 119 | 50 |
 | Evo-Overlay | 180 | 42 | 131 | 122 |
 | Overlay-Zeilen | 186 | 60 | 119 | 18 |
 
@@ -244,8 +244,8 @@ der .aseprite-Datei heißen genauso.
 | `text_btn_primary` | 86 | 152 | 86 | 10 | mittig | `ui.workbench.btn.apply` / `.applied` |
 | `text_tab_1..3` | 182 / 224 / 266 | 32 | 36 | 9 | mittig | Reiterbeschriftung |
 | `text_library_head` | 186 | 46 | 119 | 9 | links | `ui.workbench.library.*` |
-| `text_info_name` | 190 | 131 | 111 | 9 | links | Name des Eintrags |
-| `text_info_desc` | 190 | 141 | 111 | 16 | oben links | Beschreibung, umbrechend |
+| `text_info_name` | 190 | 111 | 111 | 9 | links | Name des Eintrags |
+| `text_info_desc` | 190 | 121 | 111 | 35 | oben links | Beschreibung (`weapon.<id>.desc`, max. 3 Zeilen), Evo, ggf. Startwaffen-Hinweis - umbrechend |
 | `text_overlay_title` | 186 | 46 | 100 | 9 | links | `ui.workbench.overlay.title` |
 | `text_evo_row_name` | +46 | +2 | 58 | 9 | links | Evo-Name |
 | `text_evo_row_sub` | +46 | +10 | 58 | 7 | links | `Zutat A + Zutat B` |

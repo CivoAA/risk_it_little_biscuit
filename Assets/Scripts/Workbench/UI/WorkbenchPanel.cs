@@ -76,12 +76,16 @@ public class WorkbenchPanel : MonoBehaviour
     private const float TabX = 180f, TabY = 30f, TabW = 40f, TabH = 12f, TabStep = 42f;
     private static readonly Vector4 Library = new Vector4(180f, 42f, 133f, 124f);
     private static readonly Vector4 LibHead = new Vector4(186f, 46f, 119f, 9f);
-    private static readonly Vector4 LibView = new Vector4(186f, 57f, 119f, 62f);
+    // Drei Kachelreihen (3 x 16 = 48) reichen fuer jeden Reiter; was darueber
+    // hinausgeht, wird gescrollt. Der Platz darunter gehoert der Info-Box,
+    // weil dort bis zu fuenf Zeilen stehen: Beschreibung (max. 3), Evo und bei
+    // der Startwaffe der Hinweis, dass sie fest im Build liegt.
+    private static readonly Vector4 LibView = new Vector4(186f, 57f, 119f, 48f);
     private const float LibGridDX = 4f;
     private const int LibCols = 7;
-    private static readonly Vector4 InfoBox  = new Vector4(186f, 128f, 119f, 30f);
-    private static readonly Vector4 InfoName = new Vector4(190f, 131f, 111f, 9f);
-    private static readonly Vector4 InfoDesc = new Vector4(190f, 141f, 111f, 16f);
+    private static readonly Vector4 InfoBox  = new Vector4(186f, 108f, 119f, 50f);
+    private static readonly Vector4 InfoName = new Vector4(190f, 111f, 111f, 9f);
+    private static readonly Vector4 InfoDesc = new Vector4(190f, 121f, 111f, 35f);
 
     // Evo-Overlay
     private static readonly Vector4 Overlay      = new Vector4(180f, 42f, 131f, 122f);
@@ -700,7 +704,8 @@ public class WorkbenchPanel : MonoBehaviour
         libContent = Rect("Content", view, 0f, 0f, LibView.z, LibView.w);
         libScroll.content = libContent;
 
-        Img("InfoBox", page, InfoBox, Gfx("info_box"));
+        // Das Sprite ist 119x30, die Box hoeher - gesliced bleibt der 2px-Rand scharf.
+        Img("InfoBox", page, InfoBox, Gfx("info_box")).type = Image.Type.Sliced;
         infoName = Label("InfoName", page, InfoName, "", SizeText, TextCream,
                          TextAlignmentOptions.Left);
         infoDesc = Label("InfoDesc", page, InfoDesc, "", SizeSmall, TextDim,
@@ -1180,10 +1185,6 @@ public class WorkbenchPanel : MonoBehaviour
             {
                 lines.Add(Loc.Get("ui.workbench.info.locked",
                                   "Startwaffe des Charakters - fest im Build."));
-            }
-            else if (Loadout.Contains(def.Id))
-            {
-                lines.Add(Loc.Get("ui.workbench.info.inpool", "Liegt im Verteiler."));
             }
         }
 
