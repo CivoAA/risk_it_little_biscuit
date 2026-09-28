@@ -39,8 +39,8 @@ public class WavePlanWorkshop : EditorWindow
     {
         switch (planId)
         {
-            case "World0": return "Karte 1 - Kueche";
-            case "World3": return "Karte 2 - Wald";
+            case "World1": return "Karte 1 - Kueche";
+            case "World2": return "Karte 2 - Wald";
             default: return "keiner Karte zugeordnet";
         }
     }
@@ -74,7 +74,6 @@ public class WavePlanWorkshop : EditorWindow
 
     private class PhaseDraft
     {
-        public string name = "";
         public float duration = 300f;
         public float pressureStart;
         public float pressureEnd;
@@ -148,7 +147,6 @@ public class WavePlanWorkshop : EditorWindow
     {
         var draft = new PhaseDraft
         {
-            name = phase.Name,
             duration = phase.Duration,
             pressureStart = phase.PressureStart,
             pressureEnd = phase.PressureEnd,
@@ -332,7 +330,7 @@ public class WavePlanWorkshop : EditorWindow
         if (GUILayout.Button("Phase anhaengen"))
         {
             int insertAt = plan.phases.FindIndex(p => p.endless);
-            var fresh = new PhaseDraft { name = "Neue Phase", duration = 300f, pressureStart = 20f, pressureEnd = 60f };
+            var fresh = new PhaseDraft { duration = 300f, pressureStart = 20f, pressureEnd = 60f };
             if (insertAt < 0) plan.phases.Add(fresh);
             else plan.phases.Insert(insertAt, fresh);
             dirty = true;
@@ -520,7 +518,7 @@ public class WavePlanWorkshop : EditorWindow
 
         EditorGUILayout.BeginHorizontal();
         phase.open = EditorGUILayout.Foldout(phase.open,
-            (phase.endless ? "[Endlos] " : "Phase " + (index + 1) + ": ") + phase.name, true);
+            phase.endless ? "Endlos" : "Phase " + (index + 1), true);
 
         GUILayout.FlexibleSpace();
         GUILayout.Label(DescribePressure(phase), EditorStyles.miniLabel);
@@ -529,7 +527,7 @@ public class WavePlanWorkshop : EditorWindow
         {
             if (GUILayout.Button("x", GUILayout.Width(22f))
                 && EditorUtility.DisplayDialog("Phase loeschen?",
-                       "\"" + phase.name + "\" aus " + plan.id + " entfernen?", "Loeschen", "Abbrechen"))
+                       "Phase " + (index + 1) + " aus " + plan.id + " entfernen?", "Loeschen", "Abbrechen"))
             {
                 plan.phases.Remove(phase);
                 dirty = true;
@@ -545,8 +543,6 @@ public class WavePlanWorkshop : EditorWindow
             EditorGUILayout.EndVertical();
             return;
         }
-
-        phase.name = EditorGUILayout.TextField("Name (steht im Bild)", phase.name);
 
         using (new EditorGUI.DisabledScope(phase.endless))
         {
@@ -852,11 +848,11 @@ public class WavePlanWorkshop : EditorWindow
 
         if (phase.endless)
         {
-            sb.AppendLine("        plan.EndlessPhase(\"" + Escape(phase.name) + "\")");
+            sb.AppendLine("        plan.EndlessPhase()");
         }
         else
         {
-            sb.AppendLine("        plan.Phase(\"" + Escape(phase.name) + "\", " + F(phase.duration) + ")");
+            sb.AppendLine("        plan.Phase(" + F(phase.duration) + ")");
         }
 
         foreach (PoolDraft entry in phase.pool)

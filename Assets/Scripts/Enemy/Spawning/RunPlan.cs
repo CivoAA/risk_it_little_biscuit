@@ -54,7 +54,6 @@ public struct PoolEntry
 /// </summary>
 public class Phase
 {
-    public string Name = "";
     public float Duration = 300f;
 
     /// <summary>Bedrohungssumme, die zu Beginn bzw. am Ende der Phase anliegen soll.</summary>
@@ -221,17 +220,17 @@ public class RunPlan
     }
 
     /// <summary>Haengt eine Phase an und gibt sie zum Weiterbauen zurueck.</summary>
-    public Phase Phase(string name, float duration)
+    public Phase Phase(float duration)
     {
-        var phase = new Phase { Name = name, Duration = duration };
+        var phase = new Phase { Duration = duration };
         Phases.Add(phase);
         return phase;
     }
 
     /// <summary>Legt die Phase fuer "danach" an und gibt sie zum Weiterbauen zurueck.</summary>
-    public Phase EndlessPhase(string name)
+    public Phase EndlessPhase()
     {
-        Endless = new Phase { Name = name, Duration = 120f };
+        Endless = new Phase { Duration = 120f };
         return Endless;
     }
 

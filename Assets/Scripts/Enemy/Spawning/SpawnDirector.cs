@@ -211,7 +211,7 @@ public class SpawnDirector : MonoBehaviour
         phaseTime = 0f;
         nextBeat = 0;
 
-        Debug.Log($"[SpawnDirector] Phase {index + 1}/{plan.Phases.Count}: \"{phase.Name}\" " +
+        Debug.Log($"[SpawnDirector] Phase {index + 1}/{plan.Phases.Count} " +
                   $"({phase.Duration:0}s, Druck {phase.PressureStart:0} -> {phase.PressureEnd:0})");
     }
 
@@ -493,7 +493,7 @@ public class SpawnDirector : MonoBehaviour
     {
         if (phaseText == null) return;
 
-        string text = runTime < announceUntil ? announce : (phase != null ? phase.Name : "");
+        string text = runTime < announceUntil ? announce : "";
         if (text == lastShownText) return;
 
         lastShownText = text;

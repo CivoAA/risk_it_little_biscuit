@@ -1238,14 +1238,16 @@ public class EnemyWorkshop : EditorWindow
             var phases = new List<Phase>(plan.Phases);
             if (plan.Endless != null) phases.Add(plan.Endless);
 
-            foreach (Phase phase in phases)
+            for (int i = 0; i < phases.Count; i++)
             {
+                Phase phase = phases[i];
                 bool inPool = phase.Enemies.Any(e => e.Id == id);
                 bool inBeat = phase.Beats.Any(b => b.Enemy == id || b.RingEnemy == id);
 
                 if (inPool || inBeat)
                 {
-                    result.Add(planId + " / " + phase.Name + (inPool ? " (Pool)" : " (Beat)"));
+                    string label = phase == plan.Endless ? "Endlos" : "Phase " + (i + 1);
+                    result.Add(planId + " / " + label + (inPool ? " (Pool)" : " (Beat)"));
                 }
             }
         }
