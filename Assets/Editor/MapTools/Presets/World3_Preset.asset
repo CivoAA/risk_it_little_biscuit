@@ -14,72 +14,72 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WorldGenPreset
   seed: 12345
   backgroundTiles:
-  - tile: {fileID: 11400000, guid: ff69f645ab64dc14d96d1579217c4a7b, type: 2}
-    weight: 5
-  - tile: {fileID: 11400000, guid: fe5f513748ce99949ab5bc75cefa58d6, type: 2}
-    weight: 5
-  - tile: {fileID: 11400000, guid: 8c546b8d7adbb274093547cfabe971f8, type: 2}
-    weight: 5
-  - tile: {fileID: 11400000, guid: 935816e4a898a5c499b553cedf5e07ba, type: 2}
-    weight: 5
-  - tile: {fileID: 11400000, guid: f8097113ac3922c46a297d84f41c679d, type: 2}
+  - tile: {fileID: 11400000, guid: 0a3eaef0faa03e5478aa0292fab71dc9, type: 2}
     weight: 1
-  - tile: {fileID: 11400000, guid: 92af663c5dbabee4da9f026a6223b5d8, type: 2}
+  - tile: {fileID: 11400000, guid: 79d4dc616ffdb28449ab0c3522ce87e6, type: 2}
     weight: 1
-  - tile: {fileID: 11400000, guid: 1873d3254ccf31d4da47b817db49fa1e, type: 2}
+  - tile: {fileID: 11400000, guid: 2e6a5987cbea97842a238346f3c7280d, type: 2}
+    weight: 4
+  - tile: {fileID: 11400000, guid: b28a63e6f81c82e488a89f29f8360177, type: 2}
     weight: 1
-  - tile: {fileID: 11400000, guid: d00229af443f7814289bfd072ec2ae5b, type: 2}
+  - tile: {fileID: 11400000, guid: 257ca6b1786e5da4b86323f7d68d7687, type: 2}
     weight: 1
-  - tile: {fileID: 11400000, guid: ab2651e1eb0810542b7bcac02e0aadb9, type: 2}
+  - tile: {fileID: 11400000, guid: 1dda0fde34db63c46bc367e113d7250a, type: 2}
+    weight: 1
+  - tile: {fileID: 11400000, guid: 39db047895b7e14408726df0c8986996, type: 2}
+    weight: 1
+  - tile: {fileID: 11400000, guid: a2d75d3b80f44184d8bf24ffc0752383, type: 2}
+    weight: 1
+  - tile: {fileID: 11400000, guid: fe8d20e29826c65429199ebb070be990, type: 2}
     weight: 1
   patchGroups:
   - name: Lila
     weight: 1
     density: 0.7
     tiles:
-    - tile: {fileID: 11400000, guid: 6cb0a783ec8f29246acbc1a9e6ce44a8, type: 2}
+    - tile: {fileID: 11400000, guid: 5d80bf5137eab724097ccbc2f2bb1904, type: 2}
       weight: 1
-    - tile: {fileID: 11400000, guid: a934e8bae79baa3429354ba1a7cde4e8, type: 2}
+    - tile: {fileID: 11400000, guid: c0b9ea0c412d13e468c96cfb74f8a62f, type: 2}
       weight: 1
-    - tile: {fileID: 11400000, guid: 86af350dc8e577e4cb0e92361542e483, type: 2}
+    - tile: {fileID: 11400000, guid: c4c9ee901cd385c429f4efac7cd02b0a, type: 2}
       weight: 1
-    - tile: {fileID: 11400000, guid: 43d5114fdeddd294e90c141381d5e47f, type: 2}
+    - tile: {fileID: 11400000, guid: aa58c52c158ad7c46a030c1b85e94322, type: 2}
       weight: 1
-    - tile: {fileID: 11400000, guid: 099370376e2e0104b89434df6e09f549, type: 2}
+    - tile: {fileID: 11400000, guid: c619e115edab9444b804e5dd3d4ba57d, type: 2}
       weight: 1
-    - tile: {fileID: 11400000, guid: 1a7daadfb426a3241b5f694c1353b21c, type: 2}
+    - tile: {fileID: 11400000, guid: b3cc11d34466fe04bad56d26ca247bff, type: 2}
       weight: 1
   - name: Blau
     weight: 1
     density: 0.7
     tiles:
-    - tile: {fileID: 11400000, guid: a1aa81356440d794ca4a61141e4b88d6, type: 2}
+    - tile: {fileID: 11400000, guid: 67d2c688abacb4941acee0eb27912cfe, type: 2}
       weight: 1
-    - tile: {fileID: 11400000, guid: 0bda2c844897d324fab4dfb9ef9b7b44, type: 2}
+    - tile: {fileID: 11400000, guid: 0d1a875e28b7a2a4fb7a8904b56f73bf, type: 2}
       weight: 1
-    - tile: {fileID: 11400000, guid: f6269161ee4a21f42a4c7e92f4396235, type: 2}
+    - tile: {fileID: 11400000, guid: 7d561dba26f2494419d8aa66fb66411b, type: 2}
       weight: 1
-    - tile: {fileID: 11400000, guid: 467b6bb29c1092a4fb49f210a6f3fb0b, type: 2}
+    - tile: {fileID: 11400000, guid: 43a297e8c12a4a44fadec5234ef119f5, type: 2}
       weight: 1
-    - tile: {fileID: 11400000, guid: 8be0c92f56c9eb447871425428346e4a, type: 2}
+    - tile: {fileID: 11400000, guid: 0d309c0e2bb9f6644bff7bc2a6a7c7ec, type: 2}
       weight: 1
-    - tile: {fileID: 11400000, guid: 0393357ba7c75db49a0792a9672106ed, type: 2}
+    - tile: {fileID: 11400000, guid: 3841f3ea4d5121843a8dddb2e550b7c5, type: 2}
       weight: 1
   - name: Rot
     weight: 1
     density: 0.7
     tiles:
-    - tile: {fileID: 11400000, guid: f96e0913ad01af84e87ab2c8fb0ee8fa, type: 2}
+    - tile: {fileID: 11400000, guid: f6d48dea29700d04a9896b46d55bbc80, type: 2}
       weight: 1
-    - tile: {fileID: 11400000, guid: 0373c1f7cf0c1344abcd96efa3629a87, type: 2}
+    - tile: {fileID: 11400000, guid: 5b7a0c9965c10774dac619dbdabc7452, type: 2}
       weight: 1
-    - tile: {fileID: 11400000, guid: b086720b6e574e84abdfd2edc7dd1e63, type: 2}
+    - tile: {fileID: 11400000, guid: 7570616dd6e07df41930cd6c983772db, type: 2}
       weight: 1
-    - tile: {fileID: 11400000, guid: 95f9ea50ef8287c4f868c2fe6b987b58, type: 2}
+    - tile: {fileID: 11400000, guid: e4ae5c6c72819b34285a4b868d3c6532, type: 2}
       weight: 1
-    - tile: {fileID: 11400000, guid: 6a6ef6e0aba1c194f97016b35b501589, type: 2}
+    - tile: {fileID: 11400000, guid: cfe6013398c1cb446b370514ea08ebc9, type: 2}
       weight: 1
-    - tile: {fileID: 11400000, guid: b2fcb77e93b35104cb323203f157faa5, type: 2}
+    - tile: {fileID: 11400000, guid: 8674a74b312ab434282c4845253c0366, type: 2}
       weight: 1
   patchSize: 24
   patchSpacing: 0
@@ -88,8 +88,8 @@ MonoBehaviour:
     weight: 1
   - prefab: {fileID: 4522651892511990369, guid: 7668a4fa5d63ed6469f4fad744023b26, type: 3}
     weight: 1
-  propsPerChunk: 42
-  propMinDistance: 6.7
+  propsPerChunk: 50
+  propMinDistance: 3.5
   propClumping: 0.445
   propClumpSize: 14
   propEdgeMargin: 1

@@ -12,3 +12,5 @@ UserSettings/
 *.csproj
 *.sln
 *.slnx
+Assets/Resources/Feedback/
+Assets/Resources/Feedback.meta

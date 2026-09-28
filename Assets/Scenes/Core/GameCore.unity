@@ -3195,6 +3195,7 @@ MonoBehaviour:
   spawnHalfHeight: 14
   recycleDistance: 26
   offScreenMargin: 1.5
+  blockedRecycleDelay: 1
   refillPerSecond: 0.25
   tricklePerSecond: 0.04
   minTricklePerSecond: 0.75
@@ -12856,6 +12857,8 @@ MonoBehaviour:
   CookieSoulsGained_WIN_Text: {fileID: 1114977815}
   timerText: {fileID: 1099886232}
   MultiplireTextGamba: {fileID: 1484110250}
+  useNewHud: 1
+  useNewLevelUp: 1
   levelUpButtons:
   - {fileID: 1330116449}
   - {fileID: 866522336}
@@ -16195,6 +16198,7 @@ MonoBehaviour:
   itemMenuBuffs: {fileID: 1475766309}
   skillCurrencyBeforeGame: 0
   gainedThroughAchievements: 0
+  kills: 0
 --- !u!224 &843623375
 RectTransform:
   m_ObjectHideFlags: 0
@@ -28046,8 +28050,8 @@ GameObject:
   - component: {fileID: 1574071381}
   - component: {fileID: 1574071380}
   - component: {fileID: 1574071382}
-  - component: {fileID: 1574071383}
   - component: {fileID: 1574071384}
+  - component: {fileID: 1574071383}
   m_Layer: 0
   m_Name: CinemachineCamera
   m_TagString: Untagged
