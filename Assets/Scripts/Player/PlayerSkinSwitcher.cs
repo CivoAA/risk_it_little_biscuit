@@ -29,28 +29,13 @@ public class PlayerSkinSwitcher : MonoBehaviour
     {
         if (skinIndex != skinIndexlast)
         {
-            switch (skinIndex)
-            {
-                case 0:
-                    SetNormalSkin();
-                    break;
-                case 1:
-                    SetBlackSkin();
-                    break;
-                case 2:
-                    SetRedSwordSkin();
-                    break;
-                case 3:
-                    SetJamJarSkin();
-                    break;
-                default:
-                    // Neuere Charaktere (ab 4) stehen nur in CharacterLooks.
-                    RuntimeAnimatorController look = CharacterLooks.AnimatorFor(skinIndex);
-                    if (look != null) animator.runtimeAnimatorController = look;
-                    else Debug.Log("Unbekannter Skin!");
-                    break;
-
-            }
+            // Seit 29.09.2026 sind alle Charaktere 32x32 und stehen nur noch in
+            // CharacterLooks. Die alten 64er-Overrides unten sind unbenutzt;
+            // NormalSkinOverride bleibt nur Rueckfall, falls das Asset fehlt.
+            RuntimeAnimatorController look = CharacterLooks.AnimatorFor(skinIndex);
+            if (look != null) animator.runtimeAnimatorController = look;
+            else if (skinIndex == 0) SetNormalSkin();
+            else Debug.Log("Unbekannter Skin!");
             skinIndexlast = skinIndex;
         }
     }

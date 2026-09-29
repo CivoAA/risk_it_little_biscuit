@@ -11,11 +11,10 @@ using UnityEngine;
 /// Shop.RunSkinIndex im PlayerSkinSwitcher. Die Waffennummer ist der Platz in
 /// PlayerController.activeWeapon.
 ///
-/// STAND: die vier Charaktere der alten World Map sind wieder da, in genau der
-/// Reihenfolge, die PlayerSkinSwitcher kennt (0 Normal, 1 Black, 2 RedSword,
-/// 3 JamJar) - der Index MUSS dazu passen, sonst laeuft man mit dem falschen
-/// Aussehen herum. Ab Index 4 holen sich beide Skin-Switcher den Animator aus
-/// <see cref="CharacterLooks"/> (4 = Onigiri, der erste im 32x32-Format).
+/// STAND (29.09.2026): drei Charaktere - 0 Keks, 1 Marmelade, 2 Onigiri,
+/// alle im 32x32-Format. Grauer und Roter Keks sind raus, die anderen sind
+/// aufgerueckt. Beide Skin-Switcher holen den Animator fuer jeden Index aus
+/// <see cref="CharacterLooks"/> - Eintrag i dort MUSS zu Charakter i passen.
 ///
 /// KOMMT EIN CHARAKTER DAZU: in den Listen unten je einen Eintrag ergaenzen -
 /// Startwaffe (beide), Name, Spruch, Beschreibung, ggf. Unlock-Id - und im
@@ -30,7 +29,7 @@ using UnityEngine;
 public static class Characters
 {
     /// <summary>Startwaffe je Charakter - Index in PlayerController.activeWeapon.</summary>
-    private static readonly int[] StartWeaponByskin = { 2, 6, 11, 1, 2 };
+    private static readonly int[] StartWeaponByskin = { 2, 1, 11 };
 
     /// <summary>
     /// Dieselbe Startwaffe noch einmal, diesmal als <c>Weapon.weaponID</c>.
@@ -46,11 +45,9 @@ public static class Characters
     /// </summary>
     private static readonly string[] StartWeaponIdByskin =
     {
-        "shurikookie",   // 0 - Brauner Keks
-        "spike_fork",    // 1 - Grauer Keks
-        "blade_swarm",   // 2 - Roter Keks
-        "jam_jar",       // 3 - Marmelade
-        "shurikookie",   // 4 - Onigiri (vorlaeufig, bekommt spaeter eine eigene Waffe)
+        "shurikookie",   // 0 - Keks
+        "jam_jar",       // 1 - Marmelade
+        "blade_swarm",   // 2 - Onigiri
     };
 
     /// <summary>
@@ -59,11 +56,9 @@ public static class Characters
     /// </summary>
     private static readonly string[] NameByskin =
     {
-        "Brauner Keks",   // 0 - PlayerSkinSwitcher.SetNormalSkin
-        "Grauer Keks",    // 1 - PlayerSkinSwitcher.SetBlackSkin
-        "Roter Keks",     // 2 - PlayerSkinSwitcher.SetRedSwordSkin
-        "Marmelade",      // 3 - PlayerSkinSwitcher.SetJamJarSkin
-        "Onigiri",        // 4 - Animator aus CharacterLooks (erster Charakter im 32x32-Format)
+        "Keks",           // 0 - Animator aus CharacterLooks (32x32, Char_Keks)
+        "Marmelade",      // 1 - Animator aus CharacterLooks (32x32, Char_Jam)
+        "Onigiri",        // 2 - Animator aus CharacterLooks (erster Charakter im 32x32-Format)
     };
 
     /// <summary>
@@ -73,8 +68,6 @@ public static class Characters
     private static readonly string[] TaglineByskin =
     {
         "Der Klassiker",
-        "Hart wie Zwieback",
-        "Klinge voraus",
         "Klebt an allem",
         "Reis mit Stirnband",
     };
@@ -83,8 +76,6 @@ public static class Characters
     private static readonly string[] DescriptionByskin =
     {
         "Frisch aus dem Ofen und bereit für alles. Knusprig, ehrlich, unterschätzt.",
-        "Wochenlang in der Dose vergessen und entsprechend schlecht gelaunt. Beißt sich an allem die Zähne aus.",
-        "Rote Glasur, scharfe Kante. Wer ihm zu nahe kommt, bekommt die Klinge zu spüren.",
         "Eigentlich nur der Belag. Aber ein ganzes Glas voller Wut - und es klebt.",
         "Aus der Bento-Box geflohen und fest entschlossen. Hält zusammen, was zusammengehört - vor allem sich selbst.",
     };
@@ -95,8 +86,6 @@ public static class Characters
     /// </summary>
     private static readonly string[] UnlockIdByskin =
     {
-        "",
-        "",
         "",
         "",
         "",

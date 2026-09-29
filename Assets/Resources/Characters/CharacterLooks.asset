@@ -13,17 +13,11 @@ MonoBehaviour:
   m_Name: CharacterLooks
   m_EditorClassIdentifier: 
   looks:
-  - animator: {fileID: 9100000, guid: 6648055e471b7b845b52960001cd662d, type: 2}
-    footRows: 6
+  - animator: {fileID: 9100000, guid: 3cbf50e52a2e4cfa80d7483a9b2d8e63, type: 2}
+    footRows: 0
     accent: {r: 0.88, g: 0.63, b: 0.31, a: 1}
-  - animator: {fileID: 22100000, guid: 2ce1da885dd0c444685f23783eb48254, type: 2}
-    footRows: 6
-    accent: {r: 0.66, g: 0.64, b: 0.71, a: 1}
-  - animator: {fileID: 22100000, guid: 4c3644256ee3f0e4e90ff467279fd1b4, type: 2}
-    footRows: 6
-    accent: {r: 0.83, g: 0.34, b: 0.42, a: 1}
-  - animator: {fileID: 22100000, guid: 4608178474f5ab7489238c7fc48389a0, type: 2}
-    footRows: 6
+  - animator: {fileID: 9100000, guid: 577e5aec6cce477e894c151269afe634, type: 2}
+    footRows: 0
     accent: {r: 0.65, g: 0.48, b: 0.85, a: 1}
   - animator: {fileID: 9100000, guid: 76ed922591a64a229cb77764801dbda6, type: 2}
     footRows: 0

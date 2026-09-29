@@ -499,11 +499,6 @@ public class HubCharacterSelectUI : MonoBehaviour
     {
         backBtn = MakeButton("Back", BackX, BarY, BackW, BarH, Loc.Get("ui.charselect.back", "ZURÜCK"), null, false);
 
-        string hint = Loc.Get("ui.charselect.hint", "PFEILE  AUSSUCHEN     E  WÄHLEN");
-        OptionsKit.Label("Hint", page, BackX + BackW + 6, BarY + 3, ChooseX - BackX - BackW - 12, 14, hint,
-                         OptionsKit.PickFont(hint, pixelFont, textFont), OptionsKit.SizeText,
-                         OptionsKit.WithAlpha(GameHudSkin.Parchment, 0.55f), TextAlignmentOptions.Center);
-
         chooseBtn = MakeButton("Choose", ChooseX, BarY, ChooseW, BarH, "", null, true);
     }
 
@@ -1215,9 +1210,6 @@ public class HubCharacterSelectUI : MonoBehaviour
         switch (index)
         {
             case 0: return hub.NormalSkinOverride;
-            case 1: return hub.BlackSkinOverride;
-            case 2: return hub.RedSwordSkinOverride;
-            case 3: return hub.JamJarSkinOverride;
             default: return null;
         }
     }

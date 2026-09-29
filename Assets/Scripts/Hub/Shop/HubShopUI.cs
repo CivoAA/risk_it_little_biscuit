@@ -71,14 +71,21 @@ public class HubShopUI : MonoBehaviour
     [SerializeField] private Rect priceValueArea = new Rect(226f, 116f, 70f, 12f);
     [SerializeField] private Rect buyArea  = new Rect(168f, 143f, 64f, 16f);
     [SerializeField] private Rect backArea = new Rect(242f, 143f, 60f, 16f);
-    [Tooltip("Zwischen SHOP-Titel und Goldanzeige.")]
-    [SerializeField] private Rect resetArea = new Rect(122f, 12f, 72f, 15f);
+    [Tooltip("Mittig zwischen SHOP-Titel (endet x=110) und Goldanzeige (beginnt x=199), " +
+             "so hoch wie die beiden Schilder.")]
+    [SerializeField] private Rect resetButtonArea = new Rect(125f, 11f, 60f, 17f);
 
     [Header("Reset-Knopf")]
+    [Tooltip("Gezeichnet wie BUY und BACK im Hintergrundbild - dunkle Kontur, " +
+             "abgerundete Ecken, Innenkante - nur in Rot, weil er alles zuruecksetzt.")]
     [SerializeField] private bool showResetButton = true;
-    [SerializeField] private string resetLabel = "RESET!!!";
-    [SerializeField] private Color resetButtonColor = new Color(0f, 1f, 0f, 1f);
-    [SerializeField] private Color resetTextColor = new Color(1f, 0f, 0f, 1f);
+    [SerializeField] private string resetButtonLabel = "RESET";
+    [SerializeField] private Color resetOutlineColor = new Color32(0x0E, 0x13, 0x35, 0xFF);
+    [SerializeField] private Color resetRimColor     = new Color32(0x7A, 0x2E, 0x36, 0xFF);
+    [SerializeField] private Color resetFillColor    = new Color32(0xA8, 0x3C, 0x3C, 0xFF);
+    [SerializeField] private Color resetHoverRimColor  = new Color32(0x8C, 0x35, 0x40, 0xFF);
+    [SerializeField] private Color resetHoverFillColor = new Color32(0xC0, 0x4A, 0x44, 0xFF);
+    [SerializeField] private Color resetLabelColor   = new Color32(0xE6, 0xC4, 0x93, 0xFF);
 
     [Header("Liste")]
     [SerializeField] private int visibleRows = 6;
@@ -204,7 +211,8 @@ public class HubShopUI : MonoBehaviour
     GameObject root;          // ganzer Canvasbereich, wird an- und ausgeschaltet
     RectTransform screen;     // exakt 320x180 darin - daran haengt alles Ausgemessene
     TextMeshProUGUI goldValueText, detailNameText, detailText, priceValueText, buyText;
-    Image detailIcon, buyImage, backImage;
+    Image detailIcon, buyImage, backImage, resetImage;
+    Sprite resetSprite, resetHoverSprite;
     GameObject scrollbarRoot;
     Scrollbar scrollbar;
     bool suppressScrollbarCallback;
@@ -246,6 +254,8 @@ public class HubShopUI : MonoBehaviour
             Destroy(generatedFrame);
             generatedFrame = null;
         }
+        DestroySprite(ref resetSprite);
+        DestroySprite(ref resetHoverSprite);
 
         // Szenenwechsel mit offenem Shop: die Sperre wieder abmelden,
         // sonst reagiert der Hub beim naechsten Mal auf gar nichts mehr.
@@ -379,15 +389,22 @@ public class HubShopUI : MonoBehaviour
 
         if (showResetButton)
         {
-            var resetImage = HubUiKit.NewImage("ResetButton", screen, null, resetButtonColor);
-            HubUiKit.Place((RectTransform)resetImage.transform, resetArea);
+            resetSprite = ButtonSprite("HubShopReset", resetRimColor, resetFillColor);
+            resetHoverSprite = ButtonSprite("HubShopResetHover", resetHoverRimColor, resetHoverFillColor);
+
+            resetImage = HubUiKit.NewImage("ResetButton", screen, resetSprite, Color.white);
+            HubUiKit.Place((RectTransform)resetImage.transform, resetButtonArea);
+            resetImage.type = Image.Type.Sliced;
+            resetImage.preserveAspect = false;
             resetImage.raycastTarget = true;
             AddClick(resetImage.gameObject, ResetShop);
+            AddHover(resetImage.gameObject, SetResetHover);
 
             var resetText = HubUiKit.NewText("ResetLabel", resetImage.transform, font, buttonFontSize,
-                                             resetTextColor, TextAlignmentOptions.Center);
+                                             resetLabelColor, TextAlignmentOptions.Center);
             HubUiKit.Stretch((RectTransform)resetText.transform);
-            resetText.text = resetLabel;
+            resetText.raycastTarget = false;
+            resetText.text = resetButtonLabel;
         }
 
         root.SetActive(false);
@@ -583,6 +600,66 @@ public class HubShopUI : MonoBehaviour
                                        1f, 0, SpriteMeshType.FullRect, new Vector4(1f, 1f, 1f, 1f));
         generatedFrame.name = "HubShopRowFrame";
         return generatedFrame;
+    }
+
+    /// <summary>
+    /// Knopfform, abgemalt von BUY/BACK im shopUI.png: Kontur mit abgerundeten
+    /// Ecken, darin eine Innenkante, die in den Ecken dicker wird. 9x9 mit 4px
+    /// 9-Slice-Rand - nur die Mittelreihe und -spalte werden gedehnt.
+    /// O = Kontur, R = Innenkante, F = Flaeche, . = durchsichtig.
+    /// </summary>
+    static readonly string[] ButtonShape =
+    {
+        "...OOO...",
+        "OOORRROOO",
+        "ORRRFRRRO",
+        "ORFFFFFRO",
+        "ORFFFFFRO",
+        "ORFFFFFRO",
+        "ORRRFRRRO",
+        "OOORRROOO",
+        "...OOO...",
+    };
+
+    Sprite ButtonSprite(string name, Color rim, Color fill)
+    {
+        int size = ButtonShape.Length;
+        var tex = new Texture2D(size, size, TextureFormat.RGBA32, false)
+        {
+            filterMode = FilterMode.Point,
+            wrapMode = TextureWrapMode.Clamp,
+            name = name,
+        };
+
+        for (int y = 0; y < size; y++)
+        {
+            // Texturzeile 0 ist unten, die Vorlage liest sich von oben
+            string line = ButtonShape[size - 1 - y];
+            for (int x = 0; x < size; x++)
+            {
+                char c = line[x];
+                tex.SetPixel(x, y, c == 'O' ? resetOutlineColor
+                                 : c == 'R' ? rim
+                                 : c == 'F' ? fill
+                                 : Color.clear);
+            }
+        }
+        tex.Apply();
+
+        // PPU 100 = referencePixelsPerUnit des Canvas, sonst werden die
+        // Slice-Raender hundertfach breit (siehe HubPixelSprites.Build).
+        Sprite s = Sprite.Create(tex, new Rect(0f, 0f, size, size), new Vector2(0.5f, 0.5f),
+                                 100f, 0, SpriteMeshType.FullRect, new Vector4(4f, 4f, 4f, 4f));
+        s.name = name;
+        return s;
+    }
+
+    static void DestroySprite(ref Sprite s)
+    {
+        if (s == null) return;
+        if (s.texture != null) Destroy(s.texture);
+        Destroy(s);
+        s = null;
     }
 
     /// <summary>
@@ -899,6 +976,13 @@ public class HubShopUI : MonoBehaviour
         backHovered = on;
         if (backHovered) PlaySfx(hoverClip);
         ApplyHoverTints();
+    }
+
+    /// <summary>Der Reset-Knopf ist selbst gezeichnet - statt Schleier ein hellerer Satz Farben.</summary>
+    void SetResetHover(bool on)
+    {
+        if (on) PlaySfx(hoverClip);
+        resetImage.sprite = on ? resetHoverSprite : resetSprite;
     }
 
     void ApplyHoverTints()

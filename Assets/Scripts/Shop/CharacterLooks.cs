@@ -9,11 +9,10 @@ using UnityEngine;
 ///
 /// Liegt als <c>Assets/Resources/Characters/CharacterLooks.asset</c>, Eintrag i
 /// gehoert zu Charakter i aus <see cref="Characters"/> - also dieselbe
-/// Reihenfolge wie im PlayerSkinSwitcher (0 Normal, 1 Black, 2 RedSword,
-/// 3 JamJar).
+/// Reihenfolge wie im PlayerSkinSwitcher (alle Charaktere kommen von hier).
 ///
 /// KOMMT EIN CHARAKTER DAZU: unten einen Eintrag anhaengen - Animator, Fusszeilen
-/// und eine Akzentfarbe. Ab Index 4 nehmen PlayerSkinSwitcher (Lauf) und
+/// und eine Akzentfarbe. Fuer jeden Index nehmen PlayerSkinSwitcher (Lauf) und
 /// WM_PlayerSkinSwitcher (Hub) den Animator ebenfalls von hier, das Prefab und
 /// die Szenen brauchen dafuer keinen neuen Eintrag. Fehlt der
 /// Eintrag, nimmt die Auswahl den Animator vom Hub-Spieler, und fehlt auch
