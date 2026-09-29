@@ -4278,20 +4278,6 @@ MonoBehaviour:
     - {fileID: -4520067107179353359, guid: b28a754ef0c366a4197770531d715036, type: 3}
     - {fileID: -8918019275305883511, guid: b28a754ef0c366a4197770531d715036, type: 3}
     - {fileID: -4488988060593680513, guid: b28a754ef0c366a4197770531d715036, type: 3}
-  - sprites:
-    - {fileID: 255737912664603113, guid: f99f8744a52f0ca489c32f7cc303b75c, type: 3}
-    - {fileID: -1185912836516493646, guid: f99f8744a52f0ca489c32f7cc303b75c, type: 3}
-    - {fileID: 2348050627013810511, guid: f99f8744a52f0ca489c32f7cc303b75c, type: 3}
-    - {fileID: -2371045639271389657, guid: f99f8744a52f0ca489c32f7cc303b75c, type: 3}
-    - {fileID: 135898590246515580, guid: f99f8744a52f0ca489c32f7cc303b75c, type: 3}
-    - {fileID: 2435022141152868590, guid: f99f8744a52f0ca489c32f7cc303b75c, type: 3}
-  - sprites:
-    - {fileID: -71326026192102431, guid: f99f8744a52f0ca489c32f7cc303b75c, type: 3}
-    - {fileID: 926461286400369498, guid: f99f8744a52f0ca489c32f7cc303b75c, type: 3}
-    - {fileID: -130610247877645432, guid: f99f8744a52f0ca489c32f7cc303b75c, type: 3}
-    - {fileID: 3644632810951876186, guid: f99f8744a52f0ca489c32f7cc303b75c, type: 3}
-    - {fileID: -2446372871459077729, guid: f99f8744a52f0ca489c32f7cc303b75c, type: 3}
-    - {fileID: -2365476776030859047, guid: f99f8744a52f0ca489c32f7cc303b75c, type: 3}
 --- !u!198 &4632833826724384508
 ParticleSystem:
   m_ObjectHideFlags: 0

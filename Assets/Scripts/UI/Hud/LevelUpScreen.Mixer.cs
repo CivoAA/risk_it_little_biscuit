@@ -679,15 +679,15 @@ public partial class LevelUpScreen
         {
             bool mine = hovered != null && hovered.assignedPowerUp.powerUpName == field;
             bool has = TryGetStat(field, out float cur);
-            bool blink = Mathf.Repeat(now * 3f, 1f) < 0.6f;
 
             string text;
             Color color;
             if (mine && has)
             {
-                float after = AfterPick(field, cur, hovered.Value);
-                text = FormatStat(blink ? after : cur, meta, false);
-                color = blink ? RarityLight(hovered.Rarity) : (Color)GameHudSkin.Cream;
+                // Fest der Wert nach der Wahl, leicht gelblich - kein Hin- und
+                // Herspringen mit dem alten Wert mehr.
+                text = FormatStat(AfterPick(field, cur, hovered.Value), meta, false);
+                color = GameHudSkin.GoldLight;
             }
             else
             {

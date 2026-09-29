@@ -21,7 +21,7 @@ public class LevelSelectScreen : MonoBehaviour
 
     private void Start()
     {
-        TMP_FontAsset font = PixelUI.FindPixelFont();
+        TMP_FontAsset font = PixelUI.FindTextFont() ?? PixelUI.FindPixelFont();
 
         Canvas canvas = gameObject.AddComponent<Canvas>();
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;

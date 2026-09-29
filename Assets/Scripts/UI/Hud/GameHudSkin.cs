@@ -16,7 +16,7 @@ using UnityEngine;
 /// [[unity-ui-sliced-ppu]]. Symbole werden ohne Kontur beschrieben, die
 /// 1-px-Kontur legt <see cref="Outlined"/> automatisch drumherum.
 /// </summary>
-public static class GameHudSkin
+public static partial class GameHudSkin
 {
     // ==================================================================
     //  Palette

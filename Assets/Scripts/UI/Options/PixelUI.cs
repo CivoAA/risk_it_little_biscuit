@@ -35,10 +35,19 @@ public static class PixelUI
     /// schreiben. Jersey10 liegt im selben Stil vor, ist auf
     /// <c>AtlasPopulationMode: Dynamic</c> importiert und rendert die Umlaute
     /// bei Bedarf aus der TTF nach.
+    ///
+    /// Jersey10 steht in der globalen Fallback-Liste der TMP Settings - so ist
+    /// sie auch in Szenen geladen, in denen kein Text sie benutzt (Hauptmenü),
+    /// und ThaleahFat-Texte holen fehlende Umlaute von dort statt aus der
+    /// TMP-Standardschrift.
     /// </summary>
     public static TMP_FontAsset FindTextFont()
     {
         TMP_FontAsset fallback = null;
+
+        if (TMP_Settings.instance != null && TMP_Settings.fallbackFontAssets != null)
+            foreach (TMP_FontAsset f in TMP_Settings.fallbackFontAssets)
+                if (f != null && f.name.StartsWith("Jersey10")) return f;
 
         foreach (TMP_FontAsset f in Resources.FindObjectsOfTypeAll<TMP_FontAsset>())
         {
