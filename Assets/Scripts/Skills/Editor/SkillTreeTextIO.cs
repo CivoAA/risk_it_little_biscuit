@@ -409,7 +409,7 @@ public static class SkillTreeTextIO
                 case "grant":
                     node.rewards.Add(new SkillRewardData
                     {
-                        kind    = SkillRewardKind.Schalter,
+                        kind    = SkillRewardKind.Freischalten,
                         grantId = value,
                     });
                     break;
@@ -547,7 +547,7 @@ public static class SkillTreeTextIO
         {
             if (r == null) continue;
 
-            sb.Append(r.kind == SkillRewardKind.Schalter
+            sb.Append(r.kind == SkillRewardKind.Freischalten
                 ? $" grant={r.grantId}"
                 : $" stat={r.stat}:{r.value.ToString("0.####", CultureInfo.InvariantCulture)}");
         }

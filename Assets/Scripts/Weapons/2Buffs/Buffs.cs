@@ -10,8 +10,7 @@ public class Buffs : Weapon
         {
             // Werte übernehmen
             PlayerController.Instance.playerMaxHealth += stats[weaponLevel].damage;
-            PlayerController.Instance.playerHealth += PlayerController.Instance.playerMaxHealth / 3;
-            UIController.Instance.UpdateHealthSlider();
+            PlayerController.Instance.Heal(PlayerController.Instance.playerMaxHealth / 3);
 
             // neuen Stand merken
             lastAppliedLevel = weaponLevel;

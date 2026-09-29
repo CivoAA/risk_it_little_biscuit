@@ -190,12 +190,12 @@ public static class SkillTools
             {
                 if (string.IsNullOrWhiteSpace(reward.GrantId))
                 {
-                    errors.Add($"'{node.Key}' hat einen Schalter ohne Id.");
+                    errors.Add($"'{node.Key}' hat eine Freischaltung ohne Id.");
                 }
                 else if (SkillGrants.Find(reward.GrantId) == null)
                 {
-                    warnings.Add($"'{node.Key}' gibt den Schalter '{reward.GrantId}', den es in " +
-                                 "SkillGrants nicht gibt - im Spiel fragt ihn dann niemand ab.");
+                    warnings.Add($"'{node.Key}' gibt die Freischaltung '{reward.GrantId}', die es in " +
+                                 "SkillGrants nicht gibt - im Spiel fragt sie dann niemand ab.");
                 }
 
                 continue;
@@ -207,7 +207,7 @@ public static class SkillTools
                 continue;
             }
 
-            if (Mathf.Approximately(reward.Value, 0f) && reward.Stat != SkillType.UnlockEvoOrWeapon)
+            if (Mathf.Approximately(reward.Value, 0f))
                 warnings.Add($"'{node.Key}': {reward.Stat} steht auf 0 - das bewirkt nichts.");
         }
     }

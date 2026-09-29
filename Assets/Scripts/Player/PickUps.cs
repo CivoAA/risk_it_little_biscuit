@@ -45,12 +45,7 @@ public class PickUps : MonoBehaviour
         {
             if(PickUp_id == 0)
             {
-                PlayerController.Instance.playerHealth += PlayerController.Instance.playerMaxHealth* 0.1f;
-                UIController.Instance.UpdateHealthSlider();
-                if(PlayerController.Instance.playerHealth > PlayerController.Instance.playerMaxHealth)
-                {
-                    PlayerController.Instance.playerHealth = PlayerController.Instance.playerMaxHealth;
-                }
+                PlayerController.Instance.Heal(PlayerController.Instance.playerMaxHealth * 0.1f);
 
             }
             else if (PickUp_id == 1)
@@ -62,8 +57,7 @@ public class PickUps : MonoBehaviour
                 PlayerController p = PlayerController.Instance;
                 float bonus = EnemyCatalog.GoldenHeartMaxHealth;
                 p.playerMaxHealth += bonus;
-                p.playerHealth = Mathf.Min(p.playerMaxHealth, p.playerHealth + p.playerMaxHealth * 0.1f + bonus);
-                UIController.Instance.UpdateHealthSlider();
+                p.Heal(p.playerMaxHealth * 0.1f + bonus);
                 DamageNumberController.Instance?.CreateText($"+{bonus:0} Max HP", transform.position);
             }
             else if(PickUp_id == 99)

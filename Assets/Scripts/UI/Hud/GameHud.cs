@@ -112,6 +112,10 @@ public class GameHud : MonoBehaviour
     // Leben
     private Bar hp;
     private Shadowed hpText;
+    private RectTransform shieldBar;
+    private Image shieldHi;
+    private int lastShield = -1;
+    private const int ShieldH = 5;   // obere Haelfte der 10px Balkenfuellung
     private Image heart;
     private float hpShown = 1f, hpTrail = 1f, trailHoldUntil;
     private bool trailIsHeal;
@@ -232,6 +236,19 @@ public class GameHud : MonoBehaviour
         // Leben
         heart = Img("Heart", left, HeartR, GameHudSkin.Heart, Color.white);
         hp = new Bar(this, "Hp", left, HpFrameR, GameHudSkin.Jam, GameHudSkin.JamLight, GameHudSkin.JamDark);
+
+        // Schild aus Ueberheilung (Skilltree Geist): ein Glasurstreifen ueber
+        // der oberen Haelfte des Balkens, von links - so bleibt das Rot darunter
+        // lesbar und man sieht trotzdem sofort, wie viel Puffer da ist.
+        shieldBar = Img("Shield", left, new RectInt(HpFrameR.x + 1, HpFrameR.y + 1, 1, ShieldH),
+                        GameHudSkin.White, GameHudSkin.Icing).rectTransform;
+        shieldHi = Img("ShieldHi", shieldBar, new RectInt(0, 0, 1, 1), GameHudSkin.White, GameHudSkin.IcingLight);
+        RectTransform hiRect = shieldHi.rectTransform;
+        hiRect.anchorMin = new Vector2(0f, 1f); hiRect.anchorMax = new Vector2(1f, 1f);
+        hiRect.pivot = new Vector2(0f, 1f);
+        hiRect.sizeDelta = new Vector2(0f, 1f);
+        hiRect.anchoredPosition = Vector2.zero;
+        shieldBar.gameObject.SetActive(false);
         for (int q = 1; q < 4; q++)
         {
             int x = HpFrameR.x + 1 + Mathf.RoundToInt(hp.InnerW * q / 4f);
@@ -522,14 +539,26 @@ public class GameHud : MonoBehaviour
 
         portraitBack.color = low && blink ? new Color(1f, 0.72f, 0.72f, 1f) : Color.white;
 
+        // Schild: Breite im selben Massstab wie das Leben, hoechstens der ganze Balken.
+        int shieldW = Mathf.RoundToInt(Mathf.Clamp01(p.shield / max) * hp.InnerW);
+        if (p.shield > 0f && shieldW < 1) shieldW = 1;
+        bool shieldOn = shieldW > 0;
+        if (shieldBar.gameObject.activeSelf != shieldOn) shieldBar.gameObject.SetActive(shieldOn);
+        if (shieldOn) shieldBar.sizeDelta = new Vector2(shieldW, ShieldH);
+
         // Nur neu setzen, wenn sich eine Zahl aendert - kein String pro Frame.
         int shownCur = cur > 0f ? Mathf.CeilToInt(cur) : 0;
         int shownMax = Mathf.CeilToInt(max);
-        if (shownCur != lastHpCur || shownMax != lastHpMax)
+        int shownShield = p.shield > 0f ? Mathf.CeilToInt(p.shield) : 0;
+        if (shownCur != lastHpCur || shownMax != lastHpMax || shownShield != lastShield)
         {
             lastHpCur = shownCur;
             lastHpMax = shownMax;
-            hpText.Set(shownCur + " / " + shownMax);
+            lastShield = shownShield;
+            // Ohne Farbcode: der Umriss-Text wuerde ihn mit einfaerben.
+            hpText.Set(shownShield > 0
+                ? shownCur + "+" + shownShield + " / " + shownMax
+                : shownCur + " / " + shownMax);
         }
     }
 

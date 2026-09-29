@@ -14,7 +14,7 @@ using UnityEngine;
 ///      Kommt spaeter ein Charakter dazu, steht er hier von selbst.
 ///   2. Darunter die Kategorie umschalten: Kampf, Geist, Wissen, Glueck.
 ///   3. Einen Knoten anklicken. Rechts steht dann, was er gibt: Werte wie
-///      "+10 Leben" oder Schalter wie ein Waffen-Upgrade. Mehrere sind erlaubt.
+///      "+10 Leben" oder Freischaltungen wie ein Waffen-Upgrade. Mehrere sind erlaubt.
 ///   4. Am gewaehlten Knoten erscheinen drei Plus-Knoepfe: geradeaus, nach oben
 ///      und nach unten. Der neue Knoten haengt automatisch an dem, von dem aus
 ///      man ihn angelegt hat - die Linie zeichnet sich von selbst. Ganz links
@@ -949,7 +949,7 @@ public class SkillTreeEditorWindow : EditorWindow
 
             if (EditorGUI.EndChangeCheck())
             {
-                // Wert oder Schalter zeichnet unterschiedliche Felder - also auch
+                // Wert oder Freischalten zeichnet unterschiedliche Felder - also auch
                 // hier erst im naechsten Durchgang umstellen.
                 pending = () =>
                 {
@@ -1005,11 +1005,11 @@ public class SkillTreeEditorWindow : EditorWindow
             });
         }
 
-        if (GUILayout.Button("+ Schalter"))
+        if (GUILayout.Button("+ Freischalten"))
         {
             pending = () => AddReward(node, new SkillRewardData
             {
-                kind    = SkillRewardKind.Schalter,
+                kind    = SkillRewardKind.Freischalten,
                 grantId = SkillGrants.All.Count > 0 ? SkillGrants.All[0].Id : "",
             });
         }
@@ -1047,16 +1047,16 @@ public class SkillTreeEditorWindow : EditorWindow
     }
 
     /// <summary>
-    /// Schalter aus <see cref="SkillGrants"/>. Der letzte Eintrag laesst eine
-    /// eigene Id zu - damit man einen Schalter eintragen kann, bevor er im
-    /// Katalog steht.
+    /// Freischaltung aus <see cref="SkillGrants"/> - nur was dort im Katalog steht.
+    /// Eine alte Id, die es nicht mehr gibt, wird als Warnung angezeigt und
+    /// laesst sich ueber das Menue durch eine gueltige ersetzen.
     /// </summary>
     void DrawGrantReward(SkillRewardData r)
     {
         int count = SkillGrants.All.Count;
-        var labels = new string[count + 1];
+        var labels = new string[count];
 
-        int current = count;   // "eigene Id"
+        int current = -1;
 
         for (int i = 0; i < count; i++)
         {
@@ -1064,33 +1064,21 @@ public class SkillTreeEditorWindow : EditorWindow
             if (SkillGrants.All[i].Id == r.grantId) current = i;
         }
 
-        labels[count] = "eigene Id...";
-
         EditorGUI.BeginChangeCheck();
-        int picked = EditorGUILayout.Popup("Schalter", current, labels);
+        int picked = EditorGUILayout.Popup("Freischalten", current, labels);
 
-        if (EditorGUI.EndChangeCheck())
+        if (EditorGUI.EndChangeCheck() && picked >= 0 && picked < count)
         {
-            Undo.RecordObject(asset, "Schalter aendern");
-            r.grantId = picked < count ? SkillGrants.All[picked].Id : r.grantId;
+            Undo.RecordObject(asset, "Freischaltung aendern");
+            r.grantId = SkillGrants.All[picked].Id;
             EditorUtility.SetDirty(asset);
         }
 
-        if (picked >= count || SkillGrants.Find(r.grantId) == null)
+        if (current < 0)
         {
-            EditorGUI.BeginChangeCheck();
-            string id = EditorGUILayout.TextField("Id", r.grantId);
-
-            if (EditorGUI.EndChangeCheck())
-            {
-                Undo.RecordObject(asset, "Schalter aendern");
-                r.grantId = id;
-                EditorUtility.SetDirty(asset);
-            }
-
             EditorGUILayout.HelpBox(
-                "Diese Id steht noch nicht in SkillGrants. Solange sie dort fehlt, fragt sie " +
-                "im Spiel niemand ab - eine Zeile in SkillGrants.All ergaenzen.",
+                $"'{r.grantId}' gibt es nicht (mehr) in SkillGrants - im Spiel bewirkt das nichts. " +
+                "Oben eine Freischaltung waehlen oder die Belohnung entfernen.",
                 MessageType.Warning);
         }
         else

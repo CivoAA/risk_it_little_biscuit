@@ -18,7 +18,7 @@
 #    - drei Bahnen je Kategorie, die nach rechts laufen
 #    - verschiedene Formen (Kreis, Rechteck, Raute, Sechseck, Stern, Kreuz)
 #    - ein Knoten mit ZWEI Vorgaengern (kampf_oben_3 braucht oben UND Mitte)
-#    - ein Knoten, der einen Schalter gibt statt nur Werte (das Waffen-Upgrade)
+#    - ein Knoten, der eine Freischaltung gibt statt nur Werte (das Waffen-Upgrade)
 #    - ein Knoten mit mehreren Belohnungen gleichzeitig
 #
 #  Das Format steht in SkillTreeTextIO.
@@ -109,8 +109,8 @@ node id=geist_unten_2 cat=Geist lane=Unten step=3 shape=Sechseck price=25
 
 # Ein Knoten mit mehreren Werten gleichzeitig - im Hub stehen sie untereinander.
 node id=geist_mitte_4 cat=Geist lane=Mitte step=4 shape=Stern    price=50
-     name="Zweites Leben"
-     grant=zweites_leben  stat=IncreaseMaxHealth:20  stat=IncreaseHealthReg:1
+     name="Zaeher Geist"
+     stat=IncreaseMaxHealth:20  stat=IncreaseHealthReg:1
      req=geist_oben_2,geist_mitte_3,geist_unten_2
 
 
@@ -132,7 +132,7 @@ node id=wissen_oben_2  cat=Wissen lane=Oben  step=3 shape=Kreuz    price=30
      name="Zweite Wahl"      stat=RerollAmount:1           req=wissen_oben_1
 
 node id=wissen_mitte_3 cat=Wissen lane=Mitte step=3 shape=Kreis    price=30
-     name="Platz im Gepaeck" stat=IncreaseWeaponSlots:1    req=wissen_mitte_2
+     name="Seelenkunde"      stat=SoulBonusPercent:10      req=wissen_mitte_2
 
 node id=wissen_unten_2 cat=Wissen lane=Unten step=3 shape=Kreuz    price=30
      name="Verbannen"        stat=BanishAmount:1           req=wissen_unten_1
@@ -153,10 +153,10 @@ node id=glueck_unten_1 cat=Glueck lane=Unten step=2 shape=Raute    price=15
      name="Magnet"           stat=IncreasePickupRange:0.2  req=glueck_mitte_1
 
 node id=glueck_oben_2  cat=Glueck lane=Oben  step=3 shape=Stern    price=45
-     name="Freie Truhe"      grant=erste_truhe_gratis      req=glueck_oben_1
+     name="Fundgrube"        stat=IncreaseDropChance:0.25 req=glueck_oben_1
 
 node id=glueck_mitte_3 cat=Glueck lane=Mitte step=3 shape=Sechseck price=30
      name="Gluecksstraehne"  stat=IncreaseLuck:10          req=glueck_mitte_2
 
 node id=glueck_unten_2 cat=Glueck lane=Unten step=3 shape=Kreuz    price=30
-     name="Reiche Ernte"     stat=IncreaseEvoSlots:1       req=glueck_unten_1
+     name="Glueckstreffer"   stat=LuckyXpChance:0.05      req=glueck_unten_1

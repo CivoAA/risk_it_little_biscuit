@@ -260,3 +260,54 @@ MonoBehaviour:
       descriptionOverride: 
     requires:
     - glueck_mitte_2
+  - id: geist_ueberheilung
+    category: 1
+    lane: 0
+    step: 1
+    shape: 4
+    price: 40
+    displayName: Ueberheilung
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 35
+      value: 20
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - geist_start
+  - id: geist_letzter_atem
+    category: 1
+    lane: 2
+    step: 1
+    shape: 2
+    price: 40
+    displayName: Letzter Atem
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 36
+      value: 20
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - geist_start
+  - id: geist_schockwelle
+    category: 1
+    lane: 1
+    step: 1
+    shape: 3
+    price: 60
+    displayName: Schockwelle
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 1
+      stat: 0
+      value: 0
+      grantId: schockwelle
+      descriptionOverride: 
+    requires:
+    - geist_start

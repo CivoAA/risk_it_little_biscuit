@@ -83,6 +83,15 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Bosse und Minibosse spawnen mit x % weniger Leben.")]
     public float bossHealthReduction;
 
+    // Geist-Ast, in Prozent.
+    [Header("Geist (Skilltree)")]
+    [Tooltip("Ueberheilung wird zu Schild, hoechstens x % der Max-HP.")]
+    public float overhealShieldPercent;
+    [Tooltip("Letzter Atem: unter 30 % Leben +x % Tempo und doppelte Regeneration.")]
+    public float lastBreathSpeedPercent;
+    [Tooltip("Aktueller Schild aus Ueberheilung. Faengt Schaden vor dem Leben ab.")]
+    public float shield;
+
     /// <summary>Cooldown-Faktor inklusive Untergrenze - Waffen lesen nur diesen Wert.</summary>
     public float CooldownMultiplier
     {
@@ -229,7 +238,78 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        rb.linearVelocity = new Vector3(playerMoveDirection.x * moveSpeed, playerMoveDirection.y * moveSpeed);
+        // Skilltree "Letzter Atem": unter 30 % Leben schneller.
+        float speed = IsLastBreath ? moveSpeed * (1f + lastBreathSpeedPercent / 100f) : moveSpeed;
+        rb.linearVelocity = new Vector3(playerMoveDirection.x * speed, playerMoveDirection.y * speed);
+
+        DecayShield(Time.fixedDeltaTime);
+    }
+
+    // ------------------------------------------------------------------
+    // Geist: Ueberheilung, Letzter Atem, Schockwelle
+    // ------------------------------------------------------------------
+
+    /// <summary>Ab diesem Lebensanteil greift "Letzter Atem".</summary>
+    public const float LastBreathThreshold = 0.3f;
+
+    /// <summary>So lange haelt der Schild, bevor er abbaut, wenn nichts nachkommt.</summary>
+    private const float ShieldHoldTime = 3f;
+
+    /// <summary>So viel vom maximalen Schild baut er pro Sekunde ab.</summary>
+    private const float ShieldDecayPerSecond = 0.2f;
+
+    private float shieldGainedAt = -999f;
+
+    /// <summary>Wie gross der Schild hoechstens werden kann (Skilltree "OverhealShield").</summary>
+    public float MaxShield => playerMaxHealth * overhealShieldPercent / 100f;
+
+    /// <summary>Lohnt sich Heilung gerade? Auch bei vollem Leben, solange der Schild noch Platz hat.</summary>
+    public bool CanReceiveHealing => playerHealth < playerMaxHealth || shield < MaxShield;
+
+    public bool IsLastBreath =>
+        lastBreathSpeedPercent > 0f && playerHealth > 0f && playerHealth <= playerMaxHealth * LastBreathThreshold;
+
+    /// <summary>
+    /// Heilt den Spieler. Was ueber die Max-HP hinausgeht, wird mit dem Skill
+    /// "OverhealShield" zu Schild statt zu verfallen. Alle Heilungen sollen hier
+    /// durch - sonst geht die Ueberheilung an ihnen vorbei.
+    /// </summary>
+    public void Heal(float amount)
+    {
+        if (amount <= 0f) return;
+
+        float room = Mathf.Max(0f, playerMaxHealth - playerHealth);
+        float toHealth = Mathf.Min(room, amount);
+        playerHealth += toHealth;
+
+        float over = amount - toHealth;
+        if (over > 0f && MaxShield > 0f)
+        {
+            shield = Mathf.Min(MaxShield, shield + over);
+            shieldGainedAt = Time.time;
+        }
+
+        UIController.Instance?.UpdateHealthSlider();
+    }
+
+    private void DecayShield(float dt)
+    {
+        if (shield <= 0f) return;
+        if (shield > MaxShield) shield = MaxShield;   // Max-HP gesunken
+        if (Time.time - shieldGainedAt < ShieldHoldTime) return;
+
+        shield = Mathf.Max(0f, shield - MaxShield * ShieldDecayPerSecond * dt);
+    }
+
+    private float shockwaveReadyAt;
+
+    /// <summary>Skilltree "Schockwelle": bei einem Treffer alle Gegner in der Naehe wegstossen.</summary>
+    private void TryShockwave()
+    {
+        if (!Skills.HasGrant(SkillGrants.Schockwelle) || Time.time < shockwaveReadyAt) return;
+
+        shockwaveReadyAt = Time.time + Shockwave.Cooldown;
+        Shockwave.Fire(transform.position);
     }
 
     public void StartStats()
@@ -298,9 +378,6 @@ public class PlayerController : MonoBehaviour
         rerollAmount         += Skills.BonusInt(SkillType.RerollAmount);
         experience           += Skills.Bonus(SkillType.StartXPAmount);
         powerUpShrinkSpeed   += Skills.Bonus(SkillType.IncreaseShrinkSpeed);
-        WeaponSlots          += Skills.BonusInt(SkillType.IncreaseWeaponSlots);
-        BuffSlots            += Skills.BonusInt(SkillType.IncreaseBuffSlots);
-        EvoSlots             += Skills.BonusInt(SkillType.IncreaseEvoSlots);
         dropChanceMultiplier += Skills.Bonus(SkillType.IncreaseDropChance);
         luckyXpChance        += Skills.Bonus(SkillType.LuckyXpChance);
         goldenHeartChance    += Skills.Bonus(SkillType.GoldenHeartChance);
@@ -312,20 +389,17 @@ public class PlayerController : MonoBehaviour
         levelUpHealPercent      += Skills.Bonus(SkillType.LevelUpHealPercent);
         soulBonusPercent        += Skills.Bonus(SkillType.SoulBonusPercent);
         bossHealthReduction     += Skills.Bonus(SkillType.BossHealthReduction);
+        overhealShieldPercent   += Skills.Bonus(SkillType.OverhealShield);
+        lastBreathSpeedPercent  += Skills.Bonus(SkillType.LastBreath);
 
         if (Skills.HasGrant(SkillGrants.Kartograf)) MixerCompass.Ensure();
     }
 
     public void PlayerHealthReg()
     {
-        if (playerHealth >= playerMaxHealth)
-        {
-            playerHealth = playerMaxHealth;
-        }
-        else
-        {
-            playerHealth += playerHealthReg;
-        }
+        // Letzter Atem verdoppelt die Regeneration. Ueber Heal, damit volle
+        // HP mit Ueberheilung in den Schild gehen.
+        Heal(IsLastBreath ? playerHealthReg * 2f : playerHealthReg);
     }
 
     public void TakeDamage(float damage)
@@ -341,6 +415,25 @@ public class PlayerController : MonoBehaviour
         }
 
         float finalDamage = damage * Mathf.Pow(0.9f, playerArmor);
+        if (finalDamage <= 0f) return;
+
+        TryShockwave();
+
+        // Der Schild aus der Ueberheilung faengt zuerst ab.
+        if (shield > 0f)
+        {
+            float absorbed = Mathf.Min(shield, finalDamage);
+            shield -= absorbed;
+            finalDamage -= absorbed;
+
+            if (finalDamage <= 0f)
+            {
+                isImmune = true;
+                immunityTimer = immunityDuration;
+                UIController.Instance.UpdateHealthSlider();
+                return;
+            }
+        }
 
         if (finalDamage > 0f)
         {
@@ -454,7 +547,7 @@ public class PlayerController : MonoBehaviour
 
             // Skilltree "Wissen ist Heilung".
             if (levelUpHealPercent > 0f)
-                playerHealth = Mathf.Min(playerMaxHealth, playerHealth + playerMaxHealth * levelUpHealPercent / 100f);
+                Heal(playerMaxHealth * levelUpHealPercent / 100f);
 
             UIController.Instance.UpdateHealthSlider();
             currentLevel++;

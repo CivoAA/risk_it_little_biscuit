@@ -347,15 +347,10 @@ MonoBehaviour:
     step: 4
     shape: 3
     price: 50
-    displayName: Zweites Leben
+    displayName: Zaeher Geist
     description: 
     icon: {fileID: 0}
     rewards:
-    - kind: 1
-      stat: 1
-      value: 10
-      grantId: zweites_leben
-      descriptionOverride: 
     - kind: 0
       stat: 1
       value: 20
@@ -641,7 +636,7 @@ MonoBehaviour:
     lane: 1
     step: 2
     shape: 0
-    price: 20
+    price: 1
     displayName: 
     description: 
     icon: {fileID: 0}
@@ -697,10 +692,10 @@ MonoBehaviour:
     description: 
     icon: {fileID: 0}
     rewards:
-    - kind: 0
+    - kind: 1
       stat: 32
       value: 10
-      grantId: bestiarium
+      grantId: kartograf
       descriptionOverride: 
     requires:
     - wissen_unten_2
@@ -723,3 +718,54 @@ MonoBehaviour:
       descriptionOverride: 
     requires:
     - wissen_mitte_3
+  - id: geist_ueberheilung
+    category: 1
+    lane: 0
+    step: 4
+    shape: 4
+    price: 40
+    displayName: Ueberheilung
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 35
+      value: 20
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - geist_oben_2
+  - id: geist_letzter_atem
+    category: 1
+    lane: 2
+    step: 4
+    shape: 2
+    price: 40
+    displayName: Letzter Atem
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 36
+      value: 20
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - geist_unten_2
+  - id: geist_schockwelle
+    category: 1
+    lane: 1
+    step: 5
+    shape: 3
+    price: 60
+    displayName: Schockwelle
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 1
+      stat: 0
+      value: 0
+      grantId: schockwelle
+      descriptionOverride: 
+    requires:
+    - geist_mitte_4

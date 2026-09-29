@@ -31,8 +31,8 @@ public class HPReg : Weapon
             currentCooldown = 2.5f; // läuft auch bei Level -1
         }
 
-        // ► Tick: nur heilen, wenn nicht voll
-        if (regTimer <= 0f && PlayerController.Instance.playerHealth < PlayerController.Instance.playerMaxHealth)
+        // ► Tick: nur heilen, wenn nicht voll (oder der Ueberheilungs-Schild noch Platz hat)
+        if (regTimer <= 0f && PlayerController.Instance.CanReceiveHealing)
         {
             PlayerController.Instance.PlayerHealthReg(); // nimmt den Wert aus playerHealthReg
             UIController.Instance.UpdateHealthSlider();
