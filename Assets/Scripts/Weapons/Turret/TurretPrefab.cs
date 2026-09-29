@@ -18,8 +18,20 @@ public class TurretPrefab : MonoBehaviour
     [Tooltip("Optional: dreht sich zum Ziel, bevor geschossen wird.")]
     [SerializeField] private Transform rotatingPart;
 
+    [Header("Rohr")]
+    [Tooltip("Renderer am Rohr - zeigt kurz das Muendungsfeuer.")]
+    [SerializeField] private SpriteRenderer barrelRenderer;
+    [SerializeField] private Sprite barrelIdle;
+    [SerializeField] private Sprite barrelFire;
+    [SerializeField] private float muzzleFlashTime = 0.07f;
+
+    [Tooltip("Das Projektil startet so weit vor dem Turm - an der Muendung statt in der Kuppel.")]
+    [SerializeField] private float muzzleDistance = 0.4f;
+
     private float lifeTimer;
     private float shotCounter;
+    private float flashTimer;
+    private SpriteFlipbook[] looks;
 
     void Start()
     {
@@ -35,6 +47,7 @@ public class TurretPrefab : MonoBehaviour
         }
 
         lifeTimer = weapon.CurrentDuration;
+        looks = GetComponentsInChildren<SpriteFlipbook>();
 
         // Erster Schuss ohne volle Wartezeit, sonst wirkt der Turm tot
         shotCounter = 0.2f;
@@ -49,6 +62,9 @@ public class TurretPrefab : MonoBehaviour
         }
 
         lifeTimer -= Time.deltaTime;
+        foreach (SpriteFlipbook look in looks) look.SetLifeLeft(lifeTimer);
+        UpdateMuzzleFlash();
+
         if (lifeTimer <= 0f)
         {
             Destroy(gameObject);
@@ -63,6 +79,14 @@ public class TurretPrefab : MonoBehaviour
 
         Shoot(target);
         shotCounter = Mathf.Max(0.05f, weapon.CurrentStats.AttackSpeed);
+    }
+
+    private void UpdateMuzzleFlash()
+    {
+        if (flashTimer <= 0f) return;
+        flashTimer -= Time.deltaTime;
+        if (flashTimer <= 0f && barrelRenderer != null && barrelIdle != null)
+            barrelRenderer.sprite = barrelIdle;
     }
 
     private float Range
@@ -91,7 +115,16 @@ public class TurretPrefab : MonoBehaviour
             rotatingPart.rotation = Quaternion.Euler(0f, 0f, angle);
         }
 
-        GameObject shot = Instantiate(projectilePrefab, transform.position, Quaternion.Euler(0f, 0f, angle));
+        if (barrelRenderer != null && barrelFire != null)
+        {
+            barrelRenderer.sprite = barrelFire;
+            flashTimer = muzzleFlashTime;
+        }
+
+        Vector3 muzzle = rotatingPart != null ? rotatingPart.position : transform.position;
+        muzzle += (Vector3)(direction.normalized * muzzleDistance);
+
+        GameObject shot = Instantiate(projectilePrefab, muzzle, Quaternion.Euler(0f, 0f, angle));
 
         Scene gameScene = RunScene.Current;
         if (gameScene.IsValid() && gameScene.isLoaded)

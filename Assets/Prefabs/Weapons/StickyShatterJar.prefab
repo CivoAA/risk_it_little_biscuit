@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 702312843976881027}
   - component: {fileID: 6419143523182925928}
+  - component: {fileID: 1406221814532913221}
   m_Layer: 0
   m_Name: StickyShatterJar
   m_TagString: Untagged
@@ -79,10 +80,10 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1682636205
   m_SortingLayer: 2
-  m_SortingOrder: -1
+  m_SortingOrder: 2
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.7}
+  m_Sprite: {fileID: 1942220566804324058, guid: 3874d2020064457d972a7a98cb752e36, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -91,3 +92,24 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &1406221814532913221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2231739409520687622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc50626105934462ad03c4f1e8868e2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpriteFlipbook
+  frames:
+  - {fileID: 1942220566804324058, guid: 3874d2020064457d972a7a98cb752e36, type: 3}
+  - {fileID: 1672388313031876421, guid: 3874d2020064457d972a7a98cb752e36, type: 3}
+  - {fileID: 3024679718883729596, guid: 3874d2020064457d972a7a98cb752e36, type: 3}
+  - {fileID: 4296888792736582253, guid: 3874d2020064457d972a7a98cb752e36, type: 3}
+  fps: 12
+  randomStart: 1
+  fadeIn: 0.12
+  fadeOut: 0.3

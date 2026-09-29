@@ -24,6 +24,7 @@ public class VortexPrefab : MonoBehaviour
     [SerializeField] private float spinSpeed = 180f;
 
     private float lifeTimer;
+    private SpriteFlipbook look;   // Grafik + Ausblenden, siehe Tools/waffen_modelle.py
     private float tickCounter;
 
     void Start()
@@ -40,6 +41,7 @@ public class VortexPrefab : MonoBehaviour
         }
 
         lifeTimer = weapon.CurrentDuration;
+        look = GetComponent<SpriteFlipbook>();
         transform.localScale = Vector3.one
             * weapon.CurrentStats.range
             * PlayerController.Instance.AOERange;
@@ -56,6 +58,7 @@ public class VortexPrefab : MonoBehaviour
         transform.Rotate(0f, 0f, spinSpeed * Time.deltaTime);
 
         lifeTimer -= Time.deltaTime;
+        if (look != null) look.SetLifeLeft(lifeTimer);
         if (lifeTimer <= 0f)
         {
             Destroy(gameObject);

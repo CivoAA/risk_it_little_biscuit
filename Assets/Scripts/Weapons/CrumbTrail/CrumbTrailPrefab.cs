@@ -12,6 +12,7 @@ public class CrumbTrailPrefab : MonoBehaviour
     public List<Enemy> enemiesInRange = new List<Enemy>();
 
     private float lifeTimer;
+    private SpriteFlipbook look;   // Grafik + Ausblenden, siehe Tools/waffen_modelle.py
     private float tickCounter;
 
     void Start()
@@ -28,6 +29,7 @@ public class CrumbTrailPrefab : MonoBehaviour
         }
 
         lifeTimer = weapon.CurrentDuration;
+        look = GetComponent<SpriteFlipbook>();
         transform.localScale = Vector3.one
             * weapon.CurrentStats.range
             * PlayerController.Instance.AOERange;
@@ -43,6 +45,7 @@ public class CrumbTrailPrefab : MonoBehaviour
         }
 
         lifeTimer -= Time.deltaTime;
+        if (look != null) look.SetLifeLeft(lifeTimer);
         if (lifeTimer <= 0f)
         {
             Destroy(gameObject);

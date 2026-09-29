@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1942357429736099941}
   - component: {fileID: 5518237018274900945}
   - component: {fileID: 8321151816880327823}
+  - component: {fileID: 919279763086904542}
   m_Layer: 0
   m_Name: VortexPrefab
   m_TagString: Untagged
@@ -83,7 +84,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: -1
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 4467382399352183153, guid: 172176b6d60d401889adbb29824afa1c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -145,4 +146,29 @@ MonoBehaviour:
   enemiesInRange: []
   pullSpeed: 4
   deadZone: 0.25
-  spinSpeed: 180
+  spinSpeed: 0
+--- !u!114 &919279763086904542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5032096153979561519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc50626105934462ad03c4f1e8868e2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpriteFlipbook
+  frames:
+  - {fileID: 4467382399352183153, guid: 172176b6d60d401889adbb29824afa1c, type: 3}
+  - {fileID: 2807772678826817250, guid: 172176b6d60d401889adbb29824afa1c, type: 3}
+  - {fileID: 4229148513097289395, guid: 172176b6d60d401889adbb29824afa1c, type: 3}
+  - {fileID: 4382422524439196035, guid: 172176b6d60d401889adbb29824afa1c, type: 3}
+  - {fileID: 3760621875285482037, guid: 172176b6d60d401889adbb29824afa1c, type: 3}
+  - {fileID: 2848097771257846133, guid: 172176b6d60d401889adbb29824afa1c, type: 3}
+  - {fileID: 4265377990234647740, guid: 172176b6d60d401889adbb29824afa1c, type: 3}
+  - {fileID: 4367343376953244895, guid: 172176b6d60d401889adbb29824afa1c, type: 3}
+  fps: 12
+  randomStart: 1
+  fadeIn: 0.12
+  fadeOut: 0.3

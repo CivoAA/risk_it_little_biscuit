@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4148577190099489487}
   - component: {fileID: 3579327431578316118}
   - component: {fileID: 1301596447424050933}
+  - component: {fileID: 4976773004523276134}
   m_Layer: 0
   m_Name: StickyShatterPuddle
   m_TagString: Untagged
@@ -83,7 +84,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: -1
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 1660621809174576963, guid: ced5bfd2c3f74e08af772d495797362a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -143,3 +144,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StickyShatterEvoPrefab
   weapon: {fileID: 0}
   enemiesInRange: []
+--- !u!114 &4976773004523276134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4913825698700667614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc50626105934462ad03c4f1e8868e2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpriteFlipbook
+  frames:
+  - {fileID: 1660621809174576963, guid: ced5bfd2c3f74e08af772d495797362a, type: 3}
+  - {fileID: 2724326392285637188, guid: ced5bfd2c3f74e08af772d495797362a, type: 3}
+  - {fileID: 1521486418685400834, guid: ced5bfd2c3f74e08af772d495797362a, type: 3}
+  - {fileID: 4410088563777462464, guid: ced5bfd2c3f74e08af772d495797362a, type: 3}
+  - {fileID: 2889941201604632972, guid: ced5bfd2c3f74e08af772d495797362a, type: 3}
+  - {fileID: 1314003535294525926, guid: ced5bfd2c3f74e08af772d495797362a, type: 3}
+  fps: 8
+  randomStart: 1
+  fadeIn: 0.12
+  fadeOut: 0.3
