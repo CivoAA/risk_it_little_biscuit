@@ -230,6 +230,20 @@ public static class Shop
         store.Load();
     }
 
+    /// <summary>
+    /// Loescht den Spielstand auf der Platte und laedt leer neu. Nur fuer
+    /// <see cref="SaveReset"/> (Optionen -> SPIEL -> Spielstand zuruecksetzen).
+    /// In der Sandbox bleibt die Datei liegen.
+    /// </summary>
+    public static void ResetProgress()
+    {
+        Init();
+        if (!sandbox && System.IO.File.Exists(store.SavePath)) System.IO.File.Delete(store.SavePath);
+        initialized = false;
+        Init();
+        RaiseChanged();
+    }
+
     private static ShopStore Store
     {
         get

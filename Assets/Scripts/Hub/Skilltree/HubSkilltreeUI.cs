@@ -4,29 +4,32 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// ---------------------------------------------------------------------------
-///  DER SKILLTREE IM HUB.
+///  DER SKILLTREE IM HUB - im Stil von "UI 2.0" wie Optionen, Pause, Level-Up
+///  und die Kapsel: dunkle Karte, Titelband, Holzknoepfe, 480x270-Seite mit
+///  ganzzahliger Skalierung (<see cref="OptionsKit"/>).
 ///
-///  Das Fenster ist der Rahmen: Titelschild, die vier Kategorien links, das
-///  grosse Feld in der Mitte und die Beschreibungskarte rechts. Die Knoten im
-///  Feld baut <see cref="HubSkilltreeGraph"/> - der Aufbau steht also nicht hier,
-///  sondern dort.
+///  Aufbau (Seitenpixel):
+///    Titelband   SKILLTREE
+///    Kopfzeile   Baum des Charakters · gelernt 14/43 [====]    ◆ 12 SKILLPUNKTE
+///    links       die vier Kategorien - die gewaehlte traegt ihre Farbe und
+///                greift wie ein Reiter ins Feld
+///    Mitte       Banner mit dem Pfadnamen, darunter der Baum (HubSkilltreeGraph)
+///    rechts      der Knoten unter der Maus bzw. der gewaehlte: Form, Name,
+///                Wirkung, Preis/Zustand
+///    Fussleiste  ZURUECK              Tastenhinweis              LERNEN
 ///
-///  WO DER INHALT HERKOMMT:
-///    Nicht mehr aus dem Inspector. Kategorien, Farben, Texte und Knoten stehen
-///    im Baum-Asset des Charakters unter Assets/Resources/SkillTrees/. Gebaut
-///    wird das unter Tools -> Skilltree -> Editor. Beim Oeffnen holt sich das
-///    Fenster ueber Skills.Sync() den Baum des gerade gewaehlten Charakters -
-///    jeder Charakter hat also seinen eigenen.
+///  Klick auf einen Knoten waehlt ihn, LERNEN (oder ein zweiter Klick, Enter)
+///  kauft ihn. So kauft niemand aus Versehen im Vorbeiklicken.
 ///
-///  Der Hintergrund um das Papier herum ist bewusst nur eine ruhige Flaeche -
-///  die Pixelart dafuer kommt nach und wird dann in "Hintergrundbild"
-///  eingetragen; sie legt sich ueber die vollen 320x180.
+///  WO DER INHALT HERKOMMT: aus dem Baum-Asset des Charakters unter
+///  Assets/Resources/SkillTrees/ (Tools -> Skilltree -> Editor). Beim Oeffnen
+///  holt sich das Fenster ueber Skills.Sync() den Baum des gewaehlten Charakters.
 ///
-///  Bedienung: Klick, W/S bzw. Hoch/Runter fuer die Kategorie, A/D bzw.
-///  Links/Rechts und Mausrad zum Scrollen im Baum, ESC zum Schliessen. Hover und
-///  Klick rechnet dieses Skript wie die Levelauswahl selbst aus der Mausposition
-///  aus (UpdateHover/ClickAt) - wer einen Knopf ergaenzt, muss ihn in BEIDEN
-///  Methoden eintragen, sonst reagiert er nicht.
+///  Bedienung: Maus, W/S bzw. Hoch/Runter = Kategorie, A/D bzw. Links/Rechts =
+///  Knoten, Enter/Leertaste = lernen, Mausrad = Baum scrollen, E/ESC = zu.
+///
+///  Das Fenster haengt als Komponente am Skilltree-Objekt im Hub (siehe
+///  <see cref="HubSkilltreeTrigger"/>); gebaut wird es erst beim Oeffnen.
 /// ---------------------------------------------------------------------------
 [DisallowMultipleComponent]
 public class HubSkilltreeUI : MonoBehaviour
@@ -34,855 +37,95 @@ public class HubSkilltreeUI : MonoBehaviour
     /// <summary>Steht offen? Der Hub sperrt solange seine Interaktionen.</summary>
     public static bool IsOpen { get; private set; }
 
-    [Header("Beschriftungen")]
-    [SerializeField] private string titleLabel = "SKILLTREE";
-    [SerializeField] private string backLabel  = "ZURÜCK";
-    [Tooltip("Nur wenn eine Kategorie im Baum-Asset keinen eigenen Pfadnamen hat. {0} = Name.")]
-    [SerializeField] private string pathLabelFormat = "{0}PFAD";
-    [Tooltip("Die Punkteanzeige unten rechts. {0} = Anzahl.")]
-    [SerializeField] private string pointsFormat = "SKILLPUNKTE: {0}";
-    [Tooltip("Unter der Beschreibung eines Knotens. {0} = Preis.")]
-    [SerializeField] private string priceFormat = "KOSTET {0} SP";
-    [SerializeField] private string boughtLabel = "GEKAUFT";
-    [SerializeField] private string lockedLabel = "GESPERRT";
-
-    [Header("Grafik")]
-    [Tooltip("Die Pixelart hinter dem Papier - legt sich ueber die vollen 320x180. " +
-             "Leer = ruhige Flaeche in Hintergrundfarbe.")]
-    [SerializeField] private Sprite backgroundSprite;
-    [Tooltip("Optionaler gepixelter Rahmen fuer die grosse Papierflaeche. " +
-             "Leer = Flaeche mit 1px-Rahmen.")]
-    [SerializeField] private Sprite panelSprite;
-    [Tooltip("Pixelschrift. Hier gehoert Jersey10 hin - ThaleahFat/PixelArtFont kennen " +
-             "keine Umlaute, und GLÜCK wie ZURÜCK blieben darin lueckenhaft. " +
-             "Leer = die zuerst gefundene Pixelschrift, sonst TMP-Standard.")]
-    [SerializeField] private TMP_FontAsset font;
-
-    [Header("Kaesten (Pixel im 320x180-Bild, Nullpunkt links oben)")]
-    [SerializeField] private Vector2 referenceResolution = new Vector2(320f, 180f);
-    [Tooltip("Die grosse Papierflaeche.")]
-    [SerializeField] private Rect panelArea = new Rect(8f, 10f, 304f, 142f);
-    [Tooltip("Das Titelschild. Es liegt bewusst ueber der Oberkante des Papiers.")]
-    [SerializeField] private Rect titleArea = new Rect(94f, 3f, 132f, 22f);
-    [Tooltip("Der oberste Kategorieknopf. Die anderen ruecken um Hoehe plus Abstand nach.")]
-    [SerializeField] private Rect categoryArea = new Rect(14f, 38f, 76f, 22f);
-    [SerializeField] private float categoryGap = 6f;
-    [Tooltip("Das grosse Feld in der Mitte.")]
-    [SerializeField] private Rect contentArea = new Rect(96f, 30f, 142f, 118f);
-    [Tooltip("Das farbige Banner oben im grossen Feld.")]
-    [SerializeField] private Rect contentHeaderArea = new Rect(104f, 35f, 126f, 14f);
-    [Tooltip("Die Flaeche darunter - hier baut sich der Baum auf und wird gescrollt.")]
-    [SerializeField] private Rect contentBodyArea = new Rect(100f, 54f, 134f, 90f);
-    [SerializeField] private Rect detailArea = new Rect(244f, 30f, 62f, 118f);
-    [SerializeField] private Rect backArea = new Rect(8f, 156f, 62f, 16f);
-    [Tooltip("Die Skillpunkte, unten rechts neben dem Zurueck-Knopf.")]
-    [SerializeField] private Rect pointsArea = new Rect(198f, 156f, 106f, 16f);
-
-    [Header("Beschreibungskarte (Pixel im 320x180-Bild)")]
-    [SerializeField] private Rect detailOrbArea   = new Rect(259f, 38f, 32f, 32f);
-    [SerializeField] private Rect detailNameArea  = new Rect(246f, 74f, 58f, 12f);
-    [SerializeField] private Rect detailDivider1  = new Rect(251f, 90f, 48f, 1f);
-    [SerializeField] private Rect detailTextArea  = new Rect(248f, 96f, 54f, 28f);
-    [SerializeField] private Rect detailDivider2  = new Rect(251f, 128f, 48f, 1f);
-    [SerializeField] private Rect detailQuoteArea = new Rect(248f, 133f, 54f, 14f);
-
-    [Header("Schriftgroessen")]
-    [SerializeField] private float titleFontSize      = 13f;
-    [SerializeField] private float categoryFontSize   = 8f;
-    [SerializeField] private float headerFontSize     = 8f;
-    [SerializeField] private float detailNameFontSize = 9f;
-    [SerializeField] private float detailFontSize     = 6f;
-    [SerializeField] private float buttonFontSize     = 7f;
-    [SerializeField] private float detailLineSpacing  = 4f;
-
-    [Header("Farben")]
-    [Tooltip("Der Rand neben den 320x180, wenn der Bildschirm nicht 16:9 ist - und " +
-             "die Flaeche hinter dem Papier, solange es dafuer keine Pixelart gibt.")]
-    [SerializeField] private Color backdropColor = new Color32(0x21, 0x1A, 0x1C, 0xFF);
-    [SerializeField] private Color panelFill     = new Color32(0xE8, 0xDE, 0xC2, 0xFF);
-    [Tooltip("Das Feld in der Mitte und die Karte rechts liegen etwas heller im Papier.")]
-    [SerializeField] private Color panelInset    = new Color32(0xF0, 0xE6, 0xCC, 0xFF);
-    [SerializeField] private Color panelBorder   = new Color32(0xC0, 0xAE, 0x8A, 0xFF);
-    [SerializeField] private Color panelInk      = new Color32(0x33, 0x26, 0x2B, 0xFF);
-    [SerializeField] private Color panelInkDim   = new Color32(0x6B, 0x51, 0x47, 0xFF);
-    [Tooltip("Schrift auf gesaettigten Flaechen - dunkle Farben bekommen sie, helle " +
-             "wie Gelb stattdessen panelInk. Siehe InkOn().")]
-    [SerializeField] private Color textOnColor   = new Color32(0xF4, 0xEC, 0xD8, 0xFF);
-    [SerializeField] private Color backFill      = new Color32(0x4A, 0x36, 0x2E, 0xFF);
-    [SerializeField] private Color backBorder    = new Color32(0x2A, 0x1E, 0x1A, 0xFF);
-    [SerializeField] private Color backInk       = new Color32(0xE8, 0xDE, 0xC2, 0xFF);
-    [Tooltip("So viel dunkler wird aus der Kategoriefarbe ihr Rahmen. 0 = gleiche Farbe.")]
-    [SerializeField, Range(0f, 1f)] private float borderShade = 0.42f;
-    [Tooltip("So viel heller wird ein Knopf unter der Maus. 0 = kein Hover.")]
-    [SerializeField, Range(0f, 1f)] private float hoverLift = 0.25f;
-
-    [Header("Titelschild")]
-    [Tooltip("Das Schild liegt etwas waermer als das Papier - sonst verschwindet es darin.")]
-    [SerializeField] private Color plaqueFill  = new Color32(0xE2, 0xD2, 0xA8, 0xFF);
-    [SerializeField] private Color plaqueShade = new Color32(0xB0, 0x93, 0x63, 0xFF);
-    [Tooltip("Nieten, Kreuze und die Raute vor den Skillpunkten.")]
-    [SerializeField] private Color accentGold  = new Color32(0xC8, 0xA2, 0x4A, 0xFF);
-
-    [Header("Zierrat")]
-    [Tooltip("Wie dunkel die Schatten unter Papier, Schild und Knoepfen liegen. 0 = flach.")]
-    [SerializeField, Range(0f, 1f)] private float shadowStrength = 0.34f;
-    [Tooltip("Wie deckend der Hub hinter dem Fenster abgedeckt wird. 1 = gar nicht mehr zu sehen.")]
-    [SerializeField, Range(0f, 1f)] private float backdropOpacity = 0.93f;
-    [Tooltip("Das warme Licht hinter dem Papier - Fackelschein, solange es keine Pixelart gibt.")]
-    [SerializeField] private Color glowColor = new Color32(0xFF, 0xC2, 0x7A, 0xFF);
-    [SerializeField, Range(0f, 0.6f)] private float glowStrength = 0.17f;
-    [Tooltip("Wie dunkel die Ecken auslaufen.")]
-    [SerializeField, Range(0f, 1f)] private float vignetteStrength = 0.55f;
-    [Tooltip("Wie deutlich das Papierkorn zu sehen ist. 0 = glatte Flaeche.")]
-    [SerializeField, Range(0f, 1f)] private float grainStrength = 0.30f;
-    [Tooltip("Licht pulsiert, Funken blinken, der gewaehlte Knopf atmet. Aus = alles steht still.")]
-    [SerializeField] private bool animateDecor = true;
-
-    [Header("Farbe der Fusszeile in der Karte")]
-    [SerializeField] private Color priceInk  = new Color32(0x8A, 0x64, 0x15, 0xFF);
-    [SerializeField] private Color ownedInk  = new Color32(0x4C, 0x7A, 0x3A, 0xFF);
-    [SerializeField] private Color lockedInk = new Color32(0x9A, 0x4A, 0x3C, 0xFF);
-
-    [Header("Steuerung")]
-    [SerializeField] private KeyCode closeKey = KeyCode.Escape;
-
-    [Header("Sound")]
+    [Header("Ton")]
     [SerializeField] private AudioClip openClip;
     [SerializeField] private AudioClip closeClip;
     [SerializeField] private AudioClip moveClip;
-    [Tooltip("Leer lassen - wird beim Start automatisch geholt oder angelegt.")]
+    [Tooltip("Leer = wird auf diesem Objekt angelegt.")]
     [SerializeField] private AudioSource sfxSource;
     [SerializeField, Range(0f, 1f)] private float sfxVolume = 1f;
 
-    // ------------------------------------------------------------ Laufzeit
+    // ==================================================================
+    //  Masse (Seitenpixel, Ursprung oben links)
+    // ==================================================================
 
-    /// <summary>Die Teile eines Kategorieknopfes, die beim Umschalten die Farbe wechseln.</summary>
-    class Tab
+    const int CardX = 16, CardY = 38, CardW = 448, CardH = 212;
+    const int RibbonY = 26;
+    static readonly RectInt Content = new RectInt(CardX - 12, RibbonY, CardW + 24, CardY + CardH - RibbonY);
+
+    const int InX = CardX + 14, InW = CardW - 28;
+    const int TopY = 52;
+    const int BodyY = 74, BodyH = 144;
+
+    const int CatX = InX, CatW = 84, CatH = 30, CatGap = 4;
+
+    const int FieldX = CatX + CatW + 4, FieldW = 220;
+    const int BannerH = 16;
+    static readonly RectInt TreeArea = new RectInt(FieldX + 2, BodyY + BannerH + 6, FieldW - 4, BodyH - BannerH - 8);
+
+    const int DetX = FieldX + FieldW + 6, DetW = InX + InW - DetX;
+    const int PlateS = 40;
+
+    const int FootY = 226, FootH = 18, BackW = 76;
+
+    // ==================================================================
+    //  Zustand
+    // ==================================================================
+
+    class CatView
     {
-        public GameObject Go;
-        public Image Glow;       // heller Saum, nur um den gewaehlten Knopf
-        public Image Fill;       // Papier oder Kategoriefarbe
-        public Image Sheen;      // helle Linie unter der Oberkante
-        public Image Shade;      // dunkle Linie ueber der Unterkante
-        public Image Outer;      // Rahmen in Kategoriefarbe
-        public Image Inner;      // duenne Linie innen
-        public Image IconFill;   // Kaestchen hinter dem Symbol
-        public Image IconEdge;
-        public Image Icon;
-        public TextMeshProUGUI Label;
-        public TextMeshProUGUI LabelShadow;
-        public Image Pointer;    // der Zeiger, der rechts heraussteht
-        public Image PointerEdge;
+        public RectTransform Root;
+        public Image Back, IconImg;
+        public TextMeshProUGUI Label, Count;
     }
 
-    /// <summary>Ein blinkender Funke. Die Farbe kommt aus der Kategorie, die Deckkraft aus der Zeit.</summary>
-    class Twinkle
-    {
-        public Image Image;
-        public float Phase;
-        public float Base;       // Grunddeckkraft, bevor das Blinken darauf geht
-    }
-
-    /// <summary>Was gerade unter der Maus liegt.</summary>
-    enum Hit { None, Category, Back, ScrollLeft, ScrollRight, Node }
-
-    readonly List<Tab> tabs = new List<Tab>();
-    readonly List<Twinkle> twinkles = new List<Twinkle>();
-    readonly HubPixelSprites pixels = new HubPixelSprites();
-    readonly SkilltreeSkin skin = new SkilltreeSkin();
-
-    GameObject root;
-    RectTransform screen;
-    Transform tabHolder;
-    Image glowImage, vignetteImage;
-    Image headerFill, headerSheen, headerShade, headerLineTop, headerLineBottom;
-    Image headerTipLeft, headerTipRight, headerTipLeftEdge, headerTipRightEdge;
-    Image headerPlusLeft, headerPlusRight;
-    Image orbShadow, orbRing, orbFill, orbGloss;
-    Image divider1a, divider1b, dividerPlus1;
-    Image divider2a, divider2b, dividerPlus2;
-    Image backFillImage, backSheen, backShade, backArrow, pointsGem;
-    RectTransform backArrowRect;
-    TextMeshProUGUI headerText, headerTextShadow;
-    TextMeshProUGUI detailName, detailNameShadow, detailText, detailQuote, pointsText;
-
-    /// <summary>Rundungen - hier stehen sie einmal, damit das Fenster eine Handschrift hat.</summary>
-    const int PanelRadius  = 3;   // das grosse Papier
-    const int FieldRadius  = 2;   // Felder, Schild, Knoepfe
-    const int SmallRadius  = 1;   // Kaestchen und duenne Innenlinien
-    const int BannerTip    = 6;   // Breite der Spitzen am Banner
+    GameObject canvasGo;
+    RectTransform page;
+    CanvasScaler scaler;
+    Vector2Int lastScreen;
+    TMP_FontAsset textFont, pixelFont;
 
     HubSkilltreeGraph graph;
-    SkillShapeSprites orbShapes;
+    SkillShapeSprites detailShapes;
 
-    /// <summary>Die Kategorien des gerade gezeigten Baums - Reihenfolge wie SkillCategory.</summary>
     readonly List<SkillBranchDef> branches = new List<SkillBranchDef>();
-    SkillTreeDef shownTree;
+    readonly List<CatView> cats = new List<CatView>();
+    int selectedBranch, hoverBranch = -1;
+    SkillNodeDef selectedNode;
 
-    Hit hover = Hit.None;
-    int hoverTab = -1;
+    TextMeshProUGUI treeName, learnedText, pointsText, bannerText, bannerShadow;
+    Image learnedFill, banner, bannerIcon;
 
-    int selected;
+    Image plateImg, shapeShadow, shapeFill, shapeGloss, shapeOutline, plateIcon, statusIcon;
+    TextMeshProUGUI detailName, detailSub, detailDesc, statusText;
+    Image detailRule;
+    SkinButton learnButton;
+
     int openedOnFrame = -1;
-    bool built;
 
     SkillBranchDef Current =>
-        (selected >= 0 && selected < branches.Count) ? branches[selected] : null;
-
-    // ---------------------------------------------------------------- Aufbau
-
-    void Awake()
-    {
-        EnsureSfxSource();
-        Build();
-    }
-
-    void EnsureSfxSource()
-    {
-        if (sfxSource == null) sfxSource = GetComponent<AudioSource>();
-        if (sfxSource == null) sfxSource = gameObject.AddComponent<AudioSource>();
-        sfxSource.playOnAwake = false;
-        sfxSource.loop = false;
-    }
-
-    void OnDestroy()
-    {
-        pixels.Dispose();
-        skin.Dispose();
-        orbShapes?.Dispose();
-        graph?.Dispose();
-
-        Skills.Changed -= OnSkillsChanged;
-
-        // Szenenwechsel mit offenem Fenster: die Sperre wieder abmelden, sonst
-        // reagiert der Hub beim naechsten Mal auf gar nichts mehr.
-        if (!IsOpen) return;
-        IsOpen = false;
-        HubUI.PopModal();
-    }
-
-    void Build()
-    {
-        if (built) return;
-        built = true;
-
-        // FindTextFont, nicht FindPixelFont: ZURÜCK und GLÜCK brauchen Umlaute,
-        // und die kennt ThaleahFat nicht.
-        if (font == null) font = PixelUI.FindTextFont();
-        orbShapes = new SkillShapeSprites();
-
-        var canvasGO = new GameObject("SkilltreeCanvas", typeof(Canvas), typeof(CanvasScaler));
-        canvasGO.transform.SetParent(transform, false);
-        int uiLayer = LayerMask.NameToLayer("UI");
-        if (uiLayer >= 0) canvasGO.layer = uiLayer;
-
-        var canvas = canvasGO.GetComponent<Canvas>();
-        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        // ueber Textbox (100), Konsole (120), Shop (130) und Levelauswahl (135)
-        canvas.sortingOrder = 140;
-
-        var scaler = canvasGO.GetComponent<CanvasScaler>();
-        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        scaler.referenceResolution = referenceResolution;
-        scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand;
-
-        root = HubUiKit.NewRect("Skilltree", canvasGO.transform);
-        HubUiKit.Stretch((RectTransform)root.transform);
-
-        // Deckt den Hub zu. Klicks faengt nicht diese Flaeche ab, sondern die
-        // Trefferpruefung in Update - solange das Fenster offen ist, kommt im
-        // Hub ohnehin nichts an (HubUI.PushModal).
-        //
-        // Nicht ganz deckend: ein Hauch vom Hub bleibt stehen, damit das Fenster
-        // ueber dem Raum schwebt und nicht auf einer leeren Platte liegt.
-        var backdrop = HubUiKit.NewImage("Backdrop", root.transform, null,
-                                         Alpha(backdropColor, backdropOpacity));
-        HubUiKit.Stretch((RectTransform)backdrop.transform);
-
-        // Die Vignette geht ueber das ganze Fenster, nicht nur ueber die 320x180 -
-        // sonst bliebe bei breiten Bildschirmen aussen eine harte Kante stehen.
-        // Sie ist die eine Flaeche, die weich sein darf.
-        vignetteImage = HubUiKit.NewImage("Vignette", root.transform, skin.Vignette,
-                                          new Color(0f, 0f, 0f, vignetteStrength));
-        vignetteImage.preserveAspect = false;
-        HubUiKit.Stretch((RectTransform)vignetteImage.transform);
-
-        // Feste 320x180, mittig - nur so sitzt jeder ausgemessene Pixel da, wo
-        // er hingehoert, egal wie gross das Fenster ist.
-        screen = (RectTransform)HubUiKit.NewRect("Screen", root.transform).transform;
-        screen.anchorMin = screen.anchorMax = screen.pivot = new Vector2(0.5f, 0.5f);
-        screen.sizeDelta = referenceResolution;
-        screen.anchoredPosition = Vector2.zero;
-
-        if (backgroundSprite != null)
-        {
-            var bg = HubUiKit.NewImage("Background", screen, backgroundSprite, Color.white);
-            HubUiKit.Stretch((RectTransform)bg.transform);
-            bg.preserveAspect = false;
-        }
-        else
-        {
-            // Warmes Licht hinter dem Papier - der Fackelschein aus dem
-            // Konzeptbild, bis es die Pixelart dafuer gibt.
-            glowImage = HubUiKit.NewImage("Glow", screen, skin.Glow,
-                                          Alpha(glowColor, glowStrength));
-            glowImage.preserveAspect = false;
-            var gr = (RectTransform)glowImage.transform;
-            gr.anchorMin = gr.anchorMax = gr.pivot = new Vector2(0.5f, 0.5f);
-            gr.sizeDelta = new Vector2(380f, 300f);
-            gr.anchoredPosition = new Vector2(0f, 10f);
-        }
-
-        BuildPanel();
-        BuildTitle();
-
-        // Die Kategorieknoepfe haengen am Baum und werden darum erst in Open()
-        // gefuellt. Der Behaelter steht schon, damit die Reihenfolge der Ebenen
-        // stimmt: Knoepfe vor dem Feld, Feld vor der Karte.
-        GameObject tabRoot = HubUiKit.NewRect("Kategorien", screen);
-        // Muss ueber die vollen 320x180 gehen: die Knoepfe werden mit
-        // HubUiKit.Place gesetzt, und das rechnet ab der linken OBEREN Ecke des
-        // Elters. Ohne das sitzt der Behaelter als Punkt in der Bildmitte - die
-        // Knoepfe landen dann mitten im Baum, und die Trefferpruefung in
-        // UpdateHover sucht sie trotzdem links (TabArea).
-        HubUiKit.Stretch((RectTransform)tabRoot.transform);
-        tabHolder = tabRoot.transform;
-
-        BuildContent();
-        BuildDetail();
-        BuildBackButton();
-
-        // Das Feld mit den Knoten kommt zuletzt, damit die Blaetterpfeile ueber
-        // dem Rahmen liegen.
-        graph = new HubSkilltreeGraph(screen, contentBodyArea, new HubSkilltreeGraph.Palette
-        {
-            PanelFill   = panelFill,
-            PanelInset  = panelInset,
-            PanelBorder = panelBorder,
-            PanelInk    = panelInk,
-            PanelInkDim = panelInkDim,
-            TextOnColor = textOnColor,
-            BorderShade = borderShade,
-            HoverLift   = hoverLift,
-            Shadow      = shadowStrength,
-        }, skin, font);
-
-        Skills.Changed += OnSkillsChanged;
-
-        root.SetActive(false);
-    }
-
-    /// <summary>
-    /// Das grosse Papier. Von unten nach oben: Schatten, Flaeche, Korn, die
-    /// helle Oberkante und die dunkle Unterkante darin, dann die doppelte
-    /// Aussenlinie und zuletzt die vier Eckwinkel.
-    /// </summary>
-    void BuildPanel()
-    {
-        if (panelSprite != null)
-        {
-            Image img = HubUiKit.NewImage("Panel", screen, panelSprite, Color.white);
-            img.preserveAspect = false;
-            HubUiKit.Place((RectTransform)img.transform, panelArea);
-            return;
-        }
-
-        Round("PanelShadow", screen, Offset(panelArea, 2f, 3f),
-              Alpha(Color.black, shadowStrength), PanelRadius);
-
-        Round("Panel", screen, panelArea, panelFill, PanelRadius);
-
-        if (grainStrength > 0f)
-        {
-            Rect grainArea = Inset(panelArea, 3f);
-            Image grain = HubUiKit.NewImage("PanelGrain", screen,
-                skin.Grain(Mathf.RoundToInt(grainArea.width),
-                           Mathf.RoundToInt(grainArea.height), 7331),
-                Alpha(panelBorder, grainStrength));
-            grain.preserveAspect = false;
-            HubUiKit.Place((RectTransform)grain.transform, grainArea);
-        }
-
-        // Erhaben: hell an der Oberkante, dunkel an der Unterkante.
-        CapTop("PanelLight", screen, Inset(panelArea, 1f), Lift(panelFill, 0.6f), FieldRadius);
-        CapBottom("PanelShade", screen, Inset(panelArea, 1f), Shade(panelFill, 0.14f), FieldRadius);
-
-        Round("PanelEdge", screen, panelArea, Shade(panelBorder, 0.52f), PanelRadius, edge: true);
-        Round("PanelEdgeInner", screen, Inset(panelArea, 3f), panelBorder, FieldRadius, edge: true);
-
-        Brackets("PanelCorner", screen, Inset(panelArea, 6f), panelBorder);
-    }
-
-    /// <summary>
-    /// Das Titelschild. Es liegt bewusst ueber der Oberkante des Papiers und ist
-    /// darum das einzige Stueck, das einen eigenen, waermeren Ton bekommt -
-    /// sonst wuerde es im Papier verschwinden.
-    /// </summary>
-    void BuildTitle()
-    {
-        Round("TitleShadow", screen, Offset(titleArea, 2f, 3f),
-              Alpha(Color.black, Mathf.Min(1f, shadowStrength + 0.1f)), FieldRadius);
-
-        Round("Title", screen, titleArea, plaqueFill, FieldRadius);
-        CapTop("TitleLight", screen, Inset(titleArea, 1f), Lift(plaqueFill, 0.55f), FieldRadius);
-
-        // Zwei Pixel dunkler Sockel unten - das gibt dem Schild Dicke.
-        Fill("TitleBase", screen,
-             new Rect(titleArea.x + 2f, titleArea.yMax - 4f, titleArea.width - 4f, 2f),
-             plaqueShade);
-
-        Round("TitleEdge", screen, titleArea, panelInk, FieldRadius, edge: true);
-        Round("TitleEdgeInner", screen, Inset(titleArea, 2f), plaqueShade, SmallRadius, edge: true);
-
-        // Vier Nieten in den Ecken.
-        foreach (Vector2 p in CornerPoints(Inset(titleArea, 4f), 3f))
-            Raw("TitleStud", screen, new Rect(p.x, p.y, 3f, 3f), skin.Stud, accentGold);
-
-        // Geschnitten statt gedruckt: eine helle Kopie einen Pixel tiefer,
-        // darueber die dunkle Schrift.
-        TextMeshProUGUI shadow = HubUiKit.NewText("TitleLabelLight", screen, font, titleFontSize,
-                                                  Lift(plaqueFill, 0.75f), TextAlignmentOptions.Center);
-        HubUiKit.Place((RectTransform)shadow.transform, Offset(titleArea, 0f, 1f));
-        shadow.text = titleLabel;
-
-        TextMeshProUGUI t = HubUiKit.NewText("TitleLabel", screen, font, titleFontSize,
-                                             panelInk, TextAlignmentOptions.Center);
-        HubUiKit.Place((RectTransform)t.transform, titleArea);
-        t.text = titleLabel;
-
-        // Die beiden Kreuze links und rechts der Schrift.
-        float plusY = titleArea.y + (titleArea.height - 5f) * 0.5f;
-        Plus("TitlePlusLeft", screen, new Rect(titleArea.x + 9f, plusY, 5f, 5f), accentGold);
-        Plus("TitlePlusRight", screen, new Rect(titleArea.xMax - 14f, plusY, 5f, 5f), accentGold);
-    }
-
-    /// <summary>
-    /// Legt die Kategorieknoepfe neu an. Laeuft bei jedem Oeffnen, weil Farbe und
-    /// Beschriftung aus dem Baum des Charakters kommen - und der kann zwischen
-    /// zwei Besuchen ein anderer sein.
-    /// </summary>
-    void BuildTabs()
-    {
-        foreach (Tab t in tabs)
-        {
-            if (t.Go != null) Destroy(t.Go);
-        }
-        tabs.Clear();
-
-        for (int i = 0; i < branches.Count; i++)
-        {
-            SkillBranchDef c = branches[i];
-            var tab = new Tab();
-            Rect area = TabArea(i);
-
-            tab.Go = HubUiKit.NewRect("Kategorie " + (i + 1), tabHolder);
-            HubUiKit.Place((RectTransform)tab.Go.transform, Snap(area));
-
-            // Alles darin rechnet ab der linken oberen Ecke des Knopfes.
-            var local = new Rect(0f, 0f, area.width, area.height);
-
-            // Der Schatten liegt ganz unten und bewegt sich nie - er gehoert zum
-            // Knopf, nicht zu seinem Zustand.
-            Round("Shadow", tab.Go.transform, Offset(local, 2f, 2f),
-                  Alpha(Color.black, shadowStrength * 0.8f), FieldRadius);
-
-            tab.Glow  = Round("Glow", tab.Go.transform, Grow(local, 1f), panelFill,
-                              PanelRadius, edge: true);
-            tab.Fill  = Round("Fill", tab.Go.transform, local, panelInset, FieldRadius);
-            tab.Sheen = CapTop("Sheen", tab.Go.transform, Inset(local, 1f), panelFill, FieldRadius);
-            tab.Shade = CapBottom("Shade", tab.Go.transform, Inset(local, 1f), panelBorder, FieldRadius);
-            tab.Outer = Round("Outer", tab.Go.transform, local, c.Color, FieldRadius, edge: true);
-            tab.Inner = Round("Inner", tab.Go.transform, Inset(local, 2f), c.Color,
-                              SmallRadius, edge: true);
-
-            var iconBox = new Rect(4f, (area.height - 14f) * 0.5f, 14f, 14f);
-            tab.IconFill = Round("IconBox", tab.Go.transform, iconBox, panelFill, SmallRadius);
-            tab.IconEdge = Round("IconEdge", tab.Go.transform, iconBox, c.Color,
-                                 SmallRadius, edge: true);
-            tab.Icon = HubUiKit.NewImage("Icon", tab.Go.transform,
-                                         c.Icon != null ? c.Icon : pixels.Disc, c.Color);
-            // Genau 12x12 - so gross sind die gemalten Kategoriesymbole, und nur
-            // in ihrer echten Groesse bleiben sie scharf.
-            Place(tab.Icon, Inset(iconBox, 1f));
-
-            // Erst der Schatten der Schrift, dann die Schrift - sonst steht sie
-            // auf gesaettigtem Blau oder Rot wie aufgeklebt da.
-            tab.LabelShadow = HubUiKit.NewText("LabelShadow", tab.Go.transform, font,
-                                               categoryFontSize, Color.clear,
-                                               TextAlignmentOptions.Left);
-            HubUiKit.Place((RectTransform)tab.LabelShadow.transform,
-                           Snap(new Rect(23f, 1f, area.width - 26f, area.height)));
-            tab.LabelShadow.text = c.Name;
-
-            tab.Label = HubUiKit.NewText("Label", tab.Go.transform, font, categoryFontSize,
-                                         panelInk, TextAlignmentOptions.Left);
-            HubUiKit.Place((RectTransform)tab.Label.transform,
-                           Snap(new Rect(22f, 0f, area.width - 26f, area.height)));
-            tab.Label.text = c.Name;
-
-            // Der Zeiger steht rechts heraus und zeigt auf das grosse Feld. Die
-            // dunkle Kopie dahinter setzt ihn vom Papier ab.
-            // Dieselbe Groesse wie der Zeiger, nur einen Pixel versetzt - in
-            // einen breiteren Kasten gezogen wuerde aus dem Pfeil ein Kamm.
-            tab.PointerEdge = HubUiKit.NewImage("PointerEdge", tab.Go.transform,
-                                                pixels.ArrowRight, Alpha(Color.black, 0.3f));
-            tab.PointerEdge.preserveAspect = false;
-            Place(tab.PointerEdge, new Rect(area.width + 1f, (area.height - 9f) * 0.5f + 1f, 5f, 9f));
-
-            tab.Pointer = HubUiKit.NewImage("Pointer", tab.Go.transform, pixels.ArrowRight, c.Color);
-            tab.Pointer.preserveAspect = false;
-            Place(tab.Pointer, new Rect(area.width, (area.height - 9f) * 0.5f, 5f, 9f));
-
-            tabs.Add(tab);
-        }
-    }
-
-    /// <summary>
-    /// Das grosse Feld und das Banner darin. Das Feld liegt VERTIEFT im Papier -
-    /// darum die dunkle Linie oben und die helle unten, also genau andersherum
-    /// als bei den Knoepfen.
-    /// </summary>
-    void BuildContent()
-    {
-        Round("Content", screen, contentArea, panelInset, FieldRadius);
-        CapTop("ContentDepthTop", screen, Inset(contentArea, 1f),
-               Shade(panelBorder, 0.18f), FieldRadius);
-        CapBottom("ContentDepthBottom", screen, Inset(contentArea, 1f),
-                  Lift(panelFill, 0.7f), FieldRadius);
-        Round("ContentFrame", screen, contentArea, panelBorder, FieldRadius, edge: true);
-        Brackets("ContentCorner", screen, Inset(contentArea, 3f), Shade(panelBorder, 0.2f));
-
-        BuildHeaderBanner();
-    }
-
-    /// <summary>
-    /// Das Banner ueber dem Baum: ein Band mit zwei Spitzen, wie im Konzeptbild.
-    /// Der Koerper bleibt eckig, damit die Spitzen fugenlos anschliessen - die
-    /// waagerechten Linien oben und unten laufen einfach durch.
-    /// </summary>
-    void BuildHeaderBanner()
-    {
-        Rect a = contentHeaderArea;
-        int h = Mathf.Max(3, Mathf.RoundToInt(a.height));
-
-        var leftTip  = new Rect(a.x - BannerTip, a.y, BannerTip, h);
-        var rightTip = new Rect(a.xMax, a.y, BannerTip, h);
-
-        // Schatten unter Band und Spitzen.
-        Fill("HeaderShadow", screen, Offset(a, 1f, 2f), Alpha(Color.black, shadowStrength * 0.7f));
-        Raw("HeaderShadowL", screen, Offset(leftTip, 1f, 2f),
-            skin.Tip(BannerTip, h, false, false), Alpha(Color.black, shadowStrength * 0.7f));
-        Raw("HeaderShadowR", screen, Offset(rightTip, 1f, 2f),
-            skin.Tip(BannerTip, h, true, false), Alpha(Color.black, shadowStrength * 0.7f));
-
-        headerTipLeft  = Raw("HeaderTipL", screen, leftTip,
-                             skin.Tip(BannerTip, h, false, false), Color.white);
-        headerTipRight = Raw("HeaderTipR", screen, rightTip,
-                             skin.Tip(BannerTip, h, true, false), Color.white);
-
-        headerFill = Fill("Header", screen, a, Color.white);
-
-        // Der Verlauf im Band: hell unter der Oberkante, dunkel ueber der Unterkante.
-        headerSheen = Fill("HeaderSheen", screen, new Rect(a.x, a.y + 1f, a.width, 1f), Color.white);
-        headerShade = Fill("HeaderShade", screen, new Rect(a.x, a.yMax - 2f, a.width, 1f), Color.white);
-
-        headerLineTop    = Fill("HeaderLineTop", screen, new Rect(a.x, a.y, a.width, 1f), Color.white);
-        headerLineBottom = Fill("HeaderLineBottom", screen,
-                                new Rect(a.x, a.yMax - 1f, a.width, 1f), Color.white);
-
-        headerTipLeftEdge  = Raw("HeaderTipLEdge", screen, leftTip,
-                                 skin.Tip(BannerTip, h, false, true), Color.white);
-        headerTipRightEdge = Raw("HeaderTipREdge", screen, rightTip,
-                                 skin.Tip(BannerTip, h, true, true), Color.white);
-
-        float plusY = a.y + (a.height - 5f) * 0.5f;
-        headerPlusLeft  = Plus("HeaderPlusLeft", screen,
-                               new Rect(a.x + 5f, plusY, 5f, 5f), Color.white);
-        headerPlusRight = Plus("HeaderPlusRight", screen,
-                               new Rect(a.xMax - 10f, plusY, 5f, 5f), Color.white);
-
-        headerTextShadow = HubUiKit.NewText("HeaderLabelShadow", screen, font, headerFontSize,
-                                            Color.white, TextAlignmentOptions.Center);
-        HubUiKit.Place((RectTransform)headerTextShadow.transform, Offset(a, 0f, 1f));
-
-        headerText = HubUiKit.NewText("HeaderLabel", screen, font, headerFontSize,
-                                      Color.white, TextAlignmentOptions.Center);
-        HubUiKit.Place((RectTransform)headerText.transform, a);
-    }
-
-    void BuildDetail()
-    {
-        Round("Detail", screen, detailArea, panelInset, FieldRadius);
-        CapTop("DetailDepthTop", screen, Inset(detailArea, 1f),
-               Shade(panelBorder, 0.18f), FieldRadius);
-        CapBottom("DetailDepthBottom", screen, Inset(detailArea, 1f),
-                  Lift(panelFill, 0.7f), FieldRadius);
-        Round("DetailFrame", screen, detailArea, panelBorder, FieldRadius, edge: true);
-        Brackets("DetailCorner", screen, Inset(detailArea, 3f), Shade(panelBorder, 0.2f));
-
-        // Die Formen sind 15x15 Pixel gross. Auf 32 gezogen wuerde jeder
-        // Texturpixel 2,13 Bildpunkte breit - die Kante der Kugel liefe dann
-        // ungleich dick. Also auf das naechste ganze Vielfache heruntergehen
-        // und mittig in den ausgemessenen Kasten setzen: der Kasten bleibt, wo
-        // er ist, die Kugel wird nur sauber.
-        Rect orb = SnapToShape(detailOrbArea);
-
-        // Alle vier Lagen in derselben Groesse, wie bei den Knoten im Baum:
-        // Schatten, Fuellung, Glanz, Kante. Die Kante liegt obenauf und schaut
-        // nur am Rand hervor - so passt sie zu jeder Form.
-        orbShadow = Raw("OrbShadow", screen, Offset(orb, 1f, 2f),
-                        orbShapes.Fill(SkillShape.Kreis),
-                        Alpha(Color.black, shadowStrength * 0.8f));
-        orbFill  = Raw("Orb",      screen, orb, orbShapes.Fill(SkillShape.Kreis), Color.white);
-        orbGloss = Raw("OrbGloss", screen, orb, orbShapes.Gloss(SkillShape.Kreis), Color.white);
-        orbRing  = Raw("OrbRing",  screen, orb, orbShapes.Outline(SkillShape.Kreis), Color.white);
-
-        // Funken um die Kugel - sie blinken in AnimateDecor. Jeder bekommt genau
-        // die Groesse seines Sprites, sonst franst das Kreuz aus.
-        AddTwinkle(new Rect(orb.x - 5f, orb.y + 1f, 7f, 7f), skin.Sparkle, 0.9f);
-        AddTwinkle(new Rect(orb.xMax + 1f, orb.y + 3f, 3f, 3f), skin.Spark, 0.7f);
-        AddTwinkle(new Rect(orb.x - 2f, orb.yMax - 6f, 3f, 3f), skin.Spark, 0.6f);
-
-        TextMeshProUGUI nameShadow = HubUiKit.NewText("DetailNameShadow", screen, font,
-                                                      detailNameFontSize, Alpha(panelFill, 0.9f),
-                                                      TextAlignmentOptions.Center);
-        HubUiKit.Place((RectTransform)nameShadow.transform, Offset(detailNameArea, 0f, 1f));
-
-        detailName = HubUiKit.NewText("DetailName", screen, font, detailNameFontSize,
-                                      panelInk, TextAlignmentOptions.Center);
-        HubUiKit.Place((RectTransform)detailName.transform, detailNameArea);
-        detailNameShadow = nameShadow;
-
-        Divider("Divider1", detailDivider1, out divider1a, out divider1b, out dividerPlus1);
-
-        detailText = HubUiKit.NewText("DetailText", screen, font, detailFontSize,
-                                      panelInkDim, TextAlignmentOptions.Top);
-        HubUiKit.Place((RectTransform)detailText.transform, detailTextArea);
-        detailText.lineSpacing = detailLineSpacing;
-
-        Divider("Divider2", detailDivider2, out divider2a, out divider2b, out dividerPlus2);
-
-        detailQuote = HubUiKit.NewText("DetailQuote", screen, font, detailFontSize,
-                                       panelInkDim, TextAlignmentOptions.Top);
-        HubUiKit.Place((RectTransform)detailQuote.transform, detailQuoteArea);
-        detailQuote.lineSpacing = detailLineSpacing;
-    }
-
-    /// <summary>
-    /// Zurueck-Knopf und Punkteanzeige. Beide sitzen unter dem Papier auf dem
-    /// Hintergrund und bekommen darum dasselbe dunkle Holz - so lesen sie sich
-    /// als ein Paar und nicht als zwei lose Teile.
-    /// </summary>
-    void BuildBackButton()
-    {
-        Round("BackShadow", screen, Offset(backArea, 2f, 2f),
-              Alpha(Color.black, shadowStrength), FieldRadius);
-
-        backFillImage = Round("Back", screen, backArea, backFill, FieldRadius);
-        backSheen = CapTop("BackSheen", screen, Inset(backArea, 1f),
-                           Lift(backFill, 0.3f), FieldRadius);
-        backShade = CapBottom("BackShade", screen, Inset(backArea, 1f),
-                              Shade(backFill, 0.35f), FieldRadius);
-        Round("BackFrame", screen, backArea, backBorder, FieldRadius, edge: true);
-
-        backArrow = Raw("BackArrow", screen,
-                        new Rect(backArea.x + 6f, backArea.y + (backArea.height - 7f) * 0.5f, 7f, 7f),
-                        skin.ArrowLeft, backInk);
-        backArrowRect = (RectTransform)backArrow.transform;
-
-        TextMeshProUGUI label = HubUiKit.NewText("BackLabel", screen, font, buttonFontSize,
-                                                 backInk, TextAlignmentOptions.Left);
-        HubUiKit.Place((RectTransform)label.transform,
-                       new Rect(backArea.x + 17f, backArea.y, backArea.width - 22f, backArea.height));
-        label.text = backLabel;
-
-        // Die Punkteanzeige bekommt dieselbe Platte - rechtsbuendig als
-        // Gegengewicht zum Knopf links.
-        Round("PointsShadow", screen, Offset(pointsArea, 2f, 2f),
-              Alpha(Color.black, shadowStrength), FieldRadius);
-        Round("PointsPlate", screen, pointsArea, backFill, FieldRadius);
-        CapTop("PointsSheen", screen, Inset(pointsArea, 1f), Lift(backFill, 0.3f), FieldRadius);
-        CapBottom("PointsShade", screen, Inset(pointsArea, 1f), Shade(backFill, 0.35f), FieldRadius);
-        Round("PointsFrame", screen, pointsArea, backBorder, FieldRadius, edge: true);
-
-        pointsGem = Raw("PointsGem", screen,
-                        new Rect(pointsArea.x + 6f, pointsArea.y + (pointsArea.height - 7f) * 0.5f, 7f, 7f),
-                        skin.Gem, accentGold);
-
-        pointsText = HubUiKit.NewText("Points", screen, font, buttonFontSize,
-                                      backInk, TextAlignmentOptions.Right);
-        HubUiKit.Place((RectTransform)pointsText.transform, Inset(pointsArea, 6f));
-    }
-
-    /// <summary>Legt einen blinkenden Funken an. Die Farbe setzt RefreshDetail.</summary>
-    void AddTwinkle(Rect area, Sprite sprite, float strength)
-    {
-        Image img = Raw("Sparkle", screen, area, sprite, Color.clear);
-        twinkles.Add(new Twinkle { Image = img, Phase = twinkles.Count * 1.9f, Base = strength });
-    }
-
-    // ----------------------------------------------------------- Bausteine
-
-    /// <summary>
-    /// Setzt ein Stueck auf ganze Pixel. Die Kaesten aus dem Inspector sind
-    /// ganzzahlig - aber sobald etwas MITTIG in einen davon soll, faellt eine
-    /// halbe heraus: (22-9)/2 ist 6,5. Ein Pfeil auf einem halben Pixel wird
-    /// beim Zeichnen ungleich abgetastet, und aus der Spitze wird ein Kamm.
-    /// Darum geht in diesem Fenster jedes Bild durch diese Zeile.
-    /// </summary>
-    static Rect Snap(Rect r) =>
-        new Rect(Mathf.Round(r.x), Mathf.Round(r.y),
-                 Mathf.Max(1f, Mathf.Round(r.width)), Mathf.Max(1f, Mathf.Round(r.height)));
-
-    static void Place(Image img, Rect area) =>
-        HubUiKit.Place((RectTransform)img.transform, Snap(area));
-
-    Image Fill(string name, Transform parent, Rect area, Color color)
-    {
-        Image img = HubUiKit.NewImage(name, parent, null, color);
-        Place(img, area);
-        return img;
-    }
-
-    Image Plus(string name, Transform parent, Rect area, Color color)
-    {
-        Image img = HubUiKit.NewImage(name, parent, pixels.Plus, color);
-        img.preserveAspect = false;
-        Place(img, area);
-        return img;
-    }
-
-    /// <summary>Ein Sprite, das genau in seinen Kasten gezogen wird - ohne 9-Slice.</summary>
-    Image Raw(string name, Transform parent, Rect area, Sprite sprite, Color color)
-    {
-        Image img = HubUiKit.NewImage(name, parent, sprite, color);
-        img.preserveAspect = false;
-        Place(img, area);
-        return img;
-    }
-
-    /// <summary>
-    /// Eine Flaeche oder ein Rahmen mit abgeschraegten Ecken. Der Kern des
-    /// ganzen Fensters: alles, was nicht strichduenn ist, kommt hier durch.
-    /// </summary>
-    Image Round(string name, Transform parent, Rect area, Color color, int radius, bool edge = false)
-    {
-        Image img = HubUiKit.NewImage(name, parent,
-                                      edge ? skin.Edge(radius) : skin.Fill(radius), color);
-        img.type = Image.Type.Sliced;
-        img.pixelsPerUnitMultiplier = 1f;
-        img.preserveAspect = false;
-        Place(img, area);
-        return img;
-    }
-
-    /// <summary>Die helle Linie an der Oberkante - macht aus einer Flaeche einen Knopf.</summary>
-    Image CapTop(string name, Transform parent, Rect area, Color color, int radius)
-    {
-        Image img = HubUiKit.NewImage(name, parent, skin.CapTop(radius), color);
-        img.type = Image.Type.Sliced;
-        img.pixelsPerUnitMultiplier = 1f;
-        img.preserveAspect = false;
-        Place(img, area);
-        return img;
-    }
-
-    /// <summary>Die dunkle Linie an der Unterkante.</summary>
-    Image CapBottom(string name, Transform parent, Rect area, Color color, int radius)
-    {
-        Image img = HubUiKit.NewImage(name, parent, skin.CapBottom(radius), color);
-        img.type = Image.Type.Sliced;
-        img.pixelsPerUnitMultiplier = 1f;
-        img.preserveAspect = false;
-        Place(img, area);
-        return img;
-    }
-
-    /// <summary>Vier Eckwinkel an den Ecken eines Kastens - der Zierrat auf dem Papier.</summary>
-    void Brackets(string name, Transform parent, Rect area, Color color)
-    {
-        Vector2[] p = CornerPoints(area, 5f);
-        for (int i = 0; i < 4; i++)
-            Raw(name + i, parent, new Rect(p[i].x, p[i].y, 5f, 5f), skin.Bracket(i), color);
-    }
-
-    /// <summary>
-    /// Die vier Ecken eines Kastens fuer ein Stueck der Groesse <paramref name="size"/>,
-    /// im Uhrzeigersinn ab links oben - genau so zaehlt SkilltreeSkin.Bracket.
-    /// </summary>
-    static Vector2[] CornerPoints(Rect r, float size)
-    {
-        return new[]
-        {
-            new Vector2(r.x, r.y),
-            new Vector2(r.xMax - size, r.y),
-            new Vector2(r.xMax - size, r.yMax - size),
-            new Vector2(r.x, r.yMax - size),
-        };
-    }
-
-    /// <summary>Trennlinie mit einem Kreuz in der Mitte - die Linie bricht dafuer auf.</summary>
-    void Divider(string name, Rect area, out Image left, out Image right, out Image plus)
-    {
-        float half = Mathf.Max(0f, (area.width - 9f) * 0.5f);
-        left  = Fill(name + "Left", screen, new Rect(area.x, area.y, half, area.height), panelBorder);
-        right = Fill(name + "Right", screen,
-                     new Rect(area.xMax - half, area.y, half, area.height), panelBorder);
-        plus  = Plus(name + "Plus", screen,
-                     new Rect(area.center.x - 2.5f, area.y - 2f, 5f, 5f), accentGold);
-    }
-
-    static Rect Inset(Rect r, float by) =>
-        new Rect(r.x + by, r.y + by, r.width - by * 2f, r.height - by * 2f);
-
-    static Rect Grow(Rect r, float by) => Inset(r, -by);
-
-    static Rect Offset(Rect r, float dx, float dy) =>
-        new Rect(r.x + dx, r.y + dy, r.width, r.height);
-
-    /// <summary>
-    /// Zieht einen Kasten auf das naechste ganze Vielfache der Formgroesse
-    /// zusammen und setzt ihn mittig zurueck. Nur so bleibt eine 15x15-Form
-    /// pixelgenau; sonst wird jeder Texturpixel ein krummes Stueck breit und
-    /// die Kante laeuft ungleich dick.
-    /// </summary>
-    static Rect SnapToShape(Rect r)
-    {
-        float s = SkillShapeSprites.Size;
-        float k = Mathf.Max(1f, Mathf.Floor(Mathf.Min(r.width, r.height) / s));
-        float side = s * k;
-
-        return new Rect(Mathf.Round(r.center.x - side * 0.5f),
-                        Mathf.Round(r.center.y - side * 0.5f), side, side);
-    }
-
-    /// <summary>Dieselbe Farbe mit anderer Deckkraft.</summary>
-    static Color Alpha(Color c, float a) => new Color(c.r, c.g, c.b, a);
-
-    Rect TabArea(int index) =>
-        new Rect(categoryArea.x,
-                 categoryArea.y + index * (categoryArea.height + categoryGap),
-                 categoryArea.width, categoryArea.height);
-
-    // --------------------------------------------------------------- Oeffnen
+        selectedBranch >= 0 && selectedBranch < branches.Count ? branches[selectedBranch] : null;
+
+    // ==================================================================
+    //  Oeffnen / Schliessen
+    // ==================================================================
 
     public void Open()
     {
         if (IsOpen) return;
-
-        Build();
+        IsOpen = true;
+        openedOnFrame = Time.frameCount;
 
         // Der Baum haengt am gewaehlten Charakter - erst holen, dann anzeigen.
         Skills.Sync();
-        LoadTree();
+        selectedBranch = Mathf.Clamp(selectedBranch, 0, 3);
+        selectedNode = null;
+        hoverBranch = -1;
 
-        IsOpen = true;
-        openedOnFrame = Time.frameCount;
-        root.SetActive(true);
+        Build();
 
-        hover = Hit.None;
-        hoverTab = -1;
-        Refresh();
+        Skills.Changed += OnSkillsChanged;
+        Loc.LanguageChanged += OnLanguageChanged;
 
         HubUI.PushModal();
         HubUI.Instance.SetPlayerFrozen(true);
@@ -894,7 +137,10 @@ public class HubSkilltreeUI : MonoBehaviour
     {
         if (!IsOpen) return;
         IsOpen = false;
-        root.SetActive(false);
+
+        Teardown();
+        Skills.Changed -= OnSkillsChanged;
+        Loc.LanguageChanged -= OnLanguageChanged;
 
         HubUI.PopModal();
         HubUI.Instance.SetPlayerFrozen(false);
@@ -902,491 +148,654 @@ public class HubSkilltreeUI : MonoBehaviour
         PlaySfx(closeClip);
     }
 
-    /// <summary>Uebernimmt den aktiven Baum in die Knoepfe und ins Feld.</summary>
-    void LoadTree()
+    void OnDestroy()
     {
-        SkillTreeDef tree = Skills.ActiveTree;
+        Skills.Changed -= OnSkillsChanged;
+        Loc.LanguageChanged -= OnLanguageChanged;
+        Teardown();
 
-        // Derselbe Baum wie beim letzten Mal? Dann reicht der Zustand.
-        if (tree == shownTree && tabs.Count == branches.Count && tabs.Count > 0) return;
+        // Szenenwechsel mit offenem Fenster: die Sperre wieder abmelden, sonst
+        // reagiert der Hub beim naechsten Mal auf gar nichts mehr.
+        if (!IsOpen) return;
+        IsOpen = false;
+        HubUI.PopModal();
+    }
 
-        shownTree = tree;
+    void Teardown()
+    {
+        graph?.Dispose();
+        graph = null;
+        detailShapes?.Dispose();
+        detailShapes = null;
+        cats.Clear();
 
-        branches.Clear();
-        if (tree != null) branches.AddRange(tree.Branches);
+        if (canvasGo != null) Destroy(canvasGo);
+        canvasGo = null;
+        page = null;
+    }
 
-        selected = Mathf.Clamp(selected, 0, Mathf.Max(0, branches.Count - 1));
-
-        BuildTabs();
-        graph.Show(Current);
+    void OnLanguageChanged()
+    {
+        if (!IsOpen) return;
+        SkillNodeDef keep = selectedNode;
+        Teardown();
+        Build();
+        if (keep != null && keep.Branch == Current) SelectNode(keep);
     }
 
     void OnSkillsChanged()
     {
-        if (!IsOpen) return;
+        if (!IsOpen || page == null) return;
         graph.Refresh();
         Refresh();
     }
 
-    // -------------------------------------------------------------- Laufzeit
+    // ==================================================================
+    //  Aufbau
+    // ==================================================================
 
-    void Update()
+    void Build()
     {
-        if (!IsOpen) return;
+        textFont = PixelUI.FindTextFont();
+        pixelFont = PixelUI.FindPixelFont();
+        detailShapes = new SkillShapeSprites(HubSkilltreeGraph.Shape);
 
-        AnimateDecor();
+        // Eigenes Wurzelobjekt: das Skilltree-Objekt im Hub ist skaliert und
+        // traegt Sprite und Zone - die Leinwand gehoert nicht daran.
+        canvasGo = new GameObject("SkilltreeCanvas");
+        int uiLayer = LayerMask.NameToLayer("UI");
+        if (uiLayer >= 0) canvasGo.layer = uiLayer;
 
-        // Das [E], mit dem das Fenster aufgeht, darf nicht gleich durchklicken
-        if (Time.frameCount == openedOnFrame) return;
+        // Ueber Textbox (100), Konsole (120), Shop (130) und Levelauswahl (135).
+        page = OptionsKit.CreatePage(canvasGo, 140, 0.86f, out scaler);
 
-        UpdateHover();
+        OptionsKit.Img("Card", page, CardX, CardY, CardW, CardH, GameHudSkin.Card, true);
+        OptionsKit.Ribbon(page, CardX + CardW / 2f, RibbonY, Loc.Get("ui.skilltree.title", "SKILLTREE"),
+                          pixelFont, textFont);
 
-        if (Input.GetMouseButtonDown(0)) ClickAt(hover, hoverTab);
+        branches.Clear();
+        SkillTreeDef tree = Skills.ActiveTree;
+        if (tree != null) branches.AddRange(tree.Branches);
+        selectedBranch = Mathf.Clamp(selectedBranch, 0, Mathf.Max(0, branches.Count - 1));
 
-        if (Input.GetKeyDown(closeKey)) { Close(); return; }
+        BuildTop(tree);
+        BuildField();
+        BuildCategories();
+        BuildDetail();
+        BuildFooter();
 
-        // Hoch/Runter wechselt die Kategorie, Links/Rechts scrollt im Baum -
-        // genau so, wie der Baum aufgebaut ist.
-        if (Input.GetKeyDown(KeyCode.UpArrow)   || Input.GetKeyDown(KeyCode.W)) Move(-1);
-        if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)) Move(+1);
-
-        if (Input.GetKeyDown(KeyCode.LeftArrow)  || Input.GetKeyDown(KeyCode.A)) ScrollTree(-1f);
-        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) ScrollTree(+1f);
-
-        float wheel = Input.mouseScrollDelta.y;
-        if (!Mathf.Approximately(wheel, 0f)) ScrollTree(wheel > 0f ? -1f : +1f);
-    }
-
-    /// <summary>
-    /// Die Mausposition in Pixeln der 320x180-Vorlage, Nullpunkt links oben -
-    /// also in genau denselben Koordinaten, in denen die Kaesten oben stehen.
-    /// </summary>
-    bool MousePixel(out Vector2 pixel)
-    {
-        pixel = default;
-        if (screen == null) return false;
-
-        // Overlay-Canvas: die Kamera ist hier bewusst null.
-        if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                screen, Input.mousePosition, null, out Vector2 local))
-            return false;
-
-        pixel = new Vector2(local.x + referenceResolution.x * 0.5f,
-                            referenceResolution.y * 0.5f - local.y);
-        return true;
-    }
-
-    void UpdateHover()
-    {
-        Hit was = hover;
-        int wasTab = hoverTab;
-
-        hover = Hit.None;
-        hoverTab = -1;
-
-        bool valid = MousePixel(out Vector2 m);
-
-        // Der Graph prueft selbst, ob ein Knoten getroffen ist - er weiss als
-        // Einziger, wie weit gerade gescrollt wurde.
-        bool graphChanged = graph.UpdateHover(valid, m);
-
-        if (valid)
-        {
-            if (backArea.Contains(m)) hover = Hit.Back;
-            else if (graph.Hovered != null) hover = Hit.Node;
-            else if (graph.CanScrollLeft && graph.ScrollLeftArea.Contains(m)) hover = Hit.ScrollLeft;
-            else if (graph.CanScrollRight && graph.ScrollRightArea.Contains(m)) hover = Hit.ScrollRight;
-            else
-            {
-                for (int i = 0; i < branches.Count; i++)
-                {
-                    if (!TabArea(i).Contains(m)) continue;
-                    hover = Hit.Category;
-                    hoverTab = i;
-                    break;
-                }
-            }
-        }
-
-        if (hover != was || hoverTab != wasTab || graphChanged) Refresh();
-    }
-
-    void ClickAt(Hit what, int tab)
-    {
-        switch (what)
-        {
-            case Hit.Category:
-                if (tab != selected) Select(tab);
-                break;
-
-            case Hit.Node:
-                BuyHovered();
-                break;
-
-            case Hit.ScrollLeft:
-                ScrollTree(-1f);
-                break;
-
-            case Hit.ScrollRight:
-                ScrollTree(+1f);
-                break;
-
-            case Hit.Back:
-                Close();
-                break;
-        }
-    }
-
-    void BuyHovered()
-    {
-        bool bought = graph.ClickHovered(out bool hitNode);
-        if (!hitNode) return;
-
-        AudioController ac = AudioController.Instance;
-
-        // Gekauft klingt wie ein Menueklick, abgelehnt wie ein Treffer - denselben
-        // Unterschied macht der Shop auch.
-        if (ac != null) ac.PalySound(bought ? ac.MenuClick : ac.PlayerHit);
-
-        Refresh();
-    }
-
-    void ScrollTree(float steps)
-    {
-        if (!graph.Scroll(steps)) return;
-
-        // Nach dem Scrollen liegt unter der Maus etwas anderes.
-        UpdateHover();
-        Refresh();
-    }
-
-    void Move(int delta)
-    {
-        if (branches.Count == 0) return;
-
-        int next = Mathf.Clamp(selected + delta, 0, branches.Count - 1);
-        if (next == selected) return;
-
-        Select(next);
-    }
-
-    void Select(int index)
-    {
-        selected = index;
-        PlaySfx(moveClip);
+        OptionsKit.Layout(page, scaler, Content);
+        lastScreen = new Vector2Int(Screen.width, Screen.height);
 
         graph.Show(Current);
         Refresh();
     }
 
-    // -------------------------------------------------------------- Anzeige
+    void BuildTop(SkillTreeDef tree)
+    {
+        // Jeder Charakter hat seinen eigenen Baum - darum steht hier, wessen es ist.
+        treeName = OptionsKit.Label("Tree", page, InX + 2, TopY, 150, 13,
+                                    Characters.DisplayName(Shop.SkinIndex).ToUpperInvariant(), textFont,
+                                    OptionsKit.SizeText, GameHudSkin.Parchment, TextAlignmentOptions.Left);
+
+        // Gelernt: Zahl und Balken, mittig ueber dem Feld.
+        const int barW = 80;
+        int barX = FieldX + FieldW - barW;
+        OptionsKit.Img("LearnedFrame", page, barX, TopY + 3, barW, 8, GameHudSkin.BarFrame, true);
+        learnedFill = OptionsKit.Img("LearnedFill", page, barX + 1, TopY + 4, 0, 6, GameHudSkin.White,
+                                     GameHudSkin.Mint);
+        learnedText = OptionsKit.Label("Learned", page, barX - 124, TopY, 120, 13, "", textFont,
+                                       OptionsKit.SizeText, GameHudSkin.Stone, TextAlignmentOptions.Right);
+
+        // Skillpunkte rechts ueber der Karte.
+        OptionsKit.Img("PointsPlate", page, DetX, TopY - 2, DetW, 16, GameHudSkin.Plate, true);
+        Sprite gem = GameHudSkin.Gem;
+        OptionsKit.Img("Gem", page, DetX + 5, TopY - 2 + Mathf.Floor((16 - gem.rect.height) / 2f),
+                       gem.rect.width, gem.rect.height, gem);
+        pointsText = OptionsKit.Label("Points", page, DetX + 8 + gem.rect.width, TopY - 1, DetW - 12 - gem.rect.width, 13,
+                                      "", textFont, OptionsKit.SizeText, GameHudSkin.Gold, TextAlignmentOptions.Left);
+    }
+
+    void BuildField()
+    {
+        OptionsKit.Img("FieldWell", page, FieldX, BodyY, FieldW, BodyH, GameHudSkin.Well, true);
+
+        banner = OptionsKit.Img("Banner", page, FieldX + 3, BodyY + 3, FieldW - 6, BannerH,
+                                GameHudSkin.TintButton(true), true);
+        bannerIcon = OptionsKit.Img("BannerIcon", page, FieldX + 8, BodyY + 5, 12, 12, null);
+        bannerShadow = OptionsKit.Label("BannerTextShadow", page, FieldX + 3, BodyY + 5, FieldW - 6, 13, "",
+                                        textFont, OptionsKit.SizeText, GameHudSkin.Ink, TextAlignmentOptions.Center);
+        bannerText = OptionsKit.Label("BannerText", page, FieldX + 3, BodyY + 4, FieldW - 6, 13, "", textFont,
+                                      OptionsKit.SizeText, GameHudSkin.Cream, TextAlignmentOptions.Center);
+
+        graph = new HubSkilltreeGraph(page, TreeArea, textFont)
+        {
+            HoverChanged = _ => ShowDetail(),
+            Clicked = OnNodeClicked,
+        };
+    }
+
+    /// <summary>
+    /// Die Kategorien links. Nach dem Feld gebaut, damit die gewaehlte ueber
+    /// dessen Kante greifen kann - so haengt sie wie ein Reiter am Feld.
+    /// </summary>
+    void BuildCategories()
+    {
+        cats.Clear();
+        for (int i = 0; i < branches.Count; i++)
+        {
+            int index = i;
+            SkillBranchDef b = branches[i];
+            var v = new CatView();
+
+            v.Root = OptionsKit.Rect("Cat_" + b.Id, page, CatX, BodyY + i * (CatH + CatGap), CatW, CatH);
+            v.Back = v.Root.gameObject.AddComponent<Image>();
+            v.Back.type = Image.Type.Sliced;
+            v.Back.raycastTarget = true;
+
+            OptionsKit.Img("Socket", v.Root, 5, 6, 18, 18, GameHudSkin.Socket, true);
+            v.IconImg = OptionsKit.Img("Icon", v.Root, 0, 0, 1, 1, b.Icon);
+            FitIcon(v.IconImg, b.Icon, 5, 6, 18, 18, 1);
+
+            v.Label = OptionsKit.Label("Name", v.Root, 27, 3, CatW - 29, 13, b.Name.ToUpperInvariant(), textFont,
+                                       OptionsKit.SizeText, GameHudSkin.Cream, TextAlignmentOptions.Left);
+            v.Label.overflowMode = TextOverflowModes.Ellipsis;
+            v.Count = OptionsKit.Label("Count", v.Root, 27, 14, CatW - 29, 13, "", textFont,
+                                       OptionsKit.SizeText, GameHudSkin.Stone, TextAlignmentOptions.Left);
+
+            PointerRelay relay = v.Root.gameObject.AddComponent<PointerRelay>();
+            relay.Enter = () => { hoverBranch = index; RefreshCategories(); ShowDetail(); };
+            relay.Exit = () =>
+            {
+                if (hoverBranch != index) return;
+                hoverBranch = -1;
+                RefreshCategories();
+                ShowDetail();
+            };
+            relay.Down = () =>
+            {
+                if (index == selectedBranch) return;
+                OptionsKit.PlayClick();
+                SelectBranch(index);
+            };
+
+            cats.Add(v);
+        }
+    }
+
+    void BuildDetail()
+    {
+        OptionsKit.Img("DetailWell", page, DetX, BodyY, DetW, BodyH, GameHudSkin.Well, true);
+
+        int px = DetX + (DetW - PlateS) / 2, py = BodyY + 7;
+        plateImg = OptionsKit.Img("Plate", page, px, py, PlateS, PlateS, GameHudSkin.IconPlate(false));
+
+        int s = HubSkilltreeGraph.Shape, o = (PlateS - s) / 2;
+        shapeShadow = OptionsKit.Img("ShapeShadow", page, px + o, py + o + 2, s, s, null);
+        shapeFill = OptionsKit.Img("ShapeFill", page, px + o, py + o, s, s, null);
+        shapeGloss = OptionsKit.Img("ShapeGloss", page, px + o, py + o, s, s, null);
+        shapeOutline = OptionsKit.Img("ShapeOutline", page, px + o, py + o, s, s, null);
+        plateIcon = OptionsKit.Img("PlateIcon", page, px, py, 1, 1, null);
+
+        int tx = DetX + 5, tw = DetW - 10;
+        detailName = OptionsKit.Label("Name", page, tx, py + PlateS + 4, tw, 26, "", textFont,
+                                      OptionsKit.SizeText, GameHudSkin.Gold, TextAlignmentOptions.Top);
+        detailName.textWrappingMode = TextWrappingModes.Normal;
+        detailSub = OptionsKit.Label("Sub", page, tx, py + PlateS + 29, tw, 13, "", textFont,
+                                     OptionsKit.SizeText, GameHudSkin.Stone, TextAlignmentOptions.Center);
+
+        detailRule = OptionsKit.Img("Rule", page, DetX + 5, py + PlateS + 44, DetW - 10, 2, GameHudSkin.Rule, true);
+
+        detailDesc = OptionsKit.Label("Desc", page, tx, py + PlateS + 48, tw, 40, "", textFont,
+                                      OptionsKit.SizeText, GameHudSkin.Parchment, TextAlignmentOptions.TopLeft);
+        detailDesc.textWrappingMode = TextWrappingModes.Normal;
+        detailDesc.richText = true;
+
+        int sy = BodyY + BodyH - 17;
+        OptionsKit.Img("StatusPlate", page, DetX + 3, sy, DetW - 6, 14, GameHudSkin.Plate, true);
+        statusIcon = OptionsKit.Img("StatusIcon", page, DetX + 7, sy, 1, 1, null);
+        statusText = OptionsKit.Label("Status", page, DetX + 19, sy + 1, DetW - 24, 13, "", textFont,
+                                      OptionsKit.SizeText, GameHudSkin.Cream, TextAlignmentOptions.Left);
+        statusText.overflowMode = TextOverflowModes.Ellipsis;
+    }
+
+    void BuildFooter()
+    {
+        SkinButton.Create(page, InX, FootY, BackW, FootH, Loc.Get("ui.skilltree.back", "ZURÜCK"), textFont,
+                          SkinButton.Kind.Wood, Close);
+
+        OptionsKit.Label("Hint", page, InX + BackW + 6, FootY + 2, DetX - InX - BackW - 12, 13,
+                         Loc.Get("ui.skilltree.hint", "W/S PFAD   A/D KNOTEN   ENTER LERNEN"), textFont,
+                         OptionsKit.SizeText, GameHudSkin.Stone, TextAlignmentOptions.Center);
+
+        learnButton = SkinButton.Create(page, DetX, FootY, DetW, FootH, Loc.Get("ui.skilltree.learn", "LERNEN"),
+                                        textFont, SkinButton.Kind.Primary, LearnSelected, GameHudSkin.Gem);
+    }
+
+    // ==================================================================
+    //  Laufzeit
+    // ==================================================================
+
+    void Update()
+    {
+        if (!IsOpen || page == null) return;
+
+        var size = new Vector2Int(Screen.width, Screen.height);
+        if (size != lastScreen)
+        {
+            lastScreen = size;
+            OptionsKit.Layout(page, scaler, Content);
+        }
+
+        graph.Animate(Time.unscaledTime);
+
+        // Das [E], mit dem das Fenster aufgeht, darf es nicht gleich schliessen.
+        if (Time.frameCount == openedOnFrame) return;
+
+        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.E))
+        {
+            OptionsKit.PlayClick();
+            Close();
+            return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) StepBranch(-1);
+        if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)) StepBranch(+1);
+        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) StepNode(-1);
+        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) StepNode(+1);
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter) ||
+            Input.GetKeyDown(KeyCode.Space))
+            LearnSelected();
+
+        float wheel = Input.mouseScrollDelta.y;
+        if (!Mathf.Approximately(wheel, 0f)) graph.Scroll(wheel > 0f ? -1f : 1f);
+    }
+
+    void StepBranch(int delta)
+    {
+        if (branches.Count == 0) return;
+        int next = Mathf.Clamp(selectedBranch + delta, 0, branches.Count - 1);
+        if (next == selectedBranch) return;
+        SelectBranch(next);
+    }
+
+    void StepNode(int delta)
+    {
+        IReadOnlyList<SkillNodeDef> order = graph.Order;
+        if (order.Count == 0) return;
+
+        int i = selectedNode != null ? IndexOf(order, selectedNode) : -1;
+        i = i < 0 ? (delta > 0 ? 0 : order.Count - 1) : Mathf.Clamp(i + delta, 0, order.Count - 1);
+        SelectNode(order[i]);
+        PlaySfx(moveClip);
+    }
+
+    static int IndexOf(IReadOnlyList<SkillNodeDef> list, SkillNodeDef def)
+    {
+        for (int i = 0; i < list.Count; i++) if (list[i] == def) return i;
+        return -1;
+    }
+
+    void SelectBranch(int index)
+    {
+        selectedBranch = index;
+        selectedNode = null;
+        PlaySfx(moveClip);
+        graph.Show(Current);
+        Refresh();
+    }
+
+    void SelectNode(SkillNodeDef node)
+    {
+        selectedNode = node;
+        graph.Selected = node;
+        Refresh();
+    }
+
+    void OnNodeClicked(SkillNodeDef node)
+    {
+        // Zweiter Klick auf den gewaehlten Knoten lernt ihn.
+        if (node == selectedNode && CanLearn(node))
+        {
+            LearnSelected();
+            return;
+        }
+
+        OptionsKit.PlayClick();
+        SelectNode(node);
+    }
+
+    static bool CanLearn(SkillNodeDef node) =>
+        node != null && !node.IsStart && !Skills.IsUnlocked(node) && Skills.CanUnlock(node);
+
+    void LearnSelected()
+    {
+        SkillNodeDef node = selectedNode;
+        if (node == null || node.IsStart || Skills.IsUnlocked(node)) return;
+
+        bool bought = Skills.TryUnlock(node);
+
+        // Gelernt klingt wie ein Menueklick, abgelehnt wie ein Treffer - wie im Shop.
+        AudioController ac = AudioController.Instance;
+        if (ac != null) ac.PalySound(bought ? ac.MenuClick : ac.PlayerHit);
+
+        graph.Refresh();
+        Refresh();
+    }
+
+    // ==================================================================
+    //  Anzeige
+    // ==================================================================
 
     void Refresh()
     {
-        RefreshTabs();
-        RefreshContent();
-        RefreshDetail();
-        RefreshBack();
+        if (page == null) return;
 
-        if (pointsText != null) pointsText.text = string.Format(pointsFormat, Skills.Currency);
+        pointsText.text = string.Format(Loc.Get("ui.skilltree.points", "{0} SKILLPUNKTE"), Skills.Currency);
+
+        int learned = 0, total = 0;
+        foreach (SkillBranchDef b in branches)
+        {
+            CountBranch(b, out int d, out int t);
+            learned += d;
+            total += t;
+        }
+        learnedText.text = string.Format(Loc.Get("ui.skilltree.learned", "GELERNT {0}/{1}"), learned, total);
+        SetFill(learnedFill, 78, total > 0 ? learned / (float)total : 0f);
+
+        RefreshCategories();
+        RefreshBanner();
+        ShowDetail();
     }
 
-    void RefreshBack()
+    static void CountBranch(SkillBranchDef b, out int done, out int total)
     {
-        bool isHover = hover == Hit.Back;
-
-        backFillImage.color = isHover ? Lift(backFill, hoverLift) : backFill;
-        backSheen.color     = Lift(backFill, isHover ? 0.5f : 0.3f);
-        backShade.color     = Shade(backFill, 0.35f);
-        backArrow.color     = isHover ? Color.white : backInk;
-
-        // Unter der Maus zieht der Pfeil einen Pixel nach links - der Knopf
-        // zeigt damit selbst, wohin er fuehrt.
-        if (backArrowRect != null)
+        done = total = 0;
+        foreach (SkillNodeDef n in b.Nodes)
         {
-            backArrowRect.anchoredPosition =
-                new Vector2(Mathf.Round(backArea.x + (isHover ? 4f : 6f)),
-                            -Mathf.Round(backArea.y + (backArea.height - 7f) * 0.5f));
+            if (n.IsStart) continue;
+            total++;
+            if (Skills.IsUnlocked(n)) done++;
         }
     }
 
-    void RefreshTabs()
+    void RefreshCategories()
     {
-        for (int i = 0; i < tabs.Count && i < branches.Count; i++)
+        for (int i = 0; i < cats.Count && i < branches.Count; i++)
         {
-            Tab t = tabs[i];
-            SkillBranchDef c = branches[i];
+            CatView v = cats[i];
+            SkillBranchDef b = branches[i];
+            bool sel = i == selectedBranch, hov = i == hoverBranch;
 
-            bool isSelected = i == selected;
-            bool isHover = hover == Hit.Category && hoverTab == i;
+            // Die gewaehlte ragt vier Pixel ins Feld - wie ein Reiter.
+            OptionsKit.Move(v.Root, CatX, BodyY + i * (CatH + CatGap), sel ? CatW + 6 : CatW, CatH);
 
-            Color border = Shade(c.Color, borderShade);
-
-            t.Glow.gameObject.SetActive(isSelected);
-            t.Pointer.gameObject.SetActive(isSelected);
-            t.PointerEdge.gameObject.SetActive(isSelected);
-            t.Pointer.color = c.Color;
-
-            if (isSelected)
+            if (sel)
             {
-                // Gewaehlt: der Knopf traegt seine Farbe, die Schrift wird hell -
-                // oder dunkel, wenn die Farbe dafuer zu hell ist (Gelb).
-                Color ink = InkOn(c.Color);
-
-                t.Fill.color       = c.Color;
-                t.Sheen.color      = Lift(c.Color, 0.45f);
-                t.Shade.color      = Shade(c.Color, 0.3f);
-                t.Outer.color      = border;
-                t.Inner.color      = Lift(c.Color, 0.35f);
-                t.Label.color      = ink;
-                t.LabelShadow.color = ink.Equals(panelInk) ? Alpha(Lift(c.Color, 0.6f), 0.7f)
-                                                           : Alpha(border, 0.8f);
-                t.IconFill.color   = Lift(c.Color, 0.6f);
-                t.IconEdge.color   = border;
+                v.Back.sprite = GameHudSkin.TintButton(true);
+                v.Back.color = b.Color;
             }
             else
             {
-                t.Fill.color       = isHover ? Lift(panelInset, hoverLift * 0.5f) : panelInset;
-                t.Sheen.color      = isHover ? Lift(panelFill, 0.5f) : panelFill;
-                t.Shade.color      = Alpha(panelBorder, isHover ? 0.5f : 0.8f);
-                t.Outer.color      = isHover ? c.Color : Shade(c.Color, borderShade * 0.5f);
-                t.Inner.color      = Lift(c.Color, isHover ? 0.35f : 0.55f);
-                t.Label.color      = border;
-                t.LabelShadow.color = Alpha(panelFill, 0.9f);
-                t.IconFill.color   = panelFill;
-                t.IconEdge.color   = Lift(c.Color, 0.35f);
+                v.Back.sprite = GameHudSkin.Button(hov ? GameHudSkin.ButtonLook.Hover : GameHudSkin.ButtonLook.Wood);
+                v.Back.color = Color.white;
             }
 
-            // Die Ersatzscheibe bleibt in der Kategoriefarbe - auf dem gewaehlten
-            // Knopf in der dunklen, sonst verschwindet sie im hellen Kaestchen.
-            t.Icon.color = c.Icon != null ? Color.white
-                                          : (isSelected ? border : c.Color);
+            Color ink = sel ? InkOn(b.Color) : (Color)GameHudSkin.Cream;
+            v.Label.color = ink;
+
+            CountBranch(b, out int d, out int t);
+            v.Count.text = $"{d}/{t}";
+            v.Count.color = sel ? new Color(ink.r, ink.g, ink.b, 0.75f)
+                          : d == t && t > 0 ? (Color)GameHudSkin.Mint : (Color)GameHudSkin.ParchDark;
         }
     }
 
-    void RefreshContent()
+    void RefreshBanner()
     {
-        SkillBranchDef c = Current;
-        if (c == null)
+        SkillBranchDef b = Current;
+        banner.enabled = b != null;
+        if (b == null)
         {
-            headerText.text = headerTextShadow.text = "";
+            bannerText.text = bannerShadow.text = "";
+            bannerIcon.enabled = false;
             return;
         }
 
-        Color border = Shade(c.Color, borderShade);
-        Color ink = InkOn(c.Color);
+        banner.color = b.Color;
+        Color ink = InkOn(b.Color);
+        bannerText.color = ink;
+        bannerShadow.color = ink == (Color)GameHudSkin.Ink ? new Color(1f, 1f, 1f, 0.35f) : Shade(b.Color, 0.55f);
+        bannerText.text = bannerShadow.text = (string.IsNullOrWhiteSpace(b.Path) ? b.Name : b.Path).ToUpperInvariant();
 
-        headerFill.color  = c.Color;
-        headerSheen.color = Lift(c.Color, 0.35f);
-        headerShade.color = Shade(c.Color, 0.28f);
-        headerLineTop.color = headerLineBottom.color = border;
-
-        headerTipLeft.color = headerTipRight.color = Shade(c.Color, 0.15f);
-        headerTipLeftEdge.color = headerTipRightEdge.color = border;
-
-        headerText.color  = ink;
-        headerTextShadow.color = ink.Equals(panelInk) ? Alpha(Lift(c.Color, 0.55f), 0.8f)
-                                                      : Alpha(border, 0.85f);
-        headerPlusLeft.color = headerPlusRight.color = Alpha(ink, 0.8f);
-
-        headerText.text = headerTextShadow.text = string.IsNullOrWhiteSpace(c.Path)
-            ? string.Format(pathLabelFormat, c.Name)
-            : c.Path;
+        FitIcon(bannerIcon, b.Icon, FieldX + 6, BodyY + 3, 14, BannerH - 1, 1);
     }
 
     /// <summary>
-    /// Die Karte rechts zeigt, worum es geht. Der Reihe nach:
-    ///   - Maus auf einem Knoten: dieser Knoten - Form, Name, Wirkung, Preis.
-    ///   - Maus auf einem Kategorieknopf links: DIESE Kategorie, auch wenn sie
-    ///     noch gar nicht gewaehlt ist. So sieht man vor dem Klick, was einen
-    ///     dort erwartet.
-    ///   - Sonst: die gewaehlte Kategorie.
+    /// Die Karte rechts, der Reihe nach: Knoten unter der Maus, Kategorie unter
+    /// der Maus (Vorschau vor dem Klick), gewaehlter Knoten, gewaehlte Kategorie.
     /// </summary>
-    void RefreshDetail()
+    void ShowDetail()
     {
-        // Die Karte folgt der Maus ueber die Knoepfe links, das grosse Feld
-        // daneben bleibt aber auf der gewaehlten Kategorie.
-        SkillBranchDef c = (hover == Hit.Category && hoverTab >= 0 && hoverTab < branches.Count)
-            ? branches[hoverTab]
-            : Current;
+        if (page == null) return;
 
-        if (c == null)
-        {
-            detailName.text = detailNameShadow.text = "";
-            detailText.text = detailQuote.text = "";
-            return;
-        }
-
-        Color border = Shade(c.Color, borderShade);
-        Color glossOn = c.Color;
-        Color footer = panelInkDim;
-
-        // Ein Knoten unter der Maus gewinnt - dann steht die Maus ohnehin nicht
-        // gleichzeitig auf einem Knopf links.
         SkillNodeDef node = graph.Hovered;
+        SkillBranchDef branch = null;
 
-        if (node != null)
-        {
-            bool unlocked = Skills.IsUnlocked(node);
-            bool open = !unlocked && Skills.RequirementsMet(node);
+        if (node == null && hoverBranch >= 0 && hoverBranch < branches.Count) branch = branches[hoverBranch];
+        else if (node == null) node = selectedNode;
+        if (node == null && branch == null) branch = Current;
 
-            orbShadow.sprite = orbShapes.Fill(node.Shape);
-            orbRing.sprite   = orbShapes.Outline(node.Shape);
-            orbFill.sprite   = orbShapes.Fill(node.Shape);
-            orbGloss.sprite  = orbShapes.Gloss(node.Shape);
+        if (node != null) ShowNode(node);
+        else ShowBranch(branch);
 
-            orbRing.color = unlocked || open ? border : Shade(panelBorder, 0.35f);
-            orbFill.color = unlocked ? c.Color : open ? panelFill : panelBorder;
-            glossOn = orbFill.color;
+        ReflowDetail();
 
-            detailName.text  = node.Name;
-            detailName.color = border;
-            detailText.text  = node.Description;
-
-            // Der Startknoten wird nicht gekauft - "GEKAUFT" waere dort Unsinn.
-            detailQuote.text = node.IsStart ? ""
-                             : unlocked     ? boughtLabel
-                             : open         ? string.Format(priceFormat, node.Price)
-                                            : MissingText(node);
-
-            // Die Fusszeile sagt ihren Zustand auch ueber die Farbe: Gold fuer
-            // einen Preis, Gruen fuer erledigt, Rot fuer verschlossen.
-            footer = node.IsStart ? panelInkDim
-                   : unlocked     ? ownedInk
-                   : open         ? priceInk
-                                  : lockedInk;
-        }
-        else
-        {
-            orbShadow.sprite = orbShapes.Fill(SkillShape.Kreis);
-            orbRing.sprite   = orbShapes.Outline(SkillShape.Kreis);
-            orbFill.sprite   = orbShapes.Fill(SkillShape.Kreis);
-            orbGloss.sprite  = orbShapes.Gloss(SkillShape.Kreis);
-
-            orbRing.color = border;
-            orbFill.color = c.Color;
-            glossOn = c.Color;
-
-            detailName.text  = c.Name;
-            detailName.color = border;
-            detailText.text  = c.Description;
-            detailQuote.text = c.Quote;
-        }
-
-        detailNameShadow.text = detailName.text;
-        detailQuote.color = footer;
-
-        // Das Glanzlicht ist nur da, wo die Kugel auch Farbe hat - auf einer
-        // grauen, gesperrten Form waere ein Glanz reine Behauptung.
-        bool lit = Luma(glossOn) > 0.28f;
-        orbGloss.gameObject.SetActive(lit);
-        orbGloss.color = Alpha(Color.white, Luma(glossOn) > 0.72f ? 0.28f : 0.42f);
-
-        // Die Funken tragen die Kategoriefarbe - AnimateDecor macht daraus das
-        // Blinken, hier steht nur, WELCHE Farbe blinkt.
-        Color sparkColor = Lift(c.Color, 0.55f);
-        foreach (Twinkle t in twinkles) t.Image.color = Alpha(sparkColor, t.Base);
-
-        // Ohne Text unten braucht es auch die zweite Trennlinie nicht.
-        bool hasFooter = !string.IsNullOrWhiteSpace(detailQuote.text);
-        divider2a.gameObject.SetActive(hasFooter);
-        divider2b.gameObject.SetActive(hasFooter);
-        dividerPlus2.gameObject.SetActive(hasFooter);
-
-        dividerPlus1.color = dividerPlus2.color = accentGold;
-        divider1a.color = divider1b.color = panelBorder;
-        divider2a.color = divider2b.color = panelBorder;
+        // Der Knopf gilt immer dem GEWAEHLTEN Knoten, nicht dem unter der Maus.
+        SkillNodeDef target = selectedNode;
+        learnButton.gameObject.SetActive(target != null && !target.IsStart && !Skills.IsUnlocked(target));
+        learnButton.Disabled = !CanLearn(target);
+        if (target != null)
+            learnButton.SetText(string.Format(Loc.Get("ui.skilltree.learn.cost", "LERNEN  {0}"), target.Price));
     }
 
-    // ------------------------------------------------------------- Bewegung
+    void ShowNode(SkillNodeDef node)
+    {
+        Color accent = node.Branch != null ? node.Branch.Color : Color.white;
+        bool unlocked = node.IsStart || Skills.IsUnlocked(node);
+        bool open = !unlocked && Skills.RequirementsMet(node);
+        bool affordable = open && Skills.Currency >= node.Price;
+
+        SetShape(node.Shape, true);
+        shapeFill.color = unlocked ? accent : open ? (Color)GameHudSkin.Trough : (Color)GameHudSkin.StoneDark;
+        shapeOutline.color = unlocked ? Shade(accent, 0.5f) : open ? accent : GameHudSkin.Hex(0x3a2e34);
+        shapeGloss.color = new Color(1f, 1f, 1f, unlocked ? 0.4f : 0.1f);
+        shapeShadow.color = new Color(0f, 0f, 0f, 0.5f);
+
+        Sprite symbol = node.Icon;
+        if (symbol == null && !unlocked && !open) symbol = GameHudSkin.Lock;
+        FitPlateIcon(symbol, unlocked || node.Icon == null ? Color.white : new Color(1f, 1f, 1f, 0.6f));
+
+        detailName.text = node.Name.ToUpperInvariant();
+        detailName.color = unlocked ? GameHudSkin.Gold : GameHudSkin.Cream;
+        detailSub.text = node.Branch != null ? node.Branch.Name.ToUpperInvariant() : "";
+        detailSub.color = Lift(accent, 0.25f);
+        detailDesc.text = node.Description;
+
+        if (node.IsStart)
+            SetStatus(null, Loc.Get("ui.skilltree.status.start", "Hier beginnt der Pfad."), GameHudSkin.Stone);
+        else if (unlocked)
+            SetStatus(GameHudSkin.Check, Loc.Get("ui.skilltree.status.owned", "GELERNT"), GameHudSkin.Mint);
+        else if (open)
+            SetStatus(GameHudSkin.Gem,
+                      string.Format(Loc.Get("ui.skilltree.status.price", "{0} SKILLPUNKTE"), node.Price),
+                      affordable ? GameHudSkin.Gold : GameHudSkin.JamLight);
+        else
+            SetStatus(GameHudSkin.Lock, MissingText(node), GameHudSkin.JamLight);
+    }
+
+    void ShowBranch(SkillBranchDef b)
+    {
+        if (b == null)
+        {
+            SetShape(SkillShape.Kreis, false);
+            FitPlateIcon(null, Color.white);
+            detailName.text = detailSub.text = detailDesc.text = "";
+            SetStatus(null, "", GameHudSkin.Stone);
+            return;
+        }
+
+        SetShape(SkillShape.Kreis, true);
+        shapeFill.color = b.Color;
+        shapeOutline.color = Shade(b.Color, 0.5f);
+        shapeGloss.color = new Color(1f, 1f, 1f, 0.4f);
+        shapeShadow.color = new Color(0f, 0f, 0f, 0.5f);
+        FitPlateIcon(b.Icon, Color.white);
+
+        detailName.text = b.Name.ToUpperInvariant();
+        detailName.color = Lift(b.Color, 0.35f);
+        detailSub.text = (string.IsNullOrWhiteSpace(b.Path) ? "" : b.Path).ToUpperInvariant();
+        detailSub.color = GameHudSkin.Stone;
+        // Das Zitat steht unter der Beschreibung, eine Stufe leiser.
+        detailDesc.text = string.IsNullOrWhiteSpace(b.Quote)
+            ? b.Description
+            : $"{b.Description}\n<color=#{ColorUtility.ToHtmlStringRGB(GameHudSkin.StoneLight)}>{b.Quote}</color>";
+
+        CountBranch(b, out int d, out int t);
+        SetStatus(d == t && t > 0 ? GameHudSkin.Check : null,
+                  string.Format(Loc.Get("ui.skilltree.branch.count", "{0} von {1} gelernt"), d, t),
+                  d == t && t > 0 ? GameHudSkin.Mint : GameHudSkin.StoneLight);
+    }
 
     /// <summary>
-    /// Das bisschen Leben im Fenster: das Licht hinter dem Papier atmet, die
-    /// Funken an der Kugel blinken, und der Saum um den gewaehlten Knopf geht
-    /// mit. Nichts davon bewegt einen Pixel - es aendert nur Deckkraft und
-    /// Farbe, damit das Bild pixelgenau bleibt.
-    ///
-    /// Laeuft auf unscaledTime: das Fenster friert den Spieler ein, und wer
-    /// spaeter die Zeit anhaelt, soll hier nicht alles stehen sehen.
+    /// Name, Unterzeile, Linie und Text ruecken zusammen, wenn der Name nur
+    /// eine Zeile braucht - der Text bekommt dann eine Zeile mehr.
     /// </summary>
-    void AnimateDecor()
+    void ReflowDetail()
     {
-        if (!animateDecor) return;
+        int tx = DetX + 5, tw = DetW - 10;
+        int y = BodyY + 7 + PlateS + 4;
 
-        float t = Time.unscaledTime;
+        float pref = string.IsNullOrEmpty(detailName.text) ? 0f : detailName.GetPreferredValues(detailName.text, tw, 0f).y;
+        int nameH = pref > 14f ? 25 : 13;
+        OptionsKit.Move(detailName.rectTransform, tx, y, tw, nameH + 1);
+        y += nameH;
 
-        if (glowImage != null)
-            glowImage.color = Alpha(glowColor, glowStrength * (0.82f + 0.18f * Mathf.Sin(t * 0.9f)));
+        OptionsKit.Move(detailSub.rectTransform, tx, y, tw, 13);
+        y += 15;
 
-        foreach (Twinkle tw in twinkles)
-        {
-            float wave = Mathf.Sin(t * 2.3f + tw.Phase);
-            // Laenger dunkel als hell - ein Funke blitzt, er leuchtet nicht.
-            float a = Mathf.InverseLerp(-0.1f, 1f, wave);
-            tw.Image.color = Alpha(tw.Image.color, tw.Base * (0.15f + 0.85f * a));
-        }
+        OptionsKit.Move(detailRule.rectTransform, DetX + 5, y, DetW - 10, 2);
+        y += 4;
 
-        SkillBranchDef c = Current;
-        if (c != null && selected >= 0 && selected < tabs.Count)
-        {
-            float wave = 0.5f + 0.5f * Mathf.Sin(t * 1.6f);
-            tabs[selected].Glow.color = Color.Lerp(panelFill, Lift(c.Color, 0.75f), wave);
-        }
-
-        graph?.Animate(t);
+        int statusY = BodyY + BodyH - 17;
+        OptionsKit.Move(detailDesc.rectTransform, tx, y, tw, statusY - y - 1);
     }
 
-    static float Luma(Color c) => 0.299f * c.r + 0.587f * c.g + 0.114f * c.b;
+    void SetShape(SkillShape shape, bool visible)
+    {
+        shapeShadow.enabled = shapeFill.enabled = shapeGloss.enabled = shapeOutline.enabled = visible;
+        if (!visible) return;
+        shapeShadow.sprite = detailShapes.Fill(shape);
+        shapeFill.sprite = detailShapes.Fill(shape);
+        shapeGloss.sprite = detailShapes.Gloss(shape);
+        shapeOutline.sprite = detailShapes.Outline(shape);
+    }
+
+    /// <summary>Symbol mittig auf die Plakette, in ganzem Vielfachen seiner Groesse (hoechstens 16 px).</summary>
+    void FitPlateIcon(Sprite s, Color color)
+    {
+        int px = DetX + (DetW - PlateS) / 2, py = BodyY + 7;
+        FitIcon(plateIcon, s, px, py, PlateS, PlateS, 16);
+        plateIcon.color = color;
+    }
+
+    void SetStatus(Sprite icon, string text, Color color)
+    {
+        int sy = BodyY + BodyH - 17;
+        statusIcon.enabled = icon != null;
+        if (icon != null)
+        {
+            statusIcon.sprite = icon;
+            OptionsKit.Move(statusIcon.rectTransform, DetX + 7 + Mathf.Floor((9 - icon.rect.width) / 2f),
+                            sy + Mathf.Floor((14 - icon.rect.height) / 2f), icon.rect.width, icon.rect.height);
+        }
+
+        statusText.text = text;
+        statusText.color = color;
+        OptionsKit.Move(statusText.rectTransform, icon != null ? DetX + 19 : DetX + 7, sy + 1,
+                        icon != null ? DetW - 24 : DetW - 12, 13);
+        statusText.alignment = icon != null ? TextAlignmentOptions.Left : TextAlignmentOptions.Center;
+    }
 
     /// <summary>Welche Knoten noch fehlen. Mehr als zwei werden nicht aufgezaehlt.</summary>
-    string MissingText(SkillNodeDef node)
+    static string MissingText(SkillNodeDef node)
     {
+        string locked = Loc.Get("ui.skilltree.status.locked", "GESPERRT");
         var missing = new List<string>();
-
         foreach (SkillNodeDef parent in node.Requires)
-        {
             if (!Skills.IsUnlocked(parent)) missing.Add(parent.Name);
-        }
 
-        if (missing.Count == 0) return lockedLabel;
-        if (missing.Count > 2) return lockedLabel;
-
-        return lockedLabel + ": " + string.Join(" + ", missing);
+        if (missing.Count == 0 || missing.Count > 2) return locked;
+        return string.Format(Loc.Get("ui.skilltree.status.needs", "BRAUCHT: {0}"), string.Join(" + ", missing));
     }
 
-    // ---------------------------------------------------------------- Farben
+    // ==================================================================
+    //  Helfer
+    // ==================================================================
+
+    /// <summary>
+    /// Setzt ein Bild mittig in einen Kasten - in seiner echten Groesse oder
+    /// einem ganzen Vielfachen, solange es hoechstens <paramref name="maxSize"/>
+    /// breit wird. Nie gestreckt.
+    /// </summary>
+    static void FitIcon(Image img, Sprite s, float x, float y, float w, float h, int maxSize)
+    {
+        img.enabled = s != null;
+        if (s == null) return;
+        img.sprite = s;
+
+        float sw = s.rect.width, sh = s.rect.height;
+        float k = Mathf.Max(1f, Mathf.Floor(maxSize / Mathf.Max(sw, sh)));
+        sw *= k;
+        sh *= k;
+        OptionsKit.Move(img.rectTransform, x + Mathf.Floor((w - sw) / 2f), y + Mathf.Floor((h - sh) / 2f), sw, sh);
+    }
+
+    static void SetFill(Image fill, float innerWidth, float t)
+    {
+        RectTransform rt = fill.rectTransform;
+        float w = Mathf.Round(innerWidth * Mathf.Clamp01(t));
+        rt.sizeDelta = new Vector2(w, rt.sizeDelta.y);
+        fill.enabled = w > 0f;
+    }
 
     /// <summary>Hellt eine Farbe auf, ohne ihre Deckkraft anzutasten.</summary>
-    static Color Lift(Color c, float amount)
-    {
-        return new Color(Mathf.Lerp(c.r, 1f, amount),
-                         Mathf.Lerp(c.g, 1f, amount),
-                         Mathf.Lerp(c.b, 1f, amount), c.a);
-    }
+    public static Color Lift(Color c, float amount) =>
+        new Color(Mathf.Lerp(c.r, 1f, amount), Mathf.Lerp(c.g, 1f, amount), Mathf.Lerp(c.b, 1f, amount), c.a);
 
     /// <summary>Dunkelt eine Farbe ab, ohne ihre Deckkraft anzutasten.</summary>
-    static Color Shade(Color c, float amount)
-    {
-        return new Color(Mathf.Lerp(c.r, 0f, amount),
-                         Mathf.Lerp(c.g, 0f, amount),
-                         Mathf.Lerp(c.b, 0f, amount), c.a);
-    }
+    public static Color Shade(Color c, float amount) =>
+        new Color(Mathf.Lerp(c.r, 0f, amount), Mathf.Lerp(c.g, 0f, amount), Mathf.Lerp(c.b, 0f, amount), c.a);
 
     /// <summary>
     /// Welche Schriftfarbe auf dieser Flaeche lesbar ist. Blau, Rot und Gruen
     /// vertragen helle Schrift - Gelb nicht, darauf wird sie dunkel.
     /// </summary>
-    Color InkOn(Color background)
+    public static Color InkOn(Color background)
     {
         float luma = 0.299f * background.r + 0.587f * background.g + 0.114f * background.b;
-        return luma > 0.6f ? panelInk : textOnColor;
+        return luma > 0.6f ? (Color)GameHudSkin.Ink : (Color)GameHudSkin.Cream;
     }
-
-    // ----------------------------------------------------------------- Ton
 
     void PlaySfx(AudioClip clip)
     {
-        if (clip == null || sfxSource == null) return;
+        if (clip == null) return;
+        if (sfxSource == null) sfxSource = GetComponent<AudioSource>();
+        if (sfxSource == null)
+        {
+            sfxSource = gameObject.AddComponent<AudioSource>();
+            sfxSource.playOnAwake = false;
+        }
         sfxSource.PlayOneShot(clip, sfxVolume);
     }
 }

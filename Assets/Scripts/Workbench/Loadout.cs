@@ -101,6 +101,20 @@ public static class Loadout
     /// um ihn bei jedem Zugriff zu machen; das Umstellen selbst kostet nur
     /// dann etwas, wenn wirklich gewechselt wurde.
     /// </summary>
+    /// <summary>
+    /// Loescht den Spielstand auf der Platte und laedt leer neu. Nur fuer
+    /// <see cref="SaveReset"/> (Optionen -> SPIEL -> Spielstand zuruecksetzen).
+    /// In der Sandbox bleibt die Datei liegen.
+    /// </summary>
+    public static void ResetProgress()
+    {
+        Init();
+        if (!sandbox && System.IO.File.Exists(store.SavePath)) System.IO.File.Delete(store.SavePath);
+        initialized = false;
+        Init();
+        Changed?.Invoke();
+    }
+
     private static LoadoutStore Store
     {
         get

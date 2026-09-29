@@ -1,107 +1,70 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /// <summary>
-/// Das Erfolge-/Unlocks-Buch: ein aufgeschlagenes Kochbuch, das in der gelben
-/// Kapselfluessigkeit schwebt. Zwei Reiter, links die Liste, rechts das Detail.
+/// Die Kapsel im Hub: Erfolge, Unlocks und - sobald ein Charakter den Knoten
+/// im Skilltree hat - das Bestiarium. Im Stil von "UI 2.0" wie
+/// <see cref="OptionsPanel"/>, <see cref="AchievementPanel"/> und der Level-Up:
+/// dunkle Karte, Titelband, Holzknoepfe.
 ///
 ///   AchievementsBookPanel.Toggle();
+///   AchievementsBookPanel.Open(AchievementsBookPanel.TabUnlocks);
 ///
-/// Baut sich komplett per Code auf - kein Szenenobjekt, kein Prefab, keine
-/// Verdrahtung im Inspector, genau wie <see cref="AchievementPanel"/> und
-/// <see cref="UnlockPanel"/>. Damit laesst es sich aus jeder Szene oeffnen.
+/// Aufbau (Seitenpixel, 480x270):
+///   Titelband   Name des Reiters
+///   Reiter      ERFOLGE | UNLOCKS | BESTIARIUM          12 / 43 [=====   ]
+///   links       Erfolge: Liste nach Kategorie, mit Fortschrittsstrich
+///               Unlocks/Bestiarium: Kachelgitter
+///   rechts      das Gewaehlte: Bild im Fenster, Name, Text, Balken, Belohnung
+///   Fussleiste  ZURUECK                                 Tastenhinweis
 ///
-/// Die Grafik kommt aus Assets/Resources/AchievementsBook/ui/ (siehe
-/// Assets/Art/UI_Objects/AchievementsBook/ACHIEVEMENTS_BOOK_UI.md - dort stehen
-/// alle Masse, Textzonen und 9-Slice-Raender, nach denen hier gerechnet wird).
-/// Jede Zahl in diesem Skript ist ein Pixel im 320x180-Raster, Ursprung oben
-/// links. Landet etwas auf einem halben Pixel, verschmiert es beim Hochskalieren.
+/// Hinter der Karte steigen gelbe Blasen auf - die Fluessigkeit der Kapsel.
 ///
-/// Inhalt und Reihenfolge kommen aus den vorhandenen Katalogen <see cref="Ach"/>
-/// und <see cref="Unlocks"/> - dieses Skript kennt weder ein Achievement noch
-/// einen Unlock beim Namen.
+/// Bedienung: Maus, A/D bzw. Links/Rechts = Reiter, W/S bzw. Hoch/Runter =
+/// Eintrag, Mausrad, E oder ESC schliesst.
+///
+/// Baut sich komplett per Code auf und laesst sich aus jeder Szene oeffnen.
+/// Inhalt kommt aus <see cref="Ach"/>, <see cref="Unlocks"/> und
+/// <see cref="Bestiary"/> - dieses Skript kennt keinen Eintrag beim Namen.
 /// </summary>
 public class AchievementsBookPanel : MonoBehaviour
 {
+    public const int TabAchievements = 0, TabUnlocks = 1, TabBestiary = 2;
+
     // ==================================================================
-    //  Masse (alle aus ACHIEVEMENTS_BOOK_UI.md)
+    //  Masse (Seitenpixel, Ursprung oben links)
     // ==================================================================
 
-    private const int RefW = 320;
-    private const int RefH = 180;
+    private const int CardX = 24, CardY = 38, CardW = 432, CardH = 212;
+    private const int RibbonY = 26;
+    private static readonly RectInt Content = new RectInt(CardX - 12, RibbonY, CardW + 24, CardY + CardH - RibbonY);
 
-    private const string UiPath = "AchievementsBook/ui/";
-    private const string IconPath = "AchievementsBook/";
+    private const int InX = CardX + 14, InW = CardW - 28;
 
-    // Buch
-    private static readonly Vector4 Book  = new Vector4(16f, 23f, 290f, 144f);
-    private static readonly Vector4 Spine = new Vector4(156f, 25f, 8f, 138f);
+    private const int TabY = 52, TabH = 18, TabW = 86, TabGap = 4;
+    private const int TotalBarW = 90;
 
-    // Reiter
-    private const float TabX = 16f, TabY = 9f, TabW = 60f, TabH = 14f, TabStep = 62f;
+    private const int BodyY = 76, BodyH = 140;
+    private const int ListX = InX, ListW = 236;
+    private const int Pad = 4;
+    private const int ViewX = ListX + Pad, ViewY = BodyY + Pad, ViewW = ListW - 2 * Pad, ViewH = BodyH - 2 * Pad;
 
-    // Der aktive Reiter reicht so viel tiefer, dass er die Oberkante der
-    // Buchseite ueberdeckt. tab_active.png ist genau darum 60x16 gross.
-    private const float TabOverlap = 2f;
+    private const int DetX = ListX + ListW + 6, DetY = BodyY, DetW = InX + InW - DetX, DetH = BodyH;
+    private const int WinS = 56;                 // Fenster fuer das grosse Bild (SlotFrame, innen 50)
 
-    // Zurueck-Knopf rechts in derselben Zeile, rechte Kante buendig mit dem Buch
-    private static readonly Vector4 Back = new Vector4(251f, 9f, 52f, 14f);
+    private const int FootY = 224, FootH = 18, BackW = 76;
 
-    // Fortschrittsleiste: 10 Zellen, rechts daneben der Zaehler
-    private const float BarX = 20f, BarY = 29f, CellW = 9f, CellH = 4f, CellStep = 10f;
-    private const int CellCount = 10;
-    private static readonly Vector4 Counter = new Vector4(121f, 26f, 34f, 10f);
+    // Liste (Erfolge)
+    private const int HeadH = 15, RowH = 24, RowGap = 1, RowIcon = 21;
 
-    // Liste: 6 Zeilen a 21px = 126 = volle Hoehe des Sichtfensters
-    private const float ListX = 20f, ListY = 36f, ListW = 132f, ListH = 126f;
-    private const float RowH = 21f;
-    private const float SlotDX = 1f, SlotDY = 0f, SlotS = 21f;
-    private const float RowTextDX = 25f, RowTextW = 94f;
+    // Gitter: Unlocks 36er Kacheln (32er Symbol), Bestiarium 52er (bis 48er Bild)
+    private const int TileGap = 2;
+    private static int TileSize(int tab) => tab == TabBestiary ? 52 : 36;
 
-    // Unlocks bekommen statt der Liste ein Kachelgitter: dort zaehlt nur das
-    // Symbol, Name und Beschreibung stehen ohnehin rechts. 4 Spalten a 32px
-    // passen mit 1px Luecke in die 132 des Sichtfensters, 3 Zeilen zeigen alle
-    // zehn Unlocks ohne Scrollen.
-    private const float TileS = 32f, TileStepX = 33f, TileStepY = 36f;
-    private const int TileCols = 4;
-
-    // Detailseite. Alles haengt an DetailLeft/DetailW, damit die Spalte in
-    // einem Stueck bleibt: Titel, Text, Trennlinie und Belohnungsbox stehen auf
-    // derselben Kante, der Icon-Rahmen sitzt genau in ihrer Mitte.
-    //
-    // Die Spalte beginnt bei 182 und nicht mehr bei 168: die rechte Seite
-    // laeuft zum Bund hin in den Falzschatten (bis x=179, siehe GUTTER in
-    // Tools/erfolgsbuch_ui.py), und der Text fing vorher sichtbar in diesem
-    // dunklen Streifen an.
-    private const float DetailLeft = 182f, DetailW = 117f;
-
-    private static readonly Vector4 SlotXL  = new Vector4(224f, 32f, 32f, 32f);
-    private static readonly Vector4 Title   = new Vector4(DetailLeft, 67f, DetailW, 14f);
-    private static readonly Vector4 Desc    = new Vector4(DetailLeft, 84f, DetailW, 34f);
-    private static readonly Vector4 Prog    = new Vector4(DetailLeft, 120f, DetailW, 9f);
-    private static readonly Vector4 Divider = new Vector4(DetailLeft, 132f, DetailW, 1f);
-    private static readonly Vector4 Reward  = new Vector4(DetailLeft, 138f, DetailW, 20f);
-    private static readonly Vector4 RewIco  = new Vector4(DetailLeft + 4f, 142f, 12f, 12f);
-    private static readonly Vector4 RewTxt  = new Vector4(DetailLeft + 20f, 141f, DetailW - 24f, 14f);
-
-    private const float SizeTitle = 12f, SizeText = 8f, SizeSmall = 6f;
-
-    // Palette
-    private static readonly Color TextDark  = Hex(0x3b2b33);
-    private static readonly Color TextMid   = Hex(0x6f4630);
-    private static readonly Color TextDim   = Hex(0xb99772);
-    private static readonly Color TextOnTab = Hex(0xf2dcbc);
-    private static readonly Color TextOnGold = Hex(0x4d2e1e);
-    private static readonly Color LineColor = Hex(0xd9b189);
-
-    /// <summary>
-    /// Gesperrte Icons werden nicht schwarz gefaerbt, sondern nur gedaempft -
-    /// das Motiv soll erkennbar bleiben.
-    /// </summary>
-    private static readonly Color IconLockedTint = Hex(0xb99772);
+    private static readonly Color LockedTint = new Color(0.45f, 0.40f, 0.44f, 1f);
+    private static readonly Color Silhouette = new Color(0.10f, 0.07f, 0.09f, 0.85f);
 
     // ==================================================================
     //  Zustand
@@ -113,105 +76,63 @@ public class AchievementsBookPanel : MonoBehaviour
     /// <summary>Reiter, der beim naechsten Oeffnen vorne liegt.</summary>
     private static int startTab;
 
-    private TMP_FontAsset font;
-    private int tab;
-    private int selected;
-
-    // 0 = Erfolge, 1 = Unlocks, 2 = Bestiarium. Den dritten Reiter gibt es erst,
-    // wenn ein Charakter den Bestiarium-Knoten im Skilltree hat.
-    private const int BestiaryTab = 2;
-    private int tabCount = 2;
-
-    // Geoeffnet wird mit [E], geschlossen auch - im Frame des Oeffnens darf die
-    // Taste darum nicht noch einmal zaehlen.
+    private TMP_FontAsset textFont, pixelFont;
+    private RectTransform page, ribbonHolder, bubbleHolder;
+    private CanvasScaler scaler;
+    private Vector2Int lastScreen;
     private int openedFrame;
 
+    private int tab, tabCount = 2;
+    private SkinButton[] tabs;
+    private TextMeshProUGUI counter;
+    private Image totalFill;
+
+    private RectTransform viewport, content;
+    private Image scrollHandle;
+    private float scrollTop, contentHeight;
+
     private readonly List<Entry> entries = new List<Entry>();
-    private readonly List<Row> rows = new List<Row>();
-    private readonly List<Tile> tiles = new List<Tile>();
-    private readonly List<Image> cells = new List<Image>();
+    private readonly List<View> views = new List<View>();
+    private int selected, hovered = -1;
+
+    private Image winFrame, winBack, detailIcon, detailLock, detailCheck;
+    private TextMeshProUGUI detailName, detailSub, detailDesc, detailProgress, detailReward;
+    private Image barFrame, barFill, rewardBox, rewardIcon;
+
     private readonly List<Bubble> bubbles = new List<Bubble>();
-
-    private RectTransform page;
-    private RectTransform listContent;
-    private RectTransform gridContent;
-    private ScrollRect scroll;
-    private Image[] tabImages;
-    private TMP_Text[] tabLabels;
-
-    private TMP_Text counterText, detailTitle, detailDesc, detailProgress, rewardText;
-    private Image detailSlot, detailIcon, rewardBox, rewardIcon;
-
     private HubUI hub;
 
-    /// <summary>Ein Listeneintrag, egal ob Achievement oder Unlock.</summary>
+    /// <summary>Ein Eintrag, egal ob Erfolg, Unlock oder Gegner.</summary>
     private class Entry
     {
-        public string Title;
-        public string Desc;
-        public string RowProgress;
-        public string DetailProgress;
-        public string Reward;
+        public string Title, Sub, Desc;
+        public Color SubColor;
+        public Sprite RowIcon, Icon;
         public bool Done;
-        public Sprite IconRow;
-        public Sprite IconDetail;
+        public bool Shadow;            // noch unbekannt: nur der Umriss
+        public float Progress = -1f;   // -1 = kein Balken
+        public string ProgressText;
+        public string Reward;
         public Sprite RewardIcon;
-        public string Letter;     // Ersatz auf der Kachel, solange es kein Bild gibt
+        public Color RewardColor;
+        public string Badge;           // Ecke der Kachel (Bestiarium: "+2%")
+        public string Group;           // Erfolge: Kategorie, fuer die Zwischenueberschrift
     }
 
-    private class Row
+    /// <summary>Zeile oder Kachel auf dem Bildschirm.</summary>
+    private class View
     {
-        public Image Frame;       // Hintergrund: normal oder erledigt
-        public Image Hover;       // duenner Rahmen, solange die Maus draufliegt
-        public Image Selection;   // dicker Rahmen, liegt ueber allem
-        public Image Slot;
-        public Image Icon;
-        public TMP_Text Title;
-        public TMP_Text Progress;
-    }
-
-    /// <summary>Eine Kachel im Unlocks-Gitter. Traegt nur das Symbol.</summary>
-    private class Tile
-    {
-        public Image Frame;       // slot_large_unlocked / _locked
-        public Image Icon;
-        public Image Hover;
-        public Image Selection;
-        public TMP_Text Letter;
-    }
-
-    /// <summary>
-    /// Schaltet den Hover-Rahmen einer Zeile oder Kachel. Eigene Komponente
-    /// statt eines EventTriggers - das ist billiger und liest sich besser.
-    /// </summary>
-    private class RowHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
-    {
-        public Image Target;
-
-        public void OnPointerEnter(PointerEventData e)
-        {
-            if (Target != null) Target.enabled = true;
-        }
-
-        public void OnPointerExit(PointerEventData e)
-        {
-            if (Target != null) Target.enabled = false;
-        }
-
-        private void OnDisable()
-        {
-            if (Target != null) Target.enabled = false;
-        }
+        public int Index;
+        public float Top, Height;
+        public Image Back, Tile, Hover, Select, Icon, Lock, Check, BarBack, BarFill;
+        public TextMeshProUGUI Label, Right, Badge;
     }
 
     private class Bubble
     {
         public RectTransform Rt;
-        public float Size;
-        public float Speed;
-        public float Drift;
-        public float Phase;
-        public bool RightSide;
+        public Image Img;
+        public float X, Y, Speed, Phase, Sway;
     }
 
     // ==================================================================
@@ -225,10 +146,10 @@ public class AchievementsBookPanel : MonoBehaviour
         instance = go.AddComponent<AchievementsBookPanel>();
     }
 
-    /// <summary>Oeffnet direkt auf einem bestimmten Reiter: 0 = Erfolge, 1 = Unlocks, 2 = Bestiarium.</summary>
+    /// <summary>Oeffnet direkt auf einem Reiter: 0 = Erfolge, 1 = Unlocks, 2 = Bestiarium.</summary>
     public static void Open(int tabIndex)
     {
-        startTab = Mathf.Clamp(tabIndex, 0, BestiaryTab);
+        startTab = Mathf.Clamp(tabIndex, 0, TabBestiary);
         Open();
     }
 
@@ -259,9 +180,8 @@ public class AchievementsBookPanel : MonoBehaviour
     {
         instance = this;
         openedFrame = Time.frameCount;
-        font = FindFont();
-        tabCount = Bestiary.IsVisible ? 3 : 2;
-        tab = Mathf.Clamp(startTab, 0, tabCount - 1);
+        textFont = PixelUI.FindTextFont();
+        pixelFont = PixelUI.FindPixelFont();
         Build();
         BlockHub(true);
     }
@@ -271,7 +191,7 @@ public class AchievementsBookPanel : MonoBehaviour
         Loc.LanguageChanged += Rebuild;
         Achievements.Unlocked += OnAchievementUnlocked;
         Unlocks.Granted += OnUnlockGranted;
-        Bestiary.Changed += Rebuild;
+        Bestiary.Changed += Refresh;
     }
 
     private void OnDisable()
@@ -279,22 +199,23 @@ public class AchievementsBookPanel : MonoBehaviour
         Loc.LanguageChanged -= Rebuild;
         Achievements.Unlocked -= OnAchievementUnlocked;
         Unlocks.Granted -= OnUnlockGranted;
-        Bestiary.Changed -= Rebuild;
+        Bestiary.Changed -= Refresh;
     }
 
     private void OnDestroy()
     {
+        startTab = tab;
         BlockHub(false);
         if (instance == this) instance = null;
     }
 
-    private void OnAchievementUnlocked(AchievementDef def) => Rebuild();
-    private void OnUnlockGranted(UnlockDef def) => Rebuild();
+    private void OnAchievementUnlocked(AchievementDef def) => Refresh();
+    private void OnUnlockGranted(UnlockDef def) => Refresh();
 
     /// <summary>
-    /// Sperrt den Hub, solange das Fenster offen ist - so wie Shop, Skilltree und
-    /// UnlockPanel es tun. Laeuft das Fenster woanders (Hauptmenue, World Map,
-    /// im Spiel), passiert nichts und es wird auch kein HubUI angelegt.
+    /// Sperrt den Hub, solange das Fenster offen ist - wie Shop, Skilltree und
+    /// Charakterauswahl. Ausserhalb des Hubs passiert nichts, und es wird auch
+    /// kein HubUI angelegt.
     /// </summary>
     private void BlockHub(bool blocked)
     {
@@ -321,916 +242,749 @@ public class AchievementsBookPanel : MonoBehaviour
 
     private void Update()
     {
+        var size = new Vector2Int(Screen.width, Screen.height);
+        if (page != null && size != lastScreen)
+        {
+            lastScreen = size;
+            OptionsKit.Layout(page, scaler, Content);
+        }
+
         AnimateBubbles();
 
-        // Der Tastendruck, der das Fenster aufgemacht hat, darf es nicht gleich
-        // wieder zumachen.
+        // Das [E], mit dem die Kapsel aufgeht, darf sie nicht gleich wieder schliessen.
         if (Time.frameCount == openedFrame) return;
 
         if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.E))
         {
+            OptionsKit.PlayClick();
             Close();
             return;
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) SetTab(tab - 1);
-        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) SetTab(tab + 1);
-        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) Move(-1);
-        if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)) Move(1);
+        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) StepTab(-1);
+        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.Tab))
+            StepTab(1);
+        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) StepEntry(-1);
+        if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)) StepEntry(1);
+
+        float wheel = Input.mouseScrollDelta.y;
+        if (!Mathf.Approximately(wheel, 0f)) SetScroll(scrollTop - wheel * (GridMode ? TileSize(tab) + TileGap : RowH + RowGap));
     }
 
-    private void Move(int delta)
+    private void StepTab(int delta)
+    {
+        if (tabCount <= 1) return;
+        OptionsKit.PlayClick();
+        SetTab((tab + delta + tabCount) % tabCount);
+    }
+
+    private void StepEntry(int delta)
     {
         if (entries.Count == 0) return;
-        Select(Mathf.Clamp(selected + delta, 0, entries.Count - 1));
-        ScrollTo(selected);
-    }
-
-    /// <summary>
-    /// Zieht den Inhalt nur nach, wenn die Auswahl aus dem Sichtfenster laeuft -
-    /// und dann immer um ganze Zeilen, damit nichts auf halben Pixeln landet.
-    /// </summary>
-    private void ScrollTo(int index)
-    {
-        RectTransform content = GridMode ? gridContent : listContent;
-        if (scroll == null || content == null) return;
-
-        // In der Liste ist eine Reihe ein Eintrag, im Gitter sind es vier.
-        float step = GridMode ? TileStepY : RowH;
-        int perLine = GridMode ? TileCols : 1;
-
-        int lines = Mathf.CeilToInt(entries.Count / (float)perLine);
-        float hidden = Mathf.Max(0f, lines * step - ListH);
-        if (hidden <= 0f) return;
-
-        float top = content.anchoredPosition.y;
-        float lineTop = (index / perLine) * step;
-        float lineBottom = lineTop + step;
-
-        if (lineTop < top) top = lineTop;
-        else if (lineBottom > top + ListH) top = lineBottom - ListH;
-
-        top = Mathf.Round(Mathf.Clamp(top, 0f, hidden) / step) * step;
-        content.anchoredPosition = new Vector2(content.anchoredPosition.x, top);
+        OptionsKit.PlayClick();
+        Select(Mathf.Clamp(selected + delta, 0, entries.Count - 1), true);
     }
 
     // ==================================================================
     //  Aufbau
     // ==================================================================
 
+    private void Rebuild()
+    {
+        if (page == null) return;
+        bubbles.Clear();
+        OptionsKit.Clear(transform);
+        textFont = PixelUI.FindTextFont();
+        Build();
+    }
+
     private void Build()
     {
-        Canvas canvas = gameObject.AddComponent<Canvas>();
-        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        canvas.sortingOrder = 150;          // ueber Shop 130, Levelauswahl 135, Skilltree 140
+        // Ueber Shop 130, Levelauswahl 135 und Skilltree 140; unter Pause und Optionen.
+        page = OptionsKit.CreatePage(gameObject, 150, 0.84f, out scaler);
 
-        CanvasScaler scaler = gameObject.AddComponent<CanvasScaler>();
-        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        scaler.referenceResolution = new Vector2(RefW, RefH);
-        scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand;
+        bubbleHolder = OptionsKit.Rect("Bubbles", page, 0, 0, OptionsKit.RefW, OptionsKit.RefH);
+        BuildBubbles();
 
-        gameObject.AddComponent<GraphicRaycaster>();
-        EnsureEventSystem();
+        OptionsKit.Img("Card", page, CardX, CardY, CardW, CardH, GameHudSkin.Card, true);
+        ribbonHolder = OptionsKit.Rect("RibbonHolder", page, 0, 0, OptionsKit.RefW, OptionsKit.RefH);
 
-        // Kapselfluessigkeit fuellt den ganzen Bildschirm. Als 9-Slice, damit der
-        // 4px-Rahmen auch bei anderen Seitenverhaeltnissen am Rand klebt und
-        // seine Staerke behaelt - nur die Fluessigkeit dazwischen wird gedehnt.
-        Image bg = Stretch("Backdrop", transform, Gfx("bg_capsule"));
-        bg.type = Image.Type.Sliced;
-        bg.raycastTarget = true;
-
-        BuildBubbles(StretchRect("Bubbles", transform));
-
-        // Die Seite selbst bleibt immer exakt 320x180 und mittig, egal wie breit
-        // der Bildschirm ist.
-        page = Rect("Page", transform, 0f, 0f, RefW, RefH);
-        page.anchorMin = page.anchorMax = page.pivot = new Vector2(0.5f, 0.5f);
-        page.anchoredPosition = Vector2.zero;
-
-        Img("BookPanel", page, Book.x, Book.y, Book.z, Book.w, Gfx("book_panel"));
-        Img("BookSpine", page, Spine.x, Spine.y, Spine.z, Spine.w, Gfx("book_spine"));
-
+        tabCount = Bestiary.IsVisible ? 3 : 2;
         BuildTabs();
-        BuildProgressBar();
-        BuildBody();
+        BuildList();
         BuildDetail();
+        BuildFooter();
 
-        Rebuild();
+        OptionsKit.Layout(page, scaler, Content);
+        lastScreen = new Vector2Int(Screen.width, Screen.height);
+
+        tab = -1;
+        SetTab(Mathf.Clamp(startTab, 0, tabCount - 1));
     }
 
-    // ---------- Blasen ----------
-
-    private void BuildBubbles(RectTransform parent)
+    private static string TabName(int i)
     {
-        // Nur in den Streifen links und rechts neben dem Buch: in der Mitte
-        // waeren sie ohnehin dahinter versteckt und wuerden bloss am Buchrand
-        // auftauchen und wieder verschwinden - genau das sah unlogisch aus.
-        //
-        // Und nur die vier kleinen: bei 320px Breite ist so ein Streifen 11px
-        // schmal, eine 16er Blase wuerde dort ueber den Kapselrahmen laufen.
-        for (int i = 0; i < 4; i++)
+        switch (i)
         {
-            Sprite sprite = Gfx($"bubble_{i + 1:00}");
-            if (sprite == null) continue;
-
-            // Groesse kommt aus dem Sprite, nicht aus einer zweiten Liste -
-            // sonst wird die Blase beim kleinsten Versatz gedehnt.
-            float s = sprite.rect.width;
-
-            RectTransform rt = Rect($"Bubble_{i + 1:00}", parent, 0f, 0f, s, s);
-            rt.anchorMin = rt.anchorMax = Vector2.zero;
-            rt.pivot = new Vector2(0.5f, 0.5f);
-
-            Image img = rt.gameObject.AddComponent<Image>();
-            img.sprite = sprite;
-            img.raycastTarget = false;
-
-            Bubble b = new Bubble
-            {
-                Rt = rt,
-                Size = s,
-                Speed = Mathf.Lerp(11f, 5f, Mathf.InverseLerp(6f, 16f, s)),
-                Drift = Random.Range(1f, 2f),
-                Phase = Random.Range(0f, Mathf.PI * 2f),
-                RightSide = i % 2 == 1,
-            };
-            bubbles.Add(b);
-
-            rt.anchoredPosition = new Vector2(SideX(b), Random.Range(0f, RefH));
+            case TabAchievements: return Loc.Get("ui.book.tab.achievements", "ERFOLGE");
+            case TabUnlocks:      return Loc.Get("ui.book.tab.unlocks", "UNLOCKS");
+            default:              return Loc.Get("ui.book.tab.bestiary", "BESTIARIUM");
         }
     }
 
-    /// <summary>
-    /// x irgendwo im sichtbaren Streifen neben dem Buch - so, dass die Blase
-    /// ganz hineinpasst und weder den Kapselrahmen noch die Buchkante ueberlauft.
-    /// </summary>
-    private float SideX(Bubble b)
+    private static Sprite TabIcon(int i)
     {
-        // Beim ersten Aufruf steht das Canvas-Rect noch nicht, dann mit der
-        // Referenzbreite rechnen.
-        float w = ((RectTransform)transform).rect.width;
-        if (w <= 1f) w = RefW;
-
-        float margin = Mathf.Max(12f, (w - Book.z) * 0.5f);     // Buch ist mittig
-        float half = b.Size * 0.5f;
-
-        float min = CapsuleFrame + half;                        // hinter dem Rahmen
-        float max = Mathf.Max(min, margin - half);               // vor der Buchkante
-        float inset = Random.Range(min, max);
-
-        return b.RightSide ? w - inset : inset;
-    }
-
-    /// <summary>Breite des Kapselrahmens: 4px Holz plus 1px Kontur.</summary>
-    private const float CapsuleFrame = 5f;
-
-    private void AnimateBubbles()
-    {
-        float h = ((RectTransform)transform).rect.height;
-
-        foreach (Bubble b in bubbles)
+        switch (i)
         {
-            Vector2 p = b.Rt.anchoredPosition;
-            p.y += b.Speed * Time.unscaledDeltaTime;
-
-            if (p.y > h + 10f)
-            {
-                p.y = -10f;
-                p.x = SideX(b);
-            }
-
-            b.Phase += Time.unscaledDeltaTime * 0.8f;
-            b.Rt.anchoredPosition = new Vector2(p.x + Mathf.Sin(b.Phase) * b.Drift, p.y);
+            case TabAchievements: return GameHudSkin.Star;
+            case TabUnlocks:      return GameHudSkin.Key;
+            default:              return GameHudSkin.Skull;
         }
     }
-
-    // ---------- Reiter, Leiste, Liste, Detail ----------
 
     private void BuildTabs()
     {
-        tabImages = new Image[tabCount];
-        tabLabels = new TMP_Text[tabCount];
-
-        string[] names =
-        {
-            Loc.Get("ui.book.tab.achievements", "ERFOLGE"),
-            Loc.Get("ui.book.tab.unlocks", "UNLOCKS"),
-            Loc.Get("ui.book.tab.bestiary", "BESTIARIUM"),
-        };
-
+        tabs = new SkinButton[tabCount];
         for (int i = 0; i < tabCount; i++)
         {
-            Image img = Img($"Tab_{i}", page, TabX + i * TabStep, TabY, TabW, TabH,
-                            Gfx("tab_inactive"));
-            img.raycastTarget = true;
-            tabImages[i] = img;
-
-            tabLabels[i] = Label($"Label_{i}", img.rectTransform, 2f, 2f, 56f, 10f,
-                                 names[i], SizeText, TextDark, TextAlignmentOptions.Center);
-
-            Button button = img.gameObject.AddComponent<Button>();
-            button.transition = Selectable.Transition.None;
-            button.targetGraphic = img;
-
-            int captured = i;
-            button.onClick.AddListener(() =>
-            {
-                PlayClick();
-                SetTab(captured);
-            });
+            int index = i;
+            tabs[i] = SkinButton.Create(page, InX + i * (TabW + TabGap), TabY, TabW, TabH, TabName(i),
+                                        textFont, SkinButton.Kind.Wood, () => SetTab(index), TabIcon(i));
         }
 
-        BuildBackButton();
+        // Stand des Reiters rechts: Zahl und Balken.
+        int barX = InX + InW - TotalBarW;
+        OptionsKit.Img("TotalFrame", page, barX, TabY + 5, TotalBarW, 8, GameHudSkin.BarFrame, true);
+        totalFill = OptionsKit.Img("TotalFill", page, barX + 1, TabY + 6, 0, 6, GameHudSkin.White, GameHudSkin.Gold);
+        counter = OptionsKit.Label("Counter", page, barX - 52, TabY + 2, 48, 13, "", textFont,
+                                   OptionsKit.SizeText, GameHudSkin.Cream, TextAlignmentOptions.Right);
     }
 
-    /// <summary>
-    /// Sieht aus wie ein inaktiver Reiter, ist aber ein Knopf. Beschriftung ueber
-    /// den vorhandenen Schluessel, der steht schon in beiden Sprachdateien -
-    /// deutsch bewusst "ZURUECK" ohne Umlaut, weil ThaleahFat keinen kann.
-    /// </summary>
-    private void BuildBackButton()
+    private void BuildList()
     {
-        Image plate = Img("Back", page, Back.x, Back.y, Back.z, Back.w, Gfx("tab_inactive"));
-        plate.type = Image.Type.Sliced;
-        plate.raycastTarget = true;
+        OptionsKit.Img("ListWell", page, ListX, BodyY, ListW, BodyH, GameHudSkin.Well, true);
 
-        Label("Label", plate.rectTransform, 2f, 2f, Back.z - 4f, 10f,
-              Loc.Get("ui.achievements.close", "ZURUECK"), SizeText, TextOnTab,
-              TextAlignmentOptions.Center);
-
-        // Gleiche Hover-Sprache wie Liste und Gitter: ein duenner Rahmen.
-        Image hover = Img("Hover", plate.rectTransform, 0f, 0f, Back.z, Back.w, Gfx("row_hover"));
-        hover.type = Image.Type.Sliced;
-        hover.enabled = false;
-
-        Button button = plate.gameObject.AddComponent<Button>();
-        button.transition = Selectable.Transition.None;
-        button.targetGraphic = plate;
-        button.onClick.AddListener(() =>
-        {
-            PlayClick();
-            Close();
-        });
-
-        plate.gameObject.AddComponent<RowHover>().Target = hover;
-    }
-
-    private void BuildProgressBar()
-    {
-        for (int i = 0; i < CellCount; i++)
-        {
-            cells.Add(Img($"Cell_{i:00}", page, BarX + i * CellStep, BarY, CellW, CellH,
-                          Gfx("progress_cell_empty")));
-        }
-
-        counterText = Label("Counter", page, Counter.x, Counter.y, Counter.z, Counter.w,
-                            "", SizeSmall, TextMid, TextAlignmentOptions.Right);
-    }
-
-    /// <summary>
-    /// Beide Ansichten haengen im selben Sichtfenster: die Liste fuer die
-    /// Erfolge, das Kachelgitter fuer die Unlocks. Umgeschaltet wird nur, welche
-    /// gerade aktiv ist.
-    /// </summary>
-    private void BuildBody()
-    {
-        RectTransform viewport = Rect("Viewport", page, ListX, ListY, ListW, ListH);
+        viewport = OptionsKit.Rect("Viewport", page, ViewX, ViewY, ViewW, ViewH);
         viewport.gameObject.AddComponent<RectMask2D>();
+        content = OptionsKit.Rect("Content", viewport, 0, 0, ViewW, ViewH);
 
-        listContent = Rect("ListContent", viewport, 0f, 0f, ListW, 0f);
-
-        VerticalLayoutGroup layout = listContent.gameObject.AddComponent<VerticalLayoutGroup>();
-        layout.childAlignment = TextAnchor.UpperLeft;
-        layout.childControlWidth = true;
-        layout.childControlHeight = false;
-        layout.childForceExpandWidth = true;
-        layout.childForceExpandHeight = false;
-        layout.spacing = 0f;
-        layout.padding = new RectOffset(0, 0, 0, 0);
-
-        ContentSizeFitter fitter = listContent.gameObject.AddComponent<ContentSizeFitter>();
-        fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-
-        gridContent = Rect("GridContent", viewport, 0f, 0f, ListW, 0f);
-
-        GridLayoutGroup grid = gridContent.gameObject.AddComponent<GridLayoutGroup>();
-        grid.cellSize = new Vector2(TileS, TileS);
-        grid.spacing = new Vector2(TileStepX - TileS, TileStepY - TileS);
-        grid.startCorner = GridLayoutGroup.Corner.UpperLeft;
-        grid.startAxis = GridLayoutGroup.Axis.Horizontal;
-        grid.childAlignment = TextAnchor.UpperLeft;
-        grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-        grid.constraintCount = TileCols;
-        grid.padding = new RectOffset(0, 0, 0, 0);
-
-        ContentSizeFitter gridFitter = gridContent.gameObject.AddComponent<ContentSizeFitter>();
-        gridFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-
-        scroll = viewport.gameObject.AddComponent<ScrollRect>();
-        scroll.viewport = viewport;
-        scroll.content = listContent;
-        scroll.horizontal = false;
-        scroll.vertical = true;
-        scroll.movementType = ScrollRect.MovementType.Clamped;
-        scroll.inertia = false;
-    }
-
-    /// <summary>Kachelgitter bei Unlocks und Bestiarium, Liste im Erfolge-Reiter.</summary>
-    private bool GridMode => tab != 0;
-
-    private void ApplyMode()
-    {
-        listContent.gameObject.SetActive(!GridMode);
-        gridContent.gameObject.SetActive(GridMode);
-
-        scroll.content = GridMode ? gridContent : listContent;
-        scroll.scrollSensitivity = GridMode ? TileStepY : RowH;   // eine Reihe pro Rastung
+        scrollHandle = OptionsKit.Img("ScrollHandle", page, ListX + ListW - 3, ViewY, 2, 10,
+                                      GameHudSkin.White, GameHudSkin.Stone);
     }
 
     private void BuildDetail()
     {
-        detailSlot = Img("SlotXL", page, SlotXL.x, SlotXL.y, SlotXL.z, SlotXL.w,
-                         Gfx("slot_large_unlocked"));
-        detailIcon = Img("IconXL", page, SlotXL.x, SlotXL.y, SlotXL.z, SlotXL.w, null);
+        OptionsKit.Img("DetailWell", page, DetX, DetY, DetW, DetH, GameHudSkin.Well, true);
 
-        detailTitle = Label("Title", page, Title.x, Title.y, Title.z, Title.w,
-                            "", SizeTitle, TextDark, TextAlignmentOptions.Center);
+        int wx = DetX + 6, wy = DetY + 6;
+        winBack = OptionsKit.Img("WinBack", page, wx + 3, wy + 3, WinS - 6, WinS - 6,
+                                 GameHudSkin.SlotBack(WinS - 6, WinS - 6));
+        detailIcon = OptionsKit.Img("Icon", page, wx, wy, 32, 32, null);
+        winFrame = OptionsKit.Img("WinFrame", page, wx, wy, WinS, WinS,
+                                  GameHudSkin.SlotFrame(GameHudSkin.SlotLook.Wood), true);
 
-        detailDesc = Label("Desc", page, Desc.x, Desc.y, Desc.z, Desc.w,
-                           "", SizeText, TextMid, TextAlignmentOptions.TopLeft);
+        Sprite lockSprite = GameHudSkin.Lock;
+        detailLock = OptionsKit.Img("Lock", page, wx + WinS - lockSprite.rect.width - 2,
+                                    wy + WinS - lockSprite.rect.height - 2,
+                                    lockSprite.rect.width, lockSprite.rect.height, lockSprite);
+        Sprite check = GameHudSkin.Check;
+        detailCheck = OptionsKit.Img("Check", page, wx + WinS - check.rect.width + 1, wy - 2,
+                                     check.rect.width, check.rect.height, check);
+
+        int tx = wx + WinS + 6, tw = DetX + DetW - 6 - tx;
+        detailName = OptionsKit.Label("Name", page, tx, wy + 2, tw, 28, "", textFont, OptionsKit.SizeText,
+                                      GameHudSkin.Gold, TextAlignmentOptions.TopLeft);
+        detailName.textWrappingMode = TextWrappingModes.Normal;
+        detailSub = OptionsKit.Label("Sub", page, tx, wy + WinS - 15, tw, 13, "", textFont, OptionsKit.SizeText,
+                                     GameHudSkin.Stone, TextAlignmentOptions.BottomLeft);
+
+        OptionsKit.Img("Rule", page, DetX + 6, DetY + WinS + 10, DetW - 12, 2, GameHudSkin.Rule, true);
+
+        detailDesc = OptionsKit.Label("Desc", page, DetX + 7, DetY + WinS + 15, DetW - 14, 40, "", textFont,
+                                      OptionsKit.SizeText, GameHudSkin.Parchment, TextAlignmentOptions.TopLeft);
         detailDesc.textWrappingMode = TextWrappingModes.Normal;
-        detailDesc.overflowMode = TextOverflowModes.Truncate;
+        detailDesc.richText = true;
 
-        detailProgress = Label("Progress", page, Prog.x, Prog.y, Prog.z, Prog.w,
-                               "", SizeSmall, TextDim, TextAlignmentOptions.Center);
+        int barY = DetY + DetH - 30;
+        int barW = DetW - 12 - 44;
+        barFrame = OptionsKit.Img("BarFrame", page, DetX + 6, barY, barW, 8, GameHudSkin.BarFrame, true);
+        barFill = OptionsKit.Img("BarFill", page, DetX + 7, barY + 1, 0, 6, GameHudSkin.White, GameHudSkin.Gold);
+        detailProgress = OptionsKit.Label("Progress", page, DetX + 6 + barW, barY - 3, 44, 13, "", textFont,
+                                          OptionsKit.SizeText, GameHudSkin.Cream, TextAlignmentOptions.Right);
 
-        Img("Divider", page, Divider.x, Divider.y, Divider.z, Divider.w, null).color = LineColor;
+        rewardBox = OptionsKit.Img("RewardBox", page, DetX + 4, DetY + DetH - 19, DetW - 8, 15,
+                                   GameHudSkin.Plate, true);
+        rewardIcon = OptionsKit.Img("RewardIcon", page, DetX + 8, DetY + DetH - 17, 9, 9, null);
+        detailReward = OptionsKit.Label("Reward", page, DetX + 20, DetY + DetH - 18, DetW - 26, 13, "", textFont,
+                                        OptionsKit.SizeText, GameHudSkin.GoldLight, TextAlignmentOptions.Left);
+    }
 
-        // Die Box ist nativ 128 breit, die Detailspalte ist schmaler. Als
-        // 9-Slice bleiben die Goldfassung links und die Kante rechts scharf,
-        // nur die leere Mitte dazwischen wird gestaucht.
-        rewardBox = Img("RewardBox", page, Reward.x, Reward.y, Reward.z, Reward.w, Gfx("reward_box"));
-        rewardBox.type = Image.Type.Sliced;
-        rewardIcon = Img("RewardIcon", page, RewIco.x, RewIco.y, RewIco.z, RewIco.w, null);
-        rewardText = Label("RewardText", page, RewTxt.x, RewTxt.y, RewTxt.z, RewTxt.w,
-                           "", SizeSmall, TextMid, TextAlignmentOptions.TopLeft);
-        rewardText.textWrappingMode = TextWrappingModes.Normal;
+    private void BuildFooter()
+    {
+        SkinButton.Create(page, InX, FootY, BackW, FootH, Loc.Get("ui.achievements.close", "ZURÜCK"),
+                          textFont, SkinButton.Kind.Wood, Close);
+
+        OptionsKit.Label("Hint", page, InX + BackW + 8, FootY + 2, InW - BackW - 8, 13,
+                         Loc.Get("ui.book.hint", "A/D REITER   W/S AUSWAHL   E SCHLIESSEN"), textFont,
+                         OptionsKit.SizeText, GameHudSkin.Stone, TextAlignmentOptions.Right);
+    }
+
+    // ---------- Blasen ----------
+
+    private void BuildBubbles()
+    {
+        int[] sizes = { 3, 3, 5, 3, 7, 5, 3, 5, 3, 7, 3, 5 };
+        for (int i = 0; i < sizes.Length; i++)
+        {
+            int s = sizes[i];
+            Image img = OptionsKit.Img("Bubble", bubbleHolder, 0, 0, s, s, GameHudSkin.Bubble(s),
+                                       OptionsKit.WithAlpha(GameHudSkin.Capsule, 0.45f));
+            bubbles.Add(new Bubble
+            {
+                Rt = img.rectTransform,
+                Img = img,
+                X = Random.Range(0f, OptionsKit.RefW),
+                Y = Random.Range(0f, OptionsKit.RefH),
+                Speed = Mathf.Lerp(16f, 7f, (s - 3) / 4f),
+                Phase = Random.Range(0f, Mathf.PI * 2f),
+                Sway = Random.Range(1f, 3f),
+            });
+        }
+    }
+
+    /// <summary>Blasen steigen auf und pendeln leicht - immer auf ganzen Pixeln.</summary>
+    private void AnimateBubbles()
+    {
+        float dt = Time.unscaledDeltaTime, t = Time.unscaledTime;
+        foreach (Bubble b in bubbles)
+        {
+            if (b.Rt == null) continue;
+            b.Y -= b.Speed * dt;
+            if (b.Y < -10f)
+            {
+                b.Y = OptionsKit.RefH + Random.Range(0f, 30f);
+                b.X = Random.Range(0f, OptionsKit.RefW);
+            }
+            float x = b.X + Mathf.Sin(t * 0.8f + b.Phase) * b.Sway;
+            b.Rt.anchoredPosition = new Vector2(Mathf.Round(x), -Mathf.Round(b.Y));
+        }
+    }
+
+    // ==================================================================
+    //  Reiter
+    // ==================================================================
+
+    private bool GridMode => tab != TabAchievements;
+
+    private void SetTab(int index)
+    {
+        index = Mathf.Clamp(index, 0, tabCount - 1);
+        bool changed = index != tab;
+        tab = index;
+
+        for (int i = 0; i < tabs.Length; i++) tabs[i].Active = i == tab;
+
+        OptionsKit.Clear(ribbonHolder);
+        OptionsKit.Ribbon(ribbonHolder, CardX + CardW / 2f, RibbonY, TabName(tab), pixelFont, textFont);
+
+        if (changed) selected = 0;
+        BuildEntries();
+        Select(selected, true);
+    }
+
+    /// <summary>Liest den Reiter neu ein und baut Liste bzw. Gitter.</summary>
+    private void BuildEntries()
+    {
+        CollectEntries();
+
+        OptionsKit.Clear(content);
+        views.Clear();
+        hovered = -1;
+
+        if (GridMode) LayoutGrid();
+        else LayoutList();
+
+        content.sizeDelta = new Vector2(ViewW, Mathf.Max(ViewH, contentHeight));
+        selected = entries.Count == 0 ? 0 : Mathf.Clamp(selected, 0, entries.Count - 1);
+        SetScroll(scrollTop);
+
+        RefreshCounter();
+        PaintViews();
+    }
+
+    /// <summary>Wie <see cref="BuildEntries"/>, behaelt aber Auswahl und Scrollstand.</summary>
+    private void Refresh()
+    {
+        if (page == null) return;
+        int keepSel = selected;
+        float keepScroll = scrollTop;
+        BuildEntries();
+        selected = Mathf.Clamp(keepSel, 0, Mathf.Max(0, entries.Count - 1));
+        SetScroll(keepScroll);
+        PaintViews();
+        ShowDetail();
+    }
+
+    private void RefreshCounter()
+    {
+        int done = 0, total = entries.Count;
+        foreach (Entry e in entries) if (e.Done) done++;
+
+        counter.text = string.Format(Loc.Get("ui.achievements.counter", "{0} / {1}"), done, total);
+        SetFill(totalFill, TotalBarW - 2, total > 0 ? done / (float)total : 0f);
     }
 
     // ==================================================================
     //  Inhalt
     // ==================================================================
 
-    private void SetTab(int index)
-    {
-        index = Mathf.Clamp(index, 0, tabCount - 1);
-        if (index == tab) return;
-
-        tab = index;
-        startTab = index;
-        selected = 0;
-        Rebuild();
-
-        RectTransform content = GridMode ? gridContent : listContent;
-        if (content != null)
-            content.anchoredPosition = new Vector2(content.anchoredPosition.x, 0f);
-    }
-
-    /// <summary>Liest die Kataloge neu ein und beschriftet die Zeilen danach.</summary>
-    public void Rebuild()
-    {
-        CollectEntries();
-
-        for (int i = 0; i < tabCount; i++)
-        {
-            bool active = i == tab;
-            tabImages[i].sprite = Gfx(active ? "tab_active" : "tab_inactive");
-            tabLabels[i].color = active ? TextDark : TextOnTab;
-
-            // Der aktive Reiter ist 2px hoeher und deckt damit Kontur (y=23)
-            // und Lichtkante (y=24) der Buchseite zu. Erst dadurch haengt er an
-            // der Seite, statt als eigene Karte darueber zu schweben - die
-            // Beschriftung bleibt oben verankert und wandert nicht mit.
-            tabImages[i].rectTransform.sizeDelta =
-                new Vector2(TabW, active ? TabH + TabOverlap : TabH);
-        }
-
-        ApplyMode();
-
-        if (GridMode) BuildTiles();
-        else BuildRows();
-
-        selected = entries.Count == 0 ? 0 : Mathf.Clamp(selected, 0, entries.Count - 1);
-        Select(selected);
-        RefreshBar();
-    }
-
     private void CollectEntries()
     {
         entries.Clear();
-
-        if (tab == 0)
+        switch (tab)
         {
-            foreach (AchievementDef def in SortedAchievements())
-            {
-                bool done = def.IsUnlocked;
-                bool counted = def.HasProgress;
-                string count = $"{Mathf.FloorToInt(def.Value)} / {Mathf.FloorToInt(def.Goal)}";
-
-                entries.Add(new Entry
-                {
-                    Title = def.Name,
-                    Desc = def.Description,
-                    RowProgress = done ? "" : counted ? count : "",
-                    DetailProgress = done ? "" : counted ? count : "",
-                    // Ohne "Belohnung:" davor - die Goldfassung mit dem Abzeichen
-                    // sagt das schon, und die Detailspalte ist schmal.
-                    Reward = def.Souls > 0
-                        ? $"+{def.Souls} {Loc.Get("ui.achievements.souls", "Cookie Souls")}"
-                        : "",
-                    Done = done,
-                    IconRow = BookIcon(def.IconKey, 21),
-                    IconDetail = BookIcon(def.IconKey, 32) ?? def.Icon,
-                    RewardIcon = BookIcon("_badge_unlocked", 12),
-                });
-            }
-            return;
-        }
-
-        if (tab == BestiaryTab)
-        {
-            CollectBestiary();
-            return;
-        }
-
-        foreach (UnlockDef def in Unlocks.All)
-        {
-            bool done = def.IsUnlocked;
-
-            // Woher kommt der Unlock? Vergibt ein Achievement ihn mit, steht das
-            // in der Detailspalte - genau wie im UnlockPanel.
-            AchievementDef source = Ach.FindByUnlock(def.Id);
-            string desc = done
-                ? def.Description
-                : source != null
-                    ? string.Format(Loc.Get("ui.unlocks.from", "From: {0}"), source.Name)
-                    : Loc.Get("ui.unlocks.hint", "Keep playing to find this one.");
-
-            entries.Add(new Entry
-            {
-                Title = done ? def.Name : "???",
-                Desc = desc,
-                RowProgress = "",
-                DetailProgress = "",
-
-                // Ein Unlock vergibt nichts, die Box blieb hier bisher leer.
-                // Freigeschaltet bekommt sie jetzt trotzdem etwas zu sagen -
-                // die untere Haelfte der Seite stand sonst ohne Grund leer,
-                // und "hab ich" ist genau die Auskunft, die man hier sucht.
-                Reward = done ? Loc.Get("ui.unlocks.owned", "Unlocked") : "",
-                Done = done,
-                IconRow = BookIcon(def.IconKey, 21),
-                IconDetail = BookIcon(def.IconKey, 32) ?? def.Icon,
-                RewardIcon = done ? BookIcon("_badge_unlocked", 12) : null,
-            });
+            case TabAchievements: CollectAchievements(); break;
+            case TabUnlocks:      CollectUnlocks(); break;
+            default:              CollectBestiary(); break;
         }
     }
 
-    /// <summary>
-    /// Ein Eintrag je Gegner aus <see cref="Bestiary.Enemies"/>. "Erledigt" heisst
-    /// hier: mindestens ein Kill - dann gibt es den goldenen Rahmen.
-    /// </summary>
+    private void CollectAchievements()
+    {
+        foreach (AchievementCategory category in System.Enum.GetValues(typeof(AchievementCategory)))
+        {
+            string group = Loc.Get($"ach.cat.{category}", category.ToString().ToUpperInvariant());
+            foreach (AchievementDef def in Ach.All)
+            {
+                if (def.Category != category) continue;
+
+                bool done = def.IsUnlocked;
+                string key = def.Hidden && !done ? "_hidden" : def.IconKey;
+
+                var e = new Entry
+                {
+                    Title = def.Name,
+                    Sub = group,
+                    SubColor = GameHudSkin.Stone,
+                    Desc = def.Description,
+                    RowIcon = BookIcon(key, 21) ?? def.Icon,
+                    Icon = BookIcon(key, 32) ?? def.Icon,
+                    Done = done,
+                    Group = group,
+                };
+
+                if (!done && def.HasProgress)
+                {
+                    e.Progress = Mathf.Clamp01(def.Value / def.Goal);
+                    e.ProgressText = $"{Mathf.FloorToInt(Mathf.Min(def.Value, def.Goal))}/{Mathf.FloorToInt(def.Goal)}";
+                }
+
+                if (done)
+                {
+                    e.Reward = Loc.Get("ui.achievements.unlocked", "Freigeschaltet");
+                    e.RewardIcon = GameHudSkin.Check;
+                    e.RewardColor = GameHudSkin.Mint;
+                }
+                else if (def.Souls > 0)
+                {
+                    e.Reward = $"+{def.Souls} {Loc.Get("ui.achievements.souls", "Cookie Souls")}";
+                    e.RewardIcon = GameHudSkin.Coin;
+                    e.RewardColor = GameHudSkin.GoldLight;
+                }
+
+                entries.Add(e);
+            }
+        }
+    }
+
+    private void CollectUnlocks()
+    {
+        foreach (UnlockDef def in Unlocks.All)
+        {
+            bool done = def.IsUnlocked;
+            AchievementDef source = Ach.FindByUnlock(def.Id);
+
+            var e = new Entry
+            {
+                Title = done ? def.Name : "???",
+                Sub = done ? Loc.Get("ui.unlocks.owned", "Freigeschaltet").ToUpperInvariant()
+                           : Loc.Get("ui.book.locked", "GESPERRT"),
+                SubColor = done ? GameHudSkin.Mint : GameHudSkin.Stone,
+                Desc = done ? def.Description : Loc.Get("ui.unlocks.hint", "Spiel weiter, dann taucht das hier auf."),
+                Icon = BookIcon(def.IconKey, 32) ?? def.Icon,
+                Done = done,
+                Shadow = !done,
+            };
+
+            // Woher der Unlock kommt, steht unten in der Belohnungszeile.
+            if (source != null)
+            {
+                e.Reward = string.Format(Loc.Get("ui.unlocks.from", "Aus: {0}"), source.Name);
+                e.RewardIcon = GameHudSkin.Star;
+                e.RewardColor = done ? GameHudSkin.StoneLight : GameHudSkin.GoldLight;
+            }
+
+            entries.Add(e);
+        }
+    }
+
     private void CollectBestiary()
     {
-        bool active = Skills.HasGrant(SkillGrants.Bestiarium);
+        bool counting = Skills.HasGrant(SkillGrants.Bestiarium);
 
         foreach (EnemyId id in Bestiary.Enemies)
         {
             int kills = Bestiary.Kills(id);
             int bonus = Bestiary.BonusPercent(id);
-            int toNext = Bestiary.KillsPerPercent - kills % Bestiary.KillsPerPercent;
-            string name = Bestiary.NameOf(id);
-            Sprite icon = Bestiary.Icon(id);
+            int into = kills % Bestiary.KillsPerPercent;
+            bool seen = kills > 0;
+
+            string desc = seen
+                ? string.Format(Loc.Get("ui.bestiary.next", "Nächstes +1% in {0} Kills"),
+                                (Bestiary.KillsPerPercent - into).ToString("N0"))
+                : Loc.Get("ui.bestiary.unseen", "Noch nie besiegt. Wer ist das wohl?");
+
+            if (!counting)
+            {
+                string warn = Loc.Get("ui.bestiary.inactive", "Dieser Charakter zählt nicht mit.");
+                desc += $"\n<color=#{ColorUtility.ToHtmlStringRGB(GameHudSkin.JamLight)}>{warn}</color>";
+            }
 
             entries.Add(new Entry
             {
-                Title = name,
-                Desc = string.Format(Loc.Get("ui.bestiary.kills", "Kills: {0}"), kills.ToString("N0")) + "\n" +
-                       string.Format(Loc.Get("ui.bestiary.next", "Next +1% in {0} kills"), toNext.ToString("N0")),
-                RowProgress = "",
-                DetailProgress = active ? "" : Loc.Get("ui.bestiary.inactive",
-                                                       "This character has not learned the Bestiary."),
-                Reward = string.Format(Loc.Get("ui.bestiary.bonus", "+{0}% damage"), bonus),
-                Done = kills > 0,
-                IconRow = icon,
-                IconDetail = icon,
-                RewardIcon = null,
-                Letter = icon == null && name.Length > 0 ? name.Substring(0, 1) : "",
+                Title = seen ? Bestiary.NameOf(id) : "???",
+                Sub = string.Format(Loc.Get("ui.bestiary.kills", "Kills: {0}"), kills.ToString("N0")).ToUpperInvariant(),
+                SubColor = seen ? GameHudSkin.Cream : GameHudSkin.Stone,
+                Desc = desc,
+                Icon = Bestiary.Icon(id),
+                Done = seen,
+                Shadow = !seen,
+                Progress = into / (float)Bestiary.KillsPerPercent,
+                ProgressText = $"{into}/{Bestiary.KillsPerPercent}",
+                Reward = string.Format(Loc.Get("ui.bestiary.bonus", "+{0}% Schaden"), bonus),
+                RewardIcon = GameHudSkin.Crit,
+                RewardColor = bonus > 0 ? GameHudSkin.GoldLight : GameHudSkin.Stone,
+                Badge = bonus > 0 ? $"+{bonus}%" : "",
             });
         }
     }
 
-    /// <summary>
-    /// Nach Kategorie gruppiert, innerhalb der Gruppe in Katalogreihenfolge -
-    /// gleiche Sortierung wie im AchievementPanel, damit beide dasselbe zeigen.
-    /// </summary>
-    private static IEnumerable<AchievementDef> SortedAchievements()
+    // ---------- Liste ----------
+
+    private void LayoutList()
     {
-        foreach (AchievementCategory category in System.Enum.GetValues(typeof(AchievementCategory)))
+        float y = 0f;
+        string group = null;
+
+        for (int i = 0; i < entries.Count; i++)
         {
-            foreach (AchievementDef def in Ach.All)
-            {
-                if (def.Category == category) yield return def;
-            }
-        }
-    }
-
-    private void BuildRows()
-    {
-        while (rows.Count < entries.Count) rows.Add(CreateRow(rows.Count));
-
-        for (int i = 0; i < rows.Count; i++)
-        {
-            Row row = rows[i];
-            bool used = i < entries.Count;
-            row.Frame.gameObject.SetActive(used);
-            if (!used)
-            {
-                row.Hover.enabled = false;
-                continue;
-            }
-
             Entry e = entries[i];
 
-            // Erledigt bekommt eine eigene Flaeche, nicht nur ein Haekchen -
-            // man soll auf einen Blick sehen, was schon steht.
-            row.Frame.sprite = Gfx(e.Done ? "row_done" : "row_normal");
-            row.Slot.sprite = Gfx(e.Done ? "slot_small_unlocked" : "slot_small_locked");
+            if (e.Group != group)
+            {
+                group = e.Group;
+                if (i > 0) y += 3f;
+                AddHeader(group, y);
+                y += HeadH;
+            }
 
-            row.Icon.sprite = e.IconRow;
-            row.Icon.enabled = e.IconRow != null;
-            row.Icon.color = e.Done ? Color.white : IconLockedTint;
-
-            row.Title.text = e.Title;
-            row.Title.color = e.Done ? TextOnGold : TextMid;
-            row.Progress.text = e.RowProgress;
-            row.Progress.color = e.Done ? TextMid : TextDim;
+            views.Add(AddRow(i, y));
+            y += RowH + RowGap;
         }
+
+        contentHeight = Mathf.Max(0f, y - RowGap);
     }
 
-    private Row CreateRow(int index)
+    /// <summary>Zwischenueberschrift: Kategorie in Gold, rechts "3/8", darunter eine Linie.</summary>
+    private void AddHeader(string group, float y)
     {
-        Image frame = Img($"Row_{index:00}", listContent, 0f, 0f, ListW, RowH, Gfx("row_normal"));
-        frame.type = Image.Type.Sliced;
-        frame.raycastTarget = true;
-
-        LayoutElement le = frame.gameObject.AddComponent<LayoutElement>();
-        le.preferredHeight = RowH;
-        le.minHeight = RowH;
-
-        // Ganz unten in der Zeile, damit der duenne Strich nie ueber Icon oder
-        // Text liegt.
-        Image hover = Img("Hover", frame.rectTransform, 0f, 0f, ListW, RowH, Gfx("row_hover"));
-        hover.type = Image.Type.Sliced;
-        hover.enabled = false;
-
-        Image slot = Img("Slot", frame.rectTransform, SlotDX, SlotDY, SlotS, SlotS,
-                         Gfx("slot_small_unlocked"));
-        Image icon = Img("Icon", frame.rectTransform, SlotDX, SlotDY, SlotS, SlotS, null);
-
-        // Zeilenlokal y=2, nicht y=1: der Auswahlrahmen liegt als letztes Kind
-        // ueber dem Text und hat bei y=1 seine Innenkante. Die Punkte ueber
-        // einem A/O/U mit Umlaut sitzen ganz oben in der Zeile und kaemen ihr
-        // sonst ins Gehege. 10 ist immer noch groesser als SizeText - die
-        // Zone darf nie flacher werden als die Schrift, sonst wirft TMP die
-        // Zeile still weg.
-        TMP_Text title = Label("Title", frame.rectTransform, RowTextDX, 2f, RowTextW, 10f,
-                               "", SizeText, TextMid, TextAlignmentOptions.Left);
-        title.overflowMode = TextOverflowModes.Ellipsis;
-
-        TMP_Text prog = Label("Progress", frame.rectTransform, RowTextDX, 11f, RowTextW, 9f,
-                              "", SizeSmall, TextDim, TextAlignmentOptions.Left);
-
-        // Auswahl liegt als reiner Rahmen obenauf, damit "ausgewaehlt" und
-        // "erledigt" gleichzeitig sichtbar sind.
-        Image sel = Img("Selection", frame.rectTransform, 0f, 0f, ListW, RowH, Gfx("row_selected"));
-        sel.type = Image.Type.Sliced;
-        sel.enabled = false;
-
-        Button button = frame.gameObject.AddComponent<Button>();
-        button.transition = Selectable.Transition.None;
-        button.targetGraphic = frame;
-
-        frame.gameObject.AddComponent<RowHover>().Target = hover;
-
-        int captured = index;
-        button.onClick.AddListener(() =>
+        int done = 0, total = 0;
+        foreach (Entry e in entries)
         {
-            PlayClick();
-            Select(captured);
-        });
+            if (e.Group != group) continue;
+            total++;
+            if (e.Done) done++;
+        }
 
-        return new Row
+        OptionsKit.ShadowLabel("Head", content, 3, y, ViewW - 6, 13, group, textFont, OptionsKit.SizeText,
+                               GameHudSkin.Gold, TextAlignmentOptions.Left);
+        OptionsKit.Label("HeadCount", content, 3, y, ViewW - 9, 13, $"{done}/{total}", textFont,
+                         OptionsKit.SizeText, done == total ? GameHudSkin.Mint : GameHudSkin.Stone,
+                         TextAlignmentOptions.Right);
+        OptionsKit.Img("HeadRule", content, 0, y + 12, ViewW - 4, 2, GameHudSkin.Rule, true);
+    }
+
+    private View AddRow(int index, float y)
+    {
+        Entry e = entries[index];
+        float w = ViewW - 4;
+
+        RectTransform row = OptionsKit.Rect("Row", content, 0, y, w, RowH);
+        var v = new View { Index = index, Top = y, Height = RowH };
+
+        v.Back = row.gameObject.AddComponent<Image>();
+        v.Back.sprite = GameHudSkin.White;
+        v.Back.raycastTarget = true;
+
+        v.Icon = OptionsKit.Img("Icon", row, 2, Mathf.Floor((RowH - RowIcon) / 2f), RowIcon, RowIcon, e.RowIcon);
+        v.Icon.enabled = e.RowIcon != null;
+
+        v.Label = OptionsKit.Label("Label", row, RowIcon + 7, e.Progress >= 0f ? 1 : 5, w - RowIcon - 50, 13,
+                                   e.Title, textFont, OptionsKit.SizeText, GameHudSkin.Parchment,
+                                   TextAlignmentOptions.Left);
+        v.Label.overflowMode = TextOverflowModes.Ellipsis;
+
+        // Laufender Fortschritt: ein zwei Pixel duenner Strich unter dem Namen.
+        if (e.Progress >= 0f)
         {
-            Frame = frame, Hover = hover, Selection = sel, Slot = slot, Icon = icon,
-            Title = title, Progress = prog,
+            const int barW = 96;
+            v.BarBack = OptionsKit.Img("BarBack", row, RowIcon + 7, 16, barW, 3, GameHudSkin.White,
+                                       GameHudSkin.Night);
+            v.BarFill = OptionsKit.Img("BarFill", row, RowIcon + 7, 16, 0, 3, GameHudSkin.White,
+                                       GameHudSkin.GoldDark);
+            SetFill(v.BarFill, barW, e.Progress);
+        }
+
+        v.Right = OptionsKit.Label("Right", row, w - 48, 5, 44, 13, e.Done ? "" : e.ProgressText ?? "",
+                                   textFont, OptionsKit.SizeText, GameHudSkin.Stone, TextAlignmentOptions.Right);
+
+        Sprite c = GameHudSkin.Check;
+        v.Check = OptionsKit.Img("Check", row, w - 5 - c.rect.width, Mathf.Round((RowH - c.rect.height) / 2f),
+                                 c.rect.width, c.rect.height, c);
+
+        Hook(row.gameObject, v);
+        return v;
+    }
+
+    // ---------- Gitter ----------
+
+    private void LayoutGrid()
+    {
+        int s = TileSize(tab), step = s + TileGap;
+        int cols = Mathf.Max(1, (ViewW - 4 + TileGap) / step);
+        int x0 = (ViewW - 4 - (cols * s + (cols - 1) * TileGap)) / 2;
+
+        for (int i = 0; i < entries.Count; i++)
+        {
+            int cx = i % cols, cy = i / cols;
+            views.Add(AddTile(i, x0 + cx * step, 1 + cy * step, s));
+        }
+
+        int lines = Mathf.CeilToInt(entries.Count / (float)cols);
+        contentHeight = lines > 0 ? 1 + lines * step - TileGap + 1 : 0;
+    }
+
+    private View AddTile(int index, float x, float y, int s)
+    {
+        Entry e = entries[index];
+        RectTransform root = OptionsKit.Rect("Tile", content, x, y, s, s);
+        var v = new View { Index = index, Top = y, Height = s };
+
+        v.Tile = root.gameObject.AddComponent<Image>();
+        v.Tile.sprite = GameHudSkin.Tile(s, e.Done ? GameHudSkin.TileKind.Weapon : GameHudSkin.TileKind.Empty);
+        v.Tile.raycastTarget = true;
+
+        v.Icon = OptionsKit.Img("Icon", root, 0, 0, 1, 1, e.Icon);
+        FitIcon(v.Icon, e.Icon, 0, 0, s, s - 1);
+
+        if (e.Shadow)
+        {
+            Sprite l = GameHudSkin.Lock;
+            v.Lock = OptionsKit.Img("Lock", root, s - l.rect.width - 2, s - l.rect.height - 3,
+                                    l.rect.width, l.rect.height, l);
+        }
+
+        if (!string.IsNullOrEmpty(e.Badge))
+        {
+            v.Badge = OptionsKit.ShadowLabel("Badge", root, 2, s - 15, s - 5, 13, e.Badge, textFont,
+                                             OptionsKit.SizeText, GameHudSkin.GoldLight, TextAlignmentOptions.Right);
+        }
+
+        v.Hover = OptionsKit.Img("Hover", root, -1, -1, s + 2, s + 2,
+                                 GameHudSkin.SlotFrame(GameHudSkin.SlotLook.Hover), true);
+        v.Select = OptionsKit.Img("Select", root, -1, -1, s + 2, s + 2,
+                                  GameHudSkin.SlotFrame(GameHudSkin.SlotLook.Gold), true);
+
+        Hook(root.gameObject, v);
+        return v;
+    }
+
+    /// <summary>Setzt ein Bild in seiner echten Groesse mittig in einen Kasten - nie gestreckt.</summary>
+    private static void FitIcon(Image img, Sprite sprite, float x, float y, float w, float h)
+    {
+        img.enabled = sprite != null;
+        if (sprite == null) return;
+        img.sprite = sprite;
+
+        float sw = sprite.rect.width, sh = sprite.rect.height;
+        OptionsKit.Move(img.rectTransform, x + Mathf.Floor((w - sw) / 2f), y + Mathf.Floor((h - sh) / 2f), sw, sh);
+    }
+
+    private void Hook(GameObject go, View v)
+    {
+        PointerRelay relay = go.AddComponent<PointerRelay>();
+        relay.Enter = () => { hovered = v.Index; PaintViews(); };
+        relay.Exit = () => { if (hovered == v.Index) hovered = -1; PaintViews(); };
+        relay.Down = () =>
+        {
+            if (v.Index == selected) return;
+            OptionsKit.PlayClick();
+            Select(v.Index, false);
         };
     }
 
-    // ---------- Kachelgitter (Unlocks) ----------
+    // ---------- Auswahl, Scrollen ----------
 
-    private void BuildTiles()
+    private void Select(int index, bool scrollIntoView)
     {
-        while (tiles.Count < entries.Count) tiles.Add(CreateTile(tiles.Count));
+        selected = entries.Count == 0 ? 0 : Mathf.Clamp(index, 0, entries.Count - 1);
+        PaintViews();
+        ShowDetail();
 
-        for (int i = 0; i < tiles.Count; i++)
+        if (!scrollIntoView || views.Count == 0) return;
+
+        View v = views[selected];
+        // In der Liste die Zwischenueberschrift mitnehmen, wenn es die erste Zeile der Gruppe ist.
+        float top = v.Top - (!GridMode && (selected == 0 || entries[selected - 1].Group != entries[selected].Group)
+                                 ? HeadH + 3 : 1);
+        float bottom = v.Top + v.Height + 1;
+        if (top < scrollTop) SetScroll(top);
+        else if (bottom > scrollTop + ViewH) SetScroll(bottom - ViewH);
+    }
+
+    private void SetScroll(float value)
+    {
+        float hidden = Mathf.Max(0f, contentHeight - ViewH);
+        scrollTop = Mathf.Clamp(value, 0f, hidden);
+        // Ganze Pixel - sonst verschmiert der Inhalt beim Hochskalieren.
+        content.anchoredPosition = new Vector2(0f, Mathf.Round(scrollTop));
+        UpdateScrollBar();
+    }
+
+    private void UpdateScrollBar()
+    {
+        float hidden = Mathf.Max(0f, contentHeight - ViewH);
+        scrollHandle.enabled = hidden > 0f;
+        if (hidden <= 0f) return;
+
+        float size = Mathf.Max(8f, Mathf.Round(ViewH * (ViewH / contentHeight)));
+        float y = ViewY + Mathf.Round((ViewH - size) * (scrollTop / hidden));
+        OptionsKit.Move(scrollHandle.rectTransform, ListX + ListW - 3, y, 2, size);
+    }
+
+    /// <summary>Zustand jeder Zeile/Kachel: erledigt, gewaehlt, Maus.</summary>
+    private void PaintViews()
+    {
+        foreach (View v in views)
         {
-            Tile tile = tiles[i];
-            bool used = i < entries.Count;
-            tile.Frame.gameObject.SetActive(used);
-            if (!used)
+            Entry e = entries[v.Index];
+            bool sel = v.Index == selected, hov = v.Index == hovered;
+
+            if (v.Back != null)
             {
-                tile.Hover.enabled = false;
-                continue;
+                Color c;
+                if (sel) c = GameHudSkin.WoodMid;
+                else if (hov) c = GameHudSkin.StoneDark;
+                else if (v.Index % 2 == 0) c = GameHudSkin.CardFill;
+                else c = Color.clear;
+                v.Back.color = c;
+
+                v.Label.color = sel ? GameHudSkin.Cream : e.Done ? GameHudSkin.Parchment : GameHudSkin.StoneLight;
+                v.Icon.color = e.Done ? Color.white : LockedTint;
+                v.Check.enabled = e.Done;
+                if (v.BarFill != null) v.BarFill.color = sel ? GameHudSkin.Gold : GameHudSkin.GoldDark;
             }
-
-            Entry e = entries[i];
-
-            // Das Gitter gibt es nur fuer Unlocks, und dort ist "hab ich" der
-            // eigentliche Inhalt der Kachel. Ein vergoldeter Rahmen sagt das
-            // von selbst - vorher war der Unterschied nur, dass die Kachel
-            // *nicht* die blasse Vertiefung war, und eine Abwesenheit sieht man
-            // schlecht.
-            tile.Frame.sprite = Gfx(e.Done ? "slot_large_owned" : "slot_large_locked");
-            tile.Icon.sprite = e.IconDetail;              // die 32er-Variante
-            tile.Icon.enabled = e.IconDetail != null;
-            tile.Icon.color = e.Done ? Color.white : IconLockedTint;
-            tile.Letter.text = e.Letter ?? "";
-            tile.Letter.color = e.Done ? TextDark : TextDim;
+            else
+            {
+                v.Icon.color = e.Shadow ? Silhouette : Color.white;
+                v.Hover.enabled = hov && !sel;
+                v.Select.enabled = sel;
+            }
         }
     }
 
-    private Tile CreateTile(int index)
+    // ==================================================================
+    //  Detail
+    // ==================================================================
+
+    private void ShowDetail()
     {
-        Image frame = Img($"Tile_{index:00}", gridContent, 0f, 0f, TileS, TileS,
-                          Gfx("slot_large_unlocked"));
-        frame.raycastTarget = true;
+        Entry e = entries.Count > 0 ? entries[Mathf.Clamp(selected, 0, entries.Count - 1)] : null;
+        bool has = e != null;
 
-        Image icon = Img("Icon", frame.rectTransform, 0f, 0f, TileS, TileS, null);
+        winBack.enabled = winFrame.enabled = has;
+        detailLock.enabled = detailCheck.enabled = false;
+        barFrame.enabled = barFill.enabled = false;
+        detailProgress.text = "";
+        rewardBox.enabled = rewardIcon.enabled = false;
+        detailReward.text = "";
 
-        // Nur im Bestiarium, solange ein Gegner noch kein Bild hat.
-        TMP_Text letter = Label("Letter", frame.rectTransform, 0f, 9f, TileS, 14f,
-                                "", SizeTitle, TextDark, TextAlignmentOptions.Center);
-
-        // Hover und Auswahl sind dieselben Sprites wie in der Liste. Sie sind
-        // 9-Slices, also laesst sich derselbe Rahmen auf 32x32 ziehen, ohne dass
-        // die Kante dicker wird.
-        Image hover = Img("Hover", frame.rectTransform, 0f, 0f, TileS, TileS, Gfx("row_hover"));
-        hover.type = Image.Type.Sliced;
-        hover.enabled = false;
-
-        Image sel = Img("Selection", frame.rectTransform, 0f, 0f, TileS, TileS, Gfx("row_selected"));
-        sel.type = Image.Type.Sliced;
-        sel.enabled = false;
-
-        Button button = frame.gameObject.AddComponent<Button>();
-        button.transition = Selectable.Transition.None;
-        button.targetGraphic = frame;
-
-        frame.gameObject.AddComponent<RowHover>().Target = hover;
-
-        int captured = index;
-        button.onClick.AddListener(() =>
+        if (!has)
         {
-            PlayClick();
-            Select(captured);
-        });
-
-        return new Tile { Frame = frame, Icon = icon, Hover = hover, Selection = sel, Letter = letter };
-    }
-
-    // ---------- Auswahl ----------
-
-    private void Select(int index)
-    {
-        selected = index;
-
-        if (GridMode)
-        {
-            for (int i = 0; i < tiles.Count; i++)
-            {
-                if (i >= entries.Count) continue;
-                tiles[i].Selection.enabled = i == selected;
-            }
-        }
-        else
-        {
-            for (int i = 0; i < rows.Count; i++)
-            {
-                if (i >= entries.Count) continue;
-                rows[i].Selection.enabled = i == selected;
-            }
-        }
-
-        ShowDetail(entries.Count > 0 ? entries[selected] : null);
-    }
-
-    private void ShowDetail(Entry e)
-    {
-        if (e == null)
-        {
-            detailTitle.text = Loc.Get("ui.achievements.empty", "Nothing here yet.");
-            detailDesc.text = "";
-            detailProgress.text = "";
-            rewardText.text = "";
             detailIcon.enabled = false;
-            rewardBox.enabled = false;
-            rewardIcon.enabled = false;
+            detailName.text = Loc.Get("ui.achievements.empty", "Hier ist noch nichts.");
+            detailName.color = GameHudSkin.Stone;
+            detailSub.text = detailDesc.text = "";
             return;
         }
 
-        detailSlot.sprite = Gfx(e.Done
-            ? (GridMode ? "slot_large_owned" : "slot_large_unlocked")
-            : "slot_large_locked");
+        int wx = DetX + 6, wy = DetY + 6;
+        FitIcon(detailIcon, e.Icon, wx + 3, wy + 3, WinS - 6, WinS - 6);
+        detailIcon.color = e.Shadow ? Silhouette : e.Done || GridMode ? Color.white : LockedTint;
 
-        detailIcon.sprite = e.IconDetail;
-        detailIcon.enabled = e.IconDetail != null;
-        detailIcon.color = e.Done ? Color.white : IconLockedTint;
+        winFrame.sprite = GameHudSkin.SlotFrame(e.Done ? GameHudSkin.SlotLook.Gold : GameHudSkin.SlotLook.Wood);
+        winBack.color = e.Done ? Color.white : new Color(0.72f, 0.66f, 0.66f, 1f);
+        detailLock.enabled = e.Shadow;
+        detailCheck.enabled = e.Done && tab != TabBestiary;
 
-        detailTitle.text = e.Title;
-        detailTitle.color = e.Done ? TextDark : TextMid;
+        detailName.text = e.Title.ToUpperInvariant();
+        detailName.color = e.Done ? GameHudSkin.Gold : GameHudSkin.Cream;
+        detailSub.text = e.Sub;
+        detailSub.color = e.SubColor;
         detailDesc.text = e.Desc;
-        detailProgress.text = e.DetailProgress;
 
-        // Offene Erfolge haben eine Belohnung, freigeschaltete Unlocks eine
-        // Statuszeile - beides steht in derselben Box. Ist nichts davon da,
-        // verschwindet sie ganz, statt leer herumzustehen. Der Text kommt
-        // fertig aus CollectEntries, weil "Belohnung:" nur vor einer Belohnung
-        // stehen darf und nicht vor "Freigeschaltet".
-        bool hasReward = !string.IsNullOrEmpty(e.Reward);
-        rewardBox.enabled = hasReward;
-        rewardText.text = e.Reward;
-        rewardIcon.sprite = e.RewardIcon;
-        rewardIcon.enabled = hasReward && e.RewardIcon != null;
-    }
-
-    private void RefreshBar()
-    {
-        int done, total;
-        if (tab == BestiaryTab)
+        if (e.Progress >= 0f)
         {
-            // Wie viele Gegnerarten schon mindestens +1 % bringen.
-            done = 0;
-            total = Bestiary.Enemies.Count;
-            foreach (EnemyId id in Bestiary.Enemies) if (Bestiary.BonusPercent(id) > 0) done++;
-        }
-        else
-        {
-            done = tab == 0 ? Achievements.UnlockedCount : Unlocks.UnlockedCount;
-            total = tab == 0 ? Achievements.TotalCount : Unlocks.TotalCount;
+            barFrame.enabled = true;
+            SetFill(barFill, barFrame.rectTransform.sizeDelta.x - 2f, e.Progress);
+            detailProgress.text = e.ProgressText;
         }
 
-        counterText.text = string.Format(Loc.Get("ui.achievements.counter", "{0} / {1}"), done, total);
-
-        // Angefangen zaehlt als angefangen: sobald etwas offen ist, leuchtet
-        // mindestens eine Zelle, und voll ist die Leiste nur bei wirklich allem.
-        int filled = 0;
-        if (total > 0 && done > 0)
+        if (!string.IsNullOrEmpty(e.Reward))
         {
-            filled = Mathf.Clamp(Mathf.CeilToInt(done / (float)total * CellCount), 1, CellCount);
-            if (done < total) filled = Mathf.Min(filled, CellCount - 1);
-        }
+            rewardBox.enabled = true;
+            detailReward.text = e.Reward;
+            detailReward.color = e.RewardColor;
 
-        for (int i = 0; i < cells.Count; i++)
-        {
-            cells[i].sprite = Gfx(i < filled ? "progress_cell_full" : "progress_cell_empty");
+            if (e.RewardIcon != null)
+            {
+                Sprite s = e.RewardIcon;
+                rewardIcon.sprite = s;
+                rewardIcon.enabled = true;
+                int rbY = DetY + DetH - 19;
+                OptionsKit.Move(rewardIcon.rectTransform, DetX + 8 + Mathf.Floor((9 - s.rect.width) / 2f),
+                                rbY + Mathf.Floor((15 - s.rect.height) / 2f), s.rect.width, s.rect.height);
+            }
         }
     }
 
     // ==================================================================
-    //  Kleinkram
+    //  Helfer
     // ==================================================================
 
-    private static readonly Dictionary<string, Sprite> spriteCache = new Dictionary<string, Sprite>();
-
-    private static Sprite Gfx(string name)
-    {
-        // != null statt TryGetValue allein: raeumt Unity die Resources zwischen
-        // zwei Szenen auf, steht im Cache eine zerstoerte Referenz.
-        if (spriteCache.TryGetValue(name, out Sprite cached) && cached != null) return cached;
-
-        Sprite s = Resources.Load<Sprite>(UiPath + name);
-        if (s == null)
-        {
-            Debug.LogWarning($"[Buch] Sprite '{name}' fehlt - erwartet wird " +
-                             $"Assets/Resources/{UiPath}{name}.png");
-        }
-        spriteCache[name] = s;
-        return s;
-    }
-
-    /// <summary>
-    /// Das auf das Slot-Raster gebrachte Icon (12, 21 oder 32 Pixel). Fehlt es,
-    /// gibt es null zurueck und der Aufrufer nimmt das alte 64x64-Bild.
-    /// </summary>
+    /// <summary>Die Achievement-/Unlock-Bilder aus Resources/AchievementsBook/ in 12, 21 oder 32 px.</summary>
     private static Sprite BookIcon(string iconKey, int size)
     {
         if (string.IsNullOrEmpty(iconKey)) return null;
-        return Resources.Load<Sprite>($"{IconPath}{iconKey}_{size}");
+        return Resources.Load<Sprite>($"AchievementsBook/{iconKey}_{size}");
     }
 
-    /// <summary>
-    /// Jersey10 zuerst: die Pixelfont des Projekts (ThaleahFat) kann keine
-    /// Umlaute, und in diesem Fenster steht deutscher Text. Die Auswahl steht
-    /// in <see cref="PixelUI.FindTextFont"/>, damit die anderen Fenster mit
-    /// denselben Katalogtexten nicht wieder auf ThaleahFat zurueckfallen.
-    /// </summary>
-    private static TMP_FontAsset FindFont()
+    /// <summary>Fuellbalken auf ganze Pixel: Breite = Anteil der Innenbreite.</summary>
+    private static void SetFill(Image fill, float innerWidth, float t)
     {
-        return PixelUI.FindTextFont() ?? PixelUI.FindPixelFont();
-    }
-
-    private static Color Hex(int rgb) => new Color32(
-        (byte)((rgb >> 16) & 0xFF), (byte)((rgb >> 8) & 0xFF), (byte)(rgb & 0xFF), 0xFF);
-
-    /// <summary>Rechteck im 320x180-Raster: x/y zaehlen von oben links.</summary>
-    private static RectTransform Rect(string name, Transform parent, float x, float y, float w, float h)
-    {
-        GameObject go = new GameObject(name, typeof(RectTransform));
-        go.transform.SetParent(parent, false);
-
-        RectTransform rt = (RectTransform)go.transform;
-        rt.anchorMin = rt.anchorMax = rt.pivot = new Vector2(0f, 1f);
-        rt.sizeDelta = new Vector2(w, h);
-        rt.anchoredPosition = new Vector2(x, -y);
-        return rt;
-    }
-
-    private static Image Img(string name, Transform parent, float x, float y, float w, float h,
-                             Sprite sprite)
-    {
-        RectTransform rt = Rect(name, parent, x, y, w, h);
-        Image img = rt.gameObject.AddComponent<Image>();
-        img.sprite = sprite;
-        img.raycastTarget = false;
-        return img;
-    }
-
-    private static RectTransform StretchRect(string name, Transform parent)
-    {
-        GameObject go = new GameObject(name, typeof(RectTransform));
-        go.transform.SetParent(parent, false);
-
-        RectTransform rt = (RectTransform)go.transform;
-        rt.anchorMin = Vector2.zero;
-        rt.anchorMax = Vector2.one;
-        rt.sizeDelta = Vector2.zero;
-        rt.anchoredPosition = Vector2.zero;
-        return rt;
-    }
-
-    private static Image Stretch(string name, Transform parent, Sprite sprite)
-    {
-        RectTransform rt = StretchRect(name, parent);
-        Image img = rt.gameObject.AddComponent<Image>();
-        img.sprite = sprite;
-        img.raycastTarget = false;
-        return img;
-    }
-
-    /// <summary>
-    /// Die Hoehe muss groesser sein als die Schriftgroesse. Ist das Rechteck zu
-    /// flach, wirft TextMeshPro die Zeile still weg und es steht gar nichts da.
-    /// </summary>
-    private TMP_Text Label(string name, Transform parent, float x, float y, float w, float h,
-                           string text, float size, Color color, TextAlignmentOptions align)
-    {
-        RectTransform rt = Rect(name, parent, x, y, w, h);
-
-        TextMeshProUGUI label = rt.gameObject.AddComponent<TextMeshProUGUI>();
-        if (font != null) label.font = font;
-        label.text = text;
-        label.fontSize = size;
-        label.color = color;
-        label.alignment = align;
-        label.raycastTarget = false;
-        label.enableAutoSizing = false;
-        label.margin = Vector4.zero;
-        label.textWrappingMode = TextWrappingModes.NoWrap;
-        label.overflowMode = TextOverflowModes.Overflow;
-        return label;
-    }
-
-    private static void PlayClick()
-    {
-        AudioController audio = AudioController.Instance;
-        if (audio != null && audio.MenuClick != null) audio.PalySound(audio.MenuClick);
-    }
-
-    private static void EnsureEventSystem()
-    {
-        if (EventSystem.current != null) return;
-        GameObject es = new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
-        DontDestroyOnLoad(es);
+        RectTransform rt = fill.rectTransform;
+        float w = Mathf.Round(innerWidth * Mathf.Clamp01(t));
+        rt.sizeDelta = new Vector2(w, rt.sizeDelta.y);
+        fill.enabled = w > 0f;
     }
 }

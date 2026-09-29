@@ -11,7 +11,7 @@ using UnityEngine.UI;
 ///
 /// Aufbau (Seitenpixel, 480x270):
 ///   Titelband   OPTIONEN
-///   Reiter      AUDIO | ANZEIGE                     ESC ZURUECK
+///   Reiter      AUDIO | ANZEIGE | SPIEL             ESC ZURUECK
 ///   Liste       eingelassene Senke, Zeilen im Zebra
 ///   Hinweis     eine Zeile zum aktiven Reiter
 ///   Fussleiste  STANDARD      FEEDBACK      FERTIG
@@ -24,7 +24,9 @@ using UnityEngine.UI;
 /// Die Werte haengen an den vorhandenen Systemen: Ton am
 /// <see cref="AudioSettingsManager"/>, Sprache an <see cref="Loc"/>, alles
 /// andere an <see cref="GameSettings"/>. Das Fenster haelt selbst nichts.
-/// Der FEEDBACK-Knopf oeffnet <see cref="FeedbackPanel"/> darueber.
+/// Der FEEDBACK-Knopf oeffnet <see cref="FeedbackPanel"/> darueber. Der
+/// Reiter SPIEL zeigt die Version, oeffnet <see cref="CreditsPanel"/> und
+/// setzt ueber <see cref="SaveReset"/> den Spielstand zurueck (mit Rueckfrage).
 /// </summary>
 public class OptionsPanel : MonoBehaviour
 {
@@ -49,12 +51,19 @@ public class OptionsPanel : MonoBehaviour
     private const int ChipH = 14, ChipGap = 3, ChipPad = 12, ChipMinW = 26;
     private const int CellCount = 10, CellW = 7, CellH = 9, CellStep = 8;
     private const int ValueW = 26;
+    private const int RowBtnMinW = 60;
+
+    // Rueckfrage wie im Pausenmenue, etwas hoeher fuer drei Zeilen Text.
+    private const int DlgX = 146, DlgY = 92, DlgW = 188, DlgH = 86;
+    private const int DlgTextY = 101, DlgTextH = 40;
+    private const int DlgBtnY = 150, DlgBtnW = 80, DlgBtnH = 18;
 
     // ==================================================================
     //  Zustand
     // ==================================================================
 
-    private enum Tab { Audio, Display }
+    private enum Tab { Audio, Display, Game }
+    private const int TabCount = 3;
 
     private static OptionsPanel instance;
     public static bool IsOpen => instance != null;
@@ -78,6 +87,9 @@ public class OptionsPanel : MonoBehaviour
     private float contentHeight, scrollTop;
     private int openedFrame;
 
+    private RectTransform dialog, dialogPage;
+    private System.Action dialogConfirm;
+
     // ==================================================================
     //  Oeffnen / Schliessen
     // ==================================================================
@@ -92,6 +104,7 @@ public class OptionsPanel : MonoBehaviour
     public static void Close()
     {
         FeedbackPanel.Close();
+        CreditsPanel.Close();
         if (instance == null) return;
         Destroy(instance.gameObject);
         instance = null;
@@ -130,19 +143,23 @@ public class OptionsPanel : MonoBehaviour
         {
             lastScreen = size;
             OptionsKit.Layout(page, scaler, Content);
+            if (dialogPage != null) dialogPage.anchoredPosition = page.anchoredPosition;
         }
 
-        // Das Feedback-Fenster liegt darueber und hat die Tastatur.
-        if (FeedbackPanel.IsOpen || Time.frameCount == openedFrame) return;
+        // Feedback und Credits liegen darueber und haben die Tastatur.
+        if (FeedbackPanel.IsOpen || CreditsPanel.IsOpen || Time.frameCount == openedFrame) return;
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             OptionsKit.PlayClick();
-            Close();
+            if (dialog != null) CloseDialog();
+            else Close();
             return;
         }
 
-        if (Input.GetKeyDown(KeyCode.Tab)) SetTab(tab == Tab.Audio ? Tab.Display : Tab.Audio);
+        if (dialog != null) return;
+
+        if (Input.GetKeyDown(KeyCode.Tab)) SetTab((Tab)(((int)tab + 1) % TabCount));
 
         float wheel = Input.mouseScrollDelta.y;
         if (!Mathf.Approximately(wheel, 0f)) Scroll(-wheel * RowStep);
@@ -155,6 +172,7 @@ public class OptionsPanel : MonoBehaviour
     private void OnLanguageChanged()
     {
         // Alles neu: Titel, Reiter und Knoepfe aendern ihre Breite mit.
+        CloseDialog();
         OptionsKit.Clear(transform);
         rows.Clear();
         textFont = PixelUI.FindTextFont();
@@ -186,6 +204,7 @@ public class OptionsPanel : MonoBehaviour
         {
             Loc.Get("ui.options.tab.audio", "AUDIO"),
             Loc.Get("ui.options.tab.display", "ANZEIGE"),
+            Loc.Get("ui.options.tab.game", "SPIEL"),
         };
 
         tabs = new SkinButton[labels.Length];
@@ -290,12 +309,26 @@ public class OptionsPanel : MonoBehaviour
 
         for (int i = 0; i < tabs.Length; i++) tabs[i].Active = (int)tab == i;
 
-        description.text = tab == Tab.Audio
-            ? Loc.Get("ui.options.desc.audio", "Lautstärke von Musik und Geräuschen.")
-            : Loc.Get("ui.options.desc.display", "Fenster, Auflösung und was im Spiel angezeigt wird.");
+        switch (tab)
+        {
+            case Tab.Audio:
+                description.text = Loc.Get("ui.options.desc.audio", "Lautstärke von Musik und Geräuschen.");
+                BuildAudioRows();
+                break;
 
-        if (tab == Tab.Audio) BuildAudioRows();
-        else BuildDisplayRows();
+            case Tab.Display:
+                description.text = Loc.Get("ui.options.desc.display",
+                                           "Fenster, Auflösung und was im Spiel angezeigt wird.");
+                BuildDisplayRows();
+                break;
+
+            default:
+                description.text = SaveReset.Allowed
+                    ? Loc.Get("ui.options.desc.game", "Version, Credits und dein Spielstand.")
+                    : Loc.Get("ui.options.desc.game.run", "Zurücksetzen geht nicht während eines Laufs.");
+                BuildGameRows();
+                break;
+        }
 
         contentHeight = rows.Count * RowStep - (rows.Count > 0 ? RowStep - RowH : 0);
         content.sizeDelta = new Vector2(RowW, Mathf.Max(ViewH, contentHeight));
@@ -367,6 +400,29 @@ public class OptionsPanel : MonoBehaviour
     private static string[] OnOff()
     {
         return new[] { Loc.Get("ui.options.on", "An"), Loc.Get("ui.options.off", "Aus") };
+    }
+
+    private void BuildGameRows()
+    {
+        TextRow(Loc.Get("ui.options.game.version", "Version"), Application.version);
+
+        ButtonRow(Loc.Get("ui.options.game.credits", "Credits"),
+                  Loc.Get("ui.options.game.credits.btn", "ANZEIGEN"), SkinButton.Kind.Wood, CreditsPanel.Open);
+
+        SkinButton reset = ButtonRow(Loc.Get("ui.options.game.reset", "Spielstand zurücksetzen"),
+                                     Loc.Get("ui.options.game.reset.btn", "ZURÜCKSETZEN"), SkinButton.Kind.Danger,
+                                     () => OpenDialog(Loc.Get("ui.options.game.reset.confirm",
+                                                              "Wirklich alles löschen? Münzen, Upgrades, Skills und Erfolge sind danach weg."),
+                                                      ResetSave));
+        reset.Disabled = !SaveReset.Allowed;
+    }
+
+    private static void ResetSave()
+    {
+        // Das Pausenmenue (Hub) liegt versteckt darunter - mit weg, bevor die Szene wechselt.
+        Close();
+        PauseMenuPanel.Close();
+        SaveReset.ResetAll();
     }
 
     // ---------- Zeilentypen ----------
@@ -495,6 +551,82 @@ public class OptionsPanel : MonoBehaviour
             for (int i = 0; i < chips.Length; i++)
                 if (chips[i] != null) chips[i].Active = i == selected;
         });
+    }
+
+    /// <summary>Nur Anzeige: Wert rechtsbuendig.</summary>
+    private void TextRow(string name, string value)
+    {
+        RectTransform row = NewRow(name);
+        OptionsKit.Label("Value", row, RowW - 4 - 160, 1, 160, RowH - 2, value, textFont, OptionsKit.SizeText,
+                         GameHudSkin.Cream, TextAlignmentOptions.Right);
+        rows.Add(() => { });
+    }
+
+    /// <summary>Ein Knopf rechtsbuendig, so breit wie seine Beschriftung.</summary>
+    private SkinButton ButtonRow(string name, string label, SkinButton.Kind kind, System.Action onClick)
+    {
+        RectTransform row = NewRow(name);
+
+        TextMeshProUGUI probe = OptionsKit.Label("Probe", row, 0, 0, 200, 14, "", textFont,
+                                                 OptionsKit.SizeText, Color.clear, TextAlignmentOptions.Left);
+        float width = Mathf.Max(RowBtnMinW, Mathf.Ceil(OptionsKit.Measure(probe, label)) + ChipPad);
+        probe.transform.SetParent(null, false);
+        Destroy(probe.gameObject);
+
+        SkinButton button = SkinButton.Create(row, RowW - 3 - width, Mathf.Round((RowH - ChipH) / 2f), width, ChipH,
+                                              label, textFont, kind, onClick);
+        rows.Add(() => { });
+        return button;
+    }
+
+    // ---------- Rueckfrage ----------
+
+    private void OpenDialog(string question, System.Action onConfirm)
+    {
+        if (dialog != null) return;
+
+        dialogConfirm = onConfirm;
+
+        // Eigene Ebene ueber der Karte: als letztes Kind gezeichnet, und die
+        // vollflaechige Abdunklung faengt jeden Klick daneben ab.
+        Image shade = OptionsKit.Stretch("Dialog", transform, GameHudSkin.White,
+                                         new Color(0.06f, 0.04f, 0.05f, 0.7f));
+        shade.raycastTarget = true;
+        dialog = shade.rectTransform;
+
+        dialogPage = OptionsKit.Rect("Page", dialog, 0, 0, OptionsKit.RefW, OptionsKit.RefH);
+        dialogPage.anchoredPosition = page.anchoredPosition;
+
+        OptionsKit.Img("Card", dialogPage, DlgX, DlgY, DlgW, DlgH, GameHudSkin.Card, true);
+        TextMeshProUGUI q = OptionsKit.Label("Question", dialogPage, DlgX + 10, DlgTextY, DlgW - 20, DlgTextH,
+                                             question, textFont, OptionsKit.SizeText, GameHudSkin.Parchment,
+                                             TextAlignmentOptions.Center);
+        q.textWrappingMode = TextWrappingModes.Normal;
+
+        int gap = DlgW - 20 - 2 * DlgBtnW;
+        SkinButton.Create(dialogPage, DlgX + 10, DlgBtnY, DlgBtnW, DlgBtnH,
+                          Loc.Get("ui.pause.dialog.cancel", "ABBRECHEN"), textFont, SkinButton.Kind.Wood,
+                          CloseDialog);
+        SkinButton.Create(dialogPage, DlgX + 10 + DlgBtnW + gap, DlgBtnY, DlgBtnW, DlgBtnH,
+                          Loc.Get("ui.pause.dialog.confirm", "BESTÄTIGEN"), textFont, SkinButton.Kind.Danger,
+                          ConfirmDialog);
+    }
+
+    private void CloseDialog()
+    {
+        if (dialog == null) return;
+        dialog.SetParent(null, false);
+        Destroy(dialog.gameObject);
+        dialog = null;
+        dialogPage = null;
+        dialogConfirm = null;
+    }
+
+    private void ConfirmDialog()
+    {
+        System.Action action = dialogConfirm;
+        CloseDialog();
+        action?.Invoke();
     }
 
     /// <summary>

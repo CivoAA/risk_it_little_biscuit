@@ -26,6 +26,17 @@ public sealed class SkillShapeSprites : System.IDisposable
     /// eine echte Mitte und die Formen sitzen symmetrisch.</summary>
     public const int Size = 15;
 
+    /// <summary>Kantenlaenge DIESER Instanz - Standard <see cref="Size"/>, der
+    /// Skilltree im Hub zeichnet seine Knoten groesser. Ungerade halten.</summary>
+    public readonly int Dim;
+
+    public SkillShapeSprites() : this(Size) { }
+
+    public SkillShapeSprites(int size)
+    {
+        Dim = Mathf.Max(5, size | 1);
+    }
+
     readonly List<Object> created = new List<Object>();
     readonly Dictionary<SkillShape, Sprite> fills = new Dictionary<SkillShape, Sprite>();
     readonly Dictionary<SkillShape, Sprite> outlines = new Dictionary<SkillShape, Sprite>();
@@ -38,7 +49,7 @@ public sealed class SkillShapeSprites : System.IDisposable
     {
         if (fills.TryGetValue(shape, out Sprite s) && s != null) return s;
 
-        s = Build("SkillFill_" + shape, Mask(shape));
+        s = Build("SkillFill_" + shape, Mask(shape, Dim));
         fills[shape] = s;
         return s;
     }
@@ -52,16 +63,16 @@ public sealed class SkillShapeSprites : System.IDisposable
     {
         if (outlines.TryGetValue(shape, out Sprite s) && s != null) return s;
 
-        bool[,] solid = Mask(shape);
-        var edge = new bool[Size, Size];
+        bool[,] solid = Mask(shape, Dim);
+        var edge = new bool[Dim, Dim];
 
-        for (int y = 0; y < Size; y++)
+        for (int y = 0; y < Dim; y++)
         {
-            for (int x = 0; x < Size; x++)
+            for (int x = 0; x < Dim; x++)
             {
                 if (!solid[x, y]) continue;
 
-                bool border = x == 0 || y == 0 || x == Size - 1 || y == Size - 1 ||
+                bool border = x == 0 || y == 0 || x == Dim - 1 || y == Dim - 1 ||
                               !solid[x - 1, y] || !solid[x + 1, y] ||
                               !solid[x, y - 1] || !solid[x, y + 1];
 
@@ -87,15 +98,15 @@ public sealed class SkillShapeSprites : System.IDisposable
     {
         if (glosses.TryGetValue(shape, out Sprite s) && s != null) return s;
 
-        bool[,] outer = Erode(Mask(shape), 2);
+        bool[,] outer = Erode(Mask(shape, Dim), 2);
         bool[,] inner = Erode(outer, 2);
 
-        var arc = new bool[Size, Size];
-        const float c = (Size - 1) * 0.5f;
+        var arc = new bool[Dim, Dim];
+        float c = (Dim - 1) * 0.5f;
 
-        for (int y = 0; y < Size; y++)
+        for (int y = 0; y < Dim; y++)
         {
-            for (int x = 0; x < Size; x++)
+            for (int x = 0; x < Dim; x++)
             {
                 if (!outer[x, y] || inner[x, y]) continue;
 
@@ -114,14 +125,15 @@ public sealed class SkillShapeSprites : System.IDisposable
     static bool[,] Erode(bool[,] src, int steps)
     {
         bool[,] cur = src;
+        int size = src.GetLength(0);
 
         for (int i = 0; i < steps; i++)
         {
-            var next = new bool[Size, Size];
+            var next = new bool[size, size];
 
-            for (int y = 1; y < Size - 1; y++)
+            for (int y = 1; y < size - 1; y++)
             {
-                for (int x = 1; x < Size - 1; x++)
+                for (int x = 1; x < size - 1; x++)
                 {
                     next[x, y] = cur[x, y] && cur[x - 1, y] && cur[x + 1, y] &&
                                  cur[x, y - 1] && cur[x, y + 1];
@@ -157,14 +169,14 @@ public sealed class SkillShapeSprites : System.IDisposable
     //  Die Formen selbst
     // ==================================================================
 
-    static bool[,] Mask(SkillShape shape)
+    static bool[,] Mask(SkillShape shape, int size)
     {
-        var m = new bool[Size, Size];
-        const float c = (Size - 1) * 0.5f;   // Mitte, bei 15 also 7
+        var m = new bool[size, size];
+        float c = (size - 1) * 0.5f;   // Mitte, bei 15 also 7
 
-        for (int y = 0; y < Size; y++)
+        for (int y = 0; y < size; y++)
         {
-            for (int x = 0; x < Size; x++)
+            for (int x = 0; x < size; x++)
             {
                 float dx = x - c;
                 float dy = y - c;
@@ -247,7 +259,7 @@ public sealed class SkillShapeSprites : System.IDisposable
     // ==================================================================
 
     Sprite Build(string name, bool[,] solid) =>
-        BuildFn(name, Size, Size, (x, y) => solid[x, y]);
+        BuildFn(name, Dim, Dim, (x, y) => solid[x, y]);
 
     Sprite BuildFn(string name, int w, int h, System.Func<int, int, bool> solid)
     {
