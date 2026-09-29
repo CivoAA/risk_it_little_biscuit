@@ -493,9 +493,9 @@ MonoBehaviour:
     category: 3
     lane: 1
     step: 1
-    shape: 0
+    shape: 5
     price: 10
-    displayName: Handschmeichler
+    displayName: 
     description: 
     icon: {fileID: 0}
     rewards:
@@ -506,13 +506,13 @@ MonoBehaviour:
       descriptionOverride: 
     requires:
     - glueck_start
-  - id: glueck_oben_1
+  - id: glueck_mitte_2
     category: 3
-    lane: 0
+    lane: 1
     step: 2
-    shape: 2
-    price: 15
-    displayName: Guter Fund
+    shape: 5
+    price: 20
+    displayName: 
     description: 
     icon: {fileID: 0}
     rewards:
@@ -523,19 +523,19 @@ MonoBehaviour:
       descriptionOverride: 
     requires:
     - glueck_mitte_1
-  - id: glueck_mitte_2
+  - id: glueck_oben_1
     category: 3
-    lane: 1
+    lane: 0
     step: 2
     shape: 0
-    price: 15
-    displayName: Rueckenwind
+    price: 20
+    displayName: 
     description: 
     icon: {fileID: 0}
     rewards:
     - kind: 0
-      stat: 14
-      value: 5
+      stat: 23
+      value: 0.25
       grantId: 
       descriptionOverride: 
     requires:
@@ -544,15 +544,15 @@ MonoBehaviour:
     category: 3
     lane: 2
     step: 2
-    shape: 2
-    price: 15
-    displayName: Magnet
+    shape: 0
+    price: 20
+    displayName: 
     description: 
     icon: {fileID: 0}
     rewards:
     - kind: 0
-      stat: 13
-      value: 0.2
+      stat: 24
+      value: 0.05
       grantId: 
       descriptionOverride: 
     requires:
@@ -561,53 +561,105 @@ MonoBehaviour:
     category: 3
     lane: 0
     step: 3
-    shape: 3
-    price: 45
-    displayName: Freie Truhe
-    description: 
-    icon: {fileID: 0}
-    rewards:
-    - kind: 1
-      stat: 1
-      value: 10
-      grantId: erste_truhe_gratis
-      descriptionOverride: 
-    requires:
-    - glueck_oben_1
-  - id: glueck_mitte_3
-    category: 3
-    lane: 1
-    step: 3
-    shape: 4
-    price: 30
-    displayName: Gluecksstraehne
+    shape: 0
+    price: 25
+    displayName: 
     description: 
     icon: {fileID: 0}
     rewards:
     - kind: 0
-      stat: 14
-      value: 10
+      stat: 25
+      value: 0.1
       grantId: 
       descriptionOverride: 
     requires:
-    - glueck_mitte_2
+    - glueck_oben_1
   - id: glueck_unten_2
     category: 3
     lane: 2
     step: 3
-    shape: 6
-    price: 30
-    displayName: Reiche Ernte
+    shape: 0
+    price: 25
+    displayName: 
     description: 
     icon: {fileID: 0}
     rewards:
     - kind: 0
-      stat: 21
-      value: 1
+      stat: 24
+      value: 0.05
       grantId: 
       descriptionOverride: 
     requires:
     - glueck_unten_1
+  - id: glueck_oben_3
+    category: 3
+    lane: 0
+    step: 4
+    shape: 2
+    price: 30
+    displayName: 
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 28
+      value: 2.5
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - glueck_oben_2
+  - id: glueck_unten_3
+    category: 3
+    lane: 2
+    step: 4
+    shape: 2
+    price: 30
+    displayName: 
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 29
+      value: 1
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - glueck_unten_2
+  - id: glueck_mitte_3
+    category: 3
+    lane: 1
+    step: 5
+    shape: 3
+    price: 35
+    displayName: 
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 26
+      value: 0.5
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - glueck_unten_3
+    - glueck_oben_3
+  - id: glueck_mitte_4
+    category: 3
+    lane: 1
+    step: 3
+    shape: 1
+    price: 25
+    displayName: 
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 27
+      value: 25
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - glueck_mitte_2
   - id: kampf_start
     category: 0
     lane: 1
@@ -652,54 +704,20 @@ MonoBehaviour:
     icon: {fileID: 0}
     rewards: []
     requires: []
-  - id: glueck_oben_3
-    category: 3
-    lane: 0
-    step: 4
-    shape: 0
-    price: 30
-    displayName: 
-    description: 
-    icon: {fileID: 0}
-    rewards:
-    - kind: 0
-      stat: 1
-      value: 10
-      grantId: 
-      descriptionOverride: 
-    requires:
-    - glueck_mitte_1
-  - id: glueck_unten_3
-    category: 3
-    lane: 2
-    step: 4
-    shape: 0
-    price: 30
-    displayName: 
-    description: 
-    icon: {fileID: 0}
-    rewards:
-    - kind: 0
-      stat: 1
-      value: 10
-      grantId: 
-      descriptionOverride: 
-    requires:
-    - glueck_mitte_1
-  - id: glueck_mitte_4
-    category: 3
+  - id: wissen_bestiarium
+    category: 2
     lane: 1
     step: 4
-    shape: 0
-    price: 30
-    displayName: 
+    shape: 3
+    price: 40
+    displayName: Bestiarium
     description: 
     icon: {fileID: 0}
     rewards:
-    - kind: 0
-      stat: 1
-      value: 10
-      grantId: 
+    - kind: 1
+      stat: 0
+      value: 0
+      grantId: bestiarium
       descriptionOverride: 
     requires:
-    - glueck_mitte_1
+    - wissen_mitte_3

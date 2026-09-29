@@ -68,7 +68,10 @@ public partial class LevelUpScreen
         mixSignature = null;
         dealAt = now;
 
-        mixTitle.Set(Loc.Get("ui.mixer.title", "POWER-UP!"));
+        // Skilltree-Mixer: Jackpot (alle drei) schlaegt "alles legendaer" im Titel.
+        mixTitle.Set(MixerObject.Jackpot      ? Loc.Get("ui.mixer.jackpot", "JACKPOT!")
+                   : MixerObject.AllLegendary ? Loc.Get("ui.mixer.all_legendary", "LEGENDARY!")
+                   :                            Loc.Get("ui.mixer.title", "POWER-UP!"));
         int w = Mathf.CeilToInt(mixTitle.Width) + 24;
         w += w & 1;
         int x = (RefW - w) / 2;
@@ -78,7 +81,10 @@ public partial class LevelUpScreen
         mixTailL.anchoredPosition = new Vector2(x - 8, -(TitleY + 4));
         mixTailR.anchoredPosition = new Vector2(x + w - 4, -(TitleY + 4));
 
-        mixHint.Set(Loc.Get("ui.mixer.luck_hint", "More luck, rarer rolls"));
+        mixHint.Set(MixerObject.Jackpot
+            ? Loc.Get("ui.mixer.jackpot_hint", "Pick any card - you get all three")
+            : Loc.Get("ui.mixer.luck_hint", "More luck, rarer rolls"));
+        mixHint.SetColor(MixerObject.Jackpot ? (Color)GameHudSkin.GoldLight : (Color)GameHudSkin.ParchDark);
         CollectMixOffered();
         RefreshStatChips();
     }

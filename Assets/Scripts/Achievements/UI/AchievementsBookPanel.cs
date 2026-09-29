@@ -117,6 +117,11 @@ public class AchievementsBookPanel : MonoBehaviour
     private int tab;
     private int selected;
 
+    // 0 = Erfolge, 1 = Unlocks, 2 = Bestiarium. Den dritten Reiter gibt es erst,
+    // wenn ein Charakter den Bestiarium-Knoten im Skilltree hat.
+    private const int BestiaryTab = 2;
+    private int tabCount = 2;
+
     // Geoeffnet wird mit [E], geschlossen auch - im Frame des Oeffnens darf die
     // Taste darum nicht noch einmal zaehlen.
     private int openedFrame;
@@ -151,6 +156,7 @@ public class AchievementsBookPanel : MonoBehaviour
         public Sprite IconRow;
         public Sprite IconDetail;
         public Sprite RewardIcon;
+        public string Letter;     // Ersatz auf der Kachel, solange es kein Bild gibt
     }
 
     private class Row
@@ -171,6 +177,7 @@ public class AchievementsBookPanel : MonoBehaviour
         public Image Icon;
         public Image Hover;
         public Image Selection;
+        public TMP_Text Letter;
     }
 
     /// <summary>
@@ -218,10 +225,10 @@ public class AchievementsBookPanel : MonoBehaviour
         instance = go.AddComponent<AchievementsBookPanel>();
     }
 
-    /// <summary>Oeffnet direkt auf einem bestimmten Reiter: 0 = Erfolge, 1 = Unlocks.</summary>
+    /// <summary>Oeffnet direkt auf einem bestimmten Reiter: 0 = Erfolge, 1 = Unlocks, 2 = Bestiarium.</summary>
     public static void Open(int tabIndex)
     {
-        startTab = Mathf.Clamp(tabIndex, 0, 1);
+        startTab = Mathf.Clamp(tabIndex, 0, BestiaryTab);
         Open();
     }
 
@@ -253,7 +260,8 @@ public class AchievementsBookPanel : MonoBehaviour
         instance = this;
         openedFrame = Time.frameCount;
         font = FindFont();
-        tab = startTab;
+        tabCount = Bestiary.IsVisible ? 3 : 2;
+        tab = Mathf.Clamp(startTab, 0, tabCount - 1);
         Build();
         BlockHub(true);
     }
@@ -263,6 +271,7 @@ public class AchievementsBookPanel : MonoBehaviour
         Loc.LanguageChanged += Rebuild;
         Achievements.Unlocked += OnAchievementUnlocked;
         Unlocks.Granted += OnUnlockGranted;
+        Bestiary.Changed += Rebuild;
     }
 
     private void OnDisable()
@@ -270,6 +279,7 @@ public class AchievementsBookPanel : MonoBehaviour
         Loc.LanguageChanged -= Rebuild;
         Achievements.Unlocked -= OnAchievementUnlocked;
         Unlocks.Granted -= OnUnlockGranted;
+        Bestiary.Changed -= Rebuild;
     }
 
     private void OnDestroy()
@@ -498,16 +508,17 @@ public class AchievementsBookPanel : MonoBehaviour
 
     private void BuildTabs()
     {
-        tabImages = new Image[2];
-        tabLabels = new TMP_Text[2];
+        tabImages = new Image[tabCount];
+        tabLabels = new TMP_Text[tabCount];
 
         string[] names =
         {
             Loc.Get("ui.book.tab.achievements", "ERFOLGE"),
             Loc.Get("ui.book.tab.unlocks", "UNLOCKS"),
+            Loc.Get("ui.book.tab.bestiary", "BESTIARIUM"),
         };
 
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < tabCount; i++)
         {
             Image img = Img($"Tab_{i}", page, TabX + i * TabStep, TabY, TabW, TabH,
                             Gfx("tab_inactive"));
@@ -624,8 +635,8 @@ public class AchievementsBookPanel : MonoBehaviour
         scroll.inertia = false;
     }
 
-    /// <summary>Kachelgitter im Unlocks-Reiter, Liste im Erfolge-Reiter.</summary>
-    private bool GridMode => tab == 1;
+    /// <summary>Kachelgitter bei Unlocks und Bestiarium, Liste im Erfolge-Reiter.</summary>
+    private bool GridMode => tab != 0;
 
     private void ApplyMode()
     {
@@ -672,7 +683,7 @@ public class AchievementsBookPanel : MonoBehaviour
 
     private void SetTab(int index)
     {
-        index = Mathf.Clamp(index, 0, 1);
+        index = Mathf.Clamp(index, 0, tabCount - 1);
         if (index == tab) return;
 
         tab = index;
@@ -690,7 +701,7 @@ public class AchievementsBookPanel : MonoBehaviour
     {
         CollectEntries();
 
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < tabCount; i++)
         {
             bool active = i == tab;
             tabImages[i].sprite = Gfx(active ? "tab_active" : "tab_inactive");
@@ -746,6 +757,12 @@ public class AchievementsBookPanel : MonoBehaviour
             return;
         }
 
+        if (tab == BestiaryTab)
+        {
+            CollectBestiary();
+            return;
+        }
+
         foreach (UnlockDef def in Unlocks.All)
         {
             bool done = def.IsUnlocked;
@@ -775,6 +792,40 @@ public class AchievementsBookPanel : MonoBehaviour
                 IconRow = BookIcon(def.IconKey, 21),
                 IconDetail = BookIcon(def.IconKey, 32) ?? def.Icon,
                 RewardIcon = done ? BookIcon("_badge_unlocked", 12) : null,
+            });
+        }
+    }
+
+    /// <summary>
+    /// Ein Eintrag je Gegner aus <see cref="Bestiary.Enemies"/>. "Erledigt" heisst
+    /// hier: mindestens ein Kill - dann gibt es den goldenen Rahmen.
+    /// </summary>
+    private void CollectBestiary()
+    {
+        bool active = Skills.HasGrant(SkillGrants.Bestiarium);
+
+        foreach (EnemyId id in Bestiary.Enemies)
+        {
+            int kills = Bestiary.Kills(id);
+            int bonus = Bestiary.BonusPercent(id);
+            int toNext = Bestiary.KillsPerPercent - kills % Bestiary.KillsPerPercent;
+            string name = Bestiary.NameOf(id);
+            Sprite icon = Bestiary.Icon(id);
+
+            entries.Add(new Entry
+            {
+                Title = name,
+                Desc = string.Format(Loc.Get("ui.bestiary.kills", "Kills: {0}"), kills.ToString("N0")) + "\n" +
+                       string.Format(Loc.Get("ui.bestiary.next", "Next +1% in {0} kills"), toNext.ToString("N0")),
+                RowProgress = "",
+                DetailProgress = active ? "" : Loc.Get("ui.bestiary.inactive",
+                                                       "This character has not learned the Bestiary."),
+                Reward = string.Format(Loc.Get("ui.bestiary.bonus", "+{0}% damage"), bonus),
+                Done = kills > 0,
+                IconRow = icon,
+                IconDetail = icon,
+                RewardIcon = null,
+                Letter = icon == null && name.Length > 0 ? name.Substring(0, 1) : "",
             });
         }
     }
@@ -914,6 +965,8 @@ public class AchievementsBookPanel : MonoBehaviour
             tile.Icon.sprite = e.IconDetail;              // die 32er-Variante
             tile.Icon.enabled = e.IconDetail != null;
             tile.Icon.color = e.Done ? Color.white : IconLockedTint;
+            tile.Letter.text = e.Letter ?? "";
+            tile.Letter.color = e.Done ? TextDark : TextDim;
         }
     }
 
@@ -924,6 +977,10 @@ public class AchievementsBookPanel : MonoBehaviour
         frame.raycastTarget = true;
 
         Image icon = Img("Icon", frame.rectTransform, 0f, 0f, TileS, TileS, null);
+
+        // Nur im Bestiarium, solange ein Gegner noch kein Bild hat.
+        TMP_Text letter = Label("Letter", frame.rectTransform, 0f, 9f, TileS, 14f,
+                                "", SizeTitle, TextDark, TextAlignmentOptions.Center);
 
         // Hover und Auswahl sind dieselben Sprites wie in der Liste. Sie sind
         // 9-Slices, also laesst sich derselbe Rahmen auf 32x32 ziehen, ohne dass
@@ -949,7 +1006,7 @@ public class AchievementsBookPanel : MonoBehaviour
             Select(captured);
         });
 
-        return new Tile { Frame = frame, Icon = icon, Hover = hover, Selection = sel };
+        return new Tile { Frame = frame, Icon = icon, Hover = hover, Selection = sel, Letter = letter };
     }
 
     // ---------- Auswahl ----------
@@ -1019,8 +1076,19 @@ public class AchievementsBookPanel : MonoBehaviour
 
     private void RefreshBar()
     {
-        int done = tab == 0 ? Achievements.UnlockedCount : Unlocks.UnlockedCount;
-        int total = tab == 0 ? Achievements.TotalCount : Unlocks.TotalCount;
+        int done, total;
+        if (tab == BestiaryTab)
+        {
+            // Wie viele Gegnerarten schon mindestens +1 % bringen.
+            done = 0;
+            total = Bestiary.Enemies.Count;
+            foreach (EnemyId id in Bestiary.Enemies) if (Bestiary.BonusPercent(id) > 0) done++;
+        }
+        else
+        {
+            done = tab == 0 ? Achievements.UnlockedCount : Unlocks.UnlockedCount;
+            total = tab == 0 ? Achievements.TotalCount : Unlocks.TotalCount;
+        }
 
         counterText.text = string.Format(Loc.Get("ui.achievements.counter", "{0} / {1}"), done, total);
 

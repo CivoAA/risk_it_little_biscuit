@@ -35,6 +35,14 @@ public static class SkillGrants
     /// <summary>Shurikookie prallt an Waenden ab.</summary>
     public const string ShurikookieAbpraller = "shurikookie_abpraller";
 
+    // ------------------------------------------------------------ Wissen
+
+    /// <summary>Bestiarium: +1 % Schaden je 1000 Kills einer Gegnerart (siehe <see cref="Bestiary"/>).</summary>
+    public const string Bestiarium = "bestiarium";
+
+    /// <summary>Kartograf: ein Pfeil am Bildrand zeigt zum naechsten unbenutzten Mixer.</summary>
+    public const string Kartograf = "kartograf";
+
     // ------------------------------------------------------------ Beispiele
     // Die hier sind nur Platzhalter, damit im Editor nicht nur eine Zeile steht.
     // Loeschen, sobald du eigene hast.
@@ -70,6 +78,12 @@ public static class SkillGrants
 
         new Def(ShurikookieAbpraller, "Shurikookie: Abpraller",
                 "Shurikookie prallt an Waenden ab, statt zu zerbrechen."),
+
+        new Def(Bestiarium, "Bestiarium",
+                "Zaehlt deine Kills je Gegnerart: +1% Schaden je 1000 Kills. Neuer Reiter im Erfolge-Buch."),
+
+        new Def(Kartograf, "Kartograf",
+                "Ein Pfeil am Bildrand zeigt zum naechsten Mixer, den du noch nicht benutzt hast."),
 
         new Def(ZweitesLeben, "Zweites Leben",
                 "Einmal je Lauf stehst du mit halbem Leben wieder auf."),

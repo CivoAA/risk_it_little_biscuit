@@ -48,6 +48,41 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Unverwundbarkeit direkt nach der Wiederbelebung.")]
     public float secondChanceImmunity = 2f;
 
+    // Glücks-Ast im Skilltree. Kommen nur aus dem Skilltree und werden im
+    // Spiel nicht als Stat angezeigt - Luck selbst wirkt nur auf den Mixer.
+    [Header("Glück (Skilltree)")]
+    [Tooltip("Faktor auf Magnet- und Herz-Chance. 1 = unveraendert.")]
+    public float dropChanceMultiplier = 1f;
+    [Tooltip("Chance, dass ein Gegner doppelte XP fallen laesst.")]
+    public float luckyXpChance;
+    [Tooltip("Chance, dass ein gedropptes Herz golden ist.")]
+    public float goldenHeartChance;
+    [Tooltip("Chance auf eine Wiederbelebung. Wird beim ersten Tod einmal gewuerfelt, vor dem Buff 'Zweite Chance'.")]
+    public float luckyReviveChance;
+    public float luckyReviveHealthPercent = 0.3f;
+    public float luckyReviveImmunity = 2f;
+    private bool luckyReviveRolled;
+
+    // Mixer-Knoten im Skilltree. Stehen in Prozent (1 = 1 %), so wie sie im
+    // Skilltree eingetragen werden.
+    [Tooltip("+x % Mixer auf der Map (25 = ein Viertel mehr).")]
+    public float moreMixersPercent;
+    [Tooltip("Chance in %, dass ein Mixer alle drei Stats gibt.")]
+    public float mixerAllThreeChance;
+    [Tooltip("Chance in %, dass alle drei Stats eines Mixers legendaer sind.")]
+    public float mixerAllLegendaryChance;
+
+    // Wissens-Ast, ebenfalls in Prozent.
+    [Header("Wissen (Skilltree)")]
+    [Tooltip("Chance in %, dass ein Reroll nichts kostet.")]
+    public float freeRerollChance;
+    [Tooltip("Heilung in % der Max-HP bei jedem Level-Up.")]
+    public float levelUpHealPercent;
+    [Tooltip("+x % Seelen von Minibossen und Bossen.")]
+    public float soulBonusPercent;
+    [Tooltip("Bosse und Minibosse spawnen mit x % weniger Leben.")]
+    public float bossHealthReduction;
+
     /// <summary>Cooldown-Faktor inklusive Untergrenze - Waffen lesen nur diesen Wert.</summary>
     public float CooldownMultiplier
     {
@@ -203,7 +238,9 @@ public class PlayerController : MonoBehaviour
         {
             int startWeaponIndex = Mathf.Clamp(Shop.RunStartWeapon, 0, activeWeapon.Length - 1);
             Weapon startWeapon = activeWeapon[startWeaponIndex];
-            startWeapon.weaponLevel = 0;
+            // Skilltree "StartWeaponLevel": +1 heisst Start auf Stufe 2.
+            startWeapon.weaponLevel = Mathf.Clamp(Skills.BonusInt(SkillType.StartWeaponLevel), 0,
+                                                  Mathf.Max(0, startWeapon.maxweaponLevel));
             startWeapon.posssibleEvo = true;
 
             foreach (var recipe in EvoCombinations)
@@ -264,6 +301,19 @@ public class PlayerController : MonoBehaviour
         WeaponSlots          += Skills.BonusInt(SkillType.IncreaseWeaponSlots);
         BuffSlots            += Skills.BonusInt(SkillType.IncreaseBuffSlots);
         EvoSlots             += Skills.BonusInt(SkillType.IncreaseEvoSlots);
+        dropChanceMultiplier += Skills.Bonus(SkillType.IncreaseDropChance);
+        luckyXpChance        += Skills.Bonus(SkillType.LuckyXpChance);
+        goldenHeartChance    += Skills.Bonus(SkillType.GoldenHeartChance);
+        luckyReviveChance    += Skills.Bonus(SkillType.LuckyReviveChance);
+        moreMixersPercent       += Skills.Bonus(SkillType.MoreMixers);
+        mixerAllThreeChance     += Skills.Bonus(SkillType.MixerAllThreeChance);
+        mixerAllLegendaryChance += Skills.Bonus(SkillType.MixerAllLegendaryChance);
+        freeRerollChance        += Skills.Bonus(SkillType.FreeRerollChance);
+        levelUpHealPercent      += Skills.Bonus(SkillType.LevelUpHealPercent);
+        soulBonusPercent        += Skills.Bonus(SkillType.SoulBonusPercent);
+        bossHealthReduction     += Skills.Bonus(SkillType.BossHealthReduction);
+
+        if (Skills.HasGrant(SkillGrants.Kartograf)) MixerCompass.Ensure();
     }
 
     public void PlayerHealthReg()
@@ -308,7 +358,9 @@ public class PlayerController : MonoBehaviour
                 hitsoundinterval = 0;
             }
 
-            if (playerHealth <= 0 && !TryUseSecondChance())
+            // Erst das Glück aus dem Skilltree, dann der Buff - so bleibt der
+            // Buff erhalten, wenn das Glück schon rettet.
+            if (playerHealth <= 0 && !TryLuckyRevive() && !TryUseSecondChance())
             {
                 gameObject.SetActive(false);
                 GameManager.Instance.GameOver();
@@ -328,21 +380,61 @@ public class PlayerController : MonoBehaviour
         if (secondChanceCharges <= 0) return false;
 
         secondChanceCharges--;
-        playerHealth = Mathf.Max(1f, playerMaxHealth * Mathf.Clamp01(secondChanceHealthPercent));
+        Revive(secondChanceHealthPercent, secondChanceImmunity, "Second Chance!");
+
+        // Aufgebraucht: der Buff verschwindet fuer den Rest des Laufs und gibt
+        // seinen Platz frei, damit ein neuer Buff reinkann.
+        if (secondChanceCharges <= 0) RemoveSecondChanceBuff();
+
+        return true;
+    }
+
+    /// <summary>
+    /// Skilltree "LuckyReviveChance": beim ersten toedlichen Treffer des Laufs
+    /// wird einmal gewuerfelt. Egal ob Treffer oder nicht - danach nie wieder.
+    /// </summary>
+    private bool TryLuckyRevive()
+    {
+        if (luckyReviveRolled || luckyReviveChance <= 0f) return false;
+
+        luckyReviveRolled = true;
+        if (UnityEngine.Random.value >= luckyReviveChance) return false;
+
+        Revive(luckyReviveHealthPercent, luckyReviveImmunity, "Lucky!");
+        return true;
+    }
+
+    private void Revive(float healthPercent, float immunity, string text)
+    {
+        playerHealth = Mathf.Max(1f, playerMaxHealth * Mathf.Clamp01(healthPercent));
 
         // Kurze Unverwundbarkeit, sonst toetet der naechste Kontaktschaden im
         // selben Gegnerpulk sofort wieder.
         isImmune = true;
-        immunityTimer = Mathf.Max(immunityDuration, secondChanceImmunity);
+        immunityTimer = Mathf.Max(immunityDuration, immunity);
 
         UIController.Instance.UpdateHealthSlider();
-        DamageNumberController.Instance?.CreateText("Second Chance!", transform.position);
+        DamageNumberController.Instance?.CreateText(text, transform.position);
         if (AudioController.Instance != null)
         {
             AudioController.Instance.PalySound(AudioController.Instance.LevelUpSound);
         }
+    }
 
-        return true;
+    private void RemoveSecondChanceBuff()
+    {
+        if (activeBuffs == null) return;
+
+        foreach (Weapon buff in activeBuffs)
+        {
+            if (buff is SecondChance && buff.weaponLevel >= 0)
+            {
+                // Wie eine von einer Evo ersetzte Waffe: zaehlt nicht mehr als
+                // belegter Platz und wird im Lauf nicht wieder angeboten.
+                buff.weaponLevel = Weapon.RemovedLevel;
+                buff.hasBeenRemoved = true;
+            }
+        }
     }
     public void GetExperience(int experienceToGet)
     {
@@ -359,6 +451,11 @@ public class PlayerController : MonoBehaviour
             LevelUpSelectet = false;
             experience -= playerLevels[currentLevel - 1];
             playerMaxHealth += 1f;
+
+            // Skilltree "Wissen ist Heilung".
+            if (levelUpHealPercent > 0f)
+                playerHealth = Mathf.Min(playerMaxHealth, playerHealth + playerMaxHealth * levelUpHealPercent / 100f);
+
             UIController.Instance.UpdateHealthSlider();
             currentLevel++;
 

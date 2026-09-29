@@ -226,6 +226,13 @@ public static class EnemyCatalog
     /// <summary>Wahrscheinlichkeit auf ein Herz beim Tod eines Gegners.</summary>
     public const float HeartChance = 0.01f;     // 1 von 100
 
+    /// <summary>
+    /// So viel Max-Leben gibt ein goldenes Herz (Skill "GoldenHeartChance").
+    /// Um denselben Betrag wird der Spieler zusaetzlich zur normalen
+    /// Herz-Heilung geheilt.
+    /// </summary>
+    public const float GoldenHeartMaxHealth = 5f;
+
     /// <summary>Seelen ("Cookie Souls") je Rolle.</summary>
     public static int Souls(EnemyRole role)
     {

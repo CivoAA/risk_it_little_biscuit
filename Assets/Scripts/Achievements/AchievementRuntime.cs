@@ -90,5 +90,6 @@ public class AchievementRuntime : MonoBehaviour
     {
         Achievements.Flush();
         Skills.Flush();
+        Bestiary.Flush();
     }
 }

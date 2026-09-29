@@ -10,6 +10,11 @@ public class SpawnExp : MonoBehaviour
     [SerializeField] private GameObject mediumPrefab; // ab 50+
     [SerializeField] private GameObject bigPrefab;    // ab 400+
 
+    [Header("Doppelte XP (Skill LuckyXpChance)")]
+    [Tooltip("Eigenes Prefab fuer den Glueckstreffer. Leer = normales Prefab, golden eingefaerbt.")]
+    [SerializeField] private GameObject luckyPrefab;
+    [SerializeField] private Color luckyTint = new Color(1f, 0.85f, 0.25f);
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -20,7 +25,8 @@ public class SpawnExp : MonoBehaviour
         Instance = this;
     }
 
-    public void SpawnEP(Vector2 pos, int expAmount)
+    /// <param name="lucky">Glueckstreffer: expAmount ist schon verdoppelt, hier geht es nur ums Aussehen.</param>
+    public void SpawnEP(Vector2 pos, int expAmount, bool lucky = false)
     {
         // Prefab je nach expAmount auswählen
         GameObject prefabToSpawn = smallPrefab;
@@ -30,8 +36,21 @@ public class SpawnExp : MonoBehaviour
         else if (expAmount >= 50)
             prefabToSpawn = mediumPrefab;
 
+        bool ownLuckyPrefab = lucky && luckyPrefab != null;
+        if (ownLuckyPrefab) prefabToSpawn = luckyPrefab;
+
         // Prefab instanziieren
         GameObject exp = Instantiate(prefabToSpawn, pos, transform.rotation);
+
+        if (lucky)
+        {
+            if (!ownLuckyPrefab)
+            {
+                foreach (SpriteRenderer sr in exp.GetComponentsInChildren<SpriteRenderer>())
+                    sr.color = luckyTint;
+            }
+            DamageNumberController.Instance?.CreateText("x2", pos);
+        }
 
         // XP-Wert setzen
         ExpPickup xp = exp.GetComponent<ExpPickup>();

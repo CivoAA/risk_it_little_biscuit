@@ -103,7 +103,21 @@ public static class SkillDefaults
             case SkillType.IncreaseWeaponSlots: return 1f;
             case SkillType.IncreaseBuffSlots:   return 1f;
             case SkillType.IncreaseEvoSlots:    return 1f;
-            case SkillType.None:                return 0f;
+            case SkillType.IncreaseDropChance:  return 0.25f;
+            case SkillType.LuckyXpChance:       return 0.05f;
+            case SkillType.GoldenHeartChance:   return 0.1f;
+            case SkillType.LuckyReviveChance:   return 0.5f;
+            // Die Mixer-Werte stehen direkt in Prozent (1 = 1 %).
+            case SkillType.MoreMixers:              return 25f;
+            case SkillType.MixerAllThreeChance:     return 2.5f;
+            case SkillType.MixerAllLegendaryChance: return 1f;
+            // Wissen, ebenfalls in Prozent.
+            case SkillType.FreeRerollChance:        return 20f;
+            case SkillType.LevelUpHealPercent:      return 5f;
+            case SkillType.SoulBonusPercent:        return 10f;
+            case SkillType.BossHealthReduction:     return 5f;
+            case SkillType.StartWeaponLevel:        return 1f;
+            case SkillType.None:               return 0f;
             default:                            return 1f;
         }
     }

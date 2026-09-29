@@ -71,6 +71,7 @@ public class GameManager : MonoBehaviour
         // Der Lauf ist vorbei - was sich an Skillpunkten angesammelt hat, jetzt
         // wegschreiben statt auf den naechsten 5-Sekunden-Takt zu warten.
         Skills.Flush();
+        Bestiary.Flush();
         if (!bossSpawned)
         {
             gainedThroughAchievements = Skills.Currency - skillCurrencyBeforeGame;

@@ -295,6 +295,30 @@ public static class Skills
         return grants.Contains(grantId);
     }
 
+    /// <summary>
+    /// Ist der Schalter in IRGENDEINEM Baum offen, egal welcher Charakter gerade
+    /// gewählt ist? Für Anzeigen, die man einmal freischaltet und dann immer
+    /// sieht (z.B. den Bestiarium-Tab).
+    /// </summary>
+    public static bool HasGrantInAnyTree(string grantId)
+    {
+        if (string.IsNullOrEmpty(grantId)) return false;
+        if (!initialized) Init();
+
+        foreach (SkillTreeDef tree in SkillTrees.All)
+        {
+            foreach (SkillNodeDef node in tree.AllNodes())
+            {
+                if (!IsUnlocked(node)) continue;
+                foreach (SkillReward reward in node.Rewards)
+                {
+                    if (reward.IsGrant && reward.GrantId == grantId) return true;
+                }
+            }
+        }
+        return false;
+    }
+
     /// <summary>Alle offenen Schalter - für Debug-Ausgaben und die Testszene.</summary>
     public static IEnumerable<string> ActiveGrants
     {

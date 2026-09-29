@@ -4,6 +4,9 @@ using UnityEngine.SceneManagement;
 
 public class PickUps : MonoBehaviour
 {
+    /// <summary>0 = Herz, 1 = Magnet, 2 = goldenes Herz (heilt wie ein Herz und gibt Max-Leben).</summary>
+    public const int GoldenHeartId = 2;
+
     public float detectRange = 1f;       // Ab wann das Objekt den Spieler anzieht
     public float moveSpeed = 5f;         // Geschwindigkeit beim Hinfliegen
     public int PickUp_id = 99;
@@ -53,6 +56,15 @@ public class PickUps : MonoBehaviour
             else if (PickUp_id == 1)
             {
                 PlayerController.Instance.attractAllXP = true;
+            }
+            else if (PickUp_id == GoldenHeartId)
+            {
+                PlayerController p = PlayerController.Instance;
+                float bonus = EnemyCatalog.GoldenHeartMaxHealth;
+                p.playerMaxHealth += bonus;
+                p.playerHealth = Mathf.Min(p.playerMaxHealth, p.playerHealth + p.playerMaxHealth * 0.1f + bonus);
+                UIController.Instance.UpdateHealthSlider();
+                DamageNumberController.Instance?.CreateText($"+{bonus:0} Max HP", transform.position);
             }
             else if(PickUp_id == 99)
             {
