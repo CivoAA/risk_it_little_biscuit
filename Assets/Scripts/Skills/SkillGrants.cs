@@ -5,9 +5,9 @@ using System.Collections.Generic;
 ///
 /// Ein Skill-Knoten kann zweierlei geben:
 ///   1. Werte - "+10 Leben". Das sind die Eintraege aus <see cref="SkillType"/>.
-///   2. Schalter - "Shurikookie schiesst in alle vier Richtungen". Die stehen hier.
+///   2. Freischaltungen - "Shurikookie schiesst in alle vier Richtungen". Die stehen hier.
 ///
-/// Ein Schalter ist nur eine Id. Das Spiel fragt an der Stelle, wo es darauf
+/// Eine Freischaltung ist nur eine Id. Das Spiel fragt an der Stelle, wo es darauf
 /// ankommt, danach:
 ///
 /// <code>
@@ -17,7 +17,7 @@ using System.Collections.Generic;
 ///   }
 /// </code>
 ///
-/// EINEN NEUEN SCHALTER ANLEGEN - zwei Schritte, beide hier:
+/// EINE NEUE FREISCHALTUNG ANLEGEN - zwei Schritte, beide hier:
 ///   1. Eine Konstante ergaenzen (der Text darin ist der Schluessel; er landet
 ///      im Baum-Asset, also NIE nachtraeglich aendern).
 ///   2. Eine Zeile in <see cref="All"/> dazu - damit steht sie im Skilltree-Editor
@@ -35,15 +35,18 @@ public static class SkillGrants
     /// <summary>Shurikookie prallt an Waenden ab.</summary>
     public const string ShurikookieAbpraller = "shurikookie_abpraller";
 
-    // ------------------------------------------------------------ Beispiele
-    // Die hier sind nur Platzhalter, damit im Editor nicht nur eine Zeile steht.
-    // Loeschen, sobald du eigene hast.
+    // ------------------------------------------------------------ Wissen
 
-    /// <summary>Ein zweites Leben je Lauf.</summary>
-    public const string ZweitesLeben = "zweites_leben";
+    /// <summary>Bestiarium: +1 % Schaden je 1000 Kills einer Gegnerart (siehe <see cref="Bestiary"/>).</summary>
+    public const string Bestiarium = "bestiarium";
 
-    /// <summary>Die erste Truhe in jedem Lauf ist umsonst.</summary>
-    public const string ErsteTruheGratis = "erste_truhe_gratis";
+    /// <summary>Kartograf: ein Pfeil am Bildrand zeigt zum naechsten unbenutzten Mixer.</summary>
+    public const string Kartograf = "kartograf";
+
+    // ------------------------------------------------------------ Geist
+
+    /// <summary>Schockwelle: ein Treffer stoesst alle Gegner in der Naehe weg (siehe <see cref="Shockwave"/>).</summary>
+    public const string Schockwelle = "schockwelle";
 
     // ==================================================================
     //  Der Katalog - was hier steht, steht im Editor zur Auswahl.
@@ -71,11 +74,14 @@ public static class SkillGrants
         new Def(ShurikookieAbpraller, "Shurikookie: Abpraller",
                 "Shurikookie prallt an Waenden ab, statt zu zerbrechen."),
 
-        new Def(ZweitesLeben, "Zweites Leben",
-                "Einmal je Lauf stehst du mit halbem Leben wieder auf."),
+        new Def(Bestiarium, "Bestiarium",
+                "Zaehlt deine Kills je Gegnerart: +1% Schaden je 1000 Kills. Neuer Reiter im Erfolge-Buch."),
 
-        new Def(ErsteTruheGratis, "Erste Truhe gratis",
-                "Die erste Truhe in jedem Lauf kostet nichts."),
+        new Def(Kartograf, "Kartograf",
+                "Ein Pfeil am Bildrand zeigt zum naechsten Mixer, den du noch nicht benutzt hast."),
+
+        new Def(Schockwelle, "Schockwelle",
+                "Wirst du getroffen, stoesst eine Welle alle Gegner in der Naehe weg (alle 10 Sekunden)."),
     };
 
     /// <summary>Eintrag zu einer Id. Null, wenn die Id nicht (mehr) im Katalog steht.</summary>
@@ -98,7 +104,7 @@ public static class SkillGrants
     public static string NameOf(string id)
     {
         Def d = Find(id);
-        return d != null ? d.Name : (string.IsNullOrEmpty(id) ? "(kein Schalter)" : id + " (unbekannt)");
+        return d != null ? d.Name : (string.IsNullOrEmpty(id) ? "(keine Freischaltung)" : id + " (unbekannt)");
     }
 
     public static string DescriptionOf(string id)

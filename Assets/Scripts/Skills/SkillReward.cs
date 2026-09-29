@@ -6,8 +6,8 @@ public enum SkillRewardKind
     /// <summary>Ein Wert aus <see cref="SkillType"/>, z.B. "+10 Leben".</summary>
     Wert,
 
-    /// <summary>Ein Schalter aus <see cref="SkillGrants"/>, z.B. ein Waffen-Upgrade.</summary>
-    Schalter,
+    /// <summary>Eine Freischaltung aus <see cref="SkillGrants"/>, z.B. ein Waffen-Upgrade.</summary>
+    Freischalten,
 }
 
 /// <summary>
@@ -28,7 +28,7 @@ public sealed class SkillReward
     /// <summary>Nur bei <see cref="SkillRewardKind.Wert"/> gefuellt.</summary>
     public readonly float Value;
 
-    /// <summary>Nur bei <see cref="SkillRewardKind.Schalter"/> gefuellt.</summary>
+    /// <summary>Nur bei <see cref="SkillRewardKind.Freischalten"/> gefuellt.</summary>
     public readonly string GrantId;
 
     private readonly string descriptionOverride;
@@ -44,7 +44,7 @@ public sealed class SkillReward
 
     public SkillReward(string grantId, string description = null)
     {
-        Kind                = SkillRewardKind.Schalter;
+        Kind                = SkillRewardKind.Freischalten;
         Stat                = SkillType.None;
         Value               = 0f;
         GrantId             = grantId;
@@ -52,7 +52,7 @@ public sealed class SkillReward
     }
 
     public bool IsStat    => Kind == SkillRewardKind.Wert;
-    public bool IsGrant   => Kind == SkillRewardKind.Schalter;
+    public bool IsGrant   => Kind == SkillRewardKind.Freischalten;
 
     /// <summary>Eine Zeile fuer die Beschreibungskarte.</summary>
     public string Describe()
@@ -100,10 +100,24 @@ public static class SkillDefaults
             case SkillType.RerollAmount:        return 1f;
             case SkillType.StartXPAmount:       return 10f;
             case SkillType.IncreaseShrinkSpeed: return 0.1f;
-            case SkillType.IncreaseWeaponSlots: return 1f;
-            case SkillType.IncreaseBuffSlots:   return 1f;
-            case SkillType.IncreaseEvoSlots:    return 1f;
-            case SkillType.None:                return 0f;
+            case SkillType.IncreaseDropChance:  return 0.25f;
+            case SkillType.LuckyXpChance:       return 0.05f;
+            case SkillType.GoldenHeartChance:   return 0.1f;
+            case SkillType.LuckyReviveChance:   return 0.5f;
+            // Die Mixer-Werte stehen direkt in Prozent (1 = 1 %).
+            case SkillType.MoreMixers:              return 25f;
+            case SkillType.MixerAllThreeChance:     return 2.5f;
+            case SkillType.MixerAllLegendaryChance: return 1f;
+            // Wissen, ebenfalls in Prozent.
+            case SkillType.FreeRerollChance:        return 20f;
+            case SkillType.LevelUpHealPercent:      return 5f;
+            case SkillType.SoulBonusPercent:        return 10f;
+            case SkillType.BossHealthReduction:     return 5f;
+            case SkillType.StartWeaponLevel:        return 1f;
+            // Geist, in Prozent.
+            case SkillType.OverhealShield:          return 20f;
+            case SkillType.LastBreath:              return 20f;
+            case SkillType.None:               return 0f;
             default:                            return 1f;
         }
     }

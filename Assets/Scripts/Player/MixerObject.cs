@@ -22,6 +22,20 @@ public class MixerObject : MonoBehaviour
     [Tooltip("Aus = alter Mixer-Sprite mit gruenem Kreis statt MixerVisual.")]
     public bool useNewVisual = true;
 
+    // Alle Mixer, die noch nicht benutzt wurden - fuer den Kartografen.
+    private static readonly List<MixerObject> unused = new List<MixerObject>();
+    public static IReadOnlyList<MixerObject> Unused => unused;
+
+    private void OnEnable()
+    {
+        if (!actionTriggered && !unused.Contains(this)) unused.Add(this);
+    }
+
+    private void OnDisable()
+    {
+        unused.Remove(this);
+    }
+
     private void Start()
     {
         animator = GetComponent<Animator>();
@@ -91,6 +105,11 @@ public class MixerObject : MonoBehaviour
                 chargeSprite.transform.localScale = Vector3.zero;
                 actionTriggered = true;
                 mixerActive = true;
+                unused.Remove(this);
+
+                // Vor dem Oeffnen wuerfeln - die Mixer-Ansicht liest die
+                // Ergebnisse fuer Titel und Hinweis.
+                RollSpecials();
 
                 PlayerController.Instance.RandomWeapon2();
                 UIController.Instance.PowerUpPanelOpen();
@@ -186,11 +205,49 @@ public class MixerObject : MonoBehaviour
 
             // PowerUp zuweisen
             powerUpButtons[i].assignedPowerUp = selected;
-            powerUpButtons[i].ActivateButton();
+            powerUpButtons[i].ActivateButton(AllLegendary ? PowerUpRarity.Legendary : (PowerUpRarity?)null);
 
             // Damit keine Duplikate vorkommen
             available.RemoveAt(randomIndex);
         }
+    }
+
+    // ------------------------------------------------------------------
+    // Skilltree: Mixer-Knoten (Werte am Spieler in Prozent, 1 = 1 %)
+    // ------------------------------------------------------------------
+
+    /// <summary>Der gerade offene Mixer gibt beim Waehlen alle drei Stats.</summary>
+    public static bool Jackpot { get; set; }
+
+    /// <summary>Der gerade offene Mixer hat alle drei Stats legendaer gewuerfelt.</summary>
+    public static bool AllLegendary { get; private set; }
+
+    private static void RollSpecials()
+    {
+        PlayerController p = PlayerController.Instance;
+        Jackpot      = p != null && Random.value * 100f < p.mixerAllThreeChance;
+        AllLegendary = p != null && Random.value * 100f < p.mixerAllLegendaryChance;
+    }
+
+    /// <summary>True, wenn das Prefab ein Mixer ist - nur dann zaehlt "MoreMixers".</summary>
+    public static bool IsMixer(GameObject prefab)
+    {
+        return prefab != null && prefab.GetComponentInChildren<MixerObject>(true) != null;
+    }
+
+    /// <summary>
+    /// Skaliert die Anzahl, die ein Zufalls-Spawner fuer einen Block gewuerfelt
+    /// hat, mit "MoreMixers". Der Nachkomma-Rest wird gewuerfelt - so stimmt der
+    /// Durchschnitt genau (+25 % heisst im Schnitt ein Viertel mehr Mixer).
+    /// </summary>
+    public static int ScaleSpawnCount(int count)
+    {
+        PlayerController p = PlayerController.Instance;
+        if (p == null || p.moreMixersPercent <= 0f || count <= 0) return count;
+
+        float scaled = count * (1f + p.moreMixersPercent / 100f);
+        int whole = Mathf.FloorToInt(scaled);
+        return whole + (Random.value < scaled - whole ? 1 : 0);
     }
 
 

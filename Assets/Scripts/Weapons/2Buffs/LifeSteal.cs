@@ -35,14 +35,13 @@ public class LifeSteal : Weapon
     {   
         if(cooldown <= 0)
         {   
-            if (PlayerController.Instance.lifeStealChance >= 0 && PlayerController.Instance.playerHealth < PlayerController.Instance.playerMaxHealth)
+            if (PlayerController.Instance.lifeStealChance >= 0 && PlayerController.Instance.CanReceiveHealing)
             {
                 chance = PlayerController.Instance.lifeStealChance;
                 if (Random.Range(0f, 100f) < chance)
                 {
                     //PlayerController.Instance.playerHealth += damage * PlayerController.Instance.lifeStealMultiplire;
-                    PlayerController.Instance.playerHealth += 1;
-                    UIController.Instance.UpdateHealthSlider();
+                    PlayerController.Instance.Heal(1f);
                     if (weaponLevel < 0)
                     {
                         cooldown = 1f; // Fallback-Cooldown

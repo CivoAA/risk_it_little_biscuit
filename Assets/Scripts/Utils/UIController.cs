@@ -237,7 +237,13 @@ public class UIController : MonoBehaviour
         if (PlayerController.Instance.rerollAmount > 0)
         {
             PlayerController.Instance.RandomWeapon();
-            PlayerController.Instance.rerollAmount -= 1;
+
+            // Skilltree "Sparsamer Reroll": mit etwas Glueck kostet er nichts.
+            if (Random.value * 100f < PlayerController.Instance.freeRerollChance)
+                DamageNumberController.Instance?.CreateText("Free Reroll!", PlayerController.Instance.transform.position);
+            else
+                PlayerController.Instance.rerollAmount -= 1;
+
             AudioController.Instance.PalySound(AudioController.Instance.MenuClick);
         }
         else

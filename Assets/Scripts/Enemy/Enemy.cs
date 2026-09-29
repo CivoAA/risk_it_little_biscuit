@@ -212,9 +212,20 @@ public class Enemy : MonoBehaviour
             facing = rightlooking ? EnemyFacing.ArtFacesLeft : EnemyFacing.Neutral;
         }
 
+        // Skilltree "Schwachstellen kennen": Bosse und Minibosse mit weniger
+        // Leben. Steht vor der Lauf-Skalierung, die rechnet dann darauf weiter.
+        PlayerController player = PlayerController.Instance;
+        if (player != null && player.bossHealthReduction > 0f && IsBossRole(role))
+        {
+            health = Mathf.Max(1f, health * (1f - Mathf.Clamp01(player.bossHealthReduction / 100f)));
+        }
+
         baseSpeed = moveSpeed;
         maxHealth = health;
     }
+
+    private static bool IsBossRole(EnemyRole r) =>
+        r == EnemyRole.MiniBoss || r == EnemyRole.Boss || r == EnemyRole.DeathBoss;
 
     private EnemyRole LegacyRole()
     {
@@ -636,7 +647,7 @@ public class Enemy : MonoBehaviour
 
     public virtual void TakeDamage(float damage, float? slowMultiplier = null)
     {
-        float finalDamage = damage * PlayerController.Instance.damageMultiplier;
+        float finalDamage = damage * PlayerController.Instance.damageMultiplier * Bestiary.DamageFactor(id);
         float critChance = PlayerController.Instance.critChance;
         float critDamage = PlayerController.Instance.critDamage;
 
@@ -693,14 +704,12 @@ public class Enemy : MonoBehaviour
         // Ohne Null-Pruefung reisst ein fehlender Spawner den ganzen
         // Todesfall mit: die NullReference fliegt, das Destroy unten laeuft
         // nie, und der Gegner steht mit negativem Leben weiter herum.
-        if (SpawnExp.Instance != null)
-        {
-            SpawnExp.Instance.SpawnEP(transform.position, experienceToGive);
-        }
+        DropExperience();
 
         GrantRewards();
         SpawnDeathEffect();
         if (GameManager.Instance != null) GameManager.Instance.kills++;
+        Bestiary.AddKill(id);
 
         AudioController.Instance.PalyModifiedSound(AudioController.Instance.enemyDeath);
 
@@ -715,6 +724,17 @@ public class Enemy : MonoBehaviour
     private void GrantRewards()
     {
         int souls = EnemyCatalog.Souls(role);
+
+        // Skilltree "Seelen-Bonus" (+x %). Der Nachkomma-Rest wird gewuerfelt,
+        // sonst braechte +10 % bei einem Miniboss (1 Seele) nie etwas.
+        PlayerController player = PlayerController.Instance;
+        if (souls > 0 && player != null && player.soulBonusPercent > 0f)
+        {
+            float scaled = souls * (1f + player.soulBonusPercent / 100f);
+            souls = Mathf.FloorToInt(scaled);
+            if (Random.value < scaled - souls) souls++;
+        }
+
         if (souls > 0)
         {
             Skills.AddCurrency(souls);
@@ -794,19 +814,37 @@ public class Enemy : MonoBehaviour
     /// </summary>
     private void TryDropPickup()
     {
-        if (PickUpManager.Instance == null) return;
+        PickUpManager pickups = PickUpManager.Instance;
+        if (pickups == null) return;
 
-        if (Random.value < EnemyCatalog.MagnetChance && PickUpManager.Instance.magnet_PickUP != null)
+        PlayerController player = PlayerController.Instance;
+        float dropMult = player != null ? player.dropChanceMultiplier : 1f;
+
+        if (Random.value < EnemyCatalog.MagnetChance * dropMult && pickups.magnet_PickUP != null)
         {
-            MoveToRunScene(Instantiate(PickUpManager.Instance.magnet_PickUP,
+            MoveToRunScene(Instantiate(pickups.magnet_PickUP,
                                        transform.position, Quaternion.identity));
         }
 
-        if (Random.value < EnemyCatalog.HeartChance && PickUpManager.Instance.heart_PickUP != null)
+        if (Random.value < EnemyCatalog.HeartChance * dropMult && pickups.heart_PickUP != null)
         {
-            MoveToRunScene(Instantiate(PickUpManager.Instance.heart_PickUP,
-                                       transform.position, Quaternion.identity));
+            bool golden = player != null && Random.value < player.goldenHeartChance;
+            MoveToRunScene(pickups.SpawnHeart(transform.position, golden));
         }
+    }
+
+    /// <summary>
+    /// XP beim Tod. Mit dem Skill "LuckyXpChance" faellt manchmal die
+    /// doppelte Menge - dann golden eingefaerbt und mit "x2" darueber.
+    /// </summary>
+    private void DropExperience()
+    {
+        if (SpawnExp.Instance == null) return;
+
+        PlayerController player = PlayerController.Instance;
+        bool lucky = player != null && Random.value < player.luckyXpChance;
+
+        SpawnExp.Instance.SpawnEP(transform.position, lucky ? experienceToGive * 2 : experienceToGive, lucky);
     }
 
     private static void MoveToRunScene(GameObject spawned)

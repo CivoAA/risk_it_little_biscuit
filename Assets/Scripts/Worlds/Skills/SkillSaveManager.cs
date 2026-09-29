@@ -57,6 +57,7 @@ public class SkillSaveManager : MonoBehaviour
         Achievements.ResetAll();
         Unlocks.ResetAll();
         Skills.ResetEverything();
+        Bestiary.ResetAll();
 
         WM_UIController.Instance?.UpdateSkillCurrencyText();
         UnlockUIManager.Instance?.RefreshUI();

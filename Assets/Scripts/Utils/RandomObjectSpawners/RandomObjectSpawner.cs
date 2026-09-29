@@ -20,6 +20,7 @@ public class RandomObjectSpawner : MonoBehaviour
     public Transform rightNoSpawnPoint;
 
     private HashSet<int> generatedBlocks = new HashSet<int>();
+    private GameObject[] mixerPrefabs;
 
     private void Update()
     {
@@ -54,7 +55,11 @@ public class RandomObjectSpawner : MonoBehaviour
         float blockStartX = blockIndex * blockSize;
         float blockEndX = blockStartX + blockSize;
 
-        int objectCount = Random.Range(0, maxObjectsPerBlock + 1);
+        int baseCount = Random.Range(0, maxObjectsPerBlock + 1);
+
+        // Skilltree "MoreMixers": zusaetzliche Objekte sind immer Mixer.
+        if (mixerPrefabs == null) mixerPrefabs = System.Array.FindAll(spawnablePrefabs, MixerObject.IsMixer);
+        int objectCount = mixerPrefabs.Length > 0 ? MixerObject.ScaleSpawnCount(baseCount) : baseCount;
 
         for (int i = 0; i < objectCount; i++)
         {
@@ -65,7 +70,9 @@ public class RandomObjectSpawner : MonoBehaviour
             if (IsInNoSpawnZone(randomX))
                 continue;
 
-            GameObject prefab = spawnablePrefabs[Random.Range(0, spawnablePrefabs.Length)];
+            GameObject prefab = i < baseCount
+                ? spawnablePrefabs[Random.Range(0, spawnablePrefabs.Length)]
+                : mixerPrefabs[Random.Range(0, mixerPrefabs.Length)];
             GameObject spawnedObject = Instantiate(prefab, new Vector3(randomX, randomY, 0f), Quaternion.identity);
 
             Scene gameScene = RunScene.Current;

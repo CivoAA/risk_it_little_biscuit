@@ -1,0 +1,313 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c18eae5cd8ed3a4fada04a73f1fddc8, type: 3}
+  m_Name: char_2
+  m_EditorClassIdentifier: Assembly-CSharp::SkillTreeAsset
+  treeId: char_2
+  displayName: Onigiri
+  characterIndex: 2
+  categories:
+  - category: 0
+    displayName: KAMPF
+    pathLabel: KAMPFPFAD
+    description: Schaerfe deine Waffen und triff haerter, wo es weh tut.
+    quote: '"Angriff ist die beste Verteidigung."'
+    color: {r: 0.69803923, g: 0.25490198, b: 0.25490198, a: 1}
+    icon: {fileID: 21300000, guid: 5c83bc25ff3a469d85c868257bfed173, type: 3}
+  - category: 1
+    displayName: GEIST
+    pathLabel: GEISTPFAD
+    description: Meistere die Kraefte in dir und halte laenger durch als alle anderen.
+    quote: '"Der Geist ueberdauert."'
+    color: {r: 0.23529412, g: 0.43529412, b: 0.7529412, a: 1}
+    icon: {fileID: 21300000, guid: f6b413de56154698a1c99bc219168b26, type: 3}
+  - category: 2
+    displayName: WISSEN
+    pathLabel: WISSENSPFAD
+    description: Lerne schneller, waehle klueger und hole aus jedem Lauf mehr heraus.
+    quote: '"Wissen veraendert die Welt."'
+    color: {r: 0.24313726, g: 0.56078434, b: 0.30980393, a: 1}
+    icon: {fileID: 21300000, guid: 5f4a3fbbfe784fa0bffda7c899d88f41, type: 3}
+  - category: 3
+    displayName: "GL\xDCCK"
+    pathLabel: "GL\xDCCKSPFAD"
+    description: Bessere Funde, seltenere Beute und der eine Wurf, der alles dreht.
+    quote: '"Glueck ist kein Zufall."'
+    color: {r: 0.78431374, g: 0.6039216, b: 0.17254902, a: 1}
+    icon: {fileID: 21300000, guid: 35894fd0e8c840379c23367db38a9df5, type: 3}
+  nodes:
+  - id: kampf_start
+    category: 0
+    lane: 1
+    step: 0
+    shape: 0
+    price: 0
+    displayName: Start
+    description: Hier beginnt der Pfad.
+    icon: {fileID: 0}
+    rewards: []
+    requires: []
+  - id: geist_start
+    category: 1
+    lane: 1
+    step: 0
+    shape: 0
+    price: 0
+    displayName: Start
+    description: Hier beginnt der Pfad.
+    icon: {fileID: 0}
+    rewards: []
+    requires: []
+  - id: wissen_start
+    category: 2
+    lane: 1
+    step: 0
+    shape: 0
+    price: 0
+    displayName: Start
+    description: Hier beginnt der Pfad.
+    icon: {fileID: 0}
+    rewards: []
+    requires: []
+  - id: glueck_start
+    category: 3
+    lane: 1
+    step: 0
+    shape: 0
+    price: 0
+    displayName: Start
+    description: Hier beginnt der Pfad.
+    icon: {fileID: 0}
+    rewards: []
+    requires: []
+  - id: glueck_mitte_1
+    category: 3
+    lane: 1
+    step: 1
+    shape: 5
+    price: 10
+    displayName: 
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 14
+      value: 5
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - glueck_start
+  - id: glueck_mitte_2
+    category: 3
+    lane: 1
+    step: 2
+    shape: 5
+    price: 20
+    displayName: 
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 14
+      value: 5
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - glueck_mitte_1
+  - id: glueck_oben_1
+    category: 3
+    lane: 0
+    step: 2
+    shape: 0
+    price: 20
+    displayName: 
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 23
+      value: 0.25
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - glueck_mitte_1
+  - id: glueck_unten_1
+    category: 3
+    lane: 2
+    step: 2
+    shape: 0
+    price: 20
+    displayName: 
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 24
+      value: 0.05
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - glueck_mitte_1
+  - id: glueck_oben_2
+    category: 3
+    lane: 0
+    step: 3
+    shape: 0
+    price: 25
+    displayName: 
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 25
+      value: 0.1
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - glueck_oben_1
+  - id: glueck_unten_2
+    category: 3
+    lane: 2
+    step: 3
+    shape: 0
+    price: 25
+    displayName: 
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 24
+      value: 0.05
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - glueck_unten_1
+  - id: glueck_oben_3
+    category: 3
+    lane: 0
+    step: 4
+    shape: 2
+    price: 30
+    displayName: 
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 28
+      value: 2.5
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - glueck_oben_2
+  - id: glueck_unten_3
+    category: 3
+    lane: 2
+    step: 4
+    shape: 2
+    price: 30
+    displayName: 
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 29
+      value: 1
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - glueck_unten_2
+  - id: glueck_mitte_3
+    category: 3
+    lane: 1
+    step: 5
+    shape: 3
+    price: 35
+    displayName: 
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 26
+      value: 0.5
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - glueck_unten_3
+    - glueck_oben_3
+  - id: glueck_mitte_4
+    category: 3
+    lane: 1
+    step: 3
+    shape: 1
+    price: 25
+    displayName: 
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 27
+      value: 25
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - glueck_mitte_2
+  - id: geist_ueberheilung
+    category: 1
+    lane: 0
+    step: 1
+    shape: 4
+    price: 40
+    displayName: Ueberheilung
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 35
+      value: 20
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - geist_start
+  - id: geist_letzter_atem
+    category: 1
+    lane: 2
+    step: 1
+    shape: 2
+    price: 40
+    displayName: Letzter Atem
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 36
+      value: 20
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - geist_start
+  - id: geist_schockwelle
+    category: 1
+    lane: 1
+    step: 1
+    shape: 3
+    price: 60
+    displayName: Schockwelle
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 1
+      stat: 0
+      value: 0
+      grantId: schockwelle
+      descriptionOverride: 
+    requires:
+    - geist_start

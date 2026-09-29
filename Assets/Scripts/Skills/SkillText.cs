@@ -30,7 +30,23 @@ public static class SkillText
             case SkillType.xpMultiplier:
             case SkillType.IncreasePickupRange:
             case SkillType.IncreaseAOERange:
+            case SkillType.IncreaseDropChance:
+            case SkillType.LuckyXpChance:
+            case SkillType.GoldenHeartChance:
+            case SkillType.LuckyReviveChance:
                 return (value * 100f).ToString("0.#");
+
+            // Schon in Prozent eingetragen (1 = 1 %).
+            case SkillType.MoreMixers:
+            case SkillType.MixerAllThreeChance:
+            case SkillType.MixerAllLegendaryChance:
+            case SkillType.FreeRerollChance:
+            case SkillType.LevelUpHealPercent:
+            case SkillType.SoulBonusPercent:
+            case SkillType.BossHealthReduction:
+            case SkillType.OverhealShield:
+            case SkillType.LastBreath:
+                return value.ToString("0.#");
 
             case SkillType.IncreaseSpeed:
             case SkillType.IncreaseLifeSteal:
@@ -40,9 +56,7 @@ public static class SkillText
             case SkillType.IncreaseExtraShot:
             case SkillType.BanishAmount:
             case SkillType.RerollAmount:
-            case SkillType.IncreaseWeaponSlots:
-            case SkillType.IncreaseBuffSlots:
-            case SkillType.IncreaseEvoSlots:
+            case SkillType.StartWeaponLevel:
                 return Mathf.RoundToInt(value).ToString();
 
             default:
@@ -72,10 +86,20 @@ public static class SkillText
             case SkillType.RerollAmount:        return "+{0} Reroll";
             case SkillType.StartXPAmount:       return "+{0} Start XP";
             case SkillType.IncreaseShrinkSpeed: return "+{0} Shrink Speed";
-            case SkillType.IncreaseWeaponSlots: return "+{0} Weapon Slot";
-            case SkillType.IncreaseBuffSlots:   return "+{0} Buff Slot";
-            case SkillType.IncreaseEvoSlots:    return "+{0} Evo Slot";
-            case SkillType.UnlockEvoOrWeapon:   return "Unlocks an Evo or Weapon";
+            case SkillType.IncreaseDropChance:  return "+{0}% Drop Chance";
+            case SkillType.LuckyXpChance:       return "{0}% Chance for double XP";
+            case SkillType.GoldenHeartChance:   return "{0}% of hearts are golden (+Max Health)";
+            case SkillType.LuckyReviveChance:   return "{0}% Chance to revive once";
+            case SkillType.MoreMixers:              return "+{0}% Mixers on the map";
+            case SkillType.MixerAllThreeChance:     return "{0}% Chance a mixer gives all 3 stats";
+            case SkillType.MixerAllLegendaryChance: return "{0}% Chance a mixer rolls all 3 legendary";
+            case SkillType.FreeRerollChance:        return "{0}% Chance for a free reroll";
+            case SkillType.LevelUpHealPercent:      return "Heal {0}% health on level up";
+            case SkillType.SoulBonusPercent:        return "+{0}% Souls from bosses";
+            case SkillType.BossHealthReduction:     return "Bosses spawn with {0}% less health";
+            case SkillType.StartWeaponLevel:        return "+{0} Start weapon level";
+            case SkillType.OverhealShield:          return "Overheal becomes a shield (max {0}% health)";
+            case SkillType.LastBreath:              return "Below 30% health: +{0}% speed, double regen";
             default:                            return "{0}";
         }
     }

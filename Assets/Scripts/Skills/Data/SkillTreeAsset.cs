@@ -9,7 +9,7 @@ using UnityEngine;
 [Serializable]
 public class SkillRewardData
 {
-    [Tooltip("Wert = eine Zahl aus der Liste unten. Schalter = ein Eintrag aus SkillGrants.")]
+    [Tooltip("Wert = eine Zahl aus der Liste unten. Freischalten = ein Eintrag aus SkillGrants.")]
     public SkillRewardKind kind = SkillRewardKind.Wert;
 
     [Tooltip("Nur bei 'Wert'. Der Startwert kommt aus SkillDefaults und darf ueberschrieben werden.")]
@@ -17,7 +17,7 @@ public class SkillRewardData
 
     public float value = 10f;
 
-    [Tooltip("Nur bei 'Schalter'. Die Id aus SkillGrants.")]
+    [Tooltip("Nur bei 'Freischalten'. Die Id aus SkillGrants.")]
     public string grantId = "";
 
     [Tooltip("Optional. Leer = Text wird aus Effekt und Wert gebaut.")]
@@ -36,7 +36,7 @@ public class SkillRewardData
     {
         string desc = string.IsNullOrWhiteSpace(descriptionOverride) ? null : descriptionOverride;
 
-        return kind == SkillRewardKind.Schalter
+        return kind == SkillRewardKind.Freischalten
             ? new SkillReward(grantId, desc)
             : new SkillReward(stat, value, desc);
     }

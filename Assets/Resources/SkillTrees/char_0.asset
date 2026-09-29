@@ -347,15 +347,10 @@ MonoBehaviour:
     step: 4
     shape: 3
     price: 50
-    displayName: Zweites Leben
+    displayName: Zaeher Geist
     description: 
     icon: {fileID: 0}
     rewards:
-    - kind: 1
-      stat: 1
-      value: 10
-      grantId: zweites_leben
-      descriptionOverride: 
     - kind: 0
       stat: 1
       value: 20
@@ -370,132 +365,13 @@ MonoBehaviour:
     - geist_oben_2
     - geist_mitte_3
     - geist_unten_2
-  - id: wissen_mitte_1
-    category: 2
-    lane: 1
-    step: 1
-    shape: 0
-    price: 10
-    displayName: Lerneifer
-    description: 
-    icon: {fileID: 0}
-    rewards:
-    - kind: 0
-      stat: 3
-      value: 0.1
-      grantId: 
-      descriptionOverride: 
-    requires:
-    - wissen_start
-  - id: wissen_oben_1
-    category: 2
-    lane: 0
-    step: 2
-    shape: 1
-    price: 15
-    displayName: Sammler
-    description: 
-    icon: {fileID: 0}
-    rewards:
-    - kind: 0
-      stat: 13
-      value: 0.2
-      grantId: 
-      descriptionOverride: 
-    requires:
-    - wissen_mitte_1
-  - id: wissen_mitte_2
-    category: 2
-    lane: 1
-    step: 2
-    shape: 0
-    price: 15
-    displayName: Studium
-    description: 
-    icon: {fileID: 0}
-    rewards:
-    - kind: 0
-      stat: 3
-      value: 0.1
-      grantId: 
-      descriptionOverride: 
-    requires:
-    - wissen_mitte_1
-  - id: wissen_unten_1
-    category: 2
-    lane: 2
-    step: 2
-    shape: 1
-    price: 15
-    displayName: Vorrat
-    description: 
-    icon: {fileID: 0}
-    rewards:
-    - kind: 0
-      stat: 17
-      value: 10
-      grantId: 
-      descriptionOverride: 
-    requires:
-    - wissen_mitte_1
-  - id: wissen_oben_2
-    category: 2
-    lane: 0
-    step: 3
-    shape: 6
-    price: 30
-    displayName: Zweite Wahl
-    description: 
-    icon: {fileID: 0}
-    rewards:
-    - kind: 0
-      stat: 16
-      value: 1
-      grantId: 
-      descriptionOverride: 
-    requires:
-    - wissen_oben_1
-  - id: wissen_mitte_3
-    category: 2
-    lane: 1
-    step: 3
-    shape: 0
-    price: 30
-    displayName: Platz im Gepaeck
-    description: 
-    icon: {fileID: 0}
-    rewards:
-    - kind: 0
-      stat: 19
-      value: 1
-      grantId: 
-      descriptionOverride: 
-    requires:
-    - wissen_mitte_2
-  - id: wissen_unten_2
-    category: 2
-    lane: 2
-    step: 3
-    shape: 6
-    price: 30
-    displayName: Verbannen
-    description: 
-    icon: {fileID: 0}
-    rewards:
-    - kind: 0
-      stat: 15
-      value: 1
-      grantId: 
-      descriptionOverride: 
-    requires:
-    - wissen_unten_1
   - id: glueck_mitte_1
     category: 3
     lane: 1
     step: 1
-    shape: 0
+    shape: 5
     price: 10
-    displayName: Handschmeichler
+    displayName: 
     description: 
     icon: {fileID: 0}
     rewards:
@@ -506,108 +382,6 @@ MonoBehaviour:
       descriptionOverride: 
     requires:
     - glueck_start
-  - id: glueck_oben_1
-    category: 3
-    lane: 0
-    step: 2
-    shape: 2
-    price: 15
-    displayName: Guter Fund
-    description: 
-    icon: {fileID: 0}
-    rewards:
-    - kind: 0
-      stat: 14
-      value: 5
-      grantId: 
-      descriptionOverride: 
-    requires:
-    - glueck_mitte_1
-  - id: glueck_mitte_2
-    category: 3
-    lane: 1
-    step: 2
-    shape: 0
-    price: 15
-    displayName: Rueckenwind
-    description: 
-    icon: {fileID: 0}
-    rewards:
-    - kind: 0
-      stat: 14
-      value: 5
-      grantId: 
-      descriptionOverride: 
-    requires:
-    - glueck_mitte_1
-  - id: glueck_unten_1
-    category: 3
-    lane: 2
-    step: 2
-    shape: 2
-    price: 15
-    displayName: Magnet
-    description: 
-    icon: {fileID: 0}
-    rewards:
-    - kind: 0
-      stat: 13
-      value: 0.2
-      grantId: 
-      descriptionOverride: 
-    requires:
-    - glueck_mitte_1
-  - id: glueck_oben_2
-    category: 3
-    lane: 0
-    step: 3
-    shape: 3
-    price: 45
-    displayName: Freie Truhe
-    description: 
-    icon: {fileID: 0}
-    rewards:
-    - kind: 1
-      stat: 1
-      value: 10
-      grantId: erste_truhe_gratis
-      descriptionOverride: 
-    requires:
-    - glueck_oben_1
-  - id: glueck_mitte_3
-    category: 3
-    lane: 1
-    step: 3
-    shape: 4
-    price: 30
-    displayName: Gluecksstraehne
-    description: 
-    icon: {fileID: 0}
-    rewards:
-    - kind: 0
-      stat: 14
-      value: 10
-      grantId: 
-      descriptionOverride: 
-    requires:
-    - glueck_mitte_2
-  - id: glueck_unten_2
-    category: 3
-    lane: 2
-    step: 3
-    shape: 6
-    price: 30
-    displayName: Reiche Ernte
-    description: 
-    icon: {fileID: 0}
-    rewards:
-    - kind: 0
-      stat: 21
-      value: 1
-      grantId: 
-      descriptionOverride: 
-    requires:
-    - glueck_unten_1
   - id: kampf_start
     category: 0
     lane: 1
@@ -652,42 +426,264 @@ MonoBehaviour:
     icon: {fileID: 0}
     rewards: []
     requires: []
+  - id: glueck_mitte_2
+    category: 3
+    lane: 1
+    step: 2
+    shape: 5
+    price: 20
+    displayName: 
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 14
+      value: 5
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - glueck_mitte_1
+  - id: glueck_oben_1
+    category: 3
+    lane: 0
+    step: 2
+    shape: 0
+    price: 20
+    displayName: 
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 23
+      value: 0.25
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - glueck_mitte_1
+  - id: glueck_unten_1
+    category: 3
+    lane: 2
+    step: 2
+    shape: 0
+    price: 20
+    displayName: 
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 24
+      value: 0.05
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - glueck_mitte_1
+  - id: glueck_oben_2
+    category: 3
+    lane: 0
+    step: 3
+    shape: 0
+    price: 25
+    displayName: 
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 25
+      value: 0.1
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - glueck_oben_1
+  - id: glueck_unten_2
+    category: 3
+    lane: 2
+    step: 3
+    shape: 0
+    price: 25
+    displayName: 
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 24
+      value: 0.05
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - glueck_unten_1
   - id: glueck_oben_3
     category: 3
     lane: 0
     step: 4
-    shape: 0
+    shape: 2
     price: 30
     displayName: 
     description: 
     icon: {fileID: 0}
     rewards:
     - kind: 0
-      stat: 1
-      value: 10
+      stat: 28
+      value: 2.5
       grantId: 
       descriptionOverride: 
     requires:
-    - glueck_mitte_1
+    - glueck_oben_2
   - id: glueck_unten_3
     category: 3
     lane: 2
     step: 4
-    shape: 0
+    shape: 2
     price: 30
     displayName: 
     description: 
     icon: {fileID: 0}
     rewards:
     - kind: 0
-      stat: 1
+      stat: 29
+      value: 1
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - glueck_unten_2
+  - id: glueck_mitte_3
+    category: 3
+    lane: 1
+    step: 5
+    shape: 3
+    price: 35
+    displayName: 
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 26
+      value: 0.5
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - glueck_unten_3
+    - glueck_oben_3
+  - id: glueck_mitte_4
+    category: 3
+    lane: 1
+    step: 3
+    shape: 1
+    price: 25
+    displayName: 
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 27
+      value: 25
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - glueck_mitte_2
+  - id: wissen_mitte_1
+    category: 2
+    lane: 1
+    step: 1
+    shape: 0
+    price: 15
+    displayName: 
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 32
       value: 10
       grantId: 
       descriptionOverride: 
     requires:
-    - glueck_mitte_1
-  - id: glueck_mitte_4
-    category: 3
+    - wissen_start
+  - id: wissen_oben_1
+    category: 2
+    lane: 0
+    step: 2
+    shape: 0
+    price: 20
+    displayName: 
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 31
+      value: 5
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - wissen_mitte_1
+  - id: wissen_unten_1
+    category: 2
+    lane: 2
+    step: 2
+    shape: 0
+    price: 20
+    displayName: 
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 31
+      value: 5
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - wissen_mitte_1
+  - id: wissen_mitte_2
+    category: 2
+    lane: 1
+    step: 2
+    shape: 0
+    price: 1
+    displayName: 
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 1
+      stat: 1
+      value: 10
+      grantId: bestiarium
+      descriptionOverride: 
+    requires:
+    - wissen_mitte_1
+  - id: wissen_oben_2
+    category: 2
+    lane: 0
+    step: 3
+    shape: 0
+    price: 25
+    displayName: 
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 30
+      value: 20
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - wissen_oben_1
+  - id: wissen_unten_2
+    category: 2
+    lane: 2
+    step: 3
+    shape: 0
+    price: 25
+    displayName: 
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 33
+      value: 5
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - wissen_unten_1
+  - id: wissen_mitte_3
+    category: 2
     lane: 1
     step: 4
     shape: 0
@@ -696,10 +692,80 @@ MonoBehaviour:
     description: 
     icon: {fileID: 0}
     rewards:
-    - kind: 0
-      stat: 1
+    - kind: 1
+      stat: 32
       value: 10
+      grantId: kartograf
+      descriptionOverride: 
+    requires:
+    - wissen_unten_2
+    - wissen_oben_2
+    - wissen_mitte_2
+  - id: wissen_mitte_4
+    category: 2
+    lane: 1
+    step: 5
+    shape: 0
+    price: 35
+    displayName: 
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 34
+      value: 1
+      grantId: bestiarium
+      descriptionOverride: 
+    requires:
+    - wissen_mitte_3
+  - id: geist_ueberheilung
+    category: 1
+    lane: 0
+    step: 4
+    shape: 4
+    price: 40
+    displayName: Ueberheilung
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 35
+      value: 20
       grantId: 
       descriptionOverride: 
     requires:
-    - glueck_mitte_1
+    - geist_oben_2
+  - id: geist_letzter_atem
+    category: 1
+    lane: 2
+    step: 4
+    shape: 2
+    price: 40
+    displayName: Letzter Atem
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 36
+      value: 20
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - geist_unten_2
+  - id: geist_schockwelle
+    category: 1
+    lane: 1
+    step: 5
+    shape: 3
+    price: 60
+    displayName: Schockwelle
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 1
+      stat: 0
+      value: 0
+      grantId: schockwelle
+      descriptionOverride: 
+    requires:
+    - geist_mitte_4

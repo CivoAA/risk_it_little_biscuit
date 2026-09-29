@@ -25,7 +25,8 @@ public class PowerUpButton : MonoBehaviour
             return r != null ? r.statRange : new Vector2(selectedValue, selectedValue);
         }
     }
-    public void ActivateButton()
+    /// <param name="forcedRarity">Gesetzt = diese Seltenheit statt des Glueckswurfs (Skilltree: alles legendaer).</param>
+    public void ActivateButton(PowerUpRarity? forcedRarity = null)
     {
         if (assignedPowerUp == null)
         {
@@ -34,7 +35,7 @@ public class PowerUpButton : MonoBehaviour
         }
 
         // Rarity + Wert ermitteln
-        RaritySelector();
+        RaritySelector(forcedRarity);
 
         // UI aktualisieren
         UpdateUI();
@@ -43,12 +44,12 @@ public class PowerUpButton : MonoBehaviour
     // --------------------------------------------------
     // 🔹 Rarity-Berechnung inkl. Luck
     // --------------------------------------------------
-    private void RaritySelector()
+    private void RaritySelector(PowerUpRarity? forcedRarity)
     {
         float luck = PlayerController.Instance != null ? PlayerController.Instance.luck : 0f;
 
         // 1️⃣ Rarity bestimmen
-        selectedRarity = PowerUpRaritySelector.GetRandomRarity(luck);
+        selectedRarity = forcedRarity ?? PowerUpRaritySelector.GetRandomRarity(luck);
 
         // 2️⃣ Passenden Stat finden
         PowerUpStats rarityStats = assignedPowerUp.rarityStats.Find(r => r.rarity == selectedRarity);
@@ -94,13 +95,38 @@ public class PowerUpButton : MonoBehaviour
             return;
         }
 
+        if (MixerObject.Jackpot)
+        {
+            // Skilltree "MixerAllThreeChance": egal welche Karte - alle drei gelten.
+            MixerObject.Jackpot = false;
+            foreach (PowerUpButton b in UIController.Instance.PowerUpButtons)
+            {
+                if (b != null && b.gameObject.activeSelf && b.assignedPowerUp != null)
+                    b.ApplyTo(player);
+            }
+            DamageNumberController.Instance?.CreateText("Jackpot!", player.transform.position);
+        }
+        else if (!ApplyTo(player))
+        {
+            return;
+        }
+
+        // 🔹 Panel schließen & Sound
+        UIController.Instance.PowerUpPanelClose();
+        UIController.Instance.UpdateHealthSlider();
+        AudioController.Instance.PalySound(AudioController.Instance.MenuClick);
+    }
+
+    /// <summary>Schreibt den gewuerfelten Wert auf das Spielerfeld. False, wenn es das Feld nicht gibt.</summary>
+    private bool ApplyTo(PlayerController player)
+    {
         // 🔹 Versuch, das passende Feld anhand des Namens zu finden
         var field = typeof(PlayerController).GetField(assignedPowerUp.powerUpName);
 
         if (field == null)
         {
             Debug.LogWarning($"⚠ Kein Feld mit dem Namen '{assignedPowerUp.powerUpName}' im PlayerController gefunden!");
-            return;
+            return false;
         }
 
         // 🔹 Aktuellen Wert auslesen
@@ -121,10 +147,7 @@ public class PowerUpButton : MonoBehaviour
         {
             //Debug.LogWarning($"⚠ Feld '{assignedPowerUp.powerUpName}' ist kein int oder float!");
         }
-        // 🔹 Panel schließen & Sound
-        UIController.Instance.PowerUpPanelClose();
-        UIController.Instance.UpdateHealthSlider();
-        AudioController.Instance.PalySound(AudioController.Instance.MenuClick);
+        return true;
     }
 
 
