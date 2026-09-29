@@ -33,6 +33,10 @@ public class CharacterLooks : ScriptableObject
 
         [Tooltip("Toent Licht, Hintergrund und Spruch in der Charakterauswahl.")]
         public Color accent = new Color(0.95f, 0.76f, 0.31f, 1f);
+
+        [Tooltip("Portraet fuer die Keksdose, 42x42 je Bild (Tools/char_icons.py). Bild 0 steht " +
+                 "still, unter dem Cursor laeuft die ganze Reihe. Leer = Idle-Animation wie bisher.")]
+        public Sprite[] portrait;
     }
 
     public const string ResourcePath = "Characters/CharacterLooks";
@@ -73,6 +77,12 @@ public class CharacterLooks : ScriptableObject
         Look look = Instance != null ? Instance.Get(index) : null;
         if (look != null) return look.accent;
         return FallbackAccents[Mathf.Abs(index) % FallbackAccents.Length];
+    }
+
+    public static Sprite[] PortraitFor(int index)
+    {
+        Look look = Instance != null ? Instance.Get(index) : null;
+        return look != null && look.portrait != null && look.portrait.Length > 0 ? look.portrait : null;
     }
 
     public static int FootRowsFor(int index)

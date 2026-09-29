@@ -95,6 +95,9 @@ public class HubCharacterSelectUI : MonoBehaviour
     // der Buehne 2:1.
     private const float PortraitTarget = 64f, StageTarget = 128f;
 
+    // Bilder pro Sekunde, wenn ein gemaltes Portraet unter dem Cursor laeuft
+    private const float PortraitFps = 6f;
+
     private static readonly Color Silhouette = new Color(0.11f, 0.08f, 0.1f, 1f);
 
     // ==================================================================
@@ -1048,9 +1051,26 @@ public class HubCharacterSelectUI : MonoBehaviour
             }
 
             bool isCursor = s.Character == cursor;
+            bool available = Characters.IsAvailable(s.Character);
+
+            // Gemaltes Portraet (CharacterLooks.portrait): steht still, unter dem
+            // Cursor huepft die Figur und der Strahlenkranz dreht sich. Gesperrte
+            // Charaktere bleiben beim Schatten aus der Animation - vom Portraet
+            // wuerde nur ein dunkles Quadrat uebrig.
+            Sprite[] icon = available ? CharacterLooks.PortraitFor(s.Character) : null;
+            if (icon != null)
+            {
+                int k = isCursor && animate ? Mathf.FloorToInt(now * PortraitFps) % icon.Length : 0;
+                s.Portrait.enabled = true;
+                s.Portrait.sprite = icon[k];
+                s.Portrait.color = Color.white;
+                s.Portrait.rectTransform.sizeDelta = new Vector2(icon[k].rect.width, icon[k].rect.height);
+                s.Portrait.rectTransform.anchoredPosition = Vector2.zero;
+            }
+
             // Der Keks unter dem Cursor trippelt auf der Stelle - er will los.
-            Sprite frame = s.Puppet.Frame(isCursor && animate);
-            s.Portrait.enabled = frame != null;
+            Sprite frame = icon != null ? null : s.Puppet.Frame(isCursor && animate);
+            if (icon == null) s.Portrait.enabled = frame != null;
             if (frame != null)
             {
                 s.Portrait.sprite = frame;
