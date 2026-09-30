@@ -69,7 +69,7 @@ public class StickyShatterEvoPrefab : MonoBehaviour
                 continue;
             }
 
-            enemiesInRange[i].TakeDamage(weapon.CurrentStats.damage, weapon.SlowMultiplier);
+            enemiesInRange[i].TakeDamage(weapon.CurrentStats.damage, weapon.SlowMultiplier, 0f);
         }
     }
 

@@ -217,11 +217,13 @@ public static class SkillTools
         foreach (SkillNodeDef parent in node.Requires)
         {
             // Ein Vorgaenger, der weiter rechts steht, ergibt eine Linie, die
-            // rueckwaerts laeuft - sichtbar krumm, also ein Fehler.
-            if (parent.Step >= node.Step)
+            // rueckwaerts laeuft - sichtbar krumm, also ein Fehler. Gleiche
+            // Spalte ist erlaubt: das ist eine senkrechte Verbindung zwischen
+            // zwei Bahnen (so im Geist-Zweig von char_0 gebaut).
+            if (parent.Step > node.Step)
             {
-                errors.Add($"'{node.Key}' braucht '{parent.LocalId}', der genauso weit rechts " +
-                           "oder weiter rechts steht. Voraussetzungen muessen links stehen.");
+                errors.Add($"'{node.Key}' braucht '{parent.LocalId}', der weiter rechts " +
+                           "steht. Voraussetzungen muessen links oder in derselben Spalte stehen.");
             }
         }
     }

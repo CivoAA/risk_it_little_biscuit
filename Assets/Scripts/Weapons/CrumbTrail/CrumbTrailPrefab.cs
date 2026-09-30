@@ -65,7 +65,7 @@ public class CrumbTrailPrefab : MonoBehaviour
                 continue;
             }
 
-            enemiesInRange[i].TakeDamage(weapon.CurrentStats.damage);
+            enemiesInRange[i].TakeDamage(weapon.CurrentStats.damage, knockback: 0f);
         }
     }
 

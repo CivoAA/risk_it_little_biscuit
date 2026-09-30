@@ -4,8 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// Wirbel: setzt einen Strudel ab, der Gegner zur Mitte zieht und sie dabei
-/// regelmaessig verletzt. Der Schaden ist bewusst niedrig - der Wert der Waffe
+/// Wirbel: setzt einen Strudel ab, der Gegner zur Mitte zieht, bremst und sie
+/// dabei regelmaessig verletzt. Der Schaden ist bewusst niedrig - der Wert der Waffe
 /// liegt darin, den Pulk fuer alle anderen Flaechenwaffen zusammenzuschieben.
 ///
 /// cooldown    = Pause zwischen zwei Wirbeln

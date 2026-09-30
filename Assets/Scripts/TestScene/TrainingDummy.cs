@@ -46,7 +46,7 @@ public class TrainingDummy : Enemy
     /// Spiegelt die Schadensberechnung aus <see cref="Enemy.TakeDamage"/>
     /// (Damage-Multiplier + Crit), zieht aber keine Leben ab.
     /// </summary>
-    public override void TakeDamage(float damage, float? slowMultiplier = null)
+    public override void TakeDamage(float damage, float? slowMultiplier = null, float knockback = 1f)
     {
         // Abgeschaltete Dummies (kleinere Gruppe gewählt) dürfen nicht mitzählen:
         // manche Waffen halten ihre Zielliste noch einen Moment länger.

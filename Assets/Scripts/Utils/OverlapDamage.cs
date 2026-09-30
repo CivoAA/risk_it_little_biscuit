@@ -105,6 +105,30 @@ public static class OverlapDamage
         }
     }
 
+    /// <summary>
+    /// Wie oben, aber fuer einen Kreis ohne Collider, der von
+    /// <paramref name="from"/> nach <paramref name="to"/> fliegt (z.B. eine
+    /// Welle des Salatfaechers). Reihenfolge = in der Gegner getroffen wurden.
+    /// Trifft jeden Gegner-Collider, egal auf welcher Ebene.
+    /// </summary>
+    public static void SweepEnemies(Vector2 from, Vector2 to, float radius, List<Enemy> result)
+    {
+        result.Clear();
+
+        Vector2 delta = to - from;
+        float distance = delta.magnitude;
+        Vector2 dir = distance > 0.0001f ? delta / distance : Vector2.right;
+
+        castBuffer.Clear();
+        Physics2D.CircleCast(from, radius, dir, new ContactFilter2D().NoFilter(), castBuffer, distance);
+        castBuffer.Sort((a, b) => a.distance.CompareTo(b.distance));
+
+        for (int i = 0; i < castBuffer.Count; i++)
+        {
+            AddEnemy(castBuffer[i].collider, result);
+        }
+    }
+
     private static ContactFilter2D BuildFilter(int layer)
     {
         ContactFilter2D filter = new ContactFilter2D();
