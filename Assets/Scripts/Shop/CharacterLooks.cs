@@ -91,5 +91,25 @@ public class CharacterLooks : ScriptableObject
         return look != null ? Mathf.Max(0, look.footRows) : 0;
     }
 
+    /// <summary>
+    /// Der Koerper im Frame, in Texturpixeln: ein Quadrat von einer Einheit
+    /// (PPU), unten mittig am Pivot. Bei normalen Frames ist das der ganze
+    /// Frame. Groesser ist er nur, wenn etwas heraussteht - der Zwiebelritter
+    /// hat 64er-Zellen fuer sein Schwert, ist aber eine 32er-Figur. Menues
+    /// skalieren und zentrieren nach diesem Quadrat statt nach dem Frame,
+    /// sonst wird er halb so gross gezeichnet.
+    /// </summary>
+    public static Rect BodyRect(Sprite s)
+    {
+        float w = s.rect.width, h = s.rect.height;
+        float unit = Mathf.Min(s.pixelsPerUnit, Mathf.Max(w, h));
+        if (unit <= 0f || (w <= unit && h <= unit)) return new Rect(0f, 0f, w, h);
+
+        float bw = Mathf.Min(unit, w), bh = Mathf.Min(unit, h);
+        float x = Mathf.Clamp(Mathf.Round(s.pivot.x - bw / 2f), 0f, w - bw);
+        float y = Mathf.Clamp(Mathf.Round(s.pivot.y), 0f, h - bh);
+        return new Rect(x, y, bw, bh);
+    }
+
     private Look Get(int index) => index >= 0 && index < looks.Count ? looks[index] : null;
 }

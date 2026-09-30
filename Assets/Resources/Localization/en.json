@@ -412,6 +412,12 @@
     { "key": "character.2.name", "value": "Onigiri" },
     { "key": "character.2.tagline", "value": "Rice with a headband" },
     { "key": "character.2.desc", "value": "Escaped from the bento box and determined. Holds together what belongs together - especially itself." },
+    { "key": "character.3.name", "value": "Toast" },
+    { "key": "character.3.tagline", "value": "Crispy to the crust" },
+    { "key": "character.3.desc", "value": "Fresh out of the toaster and still warm. The headband is tight, so is the crust - touch him and you'll burn your fingers." },
+    { "key": "character.4.name", "value": "Onion Knight" },
+    { "key": "character.4.tagline", "value": "Sword up, tears down" },
+    { "key": "character.4.desc", "value": "Armor, layer after layer. When he draws his blade, his enemies cry - and sometimes he does too, just a little." },
 
     { "key": "ui.options.title", "value": "OPTIONS" },
     { "key": "ui.options.esc", "value": "ESC BACK" },

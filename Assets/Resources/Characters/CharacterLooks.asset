@@ -37,3 +37,19 @@ MonoBehaviour:
     - {fileID: 4566722016867540402, guid: 025eead2c5eb438a80d65269c530e265, type: 3}
     - {fileID: 4213974408333736105, guid: 025eead2c5eb438a80d65269c530e265, type: 3}
     - {fileID: 3279919274786878370, guid: 025eead2c5eb438a80d65269c530e265, type: 3}
+  - animator: {fileID: 9100000, guid: 9e560c6b1138461d8de0b729f568fd19, type: 2}
+    footRows: 0
+    accent: {r: 0.84, g: 0.36, b: 0.34, a: 1}
+    portrait:
+    - {fileID: 1473711572193201761, guid: 8a6e6a43bdf24417b25d100605142c1d, type: 3}
+    - {fileID: 3135809797928244247, guid: 8a6e6a43bdf24417b25d100605142c1d, type: 3}
+    - {fileID: 2106910079815612455, guid: 8a6e6a43bdf24417b25d100605142c1d, type: 3}
+    - {fileID: 1597068908924085082, guid: 8a6e6a43bdf24417b25d100605142c1d, type: 3}
+  - animator: {fileID: 9100000, guid: 86adbb37c0464990a6eeea51006eb0c1, type: 2}
+    footRows: 0
+    accent: {r: 0.55, g: 0.62, b: 0.8, a: 1}
+    portrait:
+    - {fileID: 3253553677209130146, guid: 7ecc47ca99834af59017b5e221ac3614, type: 3}
+    - {fileID: 3786138481244314605, guid: 7ecc47ca99834af59017b5e221ac3614, type: 3}
+    - {fileID: 1696884995013310443, guid: 7ecc47ca99834af59017b5e221ac3614, type: 3}
+    - {fileID: 3480610669562712137, guid: 7ecc47ca99834af59017b5e221ac3614, type: 3}

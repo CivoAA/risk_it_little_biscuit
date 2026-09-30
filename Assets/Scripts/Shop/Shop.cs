@@ -292,8 +292,8 @@ public static class Shop
     /// <summary>Gewählter Charakter. Liegt im selben Spielstand wie der Shop.</summary>
     public static int SkinIndex
     {
-        // Alte Spielstaende kennen noch Grauen/Roten Keks (bis 29.09.2026, Index 3/4) -
-        // was es nicht mehr gibt, wird zum Braunen Keks.
+        // Was es nicht (mehr) gibt, wird zum Keks. Alte Spielstaende mit Grauem/Rotem
+        // Keks (bis 29.09.2026, Index 3/4) landen seit 30.09. bei Toast/Zwiebelritter.
         get => Store.SkinIndex >= 0 && Store.SkinIndex < Characters.Count ? Store.SkinIndex : 0;
         set
         {

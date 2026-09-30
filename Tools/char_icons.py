@@ -48,6 +48,9 @@ CHARS = [
     ("Keks",    "Char_Keks.png",    (0.88, 0.63, 0.31)),
     ("Jam",     "Char_Jam.png",     (0.65, 0.48, 0.85)),
     ("Onigiri", "Char_Onigiri.png", (0.45, 0.68, 0.55)),
+    ("Toast",   "Char_Toast.png",   (0.84, 0.36, 0.34)),
+    # Ritter hat 64er-Zellen (Schwert ragt ueber 32 hinaus) - Zelle als 4. Wert
+    ("OnionKnight", "Char_OnionKnight.png", (0.55, 0.62, 0.80), 64),
 ]
 
 
@@ -63,10 +66,10 @@ def shade(rgb, k):
             int(max(0, min(1, b)) * 255), 255)
 
 
-def idle_frame(sheet):
+def idle_frame(sheet, size=32):
     """Erste Zelle oben links (Zeile 1 = Idle von vorn), auf Inhalt beschnitten."""
     im = Image.open(os.path.join(CHARS_DIR, sheet)).convert("RGBA")
-    cell = im.crop((0, 0, 32, 32))
+    cell = im.crop((0, 0, size, size))
     return cell.crop(cell.getbbox())
 
 
@@ -126,6 +129,23 @@ MOTIFS = {
             "*": STAR,
         },
         "spots": [(5, 6, "p"), (36, 8, "r"), (35, 27, "p"), (5, 26, "r"), (28, 3, "*"), (13, 3, "r")],
+    },
+    # Toast: Butterstueckchen und Kruemel
+    "Toast": {
+        "shapes": {
+            "b": (["ly", "yy"], {"l": (0xFF, 0xF6, 0xC8, 255), "y": (0xF4, 0xD2, 0x6A, 255)}),
+            "c": (["d"], {"d": (0xC0, 0x7A, 0x3E, 255)}),
+            "*": STAR,
+        },
+        "spots": [(5, 6, "b"), (36, 8, "c"), (35, 27, "b"), (5, 26, "c"), (28, 3, "*"), (13, 3, "c")],
+    },
+    # Zwiebelritter: Zwiebelringe und Funkeln
+    "OnionKnight": {
+        "shapes": {
+            "o": ([".r.", "r.r", ".r."], {"r": (0xF3, 0xE0, 0xC0, 255)}),
+            "*": STAR,
+        },
+        "spots": [(4, 6, "o"), (37, 7, "*"), (37, 27, "o"), (4, 26, "*"), (28, 3, "o"), (13, 3, "*")],
     },
 }
 
@@ -209,8 +229,8 @@ def draw_frame(fig, accent, motif, f):
     return img
 
 
-def strip(name, sheet, accent):
-    fig = idle_frame(sheet)
+def strip(name, sheet, accent, cell=32):
+    fig = idle_frame(sheet, cell)
     out = Image.new("RGBA", (SIZE * FRAMES, SIZE), CLEAR)
     for f in range(FRAMES):
         out.paste(draw_frame(fig, accent, MOTIFS[name], f), (f * SIZE, 0))
@@ -223,8 +243,8 @@ def main():
         preview = sys.argv[sys.argv.index("--preview") + 1]
 
     strips = []
-    for name, sheet, accent in CHARS:
-        img = strip(name, sheet, accent)
+    for name, sheet, accent, *cell in CHARS:
+        img = strip(name, sheet, accent, *cell)
         strips.append(img)
         base = "Icon_" + name
         png = os.path.join(CHARS_DIR, base + ".png")

@@ -91,9 +91,10 @@ public class HubCharacterSelectUI : MonoBehaviour
     private static readonly RectInt Content = new RectInt(8, 4, 464, 262);
 
     // Bildgroessen: Frames werden nur in ganzen Vielfachen (oder ganzen
-    // Bruchteilen) ihrer Textur gezeichnet - 64er-Keks im Fenster 1:1, auf
-    // der Buehne 2:1.
-    private const float PortraitTarget = 64f, StageTarget = 128f;
+    // Bruchteilen) ihrer Textur gezeichnet - 32er-Figur im Fenster 2:1, auf
+    // der Buehne 3:1 (4:1 war Nick zu gross, das Ritterschwert ragte raus).
+    private const float PortraitTarget = 64f, StageTarget = 96f;
+    private const int StageMargin = 4;              // so weit bleibt die Figur vom Buehnenrand weg
 
     // Bilder pro Sekunde, wenn ein gemaltes Portraet unter dem Cursor laeuft
     private const float PortraitFps = 6f;
@@ -1077,7 +1078,12 @@ public class HubCharacterSelectUI : MonoBehaviour
                 Vector2 size = FitSize(frame, PortraitTarget);
                 s.Portrait.rectTransform.sizeDelta = size;
                 // Etwas tiefer als mittig: der Kopf soll ganz ins Fenster, die Fuesse duerfen raus.
-                s.Portrait.rectTransform.anchoredPosition = new Vector2(0f, -Mathf.Round(size.y * 6f / 64f));
+                // Mittig sitzt der Koerper, nicht der Frame (Ritter: Schwert steht heraus).
+                Rect body = CharacterLooks.BodyRect(frame);
+                float bk = size.y / frame.rect.height;
+                Vector2 shift = new Vector2(Mathf.Round((frame.rect.width / 2f - body.center.x) * bk),
+                                            Mathf.Round((frame.rect.height / 2f - body.center.y) * bk));
+                s.Portrait.rectTransform.anchoredPosition = shift + new Vector2(0f, -Mathf.Round(body.height * bk * 6f / 64f));
                 s.Portrait.color = Characters.IsAvailable(s.Character) ? Color.white : Silhouette;
             }
 
@@ -1114,7 +1120,8 @@ public class HubCharacterSelectUI : MonoBehaviour
 
             // Fuesse auf die Platte: leere Zeilen unter den Fuessen stehen in CharacterLooks.
             float k = size.y / frame.rect.height;
-            float y = FeetY - Mathf.Round((frame.rect.height - CharacterLooks.FootRowsFor(c)) * k);
+            Rect body = CharacterLooks.BodyRect(frame);
+            float y = FeetY - Mathf.Round((frame.rect.height - body.y - CharacterLooks.FootRowsFor(c)) * k);
             if (animate)
             {
                 // Neuer Charakter faellt von oben auf die Platte und federt nach.
@@ -1126,7 +1133,17 @@ public class HubCharacterSelectUI : MonoBehaviour
                 if (h < 1f) y -= Mathf.Round(Mathf.Sin(h * Mathf.PI) * 18f);
             }
 
-            OptionsKit.Move(stageChar.rectTransform, StageX + Mathf.Round((StageW - size.x) / 2f), y, size.x, size.y);
+            // Mittig steht der Koerper. Ragt etwas heraus (Ritterschwert) und wuerde
+            // ueber den Buehnenrand stehen, rueckt die Figur gerade so weit zur Seite.
+            float x = StageX + Mathf.Round((StageW - body.width * k) / 2f) - Mathf.Round(body.x * k);
+            Vector2 drawn = DrawnSpan(frame);
+            float left = x + Mathf.Floor(drawn.x * k), right = x + Mathf.Ceil(drawn.y * k);
+            if (right - left <= StageW - 2 * StageMargin)
+            {
+                if (left < StageX + StageMargin) x += StageX + StageMargin - left;
+                else if (right > StageX + StageW - StageMargin) x -= right - (StageX + StageW - StageMargin);
+            }
+            OptionsKit.Move(stageChar.rectTransform, x, y, size.x, size.y);
             stageChar.color = Characters.IsAvailable(c) ? Color.white : Silhouette;
         }
 
@@ -1209,12 +1226,33 @@ public class HubCharacterSelectUI : MonoBehaviour
     /// <summary>
     /// Groesse, in der ein Frame gezeichnet wird: das groesste ganze Vielfache
     /// (oder der groesste ganze Bruchteil) seiner Textur, das in das Ziel passt.
+    /// Gemessen am Koerper (<see cref="CharacterLooks.BodyRect"/>), nicht am
+    /// Frame - sonst kaeme der Zwiebelritter mit seiner 64er-Zelle halb so gross.
     /// </summary>
     static Vector2 FitSize(Sprite s, float target)
     {
-        float tex = Mathf.Max(s.rect.width, s.rect.height);
+        Rect body = CharacterLooks.BodyRect(s);
+        float tex = Mathf.Max(body.width, body.height);
         float k = tex <= target ? Mathf.Floor(target / tex) : 1f / Mathf.Ceil(tex / target);
         return new Vector2(Mathf.Round(s.rect.width * k), Mathf.Round(s.rect.height * k));
+    }
+
+    /// <summary>
+    /// Wo im Frame (Texturpixel, von links) wirklich etwas gemalt ist - aus dem
+    /// engen Sprite-Mesh, die Textur selbst ist nicht lesbar. Ohne Mesh: der ganze Frame.
+    /// </summary>
+    static Vector2 DrawnSpan(Sprite s)
+    {
+        Vector2[] v = s.vertices;
+        if (v == null || v.Length == 0) return new Vector2(0f, s.rect.width);
+        float min = float.MaxValue, max = float.MinValue;
+        foreach (Vector2 p in v)
+        {
+            min = Mathf.Min(min, p.x);
+            max = Mathf.Max(max, p.x);
+        }
+        float ppu = s.pixelsPerUnit;
+        return new Vector2(Mathf.Max(0f, min * ppu + s.pivot.x), Mathf.Min(s.rect.width, max * ppu + s.pivot.x));
     }
 
     Color SpotColorFor(int index) => Color.Lerp(CharacterLooks.AccentFor(index), GameHudSkin.Cream, 0.45f);

@@ -412,6 +412,12 @@
     { "key": "character.2.name", "value": "Onigiri" },
     { "key": "character.2.tagline", "value": "Reis mit Stirnband" },
     { "key": "character.2.desc", "value": "Aus der Bento-Box geflohen und fest entschlossen. Hält zusammen, was zusammengehört - vor allem sich selbst." },
+    { "key": "character.3.name", "value": "Toast" },
+    { "key": "character.3.tagline", "value": "Knusprig bis zum Rand" },
+    { "key": "character.3.desc", "value": "Direkt aus dem Toaster und noch warm. Das Stirnband sitzt, die Kruste auch - wer ihn anfasst, verbrennt sich die Finger." },
+    { "key": "character.4.name", "value": "Zwiebelritter" },
+    { "key": "character.4.tagline", "value": "Schwert hoch, Tränen runter" },
+    { "key": "character.4.desc", "value": "Schicht für Schicht Rüstung. Zieht er blank, weinen die Gegner - und manchmal er selbst ein bisschen mit." },
 
     { "key": "ui.options.title", "value": "OPTIONEN" },
     { "key": "ui.options.esc", "value": "ESC ZURÜCK" },

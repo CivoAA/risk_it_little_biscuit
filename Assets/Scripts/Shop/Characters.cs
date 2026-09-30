@@ -11,8 +11,9 @@ using UnityEngine;
 /// Shop.RunSkinIndex im PlayerSkinSwitcher. Die Waffennummer ist der Platz in
 /// PlayerController.activeWeapon.
 ///
-/// STAND (29.09.2026): drei Charaktere - 0 Keks, 1 Marmelade, 2 Onigiri,
-/// alle im 32x32-Format. Grauer und Roter Keks sind raus, die anderen sind
+/// STAND (30.09.2026): fuenf Charaktere - 0 Keks, 1 Marmelade, 2 Onigiri,
+/// 3 Toast, 4 Zwiebelritter, alle im 32x32-Format (der Ritter hat 64er-Zellen,
+/// weil sein Schwert heraussteht - Pivot unter dem Koerper, PPU 32). Grauer und Roter Keks sind raus, die anderen sind
 /// aufgerueckt. Beide Skin-Switcher holen den Animator fuer jeden Index aus
 /// <see cref="CharacterLooks"/> - Eintrag i dort MUSS zu Charakter i passen.
 ///
@@ -29,7 +30,7 @@ using UnityEngine;
 public static class Characters
 {
     /// <summary>Startwaffe je Charakter - Index in PlayerController.activeWeapon.</summary>
-    private static readonly int[] StartWeaponByskin = { 2, 1, 11 };
+    private static readonly int[] StartWeaponByskin = { 2, 1, 11, 2, 2 };
 
     /// <summary>
     /// Dieselbe Startwaffe noch einmal, diesmal als <c>Weapon.weaponID</c>.
@@ -48,6 +49,8 @@ public static class Characters
         "shurikookie",   // 0 - Keks
         "jam_jar",       // 1 - Marmelade
         "blade_swarm",   // 2 - Onigiri
+        "shurikookie",   // 3 - Toast (vorlaeufig)
+        "shurikookie",   // 4 - Zwiebelritter (vorlaeufig)
     };
 
     /// <summary>
@@ -59,6 +62,8 @@ public static class Characters
         "Keks",           // 0 - Animator aus CharacterLooks (32x32, Char_Keks)
         "Marmelade",      // 1 - Animator aus CharacterLooks (32x32, Char_Jam)
         "Onigiri",        // 2 - Animator aus CharacterLooks (erster Charakter im 32x32-Format)
+        "Toast",          // 3 - Animator aus CharacterLooks (32x32, Char_Toast)
+        "Zwiebelritter",  // 4 - Animator aus CharacterLooks (64er-Zellen, Char_OnionKnight)
     };
 
     /// <summary>
@@ -70,6 +75,8 @@ public static class Characters
         "Der Klassiker",
         "Klebt an allem",
         "Reis mit Stirnband",
+        "Knusprig bis zum Rand",
+        "Schwert hoch, Tränen runter",
     };
 
     /// <summary>Zwei, drei Saetze fuer die Charakterauswahl. Rueckfall fuer <c>character.N.desc</c>.</summary>
@@ -78,6 +85,8 @@ public static class Characters
         "Frisch aus dem Ofen und bereit für alles. Knusprig, ehrlich, unterschätzt.",
         "Eigentlich nur der Belag. Aber ein ganzes Glas voller Wut - und es klebt.",
         "Aus der Bento-Box geflohen und fest entschlossen. Hält zusammen, was zusammengehört - vor allem sich selbst.",
+        "Direkt aus dem Toaster und noch warm. Das Stirnband sitzt, die Kruste auch - wer ihn anfasst, verbrennt sich die Finger.",
+        "Schicht für Schicht Rüstung. Zieht er blank, weinen die Gegner - und manchmal er selbst ein bisschen mit.",
     };
 
     /// <summary>
@@ -86,6 +95,8 @@ public static class Characters
     /// </summary>
     private static readonly string[] UnlockIdByskin =
     {
+        "",
+        "",
         "",
         "",
         "",
