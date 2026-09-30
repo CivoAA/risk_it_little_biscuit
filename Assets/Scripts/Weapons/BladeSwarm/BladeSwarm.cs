@@ -80,50 +80,54 @@ public class BladeSwarm : Weapon
     }
     private void PositionBlades()
     {
-        float baseRadius = 1f;
-
         for (int i = 0; i < activeBlades.Count; i++)
         {
             if (activeBlades[i] == null) continue;
 
-            Vector2 pos = transform.position;
-
-            switch (i)
-            {
-                case 0: // links unten, etwas höher
-                    pos += (Vector2.left + Vector2.up * 0.4f) * baseRadius;
-                    break;
-                case 1: // rechts unten, etwas höher
-                    pos += (Vector2.right + Vector2.up * 0.4f) * baseRadius;
-                    break;
-                case 2: // oben mittig
-                    pos += Vector2.up * baseRadius * 1.4f;
-                    break;
-                case 3: // links über 0, näher
-                    pos += (Vector2.left + Vector2.up * 0.8f) * baseRadius;
-                    break;
-                case 4: // rechts über 1, näher
-                    pos += (Vector2.right + Vector2.up * 0.8f) * baseRadius;
-                    break;
-                case 5: // links über 3, fast oben beim Spieler, noch näher
-                    pos += (Vector2.left * 0.7f + Vector2.up * 1.3f) * (baseRadius * 0.8f);
-                    break;
-                case 6: // rechts über 4, fast oben beim Spieler, noch näher
-                    pos += (Vector2.right * 0.7f + Vector2.up * 1.3f) * (baseRadius * 0.8f);
-                    break;
-                case 7: // links über 3, fast oben beim Spieler, noch näher
-                    pos += (Vector2.left * 0.7f + Vector2.down * 0.25f) * (baseRadius * 0.8f);
-                    break;
-                case 8: // rechts über 4, fast oben beim Spieler, noch näher
-                    pos += (Vector2.right * 0.7f + Vector2.down * 0.25f) * (baseRadius * 0.8f);
-                    break;
-                default:
-                    pos += Vector2.up * (baseRadius * 0.5f);
-                    break;
-            }
-
-            activeBlades[i].transform.position = pos;
+            activeBlades[i].transform.localPosition = SlotOffset(i, SideX);
             activeBlades[i].transform.rotation = Quaternion.Euler(0f, 0f, 135f);
+        }
+    }
+
+    /// <summary>Seitlicher Abstand der Kunai: halbe Kunai-Laenge (~0.64) + halbe Figur (0.5) + Luft.</summary>
+    public const float SideX = 1.25f;
+
+    /// <summary>
+    /// Parkplatz Nummer <paramref name="i"/> relativ zu den Fuessen des Spielers
+    /// (Figur = 1x1 Einheit, Pivot unten mittig). Die Klingen liegen im Orbit
+    /// waagerecht - seitliche Slots brauchen darum mindestens halbe Klingen-
+    /// laenge + halbe Figur Abstand, sonst stecken sie im Charakter. Frueher
+    /// lagen sie bei x = 1 bzw. 0.56 und damit halb in der Figur.
+    /// Auch von <see cref="BladeStormEvo"/> genutzt (mit groesserem sideX).
+    ///
+    /// Das Ergebnis liegt immer auf ganzen Pixeln (1/32 Einheit): die Kamera
+    /// rundet jedes Sprite einzeln aufs Pixelraster. Mit einem krummen Abstand
+    /// (z.B. 0.45 = 14.4 px) wechselt der gerundete Abstand zwischen Spieler
+    /// und Klinge beim Laufen staendig zwischen 14 und 15 px - die Klingen zittern.
+    /// </summary>
+    public static Vector2 SlotOffset(int i, float sideX)
+    {
+        Vector2 o = RawSlotOffset(i, sideX);
+        return new Vector2(Mathf.Round(o.x * PixelsPerUnit) / PixelsPerUnit,
+                           Mathf.Round(o.y * PixelsPerUnit) / PixelsPerUnit);
+    }
+
+    private const float PixelsPerUnit = 32f;   // m_AssetsPPU der PixelPerfectCamera
+
+    private static Vector2 RawSlotOffset(int i, float sideX)
+    {
+        switch (i)
+        {
+            case 0: return new Vector2(-sideX, 0.45f);
+            case 1: return new Vector2(sideX, 0.45f);
+            case 2: return new Vector2(0f, 1.5f);          // ueber dem Kopf
+            case 3: return new Vector2(-sideX, 0.85f);
+            case 4: return new Vector2(sideX, 0.85f);
+            case 5: return new Vector2(-sideX, 1.25f);
+            case 6: return new Vector2(sideX, 1.25f);
+            case 7: return new Vector2(-sideX, 0.05f);
+            case 8: return new Vector2(sideX, 0.05f);
+            default: return new Vector2(0f, 1.85f);
         }
     }
 

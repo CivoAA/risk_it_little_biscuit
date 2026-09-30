@@ -17,6 +17,7 @@ public class BladeStormEvo : Weapon
 
     private const int MaxBlades = 9;
     private const float FireInterval = 0.1f;   // Abstand zwischen den Klingen einer Salve
+    private const float SideX = 1.45f;         // Orbit-Abstand: Evo-Kunai ~1.7 lang, halbe Figur 0.5 + Luft
 
     private readonly List<BladeStormEvoPrefab> blades = new List<BladeStormEvoPrefab>();
     private readonly List<BladeStormEvoPrefab> volley = new List<BladeStormEvoPrefab>();
@@ -180,7 +181,6 @@ public class BladeStormEvo : Weapon
     /// </summary>
     public void PositionOrbitBlades()
     {
-        float baseRadius = 1f;
         int orbitIndex = 0;
 
         for (int i = 0; i < blades.Count; i++)
@@ -188,23 +188,12 @@ public class BladeStormEvo : Weapon
             BladeStormEvoPrefab blade = blades[i];
             if (blade == null || !blade.InOrbit) continue;
 
-            Vector2 pos = transform.position;
-
-            switch (orbitIndex)
-            {
-                case 0: pos += (Vector2.left + Vector2.up * 0.4f) * baseRadius; break;
-                case 1: pos += (Vector2.right + Vector2.up * 0.4f) * baseRadius; break;
-                case 2: pos += Vector2.up * baseRadius * 1.4f; break;
-                case 3: pos += (Vector2.left + Vector2.up * 0.8f) * baseRadius; break;
-                case 4: pos += (Vector2.right + Vector2.up * 0.8f) * baseRadius; break;
-                case 5: pos += (Vector2.left * 0.7f + Vector2.up * 1.3f) * (baseRadius * 0.8f); break;
-                case 6: pos += (Vector2.right * 0.7f + Vector2.up * 1.3f) * (baseRadius * 0.8f); break;
-                case 7: pos += (Vector2.left * 0.7f + Vector2.down * 0.25f) * (baseRadius * 0.8f); break;
-                case 8: pos += (Vector2.right * 0.7f + Vector2.down * 0.25f) * (baseRadius * 0.8f); break;
-                default: pos += Vector2.up * (baseRadius * 0.5f); break;
-            }
-
-            blade.transform.position = pos;
+            // localPosition statt Weltposition + Offset: so bleibt der Abstand zum
+            // Spieler exakt pixelgenau (siehe BladeSwarm.SlotOffset).
+            if (blade.transform.parent == transform)
+                blade.transform.localPosition = BladeSwarm.SlotOffset(orbitIndex, SideX);
+            else
+                blade.transform.position = (Vector2)transform.position + BladeSwarm.SlotOffset(orbitIndex, SideX);
             orbitIndex++;
         }
     }
