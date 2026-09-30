@@ -1,19 +1,25 @@
 fileFormatVersion: 2
-guid: 0ad2924ef19224945a3d661e2cbd36b5
+guid: 619e211f15ef4adb8cccbe7a08d488b9
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6419715777707618990
-    second: KREISsage_0
+      213: 3899350687032173584
+    second: carrot_slash_0
   - first:
-      213: -1688484745913325146
-    second: KREISsage_1
+      213: 2579428612823277888
+    second: carrot_slash_1
   - first:
-      213: -4199281802550845552
-    second: KREISsage_2
+      213: 2547700535115700837
+    second: carrot_slash_2
   - first:
-      213: 5586806451479172094
-    second: KREISsage_3
+      213: 3200159056965774357
+    second: carrot_slash_3
+  - first:
+      213: 2193862597514911342
+    second: carrot_slash_4
+  - first:
+      213: 2070120478301337721
+    second: carrot_slash_5
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -57,12 +63,12 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 1
+  spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 64
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spriteGenerateFallbackPhysicsShape: 1
+  spriteGenerateFallbackPhysicsShape: 0
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
@@ -97,32 +103,6 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
     textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
@@ -135,113 +115,149 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: KREISsage_0
+      name: carrot_slash_0
       rect:
         serializedVersion: 2
-        x: 2
-        y: 1
-        width: 59
-        height: 59
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 0
+        y: 0
+        width: 96
+        height: 192
+      alignment: 9
+      pivot: {x: 0.0, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
+      customData:
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ea2bb399c79671950800000000000000
-      internalID: 6419715777707618990
+      spriteID: 383bd12a290144fb9ba1fa6de5986abb
+      internalID: 3899350687032173584
       vertices: []
-      indices: 
+      indices:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: KREISsage_1
+      name: carrot_slash_1
       rect:
         serializedVersion: 2
-        x: 65
-        y: 2
-        width: 59
-        height: 60
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 96
+        y: 0
+        width: 96
+        height: 192
+      alignment: 9
+      pivot: {x: 0.0, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
+      customData:
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6a9ab2fc11c4198e0800000000000000
-      internalID: -1688484745913325146
+      spriteID: 4dc730ea5e6f414f9760707722dbd83d
+      internalID: 2579428612823277888
       vertices: []
-      indices: 
+      indices:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: KREISsage_2
+      name: carrot_slash_2
       rect:
         serializedVersion: 2
-        x: 130
-        y: 4
-        width: 60
-        height: 59
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 192
+        y: 0
+        width: 96
+        height: 192
+      alignment: 9
+      pivot: {x: 0.0, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
+      customData:
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 09fd137037729b5c0800000000000000
-      internalID: -4199281802550845552
+      spriteID: 95fd3b48b8da437caed6207d53d91c7e
+      internalID: 2547700535115700837
       vertices: []
-      indices: 
+      indices:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: KREISsage_3
+      name: carrot_slash_3
       rect:
         serializedVersion: 2
-        x: 196
-        y: 2
-        width: 59
-        height: 60
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 288
+        y: 0
+        width: 96
+        height: 192
+      alignment: 9
+      pivot: {x: 0.0, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
+      customData:
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ef3d6411ed2588d40800000000000000
-      internalID: 5586806451479172094
+      spriteID: 7f837468d2a34d648f573436dc9995a7
+      internalID: 3200159056965774357
       vertices: []
-      indices: 
+      indices:
       edges: []
       weights: []
-    outline: []
-    customData: 
-    physicsShape: []
-    bones: []
-    spriteID: 
-    internalID: 0
-    vertices: []
-    indices: 
-    edges: []
-    weights: []
+    - serializedVersion: 2
+      name: carrot_slash_4
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 0
+        width: 96
+        height: 192
+      alignment: 9
+      pivot: {x: 0.0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d23361b1c975493182d63a65eb98198f
+      internalID: 2193862597514911342
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: carrot_slash_5
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 0
+        width: 96
+        height: 192
+      alignment: 9
+      pivot: {x: 0.0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 65539ec71c654ed48d588d4b132f95e6
+      internalID: 2070120478301337721
+      vertices: []
+      indices:
+      edges: []
+      weights: []
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      KREISsage_0: 6419715777707618990
-      KREISsage_1: -1688484745913325146
-      KREISsage_2: -4199281802550845552
-      KREISsage_3: 5586806451479172094
-  mipmapLimitGroupName: 
+      carrot_slash_0: 3899350687032173584
+      carrot_slash_1: 2579428612823277888
+      carrot_slash_2: 2547700535115700837
+      carrot_slash_3: 3200159056965774357
+      carrot_slash_4: 2193862597514911342
+      carrot_slash_5: 2070120478301337721
+  mipmapLimitGroupName:
   pSDRemoveMatte: 0
-  userData: 
-  assetBundleName: 
-  assetBundleVariant: 
+  userData:
+  assetBundleName:
+  assetBundleVariant:

@@ -26,8 +26,21 @@ public class SwordSlash : Weapon
     /// <summary>Abstand zwischen zwei Hieben derselben Serie.</summary>
     private const float SwingGap = 0.15f;
 
-    /// <summary>Wie lange der Hieb sichtbar ist.</summary>
-    private const float SlashVisibleTime = 0.14f;
+    /// <summary>
+    /// Wie lange der Hieb sichtbar ist (alle Frames der Animation). Muss unter
+    /// <see cref="SwingGap"/> bleiben, sonst liegen die Hiebe einer Serie uebereinander.
+    /// </summary>
+    private const float SlashVisibleTime = 0.13f;
+
+    /// <summary>
+    /// Radius des Bogens in den Hieb-Frames, in Tiles (80 px bei PPU 32).
+    /// Darauf wird skaliert - der Rand der Bilder ist nur Platz fuer Spritzer
+    /// und zaehlt nicht zur Trefferflaeche.
+    /// </summary>
+    private const float SlashArcRadius = 2.5f;
+
+    /// <summary>Hieb-Animation aus Tools/karottenhieb.py (Resources).</summary>
+    private const string SlashFramesPath = "Weapons/carrot_slash";
 
     private static readonly WeaponStats[] LevelStats =
     {
@@ -52,8 +65,9 @@ public class SwordSlash : Weapon
         };
     }
 
-    [Tooltip("Optionales Hieb-Sprite, zeigt nach rechts (+x). Leer = einfacher Bogen aus dem Code.")]
-    [SerializeField] private Sprite slashSprite;
+    [Tooltip("Hieb-Animation, zeigt nach rechts (+x), Pivot links mittig, Bogenradius = " +
+             "SlashArcRadius. Leer = Resources/Weapons/carrot_slash, fehlt das auch: einfacher Bogen aus dem Code.")]
+    [SerializeField] private Sprite[] slashFrames;
 
     [Tooltip("Ausgangspunkt des Hiebs relativ zum Spieler-Pivot (der liegt unter den Fuessen).")]
     [SerializeField] private Vector2 originOffset = new Vector2(0f, 0.4f);
@@ -134,21 +148,71 @@ public class SwordSlash : Weapon
         go.transform.rotation = Quaternion.Euler(0f, 0f, angle);
 
         SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
-        sr.sprite = slashSprite != null ? slashSprite : GeneratedSlash;
         sr.flipY = backhand;
         CopySorting(sr);
+
+        Sprite[] frames = SlashFrames;
+        if (frames.Length == 0)
+        {
+            yield return ShowGeneratedSlash(go, sr, angle, depth, width, backhand);
+            yield break;
+        }
+
+        // Bogenradius = Tiefe, Bogendurchmesser = Breite der Trefferflaeche.
+        go.transform.localScale = new Vector3(depth / SlashArcRadius, width * 0.5f / SlashArcRadius, 1f);
+
+        // Die Frames fegen selbst durch den Bogen und blenden aus.
+        for (float t = 0f; t < SlashVisibleTime; t += Time.deltaTime)
+        {
+            if (go == null) yield break;
+            int f = Mathf.Min(frames.Length - 1, Mathf.FloorToInt(t / SlashVisibleTime * frames.Length));
+            sr.sprite = frames[f];
+            yield return null;
+        }
+
+        if (go != null) Destroy(go);
+    }
+
+    private Sprite[] loadedFrames;
+
+    private Sprite[] SlashFrames
+    {
+        get
+        {
+            if (slashFrames != null && slashFrames.Length > 0) return slashFrames;
+            if (loadedFrames == null)
+            {
+                // LoadAll liefert die Teilbilder ohne feste Reihenfolge.
+                loadedFrames = Resources.LoadAll<Sprite>(SlashFramesPath);
+                System.Array.Sort(loadedFrames, (a, b) => FrameIndex(a).CompareTo(FrameIndex(b)));
+            }
+            return loadedFrames;
+        }
+    }
+
+    private static int FrameIndex(Sprite s)
+    {
+        int cut = s.name.LastIndexOf('_');
+        return cut >= 0 && int.TryParse(s.name.Substring(cut + 1), out int i) ? i : 0;
+    }
+
+    /// <summary>Alter Platzhalter, falls die Frames fehlen.</summary>
+    private IEnumerator ShowGeneratedSlash(GameObject go, SpriteRenderer sr, float angle, float depth, float width, bool backhand)
+    {
+        sr.sprite = GeneratedSlash;
 
         // Sprite auf die Trefferflaeche strecken: x = Tiefe, y = Breite.
         Vector2 spriteSize = sr.sprite.bounds.size;
         go.transform.localScale = new Vector3(depth / spriteSize.x, width / spriteSize.y, 1f);
 
         // Kurzes Nachdrehen in Schlagrichtung, danach ausblenden.
+        const float visible = 0.14f;
         float sweep = backhand ? 25f : -25f;
         Color c = sr.color;
-        for (float t = 0f; t < SlashVisibleTime; t += Time.deltaTime)
+        for (float t = 0f; t < visible; t += Time.deltaTime)
         {
             if (go == null) yield break;
-            float k = t / SlashVisibleTime;
+            float k = t / visible;
             go.transform.rotation = Quaternion.Euler(0f, 0f, angle - sweep * (1f - k));
             c.a = 1f - k * k;
             sr.color = c;
