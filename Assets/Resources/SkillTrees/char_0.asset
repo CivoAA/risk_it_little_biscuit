@@ -66,7 +66,7 @@ MonoBehaviour:
     category: 0
     lane: 0
     step: 2
-    shape: 1
+    shape: 4
     price: 15
     displayName: Scharfer Blick
     description: 
@@ -83,7 +83,7 @@ MonoBehaviour:
     category: 0
     lane: 1
     step: 2
-    shape: 1
+    shape: 4
     price: 15
     displayName: Nachschlag
     description: 
@@ -100,7 +100,7 @@ MonoBehaviour:
     category: 0
     lane: 2
     step: 2
-    shape: 1
+    shape: 4
     price: 15
     displayName: Tiefer Schnitt
     description: 
@@ -151,7 +151,7 @@ MonoBehaviour:
     category: 0
     lane: 1
     step: 4
-    shape: 4
+    shape: 1
     price: 30
     displayName: Doppelwurf
     description: 
@@ -187,7 +187,7 @@ MonoBehaviour:
     category: 1
     lane: 1
     step: 2
-    shape: 1
+    shape: 4
     price: 15
     displayName: "Gest\xE4hlter K\xF6rper"
     description: 
@@ -204,7 +204,7 @@ MonoBehaviour:
     category: 1
     lane: 1
     step: 4
-    shape: 4
+    shape: 1
     price: 50
     displayName: "K\xF6rper und Geist"
     description: 
@@ -287,7 +287,7 @@ MonoBehaviour:
     category: 3
     lane: 1
     step: 2
-    shape: 1
+    shape: 4
     price: 20
     displayName: Kleeblatt
     description: 
@@ -304,7 +304,7 @@ MonoBehaviour:
     category: 3
     lane: 0
     step: 2
-    shape: 1
+    shape: 4
     price: 20
     displayName: Reiche Beute
     description: 
@@ -321,7 +321,7 @@ MonoBehaviour:
     category: 3
     lane: 2
     step: 2
-    shape: 1
+    shape: 4
     price: 20
     displayName: "Doppeltes Gl\xFCck"
     description: 
@@ -372,7 +372,7 @@ MonoBehaviour:
     category: 3
     lane: 0
     step: 4
-    shape: 4
+    shape: 1
     price: 30
     displayName: Volltreffer
     description: 
@@ -389,7 +389,7 @@ MonoBehaviour:
     category: 3
     lane: 2
     step: 4
-    shape: 4
+    shape: 1
     price: 30
     displayName: Jackpot
     description: 
@@ -458,7 +458,7 @@ MonoBehaviour:
     category: 2
     lane: 0
     step: 2
-    shape: 1
+    shape: 4
     price: 20
     displayName: "Flei\xDFiger Sch\xFCler"
     description: 
@@ -475,7 +475,7 @@ MonoBehaviour:
     category: 2
     lane: 2
     step: 2
-    shape: 1
+    shape: 4
     price: 20
     displayName: Heilkunde
     description: 
@@ -543,7 +543,7 @@ MonoBehaviour:
     category: 2
     lane: 1
     step: 4
-    shape: 4
+    shape: 1
     price: 30
     displayName: Kartograf
     description: 
@@ -630,7 +630,7 @@ MonoBehaviour:
     category: 1
     lane: 0
     step: 2
-    shape: 1
+    shape: 4
     price: 20
     displayName: Seelenhunger
     description: 
@@ -647,7 +647,7 @@ MonoBehaviour:
     category: 1
     lane: 2
     step: 2
-    shape: 1
+    shape: 4
     price: 20
     displayName: Ruhiger Puls
     description: 
