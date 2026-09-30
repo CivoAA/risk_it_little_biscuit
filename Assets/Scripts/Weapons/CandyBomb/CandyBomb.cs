@@ -26,7 +26,7 @@ public class CandyBomb : Weapon
 
     private IEnumerator SpawnBomb()
     {
-        int shots = Mathf.RoundToInt(stats[weaponLevel].shots + PlayerController.Instance.playerShots);
+        int shots = Mathf.RoundToInt(stats[weaponLevel].shots + PlayerController.Instance.ExtraShots);
 
         for (int i = 0; i < shots; i++)
         {

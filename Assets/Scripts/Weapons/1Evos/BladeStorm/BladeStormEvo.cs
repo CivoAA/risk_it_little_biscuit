@@ -48,7 +48,7 @@ public class BladeStormEvo : Weapon
         Achievements.Unlock(Ach.BladeSwarmEvo);
 
         int desired = Mathf.Clamp(
-            Mathf.RoundToInt(CurrentStats.shots + PlayerController.Instance.playerShots),
+            Mathf.RoundToInt(CurrentStats.shots + PlayerController.Instance.ExtraShots),
             1, MaxBlades);
 
         // Gegen blades.Count prüfen, nicht gegen einen Merker: so kommen

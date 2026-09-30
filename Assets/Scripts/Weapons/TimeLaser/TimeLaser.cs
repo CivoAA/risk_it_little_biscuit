@@ -29,7 +29,7 @@ public class TimeLaser : Weapon
     IEnumerator SpawnLaser()
     {
         shooting = true;
-        int shots = Mathf.RoundToInt((stats[weaponLevel].shots + PlayerController.Instance.playerShots) * 0.5f);
+        int shots = Mathf.RoundToInt((stats[weaponLevel].shots + PlayerController.Instance.ExtraShots) * 0.5f);
 
         // Sofort Cooldown setzen, damit neuer Schuss nach Ablauf wieder möglich ist
         spawnCounter = CurrentCooldown;

@@ -295,6 +295,8 @@
     { "key": "weapon.vortex.desc", "value": "Opens a vortex at the nearest enemy that drags foes into its center and grinds them down." },
     { "key": "weapon.turret.name", "value": "Turret" },
     { "key": "weapon.turret.desc", "value": "Builds small turrets next to you. They stay put and shoot at enemies on their own." },
+    { "key": "weapon.sword_slash.name", "value": "Sword Slash" },
+    { "key": "weapon.sword_slash.desc", "value": "Slashes a wide arc in front of you in the direction you walk. Higher levels swing faster and strike back and forth." },
     { "key": "weapon.buff_damage.name", "value": "Damage" },
     { "key": "weapon.buff_damage.desc", "value": "All your weapons deal more damage." },
     { "key": "weapon.buff_crit_chance.name", "value": "Crit Chance" },

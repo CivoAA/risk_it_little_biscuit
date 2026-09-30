@@ -65,10 +65,11 @@ public static class WavePlans
             .Pressure(12f, 80f)
             .Base(Patterns.Scatter)
             .Burst(45f, EnemyId.EvilSlime, 18f, Patterns.Arc, 0f)
-            .Burst(90f, EnemyId.Marshmello, 25f, Patterns.Column, 0f)
-            .Encircle(150f, EnemyId.MiniBossMarshmello, EnemyId.Marshmello, 18, 13f, false, "RING!", 0.35f, 25f, 1.5f)
+            .Burst(80f, EnemyId.Marshmello, 25f, Patterns.Column, 0f)
+            .Encircle(105f, EnemyId.MinibossFliegenpliz, EnemyId.Marshmello, 18, 13f, false, "RING!", 0.35f, 25f, 1.5f)
             .Calm(195f, 10f, 0.15f)
             .Burst(225f, EnemyId.MausMitMesser, 24f, Patterns.Cluster, 0f)
+            .Burst(250f, EnemyId.MinibossFliegenpliz, 1f, Patterns.Ambush, 0f)
             .Burst(270f, EnemyId.EvilSlime, 30f, Patterns.Scatter, 0f);
 
         plan.Phase(300f)
@@ -78,6 +79,7 @@ public static class WavePlans
             .Pressure(100f, 200f)
             .Base(Patterns.Scatter)
             .Burst(40f, EnemyId.SaureMilch, 30f, Patterns.Ambush, 0f)
+            .Burst(60f, EnemyId.MiniBossMarshmello, 1f, Patterns.Ambush, 0f)
             .Calm(95f, 10f, 0.15f)
             .Encircle(125f, EnemyId.MesserMaus1, EnemyId.EliteMarshmello, 22, 14f, true, "MESSERMAUS!", 0.35f, 25f, 1.5f)
             .Burst(195f, EnemyId.Muffin, 35f, Patterns.Cluster, 0f)
@@ -141,7 +143,7 @@ public static class WavePlans
     ///
     /// Minibosse kommen nicht nur im Ring, sondern immer wieder zwischendurch:
     /// ein Burst mit Druck 1 wirft genau EINEN rein (der Director rundet auf
-    /// mindestens einen), Druck 8 / 12 sind zwei bzw. drei Miniboss-Marshmellos.
+    /// mindestens einen), Druck 8 / 16 sind zwei bzw. drei Miniboss-Marshmellos.
     /// </summary>
     public static RunPlan World2()
     {
@@ -152,7 +154,8 @@ public static class WavePlans
             .Pressure(12f, 39f)
             .Base(Patterns.Scatter)
             .Burst(45f, EnemyId.Fliegenpilz, 14f, Patterns.Arc, 0f)
-            .Burst(90f, EnemyId.Kirschslime, 16f, Patterns.Column, 0f);
+            .Burst(80f, EnemyId.Kirschslime, 16f, Patterns.Column, 0f)
+            .Encircle(105f, EnemyId.MinibossFliegenpliz, EnemyId.Fliegenpilz, 18, 13f, false, "RING!", 0.35f, 25f, 1.5f);
 
         plan.Phase(180f)
             .Pool(EnemyId.Fliegenpilz, 55f)
@@ -161,7 +164,7 @@ public static class WavePlans
             .Pressure(39f, 80f)
             .Base(Patterns.Scatter)
             .Burst(5f, EnemyId.Kirschslime, 16f, Patterns.Arc, 0f)
-            .Encircle(30f, EnemyId.MiniBossMarshmello, EnemyId.Fliegenpilz, 18, 13f, false, "RING!", 0.35f, 25f, 1.5f)
+            .Burst(60f, EnemyId.MinibossFliegenpliz, 1f, Patterns.Ambush, 0f)
             .Calm(75f, 10f, 0.15f)
             .Burst(105f, EnemyId.WeisseMessermaus, 24f, Patterns.Cluster, 0f)
             .Burst(135f, EnemyId.MiniBossMarshmello, 1f, Patterns.Ambush, 0f)
@@ -174,10 +177,12 @@ public static class WavePlans
             .Pool(EnemyId.Fluegeldolch, 15f)
             .Pressure(100f, 200f)
             .Base(Patterns.Scatter)
+            .Burst(20f, EnemyId.MiniBossMarshmello, 1f, Patterns.Ambush, 0f)
             .Burst(40f, EnemyId.Eichel, 25f, Patterns.Ambush, 0f)
             .Burst(60f, EnemyId.Fluegeldolch, 20f, Patterns.Arc, 0f)
             .Calm(95f, 10f, 0.15f)
             .Encircle(125f, EnemyId.MinibossFliegenpliz, EnemyId.Kirschslime, 22, 14f, false, "PILZKOENIG!", 0.35f, 25f, 1.5f)
+            .Burst(125f, EnemyId.MiniBossMarshmello, 1f, Patterns.Ambush, 0f)
             .Burst(195f, EnemyId.WeisseMessermaus, 30f, Patterns.Cluster, 0f)
             .Burst(225f, EnemyId.MiniBossMarshmello, 8f, Patterns.Arc, 0f)
             .Burst(250f, EnemyId.Eichel, 40f, Patterns.Column, 0f);
@@ -191,7 +196,7 @@ public static class WavePlans
             .Base(Patterns.Scatter)
             .Burst(20f, EnemyId.MinibossFliegenpliz, 1f, Patterns.Ambush, 0f)
             .Burst(50f, EnemyId.Milchpanzer, 40f, Patterns.Arc, 0f)
-            .Burst(80f, EnemyId.MiniBossMarshmello, 12f, Patterns.Arc, 0f)
+            .Burst(80f, EnemyId.MiniBossMarshmello, 16f, Patterns.Arc, 0f)
             .Calm(110f, 8f, 0.15f)
             .Encircle(145f, EnemyId.MinibossFliegenpliz, EnemyId.Eichel, 26, 15f, false, "PILZKOENIG!", 0.35f, 25f, 1.5f)
             .Burst(225f, EnemyId.Milchpanzer, 60f, Patterns.Cluster, 0f)
@@ -213,7 +218,7 @@ public static class WavePlans
             .Base(Patterns.Scatter)
             .Burst(30f, EnemyId.MinibossFliegenpliz, 1f, Patterns.Ambush, 0f)
             .Encircle(60f, EnemyId.None, EnemyId.Eichel, 26, 14f, false, "RING!", 0.35f, 25f, 1.5f)
-            .Burst(90f, EnemyId.MiniBossMarshmello, 12f, Patterns.Arc, 0f);
+            .Burst(90f, EnemyId.MiniBossMarshmello, 16f, Patterns.Arc, 0f);
 
         return plan;
     }

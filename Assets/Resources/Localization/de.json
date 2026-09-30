@@ -295,6 +295,8 @@
     { "key": "weapon.vortex.desc", "value": "Öffnet beim nächsten Gegner einen Strudel, der Feinde in seine Mitte zieht und dort zermahlt." },
     { "key": "weapon.turret.name", "value": "Geschütz" },
     { "key": "weapon.turret.desc", "value": "Baut kleine Geschütztürme neben dir auf. Sie bleiben stehen und beschießen selbstständig Gegner." },
+    { "key": "weapon.sword_slash.name", "value": "Schwerthieb" },
+    { "key": "weapon.sword_slash.desc", "value": "Schlägt in Laufrichtung einen breiten Bogen vor dir. Höhere Stufen schlagen schneller und mehrmals hin und her." },
     { "key": "weapon.buff_damage.name", "value": "Schaden" },
     { "key": "weapon.buff_damage.desc", "value": "Alle deine Waffen richten mehr Schaden an." },
     { "key": "weapon.buff_crit_chance.name", "value": "Krit-Chance" },

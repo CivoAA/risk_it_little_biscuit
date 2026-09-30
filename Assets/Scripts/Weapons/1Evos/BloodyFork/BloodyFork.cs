@@ -26,7 +26,7 @@ public class BloodyFork : Weapon
     IEnumerator SpawnForks()
     {
         // Anzahl der "Wellen" aus shots berechnen
-        int shots = Mathf.RoundToInt(stats[weaponLevel].shots + PlayerController.Instance.playerShots);
+        int shots = Mathf.RoundToInt(stats[weaponLevel].shots + PlayerController.Instance.ExtraShots);
 
         for (int i = 0; i < shots; i++)
         {

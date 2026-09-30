@@ -30,7 +30,7 @@ using UnityEngine;
 public static class Characters
 {
     /// <summary>Startwaffe je Charakter - Index in PlayerController.activeWeapon.</summary>
-    private static readonly int[] StartWeaponByskin = { 2, 1, 11, 2, 2 };
+    private static readonly int[] StartWeaponByskin = { 2, 1, 11, 2, 18 };
 
     /// <summary>
     /// Dieselbe Startwaffe noch einmal, diesmal als <c>Weapon.weaponID</c>.
@@ -50,7 +50,7 @@ public static class Characters
         "jam_jar",       // 1 - Marmelade
         "blade_swarm",   // 2 - Onigiri
         "shurikookie",   // 3 - Toast (vorlaeufig)
-        "shurikookie",   // 4 - Zwiebelritter (vorlaeufig)
+        "sword_slash",   // 4 - Zwiebelritter
     };
 
     /// <summary>

@@ -148,6 +148,7 @@ public static class WeaponCatalog
     public static readonly WeaponDef CrumbTrail    = Def("crumb_trail", "Crumb Trail", PoolKind.Weapon);
     public static readonly WeaponDef Vortex        = Def("vortex", "Vortex", PoolKind.Weapon);
     public static readonly WeaponDef Turret        = Def("turret", "Turret", PoolKind.Weapon);
+    public static readonly WeaponDef SwordSlash    = Def("sword_slash", "Sword Slash", PoolKind.Weapon);
 
     // ==================================================================
     //  Buffs

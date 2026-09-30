@@ -27,7 +27,7 @@ public class BoomerangEvo : Weapon
 
     IEnumerator SpawnBoomerangRing()
     {
-        int totalBoomerangs = Mathf.RoundToInt((stats[weaponLevel].shots + PlayerController.Instance.playerShots) * 2);
+        int totalBoomerangs = Mathf.RoundToInt((stats[weaponLevel].shots + PlayerController.Instance.ExtraShots) * 2);
         float angleStep = 360f / totalBoomerangs;
 
         for (int i = 0; i < totalBoomerangs; i++)

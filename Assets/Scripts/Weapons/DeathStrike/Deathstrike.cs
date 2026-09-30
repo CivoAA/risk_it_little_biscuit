@@ -28,7 +28,7 @@ public class Deathstrike : Weapon
 
     IEnumerator SpawnDeathstrike()
     {
-        int count = Mathf.Clamp(Mathf.RoundToInt(stats[weaponLevel].shots + PlayerController.Instance.playerShots), 1, 20);
+        int count = Mathf.Clamp(Mathf.RoundToInt(stats[weaponLevel].shots + PlayerController.Instance.ExtraShots), 1, 20);
 
         Scene gameScene = RunScene.Current;
 

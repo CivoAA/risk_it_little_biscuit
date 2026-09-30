@@ -23,6 +23,13 @@ public class PlayerController : MonoBehaviour
     public float pickupRange = 1;
     private float pickupRangeOLD = -1;
     public float playerShots;
+
+    /// <summary>
+    /// Extra-Schuesse, die Waffen wirklich abfeuern: nur ganze. 1,5 oder 1,999
+    /// gibt einen, erst ab 2 gibt es zwei. Waffen lesen das hier, nie playerShots.
+    /// </summary>
+    public int ExtraShots => Mathf.FloorToInt(playerShots + 0.0001f);
+
     public float critChance;
     public float critDamage;
     public float dodgeChance;
@@ -867,7 +874,8 @@ public class PlayerController : MonoBehaviour
             // Neue Waffen: bewusst ohne Shop-Eintrag sofort verfuegbar.
             "crumb_trail",
             "vortex",
-            "turret"
+            "turret",
+            "sword_slash"
         };
 
         if (defaultUnlockedWeapons.Contains(weapon.weaponID))

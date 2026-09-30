@@ -55,7 +55,7 @@ public class CrumbTrail : Weapon
     private void DropCrumb(Vector2 pos)
     {
         int maxCrumbs = Mathf.Max(1, Mathf.RoundToInt(
-            CurrentStats.shots + PlayerController.Instance.playerShots));
+            CurrentStats.shots + PlayerController.Instance.ExtraShots));
 
         // Aeltesten Kruemel abraeumen, damit die Spur eine feste Laenge hat und
         // nicht bei hoher Bewegungsgeschwindigkeit die Szene volllaeuft.

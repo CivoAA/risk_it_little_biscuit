@@ -55,6 +55,25 @@ public static class OverlapDamage
     }
 
     /// <summary>
+    /// Wie oben, aber fuer eine Box ohne Collider (z.B. ein Schwerthieb, der nur
+    /// einen Augenblick existiert). Trifft jeden Gegner-Collider, egal auf
+    /// welcher Ebene.
+    /// </summary>
+    public static void FindEnemies(Vector2 center, Vector2 size, float angle, List<Enemy> result)
+    {
+        result.Clear();
+
+        // NoFilter schliesst Trigger mit ein.
+        overlapBuffer.Clear();
+        Physics2D.OverlapBox(center, size, angle, new ContactFilter2D().NoFilter(), overlapBuffer);
+
+        for (int i = 0; i < overlapBuffer.Count; i++)
+        {
+            AddEnemy(overlapBuffer[i], result);
+        }
+    }
+
+    /// <summary>
     /// Schreibt alle Gegner, die auf dem Weg von <paramref name="fromCenter"/> zur
     /// aktuellen Position des Colliders getroffen wurden, in <paramref name="result"/>.
     /// Verhindert Tunneling bei schnellen Projektilen.
