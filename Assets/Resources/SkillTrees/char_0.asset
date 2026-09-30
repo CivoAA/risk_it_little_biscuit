@@ -164,8 +164,8 @@ MonoBehaviour:
       descriptionOverride: 
     requires:
     - kampf_mitte_2
-    - kampf_oben_1
-    - kampf_unten_1
+    - kampf_oben_2
+    - kampf_unten_2
   - id: geist_mitte_1
     category: 1
     lane: 1

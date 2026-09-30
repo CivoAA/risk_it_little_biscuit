@@ -110,12 +110,12 @@ public static class SkillGrants
     public static string NameOf(string id)
     {
         Def d = Find(id);
-        return d != null ? d.Name : (string.IsNullOrEmpty(id) ? "(keine Freischaltung)" : id + " (unbekannt)");
+        return d != null ? Loc.Get($"skill.grant.{d.Id}.name", d.Name) : (string.IsNullOrEmpty(id) ? "(keine Freischaltung)" : id + " (unbekannt)");
     }
 
     public static string DescriptionOf(string id)
     {
         Def d = Find(id);
-        return d != null ? d.Description : "";
+        return d != null ? Loc.Get($"skill.grant.{d.Id}.desc", d.Description) : "";
     }
 }
