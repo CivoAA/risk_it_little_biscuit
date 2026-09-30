@@ -386,7 +386,7 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Wave1/Evil_Slim.prefab");
 
         Def(EnemyId.MiniBossMarshmello, "Miniboss Marshmello",
-            health: 200f, damage: 5f, speed: 1.25f, exp: 300, pushTime: 0.3f,
+            health: 400f, damage: 7f, speed: 1.25f, exp: 450, pushTime: 0.3f,
             role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/freeze_marshmallow_miniboss.png", fps: 8f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
@@ -414,7 +414,7 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Neu/Fliegenpilz.prefab");
 
         Def(EnemyId.MinibossFliegenpliz, "Miniboss Fliegenpliz",
-            health: 600f, damage: 6f, speed: 1.3f, exp: 0, pushTime: 0f,
+            health: 200f, damage: 5f, speed: 1.25f, exp: 300, pushTime: 0.3f,
             role: EnemyRole.MiniBoss, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/miniboss/miniboss_pilz.png", fps: 6f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,

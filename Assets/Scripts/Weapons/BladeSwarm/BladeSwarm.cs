@@ -64,7 +64,7 @@ public class BladeSwarm : Weapon
     }
     private void SpawnBlade()
     {
-        if (activeBlades.Count >= stats[weaponLevel].shots + PlayerController.Instance.playerShots)
+        if (activeBlades.Count >= stats[weaponLevel].shots + PlayerController.Instance.ExtraShots)
         {
             return;
         }

@@ -50,7 +50,7 @@ public class Vortex : Weapon
         spawning = true;
 
         int count = Mathf.Max(1, Mathf.RoundToInt(
-            CurrentStats.shots + PlayerController.Instance.playerShots));
+            CurrentStats.shots + PlayerController.Instance.ExtraShots));
 
         Scene gameScene = RunScene.Current;
 

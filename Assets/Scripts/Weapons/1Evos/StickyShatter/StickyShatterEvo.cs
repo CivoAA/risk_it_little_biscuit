@@ -83,7 +83,7 @@ public class StickyShatterEvo : Weapon
         if (!IsActive) return;
 
         int shards = Mathf.Max(1, Mathf.RoundToInt(
-            CurrentStats.shots + PlayerController.Instance.playerShots));
+            CurrentStats.shots + PlayerController.Instance.ExtraShots));
 
         for (int i = 0; i < shards; i++)
         {

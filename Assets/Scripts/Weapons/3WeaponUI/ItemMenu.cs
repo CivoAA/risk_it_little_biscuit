@@ -47,6 +47,7 @@ public class ItemMenu : MonoBehaviour
     public Boomerang boomerang;
     public TimeLaser timeLaser;
     public CrumbTrail crumbTrail;
+    public SwordSlash swordSlash;
     public Vortex vortex;
     public Turret turret;
 
@@ -99,6 +100,7 @@ public class ItemMenu : MonoBehaviour
         crumbTrail = FindInScene<CrumbTrail>("Crumb Trail");
         vortex = FindInScene<Vortex>("Vortex");
         turret = FindInScene<Turret>("Turret");
+        swordSlash = FindInScene<SwordSlash>("Sword Slash");
 
         // Evos
         ShuriBlastEvo = FindInScene<ShuriBlastEvo>("Shuri Blast Evo");
@@ -167,6 +169,7 @@ public class ItemMenu : MonoBehaviour
         Collect(crumbTrail, false);
         Collect(vortex, false);
         Collect(turret, false);
+        Collect(swordSlash, false);
 
         // 🔥 Evo-Waffen
         Collect(ShuriBlastEvo, true);
