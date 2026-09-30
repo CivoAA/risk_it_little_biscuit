@@ -313,25 +313,57 @@ public static class Loadout
         Store.Buffs.Clear();
         EnsureLocked();
 
-        foreach (PoolKind kind in new[] { PoolKind.Weapon, PoolKind.Buff })
+        FillGroupRandom(PoolKind.Weapon);
+        FillGroupRandom(PoolKind.Buff);
+
+        Fire();
+    }
+
+    /// <summary>Stopft eine Gruppe mit zufaellig gezogenen Eintraegen bis zum Anschlag.</summary>
+    private static void FillGroupRandom(PoolKind kind)
+    {
+        List<WeaponDef> pool = WeaponCatalog.OfKind(kind);
+
+        // Fisher-Yates auf einer Kopie: zieht ohne Zuruecklegen und ohne
+        // die Katalogreihenfolge anzufassen.
+        for (int i = pool.Count - 1; i > 0; i--)
         {
-            List<WeaponDef> pool = WeaponCatalog.OfKind(kind);
-
-            // Fisher-Yates auf einer Kopie: zieht ohne Zuruecklegen und ohne
-            // die Katalogreihenfolge anzufassen.
-            for (int i = pool.Count - 1; i > 0; i--)
-            {
-                int j = UnityEngine.Random.Range(0, i + 1);
-                (pool[i], pool[j]) = (pool[j], pool[i]);
-            }
-
-            foreach (WeaponDef def in pool)
-            {
-                if (IsFull(kind)) break;
-                if (!Contains(def.Id)) Get(kind).Add(def.Id);
-            }
+            int j = UnityEngine.Random.Range(0, i + 1);
+            (pool[i], pool[j]) = (pool[j], pool[i]);
         }
 
+        foreach (WeaponDef def in pool)
+        {
+            if (IsFull(kind)) break;
+            if (!Contains(def.Id)) Get(kind).Add(def.Id);
+        }
+    }
+
+    /// <summary>
+    /// Beim Start eines Laufs (<see cref="PlayerController"/>): ab hier gilt
+    /// der Verteiler immer, auch ohne "Build uebernehmen". Im Lauf kommt nur,
+    /// was drinliegt.
+    ///
+    /// Hat der Spieler eine Gruppe gar nicht angefasst - bei den Waffen liegt
+    /// nur die feste Startwaffe drin, bei den Buffs nichts -, wird genau diese
+    /// Gruppe zufaellig gefuellt. Was er selbst gewaehlt hat, bleibt stehen,
+    /// auch wenn es nicht voll ist. Das Ergebnis wird gespeichert, die
+    /// Werkbank zeigt danach also, womit gespielt wurde.
+    ///
+    /// In der Test-Szene (Sandbox) passiert nichts - die hat ihre eigene Auswahl.
+    /// </summary>
+    public static void PrepareForRun()
+    {
+        if (sandbox) return;
+
+        SyncCharacter();
+
+        int locked = string.IsNullOrEmpty(LockedWeaponId) || !Store.Weapons.Contains(LockedWeaponId) ? 0 : 1;
+        if (Store.Weapons.Count <= locked) FillGroupRandom(PoolKind.Weapon);
+        if (Store.Buffs.Count == 0) FillGroupRandom(PoolKind.Buff);
+
+        Store.Active = true;
+        Store.Save();
         Fire();
     }
 

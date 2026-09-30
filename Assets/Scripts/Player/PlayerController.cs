@@ -158,6 +158,11 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         BuildLevelCurve();
+
+        // Im Lauf gibt es nur, was in der Werkbank liegt - leere Gruppen
+        // werden dabei zufaellig gefuellt (siehe Loadout.PrepareForRun).
+        Loadout.PrepareForRun();
+
         StartStats();
         UIController.Instance.UpdateHealthSlider();
         UIController.Instance.UpdateExperienceSlider();
