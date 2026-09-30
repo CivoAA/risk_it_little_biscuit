@@ -5,62 +5,52 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
-/// Die Levelauswahl im Hub, formatfuellend auf 320x180.
+/// Die Levelauswahl im Hub, im Stil von "UI 2.0" (Optionen, Skilltree,
+/// Charakterauswahl):
 ///
-/// Links die Levelkarten - jede ist der gepixelte Rahmen frameLvL mit der Nummer
-/// im Kopf und dem freien Fenster fuer das spaetere Vorschaubild -, darunter die
-/// Fortschrittslinie; rechts das Beschreibungsfeld mit dem Spielen-Knopf. Passen
-/// nicht alle Karten nebeneinander, wird geblaettert: mit A/D, den Pfeiltasten,
-/// dem Mausrad oder den beiden Pfeilen an der Linie.
+///   - links oben das PANORAMA: das breite Levelbild dreifach gross im
+///     Holzrahmen. Es schwenkt langsam auf und ab und lebt - in der Kueche
+///     tanzt Mehlstaub im Sonnenstrahl, im Wald fallen Blaetter und
+///     Gluehwuermchen blinken. Beim Wechsel gleitet das neue Bild herein.
+///     Gesperrt = dunkel mit Schloss, noch ohne Szene = Absperrband + BALD.
+///   - darunter die REISEROUTE: jedes Level eine Station auf einem
+///     Punktepfad. Auf der gewaehlten Station steht der eigene Charakter
+///     (Shop.SkinIndex) und huepft zur naechsten, wenn man weitergeht.
+///   - rechts der STECKBRIEF: Name, Text, der Boss aus dem Wellenplan (Bild
+///     aus dem Bestiarium), daneben der Bestwert (<see cref="LevelRecords"/>:
+///     Story = schnellster Sieg, Endless = laengster Lauf), Laufdauer,
+///     Gegnerarten und der Schalter Story / Endless.
+///   - unten ZURUECK und SPIELEN.
 ///
-/// Alle Kaesten stehen als <see cref="Rect"/> im Inspector, gemessen in Pixeln
-/// der 320x180-Vorlage mit Nullpunkt links oben - wie beim Shop. Was der Rahmen
-/// nicht mitbringt (Auswahlzeiger, Schloss, Haken), entsteht als Pixel-Textur in
-/// <see cref="HubPixelSprites"/>.
+/// Stationen waehlen nur aus; gestartet wird ausschliesslich ueber SPIELEN
+/// (oder Enter/E) - das war Nicks ausdruecklicher Wunsch.
 ///
-/// Maus: Die Treffer rechnet dieses Skript selbst aus der Mausposition aus,
-/// statt sich auf EventSystem-Raycasts zu verlassen. Das ist ein Codeweg fuer
-/// Hover und Klick, er haengt an keinem Input-Modul und laesst sich hier
-/// nachvollziehen - dieselbe Rechnung wie fuer das Zeichnen.
+/// Alles liegt auf einer 480x270-Seite (Ursprung oben links, jede Zahl ein
+/// Pixel), ganzzahlig skaliert wie bei <see cref="OptionsKit"/>. Treffer
+/// rechnet das Skript selbst aus der Mausposition - wie die anderen
+/// Hub-Fenster. Grafik aus <see cref="GameHudSkin"/>, dazu die Levelbilder
+/// aus dem Inspector und die Gegnerbilder aus Resources/Bestiary.
 ///
 /// ---------------------------------------------------------------------------
-///  EIN LEVEL ANBINDEN - Kurzfassung
+///  EIN LEVEL ANBINDEN
 /// ---------------------------------------------------------------------------
-///  1. In der hub-Szene das Objekt "LevelSelectUI" waehlen. Unter "Inhalt"
-///     steht die Liste "Levels" - ein Eintrag ist eine Karte, die Reihenfolge
-///     ist die Reihenfolge auf dem Bildschirm, die Nummer auf der Karte ist die
-///     Position in der Liste (Eintrag 1 = Karte "1").
-///
+///  1. In der hub-Szene das Objekt "LevelSelectUI" waehlen, Liste "Levels" -
+///     ein Eintrag ist eine Station, die Nummer ist die Position in der Liste.
 ///  2. Am Eintrag ausfuellen:
-///       Map Id         Welche Welt gespielt wird. Daraus ergibt sich die
-///                      Szene: Map-ID 3 laedt "Map_World3" (siehe
-///                      MapSceneSystem). Die Szene MUSS in File > Build
-///                      Settings stehen, sonst bleibt der Knopf grau und zeigt
-///                      "BALD" (siehe IsLinked). Map-ID -1 = noch keine Welt.
-///       Scene To Load  Nur noch Rueckfallebene: steht hier etwas und es gibt
-///                      keine Map-Szene zur Map-ID, wird diese Szene geladen.
-///                      Normalerweise leer lassen.
-///       Display Name / Description   Text im rechten Feld.
-///       Preview        Bild fuer Kartenfenster und Beschreibungsfeld. Leer =
-///                      das Fenster bleibt frei.
-///
-///  3. Sperren ist optional: Story Unlock Id / Endless Unlock Id leer lassen =
-///     immer offen. Steht dort eine Unlock-ID, muss der Katalog in Unlocks.cs
-///     sie kennen und sie freigeschaltet sein - sonst zeigt die Karte ein
-///     Schloss.
-///
-///  4. Das war's. Play() unten macht daraus denselben Ablauf wie die World Map:
-///     Fortschritt sichern, Skilltree setzen, MapsManager.selectedMap setzen,
-///     Shop-Stand einfrieren, Szene laden. Wer dort etwas ergaenzen will,
-///     findet jeden Schritt einzeln kommentiert.
+///       Map Id        Welche Welt gespielt wird: Map-ID 3 laedt "Map_World3"
+///                     (MapSceneSystem). Die Szene MUSS in den Build Settings
+///                     stehen, sonst zeigt die Station "BALD". -1 = noch keine Welt.
+///       Plan Id       Wellenplan der Karte (wie MapDefinition.planId, z.B.
+///                     World2) - daraus kommen Boss, Dauer, Arten.
+///                     Leer = der Steckbrief zeigt dazu nichts.
+///       Display Name / Description   Rueckfall, wenn die Uebersetzung
+///                     (level.N.name / level.N.desc) fehlt.
+///       Preview / Preview Wide       Bild der Station (50x50) und Panorama (82x46).
+///       Ambience      Stimmung im Panorama. Auto = nach Plan (World1 Kueche,
+///                     World2 Wald), sonst Staub.
+///  3. Sperren ist optional: Story Unlock Id / Endless Unlock Id leer = offen.
+///  4. Play() macht daraus denselben Ablauf wie die World Map.
 /// ---------------------------------------------------------------------------
-///
-/// Gestartet wird ein Level ueber dieselben Aufrufe wie in der World Map
-/// (PlayerWorldInteraction, Fall "Map"). Unlocks, Achievements, Skills und Shop
-/// sind statische Kataloge und immer da; MapsManager und MenuManager sind
-/// Szenen-Manager aus der World Map und fehlen, wenn die hub-Szene allein
-/// laeuft - darum sind die beiden geprueft und es faellt notfalls auf ein
-/// schlichtes LoadScene zurueck.
 /// </summary>
 [DisallowMultipleComponent]
 public class HubLevelSelectUI : MonoBehaviour
@@ -68,31 +58,37 @@ public class HubLevelSelectUI : MonoBehaviour
     /// <summary>Steht offen? Der Hub sperrt solange seine Interaktionen.</summary>
     public static bool IsOpen { get; private set; }
 
+    public enum Ambience { Auto, None, Dust, Kitchen, Forest }
+
     /// <summary>Ein Level in der Auswahl.</summary>
     [System.Serializable]
     public class LevelEntry
     {
-        [Tooltip("Name im Beschreibungsfeld.")]
+        [Tooltip("Name im Steckbrief - Rueckfall, wenn level.N.name nicht uebersetzt ist.")]
         public string displayName = "";
 
-        [Tooltip("Text im rechten Feld.")]
+        [Tooltip("Text im Steckbrief - Rueckfall, wenn level.N.desc nicht uebersetzt ist.")]
         [TextArea(2, 4)]
         public string description = "";
 
-        [Tooltip("Bild im Fenster der Karte (50x50). Leer = das Fenster bleibt frei.")]
+        [Tooltip("Bild der Station (50x50, die Mitte ist zu sehen).")]
         public Sprite preview;
 
-        [Tooltip("Breites Bild fuer das Beschreibungsfeld rechts (82x46). Leer = " +
-                 "dort wird das Kartenbild genommen.")]
+        [Tooltip("Panorama (82x46, wird dreifach gezeichnet). Leer = das Stationsbild.")]
         public Sprite previewWide;
 
         [Tooltip("Welche Welt geladen wird: Map-ID 3 laedt die Szene Map_World3. " +
                  "-1 = dieses Level hat noch keine Welt und zeigt 'BALD'.")]
         public int mapId;
 
-        [Tooltip("Rueckfallebene, falls es zur Map-ID keine Map-Szene gibt. " +
-                 "Normalerweise leer.")]
+        [Tooltip("Rueckfallebene, falls es zur Map-ID keine Map-Szene gibt. Normalerweise leer.")]
         public string sceneToLoad = "";
+
+        [Tooltip("Wellenplan (WavePlans), z.B. World1 oder World2 - fuer Boss, Dauer und Gegner im Steckbrief.")]
+        public string planId = "";
+
+        [Tooltip("Stimmung im Panorama. Auto = nach Plan.")]
+        public Ambience ambience = Ambience.Auto;
 
         [Tooltip("Optional: Story ist erst offen, wenn diese Unlock-ID freigeschaltet ist. Leer = immer offen.")]
         public string storyUnlockId = "";
@@ -105,122 +101,14 @@ public class HubLevelSelectUI : MonoBehaviour
     }
 
     [Header("Inhalt")]
-    [Tooltip("Reihenfolge der Karten von links nach rechts. Die Nummer auf der Karte " +
-             "ist die Position in dieser Liste.")]
+    [Tooltip("Reihenfolge der Stationen. Die Nummer ist die Position in dieser Liste.")]
     [SerializeField] private List<LevelEntry> levels = new List<LevelEntry>();
 
-    [Header("Beschriftungen")]
-    [SerializeField] private string titleLabel   = "LEVELAUSWAHL";
-    [SerializeField] private string endlessLabel = "ENDLESS MODE";
-    [SerializeField] private string playLabel    = "SPIELEN";
-    [SerializeField] private string backLabel    = "ZURÜCK";
-    [Tooltip("Auf dem Knopf, solange das Level noch keine Szene hat.")]
-    [SerializeField] private string comingSoonLabel = "BALD";
-    [Tooltip("Steht im Beschreibungsfeld, wenn das Level noch zu ist.")]
-    [SerializeField] private string lockedDescription = "Noch verschlossen.";
-    [Tooltip("{0} = Nummer, {1} = Name.")]
-    [SerializeField] private string detailTitleFormat = "{0} - {1}";
-
-    [Header("Grafik")]
-    [Tooltip("Der gepixelte Kartenrahmen (frameLvL). Leer = schlichte Flaeche mit 1px-Rahmen.")]
-    [SerializeField] private Sprite cardFrameSprite;
-    [Tooltip("Die Umrandung der gewaehlten Karte (highlight_level_selec). Sie ist " +
-             "groesser als die Karte und legt sich aussen herum - den Zeiger oben " +
-             "bringt sie schon mit. Leer = heller 1px-Rahmen plus eigener Zeiger.")]
-    [SerializeField] private Sprite selectionSprite;
-    [Tooltip("Optionaler gepixelter Rahmen ueber die vollen 320x180. Leer = schlichte Flaeche.")]
-    [SerializeField] private Sprite backgroundSprite;
-    [Tooltip("Pixelschrift des Panels. Hier steht Jersey10, weil ThaleahFat/PixelArtFont " +
-             "keine Umlaute kennt (106 Zeichen, kein äöü) - ZURÜCK bliebe darin lückenhaft. " +
-             "Leer = die zuerst gefundene Pixelschrift, sonst TMP-Standard.")]
-    [SerializeField] private TMP_FontAsset font;
-
-    [Header("Kaesten (Pixel im 320x180-Bild, Nullpunkt links oben)")]
-    [SerializeField] private Vector2 referenceResolution = new Vector2(320f, 180f);
-    [SerializeField] private Rect bannerArea = new Rect(8f, 8f, 152f, 18f);
-    [Tooltip("Die Flaeche, in der die Karten liegen. Was nicht hineinpasst, wird geblaettert.")]
-    [SerializeField] private Rect cardsArea  = new Rect(8f, 38f, 204f, 79f);
-    [Tooltip("Groesse einer Karte - beim frameLvL-Rahmen seine echten 64x79 Pixel.")]
-    [SerializeField] private Vector2 cardSize = new Vector2(64f, 79f);
-    [Tooltip("Luft zwischen zwei Karten.")]
-    [SerializeField] private float cardGap   = 6f;
-    [Tooltip("Hoehe der Fortschrittslinie unter den Karten.")]
-    [SerializeField] private float trackY    = 128f;
-    [SerializeField] private float trackNodeSize = 5f;
-    [Tooltip("Blaetterpfeile links und rechts der Linie. Nur sichtbar, wenn es " +
-             "mehr Karten gibt als Platz.")]
-    [SerializeField] private Rect scrollLeftArea  = new Rect(24f, 124f, 5f, 9f);
-    [SerializeField] private Rect scrollRightArea = new Rect(191f, 124f, 5f, 9f);
-    [SerializeField] private Rect backArea   = new Rect(8f, 151f, 62f, 15f);
-    [SerializeField] private Rect detailArea = new Rect(216f, 20f, 96f, 148f);
-
-    [Header("Karte (Pixel, relativ zur Karte)")]
-    [Tooltip("Wo das Rahmenbild in der Karte sitzt. 0,0 mit voller Kartengroesse " +
-             "passt zum zugeschnittenen frameLvL.")]
-    [SerializeField] private Rect cardFrameArea   = new Rect(0f, 0f, 64f, 79f);
-    [Tooltip("Der Kopf des Rahmens, in dem die Levelnummer steht.")]
-    [SerializeField] private Rect cardNumberArea  = new Rect(2f, 3f, 60f, 15f);
-    [Tooltip("Das freie Fenster im Rahmen - hier kommt spaeter das Levelbild hin.")]
-    [SerializeField] private Rect cardPreviewArea = new Rect(6f, 20f, 52f, 50f);
-    [Tooltip("Wo die Auswahl-Umrandung sitzt, relativ zur Karte. Die Umrandung ist " +
-             "69x85 gross, die Karte 64x79 - sie ragt also rundherum heraus, " +
-             "darum die negativen Werte.")]
-    [SerializeField] private Rect selectionArea = new Rect(-3f, -3f, 69f, 85f);
-    [Tooltip("Nur ohne Umrandungsbild: Abstand des Ersatzzeigers zur Oberkante der Karte.")]
-    [SerializeField] private float markerGap = 1f;
-
-    [Header("Beschreibungsfeld (Pixel im 320x180-Bild)")]
-    [SerializeField] private Rect detailTitleArea   = new Rect(222f, 27f, 84f, 12f);
-    [SerializeField] private Rect detailPreviewArea = new Rect(222f, 43f, 84f, 48f);
-    [SerializeField] private Rect detailTextArea    = new Rect(222f, 96f, 84f, 34f);
-    [SerializeField] private Rect dividerArea       = new Rect(222f, 133f, 84f, 1f);
-    [SerializeField] private Rect endlessBoxArea    = new Rect(222f, 138f, 9f, 9f);
-    [SerializeField] private Rect endlessLabelArea  = new Rect(235f, 138f, 71f, 9f);
-    [SerializeField] private Rect playArea          = new Rect(222f, 151f, 84f, 15f);
-
-    [Header("Endless")]
-    [Tooltip("Zeigt den Haken unter der Beschreibung. Aus: die Auswahl startet " +
-             "immer die Story, die Logik bleibt aber im Skript.")]
-    [SerializeField] private bool showEndlessToggle = true;
-
-    [Header("Schriftgroessen")]
-    [SerializeField] private float titleFontSize       = 11f;
-    [SerializeField] private float cardNumberFontSize  = 12f;
-    [SerializeField] private float detailTitleFontSize = 9f;
-    [SerializeField] private float detailFontSize      = 7f;
-    [SerializeField] private float buttonFontSize      = 9f;
-    [SerializeField] private float detailLineSpacing   = 4f;
-
-    [Header("Farben")]
-    [Tooltip("Der Rand neben den 320x180, wenn der Bildschirm nicht 16:9 ist.")]
-    [SerializeField] private Color backdropColor   = new Color32(0x21, 0x1A, 0x1C, 0xFF);
-    [Tooltip("Das leere Fenster in der Karte, solange kein Levelbild da ist.")]
-    [SerializeField] private Color previewEmpty    = new Color32(0x1E, 0x18, 0x22, 0xFF);
-    [Tooltip("Der Kartenrahmen, wenn die Karte weder gewaehlt noch unter der Maus ist.")]
-    [SerializeField] private Color cardTint         = new Color(0.72f, 0.72f, 0.72f, 1f);
-    [SerializeField] private Color cardTintHover    = new Color(0.88f, 0.88f, 0.88f, 1f);
-    [SerializeField] private Color cardTintSelected = Color.white;
-    [SerializeField] private Color cardTintLocked   = new Color(0.42f, 0.40f, 0.45f, 1f);
-    [Tooltip("Nur fuer die Rueckfallebene ohne Rahmenbild.")]
-    [SerializeField] private Color cardFill        = new Color32(0x3A, 0x2C, 0x2C, 0xFF);
-    [SerializeField] private Color cardBorder      = new Color32(0x6B, 0x51, 0x47, 0xFF);
-    [SerializeField] private Color selectionBorder = new Color32(0xF0, 0xE6, 0xCC, 0xFF);
-    [Tooltip("Liegt ueber dem Fenster eines gesperrten Levels.")]
-    [SerializeField] private Color lockedVeil      = new Color(0f, 0f, 0f, 0.55f);
-    [SerializeField] private Color panelFill       = new Color32(0xE8, 0xDE, 0xC2, 0xFF);
-    [SerializeField] private Color panelBorder     = new Color32(0xC0, 0xAE, 0x8A, 0xFF);
-    [SerializeField] private Color panelInk        = new Color32(0x33, 0x26, 0x2B, 0xFF);
-    [SerializeField] private Color panelInkDim     = new Color32(0x6B, 0x51, 0x47, 0xFF);
-    [SerializeField] private Color textOnDark      = new Color32(0xE8, 0xDE, 0xC2, 0xFF);
-    [SerializeField] private Color lockedText      = new Color32(0x8C, 0x80, 0x78, 0xFF);
-    [Tooltip("Der Spielen-Knopf, wenn das Level wirklich startbar ist.")]
-    [SerializeField] private Color playFillReady   = new Color32(0x86, 0xA5, 0x7A, 0xFF);
-    [Tooltip("Der Spielen-Knopf, wenn das Level zu ist oder noch keine Szene hat.")]
-    [SerializeField] private Color playFillLocked  = new Color32(0x9A, 0x90, 0x86, 0xFF);
-    [Tooltip("Die Box des gesetzten Endless-Hakens. Den Knopf faerbt Endless bewusst nicht.")]
-    [SerializeField] private Color endlessFill     = new Color32(0x86, 0xA5, 0x7A, 0xFF);
-    [Tooltip("So viel heller wird ein Knopf unter der Maus. 0 = kein Hover.")]
-    [SerializeField, Range(0f, 1f)] private float hoverLift = 0.3f;
+    [Header("Darstellung")]
+    [Tooltip("Wie stark der Hub hinter dem Fenster abgedunkelt wird.")]
+    [SerializeField, Range(0f, 1f)] private float dim = 0.86f;
+    [Tooltip("Schwenk, Stimmung, Huepfer. Aus = alles steht still.")]
+    [SerializeField] private bool animate = true;
 
     [Header("Steuerung")]
     [SerializeField] private KeyCode playKey    = KeyCode.Return;
@@ -232,7 +120,7 @@ public class HubLevelSelectUI : MonoBehaviour
     [SerializeField] private AudioClip openClip;
     [SerializeField] private AudioClip closeClip;
     [SerializeField] private AudioClip moveClip;
-    [Tooltip("Beim Setzen und Loesen des Endless-Hakens. Leer = der Ton vom Umschalten.")]
+    [Tooltip("Beim Umschalten Story/Endless. Leer = der Ton vom Weitergehen.")]
     [SerializeField] private AudioClip toggleClip;
     [Tooltip("Leer = MenuClick aus dem AudioController.")]
     [SerializeField] private AudioClip startClip;
@@ -242,55 +130,143 @@ public class HubLevelSelectUI : MonoBehaviour
     [SerializeField] private AudioSource sfxSource;
     [SerializeField, Range(0f, 1f)] private float sfxVolume = 1f;
 
-    // ------------------------------------------------------------ Laufzeit
+    // ==================================================================
+    //  Masse (Seitenpixel, oben links)
+    // ==================================================================
 
-    class Card
+    private const int RibbonY = 6;
+
+    // linke Karte: Panorama + Reiseroute
+    private const int LeftX = 10, LeftY = 34, LeftW = 264, LeftH = 206;
+    private const int FrameX = 16, FrameY = 40, FrameW = 252, FrameH = 126;
+    private const int WinX = FrameX + 3, WinY = FrameY + 3, WinW = FrameW - 6, WinH = FrameH - 6;
+
+    // Reiseroute
+    private const int Node = 30, NodeInset = 3, NodeStep = 52, NodeY = 202, NodeWave = 8;
+    private const int PerPage = 5;
+    private const int CharTarget = 40;           // Figur 1:1 (32er), der Ritter mit Schwert auch
+
+    // rechte Karte: Steckbrief
+    private const int InfoX = 280, InfoY = 34, InfoW = 190, InfoH = 206;
+    private const int TextX = InfoX + 8, TextW = InfoW - 16;
+    private const int BossTile = 56, BossY = InfoY + 103;
+    private const int SideX = TextX + BossTile + 6, SideW = TextW - BossTile - 6;
+    private const int ModeY = InfoY + 182, ModeH = 18, ModeW = (TextW - 6) / 2;
+
+    // Fusszeile
+    private const int BarY = 246, BarH = 20;
+    private const int BackX = 10, BackW = 80;
+    private const int PlayW = 110, PlayX = InfoX + InfoW - PlayW;
+
+    private static readonly RectInt Content = new RectInt(8, 4, 464, 262);
+
+    // Zeiten
+    private const float SlideTime = 0.24f;
+    private const float PanPeriod = 9f;
+    private const float LaunchDelay = 0.32f;
+
+    // ==================================================================
+    //  Zustand
+    // ==================================================================
+
+    private sealed class Btn
     {
-        public GameObject Go;
-        public Image Frame;          // der gepixelte Rahmen (oder die Ersatzflaeche)
-        public Image Fallback;       // nur ohne Rahmenbild: Flaeche hinter dem Rahmen
-        public Image Selection;      // heller 1px-Rahmen um die gewaehlte Karte
-        public TextMeshProUGUI Number;
-        public Image PreviewFill, Preview, Veil, Lock;
-        public Image Node;           // Punkt auf der Fortschrittslinie
+        public Rect Area;
+        public Image Bg, Icon;
+        public TextMeshProUGUI Label;
+        public GameHudSkin.ButtonLook Normal, Hover;
+        public bool Disabled, Active, Visible = true;
     }
 
-    /// <summary>Was gerade unter der Maus liegt.</summary>
-    enum Hit { None, Card, Play, Back, Endless, ScrollLeft, ScrollRight }
+    private sealed class Station
+    {
+        public int Level = -1;
+        public Rect Area;
+        public GameObject Root;
+        public Image Glow, Back, Preview, Frame, Lock, Question, Chip;
+        public TextMeshProUGUI Number;
+        public Vector2 Home;             // Position ohne Aufprall-Versatz
+    }
 
-    readonly List<Card> cards = new List<Card>();
-    readonly HubPixelSprites pixels = new HubPixelSprites();
+    private sealed class Mote
+    {
+        public Image Img;
+        public Vector2 Seed;             // 0..1, 0..1
+        public float Phase, Speed;
+    }
 
-    GameObject root;
-    RectTransform screen;
-    Image markerImage, scrollLeftImage, scrollRightImage;
-    TextMeshProUGUI detailTitle, detailText, endlessText, playText;
-    Image detailPreviewFill, detailPreview, endlessBoxFill, endlessCheck, playFill;
-    GameObject endlessGroup;
+    /// <summary>Plan-Auszug fuer den Steckbrief, einmal je Plan gerechnet.</summary>
+    private sealed class PlanInfo
+    {
+        public EnemyId Boss = EnemyId.None;
+        public int Kinds;
+        public float Duration;
+    }
 
-    Hit hover = Hit.None;
-    int hoverCard = -1;
+    private TMP_FontAsset textFont, pixelFont;
+    private GameObject root;
+    private RectTransform page;
+    private CanvasScaler scaler;
+    private Vector2Int lastScreen;
+    private Vector2 pageBase;
 
-    int selected;
-    int scrollTop;
-    bool endlessChosen;
-    int openedOnFrame = -1;
-    bool built;
+    // Panorama
+    private RectTransform window;
+    private Image panoEmpty, panoOld, panoNew, sunbeam, veil, bigLock, tape, soonChip;
+    private TextMeshProUGUI soonText;
+    private readonly List<Mote> motes = new List<Mote>();
+    private int slideDir;
+    private float slideAt = -10f;
+    private Ambience moteKind = Ambience.None;
+
+    // Reiseroute
+    private readonly List<Station> stations = new List<Station>();
+    private readonly List<Image> dots = new List<Image>();
+    private readonly List<Vector2> dotPos = new List<Vector2>();
+    private readonly List<int> dotSegment = new List<int>();
+    private Btn prevBtn, nextBtn;
+    private Image walker, walkerShadow;
+    private Puppet puppet;
+    private readonly List<Image> puffs = new List<Image>();
+    private readonly List<Image> sparks = new List<Image>();
+
+    // Steckbrief
+    private TextMeshProUGUI mapLabel, nameText, nameShadow, descText, bossLabel, bossName, bossNone,
+                            timeText, kindsText, statusText, recordLabel, recordValue, recordShadow;
+    private Image statusChip, bossTile, bossIcon, bossQuestion, timeIcon, kindsIcon;
+    private Image recordIcon;
+    private Btn storyBtn, endlessBtn, playBtn, backBtn;
+
+    private readonly Dictionary<string, PlanInfo> planCache = new Dictionary<string, PlanInfo>();
+
+    private int selected;
+    private int pageIndex;
+    private bool endlessChosen;
+    private int hoverStation = -1;
+    private Btn hoverBtn, pressedBtn;
+    private int openedOnFrame = -1;
+    private bool built, launching;
+
+    // Zeitmarken (unscaledTime)
+    private float openedAt = -10f, hopAt = -10f, landAt = -10f, launchAt = -10f;
+    private Vector2 hopFrom, hopTo;
+    private float hopTime;
 
     LevelEntry Current => (selected >= 0 && selected < levels.Count) ? levels[selected] : null;
 
-    /// <summary>So viele Karten liegen nebeneinander, bevor geblaettert wird.</summary>
-    int VisibleCards => Mathf.Max(1, Mathf.FloorToInt((cardsArea.width + cardGap) / (cardSize.x + cardGap)));
-
-    bool NeedsScrolling => levels.Count > VisibleCards;
-
-    // ---------------------------------------------------------------- Aufbau
+    // ==================================================================
+    //  Aufbau
+    // ==================================================================
 
     void Awake()
     {
         EnsureSfxSource();
         Build();
     }
+
+    void OnEnable() => Loc.LanguageChanged += OnLanguageChanged;
+
+    void OnDisable() => Loc.LanguageChanged -= OnLanguageChanged;
 
     void EnsureSfxSource()
     {
@@ -302,8 +278,6 @@ public class HubLevelSelectUI : MonoBehaviour
 
     void OnDestroy()
     {
-        pixels.Dispose();
-
         // Szenenwechsel mit offener Auswahl: die Sperre wieder abmelden, sonst
         // reagiert der Hub beim naechsten Mal auf gar nichts mehr.
         if (!IsOpen) return;
@@ -311,283 +285,290 @@ public class HubLevelSelectUI : MonoBehaviour
         HubUI.PopModal();
     }
 
+    void OnLanguageChanged()
+    {
+        if (!built) return;
+        bool wasOpen = root != null && root.activeSelf;
+        if (root != null) Destroy(root);
+        root = null;
+        built = false;
+        Build();
+        if (wasOpen)
+        {
+            root.SetActive(true);
+            ShowPage(selected / PerPage);
+            Refresh();
+            LayoutPage(true);
+        }
+    }
+
     void Build()
     {
         if (built) return;
         built = true;
 
-        if (font == null) font = PixelUI.FindTextFont() ?? PixelUI.FindPixelFont();
+        textFont = PixelUI.FindTextFont() ?? PixelUI.FindPixelFont();
+        pixelFont = PixelUI.FindPixelFont() ?? textFont;
 
-        var canvasGO = new GameObject("LevelSelectCanvas", typeof(Canvas), typeof(CanvasScaler));
-        canvasGO.transform.SetParent(transform, false);
+        // Eigene Leinwand statt OptionsKit.CreatePage: die legt ein
+        // EventSystem an, und das braucht hier niemand - Treffer rechnen wir selbst.
+        root = new GameObject("LevelSelectCanvas", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler));
+        root.transform.SetParent(transform, false);
         int uiLayer = LayerMask.NameToLayer("UI");
-        if (uiLayer >= 0) canvasGO.layer = uiLayer;
+        if (uiLayer >= 0) root.layer = uiLayer;
 
-        var canvas = canvasGO.GetComponent<Canvas>();
+        var canvas = root.GetComponent<Canvas>();
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        // ueber Textbox (100), Konsole (120) und Shop (130)
-        canvas.sortingOrder = 135;
+        canvas.pixelPerfect = true;
+        canvas.sortingOrder = 135;       // ueber Textbox (100), Konsole (120) und Shop (130)
 
-        var scaler = canvasGO.GetComponent<CanvasScaler>();
-        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        scaler.referenceResolution = referenceResolution;
-        scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand;
+        scaler = root.GetComponent<CanvasScaler>();
+        scaler.uiScaleMode = CanvasScaler.ScaleMode.ConstantPixelSize;
+        scaler.referencePixelsPerUnit = 100f;
 
-        root = HubUiKit.NewRect("LevelSelect", canvasGO.transform);
-        HubUiKit.Stretch((RectTransform)root.transform);
+        OptionsKit.Stretch("Dim", root.transform, GameHudSkin.White, new Color(0.06f, 0.04f, 0.05f, dim));
 
-        // Deckt den Hub zu. Klicks faengt nicht diese Flaeche ab, sondern die
-        // Trefferpruefung in Update - solange die Auswahl offen ist, kommt im
-        // Hub ohnehin nichts an (HubUI.PushModal).
-        var backdrop = HubUiKit.NewImage("Backdrop", root.transform, null, backdropColor);
-        HubUiKit.Stretch((RectTransform)backdrop.transform);
+        page = OptionsKit.Rect("Page", root.transform, 0, 0, OptionsKit.RefW, OptionsKit.RefH);
 
-        // Feste 320x180, mittig - nur so sitzt jeder ausgemessene Pixel da, wo
-        // er hingehoert, egal wie gross das Fenster ist.
-        screen = (RectTransform)HubUiKit.NewRect("Screen", root.transform).transform;
-        screen.anchorMin = screen.anchorMax = screen.pivot = new Vector2(0.5f, 0.5f);
-        screen.sizeDelta = referenceResolution;
-        screen.anchoredPosition = Vector2.zero;
+        OptionsKit.Ribbon(page, OptionsKit.RefW / 2f, RibbonY,
+                          Loc.Get("ui.levelselect.title", "LEVELAUSWAHL"), pixelFont, textFont);
 
-        if (backgroundSprite != null)
-        {
-            var bg = HubUiKit.NewImage("Background", screen, backgroundSprite, Color.white);
-            HubUiKit.Stretch((RectTransform)bg.transform);
-            bg.preserveAspect = false;
-        }
+        OptionsKit.Img("LeftCard", page, LeftX, LeftY, LeftW, LeftH, GameHudSkin.Card, true);
+        BuildPanorama();
+        BuildRoute();
+        BuildInfo();
+        BuildBar();
 
-        BuildBanner();
-        BuildCards();
-        BuildTrack();
-        BuildDetail();
-        BuildBackButton();
-
+        lastScreen = Vector2Int.zero;
         root.SetActive(false);
     }
 
-    void BuildBanner()
+    // ---------- Panorama ----------
+
+    void BuildPanorama()
     {
-        Image fill = Fill("Banner", screen, bannerArea, panelFill);
-        Frame("BannerFrame", screen, bannerArea, panelBorder);
+        window = OptionsKit.Rect("Window", page, WinX, WinY, WinW, WinH);
+        window.gameObject.AddComponent<RectMask2D>();
 
-        TextMeshProUGUI t = HubUiKit.NewText("Title", fill.transform, font, titleFontSize,
-                                             panelInk, TextAlignmentOptions.Center);
-        HubUiKit.Stretch((RectTransform)t.transform);
-        t.text = titleLabel;
-    }
+        panoEmpty = OptionsKit.Img("Empty", window, 0, 0, WinW, WinH, GameHudSkin.SlotEmpty(WinW, WinH));
+        // Bleiben immer eingeschaltet und werden nur durchsichtig - siehe
+        // Charakterauswahl: eingeschaltete Bilder blieben sonst unsichtbar.
+        panoOld = OptionsKit.Img("PanoOld", window, 0, 0, WinW, WinH, null, Color.clear);
+        panoNew = OptionsKit.Img("PanoNew", window, 0, 0, WinW, WinH, null, Color.clear);
 
-    void BuildCards()
-    {
-        cards.Clear();
+        sunbeam = OptionsKit.Img("Sunbeam", window, 0, 0, 120, 110, GameHudSkin.Sunbeam(120, 110), Color.clear);
 
-        for (int i = 0; i < levels.Count; i++)
+        motes.Clear();
+        var rng = new System.Random(11);
+        for (int i = 0; i < 26; i++)
         {
-            var card = new Card();
-            card.Go = HubUiKit.NewRect("Card " + (i + 1), screen);
-            HubUiKit.Place((RectTransform)card.Go.transform, CardArea(i));
-
-            // Das Fenster liegt unter dem Rahmen - der laesst es frei
-            card.PreviewFill = HubUiKit.NewImage("Window", card.Go.transform, null, previewEmpty);
-            HubUiKit.Place((RectTransform)card.PreviewFill.transform, cardPreviewArea);
-
-            card.Preview = HubUiKit.NewImage("Preview", card.Go.transform, null, Color.white);
-            HubUiKit.Place((RectTransform)card.Preview.transform, cardPreviewArea);
-            card.Preview.gameObject.SetActive(false);
-
-            if (cardFrameSprite != null)
+            Image img = OptionsKit.Img("Mote", window, 0, 0, 1, 1, GameHudSkin.White, Color.clear);
+            motes.Add(new Mote
             {
-                card.Frame = HubUiKit.NewImage("Frame", card.Go.transform, cardFrameSprite, cardTint);
-                card.Frame.preserveAspect = false;
-                HubUiKit.Place((RectTransform)card.Frame.transform, cardFrameArea);
-            }
-            else
-            {
-                // Ohne Rahmenbild: Flaeche hinter das Fenster und ein 1px-Rahmen
-                card.Fallback = HubUiKit.NewImage("Fill", card.Go.transform, null, cardFill);
-                HubUiKit.Stretch((RectTransform)card.Fallback.transform);
-                card.Fallback.transform.SetAsFirstSibling();
-                card.Frame = Frame("Frame", card.Go.transform,
-                                   new Rect(0f, 0f, cardSize.x, cardSize.y), cardBorder);
-            }
-
-            card.Number = HubUiKit.NewText("Number", card.Go.transform, font, cardNumberFontSize,
-                                           textOnDark, TextAlignmentOptions.Center);
-            HubUiKit.Place((RectTransform)card.Number.transform, cardNumberArea);
-            card.Number.text = (i + 1).ToString();
-
-            card.Veil = HubUiKit.NewImage("Veil", card.Go.transform, null, lockedVeil);
-            HubUiKit.Place((RectTransform)card.Veil.transform, cardPreviewArea);
-
-            card.Lock = HubUiKit.NewImage("Lock", card.Go.transform, pixels.Padlock, lockedText);
-            card.Lock.preserveAspect = false;
-            HubUiKit.Place((RectTransform)card.Lock.transform,
-                           new Rect(cardPreviewArea.x + (cardPreviewArea.width - 7f) * 0.5f,
-                                    cardPreviewArea.y + (cardPreviewArea.height - 10f) * 0.5f, 7f, 10f));
-
-            // Liegt ueber allem und markiert die gewaehlte Karte. Mit Bild ist es
-            // die gemalte Umrandung (sie bringt den Zeiger oben mit), ohne Bild
-            // ein heller 1px-Rahmen - dann setzt BuildCards unten zusaetzlich
-            // einen Zeiger.
-            if (selectionSprite != null)
-            {
-                card.Selection = HubUiKit.NewImage("Selection", card.Go.transform,
-                                                   selectionSprite, Color.white);
-                card.Selection.preserveAspect = false;
-                HubUiKit.Place((RectTransform)card.Selection.transform, selectionArea);
-            }
-            else
-            {
-                card.Selection = Frame("Selection", card.Go.transform,
-                                       new Rect(0f, 0f, cardSize.x, cardSize.y), selectionBorder);
-            }
-
-            cards.Add(card);
+                Img = img,
+                Seed = new Vector2((float)rng.NextDouble(), (float)rng.NextDouble()),
+                Phase = (float)rng.NextDouble() * 6.28f,
+                Speed = 0.6f + (float)rng.NextDouble() * 0.8f,
+            });
         }
 
-        // Der Zeiger ist nur die Rueckfallebene: die gemalte Umrandung hat schon einen.
-        if (selectionSprite == null)
+        OptionsKit.Img("Vignette", window, 0, 0, WinW, WinH, GameHudSkin.Vignette(WinW, WinH));
+
+        veil = OptionsKit.Img("Veil", window, 0, 0, WinW, WinH, GameHudSkin.White, Color.clear);
+        bigLock = OptionsKit.Img("Lock", window, (WinW - 28) / 2, (WinH - 36) / 2, 28, 36, GameHudSkin.Lock, Color.clear);
+
+        // Absperrband quer durchs Bild, darauf ein Schild "BALD"
+        tape = OptionsKit.Img("Tape", window, -4, WinH / 2 - 5, WinW + 8, 10, GameHudSkin.CautionTape, Color.clear);
+        tape.type = Image.Type.Tiled;
+        soonChip = OptionsKit.Img("SoonChip", window, 0, WinH / 2 - 9, 60, 18, GameHudSkin.Sign, Color.clear, true);
+        soonText = OptionsKit.Label("SoonText", window, 0, WinH / 2 - 9, 60, 17, "", pixelFont,
+                                    OptionsKit.SizeText, GameHudSkin.Cream, TextAlignmentOptions.Center);
+
+        // Rahmen zuletzt - er deckt die Kanten des Fensters
+        OptionsKit.Img("Frame", page, FrameX, FrameY, FrameW, FrameH, GameHudSkin.SlotFrame(GameHudSkin.SlotLook.Wood), true);
+    }
+
+    // ---------- Reiseroute ----------
+
+    void BuildRoute()
+    {
+        // Punkte zuerst, damit die Stationen darueber liegen
+        dots.Clear();
+        for (int i = 0; i < 64; i++)
+            dots.Add(OptionsKit.Img("Dot", page, 0, 0, 2, 2, GameHudSkin.TrailDot(true), Color.clear));
+
+        stations.Clear();
+        for (int i = 0; i < PerPage; i++) stations.Add(BuildStation(i));
+
+        walkerShadow = OptionsKit.Img("WalkerShadow", page, 0, 0, 18, 5, GameHudSkin.FootShadow(18, 5), Color.clear);
+        walker = OptionsKit.Img("Walker", page, 0, 0, 32, 32, null, Color.clear);
+
+        puffs.Clear();
+        for (int i = 0; i < 6; i++)
+            puffs.Add(OptionsKit.Img("Puff", page, 0, 0, 2, 2, GameHudSkin.White, Color.clear));
+
+        sparks.Clear();
+        for (int i = 0; i < 12; i++)
         {
-            markerImage = HubUiKit.NewImage("Marker", screen, pixels.ArrowDown, selectionBorder);
-            markerImage.preserveAspect = false;
+            bool star = i % 3 == 0;
+            sparks.Add(OptionsKit.Img("Spark", page, 0, 0, star ? 9 : 5, star ? 9 : 5,
+                                      star ? GameHudSkin.Star : GameHudSkin.Sparkle, Color.clear));
         }
+
+        prevBtn = MakeButton("Prev", LeftX + 4, NodeY + 7, 18, 16, "", GameHudSkin.ArrowLeft, false);
+        nextBtn = MakeButton("Next", LeftX + LeftW - 22, NodeY + 7, 18, 16, "", GameHudSkin.Arrow, false);
+
+        puppet = Puppet.Create(root.transform, "WalkerPuppet");
     }
 
-    void BuildTrack()
+    Station BuildStation(int i)
     {
-        if (levels.Count == 0) return;
+        var s = new Station();
+        RectTransform rt = OptionsKit.Rect("Station " + (i + 1), page, 0, 0, Node, Node);
+        s.Root = rt.gameObject;
 
-        float x0 = TrackX(0);
-        float x1 = TrackX(levels.Count - 1);
-        Fill("Track", screen, new Rect(x0, trackY, Mathf.Max(1f, x1 - x0), 1f), panelInkDim);
+        s.Glow = OptionsKit.Img("Glow", rt, -2, -2, Node + 4, Node + 4, GameHudSkin.Ring, Color.clear, true);
 
-        for (int i = 0; i < levels.Count; i++)
+        int win = Node - 2 * NodeInset;
+        s.Back = OptionsKit.Img("Back", rt, NodeInset, NodeInset, win, win, GameHudSkin.SlotEmpty(win, win));
+        RectTransform w = OptionsKit.Rect("Window", rt, NodeInset, NodeInset, win, win);
+        w.gameObject.AddComponent<RectMask2D>();
+        s.Preview = OptionsKit.Img("Preview", w, 0, 0, 50, 50, null, Color.clear);
+        RectTransform prt = s.Preview.rectTransform;
+        prt.anchorMin = prt.anchorMax = prt.pivot = new Vector2(0.5f, 0.5f);
+        prt.anchoredPosition = Vector2.zero;
+
+        s.Frame = OptionsKit.Img("Frame", rt, 0, 0, Node, Node, GameHudSkin.SlotFrame(GameHudSkin.SlotLook.Wood), true);
+        s.Lock = OptionsKit.Img("Lock", rt, (Node - 7) / 2, (Node - 9) / 2, 7, 9, GameHudSkin.Lock, Color.clear);
+        s.Question = OptionsKit.Img("Question", rt, (Node - 7) / 2, (Node - 9) / 2, 7, 9, GameHudSkin.Question, Color.clear);
+
+        // Nummernschild haengt unten mittig - oben steht die Figur
+        s.Chip = OptionsKit.Img("Chip", rt, (Node - 11) / 2, Node - 5, 11, 12, GameHudSkin.LevelChip, true);
+        s.Number = OptionsKit.Label("Number", rt, (Node - 11) / 2, Node - 6, 11, 13, "", pixelFont, OptionsKit.SizeText,
+                                    GameHudSkin.Parchment, TextAlignmentOptions.Center);
+        return s;
+    }
+
+    // ---------- Steckbrief ----------
+
+    void BuildInfo()
+    {
+        OptionsKit.Img("InfoCard", page, InfoX, InfoY, InfoW, InfoH, GameHudSkin.Card, true);
+
+        mapLabel = OptionsKit.Label("MapLabel", page, TextX, InfoY + 6, TextW, 13, "", textFont,
+                                    OptionsKit.SizeText, GameHudSkin.StoneLight, TextAlignmentOptions.Left);
+
+        statusChip = OptionsKit.Img("StatusChip", page, 0, InfoY + 5, 40, 14, GameHudSkin.LevelChip, true);
+        statusText = OptionsKit.Label("StatusText", page, 0, InfoY + 5, 40, 13, "", textFont,
+                                      OptionsKit.SizeText, GameHudSkin.Mint, TextAlignmentOptions.Center);
+
+        nameShadow = OptionsKit.Label("NameShadow", page, TextX, InfoY + 19, TextW, 22, "", pixelFont,
+                                      OptionsKit.SizeTitle, GameHudSkin.Ink, TextAlignmentOptions.Left);
+        nameText = OptionsKit.Label("Name", page, TextX, InfoY + 18, TextW, 22, "", pixelFont,
+                                    OptionsKit.SizeTitle, GameHudSkin.Cream, TextAlignmentOptions.Left);
+
+        OptionsKit.Img("Rule", page, TextX, InfoY + 42, TextW, 1, GameHudSkin.White,
+                       OptionsKit.WithAlpha(GameHudSkin.Stone, 0.7f));
+
+        descText = OptionsKit.Label("Desc", page, TextX, InfoY + 46, TextW, 40, "", textFont,
+                                    OptionsKit.SizeText, GameHudSkin.Parchment, TextAlignmentOptions.TopLeft);
+        descText.textWrappingMode = TextWrappingModes.Normal;
+
+        // Eingelassene Flaeche fuer Boss, Bestwert und Zahlen
+        OptionsKit.Img("BossWell", page, TextX - 3, BossY - 16, TextW + 6, BossTile + 34, GameHudSkin.Well, true);
+
+        bossLabel = OptionsKit.Label("BossLabel", page, TextX + 1, BossY - 14, TextW, 13,
+                                     Loc.Get("ui.levelselect.boss", "BOSS"), textFont,
+                                     OptionsKit.SizeText, GameHudSkin.StoneLight, TextAlignmentOptions.Left);
+
+        bossTile = OptionsKit.Img("BossTile", page, TextX, BossY, BossTile, BossTile,
+                                  GameHudSkin.Tile(BossTile, GameHudSkin.TileKind.Evo));
+        bossIcon = OptionsKit.Img("BossIcon", page, TextX, BossY, 1, 1, null, Color.clear);
+        bossQuestion = OptionsKit.Img("BossQuestion", page, TextX + (BossTile - 14) / 2, BossY + (BossTile - 18) / 2 - 1,
+                                      14, 18, GameHudSkin.Question, Color.clear);
+
+        bossName = OptionsKit.Label("BossName", page, SideX, BossY - 1, SideW, 13, "", textFont,
+                                    OptionsKit.SizeText, GameHudSkin.Cream, TextAlignmentOptions.Left);
+        bossNone = OptionsKit.Label("BossNone", page, SideX, BossY + 12, SideW, 30, "", textFont,
+                                    OptionsKit.SizeText, GameHudSkin.Stone, TextAlignmentOptions.TopLeft);
+        bossNone.textWrappingMode = TextWrappingModes.Normal;
+
+        // Bestwert: haengt am Schalter Story / Endless
+        OptionsKit.Img("RecordRule", page, SideX, BossY + 16, SideW, 1, GameHudSkin.White,
+                       OptionsKit.WithAlpha(GameHudSkin.Stone, 0.5f));
+        recordLabel = OptionsKit.Label("RecordLabel", page, SideX, BossY + 19, SideW, 13, "", textFont,
+                                       OptionsKit.SizeText, GameHudSkin.StoneLight, TextAlignmentOptions.Left);
+        recordIcon = OptionsKit.Img("RecordIcon", page, SideX, BossY + 37, 9, 9, GameHudSkin.Star);
+        recordShadow = OptionsKit.Label("RecordShadow", page, SideX + 13, BossY + 32, SideW - 13, 22, "", pixelFont,
+                                        OptionsKit.SizeTitle, GameHudSkin.Ink, TextAlignmentOptions.Left);
+        recordValue = OptionsKit.Label("RecordValue", page, SideX + 13, BossY + 31, SideW - 13, 22, "", pixelFont,
+                                       OptionsKit.SizeTitle, GameHudSkin.Gold, TextAlignmentOptions.Left);
+
+        int statY = BossY + BossTile + 4;
+        timeIcon = OptionsKit.Img("TimeIcon", page, TextX, statY + 2, 9, 9, GameHudSkin.Clock);
+        timeText = OptionsKit.Label("Time", page, TextX + 12, statY, 70, 13, "", textFont,
+                                    OptionsKit.SizeText, GameHudSkin.Parchment, TextAlignmentOptions.Left);
+        kindsIcon = OptionsKit.Img("KindsIcon", page, TextX + 88, statY + 2, 9, 9, GameHudSkin.Skull);
+        kindsText = OptionsKit.Label("Kinds", page, TextX + 100, statY, TextW - 100, 13, "", textFont,
+                                     OptionsKit.SizeText, GameHudSkin.Parchment, TextAlignmentOptions.Left);
+
+        storyBtn = MakeButton("Story", TextX, ModeY, ModeW, ModeH, Loc.Get("ui.levelselect.story", "STORY"), null, false);
+        endlessBtn = MakeButton("Endless", TextX + ModeW + 6, ModeY, ModeW, ModeH,
+                                Loc.Get("ui.levelselect.endless", "ENDLESS"), null, false);
+    }
+
+    // ---------- Fusszeile ----------
+
+    void BuildBar()
+    {
+        backBtn = MakeButton("Back", BackX, BarY, BackW, BarH, Loc.Get("ui.levelselect.back", "ZURÜCK"), null, false);
+        playBtn = MakeButton("Play", PlayX, BarY, PlayW, BarH, "", null, true);
+    }
+
+    Btn MakeButton(string name, float x, float y, float w, float h, string text, Sprite icon, bool primary)
+    {
+        var b = new Btn
         {
-            var node = new Rect(Mathf.Round(TrackX(i) - trackNodeSize * 0.5f),
-                                trackY - (trackNodeSize - 1f) * 0.5f, trackNodeSize, trackNodeSize);
-            Fill("NodeFill " + (i + 1), screen, node, backdropColor);
-            cards[i].Node = Frame("Node " + (i + 1), screen, node, cardBorder);
+            Area = new Rect(x, y, w, h),
+            Normal = primary ? GameHudSkin.ButtonLook.Gold : GameHudSkin.ButtonLook.Wood,
+            Hover = primary ? GameHudSkin.ButtonLook.GoldHover : GameHudSkin.ButtonLook.Hover,
+        };
+        RectTransform rt = OptionsKit.Rect("Btn_" + name, page, x, y, w, h);
+        b.Bg = rt.gameObject.AddComponent<Image>();
+        b.Bg.type = Image.Type.Sliced;
+        b.Bg.raycastTarget = false;
+        b.Icon = OptionsKit.Img("Icon", rt, 0, 0, 1, 1, null);
+        b.Label = OptionsKit.Label("Label", rt, 0, 0, w, h - 1, "", textFont, OptionsKit.SizeText,
+                                   GameHudSkin.Cream, TextAlignmentOptions.Left);
+        SetButton(b, text, icon);
+        return b;
+    }
+
+    /// <summary>Text und Symbol setzen - beides zusammen mittig, Symbol links.</summary>
+    void SetButton(Btn b, string text, Sprite icon)
+    {
+        TMP_FontAsset font = OptionsKit.PickFont(text, pixelFont, textFont);
+        b.Label.font = font;
+        b.Label.text = text;
+
+        float iw = icon != null ? icon.rect.width : 0f, ih = icon != null ? icon.rect.height : 0f;
+        float tw = string.IsNullOrEmpty(text) ? 0f : Mathf.Ceil(OptionsKit.Measure(b.Label, text));
+        float gap = icon != null && tw > 0f ? 3f : 0f;
+        float left = Mathf.Round((b.Area.width - (iw + gap + tw)) / 2f);
+
+        b.Icon.enabled = icon != null;
+        if (icon != null)
+        {
+            b.Icon.sprite = icon;
+            // Das Band unten ist 2 px dunkel - die optische Mitte liegt 1 px hoeher.
+            OptionsKit.Move(b.Icon.rectTransform, left, Mathf.Round((b.Area.height - 1f - ih) / 2f), iw, ih);
         }
-
-        scrollLeftImage  = HubUiKit.NewImage("ScrollLeft", screen, pixels.ArrowLeft, textOnDark);
-        scrollLeftImage.preserveAspect = false;
-        HubUiKit.Place((RectTransform)scrollLeftImage.transform, scrollLeftArea);
-
-        scrollRightImage = HubUiKit.NewImage("ScrollRight", screen, pixels.ArrowRight, textOnDark);
-        scrollRightImage.preserveAspect = false;
-        HubUiKit.Place((RectTransform)scrollRightImage.transform, scrollRightArea);
+        OptionsKit.Move(b.Label.rectTransform, left + iw + gap, 0, tw + 2f, b.Area.height - 1f);
     }
 
-    /// <summary>
-    /// Mitte des Punktes fuer Level i. Die Punkte verteilen sich gleichmaessig
-    /// ueber die Kartenflaeche: passt alles nebeneinander, sitzt jeder genau
-    /// unter seiner Karte; sind es mehr, wird die Linie zur Uebersicht.
-    /// </summary>
-    float TrackX(int index)
-    {
-        float half = cardSize.x * 0.5f;
-        float left = cardsArea.x + half;
-        float right = cardsArea.xMax - half;
-        if (levels.Count <= 1) return Mathf.Round(left);
-        return Mathf.Round(left + (right - left) * index / (levels.Count - 1));
-    }
-
-    void BuildDetail()
-    {
-        Fill("Detail", screen, detailArea, panelFill);
-        Frame("DetailFrame", screen, detailArea, panelBorder);
-
-        detailTitle = HubUiKit.NewText("DetailTitle", screen, font, detailTitleFontSize,
-                                       panelInk, TextAlignmentOptions.Left);
-        HubUiKit.Place((RectTransform)detailTitle.transform, detailTitleArea);
-
-        detailPreviewFill = Fill("DetailWindow", screen, detailPreviewArea, previewEmpty);
-        detailPreview = HubUiKit.NewImage("DetailPreview", screen, null, Color.white);
-        HubUiKit.Place((RectTransform)detailPreview.transform, detailPreviewArea);
-        detailPreview.gameObject.SetActive(false);
-        Frame("DetailPreviewFrame", screen, detailPreviewArea, panelBorder);
-
-        detailText = HubUiKit.NewText("DetailText", screen, font, detailFontSize,
-                                      panelInkDim, TextAlignmentOptions.TopLeft);
-        HubUiKit.Place((RectTransform)detailText.transform, detailTextArea);
-        detailText.lineSpacing = detailLineSpacing;
-
-        Fill("Divider", screen, dividerArea, panelBorder);
-
-        // ---- Endless-Haken ------------------------------------------------
-        // Bleibt vollstaendig gebaut, aber abgeschaltet: so ist er eine Zeile
-        // Arbeit entfernt, sobald Endless wieder dazusoll.
-        endlessGroup = HubUiKit.NewRect("Endless", screen);
-        HubUiKit.Stretch((RectTransform)endlessGroup.transform);
-
-        endlessBoxFill = Fill("EndlessBox", endlessGroup.transform, endlessBoxArea, panelFill);
-        Frame("EndlessBoxFrame", endlessGroup.transform, endlessBoxArea, panelInk);
-
-        endlessCheck = HubUiKit.NewImage("EndlessCheck", endlessGroup.transform, pixels.Check, panelInk);
-        endlessCheck.preserveAspect = false;
-        HubUiKit.Place((RectTransform)endlessCheck.transform,
-                       new Rect(endlessBoxArea.x + 1f, endlessBoxArea.y + 1f, 7f, 7f));
-
-        endlessText = HubUiKit.NewText("EndlessLabel", endlessGroup.transform, font, detailFontSize,
-                                       panelInk, TextAlignmentOptions.Left);
-        HubUiKit.Place((RectTransform)endlessText.transform, endlessLabelArea);
-        endlessText.text = endlessLabel;
-
-        endlessGroup.SetActive(showEndlessToggle);
-
-        // ---- Spielen ------------------------------------------------------
-        playFill = Fill("Play", screen, playArea, playFillReady);
-        Frame("PlayFrame", screen, playArea, panelInk);
-
-        playText = HubUiKit.NewText("PlayLabel", screen, font, buttonFontSize,
-                                    panelInk, TextAlignmentOptions.Center);
-        HubUiKit.Place((RectTransform)playText.transform, playArea);
-        playText.text = playLabel;
-    }
-
-    Image backFill;
-    TextMeshProUGUI backText;
-
-    void BuildBackButton()
-    {
-        backFill = Fill("Back", screen, backArea, cardFill);
-        Frame("BackFrame", screen, backArea, cardBorder);
-
-        backText = HubUiKit.NewText("BackLabel", screen, font, detailFontSize,
-                                    textOnDark, TextAlignmentOptions.Center);
-        HubUiKit.Place((RectTransform)backText.transform, backArea);
-        backText.text = "< " + backLabel;
-    }
-
-    // ----------------------------------------------------------- Bausteine
-
-    Image Fill(string name, Transform parent, Rect area, Color color)
-    {
-        Image img = HubUiKit.NewImage(name, parent, null, color);
-        HubUiKit.Place((RectTransform)img.transform, area);
-        return img;
-    }
-
-    /// <summary>1px-Rahmen ueber der Flaeche, innen offen.</summary>
-    Image Frame(string name, Transform parent, Rect area, Color color)
-    {
-        Image img = HubUiKit.NewImage(name, parent, pixels.Frame, color);
-        img.type = Image.Type.Sliced;
-        img.pixelsPerUnitMultiplier = 1f;
-        img.preserveAspect = false;
-        HubUiKit.Place((RectTransform)img.transform, area);
-        return img;
-    }
-
-    /// <summary>Wo Karte i gerade liegt - abhaengig davon, wie weit geblaettert ist.</summary>
-    Rect CardArea(int index)
-    {
-        float x = cardsArea.x + (index - scrollTop) * (cardSize.x + cardGap);
-        return new Rect(x, cardsArea.y, cardSize.x, cardSize.y);
-    }
-
-    bool IsCardVisible(int index) => index >= scrollTop && index < scrollTop + VisibleCards;
-
-    // --------------------------------------------------------------- Oeffnen
+    // ==================================================================
+    //  Oeffnen / Schliessen
+    // ==================================================================
 
     public void Open()
     {
@@ -596,26 +577,31 @@ public class HubLevelSelectUI : MonoBehaviour
         Build();
 
         IsOpen = true;
+        launching = false;
         openedOnFrame = Time.frameCount;
+        openedAt = Time.unscaledTime;
         root.SetActive(true);
 
         // Auf dem ersten offenen Level starten, damit man nie vor einer
-        // gesperrten Karte steht und sich fragt, warum nichts geht.
+        // gesperrten Station steht und sich fragt, warum nichts geht.
         selected = FirstUnlocked();
 
-        // Der Haken steht vorn, wenn im Hauptmenue "Endless" gedrueckt wurde oder
+        // Endless steht vorn, wenn im Hauptmenue "Endless" gedrueckt wurde oder
         // wenn die Story dieses Levels noch zu ist und nur Endless offen steht.
-        endlessChosen = showEndlessToggle && EndlessUnlocked(Current)
-                        && (GameSession.IsEndless || !StoryUnlocked(Current));
-        ScrollToSelected();
-        hover = Hit.None;
-        hoverCard = -1;
+        endlessChosen = EndlessUnlocked(Current) && (GameSession.IsEndless || !StoryUnlocked(Current));
+
+        hoverStation = -1;
+        hoverBtn = pressedBtn = null;
+        hopAt = landAt = launchAt = slideAt = -10f;
+        ShowPage(selected / PerPage);
+        ShowPanorama(0);
         Refresh();
+        LayoutPage(true);
 
         HubUI.PushModal();
-        HubUI.Instance.SetPlayerFrozen(true);
+        if (HubUI.Instance != null) HubUI.Instance.SetPlayerFrozen(true);
 
-        PlaySfx(openClip);
+        PlaySfx(openClip, true);
     }
 
     public void Close()
@@ -625,9 +611,9 @@ public class HubLevelSelectUI : MonoBehaviour
         root.SetActive(false);
 
         HubUI.PopModal();
-        HubUI.Instance.SetPlayerFrozen(false);
+        if (HubUI.Instance != null) HubUI.Instance.SetPlayerFrozen(false);
 
-        PlaySfx(closeClip);
+        PlaySfx(closeClip, true);
     }
 
     int FirstUnlocked()
@@ -637,329 +623,936 @@ public class HubLevelSelectUI : MonoBehaviour
         return 0;
     }
 
-    void ScrollToSelected()
-    {
-        int maxTop = Mathf.Max(0, levels.Count - VisibleCards);
-        scrollTop = Mathf.Clamp(scrollTop, selected - VisibleCards + 1, selected);
-        scrollTop = Mathf.Clamp(scrollTop, 0, maxTop);
-    }
-
-    // -------------------------------------------------------------- Laufzeit
+    // ==================================================================
+    //  Eingabe
+    // ==================================================================
 
     void Update()
     {
         if (!IsOpen) return;
 
-        // Levelstart laeuft schon - waehrend der Blende nichts mehr annehmen
-        if (SceneFader.IsFading) return;
+        LayoutPage(false);
+
+        // Levelstart laeuft schon - waehrend Absprung und Blende nichts mehr annehmen
+        if (launching || SceneFader.IsFading) return;
 
         // Das [E], mit dem die Auswahl aufgeht, darf nicht gleich ein Level starten
         if (Time.frameCount == openedOnFrame) return;
 
         UpdateHover();
 
-        if (Input.GetMouseButtonDown(0)) ClickAt(hover, hoverCard);
+        if (Input.GetMouseButtonDown(0)) MouseDown();
+        if (Input.GetMouseButtonUp(0)) MouseUp();
 
         if (Input.GetKeyDown(closeKey)) { Close(); return; }
 
-        if (Input.GetKeyDown(KeyCode.LeftArrow)  || Input.GetKeyDown(KeyCode.A)) Move(-1);
+        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) Move(-1);
         if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) Move(+1);
 
         float wheel = Input.mouseScrollDelta.y;
-        if (!Mathf.Approximately(wheel, 0f)) Move(wheel > 0f ? -1 : +1);
+        if (wheel > 0.01f) Move(-1);
+        else if (wheel < -0.01f) Move(+1);
 
-        if (showEndlessToggle && Input.GetKeyDown(endlessKey)) ToggleEndless();
-        if (Input.GetKeyDown(playKey) || Input.GetKeyDown(playKeyAlt)) Play();
-    }
+        if (Input.GetKeyDown(endlessKey)) ToggleEndless();
+        if (Input.GetKeyDown(playKey) || Input.GetKeyDown(playKeyAlt) || Input.GetKeyDown(KeyCode.KeypadEnter)) Play();
 
-    /// <summary>
-    /// Die Mausposition in Pixeln der 320x180-Vorlage, Nullpunkt links oben -
-    /// also in genau denselben Koordinaten, in denen die Kaesten oben stehen.
-    /// </summary>
-    bool MousePixel(out Vector2 pixel)
-    {
-        pixel = default;
-        if (screen == null) return false;
-
-        // Overlay-Canvas: die Kamera ist hier bewusst null.
-        if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                screen, Input.mousePosition, null, out Vector2 local))
-            return false;
-
-        pixel = new Vector2(local.x + referenceResolution.x * 0.5f,
-                            referenceResolution.y * 0.5f - local.y);
-        return true;
-    }
-
-    void UpdateHover()
-    {
-        Hit was = hover;
-        int wasCard = hoverCard;
-
-        hover = Hit.None;
-        hoverCard = -1;
-
-        if (MousePixel(out Vector2 m))
+        // 1..9 springen direkt zur Station
+        for (int i = 0; i < 9 && i < levels.Count; i++)
         {
-            if (playArea.Contains(m)) hover = Hit.Play;
-            else if (backArea.Contains(m)) hover = Hit.Back;
-            else if (showEndlessToggle && (endlessBoxArea.Contains(m) || endlessLabelArea.Contains(m)))
-                hover = Hit.Endless;
-            else if (NeedsScrolling && scrollLeftArea.Contains(m)) hover = Hit.ScrollLeft;
-            else if (NeedsScrolling && scrollRightArea.Contains(m)) hover = Hit.ScrollRight;
-            else
-            {
-                for (int i = 0; i < levels.Count; i++)
-                {
-                    if (!IsCardVisible(i) || !CardArea(i).Contains(m)) continue;
-                    hover = Hit.Card;
-                    hoverCard = i;
-                    break;
-                }
-            }
+            if (!Input.GetKeyDown(KeyCode.Alpha1 + i) && !Input.GetKeyDown(KeyCode.Keypad1 + i)) continue;
+            Select(i);
+            break;
         }
-
-        if (hover != was || hoverCard != wasCard) Refresh();
     }
 
-    void ClickAt(Hit what, int card)
+    void MouseDown()
     {
-        switch (what)
+        if (hoverBtn != null) { pressedBtn = hoverBtn; Refresh(); return; }
+
+        // Stationen waehlen nur aus - gestartet wird ueber SPIELEN.
+        if (hoverStation >= 0) Select(stations[hoverStation].Level);
+    }
+
+    void MouseUp()
+    {
+        Btn b = pressedBtn;
+        pressedBtn = null;
+        if (b != null && b == hoverBtn && b.Visible && !b.Disabled)
         {
-            case Hit.Card:
-                // Karten waehlen nur aus. Gestartet wird ausschliesslich ueber
-                // den Spielen-Knopf (oder dessen Tastenkuerzel), damit niemand
-                // aus Versehen in ein Level rutscht.
-                if (card != selected) Select(card);
-                break;
-            case Hit.Play:        Play(); break;
-            case Hit.Back:        Close(); break;
-            case Hit.Endless:     ToggleEndless(); break;
-            case Hit.ScrollLeft:  Move(-1); break;
-            case Hit.ScrollRight: Move(+1); break;
+            if (b == backBtn) { Close(); return; }
+            if (b == playBtn) Play();
+            else if (b == storyBtn) SetEndless(false);
+            else if (b == endlessBtn) SetEndless(true);
+            else if (b == prevBtn) Select(Mathf.Max(0, (pageIndex - 1) * PerPage + PerPage - 1));
+            else if (b == nextBtn) Select(Mathf.Min(levels.Count - 1, (pageIndex + 1) * PerPage));
         }
+        Refresh();
     }
 
     void Move(int delta)
     {
         if (levels.Count == 0) return;
-
-        int next = Mathf.Clamp(selected + delta, 0, levels.Count - 1);
-        if (next == selected) return;
-
-        Select(next);
+        Select(Mathf.Clamp(selected + delta, 0, levels.Count - 1));
     }
 
     void Select(int index)
     {
+        if (index < 0 || index >= levels.Count || index == selected) return;
+
+        int from = selected;
+        Vector2 fromFeet = FeetOf(from);
         selected = index;
-        ScrollToSelected();
 
-        // Ein Level, das nur noch Endless hat, setzt den Haken selbst - und
+        bool flip = selected / PerPage != pageIndex;
+        if (flip) ShowPage(selected / PerPage);
+
+        // Die Figur huepft von Station zu Station - beim Blaettern taucht sie
+        // am Rand der neuen Seite auf.
+        hopFrom = flip ? FeetOf(selected) + new Vector2(index > from ? -40f : 40f, 0f) : fromFeet;
+        hopTo = FeetOf(selected);
+        hopTime = Mathf.Clamp(0.2f + Mathf.Abs(hopTo.x - hopFrom.x) / 400f, 0.22f, 0.5f);
+        hopAt = Time.unscaledTime;
+        landAt = hopAt + hopTime;
+
+        // Ein Level, das nur noch Endless hat, setzt den Schalter selbst - und
         // eines ohne Endless nimmt ihn wieder weg.
-        if (showEndlessToggle && !StoryUnlocked(Current) && EndlessUnlocked(Current)) endlessChosen = true;
-        if (!showEndlessToggle || !EndlessUnlocked(Current)) endlessChosen = false;
+        if (!StoryUnlocked(Current) && EndlessUnlocked(Current)) endlessChosen = true;
+        if (!EndlessUnlocked(Current)) endlessChosen = false;
 
-        PlaySfx(moveClip);
+        ShowPanorama(index > from ? 1 : -1);
+        PlaySfx(moveClip, false);
         Refresh();
     }
 
-    void ToggleEndless()
+    void ToggleEndless() => SetEndless(!endlessChosen);
+
+    void SetEndless(bool on)
     {
         LevelEntry e = Current;
-        if (e == null || !showEndlessToggle) return;
+        if (e == null || on == endlessChosen) return;
 
-        if (!EndlessUnlocked(e)) { PlayDenySound(); return; }
+        if (on && !EndlessUnlocked(e)) { PlayDenySound(); return; }
+        // Ohne offene Story bleibt Endless die einzige Wahl.
+        if (!on && !StoryUnlocked(e)) { PlayDenySound(); return; }
 
-        // Ohne offene Story bleibt Endless die einzige Wahl - der Haken laesst
-        // sich dann nicht ausschalten, sonst zeigt der Knopf ins Leere.
-        if (endlessChosen && !StoryUnlocked(e)) { PlayDenySound(); return; }
-
-        endlessChosen = !endlessChosen;
-        PlaySfx(toggleClip != null ? toggleClip : moveClip);
-        RefreshDetail();
+        endlessChosen = on;
+        PlaySfx(toggleClip != null ? toggleClip : moveClip, false);
+        Refresh();
     }
 
-    // -------------------------------------------------------------- Anzeige
+    // ---------- Maus ----------
 
-    void Refresh()
+    /// <summary>Mausposition in Seitenpixeln (oben links) - dieselben Zahlen wie die Masse oben.</summary>
+    bool MousePage(out Vector2 p)
     {
-        RefreshCards();
-        RefreshDetail();
+        p = default;
+        if (scaler == null) return false;
+        float s = Mathf.Max(1f, scaler.scaleFactor);
+        Vector3 m = Input.mousePosition;
+        p = new Vector2(m.x / s - pageBase.x, (Screen.height - m.y) / s + pageBase.y);
+        return true;
     }
 
-    void RefreshCards()
+    void UpdateHover()
     {
-        for (int i = 0; i < cards.Count; i++)
+        int wasStation = hoverStation;
+        Btn wasBtn = hoverBtn;
+        hoverStation = -1;
+        hoverBtn = null;
+
+        if (MousePage(out Vector2 m))
         {
-            Card c = cards[i];
-            LevelEntry e = levels[i];
-
-            bool visible = IsCardVisible(i);
-            if (c.Go.activeSelf != visible) c.Go.SetActive(visible);
-            if (!visible) continue;
-
-            HubUiKit.Place((RectTransform)c.Go.transform, CardArea(i));
-
-            bool open = StoryUnlocked(e) || EndlessUnlocked(e);
-            bool isSelected = i == selected;
-            bool isHovered = hover == Hit.Card && hoverCard == i;
-
-            Color tint = !open ? cardTintLocked
-                       : isSelected ? cardTintSelected
-                       : isHovered ? cardTintHover
-                       : cardTint;
-
-            if (cardFrameSprite != null) c.Frame.color = tint;
-            else
+            foreach (Btn b in new[] { backBtn, playBtn, storyBtn, endlessBtn, prevBtn, nextBtn })
             {
-                c.Frame.color = isSelected ? selectionBorder : cardBorder;
-                if (c.Fallback != null)
-                    c.Fallback.color = isHovered ? Lift(cardFill, hoverLift * 0.5f) : cardFill;
+                if (b != null && b.Visible && b.Area.Contains(m)) { hoverBtn = b; break; }
             }
 
-            c.Selection.gameObject.SetActive(isSelected);
-            c.Number.color = !open ? lockedText : (isSelected ? selectionBorder : textOnDark);
-
-            ApplyPreview(e, open, c.PreviewFill, c.Preview, cardPreviewArea, false);
-            c.Veil.gameObject.SetActive(!open);
-            c.Lock.gameObject.SetActive(!open);
-        }
-
-        // Punkte gelten auch fuer Karten, die gerade weggeblaettert sind
-        for (int i = 0; i < cards.Count; i++)
-            if (cards[i].Node != null)
-                cards[i].Node.color = i == selected ? selectionBorder : cardBorder;
-
-        if (markerImage != null)
-        {
-            bool show = cards.Count > 0 && IsCardVisible(selected);
-            markerImage.gameObject.SetActive(show);
-            if (show)
+            if (hoverBtn == null)
             {
-                Rect card = CardArea(selected);
-                HubUiKit.Place((RectTransform)markerImage.transform,
-                               new Rect(card.x + (card.width - 9f) * 0.5f,
-                                        card.y - 5f - markerGap, 9f, 5f));
+                for (int i = 0; i < stations.Count; i++)
+                {
+                    Station s = stations[i];
+                    if (s.Level < 0) continue;
+                    // Etwas grosszuegiger als die Station - samt Nummernschild
+                    Rect hit = new Rect(s.Area.x - 4, s.Area.y - 4, s.Area.width + 8, s.Area.height + 8);
+                    if (!hit.Contains(m)) continue;
+                    hoverStation = i;
+                    break;
+                }
             }
         }
 
-        if (scrollLeftImage != null)
-        {
-            bool canLeft = NeedsScrolling && scrollTop > 0;
-            scrollLeftImage.gameObject.SetActive(canLeft);
-            if (canLeft)
-                scrollLeftImage.color = hover == Hit.ScrollLeft ? selectionBorder : textOnDark;
-        }
-        if (scrollRightImage != null)
-        {
-            bool canRight = NeedsScrolling && scrollTop + VisibleCards < levels.Count;
-            scrollRightImage.gameObject.SetActive(canRight);
-            if (canRight)
-                scrollRightImage.color = hover == Hit.ScrollRight ? selectionBorder : textOnDark;
-        }
-
-        // ZURUECK haengt an keiner Karte, wird aber im selben Durchgang gesetzt
-        if (backFill != null)
-        {
-            bool on = hover == Hit.Back;
-            backFill.color = on ? Lift(cardFill, hoverLift * 0.6f) : cardFill;
-            backText.color = on ? selectionBorder : textOnDark;
-        }
+        if (hoverStation != wasStation || hoverBtn != wasBtn) Refresh();
     }
 
-    void RefreshDetail()
+    // ==================================================================
+    //  Anzeige
+    // ==================================================================
+
+    int PageCount => Mathf.Max(1, (levels.Count + PerPage - 1) / PerPage);
+
+    /// <summary>So viele Stationen stehen auf dieser Seite.</summary>
+    int OnPage => Mathf.Clamp(levels.Count - pageIndex * PerPage, 0, PerPage);
+
+    void ShowPage(int index)
     {
-        LevelEntry e = Current;
+        pageIndex = Mathf.Clamp(index, 0, PageCount - 1);
 
-        if (e == null)
+        int n = OnPage;
+        for (int i = 0; i < stations.Count; i++)
         {
-            detailTitle.text = "";
-            detailText.text = "";
-            return;
+            Station s = stations[i];
+            s.Level = i < n ? pageIndex * PerPage + i : -1;
+            s.Root.SetActive(s.Level >= 0);
+            if (s.Level < 0) continue;
+
+            Vector2 p = StationPos(i, n);
+            s.Home = p;
+            s.Area = new Rect(p.x, p.y, Node, Node);
+            OptionsKit.Move((RectTransform)s.Root.transform, p.x, p.y, Node, Node);
         }
 
-        bool storyOk   = StoryUnlocked(e);
-        bool endlessOk = EndlessUnlocked(e);
-        bool open = storyOk || endlessOk;
-        bool linked = IsLinked(e);
-
-        string name = open ? (e.displayName ?? "") : "???";
-        detailTitle.text = string.Format(detailTitleFormat, selected + 1, name.ToUpperInvariant());
-        detailTitle.color = open ? panelInk : panelInkDim;
-
-        detailText.text = open ? e.description : lockedDescription;
-        ApplyPreview(e, open, detailPreviewFill, detailPreview, detailPreviewArea, true);
-
-        // ---- Haken --------------------------------------------------------
-        if (showEndlessToggle)
-        {
-            endlessBoxFill.color = (endlessChosen && endlessOk) ? endlessFill : panelFill;
-            if (endlessOk && hover == Hit.Endless)
-                endlessBoxFill.color = Lift(endlessBoxFill.color, hoverLift * 0.5f);
-
-            endlessCheck.gameObject.SetActive(endlessChosen && endlessOk);
-            endlessText.color = endlessOk ? panelInk : panelInkDim;
-        }
-
-        // ---- Spielen ------------------------------------------------------
-        // Gruen heisst: das Level laesst sich jetzt starten. Ob Endless gewaehlt
-        // ist, aendert die Farbe bewusst nicht - das sagt schon der Haken.
-        bool canPlay = open && linked;
-        Color fill = canPlay ? playFillReady : playFillLocked;
-        playFill.color = (canPlay && hover == Hit.Play) ? Lift(fill, hoverLift) : fill;
-        playText.color = canPlay ? panelInk : panelInkDim;
-        playText.text = (open && !linked) ? comingSoonLabel : playLabel;
+        BuildDots(n);
     }
 
-    void ApplyPreview(LevelEntry e, bool open, Image window, Image image, Rect box, bool wide)
+    /// <summary>Oben links von Station i auf einer Seite mit n Stationen. Jede zweite liegt hoeher - ein Pfad statt einer Linie.</summary>
+    Vector2 StationPos(int i, int n)
     {
-        Sprite sprite = null;
-        if (e != null) sprite = (wide && e.previewWide != null) ? e.previewWide : e.preview;
+        int span = Node + (Mathf.Max(1, n) - 1) * NodeStep;
+        float x = LeftX + Mathf.Round((LeftW - span) / 2f) + i * NodeStep;
+        float y = NodeY - (i % 2 == 1 ? NodeWave : 0);
+        return new Vector2(x, y);
+    }
 
-        image.gameObject.SetActive(sprite != null);
-        if (sprite != null)
-        {
-            image.sprite = sprite;
-            FitCentered((RectTransform)image.transform, box, sprite.rect.size);
-            // Gesperrt wird abgedunkelt - der Schleier darueber macht den Rest.
-            image.color = open ? Color.white : new Color(0.55f, 0.55f, 0.55f, 1f);
-        }
-
-        window.color = previewEmpty;
+    /// <summary>Wo die Figur auf Station <paramref name="level"/> mit den Fuessen steht.</summary>
+    Vector2 FeetOf(int level)
+    {
+        int i = level - pageIndex * PerPage;
+        if (i < 0 || i >= PerPage) i = Mathf.Clamp(i, 0, PerPage - 1);
+        Vector2 p = StationPos(i, OnPage);
+        return new Vector2(p.x + Node / 2f, p.y + 1f);
     }
 
     /// <summary>
-    /// Setzt ein Bild mittig in einen Kasten, in ganzen Pixeln und nie vergroessert.
-    ///
-    /// Unitys <c>Image.preserveAspect</c> hilft hier nicht: es verschiebt das
-    /// verkleinerte Bild um <c>(Kastenbreite - Bildbreite) * pivot.x</c>, und
-    /// <see cref="HubUiKit.Place"/> setzt den Pivot auf links oben - der Faktor ist
-    /// also 0 und das Bild klebt am linken Rand. Im 52px breiten Kartenfenster sass
-    /// das 50px-Bild dadurch einen Pixel zu weit links, neben dem Loch im Rahmen.
+    /// Die Punkte zwischen den Stationen: ein durchhaengender Bogen, alle 4 px
+    /// ein Punkt. Wird nur beim Blaettern neu gesetzt.
     /// </summary>
-    static void FitCentered(RectTransform rect, Rect box, Vector2 sprite)
+    void BuildDots(int n)
     {
-        if (sprite.x <= 0f || sprite.y <= 0f) { HubUiKit.Place(rect, box); return; }
+        dotPos.Clear();
+        dotSegment.Clear();
+        for (int i = 0; i + 1 < n; i++)
+        {
+            Vector2 a = StationPos(i, n) + new Vector2(Node / 2f, Node / 2f);
+            Vector2 b = StationPos(i + 1, n) + new Vector2(Node / 2f, Node / 2f);
+            Vector2 ctrl = (a + b) / 2f + new Vector2(0f, 10f);
 
-        // Pixelart wird nicht hochskaliert - lieber Luft ringsherum als Matsch.
-        float scale = Mathf.Min(1f, Mathf.Min(box.width / sprite.x, box.height / sprite.y));
-        float w = Mathf.Floor(sprite.x * scale);
-        float h = Mathf.Floor(sprite.y * scale);
+            // Laenge grob messen, dann gleichmaessig verteilen
+            float len = 0f;
+            Vector2 last = a;
+            for (int k = 1; k <= 20; k++)
+            {
+                Vector2 q = Bezier(a, ctrl, b, k / 20f);
+                len += Vector2.Distance(last, q);
+                last = q;
+            }
+            int count = Mathf.Max(2, Mathf.RoundToInt(len / 4f));
+            for (int k = 1; k < count; k++)
+            {
+                Vector2 q = Bezier(a, ctrl, b, k / (float)count);
+                // Nicht unter die Stationen malen
+                if (Vector2.Distance(q, a) < Node * 0.6f || Vector2.Distance(q, b) < Node * 0.6f) continue;
+                dotPos.Add(new Vector2(Mathf.Round(q.x - 1f), Mathf.Round(q.y - 1f)));
+                dotSegment.Add(i);
+            }
+        }
 
-        HubUiKit.Place(rect, new Rect(box.x + Mathf.Floor((box.width  - w) * 0.5f),
-                                      box.y + Mathf.Floor((box.height - h) * 0.5f), w, h));
+        for (int i = 0; i < dots.Count; i++)
+        {
+            bool on = i < dotPos.Count;
+            if (on) OptionsKit.Move(dots[i].rectTransform, dotPos[i].x, dotPos[i].y, 2, 2);
+            else dots[i].color = Color.clear;
+        }
     }
 
-    /// <summary>Hellt eine Farbe auf, ohne ihre Deckkraft anzutasten.</summary>
-    static Color Lift(Color c, float amount)
+    static Vector2 Bezier(Vector2 a, Vector2 c, Vector2 b, float t)
     {
-        return new Color(Mathf.Lerp(c.r, 1f, amount),
-                         Mathf.Lerp(c.g, 1f, amount),
-                         Mathf.Lerp(c.b, 1f, amount), c.a);
+        float u = 1f - t;
+        return u * u * a + 2f * u * t * c + t * t * b;
     }
 
-    // ------------------------------------------------------------- Unlocks
+    void Refresh()
+    {
+        if (page == null) return;
+
+        // Stationen
+        for (int i = 0; i < stations.Count; i++)
+        {
+            Station s = stations[i];
+            if (s.Level < 0) continue;
+            LevelEntry e = levels[s.Level];
+
+            bool open = IsOpenLevel(e);
+            bool linked = IsLinked(e);
+            bool isSel = s.Level == selected;
+            bool isHover = i == hoverStation;
+
+            GameHudSkin.SlotLook look = isSel ? GameHudSkin.SlotLook.Gold
+                : !open ? GameHudSkin.SlotLook.Stone
+                : isHover ? GameHudSkin.SlotLook.Hover
+                : GameHudSkin.SlotLook.Wood;
+            s.Frame.sprite = GameHudSkin.SlotFrame(look);
+
+            Sprite pic = e.preview != null ? e.preview : e.previewWide;
+            if (pic != null)
+            {
+                s.Preview.sprite = pic;
+                s.Preview.rectTransform.sizeDelta = new Vector2(pic.rect.width, pic.rect.height);
+                s.Preview.color = open ? (linked ? Color.white : new Color(0.7f, 0.66f, 0.68f, 1f))
+                                       : new Color(0.28f, 0.24f, 0.27f, 1f);
+            }
+            else s.Preview.color = Color.clear;
+
+            s.Lock.color = !open ? Color.white : Color.clear;
+            s.Question.color = open && (!linked || pic == null) ? OptionsKit.WithAlpha(GameHudSkin.Cream, 0.8f) : Color.clear;
+
+            s.Number.text = (s.Level + 1).ToString();
+            s.Number.color = isSel ? GameHudSkin.Gold : open ? GameHudSkin.Parchment : GameHudSkin.Stone;
+        }
+
+        // Punkte: golden, solange der Weg zu einer offenen Station fuehrt
+        for (int i = 0; i < dotPos.Count && i < dots.Count; i++)
+        {
+            int next = pageIndex * PerPage + dotSegment[i] + 1;
+            bool lit = next < levels.Count && IsOpenLevel(levels[next]) && IsLinked(levels[next]);
+            dots[i].sprite = GameHudSkin.TrailDot(lit);
+        }
+
+        int pages = PageCount;
+        prevBtn.Visible = nextBtn.Visible = pages > 1;
+        prevBtn.Disabled = pageIndex == 0;
+        nextBtn.Disabled = pageIndex >= pages - 1;
+
+        RefreshInfo();
+        RefreshPanoramaOverlay();
+
+        foreach (Btn b in new[] { backBtn, playBtn, storyBtn, endlessBtn, prevBtn, nextBtn }) PaintButton(b);
+    }
+
+    void RefreshInfo()
+    {
+        LevelEntry e = Current;
+        bool any = e != null;
+        bool open = any && IsOpenLevel(e);
+        bool linked = any && IsLinked(e);
+
+        mapLabel.text = any ? string.Format(Loc.Get("ui.levelselect.map", "KARTE {0}"), selected + 1) : "";
+
+        string name = !any ? "" : open ? LevelName(selected).ToUpperInvariant() : "???";
+        if (open && string.IsNullOrWhiteSpace(LevelName(selected))) name = "???";
+        FitTitle(nameText, nameShadow, name, TextW);
+
+        descText.text = !any ? ""
+                      : !open ? Loc.Get("ui.levelselect.lockeddesc", "Noch verschlossen.")
+                      : !linked ? Loc.Get("ui.levelselect.soondesc", "Hier wird noch gebacken. Bald geht es weiter!")
+                      : LevelDesc(selected);
+
+        // Status oben rechts
+        string status; Color statusCol;
+        if (!any) { status = ""; statusCol = Color.clear; }
+        else if (!open) { status = Loc.Get("ui.levelselect.locked", "GESPERRT"); statusCol = GameHudSkin.StoneLight; }
+        else if (!linked) { status = Loc.Get("ui.levelselect.soon", "BALD"); statusCol = GameHudSkin.Gold; }
+        else { status = Loc.Get("ui.levelselect.open", "OFFEN"); statusCol = GameHudSkin.Mint; }
+        statusChip.enabled = statusText.enabled = status.Length > 0;
+        if (status.Length > 0)
+        {
+            statusText.text = status;
+            statusText.color = statusCol;
+            float tw = Mathf.Ceil(OptionsKit.Measure(statusText, status));
+            float w = tw + 12f;
+            if (((int)w & 1) == 1) w += 1f;
+            float x = TextX + TextW - w;
+            OptionsKit.Move(statusChip.rectTransform, x, InfoY + 5, w, 14);
+            OptionsKit.Move(statusText.rectTransform, x, InfoY + 5, w, 13);
+        }
+
+        // Boss & Co. aus dem Wellenplan
+        PlanInfo plan = open ? PlanFor(e) : null;
+        bool hasBoss = plan != null && plan.Boss != EnemyId.None;
+        Sprite bossSprite = hasBoss ? Bestiary.Icon(plan.Boss) : null;
+
+        bossTile.enabled = true;
+        bossQuestion.color = bossSprite == null ? OptionsKit.WithAlpha(GameHudSkin.Cream, 0.55f) : Color.clear;
+        if (bossSprite != null)
+        {
+            bossIcon.sprite = bossSprite;
+            float w = bossSprite.rect.width, h = bossSprite.rect.height;
+            float k = w <= BossTile - 4 && h <= BossTile - 4 ? 1f : 0.5f;
+            w = Mathf.Round(w * k); h = Mathf.Round(h * k);
+            // Ein Pixel hoeher als mittig: unten liegt die Farbkante der Kachel
+            OptionsKit.Move(bossIcon.rectTransform, TextX + Mathf.Floor((BossTile - w) / 2f),
+                            BossY + Mathf.Floor((BossTile - 3 - h) / 2f), w, h);
+            bossIcon.color = Color.white;
+        }
+        else bossIcon.color = Color.clear;
+
+        bossName.text = hasBoss ? Bestiary.NameOf(plan.Boss).ToUpperInvariant() : "";
+        bossNone.text = hasBoss ? "" : !open ? "???" : Loc.Get("ui.levelselect.noboss", "Noch unbekannt.");
+
+        // Bestwert der Karte im gewaehlten Modus
+        bool rec = open && linked && e.mapId >= 0;
+        float best = !rec ? 0f : endlessChosen ? LevelRecords.EndlessBest(e.mapId) : LevelRecords.StoryBest(e.mapId);
+        recordLabel.text = !rec ? "" : endlessChosen
+            ? Loc.Get("ui.levelselect.recordendless", "LÄNGSTES ÜBERLEBEN")
+            : Loc.Get("ui.levelselect.recordstory", "SCHNELLSTER SIEG");
+        string value = !rec ? "" : best > 0f ? LevelRecords.Format(best) : "--:--";
+        recordValue.text = recordShadow.text = value;
+        recordValue.color = best > 0f ? (Color)GameHudSkin.Gold : GameHudSkin.Stone;
+        recordIcon.enabled = rec;
+        recordIcon.color = best > 0f ? Color.white : new Color(0.55f, 0.5f, 0.52f, 1f);
+
+        // Dauer und Gegnerarten
+        bool stats = plan != null && plan.Duration > 0f;
+        timeIcon.enabled = timeText.enabled = kindsIcon.enabled = kindsText.enabled = stats;
+        if (stats)
+        {
+            timeText.text = endlessChosen
+                ? Loc.Get("ui.levelselect.nolimit", "OHNE ENDE")
+                : string.Format(Loc.Get("ui.levelselect.minutes", "~{0} MIN"), Mathf.RoundToInt(plan.Duration / 60f));
+            kindsText.text = string.Format(Loc.Get("ui.levelselect.kinds", "{0} GEGNERARTEN"), plan.Kinds);
+        }
+
+        // Story / Endless
+        bool storyOk = any && StoryUnlocked(e), endlessOk = any && EndlessUnlocked(e);
+        storyBtn.Disabled = !storyOk;
+        endlessBtn.Disabled = !endlessOk;
+        storyBtn.Active = storyOk && !endlessChosen;
+        endlessBtn.Active = endlessOk && endlessChosen;
+
+        // Spielen
+        bool canPlay = open && linked;
+        playBtn.Disabled = !canPlay;
+        if (!any || canPlay) SetButton(playBtn, Loc.Get("ui.levelselect.play", "SPIELEN"), GameHudSkin.Arrow);
+        else if (!open) SetButton(playBtn, Loc.Get("ui.levelselect.locked", "GESPERRT"), GameHudSkin.Lock);
+        else SetButton(playBtn, Loc.Get("ui.levelselect.soon", "BALD"), null);
+    }
+
+    void RefreshPanoramaOverlay()
+    {
+        LevelEntry e = Current;
+        bool open = e != null && IsOpenLevel(e);
+        bool linked = e != null && IsLinked(e);
+
+        veil.color = !open ? new Color(0.07f, 0.05f, 0.06f, 0.72f) : Color.clear;
+        bigLock.color = !open ? Color.white : Color.clear;
+
+        bool soon = open && !linked;
+        tape.color = soon ? Color.white : Color.clear;
+        soonChip.color = soonText.color = soon ? Color.white : Color.clear;
+        if (soon)
+        {
+            string label = Loc.Get("ui.levelselect.soon", "BALD");
+            soonText.font = OptionsKit.PickFont(label, pixelFont, textFont);
+            soonText.text = label;
+            soonText.color = GameHudSkin.Cream;
+            float w = Mathf.Ceil(OptionsKit.Measure(soonText, label)) + 16f;
+            if (((int)w & 1) == 1) w += 1f;
+            float x = Mathf.Round((WinW - w) / 2f);
+            OptionsKit.Move(soonChip.rectTransform, x, WinH / 2 - 9, w, 18);
+            OptionsKit.Move(soonText.rectTransform, x, WinH / 2 - 9, w, 17);
+        }
+    }
+
+    /// <summary>Neues Panorama: das alte gleitet in <paramref name="dir"/>-Richtung hinaus, das neue herein. 0 = sofort.</summary>
+    void ShowPanorama(int dir)
+    {
+        LevelEntry e = Current;
+        Sprite next = e == null ? null : e.previewWide != null ? e.previewWide : e.preview;
+
+        panoOld.sprite = panoNew.sprite;
+        panoOld.color = panoNew.color;
+        OptionsKit.Move(panoOld.rectTransform, panoNew.rectTransform.anchoredPosition.x,
+                        -panoNew.rectTransform.anchoredPosition.y,
+                        panoNew.rectTransform.sizeDelta.x, panoNew.rectTransform.sizeDelta.y);
+
+        panoNew.sprite = next;
+        panoNew.color = next != null ? Color.white : Color.clear;
+
+        slideDir = animate ? dir : 0;
+        slideAt = Time.unscaledTime;
+        if (slideDir == 0) panoOld.color = Color.clear;
+
+        moteKind = e != null && IsOpenLevel(e) ? AmbienceFor(e) : Ambience.None;
+        PlacePanorama(Time.unscaledTime);
+    }
+
+    /// <summary>Schwenk und Hereingleiten in ganzen Seitenpixeln.</summary>
+    void PlacePanorama(float now)
+    {
+        float t = Mathf.Clamp01((now - slideAt) / SlideTime);
+        float ease = 1f - (1f - t) * (1f - t) * (1f - t);
+        float shift = slideDir == 0 ? 0f : Mathf.Round((1f - ease) * WinW) * slideDir;
+
+        if (panoNew.sprite == null) sunbeam.color = Color.clear;
+        PlaceImage(panoNew, now, shift);
+        if (slideDir != 0 && t < 1f) PlaceImage(panoOld, now, shift - slideDir * WinW);
+        else panoOld.color = Color.clear;
+    }
+
+    void PlaceImage(Image img, float now, float shiftX)
+    {
+        Sprite s = img.sprite;
+        if (s == null) return;
+
+        // Groesste ganze Vergroesserung, die das Fenster ganz fuellt
+        float sw = s.rect.width, sh = s.rect.height;
+        int k = Mathf.Max(1, Mathf.Max(Mathf.CeilToInt(WinW / sw), Mathf.CeilToInt(WinH / sh)));
+        float w = sw * k, h = sh * k;
+
+        // Langsamer Schwenk auf und ab (sanft an den Enden)
+        float range = h - WinH;
+        float wave = animate ? 0.5f - 0.5f * Mathf.Cos((now - openedAt) * Mathf.PI * 2f / PanPeriod) : 0.5f;
+        float y = -Mathf.Round(range * wave);
+        float x = Mathf.Round((WinW - w) / 2f) + shiftX;
+        OptionsKit.Move(img.rectTransform, x, y, w, h);
+
+        if (img == panoNew)
+        {
+            // Der Sonnenstrahl gehoert zur Kueche und schwenkt mit dem Bild.
+            bool beam = moteKind == Ambience.Kitchen && animate;
+            float pulse = 0.55f + 0.15f * Mathf.Sin(now * 0.9f);
+            sunbeam.color = beam ? new Color(1f, 0.95f, 0.8f, pulse) : Color.clear;
+            OptionsKit.Move(sunbeam.rectTransform, x + w - 132, y + 6, 120, 110);
+        }
+    }
+
+    // ==================================================================
+    //  Bewegtes
+    // ==================================================================
+
+    void LateUpdate()
+    {
+        if (!IsOpen || page == null) return;
+
+        float now = Time.unscaledTime;
+
+        PlacePanorama(now);
+        UpdateMotes(now);
+        UpdateStations(now);
+        UpdateDots(now);
+        UpdateWalker(now);
+    }
+
+    void UpdateMotes(float now)
+    {
+        for (int i = 0; i < motes.Count; i++)
+        {
+            Mote m = motes[i];
+            Image img = m.Img;
+            if (!animate || moteKind == Ambience.None) { img.color = Color.clear; continue; }
+
+            float x, y, a;
+            switch (moteKind)
+            {
+                case Ambience.Forest:
+                    if (i % 3 == 0)
+                    {
+                        // Gluehwuermchen: schweben unten im Gras, blinken
+                        img.sprite = GameHudSkin.Firefly;
+                        x = m.Seed.x * WinW + Mathf.Sin(now * 0.7f * m.Speed + m.Phase) * 10f;
+                        y = WinH * (0.55f + 0.4f * m.Seed.y) + Mathf.Sin(now * 1.1f * m.Speed + m.Phase * 2f) * 4f;
+                        a = Mathf.Clamp01(Mathf.Sin(now * 2.2f * m.Speed + m.Phase) * 1.4f);
+                        SetMote(img, x, y, 3, 3, new Color(1f, 1f, 1f, a));
+                    }
+                    else
+                    {
+                        // Blaetter: fallen, schaukeln, wandern leicht nach links
+                        img.sprite = GameHudSkin.Leaf(i % 3 == 1 ? i % 2 : 2);
+                        float fall = Mathf.Repeat(m.Seed.y + now * 0.07f * m.Speed, 1f);
+                        x = Mathf.Repeat(m.Seed.x * WinW - now * 6f * m.Speed + Mathf.Sin(now * 2f + m.Phase) * 6f, WinW + 10f) - 5f;
+                        y = fall * (WinH + 8f) - 6f;
+                        a = Mathf.Clamp01(fall * 8f) * Mathf.Clamp01((1f - fall) * 8f);
+                        SetMote(img, x, y, 3, 2, new Color(1f, 1f, 1f, a));
+                    }
+                    break;
+
+                case Ambience.Kitchen:
+                    // Mehlstaub: steigt langsam, glitzert im Strahl
+                    img.sprite = GameHudSkin.White;
+                    float rise = Mathf.Repeat(m.Seed.y - now * 0.035f * m.Speed, 1f);
+                    x = WinW * (0.35f + 0.6f * m.Seed.x) + Mathf.Sin(now * 0.8f + m.Phase) * 5f;
+                    y = rise * WinH;
+                    a = (0.35f + 0.35f * Mathf.Sin(now * 2.4f + m.Phase)) * Mathf.Clamp01(rise * 6f) * Mathf.Clamp01((1f - rise) * 6f);
+                    SetMote(img, x, y, 1, 1, OptionsKit.WithAlpha(GameHudSkin.Cream, Mathf.Max(0f, a)));
+                    break;
+
+                default:
+                    img.sprite = GameHudSkin.White;
+                    float up = Mathf.Repeat(m.Seed.y - now * 0.025f * m.Speed, 1f);
+                    x = m.Seed.x * WinW + Mathf.Sin(now * 0.6f + m.Phase) * 4f;
+                    y = up * WinH;
+                    a = 0.3f * Mathf.Clamp01(up * 6f) * Mathf.Clamp01((1f - up) * 6f);
+                    SetMote(img, x, y, 1, 1, OptionsKit.WithAlpha(GameHudSkin.Cream, a));
+                    break;
+            }
+        }
+    }
+
+    static void SetMote(Image img, float x, float y, float w, float h, Color c)
+    {
+        OptionsKit.Move(img.rectTransform, x, y, w, h);
+        img.color = c;
+    }
+
+    void UpdateStations(float now)
+    {
+        for (int i = 0; i < stations.Count; i++)
+        {
+            Station s = stations[i];
+            if (s.Level < 0) continue;
+
+            // Beim Oeffnen fallen die Stationen nacheinander auf den Pfad
+            float t = animate ? Mathf.Clamp01((now - openedAt - 0.05f * i) / 0.22f) : 1f;
+            float drop = Mathf.Round((1f - t) * (1f - t) * 10f);
+
+            // Die gewaehlte Station federt, wenn die Figur landet
+            float land = (now - landAt) / 0.18f;
+            if (s.Level == selected && animate && land >= 0f && land < 1f) drop -= Mathf.Round(Mathf.Sin(land * Mathf.PI) * 2f);
+
+            OptionsKit.Move((RectTransform)s.Root.transform, s.Home.x, s.Home.y - drop, Node, Node);
+
+            float glow = 0f;
+            if (s.Level == selected)
+            {
+                glow = animate ? 0.4f + 0.25f * Mathf.Sin(now * 4f) : 0.5f;
+                if (now - launchAt < 0.5f) glow = 1f;
+            }
+            else if (i == hoverStation) glow = 0.2f;
+            s.Glow.color = OptionsKit.WithAlpha(GameHudSkin.Gold, glow);
+        }
+    }
+
+    void UpdateDots(float now)
+    {
+        // Der Pfad zeichnet sich beim Oeffnen von links nach rechts
+        float reveal = animate ? Mathf.Clamp01((now - openedAt - 0.1f) / 0.45f) : 1f;
+        int show = Mathf.CeilToInt(reveal * dotPos.Count);
+        for (int i = 0; i < dotPos.Count && i < dots.Count; i++)
+            dots[i].color = i < show ? Color.white : Color.clear;
+    }
+
+    void UpdateWalker(float now)
+    {
+        int c = Mathf.Clamp(Shop.SkinIndex, 0, Mathf.Max(0, Characters.Count - 1));
+        puppet.Set(AnimatorFor(c), 0f);
+
+        float hop = (now - hopAt) / Mathf.Max(0.01f, hopTime);
+        bool hopping = animate && hop >= 0f && hop < 1f;
+        Vector2 feet = FeetOf(selected);
+        float lift = 0f;
+        float dirX = 0f;
+
+        if (hopping)
+        {
+            float e = hop * hop * (3f - 2f * hop);
+            feet = Vector2.Lerp(hopFrom, hopTo, e);
+            float height = 14f + Mathf.Min(24f, Mathf.Abs(hopTo.x - hopFrom.x) * 0.12f);
+            lift = Mathf.Sin(hop * Mathf.PI) * height;
+            dirX = Mathf.Sign(hopTo.x - hopFrom.x);
+        }
+
+        // Absprung beim Starten: hoch hinaus
+        float l = (now - launchAt) / 0.5f;
+        if (animate && l >= 0f && l < 1f) lift += Mathf.Sin(Mathf.Min(1f, l * 1.4f) * Mathf.PI * 0.5f) * 40f;
+
+        Sprite frame = puppet.Frame(hopping, dirX);
+        if (frame == null)
+        {
+            walker.color = walkerShadow.color = Color.clear;
+        }
+        else
+        {
+            walker.sprite = frame;
+            Rect body = CharacterLooks.BodyRect(frame);
+            float tex = Mathf.Max(body.width, body.height);
+            float k = tex <= CharTarget ? Mathf.Max(1f, Mathf.Floor(CharTarget / tex)) : 1f / Mathf.Ceil(tex / CharTarget);
+            if (k > 1f) k = 1f;          // auf dem Pfad 1:1 - die Stationen sind klein
+            float w = Mathf.Round(frame.rect.width * k), h = Mathf.Round(frame.rect.height * k);
+
+            float x = Mathf.Round(feet.x - body.width * k / 2f) - Mathf.Round(body.x * k);
+            float y = Mathf.Round(feet.y - lift) - Mathf.Round((frame.rect.height - body.y - CharacterLooks.FootRowsFor(c)) * k);
+            OptionsKit.Move(walker.rectTransform, x, y, w, h);
+            walker.color = Characters.IsAvailable(c) ? Color.white : new Color(0.11f, 0.08f, 0.1f, 1f);
+
+            float sa = Mathf.Lerp(1f, 0.35f, Mathf.Clamp01(lift / 30f));
+            OptionsKit.Move(walkerShadow.rectTransform, Mathf.Round(feet.x - 9f), Mathf.Round(feet.y - 3f), 18, 5);
+            walkerShadow.color = new Color(1f, 1f, 1f, sa);
+        }
+
+        // Staubwoelkchen bei der Landung
+        float p = (now - landAt) / 0.3f;
+        bool puff = animate && p >= 0f && p < 1f;
+        for (int i = 0; i < puffs.Count; i++)
+        {
+            if (!puff) { puffs[i].color = Color.clear; continue; }
+            float side = i % 2 == 0 ? -1f : 1f;
+            float spread = 4f + (i / 2) * 3f;
+            float px = hopTo.x + side * (spread + p * 8f);
+            float py = hopTo.y - 1f - Mathf.Sin(p * Mathf.PI) * (2f + i / 2);
+            OptionsKit.Move(puffs[i].rectTransform, Mathf.Round(px), Mathf.Round(py), 2, 2);
+            puffs[i].color = OptionsKit.WithAlpha(GameHudSkin.Cream, 0.8f * (1f - p));
+        }
+
+        // Funken beim Absprung
+        float st = now - launchAt;
+        bool on = animate && st >= 0f && st < 0.7f;
+        Vector2 centre = FeetOf(selected) + new Vector2(0f, -20f);
+        for (int i = 0; i < sparks.Count; i++)
+        {
+            Image img = sparks[i];
+            if (!on) { img.color = Color.clear; continue; }
+            float ang = i / (float)sparks.Count * Mathf.PI * 2f + 0.3f;
+            var dir = new Vector2(Mathf.Cos(ang), -Mathf.Abs(Mathf.Sin(ang)) - 0.3f).normalized;
+            float speed = 60f + (i % 4) * 14f;
+            Vector2 q = centre + dir * (10f + speed * st) + new Vector2(0f, 110f * st * st);
+            float sw = img.sprite.rect.width, sh = img.sprite.rect.height;
+            OptionsKit.Move(img.rectTransform, Mathf.Round(q.x - sw / 2f), Mathf.Round(q.y - sh / 2f), sw, sh);
+            img.color = new Color(1f, 1f, 1f, 1f - st / 0.7f);
+        }
+    }
+
+    // ==================================================================
+    //  Hilfen
+    // ==================================================================
+
+    void PaintButton(Btn b)
+    {
+        b.Bg.gameObject.SetActive(b.Visible);
+        if (!b.Visible) return;
+
+        bool hover = b == hoverBtn;
+        bool down = b == pressedBtn && hover;
+
+        GameHudSkin.ButtonLook look;
+        if (b.Disabled) look = GameHudSkin.ButtonLook.Disabled;
+        else if (b.Active) look = GameHudSkin.ButtonLook.Active;
+        else if (down) look = GameHudSkin.ButtonLook.Pressed;
+        else look = hover ? b.Hover : b.Normal;
+        b.Bg.sprite = GameHudSkin.Button(look);
+
+        Color ink;
+        switch (look)
+        {
+            case GameHudSkin.ButtonLook.Gold:
+            case GameHudSkin.ButtonLook.GoldHover: ink = GameHudSkin.Ink; break;
+            case GameHudSkin.ButtonLook.Pressed:   ink = GameHudSkin.ParchDark; break;
+            case GameHudSkin.ButtonLook.Disabled:  ink = GameHudSkin.StoneLight; break;
+            default:                               ink = GameHudSkin.Cream; break;
+        }
+        b.Label.color = ink;
+        b.Icon.color = look == GameHudSkin.ButtonLook.Disabled ? new Color(0.7f, 0.65f, 0.68f, 1f) : Color.white;
+
+        // Gedrueckt rutscht der Inhalt 1 px nach unten - wie bei SkinButton.
+        float push = down ? 1f : 0f;
+        Vector2 lp = b.Label.rectTransform.anchoredPosition;
+        b.Label.rectTransform.anchoredPosition = new Vector2(lp.x, -push);
+        if (b.Icon.enabled)
+        {
+            float ih = b.Icon.sprite.rect.height;
+            Vector2 ip = b.Icon.rectTransform.anchoredPosition;
+            b.Icon.rectTransform.anchoredPosition = new Vector2(ip.x, -Mathf.Round((b.Area.height - 1f - ih) / 2f) - push);
+        }
+    }
+
+    /// <summary>Titelschrift in Titelgroesse, wenn es passt; sonst Jersey10; zur Not halb so gross.</summary>
+    void FitTitle(TextMeshProUGUI t, TextMeshProUGUI shadow, string text, float width)
+    {
+        TMP_FontAsset font = OptionsKit.PickFont(text, pixelFont, textFont);
+        float size = OptionsKit.SizeTitle;
+        t.font = font;
+        t.fontSize = size;
+        if (OptionsKit.Measure(t, text) > width && font != textFont && textFont != null)
+        {
+            font = textFont;
+            t.font = font;
+        }
+        if (OptionsKit.Measure(t, text) > width) size = OptionsKit.SizeText;
+
+        t.fontSize = size;
+        t.text = text;
+        shadow.font = font;
+        shadow.fontSize = size;
+        shadow.text = text;
+    }
+
+    void LayoutPage(bool force)
+    {
+        var size = new Vector2Int(Screen.width, Screen.height);
+        if (force || size != lastScreen)
+        {
+            lastScreen = size;
+            OptionsKit.Layout(page, scaler, Content);
+            pageBase = page.anchoredPosition;
+        }
+
+        // Beim Oeffnen 6 px von unten hereinfahren - ganze Pixel, versteht sich.
+        float o = Mathf.Clamp01((Time.unscaledTime - openedAt) / 0.18f);
+        float lift = animate ? Mathf.Round((1f - o) * (1f - o) * 6f) : 0f;
+        page.anchoredPosition = pageBase + new Vector2(0f, -lift);
+    }
+
+    string LevelName(int index)
+    {
+        LevelEntry e = levels[index];
+        // Uebersetzung nach Position in der Liste, der Inspector ist der Rueckfall
+        return Loc.Get("level." + (index + 1) + ".name", e.displayName ?? "");
+    }
+
+    string LevelDesc(int index)
+    {
+        LevelEntry e = levels[index];
+        return Loc.Get("level." + (index + 1) + ".desc", e.description ?? "");
+    }
+
+    Ambience AmbienceFor(LevelEntry e)
+    {
+        if (e.ambience != Ambience.Auto) return e.ambience;
+        switch ((e.planId ?? "").Trim().ToLowerInvariant())
+        {
+            case "world1": return Ambience.Kitchen;
+            case "world2": return Ambience.Forest;
+            default: return Ambience.Dust;
+        }
+    }
+
+    /// <summary>Boss, Dauer und Arten aus dem Wellenplan. Null ohne (bekannten) Plan.</summary>
+    PlanInfo PlanFor(LevelEntry e)
+    {
+        string id = (e.planId ?? "").Trim();
+        if (id.Length == 0) return null;
+        if (planCache.TryGetValue(id, out PlanInfo cached)) return cached;
+
+        // WavePlans.For faellt bei Unbekanntem auf World1 zurueck - das soll
+        // hier nicht als Steckbrief eines fremden Levels auftauchen.
+        bool known = false;
+        foreach (string known1 in WavePlans.AllIds)
+            if (string.Equals(known1, id, System.StringComparison.OrdinalIgnoreCase)) known = true;
+
+        PlanInfo info = null;
+        if (known)
+        {
+            try
+            {
+                RunPlan plan = WavePlans.For(id);
+                info = new PlanInfo { Duration = plan.TotalDuration };
+                var kinds = new HashSet<EnemyId>();
+
+                void Add(EnemyId enemy, bool isBossBeat)
+                {
+                    if (enemy == EnemyId.None) return;
+                    EnemyDef def = EnemyCatalog.Get(enemy);
+                    if (def != null && def.Role == EnemyRole.Blocker) return;   // Kaefig-Wand ist Kulisse
+                    kinds.Add(enemy);
+                    if (isBossBeat || (def != null && def.Role == EnemyRole.Boss))
+                    {
+                        if (info.Boss == EnemyId.None) info.Boss = enemy;
+                    }
+                }
+
+                void AddPhase(Phase phase)
+                {
+                    if (phase == null) return;
+                    foreach (PoolEntry p in phase.Enemies) Add(p.Id, false);
+                    foreach (Beat b in phase.Beats)
+                    {
+                        Add(b.Enemy, b.Kind == BeatKind.Boss);
+                        Add(b.RingEnemy, false);
+                    }
+                }
+
+                foreach (Phase phase in plan.Phases) AddPhase(phase);
+                AddPhase(plan.Endless);
+                info.Kinds = kinds.Count;
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogWarning($"[Levelauswahl] Wellenplan \"{id}\" nicht lesbar: {ex.Message}");
+                info = null;
+            }
+        }
+
+        planCache[id] = info;
+        return info;
+    }
+
+    /// <summary>Animator des Charakters: erst aus <see cref="CharacterLooks"/>, sonst vom Hub-Spieler.</summary>
+    static RuntimeAnimatorController AnimatorFor(int index)
+    {
+        RuntimeAnimatorController c = CharacterLooks.AnimatorFor(index);
+        if (c != null) return c;
+
+        WM_PlayerSkinSwitcher hub = WM_PlayerSkinSwitcher.Instance;
+        return hub != null && index == 0 ? hub.NormalSkinOverride : null;
+    }
+
+    /// <summary>
+    /// Unsichtbarer Animator als Bildquelle fuer die Figur auf dem Pfad - wie
+    /// in der Charakterauswahl: er spielt Idle bzw. Laufen, gezeichnet wird
+    /// sein aktuelles Sprite ins UI.
+    /// </summary>
+    private sealed class Puppet
+    {
+        private Animator anim;
+        private SpriteRenderer source;
+        private RuntimeAnimatorController controller;
+        private bool pending;
+
+        public static Puppet Create(Transform parent, string name)
+        {
+            var go = new GameObject(name);
+            go.transform.SetParent(parent, false);
+            var p = new Puppet { source = go.AddComponent<SpriteRenderer>(), anim = go.AddComponent<Animator>() };
+            p.source.enabled = false;      // nur Bildquelle, wird nie gezeichnet
+            p.anim.cullingMode = AnimatorCullingMode.AlwaysAnimate;
+            p.anim.updateMode = AnimatorUpdateMode.UnscaledTime;
+            return p;
+        }
+
+        public void Set(RuntimeAnimatorController c, float phase)
+        {
+            if (c == controller) return;
+            controller = c;
+            anim.runtimeAnimatorController = c;
+            source.sprite = null;
+            pending = c != null;
+        }
+
+        /// <summary>Aktuelles Bild: Idle von vorn, oder Laufen zur Seite.</summary>
+        public Sprite Frame(bool walking, float dirX)
+        {
+            if (controller == null || !anim.isActiveAndEnabled) return null;
+
+            if (pending)
+            {
+                anim.Play("Idle", 0, 0f);
+                pending = false;
+            }
+
+            bool side = walking && dirX != 0f;
+            anim.SetBool("moving", walking);
+            anim.SetFloat("MoveX", side ? dirX : 0f);
+            anim.SetFloat("MoveY", side ? 0f : -1f);
+            anim.SetFloat("LastMoveX", side ? dirX : 0f);
+            anim.SetFloat("LastMoveY", side ? 0f : -1f);
+            return source.sprite;
+        }
+    }
+
+    // ==================================================================
+    //  Unlocks
+    // ==================================================================
+
+    bool IsOpenLevel(LevelEntry e) => StoryUnlocked(e) || EndlessUnlocked(e);
 
     bool StoryUnlocked(LevelEntry e)
     {
@@ -977,12 +1570,12 @@ public class HubLevelSelectUI : MonoBehaviour
 
     /// <summary>
     /// Gibt es die Szene zu diesem Level schon? Ist sie nicht eingetragen oder
-    /// fehlt sie in den Build Settings, bleibt die Karte sichtbar und der Knopf
-    /// sagt es - so kann man Level vorbereiten, bevor sie gebaut sind.
+    /// fehlt sie in den Build Settings, bleibt die Station sichtbar und zeigt
+    /// "BALD" - so kann man Level vorbereiten, bevor sie gebaut sind.
     /// </summary>
     bool IsLinked(LevelEntry e)
     {
-        if (e == null) return false;
+        if (e == null || (e.mapId < 0 && string.IsNullOrWhiteSpace(e.sceneToLoad))) return false;
 
         // Nicht sceneToLoad direkt fragen: das Level liegt in seiner eigenen
         // Map-Szene (Map_World<mapId>), der Eintrag ist nur die Rueckfallebene.
@@ -992,12 +1585,14 @@ public class HubLevelSelectUI : MonoBehaviour
         return Application.CanStreamedLevelBeLoaded(scene);
     }
 
-    // -------------------------------------------------------------- Starten
+    // ==================================================================
+    //  Starten
+    // ==================================================================
 
     void Play()
     {
         LevelEntry e = Current;
-        if (e == null) return;
+        if (e == null || launching) return;
 
         bool mayPlay = endlessChosen ? EndlessUnlocked(e) : StoryUnlocked(e);
         if (!mayPlay) { PlayDenySound(); return; }
@@ -1010,12 +1605,32 @@ public class HubLevelSelectUI : MonoBehaviour
         if (!IsLinked(e))
         {
             Debug.Log($"[Levelauswahl] Level {selected + 1} ist noch nicht verknuepft " +
-                      $"(Szene \"{sceneToLoad}\"). Szenenname im Inspector eintragen und " +
+                      $"(Szene \"{sceneToLoad}\"). Map-ID eintragen und die Szene " +
                       "in die Build Settings aufnehmen.");
             PlayDenySound();
             return;
         }
 
+        // Erst springt die Figur ab, dann geht es los.
+        launching = true;
+        launchAt = Time.unscaledTime;
+        hoverBtn = pressedBtn = null;
+        Refresh();
+        PlayStartSound();
+
+        if (animate) StartCoroutine(LaunchAfter(LaunchDelay, e, sceneToLoad));
+        else Launch(e, sceneToLoad);
+    }
+
+    System.Collections.IEnumerator LaunchAfter(float delay, LevelEntry e, string sceneToLoad)
+    {
+        float until = Time.unscaledTime + delay;
+        while (Time.unscaledTime < until) yield return null;
+        Launch(e, sceneToLoad);
+    }
+
+    void Launch(LevelEntry e, string sceneToLoad)
+    {
         // Ab hier laeuft genau das ab, was in der World Map beim Betreten eines
         // Map-Punktes passiert (PlayerWorldInteraction, Fall "Map"). Wer beim
         // Anbinden eines Levels etwas vermisst, vergleicht am besten dort.
@@ -1025,54 +1640,41 @@ public class HubLevelSelectUI : MonoBehaviour
 
         // 2. Stand sichern, bevor es losgeht: der Tracker merkt sich, welche
         //    Achievements und Unlocks vor dem Lauf schon offen waren, damit der
-        //    Abschlussbildschirm nur die neuen zeigt. Er legt sich selbst an
-        //    (RuntimeInitializeOnLoadMethod), das ?. ist nur Vorsicht.
-        //    Ach.FirstGame wird hier bewusst NICHT freigeschaltet - das macht
-        //    PlayerController.StartStats() in der Zielszene. Stuende es hier,
-        //    waeren die Souls dafuer schon vor dem Merken gezaehlt und wuerden
-        //    in der "Cookie Souls: +X"-Anzeige des ersten Laufs fehlen.
+        //    Abschlussbildschirm nur die neuen zeigt. Ach.FirstGame wird hier
+        //    bewusst NICHT freigeschaltet - das macht PlayerController.StartStats()
+        //    in der Zielszene (sonst fehlten die Souls in der Anzeige des ersten Laufs).
         SessionProgressTracker.Instance?.SnapshotBeforeGame();
 
-        // 3. Skilltree auf den gewaehlten Charakter stellen - Skills und Shop
-        //    sind statische Kataloge, die brauchen keinen Manager in der Szene.
+        // 3. Skilltree auf den gewaehlten Charakter stellen.
         Skills.SetActiveTreeForCharacter(Shop.SkinIndex);
 
         // 4. Welche Welt gespielt wird, steht im MapsManager - er ueberlebt den
-        //    Szenenwechsel, und WorldSelector in der Zielszene schaltet daraufhin
-        //    worlds[selectedMap] frei. Als Szenen-Objekt steht er nur in der
-        //    World Map; kommt der Spieler aus dem Hub, legt Ensure() ihn an.
+        //    Szenenwechsel. Kommt der Spieler aus dem Hub, legt Ensure() ihn an.
         MapsManager.Ensure().selectedMap = e.mapId;
 
-        // 5. Shop-Stand fuer diesen Lauf einfrieren. Die gekauften Upgrades
-        //    liefen frueher als float[30] extraData ueber den MapsManager; die
-        //    Game-Szene fragt sie jetzt ueber Shop.Get / Shop.IsBought ab.
+        // 5. Shop-Stand fuer diesen Lauf einfrieren.
         Shop.CaptureRun();
 
-        PlayStartSound();
-
-        // 6. Umschalten. Den Szenennamen erst merken, dann schliessen - nach dem
-        //    Wechsel steht die Auswahl sonst noch offen im Hub herum.
-        //    Der Name ist zugleich das Rueckreiseziel: GameManager.Restart()
-        //    bringt den Spieler nach dem Lauf genau hierher zurueck.
+        // 6. Umschalten. Der Hub-Name ist zugleich das Rueckreiseziel:
+        //    GameManager.Restart() bringt den Spieler nach dem Lauf hierher zurueck.
         string hubScene = gameObject.scene.name;
         GameSession.ReturnScene = hubScene;
 
         // Wie Hauptmenue -> Hub: Bild und Hub-Musik blenden aus, der Wechsel
-        // passiert hinter der Blende, dann blendet der Lauf ein. Die Lauf-Musik
-        // setzt danach mit kurzer Pause ein (AudioController). Bis dahin bleibt
-        // die Auswahl offen und haelt den Hub gesperrt.
-        SceneFader.Switch(() => SwitchToLevel(sceneToLoad, hubScene),
-                          () => SceneManager.GetSceneByName(MapSceneSystem.CoreScene).isLoaded);
+        // passiert hinter der Blende. Bis dahin bleibt die Auswahl offen und
+        // haelt den Hub gesperrt.
+        bool started = SceneFader.Switch(() => SwitchToLevel(sceneToLoad, hubScene),
+                                         () => SceneManager.GetSceneByName(MapSceneSystem.CoreScene).isLoaded);
+        if (!started) launching = false;
     }
 
     void SwitchToLevel(string sceneToLoad, string hubScene)
     {
+        launching = false;
         Close();
 
-        // Der uebliche Weg: additiv laden und den Hub stilllegen, genau wie die
-        // World Map es mit sich selbst macht. Der MenuManager ueberlebt das.
-        // Im neuen System ist das die Map-Szene - GameCore holt sie sich selbst
-        // dazu (MapBootstrap), hier ist also nichts weiter zu tun.
+        // Der uebliche Weg: additiv laden und den Hub stilllegen. Die Map-Szene
+        // holt sich GameCore selbst dazu (MapBootstrap).
         if (MenuManager.Instance != null)
         {
             MenuManager.Instance.ActivateScene(sceneToLoad);
@@ -1084,24 +1686,26 @@ public class HubLevelSelectUI : MonoBehaviour
         SceneManager.LoadScene(sceneToLoad, LoadSceneMode.Single);
     }
 
-    // ----------------------------------------------------------------- Ton
+    // ==================================================================
+    //  Ton
+    // ==================================================================
 
-    void PlaySfx(AudioClip clip)
+    void PlaySfx(AudioClip clip, bool clickIfMissing)
     {
-        if (clip == null || sfxSource == null) return;
-        sfxSource.PlayOneShot(clip, sfxVolume);
+        if (clip != null && sfxSource != null) sfxSource.PlayOneShot(clip, sfxVolume);
+        else if (clickIfMissing) OptionsKit.PlayClick();
     }
 
     void PlayStartSound()
     {
-        if (startClip != null) { PlaySfx(startClip); return; }
+        if (startClip != null) { PlaySfx(startClip, false); return; }
         if (AudioController.Instance != null && AudioController.Instance.MenuClick != null)
             AudioController.Instance.MenuClick.Play();
     }
 
     void PlayDenySound()
     {
-        if (denyClip != null) { PlaySfx(denyClip); return; }
+        if (denyClip != null) { PlaySfx(denyClip, false); return; }
         if (AudioController.Instance != null && AudioController.Instance.PlayerHit != null)
             AudioController.Instance.PlayerHit.Play();
     }

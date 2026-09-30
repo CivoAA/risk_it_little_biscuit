@@ -9,6 +9,8 @@ using UnityEngine;
 ///
 /// Mehrere Hiebe einer Stufe kommen direkt hintereinander und wechseln die
 /// Seite (hin, zurueck, hin). Erst nach dem letzten Hieb laeuft der Cooldown.
+/// Ab drei Hieben (Stufe 5+) ist der letzte ein Finisher: dieselbe Flaeche,
+/// aber goldene Sichel mit Funkeln (carrot_slash_finisher).
 ///
 /// cooldown = Pause zwischen zwei Hiebserien
 /// damage   = Schaden pro Hieb
@@ -27,10 +29,21 @@ public class SwordSlash : Weapon
     private const float SwingGap = 0.15f;
 
     /// <summary>
-    /// Wie lange der Hieb sichtbar ist (alle Frames der Animation). Muss unter
-    /// <see cref="SwingGap"/> bleiben, sonst liegen die Hiebe einer Serie uebereinander.
+    /// Wie lange der Hieb sichtbar ist (alle Frames der Animation): bis der
+    /// naechste Hieb der Serie kommt. WaitForSeconds wacht erst ein Frame nach
+    /// Ablauf auf - ohne die 20 ms Zugabe blitzt dazwischen ein leeres Bild.
+    /// Ueberlappt wird so nur das letzte, fast aufgeloeste Bild.
     /// </summary>
-    private const float SlashVisibleTime = 0.13f;
+    private const float SlashVisibleTime = SwingGap + 0.02f;
+
+    /// <summary>
+    /// Der Finisher ist der letzte Hieb einer Serie - nach ihm kommt erst der
+    /// Cooldown, er darf also etwas laenger stehen.
+    /// </summary>
+    private const float FinisherVisibleTime = 0.2f;
+
+    /// <summary>Ab so vielen Hieben pro Serie wird der letzte zum Finisher (Stufe 5+).</summary>
+    private const int FinisherFromSwings = 3;
 
     /// <summary>
     /// Radius des Bogens in den Hieb-Frames, in Tiles (80 px bei PPU 32).
@@ -41,6 +54,9 @@ public class SwordSlash : Weapon
 
     /// <summary>Hieb-Animation aus Tools/karottenhieb.py (Resources).</summary>
     private const string SlashFramesPath = "Weapons/carrot_slash";
+
+    /// <summary>Goldener Abschlusshieb, ebenfalls aus Tools/karottenhieb.py.</summary>
+    private const string FinisherFramesPath = "Weapons/carrot_slash_finisher";
 
     private static readonly WeaponStats[] LevelStats =
     {
@@ -106,7 +122,8 @@ public class SwordSlash : Weapon
 
         for (int i = 0; i < swings && IsActive; i++)
         {
-            Swing(moveDir, i % 2 == 1);
+            bool finisher = swings >= FinisherFromSwings && i == swings - 1;
+            Swing(moveDir, i % 2 == 1, finisher);
             if (i < swings - 1) yield return new WaitForSeconds(SwingGap);
         }
 
@@ -114,7 +131,7 @@ public class SwordSlash : Weapon
         swinging = false;
     }
 
-    private void Swing(Vector2 dir, bool backhand)
+    private void Swing(Vector2 dir, bool backhand, bool finisher)
     {
         AudioController.Instance.PalySound(AudioController.Instance.Werfen, 0.1f);
 
@@ -133,14 +150,14 @@ public class SwordSlash : Weapon
             if (hitBuffer[i] != null) hitBuffer[i].TakeDamage(damage);
         }
 
-        StartCoroutine(ShowSlash(origin, angle, depth, width, backhand));
+        StartCoroutine(ShowSlash(origin, angle, depth, width, backhand, finisher));
     }
 
     // ------------------------------------------------------------------
     //  Anzeige
     // ------------------------------------------------------------------
 
-    private IEnumerator ShowSlash(Vector2 origin, float angle, float depth, float width, bool backhand)
+    private IEnumerator ShowSlash(Vector2 origin, float angle, float depth, float width, bool backhand, bool finisher)
     {
         GameObject go = new GameObject("SwordSlashFx");
         go.transform.SetParent(transform, false);
@@ -152,6 +169,12 @@ public class SwordSlash : Weapon
         CopySorting(sr);
 
         Sprite[] frames = SlashFrames;
+        float visible = SlashVisibleTime;
+        if (finisher && FinisherFrames.Length > 0)
+        {
+            frames = FinisherFrames;
+            visible = FinisherVisibleTime;
+        }
         if (frames.Length == 0)
         {
             yield return ShowGeneratedSlash(go, sr, angle, depth, width, backhand);
@@ -162,10 +185,10 @@ public class SwordSlash : Weapon
         go.transform.localScale = new Vector3(depth / SlashArcRadius, width * 0.5f / SlashArcRadius, 1f);
 
         // Die Frames fegen selbst durch den Bogen und blenden aus.
-        for (float t = 0f; t < SlashVisibleTime; t += Time.deltaTime)
+        for (float t = 0f; t < visible; t += Time.deltaTime)
         {
             if (go == null) yield break;
-            int f = Mathf.Min(frames.Length - 1, Mathf.FloorToInt(t / SlashVisibleTime * frames.Length));
+            int f = Mathf.Min(frames.Length - 1, Mathf.FloorToInt(t / visible * frames.Length));
             sr.sprite = frames[f];
             yield return null;
         }
@@ -173,21 +196,25 @@ public class SwordSlash : Weapon
         if (go != null) Destroy(go);
     }
 
-    private Sprite[] loadedFrames;
+    private Sprite[] loadedFrames, loadedFinisher;
 
     private Sprite[] SlashFrames
     {
         get
         {
             if (slashFrames != null && slashFrames.Length > 0) return slashFrames;
-            if (loadedFrames == null)
-            {
-                // LoadAll liefert die Teilbilder ohne feste Reihenfolge.
-                loadedFrames = Resources.LoadAll<Sprite>(SlashFramesPath);
-                System.Array.Sort(loadedFrames, (a, b) => FrameIndex(a).CompareTo(FrameIndex(b)));
-            }
-            return loadedFrames;
+            return loadedFrames ??= LoadFrames(SlashFramesPath);
         }
+    }
+
+    private Sprite[] FinisherFrames => loadedFinisher ??= LoadFrames(FinisherFramesPath);
+
+    private static Sprite[] LoadFrames(string path)
+    {
+        // LoadAll liefert die Teilbilder ohne feste Reihenfolge.
+        Sprite[] frames = Resources.LoadAll<Sprite>(path);
+        System.Array.Sort(frames, (a, b) => FrameIndex(a).CompareTo(FrameIndex(b)));
+        return frames;
     }
 
     private static int FrameIndex(Sprite s)

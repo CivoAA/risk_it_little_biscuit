@@ -2,7 +2,9 @@
 Zeichnet die Hieb-Animation des Karottenschwerts (SwordSlash, Startwaffe des
 Zwiebelritters).
 
-  Assets/Resources/Weapons/carrot_slash.png   6 x 96x192  PPU 32  Pivot links mittig
+  Assets/Resources/Weapons/carrot_slash.png            6 x 96x192  PPU 32  Pivot links mittig
+  Assets/Resources/Weapons/carrot_slash_finisher.png   7 x 96x192  PPU 32  dritter Hieb einer Serie:
+                                                       dicker, golden, Funkeln, mehr Stuecke
 
 Bild zeigt nach rechts (+x), Drehpunkt = Spieler. Der Bogen hat Radius 80 px
 = 2.5 Tiles bei PPU 32 - genau die Tiefe (range) des Hiebs, die Breite von
@@ -50,6 +52,7 @@ LINE = hx("#3a1410")
 O_D, O, O_L, O_H = hx("#b2431c"), hx("#e8702a"), hx("#f89a3e"), hx("#ffc970")
 CREAM = hx("#fff4cf")
 G_D, G, G_L = hx("#2c6a2c"), hx("#4ea83c"), hx("#93d95c")
+GOLD, GOLD_L = hx("#ffc94a"), hx("#ffe89a")
 
 # Bayer 4x4 fuer gestufte Transparenz ohne Halbtoene
 BAYER = [[0, 8, 2, 10], [12, 4, 14, 6], [3, 11, 1, 9], [15, 7, 13, 5]]
@@ -83,7 +86,7 @@ def to_local(x, y):
 #  Wischspur
 # ----------------------------------------------------------------------------
 
-def smear(p, front, span, fade):
+def smear(p, front, span, fade, finisher=False):
     """Sichelfoermige Spur hinter dem Schwert.
 
     front: Winkel der Klinge (Grad, 0 = rechts, +90 = oben)
@@ -101,7 +104,7 @@ def smear(p, front, span, fade):
             if d < 0.0 or d > 1.0 - fade * 0.55:
                 continue
             # vorne dick, nach hinten spitz auslaufend, aussen am Radius
-            thick = 30.0 * (1.0 - d) ** 0.75 * (1.0 - fade * 0.75) + 1.0
+            thick = (42.0 if finisher else 30.0) * (1.0 - d) ** 0.75 * (1.0 - fade * 0.75) + 1.0
             r_out = R
             s = (r_out - r) / thick          # 0 = Aussenkante, 1 = Innenkante
             if s > 1.0:
@@ -112,6 +115,10 @@ def smear(p, front, span, fade):
                 continue
             if s < 0.1 or r > R - 1.2:
                 col = CREAM
+            elif finisher and s < 0.22:
+                col = GOLD_L
+            elif finisher and s < 0.42:
+                col = GOLD
             elif s < 0.26:
                 col = O_H
             elif s < 0.6:
@@ -125,6 +132,24 @@ def smear(p, front, span, fade):
                 if (a - front) % 16.0 < 1.5:
                     col = O_D
             p.set(x, y, col)
+
+    if finisher and span > 40:
+        # zweiter, innerer Schwung: duenne helle Sichel, eilt etwas hinterher
+        for y in range(H):
+            for x in range(W):
+                lx, ly = to_local(x, y)
+                r = math.hypot(lx, ly)
+                a = math.degrees(math.atan2(ly, lx))
+                d = (a - front - 12.0) / (span * 0.8) if span > 0 else 2.0
+                if d < 0.0 or d > 1.0 - fade * 0.7:
+                    continue
+                rr = R * 0.5
+                th = 3.5 * (1.0 - d) * (1.0 - fade) + 0.6
+                if abs(r - rr) > th:
+                    continue
+                if fade > 0.4 and not dither(x, y, 1.4 - fade * 1.2):
+                    continue
+                p.set(x, y, CREAM if abs(r - rr) < th * 0.45 else GOLD_L)
 
 
 # ----------------------------------------------------------------------------
@@ -194,12 +219,12 @@ def carrot_sword(p, angle):
 #  Spritzer
 # ----------------------------------------------------------------------------
 
-def chunks(p, seed, front, span, progress):
+def chunks(p, seed, front, span, progress, count=8, reach=13):
     """Karottenwuerfel und Blaetter, die vom Bogen weg nach aussen fliegen."""
     rng = random.Random(seed)
-    for i in range(8):
-        a = front + (0.08 + 0.8 * i / 7.0 + rng.uniform(-0.04, 0.04)) * span
-        r = R - 4 + progress * rng.uniform(6, 13)
+    for i in range(count):
+        a = front + (0.08 + 0.8 * i / (count - 1.0) + rng.uniform(-0.04, 0.04)) * span
+        r = R - 4 + progress * rng.uniform(6, reach)
         x = int(round(r * math.cos(math.radians(a))))
         y = int(round(H / 2.0 - r * math.sin(math.radians(a))))
         leaf = i % 3 == 1
@@ -220,6 +245,26 @@ def chunks(p, seed, front, span, progress):
                         p.set(x + dx, y + dy, LINE)
 
 
+def sparkles(p, front, span, t):
+    """Vierzackiges Funkeln auf der Aussenkante (Finisher). t 0..1 = Lebenslauf."""
+    for k, (pos, delay) in enumerate(((0.15, 0.0), (0.45, 0.15), (0.75, 0.3), (0.3, 0.45))):
+        life = (t - delay) / 0.55
+        if life < 0 or life > 1:
+            continue
+        a = math.radians(front + pos * span)
+        cx = int(round((R + 2) * math.cos(a)))
+        cy = int(round(H / 2.0 - (R + 2) * math.sin(a)))
+        arm = 4 if life < 0.4 else 3 if life < 0.7 else 1
+        for dx, dy in ((1, 1), (-1, 1), (1, -1), (-1, -1)):
+            if arm >= 3:
+                p.set(cx + dx, cy + dy, GOLD)
+        for i in range(-arm, arm + 1):
+            c = CREAM if abs(i) <= 1 else GOLD_L if abs(i) <= 2 else GOLD
+            p.set(cx + i, cy, c)
+            p.set(cx, cy + i, c)
+        p.set(cx, cy, (255, 255, 255, 255))
+
+
 # ----------------------------------------------------------------------------
 #  Frames
 # ----------------------------------------------------------------------------
@@ -235,6 +280,18 @@ FRAMES = [
 ]
 
 
+# Finisher: ein Bild mehr, laengere Spur, mehr Stuecke, Funkeln
+FINISHER = [
+    (66, 26, 0.0, True, None),
+    (30, 66, 0.0, True, None),
+    (-10, 106, 0.0, True, 0.0),
+    (-50, 140, 0.0, True, 0.25),
+    (-78, 162, 0.2, True, 0.5),
+    (-86, 168, 0.5, False, 0.75),
+    (-88, 170, 0.82, False, 1.0),
+]
+
+
 def frame(f):
     p = Px()
     front, span, fade, sword, spray = FRAMES[f]
@@ -246,25 +303,40 @@ def frame(f):
     return p.img
 
 
+def finisher_frame(f):
+    p = Px()
+    front, span, fade, sword, spray = FINISHER[f]
+    smear(p, front, span, fade, finisher=True)
+    if spray is not None:
+        chunks(p, 11, front, span, spray, count=14, reach=16)
+    if sword:
+        carrot_sword(p, front)
+    sparkles(p, front, span, f / (len(FINISHER) - 1.0))
+    return p.img
+
+
+def write_sheet(name, fn, n):
+    img = Image.new("RGBA", (W * n, H), CLEAR)
+    for f in range(n):
+        img.paste(fn(f), (f * W, 0))
+    path = os.path.join(OUT, name + ".png")
+    img.save(path)
+    if not os.path.exists(path + ".meta"):
+        write_strip_meta(path + ".meta", name, n, W, H, PPU, (0.0, 0.5))
+    print("geschrieben:", os.path.relpath(path, ROOT))
+    return img
+
+
 def main():
     preview = sys.argv[sys.argv.index("--preview") + 1] if "--preview" in sys.argv else None
     os.makedirs(OUT, exist_ok=True)
-    n = len(FRAMES)
-    img = Image.new("RGBA", (W * n, H), CLEAR)
-    for f in range(n):
-        img.paste(frame(f), (f * W, 0))
-    path = os.path.join(OUT, "carrot_slash.png")
-    img.save(path)
-    if not os.path.exists(path + ".meta"):
-        write_strip_meta(path + ".meta", "carrot_slash", n, W, H, PPU, (0.0, 0.5))
-    print("geschrieben:", os.path.relpath(path, ROOT))
+    normal = write_sheet("carrot_slash", frame, len(FRAMES))
+    fin = write_sheet("carrot_slash_finisher", finisher_frame, len(FINISHER))
 
     if preview:
-        pv = Image.new("RGBA", (img.width + 8, H + 8), (74, 96, 64, 255))
-        pv.alpha_composite(img, (4, 4))
-        for f in range(n + 1):
-            for y in range(4, H + 4, 2):
-                pv.putpixel((4 + f * W - (1 if f else 0), y), (40, 50, 35, 255)) if f * W + 4 < pv.width else None
+        pv = Image.new("RGBA", (fin.width + 8, 2 * H + 12), (74, 96, 64, 255))
+        pv.alpha_composite(normal, (4, 4))
+        pv.alpha_composite(fin, (4, H + 8))
         pv.resize((pv.width * 2, pv.height * 2), Image.NEAREST).save(preview)
 
 

@@ -12900,6 +12900,7 @@ MonoBehaviour:
     preview: {fileID: 4579466521141539760, guid: f5ca0c10136eea7edeb9d9921384469d, type: 3}
     previewWide: {fileID: 348301160672881419, guid: dab5b219ff63b2172e7ff27fc73f762d, type: 3}
     mapId: 0
+    planId: World1
     sceneToLoad: 
     storyUnlockId: 
     endlessAvailable: 1
@@ -12909,6 +12910,7 @@ MonoBehaviour:
     preview: {fileID: 159193312819562264, guid: 55f5843cee61bb5451cb6cb92ba4fbe9, type: 3}
     previewWide: {fileID: 5083564964339114383, guid: d20d5eff395e6cc60ffe7e84adf004d4, type: 3}
     mapId: 3
+    planId: World2
     sceneToLoad: 
     storyUnlockId: 
     endlessAvailable: 1

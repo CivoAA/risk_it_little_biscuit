@@ -72,6 +72,12 @@ public class GameManager : MonoBehaviour
         // wegschreiben statt auf den naechsten 5-Sekunden-Takt zu warten.
         Skills.Flush();
         Bestiary.Flush();
+
+        // Bestwerte fuer die Levelauswahl: Story = schnellster Sieg, Endless =
+        // laengster Lauf. Nur auf echten Karten (nicht in der Test-Szene).
+        if (MapDefinition.Active != null)
+            LevelRecords.ReportRun(LevelRecords.CurrentMapId(), GameSession.IsEndless, bossSpawned, gameTime);
+
         if (!bossSpawned)
         {
             gainedThroughAchievements = Skills.Currency - skillCurrencyBeforeGame;

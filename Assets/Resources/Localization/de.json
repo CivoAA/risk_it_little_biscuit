@@ -655,6 +655,30 @@
     { "key": "skill.char_0.wissen.wissen_start.name", "value": "Start" },
     { "key": "skill.char_0.wissen.wissen_start.desc", "value": "Hier beginnt der Pfad." },
     { "key": "skill.char_0.glueck.glueck_start.name", "value": "Start" },
-    { "key": "skill.char_0.glueck.glueck_start.desc", "value": "Hier beginnt der Pfad." }
+    { "key": "skill.char_0.glueck.glueck_start.desc", "value": "Hier beginnt der Pfad." },
+
+    { "key": "ui.levelselect.title", "value": "LEVELAUSWAHL" },
+    { "key": "ui.levelselect.map", "value": "KARTE {0}" },
+    { "key": "ui.levelselect.boss", "value": "BOSS" },
+    { "key": "ui.levelselect.noboss", "value": "Noch unbekannt." },
+    { "key": "ui.levelselect.story", "value": "STORY" },
+    { "key": "ui.levelselect.endless", "value": "ENDLESS" },
+    { "key": "ui.levelselect.play", "value": "SPIELEN" },
+    { "key": "ui.levelselect.back", "value": "ZURÜCK" },
+    { "key": "ui.levelselect.soon", "value": "BALD" },
+    { "key": "ui.levelselect.locked", "value": "GESPERRT" },
+    { "key": "ui.levelselect.open", "value": "OFFEN" },
+    { "key": "ui.levelselect.lockeddesc", "value": "Noch verschlossen." },
+    { "key": "ui.levelselect.soondesc", "value": "Hier wird noch gebacken. Bald geht es weiter!" },
+    { "key": "ui.levelselect.minutes", "value": "~{0} MIN" },
+    { "key": "ui.levelselect.nolimit", "value": "OHNE ENDE" },
+    { "key": "ui.levelselect.kinds", "value": "{0} GEGNERARTEN" },
+    { "key": "level.1.name", "value": "Küche" },
+    { "key": "level.1.desc", "value": "Mehl, Zucker und Ärger. Hier fängt alles an." },
+    { "key": "level.2.name", "value": "Wald" },
+    { "key": "level.2.desc", "value": "Zwischen den Bäumen wird es voll." },
+    { "key": "enemy.KeksKoenig.name", "value": "Keks-König" },
+    { "key": "ui.levelselect.recordstory", "value": "SCHNELLSTER SIEG" },
+    { "key": "ui.levelselect.recordendless", "value": "LÄNGSTES ÜBERLEBEN" }
   ]
 }
