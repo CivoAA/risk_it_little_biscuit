@@ -83,7 +83,7 @@ MonoBehaviour:
     category: 0
     lane: 1
     step: 2
-    shape: 0
+    shape: 1
     price: 15
     displayName: Nachschlag
     description: 
@@ -102,12 +102,12 @@ MonoBehaviour:
     step: 2
     shape: 1
     price: 15
-    displayName: Harte Schale
+    displayName: Tiefer Schnitt
     description: 
     icon: {fileID: 0}
     rewards:
     - kind: 0
-      stat: 6
+      stat: 10
       value: 0.25
       grantId: 
       descriptionOverride: 
@@ -119,7 +119,24 @@ MonoBehaviour:
     step: 3
     shape: 2
     price: 20
-    displayName: Tiefer Schnitt
+    displayName: Adlerauge
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 11
+      value: 0.05
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - kampf_oben_1
+  - id: kampf_unten_2
+    category: 0
+    lane: 2
+    step: 3
+    shape: 2
+    price: 20
+    displayName: Knochenbrecher
     description: 
     icon: {fileID: 0}
     rewards:
@@ -129,13 +146,13 @@ MonoBehaviour:
       grantId: 
       descriptionOverride: 
     requires:
-    - kampf_oben_1
-  - id: kampf_mitte_3
+    - kampf_unten_1
+  - id: kampf_mitte_4
     category: 0
     lane: 1
-    step: 3
-    shape: 0
-    price: 20
+    step: 4
+    shape: 4
+    price: 30
     displayName: Doppelwurf
     description: 
     icon: {fileID: 0}
@@ -147,88 +164,15 @@ MonoBehaviour:
       descriptionOverride: 
     requires:
     - kampf_mitte_2
-  - id: kampf_unten_2
-    category: 0
-    lane: 2
-    step: 3
-    shape: 2
-    price: 20
-    displayName: Zaeh
-    description: 
-    icon: {fileID: 0}
-    rewards:
-    - kind: 0
-      stat: 1
-      value: 10
-      grantId: 
-      descriptionOverride: 
-    requires:
+    - kampf_oben_1
     - kampf_unten_1
-  - id: kampf_oben_3
-    category: 0
-    lane: 0
-    step: 4
-    shape: 3
-    price: 60
-    displayName: Vier Richtungen
-    description: 
-    icon: {fileID: 0}
-    rewards:
-    - kind: 1
-      stat: 1
-      value: 10
-      grantId: shurikookie_vier_richtungen
-      descriptionOverride: 
-    - kind: 0
-      stat: 9
-      value: 0.1
-      grantId: 
-      descriptionOverride: 
-    requires:
-    - kampf_oben_2
-    - kampf_mitte_3
-  - id: kampf_mitte_4
-    category: 0
-    lane: 1
-    step: 4
-    shape: 4
-    price: 30
-    displayName: Wucht
-    description: 
-    icon: {fileID: 0}
-    rewards:
-    - kind: 0
-      stat: 9
-      value: 0.2
-      grantId: 
-      descriptionOverride: 
-    requires:
-    - kampf_mitte_3
-  - id: kampf_unten_3
-    category: 0
-    lane: 2
-    step: 4
-    shape: 3
-    price: 60
-    displayName: Abpraller
-    description: 
-    icon: {fileID: 0}
-    rewards:
-    - kind: 1
-      stat: 1
-      value: 10
-      grantId: shurikookie_abpraller
-      descriptionOverride: 
-    requires:
-    - kampf_unten_2
-    - kampf_mitte_3
   - id: geist_mitte_1
     category: 1
     lane: 1
     step: 1
     shape: 0
     price: 10
-    displayName: Atem
+    displayName: Tiefer Atem
     description: 
     icon: {fileID: 0}
     rewards:
@@ -239,115 +183,30 @@ MonoBehaviour:
       descriptionOverride: 
     requires:
     - geist_start
-  - id: geist_oben_1
-    category: 1
-    lane: 0
-    step: 2
-    shape: 1
-    price: 15
-    displayName: Ruhiger Puls
-    description: 
-    icon: {fileID: 0}
-    rewards:
-    - kind: 0
-      stat: 4
-      value: 1
-      grantId: 
-      descriptionOverride: 
-    requires:
-    - geist_mitte_1
   - id: geist_mitte_2
     category: 1
     lane: 1
     step: 2
-    shape: 0
-    price: 15
-    displayName: Leichter Schritt
-    description: 
-    icon: {fileID: 0}
-    rewards:
-    - kind: 0
-      stat: 2
-      value: 0.1
-      grantId: 
-      descriptionOverride: 
-    requires:
-    - geist_mitte_1
-  - id: geist_unten_1
-    category: 1
-    lane: 2
-    step: 2
     shape: 1
     price: 15
-    displayName: Ausweichen
+    displayName: "Gest\xE4hlter K\xF6rper"
     description: 
     icon: {fileID: 0}
     rewards:
     - kind: 0
-      stat: 12
-      value: 0.03
+      stat: 6
+      value: 0.5
       grantId: 
       descriptionOverride: 
     requires:
     - geist_mitte_1
-  - id: geist_oben_2
-    category: 1
-    lane: 0
-    step: 3
-    shape: 4
-    price: 25
-    displayName: Lebensdurst
-    description: 
-    icon: {fileID: 0}
-    rewards:
-    - kind: 0
-      stat: 8
-      value: 0.2
-      grantId: 
-      descriptionOverride: 
-    requires:
-    - geist_oben_1
-  - id: geist_mitte_3
-    category: 1
-    lane: 1
-    step: 3
-    shape: 0
-    price: 25
-    displayName: Rueckenwind
-    description: 
-    icon: {fileID: 0}
-    rewards:
-    - kind: 0
-      stat: 2
-      value: 0.1
-      grantId: 
-      descriptionOverride: 
-    requires:
-    - geist_mitte_2
-  - id: geist_unten_2
-    category: 1
-    lane: 2
-    step: 3
-    shape: 4
-    price: 25
-    displayName: Schattenhaft
-    description: 
-    icon: {fileID: 0}
-    rewards:
-    - kind: 0
-      stat: 12
-      value: 0.03
-      grantId: 
-      descriptionOverride: 
-    requires:
-    - geist_unten_1
   - id: geist_mitte_4
     category: 1
     lane: 1
     step: 4
-    shape: 3
+    shape: 4
     price: 50
-    displayName: Zaeher Geist
+    displayName: "K\xF6rper und Geist"
     description: 
     icon: {fileID: 0}
     rewards:
@@ -357,21 +216,19 @@ MonoBehaviour:
       grantId: 
       descriptionOverride: 
     - kind: 0
-      stat: 4
-      value: 1
+      stat: 6
+      value: 0.5
       grantId: 
       descriptionOverride: 
     requires:
-    - geist_oben_2
     - geist_mitte_3
-    - geist_unten_2
   - id: glueck_mitte_1
     category: 3
     lane: 1
     step: 1
-    shape: 5
+    shape: 0
     price: 10
-    displayName: 
+    displayName: "Gl\xFCckskr\xFCmel"
     description: 
     icon: {fileID: 0}
     rewards:
@@ -430,9 +287,9 @@ MonoBehaviour:
     category: 3
     lane: 1
     step: 2
-    shape: 5
+    shape: 1
     price: 20
-    displayName: 
+    displayName: Kleeblatt
     description: 
     icon: {fileID: 0}
     rewards:
@@ -447,9 +304,9 @@ MonoBehaviour:
     category: 3
     lane: 0
     step: 2
-    shape: 0
+    shape: 1
     price: 20
-    displayName: 
+    displayName: Reiche Beute
     description: 
     icon: {fileID: 0}
     rewards:
@@ -464,9 +321,9 @@ MonoBehaviour:
     category: 3
     lane: 2
     step: 2
-    shape: 0
+    shape: 1
     price: 20
-    displayName: 
+    displayName: "Doppeltes Gl\xFCck"
     description: 
     icon: {fileID: 0}
     rewards:
@@ -481,9 +338,9 @@ MonoBehaviour:
     category: 3
     lane: 0
     step: 3
-    shape: 0
+    shape: 2
     price: 25
-    displayName: 
+    displayName: Goldenes Herz
     description: 
     icon: {fileID: 0}
     rewards:
@@ -498,9 +355,9 @@ MonoBehaviour:
     category: 3
     lane: 2
     step: 3
-    shape: 0
+    shape: 2
     price: 25
-    displayName: 
+    displayName: "Gl\xFCcksstr\xE4hne"
     description: 
     icon: {fileID: 0}
     rewards:
@@ -515,9 +372,9 @@ MonoBehaviour:
     category: 3
     lane: 0
     step: 4
-    shape: 2
+    shape: 4
     price: 30
-    displayName: 
+    displayName: Volltreffer
     description: 
     icon: {fileID: 0}
     rewards:
@@ -532,9 +389,9 @@ MonoBehaviour:
     category: 3
     lane: 2
     step: 4
-    shape: 2
+    shape: 4
     price: 30
-    displayName: 
+    displayName: Jackpot
     description: 
     icon: {fileID: 0}
     rewards:
@@ -551,7 +408,7 @@ MonoBehaviour:
     step: 5
     shape: 3
     price: 35
-    displayName: 
+    displayName: "Gl\xFCckskeks"
     description: 
     icon: {fileID: 0}
     rewards:
@@ -567,9 +424,9 @@ MonoBehaviour:
     category: 3
     lane: 1
     step: 3
-    shape: 1
+    shape: 5
     price: 25
-    displayName: 
+    displayName: Mixerregen
     description: 
     icon: {fileID: 0}
     rewards:
@@ -586,7 +443,7 @@ MonoBehaviour:
     step: 1
     shape: 0
     price: 15
-    displayName: 
+    displayName: Seelenkunde
     description: 
     icon: {fileID: 0}
     rewards:
@@ -601,9 +458,9 @@ MonoBehaviour:
     category: 2
     lane: 0
     step: 2
-    shape: 0
+    shape: 1
     price: 20
-    displayName: 
+    displayName: "Flei\xDFiger Sch\xFCler"
     description: 
     icon: {fileID: 0}
     rewards:
@@ -618,9 +475,9 @@ MonoBehaviour:
     category: 2
     lane: 2
     step: 2
-    shape: 0
+    shape: 1
     price: 20
-    displayName: 
+    displayName: Heilkunde
     description: 
     icon: {fileID: 0}
     rewards:
@@ -635,9 +492,9 @@ MonoBehaviour:
     category: 2
     lane: 1
     step: 2
-    shape: 0
+    shape: 2
     price: 1
-    displayName: 
+    displayName: Bestiarium
     description: 
     icon: {fileID: 0}
     rewards:
@@ -652,9 +509,9 @@ MonoBehaviour:
     category: 2
     lane: 0
     step: 3
-    shape: 0
+    shape: 2
     price: 25
-    displayName: 
+    displayName: Kluge Wahl
     description: 
     icon: {fileID: 0}
     rewards:
@@ -669,9 +526,9 @@ MonoBehaviour:
     category: 2
     lane: 2
     step: 3
-    shape: 0
+    shape: 2
     price: 25
-    displayName: 
+    displayName: Schwachpunkt
     description: 
     icon: {fileID: 0}
     rewards:
@@ -686,9 +543,9 @@ MonoBehaviour:
     category: 2
     lane: 1
     step: 4
-    shape: 0
+    shape: 4
     price: 30
-    displayName: 
+    displayName: Kartograf
     description: 
     icon: {fileID: 0}
     rewards:
@@ -705,9 +562,9 @@ MonoBehaviour:
     category: 2
     lane: 1
     step: 5
-    shape: 0
+    shape: 3
     price: 35
-    displayName: 
+    displayName: Meisterschaft
     description: 
     icon: {fileID: 0}
     rewards:
@@ -722,9 +579,9 @@ MonoBehaviour:
     category: 1
     lane: 0
     step: 4
-    shape: 4
+    shape: 5
     price: 40
-    displayName: Ueberheilung
+    displayName: Seelenschild
     description: 
     icon: {fileID: 0}
     rewards:
@@ -734,12 +591,12 @@ MonoBehaviour:
       grantId: 
       descriptionOverride: 
     requires:
-    - geist_oben_2
+    - geist_mitte_4
   - id: geist_letzter_atem
     category: 1
     lane: 2
     step: 4
-    shape: 2
+    shape: 5
     price: 40
     displayName: Letzter Atem
     description: 
@@ -751,21 +608,108 @@ MonoBehaviour:
       grantId: 
       descriptionOverride: 
     requires:
-    - geist_unten_2
+    - geist_mitte_4
   - id: geist_schockwelle
     category: 1
     lane: 1
     step: 5
     shape: 3
     price: 60
-    displayName: Schockwelle
+    displayName: Kampfgeist
     description: 
     icon: {fileID: 0}
     rewards:
     - kind: 1
       stat: 0
       value: 0
-      grantId: schockwelle
+      grantId: rage
       descriptionOverride: 
     requires:
     - geist_mitte_4
+  - id: geist_oben_2
+    category: 1
+    lane: 0
+    step: 2
+    shape: 1
+    price: 20
+    displayName: Seelenhunger
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 8
+      value: 0.2
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - geist_mitte_2
+  - id: geist_unten_2
+    category: 1
+    lane: 2
+    step: 2
+    shape: 1
+    price: 20
+    displayName: Ruhiger Puls
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 4
+      value: 1
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - geist_mitte_2
+  - id: geist_mitte_3
+    category: 1
+    lane: 1
+    step: 3
+    shape: 2
+    price: 25
+    displayName: Lebenskraft
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 0
+      stat: 1
+      value: 10
+      grantId: 
+      descriptionOverride: 
+    requires:
+    - geist_mitte_2
+    - geist_oben_2
+    - geist_unten_2
+  - id: kampf_oben_4
+    category: 0
+    lane: 0
+    step: 5
+    shape: 3
+    price: 35
+    displayName: Vier Richtungen
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 1
+      stat: 1
+      value: 10
+      grantId: shurikookie_vier_richtungen
+      descriptionOverride: 
+    requires:
+    - kampf_mitte_4
+  - id: kampf_unten_4
+    category: 0
+    lane: 2
+    step: 5
+    shape: 3
+    price: 35
+    displayName: Abpraller
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 1
+      stat: 1
+      value: 10
+      grantId: shurikookie_abpraller
+      descriptionOverride: 
+    requires:
+    - kampf_mitte_4
