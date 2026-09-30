@@ -52,7 +52,7 @@ public class AreaWeaponPrefab : MonoBehaviour
                     enemiesInRange.RemoveAt(i);
                     continue;
                 }
-                enemiesInRange[i].TakeDamage(weapon.CurrentStats.damage);
+                enemiesInRange[i].TakeDamage(weapon.CurrentStats.damage, knockback: 0f);
             }
         }
     }

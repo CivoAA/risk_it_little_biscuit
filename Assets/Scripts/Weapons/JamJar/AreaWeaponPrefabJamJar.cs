@@ -49,7 +49,7 @@ public class AreaWeaponPrefabJamJar : MonoBehaviour
                     enemiesInRange.RemoveAt(i);
                     continue;
                 }
-                enemiesInRange[i].TakeDamage(weapon.CurrentStats.damage);
+                enemiesInRange[i].TakeDamage(weapon.CurrentStats.damage, knockback: 0f);
             }
         }
     }

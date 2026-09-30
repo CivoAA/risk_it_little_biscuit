@@ -193,8 +193,9 @@ public class CatalogTests
                     {
                         Assert.AreSame(branch, parent.Branch,
                             $"'{node.Key}' hängt an '{parent.Key}' aus einer anderen Kategorie.");
-                        Assert.Less(parent.Step, node.Step,
-                            $"'{node.Key}' steht nicht rechts von seiner Vorbedingung " +
+                        // Gleiche Spalte ist erlaubt (senkrechte Verbindung zwischen Bahnen).
+                        Assert.LessOrEqual(parent.Step, node.Step,
+                            $"'{node.Key}' steht links von seiner Vorbedingung " +
                             $"'{parent.Key}' - die Linie liefe rückwärts.");
                     }
                 }

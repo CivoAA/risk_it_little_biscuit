@@ -3,7 +3,8 @@ using UnityEngine;
 
 /// <summary>
 /// Ein einzelner Strudel des <see cref="Vortex"/>. Zieht jeden Frame alle
-/// Gegner im Trigger Richtung Mitte und verteilt im Tick-Takt Schaden.
+/// Gegner im Trigger Richtung Mitte und verteilt im Tick-Takt Schaden, der
+/// sie zusaetzlich bremst.
 ///
 /// Der Zug laeuft ueber <see cref="Enemy.ApplyPull"/> und wird jeden Frame
 /// erneuert. Wird der Wirbel zerstoert, laeuft er von selbst aus - es bleibt
@@ -19,6 +20,9 @@ public class VortexPrefab : MonoBehaviour
 
     [Tooltip("Ab diesem Abstand zur Mitte wird nicht weiter gezogen - verhindert Zittern.")]
     [SerializeField] private float deadZone = 0.25f;
+
+    [Tooltip("Tempo-Faktor fuer Gegner im Wirbel (0,5 = halb so schnell). Haelt 1,5 s nach dem letzten Tick.")]
+    [SerializeField] private float slowMultiplier = 0.5f;
 
     [Tooltip("Umdrehungen pro Sekunde fuer die Optik.")]
     [SerializeField] private float spinSpeed = 180f;
@@ -110,7 +114,9 @@ public class VortexPrefab : MonoBehaviour
                 continue;
             }
 
-            enemiesInRange[i].TakeDamage(weapon.CurrentStats.damage);
+            // Der Wirbel bremst und zieht - weggestossen wird hier nichts,
+            // sonst arbeitet der Rueckstoss gegen den Zug zur Mitte.
+            enemiesInRange[i].TakeDamage(weapon.CurrentStats.damage, slowMultiplier, 0f);
         }
     }
 

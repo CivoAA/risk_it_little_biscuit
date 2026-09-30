@@ -15,7 +15,7 @@ public class DamageProbe : Enemy
     protected override void Start() { }
     protected override void FixedUpdate() { }
 
-    public override void TakeDamage(float damage, float? slowMultiplier = null)
+    public override void TakeDamage(float damage, float? slowMultiplier = null, float knockback = 1f)
     {
         totalDamage += damage;
         hits++;

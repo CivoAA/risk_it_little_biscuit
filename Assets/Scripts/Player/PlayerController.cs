@@ -875,7 +875,8 @@ public class PlayerController : MonoBehaviour
             "crumb_trail",
             "vortex",
             "turret",
-            "sword_slash"
+            "sword_slash",
+            "salad_fan"
         };
 
         if (defaultUnlockedWeapons.Contains(weapon.weaponID))

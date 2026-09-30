@@ -82,6 +82,21 @@ public class Enemy : MonoBehaviour
 
     private float pushCounter;
 
+    /// <summary>
+    /// Globaler Daempfer auf den Rueckstoss: ein Treffer schiebt nur noch so
+    /// viel von pushTime zurueck wie frueher.
+    /// </summary>
+    private const float KnockbackScale = 0.4f;
+
+    /// <summary>
+    /// Nach einem Rueckstoss so lange (Sekunden) kein neuer. Frueher hat jeder
+    /// Treffer den Rueckstoss neu gestartet - wer mit einer tickenden
+    /// Flaechenwaffe draufhielt, hat den Gegner dauerhaft auf Abstand gehalten.
+    /// </summary>
+    private const float KnockbackImmunity = 0.6f;
+
+    private float nextPushAllowed;
+
     private Vector3 direction;
 
     // Zug von aussen (Wirbel). Wird als Geschwindigkeit auf die normale
@@ -645,7 +660,9 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public virtual void TakeDamage(float damage, float? slowMultiplier = null)
+    /// <param name="slowMultiplier">Tempo-Faktor fuer 1,5 s (0,6 = 40 % langsamer), null = kein Slow.</param>
+    /// <param name="knockback">Anteil des Rueckstosses, 1 = normal, 0 = keiner.</param>
+    public virtual void TakeDamage(float damage, float? slowMultiplier = null, float knockback = 1f)
     {
         float finalDamage = damage * PlayerController.Instance.damageMultiplier * Bestiary.DamageFactor(id);
         float critChance = PlayerController.Instance.critChance;
@@ -668,7 +685,7 @@ public class Enemy : MonoBehaviour
             LifeSteal.Instance.StealLife((int)damage);
         }
 
-        pushCounter = pushTime;
+        ApplyKnockback(knockback);
 
         if (health <= 0f)
         {
@@ -689,6 +706,17 @@ public class Enemy : MonoBehaviour
     /// erste lief - wer dauerhaft mit einer Slow-Waffe draufhielt, hat den
     /// Gegner also nur jede 1.5 Sekunden einmal gebremst.
     /// </summary>
+    private void ApplyKnockback(float knockback)
+    {
+        if (knockback <= 0f || Time.time < nextPushAllowed) return;
+
+        float push = pushTime * KnockbackScale * knockback;
+        if (push <= 0f) return;
+
+        pushCounter = push;
+        nextPushAllowed = Time.time + push + KnockbackImmunity;
+    }
+
     private void ApplySlow(float multiplier, float duration)
     {
         slowFactor = Mathf.Min(slowFactor, Mathf.Clamp01(multiplier));

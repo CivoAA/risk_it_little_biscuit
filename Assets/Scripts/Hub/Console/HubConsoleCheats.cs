@@ -199,6 +199,40 @@ public static class HubConsoleCheats
         }, hidden: true);
 
         // ------------------------------------------------------------------
+        // Seelen (Skillpunkte) schenken.  ->  "gibseelen" (1.000) oder "gibseelen 50"
+        // ------------------------------------------------------------------
+        HubConsole.Add("gibseelen", "Seelen fuer den Skilltree", (args, sink) =>
+        {
+            int betrag = ArgAsInt(args, 0, 1000);
+
+            Skills.AddCurrency(betrag);
+            sink.Print($"+{betrag} Seelen. Neuer Stand: {Skills.Currency}");
+        }, usage: "[anzahl]", hidden: true);
+
+        // ------------------------------------------------------------------
+        // Skilltree zuruecksetzen.  ->  "skillreset"       Baum des gewaehlten Charakters
+        //                               "skillreset alle"  jeder Baum
+        // Die ausgegebenen Seelen kommen in beiden Faellen zurueck aufs Konto.
+        // ------------------------------------------------------------------
+        HubConsole.Add("skillreset", "setzt den Skilltree zurueck", (args, sink) =>
+        {
+            bool alle = args != null && args.Length > 0 &&
+                        args[0].Equals("alle", System.StringComparison.OrdinalIgnoreCase);
+
+            if (alle)
+            {
+                foreach (SkillTreeDef tree in SkillTrees.All) Skills.ResetTree(tree);
+                sink.Print($"Alle Skilltrees zurueckgesetzt. Seelen: {Skills.Currency}");
+                return;
+            }
+
+            SkillTreeDef active = Skills.ActiveTree;
+            Skills.ResetActiveTree();
+            sink.Print($"Skilltree '{(active != null ? active.Id : "?")}' zurueckgesetzt. " +
+                       $"Seelen: {Skills.Currency}");
+        }, usage: "[alle]", hidden: true);
+
+        // ------------------------------------------------------------------
         // Ab hier: deine eigenen Codes.
         // ------------------------------------------------------------------
     }

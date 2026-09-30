@@ -2119,6 +2119,7 @@ MonoBehaviour:
   - {fileID: 5775431626742797176}
   - {fileID: 200782388726875803}
   - {fileID: 3847261950183746615}
+  - {fileID: 2938475610293847561}
   activeBuffs:
   - {fileID: 1329916437877316911}
   - {fileID: 3253892304407363630}
@@ -3437,6 +3438,7 @@ Transform:
   - {fileID: 8499400873819894919}
   - {fileID: 6026130219430473917}
   - {fileID: 5719823461172849302}
+  - {fileID: 4827361950172638495}
   m_Father: {fileID: 4991830239493606234}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6430632289492379781
@@ -10219,4 +10221,59 @@ MonoBehaviour:
   posssibleEvo: 0
   hasBeenRemoved: 0
   slashSprite: {fileID: 0}
+  originOffset: {x: 0, y: 0.4}
+--- !u!1 &6192837465019283746
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4827361950172638495}
+  - component: {fileID: 2938475610293847561}
+  m_Layer: 0
+  m_Name: Salad Fan
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4827361950172638495
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6192837465019283746}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3466192261950400575}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2938475610293847561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6192837465019283746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: beee6974cfc147f9bdc6f09ca772292c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::SaladFan
+  weaponID: salad_fan
+  weaponLevel: -1
+  maxweaponLevel: 5
+  stats: []
+  weaponImage: {fileID: -5823641902736451127, guid: e2992e54eabf421aa4246f9310a54827, type: 3}
+  weaponIcon: {fileID: -5823641902736451127, guid: e2992e54eabf421aa4246f9310a54827, type: 3}
+  weaponIconEvo: {fileID: 0}
+  posssibleEvo: 0
+  hasBeenRemoved: 0
+  waveSprite: {fileID: 0}
   originOffset: {x: 0, y: 0.4}
