@@ -32,8 +32,12 @@ public sealed class HubSkilltreeGraph : System.IDisposable
     /// <summary>Abstand zweier Schritte (Spalten).</summary>
     const int StepX = 34;
 
-    /// <summary>Abstand der Bahnen.</summary>
-    const int LaneY = 36;
+    /// <summary>
+    /// Abstand der Bahnen. Muss gleich <see cref="StepX"/> sein: nur dann sind
+    /// Schraegen exakt 45° (bzw. 2:1, 3:1 ueber mehrere Spalten) und die
+    /// Pixeltreppe bleibt gleichmaessig statt zu wabbeln.
+    /// </summary>
+    const int LaneY = StepX;
 
     /// <summary>Luft links und rechts im Feld.</summary>
     const int PadX = 10;
@@ -62,6 +66,10 @@ public sealed class HubSkilltreeGraph : System.IDisposable
     readonly List<Node> nodes = new List<Node>();
     readonly List<Segment> segments = new List<Segment>();
     readonly List<SkillNodeDef> order = new List<SkillNodeDef>();
+
+    // Die Schraegen sind zur Laufzeit gezeichnet und muessen wieder weg.
+    readonly List<Texture2D> lineTextures = new List<Texture2D>();
+    readonly List<Sprite> lineSprites = new List<Sprite>();
 
     RectTransform viewport, content;
     SkinButton scrollLeft, scrollRight;
@@ -128,6 +136,7 @@ public sealed class HubSkilltreeGraph : System.IDisposable
         accent = branch != null ? branch.Color : Color.white;
 
         OptionsKit.Clear(content);
+        DestroyLineTextures();
         nodes.Clear();
         segments.Clear();
         order.Clear();
@@ -219,34 +228,32 @@ public sealed class HubSkilltreeGraph : System.IDisposable
     }
 
     /// <summary>
-    /// Verbindung zweier Knoten. In derselben Bahn ein Strich, ueber Bahnen
-    /// hinweg ein Winkel (waagerecht, senkrecht, waagerecht) - eine Schraege
-    /// waere bei einem Pixel Staerke eine Treppe.
+    /// Verbindung zweier Knoten. In derselben Bahn oder Spalte ein gerader
+    /// Strich, ueber Bahnen hinweg eine direkte Schraege von Mitte zu Mitte.
+    /// Jede Verbindung ist ein eigener Strich - sie treffen sich erst im Knoten,
+    /// der sie verdeckt (Linien liegen hinter den Knoten).
+    ///
+    /// Alle Striche laufen von Mitte zu Mitte, nicht nur bis zum Kasten um die
+    /// Form: so reichen sie bei jeder Form (Dreieck, Raute, Stern) bis an den Rand.
     /// </summary>
     void AddConnection(SkillNodeDef from, SkillNodeDef to)
     {
         Vector2Int a = PosOf(from) + new Vector2Int(Mid, Mid);
         Vector2Int b = PosOf(to) + new Vector2Int(Mid, Mid);
-        int half = Shape / 2;
 
-        int x0 = Mathf.Min(a.x, b.x) + half, x1 = Mathf.Max(a.x, b.x) - half;
-
-        if (x1 <= x0)
+        if (a.x == b.x)
         {
-            AddSegment(from, to, a.x, Mathf.Min(a.y, b.y) + half, 1, Mathf.Abs(b.y - a.y) - 2 * half);
+            AddSegment(from, to, a.x, Mathf.Min(a.y, b.y), 1, Mathf.Abs(b.y - a.y) + 1);
             return;
         }
 
         if (a.y == b.y)
         {
-            AddSegment(from, to, x0, a.y, x1 - x0, 1);
+            AddSegment(from, to, Mathf.Min(a.x, b.x), a.y, Mathf.Abs(b.x - a.x) + 1, 1);
             return;
         }
 
-        int mid = (x0 + x1) / 2;
-        AddSegment(from, to, x0, a.y, mid - x0, 1);
-        AddSegment(from, to, mid, Mathf.Min(a.y, b.y), 1, Mathf.Abs(b.y - a.y) + 1);
-        AddSegment(from, to, mid, b.y, x1 - mid, 1);
+        AddDiagonal(from, to, a, b);
     }
 
     void AddSegment(SkillNodeDef from, SkillNodeDef to, int x, int y, int w, int h)
@@ -255,6 +262,58 @@ public sealed class HubSkilltreeGraph : System.IDisposable
         Image img = OptionsKit.Img("Line", content, x, y, w, h, GameHudSkin.White, GameHudSkin.StoneDark);
         img.transform.SetAsFirstSibling();
         segments.Add(new Segment { From = from, To = to, Image = img });
+    }
+
+    /// <summary>
+    /// Schraege als eigene kleine Textur, Pixel fuer Pixel (Bresenham) - so bleibt
+    /// sie bei 1 px Staerke scharf, statt ein gedrehtes, verwaschenes Bild zu sein.
+    /// </summary>
+    void AddDiagonal(SkillNodeDef from, SkillNodeDef to, Vector2Int a, Vector2Int b)
+    {
+        int left = Mathf.Min(a.x, b.x), top = Mathf.Min(a.y, b.y);
+        int w = Mathf.Abs(b.x - a.x) + 1, h = Mathf.Abs(b.y - a.y) + 1;
+
+        var tex = new Texture2D(w, h, TextureFormat.RGBA32, false)
+        {
+            filterMode = FilterMode.Point,
+            wrapMode = TextureWrapMode.Clamp,
+        };
+        var pixels = new Color32[w * h];
+
+        int x = a.x - left, y = a.y - top;
+        int ex = b.x - left, ey = b.y - top;
+        int dx = Mathf.Abs(ex - x), dy = -Mathf.Abs(ey - y);
+        int sx = x < ex ? 1 : -1, sy = y < ey ? 1 : -1;
+        int err = dx + dy;
+
+        while (true)
+        {
+            // Seitenpixel zaehlen von oben, Texturzeilen von unten.
+            pixels[(h - 1 - y) * w + x] = new Color32(255, 255, 255, 255);
+            if (x == ex && y == ey) break;
+            int e2 = 2 * err;
+            if (e2 >= dy) { err += dy; x += sx; }
+            if (e2 <= dx) { err += dx; y += sy; }
+        }
+
+        tex.SetPixels32(pixels);
+        tex.Apply(false, true);
+        lineTextures.Add(tex);
+
+        Sprite sprite = Sprite.Create(tex, new Rect(0f, 0f, w, h), new Vector2(0.5f, 0.5f), 1f);
+        lineSprites.Add(sprite);
+
+        Image img = OptionsKit.Img("Line", content, left, top, w, h, sprite, GameHudSkin.StoneDark);
+        img.transform.SetAsFirstSibling();
+        segments.Add(new Segment { From = from, To = to, Image = img });
+    }
+
+    void DestroyLineTextures()
+    {
+        foreach (Sprite s in lineSprites) if (s != null) Object.Destroy(s);
+        foreach (Texture2D t in lineTextures) if (t != null) Object.Destroy(t);
+        lineSprites.Clear();
+        lineTextures.Clear();
     }
 
     // ==================================================================
@@ -414,6 +473,7 @@ public sealed class HubSkilltreeGraph : System.IDisposable
     public void Dispose()
     {
         shapes.Dispose();
+        DestroyLineTextures();
         nodes.Clear();
         segments.Clear();
     }

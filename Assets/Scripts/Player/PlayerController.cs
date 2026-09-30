@@ -92,10 +92,17 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Aktueller Schild aus Ueberheilung. Faengt Schaden vor dem Leben ab.")]
     public float shield;
 
-    /// <summary>Cooldown-Faktor inklusive Untergrenze - Waffen lesen nur diesen Wert.</summary>
+    /// <summary>
+    /// Cooldown-Faktor inklusive Untergrenze - Waffen lesen nur diesen Wert.
+    /// Rage halbiert erst NACH der Untergrenze, sonst ginge sie am Maximum verloren.
+    /// </summary>
     public float CooldownMultiplier
     {
-        get { return Mathf.Max(minCooldownMultiplier, cooldownMultiplier); }
+        get
+        {
+            float mult = Mathf.Max(minCooldownMultiplier, cooldownMultiplier);
+            return IsRaging ? mult * RageCooldownFactor : mult;
+        }
     }
 
     /// <summary>Duration-Faktor. Nach unten abgesichert, damit Flaechen nie 0s leben.</summary>
@@ -312,8 +319,43 @@ public class PlayerController : MonoBehaviour
         Shockwave.Fire(transform.position);
     }
 
+    // ------------------------------------------------------------------
+    // Wissen: Rage
+    // ------------------------------------------------------------------
+
+    /// <summary>Ab diesem Lebensanteil springt Rage an.</summary>
+    public const float RageThreshold = 0.3f;
+
+    /// <summary>So lange haelt Rage an (Sekunden).</summary>
+    public const float RageDuration = 5f;
+
+    /// <summary>So lange dauert es, bis Rage wieder anspringen kann (ab Start gerechnet).</summary>
+    public const float RageCooldown = 120f;
+
+    /// <summary>Faktor auf alle Waffen-Cooldowns waehrend Rage - 0.5 = halb so lang.</summary>
+    public const float RageCooldownFactor = 0.5f;
+
+    private float rageUntil;
+    private float rageReadyAt;
+
+    public bool IsRaging => Time.time < rageUntil;
+
+    /// <summary>Skilltree "Rage": nach einem Treffer unter 30 % Leben feuern alle Waffen doppelt so schnell.</summary>
+    private void TryRage()
+    {
+        if (!Skills.HasGrant(SkillGrants.Rage) || Time.time < rageReadyAt) return;
+        if (playerHealth <= 0f || playerHealth > playerMaxHealth * RageThreshold) return;
+
+        rageUntil = Time.time + RageDuration;
+        rageReadyAt = Time.time + RageCooldown;
+        DamageNumberController.Instance?.CreateText("RAGE!", transform.position);
+    }
+
     public void StartStats()
     {
+        rageUntil = 0f;
+        rageReadyAt = 0f;
+
         if (activeWeapon != null && activeWeapon.Length > 0)
         {
             int startWeaponIndex = Mathf.Clamp(Shop.RunStartWeapon, 0, activeWeapon.Length - 1);
@@ -458,7 +500,10 @@ public class PlayerController : MonoBehaviour
                 gameObject.SetActive(false);
                 GameManager.Instance.GameOver();
                 WM_UIController.Instance?.UpdateCurrencyText();
+                return;
             }
+
+            TryRage();
         }
     }
 

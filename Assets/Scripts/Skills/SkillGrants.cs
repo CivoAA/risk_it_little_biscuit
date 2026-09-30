@@ -43,6 +43,9 @@ public static class SkillGrants
     /// <summary>Kartograf: ein Pfeil am Bildrand zeigt zum naechsten unbenutzten Mixer.</summary>
     public const string Kartograf = "kartograf";
 
+    /// <summary>Rage: faellt das Leben unter 30 %, halbieren sich alle Waffen-Cooldowns fuer 5 s (alle 2 min).</summary>
+    public const string Rage = "rage";
+
     // ------------------------------------------------------------ Geist
 
     /// <summary>Schockwelle: ein Treffer stoesst alle Gegner in der Naehe weg (siehe <see cref="Shockwave"/>).</summary>
@@ -80,6 +83,9 @@ public static class SkillGrants
         new Def(Kartograf, "Kartograf",
                 "Ein Pfeil am Bildrand zeigt zum naechsten Mixer, den du noch nicht benutzt hast."),
 
+        new Def(Rage, "Rage",
+                "Faellt dein Leben unter 30%, feuern alle Waffen 5 Sekunden lang doppelt so schnell (alle 2 Minuten)."),
+
         new Def(Schockwelle, "Schockwelle",
                 "Wirst du getroffen, stoesst eine Welle alle Gegner in der Naehe weg (alle 10 Sekunden)."),
     };
@@ -104,12 +110,12 @@ public static class SkillGrants
     public static string NameOf(string id)
     {
         Def d = Find(id);
-        return d != null ? d.Name : (string.IsNullOrEmpty(id) ? "(keine Freischaltung)" : id + " (unbekannt)");
+        return d != null ? Loc.Get($"skill.grant.{d.Id}.name", d.Name) : (string.IsNullOrEmpty(id) ? "(keine Freischaltung)" : id + " (unbekannt)");
     }
 
     public static string DescriptionOf(string id)
     {
         Def d = Find(id);
-        return d != null ? d.Description : "";
+        return d != null ? Loc.Get($"skill.grant.{d.Id}.desc", d.Description) : "";
     }
 }
