@@ -45,7 +45,7 @@ CLEAR = (0, 0, 0, 0)
 
 # name, Sheet, Akzent (wie CharacterLooks.asset, 0..1)
 CHARS = [
-    ("Keks",    "Char_Keks.png",    (0.88, 0.63, 0.31)),
+    ("Keks",    "Char_Keks.png",    (0.88, 0.63, 0.31), 40),
     ("Jam",     "Char_Jam.png",     (0.65, 0.48, 0.85)),
     ("Onigiri", "Char_Onigiri.png", (0.45, 0.68, 0.55)),
     ("Toast",   "Char_Toast.png",   (0.84, 0.36, 0.34)),
