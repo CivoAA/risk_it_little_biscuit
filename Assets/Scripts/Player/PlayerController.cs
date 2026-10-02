@@ -445,6 +445,23 @@ public class PlayerController : MonoBehaviour
         DamageNumberController.Instance?.CreateText("KLEBREIS!", transform.position);
     }
 
+    // ------------------------------------------------------------------
+    // Geist: Wirbelsturm
+    // ------------------------------------------------------------------
+
+    private float whirlwindReadyAt;
+
+    /// <summary>Skilltree "Wirbelsturm": faellt das Leben unter 40 %, alle Gegner in der Naehe wegdruecken.</summary>
+    private void TryWhirlwind()
+    {
+        if (!Skills.HasGrant(SkillGrants.Wirbelsturm) || Time.time < whirlwindReadyAt) return;
+        if (playerHealth <= 0f || playerHealth > playerMaxHealth * Whirlwind.Threshold) return;
+
+        whirlwindReadyAt = Time.time + Whirlwind.Duration + Whirlwind.Cooldown;
+        Whirlwind.Fire(transform);
+        DamageNumberController.Instance?.CreateText("WIRBELSTURM!", transform.position);
+    }
+
     public void StartStats()
     {
         rageUntil = 0f;
@@ -452,6 +469,7 @@ public class PlayerController : MonoBehaviour
         kawarimiUntil = 0f;
         kawarimiReadyAt = 0f;
         stickyRiceReadyAt = 0f;
+        whirlwindReadyAt = 0f;
 
         if (activeWeapon != null && activeWeapon.Length > 0)
         {
@@ -605,6 +623,7 @@ public class PlayerController : MonoBehaviour
             TryRage();
             TryKawarimi();
             TryStickyRice();
+            TryWhirlwind();
         }
     }
 

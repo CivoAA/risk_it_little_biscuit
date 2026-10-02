@@ -42,6 +42,12 @@ public static class SkillGrants
     /// </summary>
     public const string Schattenschwarm = "onigiri_schattenschwarm";
 
+    /// <summary>Salatfaecher: der erste Gegner, den eine Welle trifft, spaltet zwei kleinere Wellen ab (siehe <see cref="SaladFanWave"/>).</summary>
+    public const string Spaltwelle = "toast_spaltwelle";
+
+    /// <summary>Salatfaecher: jeder 5. Schlag geht als Kreis rundherum, mit doppelt so vielen Wellen (siehe <see cref="SaladFan"/>).</summary>
+    public const string Sturmboe = "toast_sturmboe";
+
     // ------------------------------------------------------------ Wissen
 
     /// <summary>Bestiarium: +1 % Schaden je 1000 Kills einer Gegnerart (siehe <see cref="Bestiary"/>).</summary>
@@ -63,6 +69,9 @@ public static class SkillGrants
 
     /// <summary>Klebreis: unter 35 % Leben kleben alle sichtbaren Gegner 8 s fest (alle 35 s, siehe <see cref="StickyRice"/>).</summary>
     public const string Klebreis = "klebreis";
+
+    /// <summary>Wirbelsturm: unter 40 % Leben 5 s lang alle Gegner in der Naehe wegdruecken (alle 35 s, siehe <see cref="Whirlwind"/>).</summary>
+    public const string Wirbelsturm = "wirbelsturm";
 
     // ==================================================================
     //  Der Katalog - was hier steht, steht im Editor zur Auswahl.
@@ -93,6 +102,12 @@ public static class SkillGrants
         new Def(Schattenschwarm, "Schattenschwarm",
                 "Jeder Kunai sucht sich ein eigenes Ziel und fliegt immer wieder hindurch, bis es tot ist. Gilt auch fuer Blade Storm."),
 
+        new Def(Spaltwelle, "Spaltwelle",
+                "Der erste Gegner, den eine Salatwelle trifft, spaltet zwei kleinere Wellen in entgegengesetzte Richtungen ab."),
+
+        new Def(Sturmboe, "Sturmboe",
+                "Jeder 5. Schlag des Salatfaechers geht einmal im Kreis um dich herum - mit doppelt so vielen Wellen."),
+
         new Def(Bestiarium, "Bestiarium",
                 "Zaehlt deine Kills je Gegnerart: +1% Schaden je 1000 Kills. Neuer Reiter im Erfolge-Buch."),
 
@@ -110,6 +125,9 @@ public static class SkillGrants
 
         new Def(Klebreis, "Klebreis",
                 "Faellt dein Leben unter 35%, kleben alle Gegner im Bild 8 Sekunden lang fest (alle 35 Sekunden). Bosse nicht."),
+
+        new Def(Wirbelsturm, "Wirbelsturm",
+                "Faellt dein Leben unter 40%, wirbelst du 5 Sekunden lang alle Gegner in deiner Naehe weg (alle 35 Sekunden). Bosse nicht."),
     };
 
     /// <summary>Eintrag zu einer Id. Null, wenn die Id nicht (mehr) im Katalog steht.</summary>
