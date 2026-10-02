@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -21,6 +22,14 @@ using UnityEngine.SceneManagement;
 ///
 /// Die Werte stehen im Code (<see cref="LevelStats"/>), nicht am Prefab - sie
 /// ueberschreiben beim Start, was im Inspector steht.
+///
+/// Skilltree (Toast):
+///   Spaltwelle - der erste getroffene Gegner spaltet zwei kleinere Wellen ab
+///                (<see cref="SaladFanWave"/>, Werte <see cref="SplitScale"/> ff.).
+///   Sturmboe   - jeder <see cref="StormEvery"/>. Schlag geht wie ein Uhrzeiger
+///                einmal rundherum, mit doppelt so vielen Wellen.
+///
+/// KOMMT EINE EVO DAZU: beide Sterne dort ebenfalls einbauen.
 /// </summary>
 public class SaladFan : Weapon
 {
@@ -44,6 +53,31 @@ public class SaladFan : Weapon
 
     /// <summary>Weniger Schaden als das macht eine Welle nie, auch am letzten Gegner nicht.</summary>
     public const float MinDamage = 1f;
+
+    // ---------------------------------------------------------- Spaltwelle
+
+    /// <summary>Groesse, Rueckstoss einer Abspaltung relativ zur Mutterwelle.</summary>
+    public const float SplitScale = 0.6f;
+
+    /// <summary>Schaden einer Abspaltung relativ zur Mutterwelle an diesem Treffer.</summary>
+    public const float SplitDamage = 0.5f;
+
+    /// <summary>Flugweite einer Abspaltung in Tiles.</summary>
+    public const float SplitRange = 3.5f;
+
+    /// <summary>So viele Gegner trifft eine Abspaltung.</summary>
+    public const int SplitHits = 2;
+
+    // ------------------------------------------------------------ Sturmboe
+
+    /// <summary>Jeder wievielte Schlag als Kreis rausgeht.</summary>
+    public const int StormEvery = 5;
+
+    /// <summary>So viel mal mehr Wellen als ein normaler Schlag.</summary>
+    public const int StormWaveFactor = 2;
+
+    /// <summary>So lange (Sekunden) braucht der Kreis einmal rundherum.</summary>
+    public const float StormSweepTime = 0.6f;
 
     private static readonly WeaponStats[] LevelStats =
     {
@@ -86,6 +120,8 @@ public class SaladFan : Weapon
 
     private readonly List<Enemy> targets = new List<Enemy>();
     private float spawnCounter;
+    private int attackCount;
+    private bool storming;
 
     /// <summary>Anteil, den eine Welle der aktuellen Stufe pro Treffer behaelt.</summary>
     public float CurrentKeep
@@ -108,6 +144,7 @@ public class SaladFan : Weapon
     void Update()
     {
         if (!IsActive || PlayerController.Instance == null) return;
+        if (storming) return;
 
         spawnCounter -= Time.deltaTime;
         if (spawnCounter > 0f) return;
@@ -129,6 +166,13 @@ public class SaladFan : Weapon
         int waves = Mathf.Max(1, Mathf.RoundToInt(CurrentStats.shots + PlayerController.Instance.ExtraShots));
         Vector2 nearestDir = Aim.PredictDirection(origin, targets[0], WaveSpeed);
 
+        attackCount++;
+        if (Skills.HasGrant(SkillGrants.Sturmboe) && attackCount % StormEvery == 0)
+        {
+            StartCoroutine(StormVolley(nearestDir, waves * StormWaveFactor, range));
+            return true;
+        }
+
         for (int i = 0; i < waves; i++)
         {
             Vector2 dir;
@@ -148,6 +192,32 @@ public class SaladFan : Weapon
         }
 
         return true;
+    }
+
+    /// <summary>
+    /// Sturmboe: Wellen reihum wie ein Uhrzeiger, beim naechsten Gegner
+    /// beginnend, einmal ganz herum. Jede Welle startet dort, wo der Spieler
+    /// gerade steht. Der Cooldown laeuft erst danach weiter.
+    /// </summary>
+    private IEnumerator StormVolley(Vector2 startDir, int count, float range)
+    {
+        storming = true;
+
+        float step = 360f / count;
+        float interval = StormSweepTime / count;
+
+        for (int i = 0; i < count; i++)
+        {
+            if (!IsActive || PlayerController.Instance == null) break;
+
+            Vector2 origin = (Vector2)transform.position + originOffset;
+            Vector2 dir = Quaternion.Euler(0f, 0f, -step * i) * startDir;
+            SpawnWave(origin, dir, range);
+
+            if (i < count - 1) yield return new WaitForSeconds(interval);
+        }
+
+        storming = false;
     }
 
     /// <summary>Alle lebenden Gegner im Radius, der naechste zuerst.</summary>
@@ -171,6 +241,22 @@ public class SaladFan : Weapon
 
     private void SpawnWave(Vector2 origin, Vector2 dir, float range)
     {
+        float size = WaveSize * PlayerController.Instance.AOERange;
+        SaladFanWave wave = CreateWave(origin, size, waveSprite != null ? waveSprite : GeneratedWave);
+        wave.Launch(dir, WaveSpeed, range, size * 0.5f,
+                    CurrentStats.damage, MinDamage, CurrentKeep, CurrentMaxHits,
+                    BaseSlow, BaseKnockback);
+
+        if (Skills.HasGrant(SkillGrants.Spaltwelle)) wave.EnableSplit();
+    }
+
+    /// <summary>
+    /// Legt eine Welle an (noch ohne Flug - danach <see cref="SaladFanWave.Launch"/>).
+    /// Auch fuer die Abspaltungen der Spaltwelle.
+    /// </summary>
+    /// <param name="size">Groesse in Tiles.</param>
+    public static SaladFanWave CreateWave(Vector2 origin, float size, Sprite sprite)
+    {
         GameObject go = new GameObject("SaladFanWave");
         go.transform.position = origin;
 
@@ -181,17 +267,13 @@ public class SaladFan : Weapon
         }
 
         SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
-        sr.sprite = waveSprite != null ? waveSprite : GeneratedWave;
+        sr.sprite = sprite;
         CopySorting(sr);
 
-        float size = WaveSize * PlayerController.Instance.AOERange;
         Vector2 spriteSize = sr.sprite.bounds.size;
         go.transform.localScale = new Vector3(size / spriteSize.x, size / spriteSize.y, 1f);
 
-        SaladFanWave wave = go.AddComponent<SaladFanWave>();
-        wave.Launch(dir, WaveSpeed, range, size * 0.5f,
-                    CurrentStats.damage, MinDamage, CurrentKeep, CurrentMaxHits,
-                    BaseSlow, BaseKnockback);
+        return go.AddComponent<SaladFanWave>();
     }
 
     // ------------------------------------------------------------------
@@ -216,7 +298,7 @@ public class SaladFan : Weapon
     /// 32 PPU, also genau ein Tile. Die Woelbung zeigt nach rechts (+x),
     /// vorne eine helle Kante, nach hinten ausblassendes Salatgruen.
     /// </summary>
-    private static Sprite GeneratedWave
+    public static Sprite GeneratedWave
     {
         get
         {

@@ -14,6 +14,10 @@ using UnityEngine;
 /// dann sauber zu Ende, wenn der Faecher in der Zwischenzeit durch eine Evo
 /// ersetzt wird. Getroffen wird per CircleCast ueber den ganzen Weg des
 /// Frames, damit sie bei Tempo nicht durch Gegner tunnelt.
+///
+/// Skilltree "Spaltwelle" (<see cref="SkillGrants.Spaltwelle"/>): am ersten
+/// getroffenen Gegner spaltet die Welle zwei kleinere ab, die in zufaellig
+/// entgegengesetzte Richtungen weiterfliegen. Die Abspaltungen spalten nicht weiter.
 /// </summary>
 public class SaladFanWave : MonoBehaviour
 {
@@ -30,6 +34,7 @@ public class SaladFanWave : MonoBehaviour
 
     private float travelled;
     private float strength = 1f;
+    private bool splits;
 
     private SpriteRenderer sr;
     private readonly List<Enemy> hitBuffer = new List<Enemy>();
@@ -52,6 +57,18 @@ public class SaladFanWave : MonoBehaviour
 
         transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg);
         sr = GetComponent<SpriteRenderer>();
+    }
+
+    /// <summary>Spaltwelle: am ersten Treffer zwei kleinere Wellen abspalten.</summary>
+    public void EnableSplit()
+    {
+        splits = true;
+    }
+
+    /// <summary>Diesen Gegner nie treffen - fuer Abspaltungen, die in ihm starten.</summary>
+    public void Ignore(Enemy enemy)
+    {
+        if (enemy != null) alreadyHit.Add(enemy);
     }
 
     void Update()
@@ -89,8 +106,35 @@ public class SaladFanWave : MonoBehaviour
         float slow = 1f - (1f - baseSlow) * strength;
         enemy.TakeDamage(Mathf.Max(minDamage, damage * strength), slow, baseKnockback * strength);
 
+        if (splits)
+        {
+            splits = false;
+            Split(enemy);
+        }
+
         strength *= keep;
         hitsLeft--;
+    }
+
+    /// <summary>
+    /// Zwei kleinere Wellen auf einer zufaelligen Achse, eine in jede Richtung.
+    /// Sie starten mit der Kraft, die diese Welle am Treffer gerade hat.
+    /// </summary>
+    private void Split(Enemy origin)
+    {
+        if (sr == null || sr.sprite == null) return;
+
+        Vector2 axis = Quaternion.Euler(0f, 0f, Random.Range(0f, 180f)) * Vector2.right;
+        float size = radius * 2f * SaladFan.SplitScale;
+
+        for (int side = -1; side <= 1; side += 2)
+        {
+            SaladFanWave child = SaladFan.CreateWave(origin.transform.position, size, sr.sprite);
+            child.Ignore(origin);
+            child.Launch(axis * side, speed, SaladFan.SplitRange, size * 0.5f,
+                         damage * strength * SaladFan.SplitDamage, minDamage, keep, SaladFan.SplitHits,
+                         1f - (1f - baseSlow) * strength, baseKnockback * strength * SaladFan.SplitScale);
+        }
     }
 
     /// <summary>Blasser mit jedem Treffer, auf dem letzten Viertel ausblenden.</summary>
