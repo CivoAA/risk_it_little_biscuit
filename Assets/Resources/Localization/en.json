@@ -66,6 +66,8 @@
     { "key": "ach.BombSaw_Evo.desc", "value": "Obtained the Bomb Saw Evo for the first time!" },
     { "key": "ach.Sticky_Shatter_Evo.name", "value": "Sticky Shatter Evo" },
     { "key": "ach.Sticky_Shatter_Evo.desc", "value": "Obtained the Sticky Shatter Evo for the first time!" },
+    { "key": "ach.Typhoon_Fan_Evo.name", "value": "Typhoon Fan Evo" },
+    { "key": "ach.Typhoon_Fan_Evo.desc", "value": "Obtained the Typhoon Fan Evo for the first time!" },
 
     { "key": "ach.Max_Level_CoffePool.name", "value": "Max Level: Coffee Pool" },
     { "key": "ach.Max_Level_CoffePool.desc", "value": "Reach the maximum level of the Coffee Pool weapon." },
@@ -351,6 +353,8 @@
     { "key": "weapon.evo_bomb_swarm.desc", "value": "Saws circle around you and explode on every enemy they touch." },
     { "key": "weapon.evo_sticky_shatter.name", "value": "Sticky Shatter" },
     { "key": "weapon.evo_sticky_shatter.desc", "value": "A jar shatters into several sticky puddles that hurt enemies and slow them down heavily." },
+    { "key": "weapon.evo_typhoon_fan.name", "value": "Typhoon Fan" },
+    { "key": "weapon.evo_typhoon_fan.desc", "value": "Hurls a few heavy gale waves at nearby enemies. Each one leaves a wind trail that slows enemies and gives you a tailwind while you stand in it." },
     { "key": "ui.workbench.btn.random", "value": "RANDOM" },
     { "key": "ui.workbench.info.locked", "value": "Character start weapon - always in the build." },
 

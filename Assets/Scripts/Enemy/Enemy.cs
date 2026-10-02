@@ -823,7 +823,8 @@ public class Enemy : MonoBehaviour
         nextPushAllowed = Time.time + push + KnockbackImmunity;
     }
 
-    private void ApplySlow(float multiplier, float duration)
+    /// <summary>Bremst ohne Schaden, z.B. in der Windschneise des <see cref="TyphoonFan"/>.</summary>
+    public void ApplySlow(float multiplier, float duration)
     {
         slowFactor = Mathf.Min(slowFactor, Mathf.Clamp01(multiplier));
         slowUntil = Mathf.Max(slowUntil, Time.time + duration);

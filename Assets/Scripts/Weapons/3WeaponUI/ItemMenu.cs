@@ -61,6 +61,7 @@ public class ItemMenu : MonoBehaviour
     public BoomerangEvo boomerangEvo;
     public BombSawEvo bombSawEvo;
     public StickyShatterEvo stickyShatterEvo;
+    public TyphoonFan typhoonFanEvo;
 
     /// <summary>
     /// Wie GameObject.Find(...).GetComponent&lt;T&gt;(), aber ohne
@@ -113,6 +114,7 @@ public class ItemMenu : MonoBehaviour
         boomerangEvo = FindInScene<BoomerangEvo>("Boomerang Evo");
         bombSawEvo = FindInScene<BombSawEvo>("Bomb Saw Evo");
         stickyShatterEvo = FindInScene<StickyShatterEvo>("Sticky Shatter Evo");
+        typhoonFanEvo = FindInScene<TyphoonFan>("Typhoon Fan Evo");
 
         UpdateUI();
     }
@@ -183,6 +185,7 @@ public class ItemMenu : MonoBehaviour
         Collect(boomerangEvo, true);
         Collect(bombSawEvo, true);
         Collect(stickyShatterEvo, true);
+        Collect(typhoonFanEvo, true);
 
         // Schritt 2: Bereits angezeigte Waffen
         List<Sprite> currentSprites = new List<Sprite>();

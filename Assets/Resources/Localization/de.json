@@ -66,6 +66,8 @@
     { "key": "ach.BombSaw_Evo.desc", "value": "Du hast die Bomb-Saw-Evo zum ersten Mal erhalten!" },
     { "key": "ach.Sticky_Shatter_Evo.name", "value": "Sticky Shatter Evo" },
     { "key": "ach.Sticky_Shatter_Evo.desc", "value": "Du hast die Sticky-Shatter-Evo zum ersten Mal erhalten!" },
+    { "key": "ach.Typhoon_Fan_Evo.name", "value": "Typhoon Fan Evo" },
+    { "key": "ach.Typhoon_Fan_Evo.desc", "value": "Du hast die Taifunfächer-Evo zum ersten Mal erhalten!" },
 
     { "key": "ach.Max_Level_CoffePool.name", "value": "Maximalstufe: Coffee Pool" },
     { "key": "ach.Max_Level_CoffePool.desc", "value": "Bringe die Waffe Coffee Pool auf die höchste Stufe." },
@@ -351,6 +353,8 @@
     { "key": "weapon.evo_bomb_swarm.desc", "value": "Sägen kreisen um dich und explodieren an jedem Gegner, den sie berühren." },
     { "key": "weapon.evo_sticky_shatter.name", "value": "Klebesplitter" },
     { "key": "weapon.evo_sticky_shatter.desc", "value": "Ein Glas zerspringt in mehrere klebrige Lachen, die Gegner verletzen und stark verlangsamen." },
+    { "key": "weapon.evo_typhoon_fan.name", "value": "Taifunfächer" },
+    { "key": "weapon.evo_typhoon_fan.desc", "value": "Schleudert wenige, schwere Sturmwellen auf nahe Gegner. Jede zieht eine Windschneise hinter sich her, die Gegner bremst und dir Rückenwind gibt, solange du darin stehst." },
     { "key": "ui.workbench.btn.random", "value": "ZUFÄLLIG" },
     { "key": "ui.workbench.info.locked", "value": "Startwaffe des Charakters - fest im Build." },
 

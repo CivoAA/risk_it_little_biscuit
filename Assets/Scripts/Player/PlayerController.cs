@@ -267,6 +267,8 @@ public class PlayerController : MonoBehaviour
         float speed = IsLastBreath ? moveSpeed * (1f + lastBreathSpeedPercent / 100f) : moveSpeed;
         // Skilltree "Kawarimi": waehrend der Wirkung deutlich schneller, um wegzurennen.
         if (IsKawarimi) speed *= 1f + KawarimiSpeedBonus;
+        // Taifunfaecher-Evo: Rueckenwind in der eigenen Windschneise.
+        if (TyphoonFan.HasTailwind) speed *= 1f + TyphoonFan.TailwindBonus;
         rb.linearVelocity = new Vector3(playerMoveDirection.x * speed, playerMoveDirection.y * speed);
 
         DecayShield(Time.fixedDeltaTime);
