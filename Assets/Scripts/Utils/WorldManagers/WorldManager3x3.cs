@@ -17,6 +17,22 @@ public class WorldManager3x3 : MonoBehaviour
     private Vector2 centerWorldPos;
     private Vector2Int centerIndex = new Vector2Int(1, 1);
 
+    /// <summary>Die laufende 3x3-Map, falls eine geladen ist.</summary>
+    public static WorldManager3x3 Current { get; private set; }
+
+    /// <summary>Nach dieser Strecke wiederholt sich der Inhalt der Chunks.</summary>
+    public Vector2 WrapPeriod => new Vector2(chunkWidth * 3f, chunkHeight * 3f);
+
+    void OnEnable()
+    {
+        Current = this;
+    }
+
+    void OnDisable()
+    {
+        if (Current == this) Current = null;
+    }
+
     void Awake()
     {
         // 1D (Telefon-Layout, oben→unten) in 2D (unten=0 → oben=2) umsetzen

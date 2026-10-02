@@ -99,6 +99,9 @@ public class Enemy : MonoBehaviour
 
     private Vector3 direction;
 
+    /// <summary>Gesetzt bei Gegnern, die huepfen statt laufen (Kirschslime).</summary>
+    private HopMovement hop;
+
     // Zug von aussen (Wirbel). Wird als Geschwindigkeit auf die normale
     // Laufbewegung addiert und laeuft nach kurzer Zeit von selbst aus, damit
     // ein zerstoerter Wirbel keinen Gegner dauerhaft mitzieht.
@@ -205,6 +208,7 @@ public class Enemy : MonoBehaviour
     {
         if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
         if (rb == null) rb = GetComponent<Rigidbody2D>();
+        hop = GetComponent<HopMovement>();
 
         EnemyDef def = EnemyCatalog.Get(id);
         if (def != null)
@@ -341,6 +345,7 @@ public class Enemy : MonoBehaviour
         // ueberschreiben.
         float speed = baseSpeed * slowFactor;
         if (pushCounter > 0f) speed = -speed;
+        else if (hop != null) speed *= hop.SpeedFactor;   // Huepfer: nur in der Luft
 
         Vector2 chase = (Vector2)direction * speed;
         Vector2 push = Separation(ref chase);

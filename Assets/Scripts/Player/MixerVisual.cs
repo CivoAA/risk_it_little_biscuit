@@ -23,10 +23,17 @@ using UnityEngine;
 /// Die alten Grafiken (Mixer-Sprite, Zone, ZoneOutside) werden nur
 /// unsichtbar geschaltet; MixerObject arbeitet weiter mit ihnen.
 /// Eine Welt-Einheit sind 32 Texel.
+///
+/// Liegt im Prefab schon ein Kind "MixerVisual" (gespeichert ueber
+/// Tools → Mixer → Aussehen ins Prefab speichern), wird es uebernommen:
+/// Ebene (Sorting Layer/Order), Position und Groesse der Teile kommen dann
+/// aus dem Prefab. Die Bilder malt weiterhin der Code - die Sprites im
+/// Prefab sind nur die Vorschau fuer den Editor.
 /// </summary>
 [DisallowMultipleComponent]
 public class MixerVisual : MonoBehaviour
 {
+    public const string RootName = "MixerVisual";
     private const float PPU = 32f;
     private const int BodyW = 48, BodyH = 80;
     private const int LidTop = 8, LidH = 12;          // Deckel: Zeilen 8..19 im Koerper-Raster
@@ -65,7 +72,9 @@ public class MixerVisual : MonoBehaviour
     private float chargingUntil;
     private int paintedKey = int.MinValue, paintedFieldStep = -1;
     private float burstStart, nextSpark;
-    private Vector3 lidHome;
+    private Vector3 lidHome, bodyHome;
+    private readonly Vector2[] arrowOffset = new Vector2[4];
+    private bool adopted;   // Teile kommen aus dem Prefab
 
     private class Spark
     {
@@ -81,48 +90,73 @@ public class MixerVisual : MonoBehaviour
 
     private void Start()
     {
+        Build();
+    }
+
+    /// <summary>
+    /// Baut das Aussehen auf. Im Spiel aus Start; das Editor-Tool ruft es
+    /// ausserhalb des Spiels auf, um die Teile ins Prefab zu speichern.
+    /// </summary>
+    public void Build()
+    {
         mixer = GetComponent<MixerObject>();
         trigger = GetComponent<Collider2D>();
-        if (mixer == null || trigger == null)
+        Transform baked = transform.Find(RootName);
+        if (mixer == null || trigger == null || (Application.isPlaying && !mixer.useNewVisual))
         {
+            // Alter Look gewuenscht: gespeicherte Teile aus dem Weg.
+            if (baked != null) baked.gameObject.SetActive(false);
             enabled = false;
             return;
         }
         charge = mixer.chargeSprite != null ? mixer.chargeSprite.transform : null;
 
         SpriteRenderer own = GetComponent<SpriteRenderer>();
-        foreach (SpriteRenderer sr in GetComponentsInChildren<SpriteRenderer>(true))
-            sr.enabled = false;
+        if (Application.isPlaying)
+            foreach (SpriteRenderer sr in GetComponentsInChildren<SpriteRenderer>(true))
+                sr.enabled = false;
 
         // Halter ohne eigenen SpriteRenderer: MixerObject schaltet beim
         // Ausloesen die Renderer seiner direkten Kinder ab - diesen nicht.
-        root = new GameObject("MixerVisual").transform;
-        root.SetParent(transform, false);
-        float s = Mathf.Abs(transform.lossyScale.x) > 0.0001f ? 1f / transform.lossyScale.x : 1f;
-        root.localScale = new Vector3(s, s, 1f);
+        adopted = baked != null;
+        if (adopted)
+        {
+            root = baked;
+        }
+        else
+        {
+            root = new GameObject(RootName).transform;
+            root.SetParent(transform, false);
+            float s = Mathf.Abs(transform.lossyScale.x) > 0.0001f ? 1f / transform.lossyScale.x : 1f;
+            root.localScale = new Vector3(s, s, 1f);
+        }
 
         int layer = own != null ? own.sortingLayerID : 0;
         int order = own != null ? own.sortingOrder : 0;
 
         BuildField(layer, order - 2);
-        shadow = NewRenderer("Shadow", ShadowSprite(), layer, order - 1, Vector2.zero);
-        shadow.transform.localPosition = new Vector3(0f, 2f / PPU, 0f);
+        shadow = NewRenderer("Shadow", ShadowSprite(), layer, order - 1, new Vector2(0f, 2f / PPU));
 
         bodyTex = NewTexture(BodyW, BodyH);
         bodyPx = new Color32[BodyW * BodyH];
         body = NewRenderer("Body", Sprite.Create(bodyTex, new Rect(0, 0, BodyW, BodyH), new Vector2(0.5f, 0f), PPU),
                            layer, order, Vector2.zero);
+        bodyHome = body.transform.localPosition;
 
         Texture2D lidTex = NewTexture(BodyW, LidH);
         lidTex.SetPixels32(PaintLid());
         lidTex.Apply(false);
         lid = NewRenderer("Lid", Sprite.Create(lidTex, new Rect(0, 0, BodyW, LidH), new Vector2(0.5f, 0f), PPU),
-                          layer, order + 1, Vector2.zero);
-        lidHome = new Vector3(0f, (BodyH - LidTop - LidH) / PPU, 0f);
-        lid.transform.localPosition = lidHome;
+                          layer, order + 1, new Vector2(0f, (BodyH - LidTop - LidH) / PPU));
+        lidHome = lid.transform.localPosition;
 
+        // Pfeile wandern im Spiel - aus dem Prefab zaehlt nur die Verschiebung
+        // gegenueber ihrem Ruheplatz.
         for (int i = 0; i < 4; i++)
-            arrows[i] = NewRenderer("Arrow" + i, ArrowSprite(i), layer, order - 1, Vector2.zero);
+        {
+            arrows[i] = NewRenderer("Arrow" + i, ArrowSprite(i), layer, order - 1, ArrowPosition(i, 0));
+            arrowOffset[i] = (Vector2)arrows[i].transform.localPosition - ArrowPosition(i, 0);
+        }
 
         for (int i = 0; i < 20; i++)
         {
@@ -134,16 +168,34 @@ public class MixerVisual : MonoBehaviour
         PaintBody(0, 0, true);
     }
 
+    /// <summary>
+    /// Holt das Teil aus dem Prefab, wenn es dort liegt (Ebene und Position
+    /// bleiben dann, wie sie dort eingestellt sind), sonst wird es neu angelegt.
+    /// Das Bild kommt in beiden Faellen aus dem Code.
+    /// </summary>
     private SpriteRenderer NewRenderer(string name, Sprite sprite, int layer, int order, Vector2 pos)
     {
-        var go = new GameObject(name);
-        go.transform.SetParent(root, false);
-        go.transform.localPosition = pos;
-        SpriteRenderer r = go.AddComponent<SpriteRenderer>();
+        Transform existing = adopted ? root.Find(name) : null;
+        SpriteRenderer r = existing != null ? existing.GetComponent<SpriteRenderer>() : null;
+        if (r == null)
+        {
+            var go = existing != null ? existing.gameObject : new GameObject(name);
+            go.transform.SetParent(root, false);
+            go.transform.localPosition = pos;
+            r = go.AddComponent<SpriteRenderer>();
+            r.sortingLayerID = layer;
+            r.sortingOrder = order;
+        }
         r.sprite = sprite;
-        r.sortingLayerID = layer;
-        r.sortingOrder = order;
+        r.enabled = true;
         return r;
+    }
+
+    private Vector2 ArrowPosition(int i, int step)
+    {
+        float r = (fieldR - 14 - step) / PPU;
+        Vector2 dir = i == 0 ? Vector2.up : i == 1 ? Vector2.right : i == 2 ? Vector2.down : Vector2.left;
+        return fieldCenter + dir * r;
     }
 
     private static Texture2D NewTexture(int w, int h)
@@ -228,14 +280,14 @@ public class MixerVisual : MonoBehaviour
         {
             x = (Mathf.FloorToInt(now * 40f) % 2 == 0 ? 1f : -1f) / PPU;
         }
-        body.transform.localPosition = new Vector3(x, 0f, 0f);
+        body.transform.localPosition = bodyHome + new Vector3(x, 0f, 0f);
     }
 
     private void UpdateLid(float now)
     {
         if (state == State.Ready || state == State.Waiting)
         {
-            float x = body.transform.localPosition.x;
+            float x = body.transform.localPosition.x - bodyHome.x;
             // Kurz vor voll hebt sich der Deckel im Takt - gleich fliegt er.
             float hop = state == State.Ready && charging && progress > 0.8f
                         && Mathf.FloorToInt(now * 8f) % 2 == 0 ? 1f / PPU : 0f;
@@ -301,9 +353,7 @@ public class MixerVisual : MonoBehaviour
 
             // In Ruhe wippen die Pfeile einen Texel, beim Laden laufen sie zur Mitte.
             int step = charging ? Mathf.FloorToInt(now * 12f) % 6 : (Mathf.FloorToInt(now * 2f) % 2);
-            float r = (fieldR - 14 - step) / PPU;
-            Vector2 dir = i == 0 ? Vector2.up : i == 1 ? Vector2.right : i == 2 ? Vector2.down : Vector2.left;
-            a.transform.localPosition = (Vector3)(fieldCenter + dir * r);
+            a.transform.localPosition = (Vector3)(ArrowPosition(i, step) + arrowOffset[i]);
             a.color = charging ? (Color)GameHudSkin.GoldLight : Color.white;
         }
     }
@@ -318,7 +368,7 @@ public class MixerVisual : MonoBehaviour
             nextSpark = now + Mathf.Lerp(0.12f, 0.04f, progress);
             float ang = Random.Range(0f, Mathf.PI * 2f);
             Vector2 from = fieldCenter + new Vector2(Mathf.Sin(ang), Mathf.Cos(ang)) * ((fieldR - 3) / PPU);
-            Vector2 to = new Vector2(0f, (BodyH - 40) / PPU);
+            Vector2 to = (Vector2)bodyHome + new Vector2(0f, (BodyH - 40) / PPU);
             Emit(from, to, now, 0.45f, true);
         }
 
@@ -357,7 +407,7 @@ public class MixerVisual : MonoBehaviour
 
     private void Burst()
     {
-        Vector2 top = new Vector2(0f, (BodyH - JugTop) / PPU);
+        Vector2 top = (Vector2)bodyHome + new Vector2(0f, (BodyH - JugTop) / PPU);
         for (int i = 0; i < 16; i++)
         {
             float ang = i / 16f * Mathf.PI * 2f + Random.Range(-0.1f, 0.1f);
@@ -748,6 +798,8 @@ public class MixerVisual : MonoBehaviour
 
         field = NewRenderer("Field", Sprite.Create(fieldTex, new Rect(0, 0, fieldSize, fieldSize),
                                                    new Vector2(0.5f, 0.5f), PPU), layer, order, fieldCenter);
+        // Aus dem Prefab kann das Feld verschoben sein - Pfeile und Funken folgen ihm.
+        fieldCenter = field.transform.localPosition;
         PaintFieldProgress(0f, false);
     }
 

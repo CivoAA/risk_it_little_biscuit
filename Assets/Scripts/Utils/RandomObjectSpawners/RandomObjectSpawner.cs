@@ -14,6 +14,8 @@ public class RandomObjectSpawner : MonoBehaviour
     public float minY = -8f;
     public float maxY = 8f;
     public int maxObjectsPerBlock = 1;
+    [Tooltip("Luecke zwischen zwei Mixer-Feldern, in Feld-Durchmessern (1 = ein ganzes Feld dazwischen).")]
+    public float mixerGap = 1f;
 
     [Header("No-Spawn-Zone um Kamera")]
     public Transform leftNoSpawnPoint;
@@ -63,22 +65,38 @@ public class RandomObjectSpawner : MonoBehaviour
 
         for (int i = 0; i < objectCount; i++)
         {
-            float randomX = Random.Range(blockStartX, blockEndX);
-            float randomY = Random.Range(minY, maxY);
-
-            // 🔹 Überspringen, falls in der No-Spawn-Zone
-            if (IsInNoSpawnZone(randomX))
-                continue;
-
             GameObject prefab = i < baseCount
                 ? spawnablePrefabs[Random.Range(0, spawnablePrefabs.Length)]
                 : mixerPrefabs[Random.Range(0, mixerPrefabs.Length)];
+
+            // Mixer wuerfeln neu, bis ihr Feld frei steht - normale Objekte
+            // haben wie bisher einen Versuch.
+            bool isMixer = System.Array.IndexOf(mixerPrefabs, prefab) >= 0;
+            int attempts = isMixer ? MixerPlacement.Attempts : 1;
+            bool found = false;
+            float randomX = 0f, randomY = 0f;
+
+            for (int a = 0; a < attempts && !found; a++)
+            {
+                randomX = Random.Range(blockStartX, blockEndX);
+                randomY = Random.Range(minY, maxY);
+
+                // 🔹 Überspringen, falls in der No-Spawn-Zone
+                if (IsInNoSpawnZone(randomX))
+                    continue;
+
+                found = !isMixer || MixerPlacement.IsFree(prefab, new Vector2(randomX, randomY), mixerGap);
+            }
+
+            if (!found)
+                continue;
+
             GameObject spawnedObject = Instantiate(prefab, new Vector3(randomX, randomY, 0f), Quaternion.identity);
 
             Scene gameScene = RunScene.Current;
             if (gameScene.IsValid() && gameScene.isLoaded)
             {
-                SceneManager.MoveGameObjectToScene(spawnedObject, gameScene);
+                RunScene.Place(spawnedObject, isMixer ? "Mixer" : "Map-Objekte");
             }
             else
             {

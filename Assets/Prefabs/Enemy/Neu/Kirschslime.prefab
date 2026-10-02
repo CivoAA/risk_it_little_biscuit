@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1555037849755485170}
   - component: {fileID: 7518344913395470408}
   - component: {fileID: 6070289056054779866}
+  - component: {fileID: 194556390207289122}
   m_Layer: 7
   m_Name: Kirschslime
   m_TagString: Enemy
@@ -205,3 +206,18 @@ MonoBehaviour:
   MiniBoss: 0
   BossBoss: 0
   Death_Boss: 0
+--- !u!114 &194556390207289122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1720231452579878710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ad85bef22319653a3038d4eb7c6461c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HopMovement
+  firstAirFrame: 4
+  lastAirFrame: 6
+  keepAverageSpeed: 1

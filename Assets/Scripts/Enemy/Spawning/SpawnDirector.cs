@@ -560,11 +560,7 @@ public class SpawnDirector : MonoBehaviour
 
         GameObject spawned = Instantiate(prefab, position, Quaternion.identity);
 
-        Scene runScene = RunScene.Current;
-        if (runScene.IsValid() && runScene.isLoaded)
-        {
-            SceneManager.MoveGameObjectToScene(spawned, runScene);
-        }
+        RunScene.Place(spawned, "Gegner");
 
         Enemy enemy = spawned.GetComponent<Enemy>();
         if (enemy != null)
