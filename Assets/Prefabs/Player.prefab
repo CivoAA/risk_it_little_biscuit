@@ -1310,6 +1310,7 @@ Transform:
   - {fileID: 175688916461800329}
   - {fileID: 200387155286948073}
   - {fileID: 8870903225465502390}
+  - {fileID: 5182736409182736452}
   m_Father: {fileID: 4991830239493606234}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1872045825326429319
@@ -2149,6 +2150,7 @@ MonoBehaviour:
   - {fileID: 5625415980960060364}
   - {fileID: 1208513299144906886}
   - {fileID: 6268419814492763084}
+  - {fileID: 6402918374650192837}
   maxLevelStuff:
   - {fileID: 9138393922043077461}
   EvoCombinations:
@@ -2176,6 +2178,9 @@ MonoBehaviour:
   - EvoWeapon: {fileID: 6268419814492763084}
     RequiredWeapon1: {fileID: 4065641611000851519}
     RequiredWeapon2: {fileID: 4506321017599628611}
+  - EvoWeapon: {fileID: 6402918374650192837}
+    RequiredWeapon1: {fileID: 2938475610293847561}
+    RequiredWeapon2: {fileID: 3253892304407363630}
   immunityDuration: 0.3
   immunityTimer: 0
 --- !u!95 &3309684457716786782
@@ -10272,6 +10277,61 @@ MonoBehaviour:
   stats: []
   weaponImage: {fileID: -5823641902736451127, guid: e2992e54eabf421aa4246f9310a54827, type: 3}
   weaponIcon: {fileID: -5823641902736451127, guid: e2992e54eabf421aa4246f9310a54827, type: 3}
+  weaponIconEvo: {fileID: 0}
+  posssibleEvo: 0
+  hasBeenRemoved: 0
+  waveSprite: {fileID: 0}
+  originOffset: {x: 0, y: 0.4}
+--- !u!1 &7391046258173920461
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5182736409182736452}
+  - component: {fileID: 6402918374650192837}
+  m_Layer: 0
+  m_Name: Typhoon Fan Evo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5182736409182736452
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7391046258173920461}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7413418079001370670}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6402918374650192837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7391046258173920461}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6e78641301648e5b1f23447da5beb30, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::TyphoonFan
+  weaponID: evo_typhoon_fan
+  weaponLevel: -1
+  maxweaponLevel: 0
+  stats: []
+  weaponImage: {fileID: -5823641902736451127, guid: f57851f037184c948c0c9a1b9504dd04, type: 3}
+  weaponIcon: {fileID: -5823641902736451127, guid: f57851f037184c948c0c9a1b9504dd04, type: 3}
   weaponIconEvo: {fileID: 0}
   posssibleEvo: 0
   hasBeenRemoved: 0

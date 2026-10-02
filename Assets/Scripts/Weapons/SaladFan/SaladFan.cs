@@ -29,7 +29,9 @@ using UnityEngine.SceneManagement;
 ///   Sturmboe   - jeder <see cref="StormEvery"/>. Schlag geht wie ein Uhrzeiger
 ///                einmal rundherum, mit doppelt so vielen Wellen.
 ///
-/// KOMMT EINE EVO DAZU: beide Sterne dort ebenfalls einbauen.
+/// Die Evo <see cref="TyphoonFan"/> erbt von hier, damit beide Sterne dort
+/// automatisch mitlaufen. Was sie anders macht, haengt an den virtuellen
+/// Stellschrauben unten (Groesse, Tempo, Wellenzahl, Kreis, Abschuss).
 /// </summary>
 public class SaladFan : Weapon
 {
@@ -124,21 +126,57 @@ public class SaladFan : Weapon
     private bool storming;
 
     /// <summary>Anteil, den eine Welle der aktuellen Stufe pro Treffer behaelt.</summary>
-    public float CurrentKeep
+    public virtual float CurrentKeep
     {
         get { return KeepPerHit[Mathf.Clamp(weaponLevel, 0, KeepPerHit.Length - 1)]; }
     }
 
     /// <summary>So viele Gegner trifft eine Welle der aktuellen Stufe.</summary>
-    public int CurrentMaxHits
+    public virtual int CurrentMaxHits
     {
         get { return HitsPerLevel[Mathf.Clamp(weaponLevel, 0, HitsPerLevel.Length - 1)]; }
     }
 
-    void Awake()
+    /// <summary>Werte der hoechsten Stufe - die Evo baut darauf auf.</summary>
+    protected static WeaponStats MaxLevelStats
+    {
+        get { return LevelStats[LevelStats.Length - 1]; }
+    }
+
+    /// <summary>Ausgangspunkt der Wellen in Weltkoordinaten.</summary>
+    protected Vector2 WaveOrigin
+    {
+        get { return (Vector2)transform.position + originOffset; }
+    }
+
+    /// <summary>Groesse einer Welle in Tiles, vor AOERange.</summary>
+    protected virtual float CurrentWaveSize
+    {
+        get { return WaveSize; }
+    }
+
+    /// <summary>Fluggeschwindigkeit einer Welle in Tiles pro Sekunde.</summary>
+    protected virtual float CurrentWaveSpeed
+    {
+        get { return WaveSpeed; }
+    }
+
+    /// <summary>Bild der Welle, wenn am Prefab keins eingetragen ist.</summary>
+    protected virtual Sprite DefaultWaveSprite
+    {
+        get { return GeneratedWave; }
+    }
+
+    protected virtual void Awake()
     {
         stats = new List<WeaponStats>(LevelStats);
         maxweaponLevel = LevelStats.Length - 1;
+    }
+
+    /// <summary>Wellen pro Schlag: Stufe plus Extra-Schuss 1:1.</summary>
+    protected virtual int WaveCount()
+    {
+        return Mathf.Max(1, Mathf.RoundToInt(CurrentStats.shots + PlayerController.Instance.ExtraShots));
     }
 
     void Update()
@@ -155,7 +193,7 @@ public class SaladFan : Weapon
 
     private bool Fire()
     {
-        Vector2 origin = (Vector2)transform.position + originOffset;
+        Vector2 origin = WaveOrigin;
         float range = CurrentStats.range;
 
         CollectTargets(origin, range);
@@ -163,8 +201,9 @@ public class SaladFan : Weapon
 
         AudioController.Instance.PalySound(AudioController.Instance.Werfen, 0.1f);
 
-        int waves = Mathf.Max(1, Mathf.RoundToInt(CurrentStats.shots + PlayerController.Instance.ExtraShots));
-        Vector2 nearestDir = Aim.PredictDirection(origin, targets[0], WaveSpeed);
+        int waves = WaveCount();
+        float speed = CurrentWaveSpeed;
+        Vector2 nearestDir = Aim.PredictDirection(origin, targets[0], speed);
 
         attackCount++;
         if (Skills.HasGrant(SkillGrants.Sturmboe) && attackCount % StormEvery == 0)
@@ -178,7 +217,7 @@ public class SaladFan : Weapon
             Vector2 dir;
             if (i < targets.Count)
             {
-                dir = Aim.PredictDirection(origin, targets[i], WaveSpeed);
+                dir = Aim.PredictDirection(origin, targets[i], speed);
             }
             else
             {
@@ -199,7 +238,7 @@ public class SaladFan : Weapon
     /// beginnend, einmal ganz herum. Jede Welle startet dort, wo der Spieler
     /// gerade steht. Der Cooldown laeuft erst danach weiter.
     /// </summary>
-    private IEnumerator StormVolley(Vector2 startDir, int count, float range)
+    protected virtual IEnumerator StormVolley(Vector2 startDir, int count, float range)
     {
         storming = true;
 
@@ -210,7 +249,7 @@ public class SaladFan : Weapon
         {
             if (!IsActive || PlayerController.Instance == null) break;
 
-            Vector2 origin = (Vector2)transform.position + originOffset;
+            Vector2 origin = WaveOrigin;
             Vector2 dir = Quaternion.Euler(0f, 0f, -step * i) * startDir;
             SpawnWave(origin, dir, range);
 
@@ -239,15 +278,24 @@ public class SaladFan : Weapon
                 .CompareTo(((Vector2)b.transform.position - origin).sqrMagnitude));
     }
 
-    private void SpawnWave(Vector2 origin, Vector2 dir, float range)
+    /// <summary>Eine Hauptwelle - Abspaltungen der Spaltwelle laufen nicht hier durch.</summary>
+    protected void SpawnWave(Vector2 origin, Vector2 dir, float range)
     {
-        float size = WaveSize * PlayerController.Instance.AOERange;
-        SaladFanWave wave = CreateWave(origin, size, waveSprite != null ? waveSprite : GeneratedWave);
-        wave.Launch(dir, WaveSpeed, range, size * 0.5f,
+        float size = CurrentWaveSize * PlayerController.Instance.AOERange;
+        SaladFanWave wave = CreateWave(origin, size, waveSprite != null ? waveSprite : DefaultWaveSprite);
+        wave.Launch(dir, CurrentWaveSpeed, range, size * 0.5f,
                     CurrentStats.damage, MinDamage, CurrentKeep, CurrentMaxHits,
                     BaseSlow, BaseKnockback);
 
         if (Skills.HasGrant(SkillGrants.Spaltwelle)) wave.EnableSplit();
+
+        OnWaveLaunched(wave, origin, size);
+    }
+
+    /// <summary>Nach jeder Hauptwelle, z.B. fuer die Windschneise der Evo.</summary>
+    /// <param name="size">Groesse der Welle in Tiles (mit AOERange).</param>
+    protected virtual void OnWaveLaunched(SaladFanWave wave, Vector2 origin, float size)
+    {
     }
 
     /// <summary>
@@ -280,7 +328,8 @@ public class SaladFan : Weapon
     //  Anzeige
     // ------------------------------------------------------------------
 
-    private static void CopySorting(SpriteRenderer target)
+    /// <summary>Gleiche Ebene wie der Spieler, <paramref name="orderOffset"/> davor (+) oder dahinter (-).</summary>
+    public static void CopySorting(SpriteRenderer target, int orderOffset = 1)
     {
         SpriteRenderer player = PlayerController.Instance != null
             ? PlayerController.Instance.GetComponentInChildren<SpriteRenderer>()
@@ -288,7 +337,7 @@ public class SaladFan : Weapon
         if (player == null) return;
 
         target.sortingLayerID = player.sortingLayerID;
-        target.sortingOrder = player.sortingOrder + 1;
+        target.sortingOrder = player.sortingOrder + orderOffset;
     }
 
     private static Sprite generatedWave;
@@ -302,59 +351,68 @@ public class SaladFan : Weapon
     {
         get
         {
-            if (generatedWave != null) return generatedWave;
-
-            const int n = 32;
-            Texture2D tex = new Texture2D(n, n, TextureFormat.RGBA32, false)
+            if (generatedWave == null)
             {
-                filterMode = FilterMode.Point,
-                wrapMode = TextureWrapMode.Clamp,
-            };
-
-            const float outerR = 15.5f;
-            const float innerR = 14f;
-            const float innerShift = 7f;   // Mitte des ausgeschnittenen Kreises liegt weiter hinten
-            const float c = n * 0.5f;
-
-            Color32 edge = new Color32(245, 255, 235, 255);
-            Color32 leaf = new Color32(150, 225, 110, 220);
-            Color32 clear = new Color32(0, 0, 0, 0);
-            Color32[] px = new Color32[n * n];
-
-            for (int y = 0; y < n; y++)
-            {
-                for (int x = 0; x < n; x++)
-                {
-                    float fx = x + 0.5f - c;
-                    float fy = y + 0.5f - c;
-                    float rOuter = Mathf.Sqrt(fx * fx + fy * fy);
-                    float rInner = Mathf.Sqrt((fx + innerShift) * (fx + innerShift) + fy * fy);
-
-                    Color32 col = clear;
-                    if (rOuter <= outerR && rInner > innerR)
-                    {
-                        if (outerR - rOuter < 2f)
-                        {
-                            col = edge;
-                        }
-                        else
-                        {
-                            // Nach hinten (zur Innenkante) durchsichtiger.
-                            float t = Mathf.Clamp01((rInner - innerR) / 6f);
-                            col = leaf;
-                            col.a = (byte)Mathf.RoundToInt(Mathf.Lerp(70f, 220f, t));
-                        }
-                    }
-
-                    px[y * n + x] = col;
-                }
+                generatedWave = BuildWaveSprite(new Color32(245, 255, 235, 255), new Color32(150, 225, 110, 220));
             }
-
-            tex.SetPixels32(px);
-            tex.Apply();
-
-            generatedWave = Sprite.Create(tex, new Rect(0, 0, n, n), new Vector2(0.5f, 0.5f), n);
             return generatedWave;
         }
+    }
+
+    /// <summary>
+    /// Sichel in beliebigen Farben (z.B. die blaeuliche des
+    /// <see cref="TyphoonFan"/>). <paramref name="leaf"/>.a ist die Deckkraft
+    /// an der dicksten Stelle.
+    /// </summary>
+    public static Sprite BuildWaveSprite(Color32 edge, Color32 leaf)
+    {
+        const int n = 32;
+        Texture2D tex = new Texture2D(n, n, TextureFormat.RGBA32, false)
+        {
+            filterMode = FilterMode.Point,
+            wrapMode = TextureWrapMode.Clamp,
+        };
+
+        const float outerR = 15.5f;
+        const float innerR = 14f;
+        const float innerShift = 7f;   // Mitte des ausgeschnittenen Kreises liegt weiter hinten
+        const float c = n * 0.5f;
+
+        Color32 clear = new Color32(0, 0, 0, 0);
+        Color32[] px = new Color32[n * n];
+
+        for (int y = 0; y < n; y++)
+        {
+            for (int x = 0; x < n; x++)
+            {
+                float fx = x + 0.5f - c;
+                float fy = y + 0.5f - c;
+                float rOuter = Mathf.Sqrt(fx * fx + fy * fy);
+                float rInner = Mathf.Sqrt((fx + innerShift) * (fx + innerShift) + fy * fy);
+
+                Color32 col = clear;
+                if (rOuter <= outerR && rInner > innerR)
+                {
+                    if (outerR - rOuter < 2f)
+                    {
+                        col = edge;
+                    }
+                    else
+                    {
+                        // Nach hinten (zur Innenkante) durchsichtiger.
+                        float t = Mathf.Clamp01((rInner - innerR) / 6f);
+                        col = leaf;
+                        col.a = (byte)Mathf.RoundToInt(Mathf.Lerp(70f, leaf.a, t));
+                    }
+                }
+
+                px[y * n + x] = col;
+            }
+        }
+
+        tex.SetPixels32(px);
+        tex.Apply();
+
+        return Sprite.Create(tex, new Rect(0, 0, n, n), new Vector2(0.5f, 0.5f), n);
     }
 }

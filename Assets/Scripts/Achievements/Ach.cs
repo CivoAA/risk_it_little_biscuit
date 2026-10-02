@@ -110,6 +110,10 @@ public static class Ach
         "Sticky_Shatter_Evo", "Sticky Shatter Evo", "Obtained the Sticky Shatter Evo for the first time!",
         AchievementCategory.Evolutions);
 
+    public static readonly AchievementDef TyphoonFanEvo = Def(
+        "Typhoon_Fan_Evo", "Typhoon Fan Evo", "Obtained the Typhoon Fan Evo for the first time!",
+        AchievementCategory.Evolutions);
+
     // ==================================================================
     //  Waffen auf Maximalstufe
     // ==================================================================

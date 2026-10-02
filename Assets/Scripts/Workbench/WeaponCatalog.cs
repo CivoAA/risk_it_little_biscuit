@@ -187,6 +187,7 @@ public static class WeaponCatalog
     public static readonly WeaponDef EvoBoomerang      = Def("evo_boomerang", "Boomerang Evo", PoolKind.Evo);
     public static readonly WeaponDef EvoBombSwarm      = Def("evo_bomb_swarm", "Bomb Saw Evo", PoolKind.Evo);
     public static readonly WeaponDef EvoStickyShatter  = Def("evo_sticky_shatter", "Sticky Shatter Evo", PoolKind.Evo);
+    public static readonly WeaponDef EvoTyphoonFan     = Def("evo_typhoon_fan", "Typhoon Fan Evo", PoolKind.Evo);
 
     // ==================================================================
     //  Rezepte - Reihenfolge wie im Player-Prefab
@@ -200,6 +201,7 @@ public static class WeaponCatalog
     public static readonly EvoDef RecipeBoomerang     = Evo("evo_boomerang", "boomerang", "buff_extra_shot");
     public static readonly EvoDef RecipeBombSwarm     = Evo("evo_bomb_swarm", "candy_bomb", "cookie_saw");
     public static readonly EvoDef RecipeStickyShatter = Evo("evo_sticky_shatter", "jam_jar", "buff_aoe_range");
+    public static readonly EvoDef RecipeTyphoonFan    = Evo("evo_typhoon_fan", "salad_fan", "buff_move_speed");
 
     // ==================================================================
     //  Zugriff
