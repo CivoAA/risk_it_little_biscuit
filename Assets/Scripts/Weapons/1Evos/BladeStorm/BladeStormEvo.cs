@@ -4,7 +4,8 @@ using System.Collections.Generic;
 /// <summary>
 /// Blade Storm Evo (Blade Swarm + Void Spike).
 ///
-/// Die Klingen parken in festen Slots um den Spieler, werden im Takt auf ein
+/// Die Klingen parken gleichmaessig verteilt im Ring um den Spieler (Spitze
+/// nach aussen), werden im Takt auf ein
 /// zufälliges Ziel im Erfassungsbereich abgefeuert, durchdringen alles auf der
 /// Flugbahn und kehren danach zurück. Der eigentliche Flug liegt in
 /// <see cref="BladeStormEvoPrefab"/>; diese Klasse verwaltet nur Bestand,
@@ -17,7 +18,9 @@ public class BladeStormEvo : Weapon
 
     private const int MaxBlades = 9;
     private const float FireInterval = 0.1f;   // Abstand zwischen den Klingen einer Salve
-    private const float SideX = 1.45f;         // Orbit-Abstand: Evo-Kunai ~1.7 lang, halbe Figur 0.5 + Luft
+    private const float RingRadius = 1.45f;    // Ring-Radius: Evo-Kunai ~1.7 lang, halbe Figur 0.5 + Luft
+    private const float RingSpacing = 0.7f;    // Mindestabstand auf dem Ring: Evo-Kunai ~0.6 breit + Luft
+    private const float SpriteAngle = -90f;    // Sprite zeigt bei Rotation 0 mit der Spitze nach oben
 
     private readonly List<BladeStormEvoPrefab> blades = new List<BladeStormEvoPrefab>();
     private readonly List<BladeStormEvoPrefab> volley = new List<BladeStormEvoPrefab>();
@@ -182,26 +185,32 @@ public class BladeStormEvo : Weapon
     }
 
     /// <summary>
-    /// Setzt alle Klingen im Orbit auf ihre Slots. Die Rotation bleibt dabei
-    /// bewusst unangetastet – die regelt die Klinge selbst, sonst überschreiben
-    /// sich beide Skripte jeden Frame gegenseitig.
+    /// Setzt alle Klingen im Orbit auf ihren Platz im Ring (Spitze nach aussen,
+    /// siehe <see cref="BladeSwarm.RingAngle"/>). Jede Klinge hat ihren Platz
+    /// nach ihrer Nummer unter ALLEN Klingen - so bleibt waehrend einer Salve
+    /// eine Luecke, statt dass die uebrigen bei jedem Abschuss nachruecken.
+    /// Die Klinge selbst dreht sich im Orbit nicht mehr.
     /// </summary>
     public void PositionOrbitBlades()
     {
-        int orbitIndex = 0;
+        int count = blades.Count;
 
-        for (int i = 0; i < blades.Count; i++)
+        for (int i = 0; i < count; i++)
         {
             BladeStormEvoPrefab blade = blades[i];
             if (blade == null || !blade.InOrbit) continue;
 
+            float angle = BladeSwarm.RingAngle(i, count);
+            Vector2 offset = BladeSwarm.RingOffset(angle, count, RingRadius, RingSpacing);
+
             // localPosition statt Weltposition + Offset: so bleibt der Abstand zum
-            // Spieler exakt pixelgenau (siehe BladeSwarm.SlotOffset).
+            // Spieler exakt pixelgenau (siehe BladeSwarm.RingOffset).
             if (blade.transform.parent == transform)
-                blade.transform.localPosition = BladeSwarm.SlotOffset(orbitIndex, SideX);
+                blade.transform.localPosition = offset;
             else
-                blade.transform.position = (Vector2)transform.position + BladeSwarm.SlotOffset(orbitIndex, SideX);
-            orbitIndex++;
+                blade.transform.position = (Vector2)transform.position + offset;
+
+            blade.transform.rotation = Quaternion.Euler(0f, 0f, angle + SpriteAngle);
         }
     }
 

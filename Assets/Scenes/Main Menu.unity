@@ -516,7 +516,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 241260809}
           m_TargetAssemblyTypeName: MainMenuController, Assembly-CSharp
-          m_MethodName: PlayEndless
+          m_MethodName: PlayStory
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
