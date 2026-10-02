@@ -272,6 +272,7 @@ public class Enemy : MonoBehaviour
     {
         alive.Remove(this);
         UnregisterCollider();
+        if (IsFrozen) Unfreeze();
     }
 
     protected virtual void Start()
@@ -322,6 +323,13 @@ public class Enemy : MonoBehaviour
             return;
         }
 
+        // Festgeklebt: kein Laufen, kein Umdrehen, kein Schieben.
+        if (IsFrozen)
+        {
+            if (Time.time < frozenUntil) return;
+            Unfreeze();
+        }
+
         float dt = Time.fixedDeltaTime;
 
         FacePlayer(player);
@@ -359,6 +367,91 @@ public class Enemy : MonoBehaviour
         Vector2 push = Separation(ref chase);
 
         rb.linearVelocity = chase + externalVelocity + push * baseSpeed * SeparationStrength;
+    }
+
+    // ---------------------------------------------------------- Festkleben
+
+    /// <summary>Faerbung waehrend des Festklebens (Multiplikator auf das Bild).</summary>
+    private static readonly Color FrozenTint = new Color(0.78f, 0.84f, 0.95f, 1f);
+
+    private float frozenUntil;
+    private float recycleHoldUntil;
+    private Animator[] frozenAnimators;
+    private float[] frozenAnimatorSpeeds;
+    private RigidbodyConstraints2D frozenConstraints;
+    private Color frozenColor;
+
+    /// <summary>Skilltree "Klebreis": steht still, dreht sich nicht, Animation steht.</summary>
+    public bool IsFrozen => frozenUntil > 0f;
+
+    /// <summary>
+    /// Solange setzt der <see cref="SpawnDirector"/> den Gegner nicht um. Laeuft
+    /// ueber das Festkleben hinaus - jeder Gegner mit eigenem Nachlauf, damit
+    /// nach dem Aufloesen nicht alle auf einmal vor dem Spieler auftauchen.
+    /// </summary>
+    public bool RecycleHeld => Time.time < recycleHoldUntil;
+
+    /// <summary>
+    /// Klebt den Gegner fest. Bosse und Minibosse steuern sich selbst und
+    /// bleiben frei.
+    /// </summary>
+    /// <param name="seconds">So lange steht er still.</param>
+    /// <param name="recycleDelay">So lange nach dem Aufloesen wird er noch nicht umgesetzt.</param>
+    public void Freeze(float seconds, float recycleDelay)
+    {
+        if (IsBoss) return;
+
+        if (!IsFrozen)
+        {
+            frozenAnimators = GetComponentsInChildren<Animator>();
+            frozenAnimatorSpeeds = new float[frozenAnimators.Length];
+            for (int i = 0; i < frozenAnimators.Length; i++)
+            {
+                frozenAnimatorSpeeds[i] = frozenAnimators[i].speed;
+                frozenAnimators[i].speed = 0f;
+            }
+
+            if (rb != null)
+            {
+                frozenConstraints = rb.constraints;
+                rb.linearVelocity = Vector2.zero;
+                rb.constraints = RigidbodyConstraints2D.FreezeAll;
+            }
+
+            if (spriteRenderer != null)
+            {
+                frozenColor = spriteRenderer.color;
+                spriteRenderer.color = frozenColor * FrozenTint;
+            }
+        }
+
+        frozenUntil = Mathf.Max(frozenUntil, Time.time + seconds);
+        recycleHoldUntil = Mathf.Max(recycleHoldUntil, frozenUntil + recycleDelay);
+    }
+
+    private void Unfreeze()
+    {
+        frozenUntil = 0f;
+
+        if (frozenAnimators != null)
+        {
+            for (int i = 0; i < frozenAnimators.Length; i++)
+            {
+                if (frozenAnimators[i] != null) frozenAnimators[i].speed = frozenAnimatorSpeeds[i];
+            }
+            frozenAnimators = null;
+        }
+
+        if (rb != null) rb.constraints = frozenConstraints;
+        if (spriteRenderer != null) spriteRenderer.color = frozenColor;
+
+        // Rueckstoss und Zug, die waehrend des Festklebens angekommen sind, verfallen.
+        pushCounter = 0f;
+        externalVelocity = Vector2.zero;
+        externalVelocityTimer = 0f;
+
+        // Der Stau von vor dem Festkleben gilt nicht mehr.
+        ResetBlocked();
     }
 
     // ------------------------------------------------------------- Laufweg

@@ -4,9 +4,18 @@ using UnityEngine;
 public class EnemyR : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer spriteRenderer;
+    private Enemy enemy;
+
+    void Awake()
+    {
+        enemy = GetComponent<Enemy>();
+    }
 
     void FixedUpdate()
     {
+        // Festgeklebt (Klebreis): nicht umdrehen.
+        if (enemy != null && enemy.IsFrozen) return;
+
         if (PlayerController.Instance.gameObject.activeSelf)
         {
             //face the player

@@ -87,9 +87,13 @@ public class ShurikenWeapon : Weapon
             SceneManager.MoveGameObjectToScene(shuriken, gameScene);
         }
 
-        StartCoroutine(MoveAndDestroy(shuriken, direction));
+        // Der Stern fliegt selbst - nur so kann er beim Abpraller umlenken.
+        ShurikenWeaponPrefab star = shuriken.GetComponent<ShurikenWeaponPrefab>();
+        if (star != null) star.Launch(direction);
+        else StartCoroutine(MoveAndDestroy(shuriken, direction));
     }
 
+    /// <summary>Rueckfall fuer ein Prefab ohne <see cref="ShurikenWeaponPrefab"/>.</summary>
     IEnumerator MoveAndDestroy(GameObject shuriken, Vector2 direction)
     {
         float moveSpeed = 10f;
