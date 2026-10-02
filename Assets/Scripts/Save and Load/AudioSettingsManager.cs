@@ -9,6 +9,12 @@ public class AudioSettingsData
     public float masterVolume = 1f;
     public float musicVolume = 1f;
     public float effectsVolume = 1f;
+
+    // Stumm-Schalter je Kanal. Die Lautstaerke darueber bleibt stehen, damit
+    // der Ton beim Wiedereinschalten so laut ist wie vorher.
+    public bool masterMuted;
+    public bool musicMuted;
+    public bool effectsMuted;
 }
 
 public class AudioSettingsManager : MonoBehaviour
@@ -100,9 +106,7 @@ public class AudioSettingsManager : MonoBehaviour
 
         if (AudioController.Instance != null)
         {
-            AudioController.Instance.SetMasterVolume(currentSettings.masterVolume);
-            AudioController.Instance.SetMusicVolume(currentSettings.musicVolume);
-            AudioController.Instance.SetEffectsVolume(currentSettings.effectsVolume);
+            ApplySettingsNow();
         }
         else
         {
@@ -155,37 +159,65 @@ public class AudioSettingsManager : MonoBehaviour
         }
     }
 
-    // diese Methoden rufst du aus deinem VolumeSlider auf:
+    // diese Methoden rufst du aus deinem VolumeSlider auf.
+    // Wer die Lautstaerke dreht, will den Kanal hoeren - das hebt Stumm auf.
     public void SetMasterVolume(float value)
     {
         currentSettings.masterVolume = value;
-        if (AudioController.Instance != null)
-            AudioController.Instance.SetMasterVolume(value);
+        currentSettings.masterMuted = false;
+        ApplySettingsNow();
         SaveSettings();
     }
 
     public void SetMusicVolume(float value)
     {
         currentSettings.musicVolume = value;
-        if (AudioController.Instance != null)
-            AudioController.Instance.SetMusicVolume(value);
+        currentSettings.musicMuted = false;
+        ApplySettingsNow();
         SaveSettings();
     }
 
     public void SetEffectsVolume(float value)
     {
         currentSettings.effectsVolume = value;
-        if (AudioController.Instance != null)
-            AudioController.Instance.SetEffectsVolume(value);
+        currentSettings.effectsMuted = false;
+        ApplySettingsNow();
         SaveSettings();
     }
+
+    public void SetMasterMuted(bool muted)
+    {
+        currentSettings.masterMuted = muted;
+        ApplySettingsNow();
+        SaveSettings();
+    }
+
+    public void SetMusicMuted(bool muted)
+    {
+        currentSettings.musicMuted = muted;
+        ApplySettingsNow();
+        SaveSettings();
+    }
+
+    public void SetEffectsMuted(bool muted)
+    {
+        currentSettings.effectsMuted = muted;
+        ApplySettingsNow();
+        SaveSettings();
+    }
+
+    /// <summary>Was wirklich im Mixer landet: stumm heisst 0, sonst die eingestellte Lautstaerke.</summary>
+    public float EffectiveMaster => currentSettings.masterMuted ? 0f : currentSettings.masterVolume;
+    public float EffectiveMusic => currentSettings.musicMuted ? 0f : currentSettings.musicVolume;
+    public float EffectiveEffects => currentSettings.effectsMuted ? 0f : currentSettings.effectsVolume;
+
     public void ApplySettingsNow()
     {
         if (AudioController.Instance != null)
         {
-            AudioController.Instance.SetMasterVolume(currentSettings.masterVolume);
-            AudioController.Instance.SetMusicVolume(currentSettings.musicVolume);
-            AudioController.Instance.SetEffectsVolume(currentSettings.effectsVolume);
+            AudioController.Instance.SetMasterVolume(EffectiveMaster);
+            AudioController.Instance.SetMusicVolume(EffectiveMusic);
+            AudioController.Instance.SetEffectsVolume(EffectiveEffects);
         }
     }
 }

@@ -432,6 +432,7 @@
     { "key": "ui.options.audio.master", "value": "Master Volume" },
     { "key": "ui.options.audio.music", "value": "Music" },
     { "key": "ui.options.audio.sfx", "value": "Sound Effects" },
+    { "key": "ui.options.audio.mute", "value": "OFF" },
     { "key": "ui.options.display.mode", "value": "Mode" },
     { "key": "ui.options.display.resolution", "value": "Resolution" },
     { "key": "ui.options.display.damage", "value": "Damage Numbers" },

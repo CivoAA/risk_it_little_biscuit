@@ -51,6 +51,7 @@ public class OptionsPanel : MonoBehaviour
     private const int ChipH = 14, ChipGap = 3, ChipPad = 12, ChipMinW = 26;
     private const int CellCount = 10, CellW = 7, CellH = 9, CellStep = 8;
     private const int ValueW = 26;
+    private const int MuteW = 30;
     private const int RowBtnMinW = 60;
 
     // Rueckfrage wie im Pausenmenue, etwas hoeher fuer drei Zeilen Text.
@@ -344,15 +345,21 @@ public class OptionsPanel : MonoBehaviour
         // haette alle drei Leisten fuer immer taub gemacht.
         BarRow(Loc.Get("ui.options.audio.master", "Gesamtlautstärke"),
                () => Audio != null ? Audio.currentSettings.masterVolume : GameSettings.DefaultVolume,
-               v => { if (Audio != null) Audio.SetMasterVolume(v); });
+               v => { if (Audio != null) Audio.SetMasterVolume(v); },
+               () => Audio != null && Audio.currentSettings.masterMuted,
+               m => { if (Audio != null) Audio.SetMasterMuted(m); });
 
         BarRow(Loc.Get("ui.options.audio.music", "Musik"),
                () => Audio != null ? Audio.currentSettings.musicVolume : GameSettings.DefaultVolume,
-               v => { if (Audio != null) Audio.SetMusicVolume(v); });
+               v => { if (Audio != null) Audio.SetMusicVolume(v); },
+               () => Audio != null && Audio.currentSettings.musicMuted,
+               m => { if (Audio != null) Audio.SetMusicMuted(m); });
 
         BarRow(Loc.Get("ui.options.audio.sfx", "Geräusche"),
                () => Audio != null ? Audio.currentSettings.effectsVolume : GameSettings.DefaultVolume,
-               v => { if (Audio != null) Audio.SetEffectsVolume(v); });
+               v => { if (Audio != null) Audio.SetEffectsVolume(v); },
+               () => Audio != null && Audio.currentSettings.effectsMuted,
+               m => { if (Audio != null) Audio.SetEffectsMuted(m); });
     }
 
     private static AudioSettingsManager Audio => AudioSettingsManager.Instance;
@@ -441,8 +448,13 @@ public class OptionsPanel : MonoBehaviour
         return row;
     }
 
-    /// <summary>Lautstaerke: zehn Zellen (klicken oder ziehen) und der Prozentwert.</summary>
-    private void BarRow(string name, System.Func<float> get, System.Action<float> set)
+    /// <summary>
+    /// Lautstaerke: AUS-Knopf, zehn Zellen (klicken oder ziehen) und der
+    /// Prozentwert. AUS schaltet den Kanal stumm, ohne die Stufe zu vergessen;
+    /// ein Klick in die Leiste schaltet ihn wieder ein.
+    /// </summary>
+    private void BarRow(string name, System.Func<float> get, System.Action<float> set,
+                        System.Func<bool> getMuted, System.Action<bool> setMuted)
     {
         RectTransform row = NewRow(name);
 
@@ -456,9 +468,20 @@ public class OptionsPanel : MonoBehaviour
                                                  textFont, OptionsKit.SizeText, GameHudSkin.Cream,
                                                  TextAlignmentOptions.Right);
 
+        SkinButton mute = SkinButton.Create(row, x0 - 6 - MuteW, Mathf.Round((RowH - ChipH) / 2f), MuteW, ChipH,
+                                            Loc.Get("ui.options.audio.mute", "AUS"), textFont, SkinButton.Kind.Wood,
+                                            () =>
+                                            {
+                                                setMuted(!getMuted());
+                                                RefreshRows();
+                                            });
+
         System.Action refresh = () =>
         {
-            int filled = Mathf.RoundToInt(Mathf.Clamp01(get()) * CellCount);
+            bool muted = getMuted();
+            mute.Active = muted;
+
+            int filled = muted ? 0 : Mathf.RoundToInt(Mathf.Clamp01(get()) * CellCount);
             for (int i = 0; i < cells.Length; i++)
             {
                 GameHudSkin.CellKind kind = hovered >= 0 && i <= hovered ? GameHudSkin.CellKind.Hover
@@ -466,7 +489,7 @@ public class OptionsPanel : MonoBehaviour
                                           : GameHudSkin.CellKind.Empty;
                 cells[i].sprite = GameHudSkin.VolumeCell(kind);
             }
-            value.text = (filled * 10) + "%";
+            value.text = muted ? Loc.Get("ui.options.audio.mute", "AUS") : (filled * 10) + "%";
         };
 
         for (int i = 0; i < CellCount; i++)
@@ -498,16 +521,6 @@ public class OptionsPanel : MonoBehaviour
                 refresh();
             };
         }
-
-        // Ein Klick links neben die erste Zelle heisst stumm.
-        Image mute = OptionsKit.Img("Mute", row, x0 - 8, 0, 7, RowH, GameHudSkin.White, Color.clear);
-        mute.raycastTarget = true;
-        mute.gameObject.AddComponent<PointerRelay>().Down = () =>
-        {
-            set(0f);
-            OptionsKit.PlayClick();
-            RefreshRows();
-        };
 
         rows.Add(refresh);
     }
