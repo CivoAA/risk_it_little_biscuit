@@ -31,9 +31,9 @@ public class SpawnExp : MonoBehaviour
         // Prefab je nach expAmount auswählen
         GameObject prefabToSpawn = smallPrefab;
 
-        if (expAmount >= 300)
+        if (expAmount >= ExpPickup.BigFrom)
             prefabToSpawn = bigPrefab;
-        else if (expAmount >= 50)
+        else if (expAmount >= ExpPickup.MediumFrom)
             prefabToSpawn = mediumPrefab;
 
         bool ownLuckyPrefab = lucky && luckyPrefab != null;
@@ -42,9 +42,13 @@ public class SpawnExp : MonoBehaviour
         // Prefab instanziieren
         GameObject exp = Instantiate(prefabToSpawn, pos, transform.rotation);
 
+        ExpPickup xp = exp.GetComponent<ExpPickup>();
+
         if (lucky)
         {
-            if (!ownLuckyPrefab)
+            // Eigenes goldenes Bonbon (Resources/PickUps) geht vor dem Einfaerben.
+            bool ownLuckyLook = !ownLuckyPrefab && xp != null && xp.SetLook("candy_lucky");
+            if (!ownLuckyPrefab && !ownLuckyLook)
             {
                 foreach (SpriteRenderer sr in exp.GetComponentsInChildren<SpriteRenderer>())
                     sr.color = luckyTint;
@@ -53,7 +57,6 @@ public class SpawnExp : MonoBehaviour
         }
 
         // XP-Wert setzen
-        ExpPickup xp = exp.GetComponent<ExpPickup>();
         if (xp != null)
         {
             xp.xpValue = expAmount;

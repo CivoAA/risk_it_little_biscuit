@@ -9,9 +9,20 @@ public class ExpPickup : MonoBehaviour
     public float collectDistance = 0.5f;
     public float maxChaseTime = 5f;   // nach so vielen Sekunden auto-einsammeln
 
+    [Tooltip("Bilder pro Sekunde der Idle-Schleife (Tools/bonbons.py).")]
+    public float idleFps = 8f;
+
+    /// <summary>Ab so viel XP wird das Bonbon mittel bzw. gross (gleich wie SpawnExp).</summary>
+    public const int MediumFrom = 50, BigFrom = 300;
+
     private bool movingToPlayer = false;
     private Transform playerTransform;
     private float chaseTimer = 0f;
+
+    private string look;
+    private SpriteRenderer spriteRenderer;
+    private Sprite[] idleFrames;
+    private float idleTime;
 
     // Globale Liste aller Candies im Spiel
     private static readonly List<ExpPickup> allCandies = new List<ExpPickup>();
@@ -20,6 +31,35 @@ public class ExpPickup : MonoBehaviour
     private void Awake()
     {
         allCandies.Add(this);
+    }
+
+    /// <summary>
+    /// Bildstreifen aus Resources/PickUps waehlen (candy_small/medium/big/lucky).
+    /// Ohne Aufruf entscheidet der XP-Wert. Gibt false zurueck, wenn es den
+    /// Streifen nicht gibt - dann bleibt das Prefab-Sprite.
+    /// </summary>
+    public bool SetLook(string key)
+    {
+        look = key;
+        return PickUps.LoadFrames(key) != null;
+    }
+
+    public static string LookFor(int xp) =>
+        xp >= BigFrom ? "candy_big" : xp >= MediumFrom ? "candy_medium" : "candy_small";
+
+    private void Start()
+    {
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        idleFrames = PickUps.LoadFrames(look ?? LookFor(xpValue));
+        if (idleFrames != null)
+            idleTime = Random.Range(0, idleFrames.Length) / Mathf.Max(0.01f, idleFps);
+        AnimateIdle();
+    }
+
+    private void AnimateIdle()
+    {
+        if (idleFrames == null || spriteRenderer == null) return;
+        spriteRenderer.sprite = idleFrames[Mathf.FloorToInt(idleTime * idleFps) % idleFrames.Length];
     }
 
     private void OnDestroy()
@@ -38,6 +78,9 @@ public class ExpPickup : MonoBehaviour
 
     private void Update()
     {
+        idleTime += Time.deltaTime;
+        AnimateIdle();
+
         var pc = PlayerController.Instance;
 
         // Magnet (attractAllXP) aktiviert → alle Candies fliegen los

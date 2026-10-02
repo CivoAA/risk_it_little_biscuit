@@ -28,7 +28,8 @@ public class PickUpManager : MonoBehaviour
         PickUps pickup = heart.GetComponent<PickUps>();
         if (pickup != null) pickup.PickUp_id = PickUps.GoldenHeartId;
 
-        if (goldenHeart_PickUP == null)
+        // Eigene goldene Bilder (Resources/PickUps) gehen vor dem Einfaerben.
+        if (goldenHeart_PickUP == null && PickUps.LoadIdleFrames(PickUps.GoldenHeartId) == null)
         {
             foreach (SpriteRenderer sr in heart.GetComponentsInChildren<SpriteRenderer>())
                 sr.color = goldenHeartTint;
