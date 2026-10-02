@@ -33,7 +33,6 @@ public class BladeStormEvoPrefab : MonoBehaviour
     public bool InOrbit { get { return State == BladeState.Orbit; } }
 
     private BoxCollider2D hitBox;
-    private Animator playerAnimator;
     private Transform owner;
 
     private Vector2 aimDirection;     // Richtung beim Abschuss, bleibt stabil
@@ -64,9 +63,6 @@ public class BladeStormEvoPrefab : MonoBehaviour
     {
         // Die Waffe setzt das beim Spawn direkt; der Find ist nur der Fallback.
         if (weapon == null) weapon = WeaponFinder.Find<BladeStormEvo>("Blade Storm Evo");
-
-        GameObject hitbox = GameObject.FindWithTag("PlayerHitbox");
-        if (hitbox != null) playerAnimator = hitbox.GetComponent<Animator>();
     }
 
     /// <summary>
@@ -97,15 +93,6 @@ public class BladeStormEvoPrefab : MonoBehaviour
         {
             EnterState(BladeState.Outbound);
         }
-    }
-
-    void Update()
-    {
-        // Im Orbit zeigt die Klinge in Laufrichtung des Spielers. Im Flug
-        // bestimmt FixedUpdate die Rotation - deshalb hier nur der Orbit-Fall.
-        // (Vorher hat zusaetzlich PositionBlades() der Waffe jeden Frame eine
-        // feste Rotation gesetzt, was sich mit dieser hier gebissen hat.)
-        if (InOrbit) ApplyOrbitRotation();
     }
 
     void FixedUpdate()
@@ -228,22 +215,9 @@ public class BladeStormEvoPrefab : MonoBehaviour
 
         transform.SetParent(owner, true);
         EnterState(BladeState.Orbit);
-        ApplyOrbitRotation();
 
+        // Platz und Ausrichtung (Spitze nach aussen) im Ring setzt die Waffe.
         if (weapon != null) weapon.PositionOrbitBlades();
-    }
-
-    /// <summary>
-    /// Ausrichtung im Orbit: nach links, sobald der Spieler zuletzt nach links
-    /// gelaufen ist, sonst nach rechts. Ohne den Standardfall haetten frisch
-    /// gespawnte Klingen ihre Instantiate-Rotation behalten und mit der Spitze
-    /// nach oben gezeigt, bis der Spieler das erste Mal seitwaerts laeuft.
-    /// </summary>
-    private void ApplyOrbitRotation()
-    {
-        float lastMoveX = playerAnimator != null ? playerAnimator.GetFloat("LastMoveX") : 0f;
-        float angle = lastMoveX > 0.1f ? -90f : 90f;
-        transform.rotation = Quaternion.Euler(0f, 0f, angle);
     }
 
     private void EnterState(BladeState next)

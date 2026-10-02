@@ -84,8 +84,9 @@ public class BladeSwarm : Weapon
         {
             if (activeBlades[i] == null) continue;
 
-            activeBlades[i].transform.localPosition = SlotOffset(i, SideX);
-            activeBlades[i].transform.rotation = Quaternion.Euler(0f, 0f, 135f);
+            float angle = RingAngle(i, activeBlades.Count);
+            activeBlades[i].transform.localPosition = RingOffset(angle, activeBlades.Count, RingRadius, RingSpacing);
+            activeBlades[i].transform.rotation = Quaternion.Euler(0f, 0f, angle + SpriteAngle);
         }
     }
 
@@ -100,47 +101,54 @@ public class BladeSwarm : Weapon
     public static int ExtraBlades =>
         PlayerController.Instance != null ? PlayerController.Instance.ExtraShots / ExtraShotsPerBlade : 0;
 
-    /// <summary>Seitlicher Abstand der Kunai: halbe Kunai-Laenge (~0.64) + halbe Figur (0.5) + Luft.</summary>
-    public const float SideX = 1.25f;
+    /// <summary>Ring-Radius bis zur Kunai-Mitte: halbe Kunai-Laenge (~0.64) + halbe Figur (0.5) + Luft.</summary>
+    public const float RingRadius = 1.25f;
+
+    /// <summary>Mindestabstand zweier Kunai auf dem Ring (Kunai ~0.3 breit + Luft).</summary>
+    public const float RingSpacing = 0.45f;
+
+    /// <summary>Das Kunai-Sprite zeigt bei Rotation 0 mit der Spitze nach rechts oben (45 Grad).</summary>
+    private const float SpriteAngle = -45f;
+
+    /// <summary>Ringmitte relativ zu den Fuessen: Figur = 1x1 Einheit, Pivot unten mittig.</summary>
+    private static readonly Vector2 RingCenter = new Vector2(0f, 0.5f);
 
     /// <summary>
-    /// Parkplatz Nummer <paramref name="i"/> relativ zu den Fuessen des Spielers
-    /// (Figur = 1x1 Einheit, Pivot unten mittig). Die Klingen liegen im Orbit
-    /// waagerecht - seitliche Slots brauchen darum mindestens halbe Klingen-
-    /// laenge + halbe Figur Abstand, sonst stecken sie im Charakter. Frueher
-    /// lagen sie bei x = 1 bzw. 0.56 und damit halb in der Figur.
-    /// Auch von <see cref="BladeStormEvo"/> genutzt (mit groesserem sideX).
+    /// Winkel (Grad) von Kunai <paramref name="i"/> auf einem Ring aus
+    /// <paramref name="count"/> Kunai: gleichmaessig verteilt und immer
+    /// links/rechts gespiegelt. Bei gerader Anzahl beginnt der Ring rechts
+    /// (2 = rechts + links), bei ungerader oben ueber dem Kopf (3 = Dreieck mit
+    /// Spitze oben). Mit jedem neuen Kunai ruecken alle nach.
+    /// Auch von <see cref="BladeStormEvo"/> genutzt.
+    /// </summary>
+    public static float RingAngle(int i, int count)
+    {
+        count = Mathf.Max(1, count);
+        float start = count % 2 == 0 ? 0f : 90f;
+        return start + i * 360f / count;
+    }
+
+    /// <summary>
+    /// Position auf dem Ring relativ zu den Fuessen des Spielers. Der Radius
+    /// waechst mit, sobald die Kunai bei <paramref name="baseRadius"/> enger als
+    /// <paramref name="minSpacing"/> stuenden - so passen beliebig viele drauf.
+    /// Auch von <see cref="BladeStormEvo"/> genutzt.
     ///
     /// Das Ergebnis liegt immer auf ganzen Pixeln (1/32 Einheit): die Kamera
     /// rundet jedes Sprite einzeln aufs Pixelraster. Mit einem krummen Abstand
     /// (z.B. 0.45 = 14.4 px) wechselt der gerundete Abstand zwischen Spieler
     /// und Klinge beim Laufen staendig zwischen 14 und 15 px - die Klingen zittern.
     /// </summary>
-    public static Vector2 SlotOffset(int i, float sideX)
+    public static Vector2 RingOffset(float angleDeg, int count, float baseRadius, float minSpacing)
     {
-        Vector2 o = RawSlotOffset(i, sideX);
+        float radius = Mathf.Max(baseRadius, count * minSpacing / (2f * Mathf.PI));
+        float rad = angleDeg * Mathf.Deg2Rad;
+        Vector2 o = RingCenter + new Vector2(Mathf.Cos(rad), Mathf.Sin(rad)) * radius;
         return new Vector2(Mathf.Round(o.x * PixelsPerUnit) / PixelsPerUnit,
                            Mathf.Round(o.y * PixelsPerUnit) / PixelsPerUnit);
     }
 
     private const float PixelsPerUnit = 32f;   // m_AssetsPPU der PixelPerfectCamera
-
-    private static Vector2 RawSlotOffset(int i, float sideX)
-    {
-        switch (i)
-        {
-            case 0: return new Vector2(-sideX, 0.45f);
-            case 1: return new Vector2(sideX, 0.45f);
-            case 2: return new Vector2(0f, 1.5f);          // ueber dem Kopf
-            case 3: return new Vector2(-sideX, 0.85f);
-            case 4: return new Vector2(sideX, 0.85f);
-            case 5: return new Vector2(-sideX, 1.25f);
-            case 6: return new Vector2(sideX, 1.25f);
-            case 7: return new Vector2(-sideX, 0.05f);
-            case 8: return new Vector2(sideX, 0.05f);
-            default: return new Vector2(0f, 1.85f);
-        }
-    }
 
     private void UpdateTarget()
     {

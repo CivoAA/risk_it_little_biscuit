@@ -44,6 +44,9 @@ public class PlayerHitFeedback : MonoBehaviour
         {
             var main = hitParticles.main;
             hitParticles.Stop();
+            // Kruemel aus dem Charakter schneiden, den man gerade spielt.
+            var crumbs = hitParticles.GetComponent<RandomParticleSprites>();
+            if (crumbs != null) crumbs.BuildFrom(playerSpriteRenderer);
             main.startColor = originalColor;
             hitParticles.Play();
         }

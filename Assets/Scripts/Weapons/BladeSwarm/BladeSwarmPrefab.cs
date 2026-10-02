@@ -5,8 +5,6 @@ public class BladeSwarmPrefab : MonoBehaviour
 {
     public BladeSwarm weapon;
     public List<Enemy> enemiesInRange;
-    private SpriteRenderer spriteRenderer;
-    private Animator playerAnimator;
 
     // Skilltree "Schattenschwarm" (siehe ShadowSwoop)
     private bool swooping;
@@ -17,34 +15,13 @@ public class BladeSwarmPrefab : MonoBehaviour
     void Start()
     {
         weapon = WeaponFinder.Find<BladeSwarm>("Blade Swarm");
-        GameObject hitbox = GameObject.FindWithTag("PlayerHitbox");
-        if (hitbox != null) playerAnimator = hitbox.GetComponent<Animator>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
     }
+
+    // Im Ring setzt BladeSwarm.PositionBlades Position und Rotation (Spitze
+    // nach aussen). Frueher drehte sich der Kunai hier nach der Laufrichtung.
     void Update()
     {
-        if (swooping)
-        {
-            StepSwoop();
-            return;
-        }
-
-        if (playerAnimator == null || spriteRenderer == null) return;
-
-        // Wert aus Animator auslesen
-        float lastMoveX = playerAnimator.GetFloat("LastMoveX");
-
-        // Rotation nur ändern, wenn sich die Richtung ändert
-        if (lastMoveX > 0.1f)
-        {
-            // Nach rechts → 135 Grad
-            transform.rotation = Quaternion.Euler(0f, 0f, -45f);
-        }
-        else if (lastMoveX < -0.1f)
-        {
-            // Nach links → -45 Grad
-            transform.rotation = Quaternion.Euler(0f, 0f, 135f);
-        }
+        if (swooping) StepSwoop();
     }
 
     /// <summary>
