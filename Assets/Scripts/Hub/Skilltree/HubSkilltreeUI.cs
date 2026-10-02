@@ -55,6 +55,7 @@ public class HubSkilltreeUI : MonoBehaviour
 
     const int InX = CardX + 14, InW = CardW - 28;
     const int TopY = 52;
+    const int XpBarW = 120;
     const int BodyY = 74, BodyH = 144;
 
     const int CatX = InX, CatW = 84, CatH = 30, CatGap = 4;
@@ -94,7 +95,7 @@ public class HubSkilltreeUI : MonoBehaviour
     SkillNodeDef selectedNode;
 
     TextMeshProUGUI treeName, learnedText, pointsText, bannerText, bannerShadow;
-    Image learnedFill, banner, bannerIcon;
+    Image learnedFill, xpFill, banner, bannerIcon;
 
     Image plateImg, shapeShadow, shapeFill, shapeGloss, shapeOutline, plateIcon, statusIcon;
     TextMeshProUGUI detailName, detailSub, detailDesc, statusText;
@@ -234,9 +235,14 @@ public class HubSkilltreeUI : MonoBehaviour
     void BuildTop(SkillTreeDef tree)
     {
         // Jeder Charakter hat seinen eigenen Baum - darum steht hier, wessen es ist.
-        treeName = OptionsKit.Label("Tree", page, InX + 2, TopY, 150, 13,
+        treeName = OptionsKit.Label("Tree", page, InX + 2, TopY, 165, 13,
                                     Characters.DisplayName(Shop.SkinIndex).ToUpperInvariant(), textFont,
                                     OptionsKit.SizeText, GameHudSkin.Parchment, TextAlignmentOptions.Left);
+        treeName.richText = true;   // die XP-Zahlen stehen gedaempft hinter dem Level
+
+        // Duenner XP-Balken unter dem Namen: Fortschritt zum naechsten Level.
+        OptionsKit.Img("XpTrack", page, InX + 2, TopY + 14, XpBarW, 3, GameHudSkin.White, GameHudSkin.Trough);
+        xpFill = OptionsKit.Img("XpFill", page, InX + 2, TopY + 14, 0, 3, GameHudSkin.White, GameHudSkin.Gold);
 
         // Gelernt: Zahl und Balken, mittig ueber dem Feld.
         const int barW = 80;
@@ -493,10 +499,15 @@ public class HubSkilltreeUI : MonoBehaviour
 
         pointsText.text = string.Format(Loc.Get("ui.skilltree.points", "{0} SKILLPUNKTE"), Skills.Points);
 
-        // Charakter-Level und Fortschritt zum naechsten, gleich hinter dem Namen.
-        int pct = Mathf.FloorToInt(CharLevel.Progress(Skills.Xp) * 100f);
+        // Charakter-Level und XP bis zum naechsten, gleich hinter dem Namen.
+        double xp = Skills.Xp;
+        int xpLevel = CharLevel.LevelFor(xp);
+        double next = CharLevel.XpForLevel(Mathf.Min(xpLevel + 1, CharLevel.MaxLevel));
+        string xpText = string.Format(Loc.Get("ui.skilltree.xp", "{0}/{1} XP"), FormatXp(xp), FormatXp(next));
         treeName.text = Characters.DisplayName(Shop.SkinIndex).ToUpperInvariant() + "  " +
-                        string.Format(Loc.Get("ui.skilltree.charlevel", "LV {0}  {1}%"), Skills.Level, pct);
+                        string.Format(Loc.Get("ui.skilltree.charlevel", "LV {0}"), Skills.Level) +
+                        "  <color=#" + ColorUtility.ToHtmlStringRGB(GameHudSkin.Stone) + ">" + xpText + "</color>";
+        SetFill(xpFill, XpBarW, CharLevel.Progress(xp));
 
         int learned = 0, total = 0;
         foreach (SkillBranchDef b in branches)
@@ -764,6 +775,14 @@ public class HubSkilltreeUI : MonoBehaviour
         sw *= k;
         sh *= k;
         OptionsKit.Move(img.rectTransform, x + Mathf.Floor((w - sw) / 2f), y + Mathf.Floor((h - sh) / 2f), sw, sh);
+    }
+
+    /// <summary>XP kurz genug fuer die Kopfzeile: bis 99.999 voll, darueber in k bzw. M.</summary>
+    static string FormatXp(double xp)
+    {
+        if (xp < 100000) return System.Math.Floor(xp).ToString("N0");
+        if (xp < 10000000) return System.Math.Floor(xp / 1000).ToString("N0") + "k";
+        return (xp / 1000000).ToString("0.#") + "M";
     }
 
     static void SetFill(Image fill, float innerWidth, float t)

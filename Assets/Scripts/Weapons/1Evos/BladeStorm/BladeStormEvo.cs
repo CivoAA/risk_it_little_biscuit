@@ -21,6 +21,8 @@ public class BladeStormEvo : Weapon
 
     private readonly List<BladeStormEvoPrefab> blades = new List<BladeStormEvoPrefab>();
     private readonly List<BladeStormEvoPrefab> volley = new List<BladeStormEvoPrefab>();
+    private readonly List<Enemy> volleyTargets = new List<Enemy>();
+    private bool swarm;
 
     private Enemy currentTarget;
     private float attackCounter;
@@ -48,7 +50,7 @@ public class BladeStormEvo : Weapon
         Achievements.Unlock(Ach.BladeSwarmEvo);
 
         int desired = Mathf.Clamp(
-            Mathf.RoundToInt(CurrentStats.shots + PlayerController.Instance.ExtraShots),
+            Mathf.RoundToInt(CurrentStats.shots) + BladeSwarm.ExtraBlades,
             1, MaxBlades);
 
         // Gegen blades.Count prüfen, nicht gegen einen Merker: so kommen
@@ -110,6 +112,10 @@ public class BladeStormEvo : Weapon
 
         if (volley.Count == 0) return;
 
+        // Skilltree "Schattenschwarm": jede Klinge bekommt ihr eigenes Ziel.
+        swarm = Skills.HasGrant(SkillGrants.Schattenschwarm);
+        if (swarm) BladeSwarm.PickTargets(enemiesInRange, volley.Count, volleyTargets);
+
         firing = true;
         fireIndex = 0;
         fireTimer = 0f;
@@ -120,13 +126,14 @@ public class BladeStormEvo : Weapon
     {
         while (fireIndex < volley.Count)
         {
+            Enemy swoopAt = swarm && fireIndex < volleyTargets.Count ? volleyTargets[fireIndex] : null;
             BladeStormEvoPrefab blade = volley[fireIndex];
             fireIndex++;
 
             if (blade == null || !blade.InOrbit) continue;
 
             Vector2 aim = TargetPosition - (Vector2)transform.position;
-            blade.Launch(transform, aim.sqrMagnitude > 0.0001f ? aim.normalized : Vector2.up);
+            blade.Launch(transform, aim.sqrMagnitude > 0.0001f ? aim.normalized : Vector2.up, swoopAt);
 
             fireTimer += FireInterval;
             return;

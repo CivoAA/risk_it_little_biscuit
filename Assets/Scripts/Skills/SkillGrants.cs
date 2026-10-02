@@ -32,8 +32,15 @@ public static class SkillGrants
     /// <summary>Shurikookie wirft in alle vier Richtungen statt nur nach vorn.</summary>
     public const string ShurikookieVierRichtungen = "shurikookie_vier_richtungen";
 
-    /// <summary>Shurikookie prallt an Waenden ab.</summary>
+    /// <summary>Shurikookie prallt von einem getroffenen Gegner zum naechsten ab (siehe <see cref="Ricochet"/>).</summary>
     public const string ShurikookieAbpraller = "shurikookie_abpraller";
+
+    /// <summary>
+    /// Blade Swarm / Blade Storm: jeder Kunai sucht sich ein eigenes Ziel und
+    /// fliegt so lange hindurch und wieder hinein, bis es tot ist (siehe
+    /// <see cref="BladeSwarmPrefab"/> und <see cref="BladeStormEvoPrefab"/>).
+    /// </summary>
+    public const string Schattenschwarm = "onigiri_schattenschwarm";
 
     // ------------------------------------------------------------ Wissen
 
@@ -50,6 +57,12 @@ public static class SkillGrants
 
     /// <summary>Schockwelle: ein Treffer stoesst alle Gegner in der Naehe weg (siehe <see cref="Shockwave"/>).</summary>
     public const string Schockwelle = "schockwelle";
+
+    /// <summary>Kawarimi: unter 50 % Leben 4 s lang 100 % Ausweichen und +50 % Tempo, durchscheinend (alle 35 s).</summary>
+    public const string Kawarimi = "kawarimi";
+
+    /// <summary>Klebreis: unter 35 % Leben kleben alle sichtbaren Gegner 8 s fest (alle 35 s, siehe <see cref="StickyRice"/>).</summary>
+    public const string Klebreis = "klebreis";
 
     // ==================================================================
     //  Der Katalog - was hier steht, steht im Editor zur Auswahl.
@@ -72,10 +85,13 @@ public static class SkillGrants
     public static readonly IReadOnlyList<Def> All = new List<Def>
     {
         new Def(ShurikookieVierRichtungen, "Shurikookie: Vier Richtungen",
-                "Shurikookie fliegt in alle vier Richtungen gleichzeitig."),
+                "Shurikookie fliegt in alle vier Richtungen gleichzeitig. Gilt auch fuer Shuri Blast."),
 
         new Def(ShurikookieAbpraller, "Shurikookie: Abpraller",
-                "Shurikookie prallt an Waenden ab, statt zu zerbrechen."),
+                "Shurikookie zerbricht nicht am ersten Gegner, sondern prallt bis zu zweimal zum naechsten ab. Gilt auch fuer Shuri Blast."),
+
+        new Def(Schattenschwarm, "Schattenschwarm",
+                "Jeder Kunai sucht sich ein eigenes Ziel und fliegt immer wieder hindurch, bis es tot ist. Gilt auch fuer Blade Storm."),
 
         new Def(Bestiarium, "Bestiarium",
                 "Zaehlt deine Kills je Gegnerart: +1% Schaden je 1000 Kills. Neuer Reiter im Erfolge-Buch."),
@@ -88,6 +104,12 @@ public static class SkillGrants
 
         new Def(Schockwelle, "Schockwelle",
                 "Wirst du getroffen, stoesst eine Welle alle Gegner in der Naehe weg (alle 10 Sekunden)."),
+
+        new Def(Kawarimi, "Kawarimi",
+                "Faellt dein Leben unter 50%, wirst du durchscheinend und weichst 4 Sekunden lang allem aus und bist 50% schneller (alle 35 Sekunden)."),
+
+        new Def(Klebreis, "Klebreis",
+                "Faellt dein Leben unter 35%, kleben alle Gegner im Bild 8 Sekunden lang fest (alle 35 Sekunden). Bosse nicht."),
     };
 
     /// <summary>Eintrag zu einer Id. Null, wenn die Id nicht (mehr) im Katalog steht.</summary>

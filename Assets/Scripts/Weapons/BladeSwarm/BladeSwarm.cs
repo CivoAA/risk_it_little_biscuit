@@ -64,7 +64,7 @@ public class BladeSwarm : Weapon
     }
     private void SpawnBlade()
     {
-        if (activeBlades.Count >= stats[weaponLevel].shots + PlayerController.Instance.ExtraShots)
+        if (activeBlades.Count >= stats[weaponLevel].shots + ExtraBlades)
         {
             return;
         }
@@ -88,6 +88,17 @@ public class BladeSwarm : Weapon
             activeBlades[i].transform.rotation = Quaternion.Euler(0f, 0f, 135f);
         }
     }
+
+    /// <summary>
+    /// So viele Extra-Schuesse braucht es fuer einen Kunai mehr. Die Waffe hat
+    /// viele kleine Treffer und skaliert sonst zu stark mit Extra-Schuss; die
+    /// Kunai, die sie pro Stufe dazubekommt, bleiben davon unberuehrt.
+    /// </summary>
+    public const int ExtraShotsPerBlade = 2;
+
+    /// <summary>Kunai aus Extra-Schuessen. Auch von <see cref="BladeStormEvo"/> genutzt.</summary>
+    public static int ExtraBlades =>
+        PlayerController.Instance != null ? PlayerController.Instance.ExtraShots / ExtraShotsPerBlade : 0;
 
     /// <summary>Seitlicher Abstand der Kunai: halbe Kunai-Laenge (~0.64) + halbe Figur (0.5) + Luft.</summary>
     public const float SideX = 1.25f;
@@ -168,15 +179,50 @@ public class BladeSwarm : Weapon
     {
         activeBlades.RemoveAll(b => b == null);
         var bladesToFire = new List<GameObject>(activeBlades);
-        foreach (GameObject blade in bladesToFire)
+
+        // Skilltree "Schattenschwarm": jeder Kunai bekommt sein eigenes Ziel.
+        bool swarm = Skills.HasGrant(SkillGrants.Schattenschwarm);
+        if (swarm) PickTargets(enemiesInRange, bladesToFire.Count, swarmTargets);
+
+        for (int i = 0; i < bladesToFire.Count; i++)
         {
+            GameObject blade = bladesToFire[i];
             if (blade == null) continue;
             blade.transform.SetParent(null);
-            StartCoroutine(MoveAndDestroy(blade, target));
+
+            BladeSwarmPrefab kunai = swarm ? blade.GetComponent<BladeSwarmPrefab>() : null;
+            if (kunai != null)
+                kunai.Swoop(i < swarmTargets.Count ? swarmTargets[i] : null, enemiesInRange);
+            else
+                StartCoroutine(MoveAndDestroy(blade, target));
+
             yield return new WaitForSeconds(0.13f); // Abstand zwischen den Blades
         }
         activeBlades.Clear();
         shooting = false;
+    }
+
+    private readonly List<Enemy> swarmTargets = new List<Enemy>();
+
+    /// <summary>
+    /// Verteilt <paramref name="count"/> Kunai auf die Gegner in Reichweite:
+    /// erst jeder Gegner einmal (zufaellige Reihenfolge), sind es mehr Kunai
+    /// als Gegner, geht es von vorn los. Auch von <see cref="BladeStormEvo"/> genutzt.
+    /// </summary>
+    public static void PickTargets(List<Enemy> pool, int count, List<Enemy> result)
+    {
+        result.Clear();
+        pool.RemoveAll(e => e == null);
+        if (pool.Count == 0 || count <= 0) return;
+
+        var shuffled = new List<Enemy>(pool);
+        for (int i = shuffled.Count - 1; i > 0; i--)
+        {
+            int j = Random.Range(0, i + 1);
+            (shuffled[i], shuffled[j]) = (shuffled[j], shuffled[i]);
+        }
+
+        for (int i = 0; i < count; i++) result.Add(shuffled[i % shuffled.Count]);
     }
     IEnumerator MoveAndDestroy(GameObject blade, Vector2 Target)
     {

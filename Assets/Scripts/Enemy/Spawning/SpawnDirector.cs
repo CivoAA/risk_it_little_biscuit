@@ -478,6 +478,8 @@ public class SpawnDirector : MonoBehaviour
     /// anderer Seite wieder.
     /// Einfach nur ausserhalb des Bildes zu sein reicht dafuer NICHT - wer
     /// freie Bahn hat, laeuft weiter auf den Spieler zu.
+    /// Festgeklebte Gegner (Klebreis) bleiben liegen, bis <see cref="Enemy.RecycleHeld"/>
+    /// ablaeuft - sonst waeren sie beim Weglaufen sofort wieder vorn.
     /// </summary>
     private void RecycleStragglers()
     {
@@ -496,7 +498,7 @@ public class SpawnDirector : MonoBehaviour
         for (int i = 0; i < alive.Count; i++)
         {
             Enemy enemy = alive[i];
-            if (enemy == null || enemy.IsBoss || !enemy.CanRecycle) continue;
+            if (enemy == null || enemy.IsBoss || !enemy.CanRecycle || enemy.RecycleHeld) continue;
 
             Vector2 pos = enemy.transform.position;
             bool tooFar = (pos - player).sqrMagnitude >= limitSqr;

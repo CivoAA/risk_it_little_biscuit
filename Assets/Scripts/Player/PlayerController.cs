@@ -255,10 +255,18 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void LateUpdate()
+    {
+        // Nach den Coroutines, sonst setzt der Treffer-Flash die Deckkraft fuer einen Frame zurueck.
+        UpdateKawarimiFade();
+    }
+
     void FixedUpdate()
     {
         // Skilltree "Letzter Atem": unter 30 % Leben schneller.
         float speed = IsLastBreath ? moveSpeed * (1f + lastBreathSpeedPercent / 100f) : moveSpeed;
+        // Skilltree "Kawarimi": waehrend der Wirkung deutlich schneller, um wegzurennen.
+        if (IsKawarimi) speed *= 1f + KawarimiSpeedBonus;
         rb.linearVelocity = new Vector3(playerMoveDirection.x * speed, playerMoveDirection.y * speed);
 
         DecayShield(Time.fixedDeltaTime);
@@ -363,10 +371,87 @@ public class PlayerController : MonoBehaviour
         DamageNumberController.Instance?.CreateText("RAGE!", transform.position);
     }
 
+    // ------------------------------------------------------------------
+    // Geist: Kawarimi
+    // ------------------------------------------------------------------
+
+    /// <summary>Ab diesem Lebensanteil springt Kawarimi an.</summary>
+    public const float KawarimiThreshold = 0.5f;
+
+    /// <summary>So lange weicht der Spieler allem aus (Sekunden).</summary>
+    public const float KawarimiDuration = 4f;
+
+    /// <summary>Abklingzeit, gerechnet ab dem ENDE der Wirkung.</summary>
+    public const float KawarimiCooldown = 35f;
+
+    /// <summary>Deckkraft des Spielers waehrend Kawarimi.</summary>
+    public const float KawarimiAlpha = 0.4f;
+
+    /// <summary>Tempo-Bonus waehrend Kawarimi - 0.5 = 50 % schneller. Rechnet auf Letzter Atem drauf.</summary>
+    public const float KawarimiSpeedBonus = 0.5f;
+
+    private float kawarimiUntil;
+    private float kawarimiReadyAt;
+    private bool kawarimiFaded;
+
+    public bool IsKawarimi => Time.time < kawarimiUntil;
+
+    /// <summary>Skilltree "Kawarimi": faellt das Leben unter 50 %, 4 s lang 100 % Ausweichen und schneller.</summary>
+    private void TryKawarimi()
+    {
+        if (!Skills.HasGrant(SkillGrants.Kawarimi) || Time.time < kawarimiReadyAt) return;
+        if (playerHealth <= 0f || playerHealth > playerMaxHealth * KawarimiThreshold) return;
+
+        kawarimiUntil = Time.time + KawarimiDuration;
+        kawarimiReadyAt = kawarimiUntil + KawarimiCooldown;
+        DamageNumberController.Instance?.CreateText("KAWARIMI!", transform.position);
+    }
+
+    /// <summary>
+    /// Durchscheinend, solange Kawarimi laeuft. Jeden Frame gesetzt, weil der
+    /// Treffer-Flash (<see cref="PlayerHitFeedback"/>) die Farbe danach
+    /// zuruecksetzt - und mit ihr die Deckkraft.
+    /// </summary>
+    private void UpdateKawarimiFade()
+    {
+        bool active = IsKawarimi;
+        if (!active && !kawarimiFaded) return;
+
+        SpriteRenderer body = hitFeedback != null && hitFeedback.playerSpriteRenderer != null
+            ? hitFeedback.playerSpriteRenderer
+            : (animator != null ? animator.GetComponent<SpriteRenderer>() : null);
+        if (body == null) return;
+
+        Color c = body.color;
+        c.a = active ? KawarimiAlpha : 1f;
+        body.color = c;
+        kawarimiFaded = active;
+    }
+
+    // ------------------------------------------------------------------
+    // Geist: Klebreis
+    // ------------------------------------------------------------------
+
+    private float stickyRiceReadyAt;
+
+    /// <summary>Skilltree "Klebreis": faellt das Leben unter 35 %, kleben alle Gegner im Bild fest.</summary>
+    private void TryStickyRice()
+    {
+        if (!Skills.HasGrant(SkillGrants.Klebreis) || Time.time < stickyRiceReadyAt) return;
+        if (playerHealth <= 0f || playerHealth > playerMaxHealth * StickyRice.Threshold) return;
+
+        stickyRiceReadyAt = Time.time + StickyRice.Duration + StickyRice.Cooldown;
+        StickyRice.Fire();
+        DamageNumberController.Instance?.CreateText("KLEBREIS!", transform.position);
+    }
+
     public void StartStats()
     {
         rageUntil = 0f;
         rageReadyAt = 0f;
+        kawarimiUntil = 0f;
+        kawarimiReadyAt = 0f;
+        stickyRiceReadyAt = 0f;
 
         if (activeWeapon != null && activeWeapon.Length > 0)
         {
@@ -461,7 +546,8 @@ public class PlayerController : MonoBehaviour
     {
         if (isImmune) return;
 
-        if (UnityEngine.Random.value < dodgeChance)
+        // Kawarimi: waehrend der Wirkung weicht der Spieler allem aus.
+        if (IsKawarimi || UnityEngine.Random.value < dodgeChance)
         {
             isImmune = true;
             immunityTimer = immunityDuration;
@@ -517,6 +603,8 @@ public class PlayerController : MonoBehaviour
             }
 
             TryRage();
+            TryKawarimi();
+            TryStickyRice();
         }
     }
 

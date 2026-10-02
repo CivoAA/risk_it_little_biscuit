@@ -17,7 +17,7 @@ using System.Collections.Generic;
 /// </summary>
 public class BladeStormEvoPrefab : MonoBehaviour
 {
-    public enum BladeState { Orbit, Outbound, Inbound }
+    public enum BladeState { Orbit, Outbound, Inbound, Swoop }
 
     public BladeStormEvo weapon;
     public List<Enemy> enemiesInRange = new List<Enemy>();
@@ -44,6 +44,10 @@ public class BladeStormEvoPrefab : MonoBehaviour
     private float inboundT;
     private Vector2 lastCenter;
 
+    // Skilltree "Schattenschwarm" (siehe ShadowSwoop)
+    private Enemy swoopTarget;
+    private Vector2 swoopDirection;
+
     // Pro Flugabschnitt darf jeder Gegner einmal getroffen werden. Hin- und
     // Rückflug sind getrennte Abschnitte – wie vorher über Enter/Exit/Enter.
     private readonly HashSet<Enemy> hitThisPass = new HashSet<Enemy>();
@@ -65,8 +69,12 @@ public class BladeStormEvoPrefab : MonoBehaviour
         if (hitbox != null) playerAnimator = hitbox.GetComponent<Animator>();
     }
 
-    /// <summary>Schickt die Klinge auf den Weg. Wird von der Waffe aufgerufen.</summary>
-    public void Launch(Transform bladeOwner, Vector2 direction)
+    /// <summary>
+    /// Schickt die Klinge auf den Weg. Wird von der Waffe aufgerufen. Mit
+    /// <paramref name="swoopAt"/> (Skilltree "Schattenschwarm") fliegt sie so lange
+    /// durch dieses Ziel, bis es tot ist, und kehrt erst dann zurueck.
+    /// </summary>
+    public void Launch(Transform bladeOwner, Vector2 direction, Enemy swoopAt = null)
     {
         if (!InOrbit) return;
 
@@ -75,7 +83,20 @@ public class BladeStormEvoPrefab : MonoBehaviour
         launchOrigin = transform.position;
 
         transform.SetParent(null);
-        EnterState(BladeState.Outbound);
+
+        if (swoopAt != null && !ShadowSwoop.IsAlive(swoopAt) && weapon != null)
+            swoopAt = ShadowSwoop.AnyAlive(weapon.enemiesInRange);
+
+        if (ShadowSwoop.IsAlive(swoopAt))
+        {
+            swoopTarget = swoopAt;
+            swoopDirection = ShadowSwoop.FirstDirection(transform.position, swoopAt);
+            EnterState(BladeState.Swoop);
+        }
+        else
+        {
+            EnterState(BladeState.Outbound);
+        }
     }
 
     void Update()
@@ -94,6 +115,7 @@ public class BladeStormEvoPrefab : MonoBehaviour
         stateTimer += Time.fixedDeltaTime;
 
         if (State == BladeState.Outbound) StepOutbound();
+        else if (State == BladeState.Swoop) StepSwoop();
         else StepInbound();
 
         DamageSweptEnemies();
@@ -132,6 +154,43 @@ public class BladeStormEvoPrefab : MonoBehaviour
             bezierStart = position;
             bezierControl = position + aimDirection * 8f;
             EnterState(BladeState.Inbound);
+        }
+    }
+
+    /// <summary>
+    /// Schattenschwarm: durchs Ziel, dahinter wenden, wieder durch - bis es tot
+    /// ist. Jede Durchquerung ist ein eigener Abschnitt, also darf jeder Gegner
+    /// pro Durchgang einmal getroffen werden.
+    /// </summary>
+    private void StepSwoop()
+    {
+        Vector2 position = transform.position;
+
+        if (weapon == null || !weapon.IsActive || !ShadowSwoop.IsAlive(swoopTarget)
+            || ShadowSwoop.TimedOut(stateTimer))
+        {
+            swoopTarget = null;
+            bezierStart = position;
+            bezierControl = position + swoopDirection * 3f;
+            EnterState(BladeState.Inbound);
+            return;
+        }
+
+        Vector2 exit = ShadowSwoop.ExitPoint(swoopTarget, swoopDirection);
+        Vector2 toExit = exit - position;
+        float step = ShadowSwoop.Speed * Time.fixedDeltaTime;
+
+        if (toExit.sqrMagnitude <= step * step)
+        {
+            transform.position = exit;
+            swoopDirection = ShadowSwoop.TurnDirection(swoopDirection);
+            hitThisPass.Clear();
+        }
+        else
+        {
+            Vector2 dir = toExit.normalized;
+            transform.position = position + dir * step;
+            FaceDirection(dir);
         }
     }
 

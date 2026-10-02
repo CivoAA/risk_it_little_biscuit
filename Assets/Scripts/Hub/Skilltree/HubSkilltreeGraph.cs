@@ -6,8 +6,9 @@ using UnityEngine.UI;
 /// <summary>
 /// DER BAUM IM GROSSEN FELD des Skilltrees (<see cref="HubSkilltreeUI"/>).
 ///
-/// Drei Bahnen (oben, Mitte, unten) laufen von links nach rechts, ganz links
-/// steht der Startknoten, alles Weitere haengt daran. Passt eine Kategorie nicht
+/// Drei Bahnen (oben, Mitte, unten) laufen von links nach rechts. Der
+/// Startknoten der Kategorie bleibt unsichtbar (er gibt nichts) - ganz links
+/// stehen gleich die Knoten, die an ihm haengen. Passt eine Kategorie nicht
 /// in die Breite, wird waagerecht gescrollt (Mausrad oder die Pfeile am Rand).
 ///
 /// Seit dem UI-2.0-Umbau liegt das Feld auf der 480x270-Seite von
@@ -78,6 +79,9 @@ public sealed class HubSkilltreeGraph : System.IDisposable
     Color accent = Color.white;
     float scrollX, maxScroll;
 
+    /// <summary>Erste sichtbare Spalte - die des Startknotens faellt weg.</summary>
+    int firstStep;
+
     Node hovered;
     SkillNodeDef selected;
 
@@ -146,19 +150,27 @@ public sealed class HubSkilltreeGraph : System.IDisposable
 
         if (branch != null)
         {
+            // Der Startknoten wird nicht gezeigt, also auch nicht seine Spalte.
+            firstStep = int.MaxValue;
+            foreach (SkillNodeDef def in branch.Nodes)
+                if (!def.IsStart) firstStep = Mathf.Min(firstStep, def.Step);
+            if (firstStep == int.MaxValue) firstStep = 0;
+
             // Linien zuerst - sie liegen hinter den Knoten.
             foreach (SkillNodeDef def in branch.Nodes)
                 foreach (SkillNodeDef p in def.Requires)
-                    AddConnection(p, def);
+                    if (!def.IsStart && !p.IsStart) AddConnection(p, def);
 
-            foreach (SkillNodeDef def in branch.Nodes) AddNode(def);
+            foreach (SkillNodeDef def in branch.Nodes)
+                if (!def.IsStart) AddNode(def);
 
-            order.AddRange(branch.Nodes);
+            foreach (SkillNodeDef def in branch.Nodes)
+                if (!def.IsStart) order.Add(def);
             order.Sort((a, b) => a.Step != b.Step
                 ? a.Step.CompareTo(b.Step)
                 : SkillTreeLayout.LaneOffset(b.Lane).CompareTo(SkillTreeLayout.LaneOffset(a.Lane)));
 
-            float contentWidth = PadX * 2 + branch.MaxStep * StepX + NodeSize;
+            float contentWidth = PadX * 2 + (branch.MaxStep - firstStep) * StepX + NodeSize;
             maxScroll = Mathf.Max(0f, contentWidth - area.width);
             content.sizeDelta = new Vector2(Mathf.Max(area.width, contentWidth), area.height);
         }
@@ -174,9 +186,9 @@ public sealed class HubSkilltreeGraph : System.IDisposable
     /// <summary>Links oben eines Knotens im Inhalt - immer ganze Pixel.</summary>
     Vector2Int PosOf(SkillNodeDef def)
     {
-        // Etwas ueber der Mitte: unter dem Startknoten steht noch START.
+        // Etwas ueber der Mitte: unter kaufbaren Knoten steht noch der Preis.
         int top0 = (area.height - NodeSize) / 2 - 3;
-        return new Vector2Int(PadX + def.Step * StepX,
+        return new Vector2Int(PadX + (def.Step - firstStep) * StepX,
                               top0 - SkillTreeLayout.LaneOffset(def.Lane) * LaneY);
     }
 
@@ -208,9 +220,8 @@ public sealed class HubSkilltreeGraph : System.IDisposable
             n.Corners[i] = OptionsKit.Img("Corner" + i, root, cx, cy, 5, 5, GameHudSkin.Corner(i));
         }
 
-        // Preis unter kaufbaren Knoten, START unter dem Anker der Bahn.
-        n.Price = OptionsKit.Label("Price", content, p.x - 10, p.y + NodeSize - 1, NodeSize + 20, 13,
-                                   def.IsStart ? Loc.Get("ui.skilltree.start", "START") : "", font,
+        // Preis unter kaufbaren Knoten.
+        n.Price = OptionsKit.Label("Price", content, p.x - 10, p.y + NodeSize - 1, NodeSize + 20, 13, "", font,
                                    OptionsKit.SizeText, GameHudSkin.Stone, TextAlignmentOptions.Center);
 
         PointerRelay relay = root.gameObject.AddComponent<PointerRelay>();
@@ -401,7 +412,7 @@ public sealed class HubSkilltreeGraph : System.IDisposable
                 symbol = d.Icon;
                 symbolColor = unlocked ? Color.white : new Color(1f, 1f, 1f, open ? 0.6f : 0.35f);
             }
-            else if (unlocked && !d.IsStart)
+            else if (unlocked)
             {
                 symbol = shapes.Check;
                 symbolColor = HubSkilltreeUI.InkOn(accent);
@@ -422,11 +433,8 @@ public sealed class HubSkilltreeGraph : System.IDisposable
                                 Mathf.Floor((NodeSize - h) / 2f), w, h);
             }
 
-            if (!d.IsStart)
-            {
-                n.Price.text = open ? d.Price.ToString() : "";
-                n.Price.color = affordable ? GameHudSkin.Gold : GameHudSkin.JamLight;
-            }
+            n.Price.text = open ? d.Price.ToString() : "";
+            n.Price.color = affordable ? GameHudSkin.Gold : GameHudSkin.JamLight;
 
             bool sel = d == selected;
             foreach (Image c in n.Corners)
