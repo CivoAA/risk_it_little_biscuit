@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -41,5 +42,33 @@ public static class RunScene
 
             return default;
         }
+    }
+
+    // Sammelobjekte pro Name - werden beim naechsten Lauf neu angelegt,
+    // weil das alte mit seiner Szene verschwunden ist.
+    private static readonly Dictionary<string, Transform> containers = new Dictionary<string, Transform>();
+
+    /// <summary>
+    /// Legt ein frisch erzeugtes Objekt in die Lauf-Szene, unter ein
+    /// Sammelobjekt namens <paramref name="container"/> (z. B. "Gegner"), damit
+    /// es sich in der Hierarchy einklappen laesst. Ohne Lauf-Szene bleibt es,
+    /// wo es ist.
+    /// </summary>
+    public static void Place(GameObject spawned, string container)
+    {
+        if (spawned == null) return;
+
+        Scene scene = Current;
+        if (!scene.IsValid() || !scene.isLoaded) return;
+
+        if (!containers.TryGetValue(container, out Transform parent) || parent == null || parent.gameObject.scene != scene)
+        {
+            parent = new GameObject(container).transform;
+            SceneManager.MoveGameObjectToScene(parent.gameObject, scene);
+            containers[container] = parent;
+        }
+
+        // SetParent zieht das Objekt mit in die Szene des Sammelobjekts.
+        spawned.transform.SetParent(parent, true);
     }
 }

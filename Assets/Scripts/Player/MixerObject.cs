@@ -26,6 +26,20 @@ public class MixerObject : MonoBehaviour
     private static readonly List<MixerObject> unused = new List<MixerObject>();
     public static IReadOnlyList<MixerObject> Unused => unused;
 
+    // Alle Mixer, auch benutzte - die Spawner halten zu ihnen Abstand.
+    private static readonly List<MixerObject> all = new List<MixerObject>();
+    public static IReadOnlyList<MixerObject> All => all;
+
+    private void Awake()
+    {
+        all.Add(this);
+    }
+
+    private void OnDestroy()
+    {
+        all.Remove(this);
+    }
+
     private void OnEnable()
     {
         if (!actionTriggered && !unused.Contains(this)) unused.Add(this);

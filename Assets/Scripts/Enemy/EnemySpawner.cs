@@ -98,11 +98,7 @@ public class EnemySpawner : MonoBehaviour
     private void SpawnEnemy(WaveConfig waveConfig)
     {
         GameObject enemy = Instantiate(waveConfig.stats[waveNumber].enemyPrefab, RandomSpawnPoint(), transform.rotation);
-        Scene gameScene = RunScene.Current;
-        if (gameScene.IsValid() && gameScene.isLoaded)
-        {
-            SceneManager.MoveGameObjectToScene(enemy, gameScene);
-        }
+        RunScene.Place(enemy, "Gegner");
         waveConfig.stats[waveNumber].spawnedEnemyCount++;
     }
 

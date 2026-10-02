@@ -113,11 +113,7 @@ public class TimeWaveManager : MonoBehaviour
             GameObject enemy = Instantiate(wave.enemyPrefab, GetRandomSpawnPosition(), Quaternion.identity);
 
             // Gegner in die Lauf-Szene verschieben (wie im alten Spawner)
-            Scene gameScene = RunScene.Current;
-            if (gameScene.IsValid() && gameScene.isLoaded)
-            {
-                SceneManager.MoveGameObjectToScene(enemy, gameScene);
-            }
+            RunScene.Place(enemy, "Gegner");
 
             if (wave.enemyPrefab == messerMaus1 || wave.enemyPrefab == messerMaus2) 
             {
@@ -161,11 +157,7 @@ public class TimeWaveManager : MonoBehaviour
             GameObject enemy = Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
 
             // In Game-Szene verschieben (wie normal)
-            Scene gameScene = RunScene.Current;
-            if (gameScene.IsValid() && gameScene.isLoaded)
-            {
-                SceneManager.MoveGameObjectToScene(enemy, gameScene);
-            }
+            RunScene.Place(enemy, "Gegner");
         }
     }
 
