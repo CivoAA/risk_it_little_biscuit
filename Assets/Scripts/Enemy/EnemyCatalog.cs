@@ -51,6 +51,9 @@ public enum EnemyId
     MinibossFliegenpliz,
     Rattenkoenigin,
     Milchkoloss,
+
+    /// <summary>Endboss des Waldes: der Baumriese, der Feuer speit (EnemyGlutwurz).</summary>
+    Glutwurz,
 }
 
 /// <summary>
@@ -447,6 +450,13 @@ public static class EnemyCatalog
             sheet: "Assets/Art/Gegner/new/MausMesser.png", fps: 6f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Neu/WeisseMessermaus.prefab");
+
+        Def(EnemyId.Glutwurz, "Glutwurz",
+            health: 7500f, damage: 40f, speed: 2.2f, exp: 0, pushTime: 0f,
+            role: EnemyRole.Boss, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/boss/baumboss_walk.png", fps: 12f,
+            colliderRadius: 0.95f, colliderOffset: new Vector2(0f, 1.25f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Boss/Glutwurz.prefab");
 
         // ---------------------------------------------------------- Archiv
         //

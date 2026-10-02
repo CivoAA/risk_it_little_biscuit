@@ -678,6 +678,7 @@
     { "key": "level.2.name", "value": "Forest" },
     { "key": "level.2.desc", "value": "It gets crowded between the trees." },
     { "key": "enemy.KeksKoenig.name", "value": "Cookie King" },
+    { "key": "enemy.Glutwurz.name", "value": "Emberroot" },
     { "key": "ui.levelselect.recordstory", "value": "FASTEST WIN" },
     { "key": "ui.levelselect.recordendless", "value": "LONGEST SURVIVAL" }
   ]

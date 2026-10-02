@@ -3263,6 +3263,8 @@ MonoBehaviour:
     prefab: {fileID: 6018788198692414348, guid: e79a5a04347469443a32273fa2c0880d, type: 3}
   - id: 25
     prefab: {fileID: 4109926496035422963, guid: c244ff776d19c9b42a5c7b16aeb68981, type: 3}
+  - id: 28
+    prefab: {fileID: 1600278546617180414, guid: 14c72811c8086d043bda9cc52f2e8771, type: 3}
   slimeVariants:
   - {fileID: 606865734669720050, guid: add6d643a19561648bbc903ec25242f6, type: 3}
   - {fileID: 514329318404290448, guid: d736393565fd85b42be26fb5c2b12e64, type: 3}
@@ -3304,6 +3306,8 @@ MonoBehaviour:
   smallPrefab: {fileID: 7912816578873631320, guid: 88f544d2f4841c84d86315ff585b37f3, type: 3}
   mediumPrefab: {fileID: 3456249893950600715, guid: b374f98500a8a9a469578448eb6f5a58, type: 3}
   bigPrefab: {fileID: 8305232108458407301, guid: 003c00acd2a00c546b701c10ae994503, type: 3}
+  luckyPrefab: {fileID: 0}
+  luckyTint: {r: 1, g: 0.85, b: 0.25, a: 1}
 --- !u!1 &178592618
 GameObject:
   m_ObjectHideFlags: 0
@@ -5687,6 +5691,8 @@ MonoBehaviour:
   smallPrefab: {fileID: 7912816578873631320, guid: 88f544d2f4841c84d86315ff585b37f3, type: 3}
   mediumPrefab: {fileID: 3456249893950600715, guid: b374f98500a8a9a469578448eb6f5a58, type: 3}
   bigPrefab: {fileID: 8305232108458407301, guid: 003c00acd2a00c546b701c10ae994503, type: 3}
+  luckyPrefab: {fileID: 0}
+  luckyTint: {r: 1, g: 0.85, b: 0.25, a: 1}
 --- !u!1 &352586667
 GameObject:
   m_ObjectHideFlags: 0
@@ -12785,6 +12791,8 @@ MonoBehaviour:
   boomerang: {fileID: 0}
   timeLaser: {fileID: 0}
   crumbTrail: {fileID: 0}
+  swordSlash: {fileID: 0}
+  saladFan: {fileID: 0}
   vortex: {fileID: 0}
   turret: {fileID: 0}
   BobaSawEvo: {fileID: 0}
@@ -14560,6 +14568,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   heart_PickUP: {fileID: 7485628172464544800, guid: a7adb1d347857bb44973d5fedddb0887, type: 3}
   magnet_PickUP: {fileID: 2946229433170645476, guid: b0d8ab5f314168245b66fa87ce53451b, type: 3}
+  goldenHeart_PickUP: {fileID: 0}
+  goldenHeartTint: {r: 1, g: 0.85, b: 0.25, a: 1}
 --- !u!1 &758379419
 GameObject:
   m_ObjectHideFlags: 0
@@ -28254,6 +28264,8 @@ MonoBehaviour:
   smallPrefab: {fileID: 7912816578873631320, guid: 88f544d2f4841c84d86315ff585b37f3, type: 3}
   mediumPrefab: {fileID: 3456249893950600715, guid: b374f98500a8a9a469578448eb6f5a58, type: 3}
   bigPrefab: {fileID: 8305232108458407301, guid: 003c00acd2a00c546b701c10ae994503, type: 3}
+  luckyPrefab: {fileID: 0}
+  luckyTint: {r: 1, g: 0.85, b: 0.25, a: 1}
 --- !u!1 &1600180338
 GameObject:
   m_ObjectHideFlags: 0
@@ -35327,6 +35339,8 @@ MonoBehaviour:
   smallPrefab: {fileID: 7912816578873631320, guid: 88f544d2f4841c84d86315ff585b37f3, type: 3}
   mediumPrefab: {fileID: 3456249893950600715, guid: b374f98500a8a9a469578448eb6f5a58, type: 3}
   bigPrefab: {fileID: 8305232108458407301, guid: 003c00acd2a00c546b701c10ae994503, type: 3}
+  luckyPrefab: {fileID: 0}
+  luckyTint: {r: 1, g: 0.85, b: 0.25, a: 1}
 --- !u!114 &2054698176
 MonoBehaviour:
   m_ObjectHideFlags: 0

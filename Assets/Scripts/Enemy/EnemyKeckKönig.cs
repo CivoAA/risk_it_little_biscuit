@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Der Keks-Koenig - Endboss der Kueche (World0) und zurzeit auch das Finale
-/// jeder anderen Karte, siehe <see cref="WavePlans"/>.
+/// Der Keks-Koenig - Endboss der Kueche (World0). Der Wald hat seit Oktober
+/// 2026 einen eigenen, die Glutwurz (<see cref="EnemyGlutwurz"/>).
 ///
 /// Er kaempft in zwei Phasen:
 ///

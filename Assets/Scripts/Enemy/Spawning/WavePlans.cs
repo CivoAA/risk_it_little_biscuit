@@ -136,7 +136,8 @@ public static class WavePlans
     ///   Phase 2  + Kirschslime, + Weisse Messermaus
     ///   Phase 3  Fliegenpilz raus, + Eichel, + Fluegeldolch
     ///   Phase 4  Kirschslime raus, + Milchpanzer
-    ///   Boss     Eichel, Milchpanzer, Fluegeldolch
+    ///   Boss     Eichel, Milchpanzer, Fluegeldolch - und die Glutwurz, der
+    ///            Baumriese des Waldes (speit Feuer, siehe EnemyGlutwurz)
     ///
     /// Der Fluegeldolch (Fledermaus) kommt nur als Beimischung - in Rudeln ist
     /// er zu viel.
@@ -208,7 +209,7 @@ public static class WavePlans
             .Pool(EnemyId.Fluegeldolch, 30f)
             .Pressure(400f, 600f)
             .Base(Patterns.Scatter)
-            .Boss(2f, EnemyId.KeksKoenig, "KEKS-KOENIG", 0.4f);
+            .Boss(2f, EnemyId.Glutwurz, "GLUTWURZ", 0.4f);
 
         plan.EndlessPhase()
             .Pool(EnemyId.Eichel, 45f)

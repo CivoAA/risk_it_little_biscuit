@@ -64,6 +64,15 @@ public class GameHud : MonoBehaviour
     private const int GoldChipY = 4, GoldChipH = 13;
     private const int CoinDX = 3, CoinDY = 3, CoinSize = 7;
 
+    // ---- unten: Boss ----
+    // Nur solange ein Gegner mit der Rolle Boss lebt. Unten mittig, damit es
+    // nicht mit Uhr und Ansage-Band oben kollidiert - und weil man beim
+    // Ausweichen ohnehin auf den Boden schaut, wo die Warnflaechen liegen.
+    private const int BossW = 168, BossH = 24, BossBottom = 6;
+    private static readonly RectInt BossPlateR = new RectInt(0, 0, BossW, BossH);
+    private static readonly RectInt BossNameR  = new RectInt(4, 2, BossW - 8, 10);
+    private static readonly RectInt BossFrameR = new RectInt(4, 13, BossW - 8, 8);
+
     // ---- Schrift ----
     // Jersey10 ist auf 10 px gezeichnet: nur in Vielfachen von 10 liegt jeder
     // Schriftpixel auf genau einem HUD-Pixel - und die 1-px-Kontur passt dazu.
@@ -152,6 +161,14 @@ public class GameHud : MonoBehaviour
     private int goldTarget, goldDrawn = -1;
     private float nextGoldPoll;
 
+    // Boss
+    private RectTransform bottom;
+    private Bar bossBar;
+    private Shadowed bossName;
+    private Enemy boss;
+    private float nextBossSearch;
+    private float bossShown = 1f, bossTrail = 1f, bossTrailHold;
+
     // Slots
     private readonly List<SlotView> weaponViews = new List<SlotView>();
     private readonly List<SlotView> buffViews = new List<SlotView>();
@@ -211,10 +228,12 @@ public class GameHud : MonoBehaviour
         left = Group("Left");
         center = Group("Center");
         right = Group("Right");
+        bottom = Group("Bottom");
 
         BuildLeft();
         BuildCenter();
         BuildRight();
+        BuildBottom();
 
         ApplyLayout(true);
     }
@@ -323,6 +342,23 @@ public class GameHud : MonoBehaviour
         FitGoldChip();
     }
 
+    // ---------- unten ----------
+
+    private void BuildBottom()
+    {
+        Img("BossPlate", bottom, BossPlateR, GameHudSkin.Plate, Color.white, true);
+        bossName = Text("BossName", bottom, BossNameR, SizeLabel, GameHudSkin.Cream,
+                        TextAlignmentOptions.Center, TextStyle.Outline);
+        bossBar = new Bar(this, "Boss", bottom, BossFrameR, GameHudSkin.Jam, GameHudSkin.JamLight, GameHudSkin.JamDark);
+
+        // Kerbe bei der Haelfte: dort wechseln die Bosse in ihre zweite Phase
+        int x = BossFrameR.x + 1 + bossBar.InnerW / 2;
+        Color tick = GameHudSkin.Ink; tick.a = 0.6f;
+        Img("BossTick", bottom, new RectInt(x, BossFrameR.y + 1, 1, BossFrameR.height - 2), GameHudSkin.White, tick);
+
+        bottom.gameObject.SetActive(false);
+    }
+
     /// <summary>Chip rechtsbuendig, so breit wie Muenze plus Zahl - keine leere Mitte.</summary>
     private void FitGoldChip()
     {
@@ -358,6 +394,7 @@ public class GameHud : MonoBehaviour
         UpdateGold(dt, now);
         UpdateSlots(now);
         UpdateShake(now);
+        UpdateBoss(dt, now);
     }
 
     /// <summary>
@@ -381,6 +418,9 @@ public class GameHud : MonoBehaviour
         left.anchoredPosition = Vector2.zero;
         center.anchoredPosition = new Vector2((w - CenterW) / 2, 0f);
         right.anchoredPosition = new Vector2(w - RightW, 0f);
+
+        int h = size.y / scale;
+        bottom.anchoredPosition = new Vector2((w - BossW) / 2, -(h - BossH - BossBottom));
     }
 
     private void UpdateVisibility(float dt)
@@ -641,6 +681,42 @@ public class GameHud : MonoBehaviour
         SetPos(sign, SignR.x, -(SignR.y + dy));
         SetPos(signShadow, SignR.x + 1, -(SignR.y + 1 + dy));
         timerText.SetColor(bump ? GameHudSkin.GoldLight : GameHudSkin.Cream);
+    }
+
+    // ---------- Boss ----------
+
+    private void UpdateBoss(float dt, float now)
+    {
+        if (boss == null || !boss.isActiveAndEnabled)
+        {
+            boss = null;
+            // Nicht jeden Frame die ganze Gegnerliste durchgehen
+            if (now >= nextBossSearch)
+            {
+                nextBossSearch = now + 0.5f;
+                foreach (Enemy e in Enemy.Alive)
+                {
+                    if (e == null || e.Role != EnemyRole.Boss) continue;
+                    boss = e;
+                    bossShown = bossTrail = e.HealthFraction;
+                    bossName.Set(Bestiary.NameOf(e.Id).ToUpperInvariant());
+                    break;
+                }
+            }
+        }
+
+        bool show = boss != null;
+        if (bottom.gameObject.activeSelf != show) bottom.gameObject.SetActive(show);
+        if (!show) return;
+
+        float frac = Mathf.Clamp01(boss.HealthFraction);
+        if (frac < bossShown - 0.0001f) bossTrailHold = now + TrailHold;
+        bossShown = frac;
+        if (now >= bossTrailHold) bossTrail = Mathf.MoveTowards(bossTrail, bossShown, TrailDrain * dt);
+        if (bossTrail < bossShown) bossTrail = bossShown;
+
+        bossBar.SetFill(bossShown, bossShown > 0f);
+        bossBar.SetTrail(bossTrail, GameHudSkin.Rose);
     }
 
     // ---------- Phase / Ansage ----------

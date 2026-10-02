@@ -52,6 +52,10 @@ public class TestSceneHUD : MonoBehaviour
     private TextMeshProUGUI dummyButtonLabel;
     private TextMeshProUGUI godButtonLabel;
 
+    // Boss-Auswahl: klappt unter "Boss spawnen" auf, ein Knopf je Boss
+    private RectTransform bossMenu;
+    private TextMeshProUGUI bossButtonLabel;
+
     private bool godMode;
     private string defaultHint = string.Empty;
     private float hintUntil;
@@ -187,13 +191,12 @@ public class TestSceneHUD : MonoBehaviour
             return string.Empty;
         }
 
-        EnemyKeckKönig king = bossSpawner.King;
-        string phase = king != null && king.IsPhaseTwo
+        string phase = bossSpawner.IsPhaseTwo
             ? "<color=#FF6A4A>Phase 2</color>"
             : "Phase 1";
 
         return "\n<color=#666666>――――――――――</color>\n" +
-               $"<b>Boss</b>  <color=#FFD24A>{boss.HealthFraction * 100f:0} %</color>   {phase}";
+               $"<b>{Bestiary.NameOf(boss.Id)}</b>  <color=#FFD24A>{boss.HealthFraction * 100f:0} %</color>   {phase}";
     }
 
     private static string Num(float value)
@@ -350,9 +353,51 @@ public class TestSceneHUD : MonoBehaviour
         }
     }
 
-    private void SpawnBoss()
+    /// <summary>
+    /// Klappt die Boss-Auswahl auf oder zu. Die Liste wird bei jedem Aufklappen
+    /// neu aus dem Katalog gebaut - ein frisch gebauter Boss steht dann ohne
+    /// Neustart der Szene mit drin.
+    /// </summary>
+    private void ToggleBossMenu()
     {
-        if (bossSpawner != null) SetHint(bossSpawner.Spawn());
+        if (bossMenu == null) return;
+
+        bool open = !bossMenu.gameObject.activeSelf;
+        SetBossMenu(open);
+        if (!open) return;
+
+        for (int i = bossMenu.childCount - 1; i >= 0; i--)
+        {
+            Destroy(bossMenu.GetChild(i).gameObject);
+        }
+
+        List<EnemyId> bosses = TestSceneBossSpawner.Available();
+        if (bosses.Count == 0)
+        {
+            Label("<color=#FF6A4A>Kein Boss-Prefab gefunden.</color>", bossMenu, fontSize - 8,
+                  TextAlignmentOptions.MidlineLeft);
+            return;
+        }
+
+        foreach (EnemyId id in bosses)
+        {
+            EnemyId captured = id;
+            Button b = MakeButton(Bestiary.NameOf(id), bossMenu, 320f, () => SpawnBoss(captured));
+            b.GetComponent<Image>().color = new Color(0.22f, 0.15f, 0.12f, 1f);
+        }
+    }
+
+    private void SetBossMenu(bool open)
+    {
+        if (bossMenu == null) return;
+        bossMenu.gameObject.SetActive(open);
+        if (bossButtonLabel != null) bossButtonLabel.text = open ? "Boss spawnen  -" : "Boss spawnen  +";
+    }
+
+    private void SpawnBoss(EnemyId id)
+    {
+        SetBossMenu(false);
+        if (bossSpawner != null) SetHint(bossSpawner.Spawn(id));
     }
 
     private void ClearBoss()
@@ -521,8 +566,22 @@ public class TestSceneHUD : MonoBehaviour
         // Bosskampf: spawnen, Phase 2 anspringen, wieder wegraeumen - und der
         // Schalter, mit dem man das alles in Ruhe angucken kann.
         GameObject row4 = Row(panel);
-        MakeButton("Boss spawnen", row4.transform, 158f, SpawnBoss);
+        Button bossButton = MakeButton("Boss spawnen  +", row4.transform, 158f, ToggleBossMenu);
+        bossButtonLabel = bossButton.GetComponentInChildren<TextMeshProUGUI>();
         MakeButton("Boss auf 50%", row4.transform, 158f, BossToHalf);
+
+        // Die Auswahl selbst: liegt im Panel direkt unter der Reihe und schiebt
+        // den Rest beim Aufklappen nach unten (das Panel waechst mit).
+        GameObject menu = UiObject("Boss-Auswahl", panel);
+        VerticalLayoutGroup menuLayout = menu.AddComponent<VerticalLayoutGroup>();
+        menuLayout.spacing = 4f;
+        menuLayout.padding = new RectOffset(12, 0, 0, 4);
+        menuLayout.childForceExpandHeight = false;
+        menuLayout.childForceExpandWidth = false;
+        menuLayout.childControlHeight = true;
+        menuLayout.childControlWidth = true;
+        bossMenu = (RectTransform)menu.transform;
+        SetBossMenu(false);
 
         GameObject row5 = Row(panel);
         Button godButton = MakeButton("Unsterblich: AUS", row5.transform, 200f, ToggleGodMode);

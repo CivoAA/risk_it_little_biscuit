@@ -1,30 +1,32 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// Setzt den Keks-Koenig in die Test-Szene, damit man seine Attacken
-/// ausprobieren kann, ohne auf ihn zu warten: im Wellenplan steht er erst nach
-/// rund 890 Sekunden, siehe <see cref="WavePlans"/>.
+/// Setzt einen Boss in die Test-Szene, damit man seine Attacken ausprobieren
+/// kann, ohne auf ihn zu warten: im Wellenplan steht er erst nach rund 890
+/// Sekunden, siehe <see cref="WavePlans"/>.
 ///
-/// Das Prefab kommt ueber den Asset-Pfad statt ueber ein Inspector-Feld. Die
-/// Test-Szene haengt bewusst an keiner einzigen Prefab-Referenz (siehe
-/// <see cref="TestSceneHUD"/>), sonst muesste sie nach jedem Neubau wieder von
-/// Hand verdrahtet werden. Ausserhalb des Editors gibt es die AssetDatabase
-/// nicht - dann wird im Resources-Ordner weitergesucht und sonst sauber
-/// gemeldet, dass es nicht geht. Die Test-Szene ist ein Editor-Werkzeug, das
-/// reicht hier.
+/// Welche Bosse es gibt, steht im <see cref="EnemyCatalog"/> (Rolle Boss,
+/// nicht archiviert) - ein neuer Boss taucht in der Auswahl der Test-Szene
+/// also von selbst auf, sobald er dort eingetragen und gebaut ist.
+///
+/// Das Prefab kommt ueber den Asset-Pfad aus dem Katalog statt ueber ein
+/// Inspector-Feld. Die Test-Szene haengt bewusst an keiner einzigen
+/// Prefab-Referenz (siehe <see cref="TestSceneHUD"/>), sonst muesste sie nach
+/// jedem Neubau wieder von Hand verdrahtet werden. Ausserhalb des Editors gibt
+/// es die AssetDatabase nicht - dann hilft der SpawnCatalog aus GameCore, und
+/// sonst wird sauber gemeldet, dass es nicht geht.
 /// </summary>
 public class TestSceneBossSpawner : MonoBehaviour
 {
-    private const string AssetPath = "Assets/Prefabs/Enemy/Boss/KecksKoenig.prefab";
-    private const string ResourcePath = "Enemy/KecksKoenig";
-
     [Tooltip("Abstand vom Spieler, in dem der Boss auftaucht.")]
     public float spawnDistance = 10f;
 
     private GameObject current;
     private Enemy currentEnemy;
     private EnemyKeckKönig currentKing;
+    private EnemyGlutwurz currentGlutwurz;
 
     /// <summary>Steht gerade ein Boss?</summary>
     public bool Alive
@@ -37,22 +39,43 @@ public class TestSceneBossSpawner : MonoBehaviour
         get { return current != null ? currentEnemy : null; }
     }
 
-    public EnemyKeckKönig King
+    /// <summary>Laeuft beim aktuellen Boss schon die zweite Phase?</summary>
+    public bool IsPhaseTwo
     {
-        get { return current != null ? currentKing : null; }
+        get
+        {
+            if (current == null) return false;
+            if (currentKing != null) return currentKing.IsPhaseTwo;
+            if (currentGlutwurz != null) return currentGlutwurz.IsPhaseTwo;
+            return false;
+        }
+    }
+
+    /// <summary>Alle Bosse aus dem Katalog, zu denen ein Prefab liegt.</summary>
+    public static List<EnemyId> Available()
+    {
+        var list = new List<EnemyId>();
+        foreach (EnemyDef def in EnemyCatalog.All)
+        {
+            if (def.Role != EnemyRole.Boss || def.Archived) continue;
+            if (LoadPrefab(def.Id) == null) continue;
+            list.Add(def.Id);
+        }
+        return list;
     }
 
     /// <summary>
     /// Stellt einen frischen Boss hin. Ein bereits stehender wird vorher
-    /// entfernt - zwei Keks-Koenige gleichzeitig sagen ueber die Attacken
-    /// nichts aus, weil man nicht mehr sieht, welche Warnung zu wem gehoert.
+    /// entfernt - zwei Bosse gleichzeitig sagen ueber die Attacken nichts aus,
+    /// weil man nicht mehr sieht, welche Warnung zu wem gehoert.
     /// </summary>
-    public string Spawn()
+    public string Spawn(EnemyId id)
     {
-        GameObject prefab = LoadPrefab();
+        GameObject prefab = LoadPrefab(id);
+        string name = Bestiary.NameOf(id);
         if (prefab == null)
         {
-            return "<color=#FF6A4A>Boss-Prefab nicht gefunden.</color>";
+            return "<color=#FF6A4A>Prefab fuer " + name + " nicht gefunden.</color>";
         }
 
         Clear();
@@ -65,9 +88,10 @@ public class TestSceneBossSpawner : MonoBehaviour
         Vector3 at = center + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f) * spawnDistance;
 
         current = Instantiate(prefab, at, Quaternion.identity);
-        current.name = "KecksKoenig (Test)";
+        current.name = prefab.name + " (Test)";
         currentEnemy = current.GetComponent<Enemy>();
         currentKing = current.GetComponent<EnemyKeckKönig>();
+        currentGlutwurz = current.GetComponent<EnemyGlutwurz>();
 
         // Gleiche Vorsicht wie ueberall sonst: erzeugt wird in der aktiven
         // Szene, und das muss nicht die sein, in der der Spieler steht.
@@ -77,7 +101,7 @@ public class TestSceneBossSpawner : MonoBehaviour
             SceneManager.MoveGameObjectToScene(current, run);
         }
 
-        return "Keks-Koenig steht. Viel Glueck.";
+        return name + " steht. Viel Glueck.";
     }
 
     /// <summary>Raeumt den Boss weg. True, wenn wirklich einer dastand.</summary>
@@ -92,17 +116,24 @@ public class TestSceneBossSpawner : MonoBehaviour
         current = null;
         currentEnemy = null;
         currentKing = null;
+        currentGlutwurz = null;
         return true;
     }
 
-    private static GameObject LoadPrefab()
+    private static GameObject LoadPrefab(EnemyId id)
     {
-        GameObject prefab = Resources.Load<GameObject>(ResourcePath);
-        if (prefab != null) return prefab;
+        EnemyDef def = EnemyCatalog.Get(id);
+        GameObject prefab = null;
 
 #if UNITY_EDITOR
-        prefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>(AssetPath);
+        if (def != null && !string.IsNullOrEmpty(def.Prefab))
+        {
+            prefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>(def.Prefab);
+        }
 #endif
-        return prefab;
+        if (prefab != null) return prefab;
+
+        SpawnCatalog catalog = FindAnyObjectByType<SpawnCatalog>();
+        return catalog != null ? catalog.Prefab(id) : null;
     }
 }
