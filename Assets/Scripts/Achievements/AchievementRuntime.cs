@@ -11,7 +11,7 @@ using UnityEngine;
 /// mit der ersten Szene, also nach diesem Objekt).
 ///
 /// Die Skillpunkte hängen mit dran: sie fallen im Spiel an denselben Stellen an
-/// (jeder Miniboss-Kill, jedes Achievement) und werden deshalb im selben Takt
+/// (jeder Elite-Kill, jedes Achievement) und werden deshalb im selben Takt
 /// gebündelt geschrieben statt einzeln.
 /// </summary>
 [DisallowMultipleComponent]

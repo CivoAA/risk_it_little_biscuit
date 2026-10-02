@@ -125,7 +125,6 @@ public class MixerObject : MonoBehaviour
                 // Ergebnisse fuer Titel und Hinweis.
                 RollSpecials();
 
-                PlayerController.Instance.RandomWeapon2();
                 UIController.Instance.PowerUpPanelOpen();
                 AssignRandomPowerUps();
 

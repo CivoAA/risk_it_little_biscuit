@@ -125,16 +125,13 @@ public class Enemy : MonoBehaviour
         get { return rb != null ? rb.linearVelocity : Vector2.zero; }
     }
 
-    /// <summary>Bosse und Minibosse lassen sich nicht ziehen oder wegschieben.</summary>
-    public bool IsBoss
-    {
-        get
-        {
-            return role == EnemyRole.MiniBoss
-                || role == EnemyRole.Boss
-                || role == EnemyRole.DeathBoss;
-        }
-    }
+    /// <summary>
+    /// Bosse und Minibosse lassen sich nicht ziehen oder wegschieben. Elites
+    /// zaehlen nicht dazu - die sind nur starke Einzelgaenger.
+    /// </summary>
+    public bool IsBoss => EnemyCatalog.IsBossRole(role);
+
+    public bool IsElite => role == EnemyRole.Elite;
 
     /// <summary>Die Rolle dieses Gegners. Der Director und die Erfolge fragen danach.</summary>
     public EnemyRole Role => role;
@@ -193,6 +190,16 @@ public class Enemy : MonoBehaviour
     /// </summary>
     [System.NonSerialized] public bool CanRecycle;
 
+    /// <summary>
+    /// Als was der Director diesen Gegner gesetzt hat. Bei umgestellten Prefabs
+    /// dasselbe wie <see cref="Id"/>; beim Altbestand (Keks-Koenig steht noch
+    /// auf None) die einzige Stelle, an der man erfaehrt, WER er ist.
+    /// </summary>
+    [System.NonSerialized] public EnemyId SpawnedAs = EnemyId.None;
+
+    /// <summary>Wer der Gegner ist: Katalog-Id, sonst wie der Director ihn gesetzt hat.</summary>
+    public EnemyId Identity => id != EnemyId.None ? id : SpawnedAs;
+
     // -------------------------------------------------------------- Aufbau
 
     /// <summary>
@@ -234,23 +241,24 @@ public class Enemy : MonoBehaviour
         // Skilltree "Schwachstellen kennen": Bosse und Minibosse mit weniger
         // Leben. Steht vor der Lauf-Skalierung, die rechnet dann darauf weiter.
         PlayerController player = PlayerController.Instance;
-        if (player != null && player.bossHealthReduction > 0f && IsBossRole(role))
+        if (player != null && player.bossHealthReduction > 0f && EnemyCatalog.IsBossRole(role))
         {
             health = Mathf.Max(1f, health * (1f - Mathf.Clamp01(player.bossHealthReduction / 100f)));
         }
 
         baseSpeed = moveSpeed;
         maxHealth = health;
+
+        // Elites erkennt man am Leuchten.
+        if (role == EnemyRole.Elite && spriteRenderer != null) EliteGlow.Attach(spriteRenderer);
     }
 
-    private static bool IsBossRole(EnemyRole r) =>
-        r == EnemyRole.MiniBoss || r == EnemyRole.Boss || r == EnemyRole.DeathBoss;
-
+    /// <summary>Altbestand: der Schalter "MiniBoss" am Prefab meint heute Elite.</summary>
     private EnemyRole LegacyRole()
     {
         if (Death_Boss) return EnemyRole.DeathBoss;
         if (BossBoss) return EnemyRole.Boss;
-        if (MiniBoss) return EnemyRole.MiniBoss;
+        if (MiniBoss) return EnemyRole.Elite;
         return EnemyRole.Normal;
     }
 
@@ -756,42 +764,34 @@ public class Enemy : MonoBehaviour
     /// </summary>
     private void GrantRewards()
     {
-        int souls = EnemyCatalog.Souls(role);
-
-        // Skilltree "Seelen-Bonus" (+x %). Der Nachkomma-Rest wird gewuerfelt,
-        // sonst braechte +10 % bei einem Miniboss (1 Seele) nie etwas.
-        PlayerController player = PlayerController.Instance;
-        if (souls > 0 && player != null && player.soulBonusPercent > 0f)
-        {
-            float scaled = souls * (1f + player.soulBonusPercent / 100f);
-            souls = Mathf.FloorToInt(scaled);
-            if (Random.value < scaled - souls) souls++;
-        }
-
-        if (souls > 0)
-        {
-            Skills.AddCurrency(souls);
-            WM_UIController.Instance?.UpdateSkillCurrencyText();
-        }
-
         switch (role)
         {
             case EnemyRole.DeathBoss:
                 PlayerController.Instance.attractAllXP = true;
                 Achievements.Unlock(Ach.Death);
-                if (SpawnChest.Instance != null) SpawnChest.Instance.Spawn(transform.position);
+                break;
+
+            case EnemyRole.Elite:
+                // Die Erfolge heissen im Code noch "Miniboss" (Steam-Schluessel),
+                // zaehlen aber Elites.
+                Achievements.Progress(Ach.Kill10Miniboss, 1f);
+                Achievements.Progress(Ach.Kill100Miniboss, 1f);
+                ClearCage();
                 break;
 
             case EnemyRole.MiniBoss:
-                if (SpawnChest.Instance != null) SpawnChest.Instance.Spawn(transform.position);
-                Achievements.Progress(Ach.Kill10Miniboss, 1f);
-                Achievements.Progress(Ach.Kill100Miniboss, 1f);
+                // Die Beute ist vorerst nur die XP aus dem Katalog - die
+                // fliegen dem Spieler wie beim Boss gleich zu.
+                PlayerController.Instance.attractAllXP = true;
                 ClearCage();
                 break;
 
             case EnemyRole.Boss:
                 PlayerController.Instance.attractAllXP = true;
                 GameManager.Instance.bossSpawned = true;
+                // Erster Sieg ueber diesen Boss mit diesem Charakter: ein
+                // Charakter-Level geschenkt.
+                Skills.RegisterBossVictory(Identity != EnemyId.None ? Identity.ToString() : name.Replace("(Clone)", "").Trim());
                 if (SpawnDeath.Instance != null)
                 {
                     Vector3 deathPos = transform.position;
@@ -815,7 +815,8 @@ public class Enemy : MonoBehaviour
     /// <summary>
     /// Raeumt die Kaefig-Wand eines Encirclements weg. Sie steht auf dem Layer
     /// "Enemy_barrier" und wuerde ohne das fuer immer stehen bleiben - deshalb
-    /// setzt der Director sie auch nur zusammen mit einem Miniboss.
+    /// setzt der Director sie auch nur zusammen mit einem Elite oder Miniboss
+    /// in der Mitte.
     /// </summary>
     private void ClearCage()
     {

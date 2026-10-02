@@ -231,15 +231,4 @@ public class LevelUpButton : MonoBehaviour
             AudioController.Instance.PalySound(AudioController.Instance.MenuClick);
         }
     }
-
-
-    public void SelectUpgradeGamba()
-    {
-        for (int i = 0; i < Gamba.Instance.wins; i++)
-            assingedWeapon.LevelUP();
-
-        UIController.Instance.GambaPanelClose();
-        AudioController.Instance.PalySound(AudioController.Instance.selectUpgrade);
-        AudioController.Instance.PalySound(AudioController.Instance.MenuClick);
-    }
 }

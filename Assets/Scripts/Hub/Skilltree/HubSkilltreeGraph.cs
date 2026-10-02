@@ -360,12 +360,14 @@ public sealed class HubSkilltreeGraph : System.IDisposable
     {
         Color edge = HubSkilltreeUI.Shade(accent, 0.5f);
 
+        int points = Skills.Points;
+
         foreach (Node n in nodes)
         {
             SkillNodeDef d = n.Def;
             bool unlocked = d.IsStart || Skills.IsUnlocked(d);
             bool open = !unlocked && Skills.RequirementsMet(d);
-            bool affordable = open && Skills.Currency >= d.Price;
+            bool affordable = open && points >= d.Price;
             bool isHover = n == hovered;
 
             n.Shadow.color = new Color(0f, 0f, 0f, unlocked || open ? 0.55f : 0.3f);
@@ -453,12 +455,13 @@ public sealed class HubSkilltreeGraph : System.IDisposable
     public void Animate(float time)
     {
         float wave = 0.5f + 0.5f * Mathf.Sin(time * 3.2f);
+        int points = Skills.Points;
 
         foreach (Node n in nodes)
         {
             SkillNodeDef d = n.Def;
             bool unlocked = d.IsStart || Skills.IsUnlocked(d);
-            if (!unlocked && Skills.RequirementsMet(d) && Skills.Currency >= d.Price)
+            if (!unlocked && Skills.RequirementsMet(d) && points >= d.Price)
                 n.Outline.color = Color.Lerp(accent, HubSkilltreeUI.Lift(accent, 0.55f), wave);
 
             if (n == hovered && d != selected)

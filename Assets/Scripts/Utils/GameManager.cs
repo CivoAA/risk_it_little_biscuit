@@ -14,8 +14,10 @@ public class GameManager : MonoBehaviour
     public float currencyGainMultiplire = 1;
     public ItemMenu itemMenu;
     public ItemMenuBuffs itemMenuBuffs;
-    public int skillCurrencyBeforeGame;
-    public int gainedThroughAchievements;
+    /// <summary>Charakter-Level beim Start des Laufs - für "Level-Up!" im Abschluss.</summary>
+    public int charLevelBeforeGame;
+    /// <summary>Charakter-XP, die dieser Lauf eingebracht hat.</summary>
+    public float charXpGained;
 
     /// <summary>Besiegte Gegner in diesem Lauf - fuer die Bilanz im Death-Screen.</summary>
     public int kills;
@@ -68,7 +70,7 @@ public class GameManager : MonoBehaviour
         Shop.AddCurrency(currency);
         gameActiv = false;
 
-        // Der Lauf ist vorbei - was sich an Skillpunkten angesammelt hat, jetzt
+        // Der Lauf ist vorbei - was sich an Charakter-XP angesammelt hat, jetzt
         // wegschreiben statt auf den naechsten 5-Sekunden-Takt zu warten.
         Skills.Flush();
         Bestiary.Flush();
@@ -80,14 +82,12 @@ public class GameManager : MonoBehaviour
 
         if (!bossSpawned)
         {
-            gainedThroughAchievements = Skills.Currency - skillCurrencyBeforeGame;
             SessionProgressTracker.Instance.EvaluateAfterGame();
             StartCoroutine(ShowGameOverScreen());
         }
         else
         {
             Achievements.Unlock(Ach.FirstWin);
-            gainedThroughAchievements = Skills.Currency - skillCurrencyBeforeGame;
             SessionProgressTracker.Instance.EvaluateAfterGame();
             StartCoroutine(ShowWinScreen());
         }
@@ -235,7 +235,7 @@ public class GameManager : MonoBehaviour
 
     /// <summary>
     /// Alles, was das Bild schon fuer sich beansprucht, blockt die Pause:
-    /// Level-Up, PowerUp, Evo, Gamba und die Abschlussbildschirme.
+    /// Level-Up, PowerUp, Evo und die Abschlussbildschirme.
     /// </summary>
     private bool CanPause()
     {
@@ -246,8 +246,7 @@ public class GameManager : MonoBehaviour
             && !ui.WinPanel.activeSelf
             && !ui.LevelUpPanel.activeSelf
             && !ui.PowerUpPanel.activeSelf
-            && !ui.EvoPanel.activeSelf
-            && !ui.GambaPanel.activeSelf;
+            && !ui.EvoPanel.activeSelf;
     }
 
     /// <summary>

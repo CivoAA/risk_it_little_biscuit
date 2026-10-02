@@ -29,9 +29,6 @@ public static class Ach
     // Registrieren noch null.
     private static readonly List<AchievementDef> Registry = new List<AchievementDef>();
 
-    /// <summary>Standard-Belohnung in Skill-Währung, wenn nichts anderes angegeben ist.</summary>
-    private const int DefaultSouls = 5;
-
     // ==================================================================
     //  Fortschritt
     // ==================================================================
@@ -70,12 +67,11 @@ public static class Ach
 
     public static readonly AchievementDef Kill10Miniboss = Def(
         "Kill_10_Miniboss", "Challenger",
-        "Defeat 10 <color=#FF4040>Mini Bosses</color>. Each <color=#FF4040>Mini Boss</color> " +
-        "(marked with a crown) rewards <color=#00FAFF>+1 Skill Point!</color>",
+        "Defeat 10 <color=#FFD040>Elite</color> enemies - you will know them by their glow.",
         AchievementCategory.Combat, goal: 10f);
 
     public static readonly AchievementDef Kill100Miniboss = Def(
-        "Kill_100_Miniboss", "Conqueror", "Defeat 100 <color=#FF4040>Mini Bosses</color>.",
+        "Kill_100_Miniboss", "Conqueror", "Defeat 100 <color=#FFD040>Elite</color> enemies.",
         AchievementCategory.Combat, goal: 100f);
 
     // ==================================================================
@@ -268,13 +264,12 @@ public static class Ach
     private static AchievementDef Def(string id, string nameEn, string descEn,
                                       AchievementCategory category,
                                       float goal = 1f,
-                                      int souls = DefaultSouls,
                                       string icon = null,
                                       string grantsUnlock = null,
                                       bool hidden = false,
                                       string steamApiName = null)
     {
-        AchievementDef def = new AchievementDef(id, nameEn, descEn, icon, goal, souls,
+        AchievementDef def = new AchievementDef(id, nameEn, descEn, icon, goal,
                                                grantsUnlock, category, hidden, steamApiName)
         {
             Order = Registry.Count

@@ -515,12 +515,6 @@ public class AchievementPanel : MonoBehaviour
             detailReward.text = Loc.Get("ui.achievements.unlocked", "Freigeschaltet");
             detailReward.color = GameHudSkin.Mint;
         }
-        else if (def.Souls > 0)
-        {
-            detailReward.text = $"{Loc.Get("ui.achievements.reward", "Belohnung:")} " +
-                                $"+{def.Souls} {Loc.Get("ui.achievements.souls", "Cookie Souls")}";
-            detailReward.color = GameHudSkin.GoldLight;
-        }
         else
         {
             detailReward.text = "";

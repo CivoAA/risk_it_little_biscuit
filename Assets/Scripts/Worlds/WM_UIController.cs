@@ -280,7 +280,7 @@ public class WM_UIController : MonoBehaviour
 
         if (skillCurrencyText == null) return;
 
-        int currency = Skills.Currency;
+        int currency = Skills.Points;
         if (currency == lastSkillCurrency) return;
 
         skillCurrencyText.text = currency.ToString();

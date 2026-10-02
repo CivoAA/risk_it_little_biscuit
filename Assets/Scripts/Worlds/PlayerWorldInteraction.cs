@@ -55,9 +55,9 @@ public class PlayerWorldInteraction : MonoBehaviour
                     SessionProgressTracker.Instance.SnapshotBeforeGame(); //Sichern der Achivments und Unlocks bevor das spiel Startet
                     Skills.SetActiveTreeForCharacter(Shop.SkinIndex);
                     // Ach.FirstGame loest PlayerController.StartStats() aus - also erst,
-                    // nachdem skillCurrencyBeforeGame steht. Stuende der Aufruf auch hier,
-                    // waeren die Souls dafuer schon vor dem Merken gezaehlt und wuerden in
-                    // der "Cookie Souls: +X"-Anzeige des ersten Laufs fehlen.
+                    // nachdem charLevelBeforeGame steht. Stuende der Aufruf auch hier,
+                    // liefe StartStats zu frueh und die Anzeige im Abschlussbildschirm
+                    // des ersten Laufs stimmte nicht.
                     MapsManager.Instance.selectedMap = currentMap.mapID;
                     // Nach dem Lauf geht es wieder hierher zurueck - nicht in den Hub,
                     // falls von dort zuletzt gestartet wurde.

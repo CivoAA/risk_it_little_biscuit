@@ -65,8 +65,8 @@ public class SkillNodeData
 
     public SkillShape shape = SkillShape.Kreis;
 
-    [Tooltip("Preis in Skillpunkten.")]
-    public int price = 10;
+    [Tooltip("Preis in Skillpunkten - ein Punkt je Charakter-Level. Normal 1, Sterne 2.")]
+    public int price = 1;
 
     [Tooltip("Steht im Beschreibungsfeld. Leer = aus der Id gebaut.")]
     public string displayName = "";

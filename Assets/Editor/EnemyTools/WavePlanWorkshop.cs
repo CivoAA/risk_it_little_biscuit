@@ -587,6 +587,13 @@ public class WavePlanWorkshop : EditorWindow
             EditorGUILayout.EndHorizontal();
         }
 
+        if (phase.pool.Any(e => EnemyCatalog.IsElite(e.id)))
+        {
+            EditorGUILayout.HelpBox(
+                "Elites im Pool werden uebersprungen - sie kommen nur einzeln ueber einen Burst.",
+                MessageType.Warning);
+        }
+
         if (GUILayout.Button("Gegner in den Pool", GUILayout.Width(150f)))
         {
             phase.pool.Add(new PoolDraft { id = EnemyId.Marshmello, weight = 20f });
@@ -674,21 +681,28 @@ public class WavePlanWorkshop : EditorWindow
                 break;
 
             case BeatKind.Encirclement:
-                beat.enemy = EnemyPopup(new GUIContent("Miniboss",
-                    "None = nur der Ring, ohne Gegner in der Mitte."), beat.enemy, true);
+                beat.enemy = EnemyPopup(new GUIContent("Mitte",
+                    "Elite oder Miniboss in der Mitte. None = nur der Ring."), beat.enemy, true);
                 beat.ringEnemy = EnemyPopup(new GUIContent("Ring-Gegner"), beat.ringEnemy, false);
+                if (EnemyCatalog.IsElite(beat.ringEnemy))
+                {
+                    EditorGUILayout.HelpBox(
+                        "Elites kommen nur einzeln - als Ring-Gegner setzt der Director sie nicht.",
+                        MessageType.Warning);
+                }
                 beat.ringCount = EditorGUILayout.IntField("Anzahl im Ring", beat.ringCount);
                 beat.radius = EditorGUILayout.FloatField("Radius", beat.radius);
                 beat.cage = EditorGUILayout.Toggle(new GUIContent("Kaefig",
-                    "Blocker-Wand aussen herum. Loest sich erst auf, wenn ein MINIBOSS "
-                  + "stirbt - ohne Miniboss in der Mitte steht sie fuer immer."), beat.cage);
+                    "Blocker-Wand aussen herum. Loest sich erst auf, wenn der Elite oder "
+                  + "Miniboss in der Mitte stirbt - ohne ihn steht sie fuer immer."), beat.cage);
 
-                if (beat.cage && EnemyCatalog.Get(beat.enemy)?.Role != EnemyRole.MiniBoss)
+                EnemyRole centerRole = EnemyCatalog.Get(beat.enemy)?.Role ?? EnemyRole.Normal;
+                if (beat.cage && centerRole != EnemyRole.Elite && centerRole != EnemyRole.MiniBoss)
                 {
                     EditorGUILayout.HelpBox(
-                        "Kaefig ohne Miniboss in der Mitte: die Wand verschwindet nie. "
+                        "Kaefig ohne Elite oder Miniboss in der Mitte: die Wand verschwindet nie. "
                       + "Entweder den Kaefig abschalten oder einen Gegner mit Rolle "
-                      + "MiniBoss eintragen.", MessageType.Error);
+                      + "Elite/MiniBoss eintragen.", MessageType.Error);
                 }
 
                 beat.warnTime = EditorGUILayout.FloatField("Vorwarnung (s)", beat.warnTime);
@@ -761,6 +775,8 @@ public class WavePlanWorkshop : EditorWindow
     /// <summary>Wie viele Gegner eine Bedrohungsmenge ergibt - die Frage kommt immer.</summary>
     private static string Count(float threat, EnemyId id)
     {
+        if (EnemyCatalog.IsElite(id)) return "1 (Elite, immer einzeln)";
+
         float each = Mathf.Max(0.1f, EnemyCatalog.Threat(id));
         return Mathf.RoundToInt(threat / each).ToString();
     }

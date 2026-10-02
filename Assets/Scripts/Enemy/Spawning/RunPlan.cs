@@ -7,13 +7,16 @@ public enum BeatKind
     /// <summary>Ein Schwall auf einmal, nach einem Muster gesetzt.</summary>
     Burst,
 
-    /// <summary>Kreis um den Spieler, optional mit Kaefig und Miniboss in der Mitte.</summary>
+    /// <summary>Kreis um den Spieler, optional mit Kaefig und einem Elite in der Mitte.</summary>
     Encirclement,
 
     /// <summary>Atempause: der Grunddruck faellt fuer eine Weile ab.</summary>
     Calm,
 
-    /// <summary>Der Endboss. Der Grunddruck geht dabei deutlich zurueck.</summary>
+    /// <summary>
+    /// Ein Bosskampf: der Endboss - oder ein Miniboss mitten im Level. Der
+    /// Grunddruck geht dabei deutlich zurueck.
+    /// </summary>
     Boss,
 }
 
@@ -107,8 +110,9 @@ public class Phase
 
     /// <summary>
     /// Der Kreis-Moment: Vorwarnung, dann schliesst sich ein Ring um den
-    /// Spieler. <paramref name="boss"/> darf None sein - dann ist es nur der
-    /// Ring ohne Miniboss.
+    /// Spieler. <paramref name="boss"/> (ein Elite oder Miniboss, genau einer)
+    /// darf None sein - dann ist es nur der Ring. Als Ringgegner taugen Elites
+    /// nicht, die setzt der Director dort nicht.
     ///
     /// Die letzten drei Werte haben Vorgaben, die fuer fast jeden Ring passen.
     /// Sie stehen trotzdem als Parameter da, damit die Wellenplan-Werkstatt
@@ -174,25 +178,35 @@ public class Phase
         return Mathf.Lerp(PressureStart, PressureEnd, t);
     }
 
-    /// <summary>Zieht einen Gegner aus dem Pool - gewichtet.</summary>
+    /// <summary>
+    /// Zieht einen Gegner aus dem Pool - gewichtet. Elites werden dabei
+    /// uebergangen: die kommen nur einzeln ueber einen Beat, nie als Nachschub.
+    /// </summary>
     public EnemyId PickEnemy()
     {
-        if (Enemies.Count == 0) return EnemyId.Marshmello;
-
         if (weightSum <= 0f)
         {
-            foreach (PoolEntry entry in Enemies) weightSum += entry.Weight;
+            foreach (PoolEntry entry in Enemies)
+            {
+                if (!EnemyCatalog.IsElite(entry.Id)) weightSum += entry.Weight;
+            }
         }
 
+        if (weightSum <= 0f) return EnemyId.Marshmello;
+
         float roll = Random.Range(0f, weightSum);
+        EnemyId last = EnemyId.Marshmello;
         foreach (PoolEntry entry in Enemies)
         {
+            if (EnemyCatalog.IsElite(entry.Id)) continue;
+            last = entry.Id;
             roll -= entry.Weight;
             if (roll <= 0f) return entry.Id;
         }
 
-        return Enemies[Enemies.Count - 1].Id;
+        return last;
     }
+
 }
 
 /// <summary>

@@ -85,8 +85,8 @@ public class PlayerController : MonoBehaviour
     public float freeRerollChance;
     [Tooltip("Heilung in % der Max-HP bei jedem Level-Up.")]
     public float levelUpHealPercent;
-    [Tooltip("+x % Seelen von Minibossen und Bossen.")]
-    public float soulBonusPercent;
+    [Tooltip("+x % Charakter-XP (ausserhalb des Laufs) auf alles, was eingesammelt wird.")]
+    public float charXpBonusPercent;
     [Tooltip("Bosse und Minibosse spawnen mit x % weniger Leben.")]
     public float bossHealthReduction;
 
@@ -218,7 +218,7 @@ public class PlayerController : MonoBehaviour
         {
             LevelUp();
         }
-        // Bei pausiertem Spiel (Level-Up-Panel, Pause-Menue, Gamba, ...) laufen
+        // Bei pausiertem Spiel (Level-Up-Panel, Pause-Menue, Mixer, ...) laufen
         // die Updates weiter, obwohl Time.timeScale 0 ist. Eingaben duerfen dann
         // nicht ausgewertet werden: sonst dreht sich der Spieler im Menue mit
         // A/D mit - und mit ihm jede Waffe, die sich an LastMoveX orientiert.
@@ -407,7 +407,8 @@ public class PlayerController : MonoBehaviour
 
         if (GameManager.Instance != null)
         {
-            GameManager.Instance.skillCurrencyBeforeGame = Skills.Currency;
+            GameManager.Instance.charLevelBeforeGame = Skills.Level;
+            GameManager.Instance.charXpGained = 0f;
         }
         Achievements.Unlock(Ach.FirstGame);
 
@@ -441,7 +442,7 @@ public class PlayerController : MonoBehaviour
         mixerAllLegendaryChance += Skills.Bonus(SkillType.MixerAllLegendaryChance);
         freeRerollChance        += Skills.Bonus(SkillType.FreeRerollChance);
         levelUpHealPercent      += Skills.Bonus(SkillType.LevelUpHealPercent);
-        soulBonusPercent        += Skills.Bonus(SkillType.SoulBonusPercent);
+        charXpBonusPercent      += Skills.Bonus(SkillType.CharXpBonusPercent);
         bossHealthReduction     += Skills.Bonus(SkillType.BossHealthReduction);
         overhealShieldPercent   += Skills.Bonus(SkillType.OverhealShield);
         lastBreathSpeedPercent  += Skills.Bonus(SkillType.LastBreath);
@@ -588,7 +589,15 @@ public class PlayerController : MonoBehaviour
     }
     public void GetExperience(int experienceToGet)
     {
-        experience += experienceToGet * experienceMultiplier;
+        float gained = experienceToGet * experienceMultiplier;
+        experience += gained;
+
+        // Dieselben XP gehen auch auf das Konto des Charakters (Charakter-Level
+        // -> Skillpunkte). Der Skill "Charakter-XP" legt noch Prozente drauf.
+        float charXp = gained * (1f + charXpBonusPercent / 100f);
+        Skills.AddXp(charXp);
+        if (GameManager.Instance != null) GameManager.Instance.charXpGained += charXp;
+
         UIController.Instance.UpdateExperienceSlider();
         attractAllXP = false;
     }
@@ -754,68 +763,6 @@ public class PlayerController : MonoBehaviour
             else
             {
                 UIController.Instance.levelUpButtons[i].gameObject.SetActive(false);
-            }
-        }
-    }
-
-    public void RandomWeapon2()
-    {
-        int maxWeaponSlots = WeaponSlots;
-
-        var lowLevelActiveWeapons = activeWeapon
-            .Where(w => w.weaponLevel >= 0 && w.weaponLevel <= 3 && w.weaponLevel < w.maxweaponLevel && IsWeaponUnlocked(w))
-            .ToList();
-
-        var activeWeaponsOnly = activeWeapon
-            .Where(w => w.weaponLevel >= 0 && w.weaponLevel < w.maxweaponLevel && IsWeaponUnlocked(w))
-            .ToList();
-
-        var inactiveWeapons = activeWeapon
-            .Where(w => w.weaponLevel < 0 && w.weaponLevel < w.maxweaponLevel && IsWeaponUnlocked(w))
-            .ToList();
-
-        var activeWeaponsAndEvos = activeWeapon
-            .Where(w => w.weaponLevel >= 0)
-            .Concat(activeEvos.Where(e => e.weaponLevel >= 0))
-            .ToList();
-
-        List<Weapon> availableWeapons;
-
-        if (lowLevelActiveWeapons.Count > 0)
-        {
-            availableWeapons = lowLevelActiveWeapons;
-        }
-        else if (activeWeaponsOnly.Count > 0)
-        {
-            availableWeapons = activeWeaponsOnly;
-        }
-        else if (activeWeaponsAndEvos.Count < maxWeaponSlots && inactiveWeapons.Count > 0)
-        {
-            availableWeapons = inactiveWeapons;
-        }
-        else if (activeWeaponsAndEvos.Count >= maxWeaponSlots)
-        {
-            availableWeapons = maxLevelStuff.ToList();
-        }
-        else
-        {
-            Debug.Log("Kritischer Fehler beim Waffenzusortieren der Lootchest im PlayerController Script");
-            availableWeapons = new List<Weapon>();
-        }
-
-        // 🔀 Shuffle
-        availableWeapons = availableWeapons.OrderBy(x => rng.Next()).ToList();
-
-        // 📦 1 Button aktivieren
-        for (int i = 0; i < 1; i++)
-        {
-            if (i < availableWeapons.Count)
-            {
-                UIController.Instance.GambaButtons.ActivateButton(availableWeapons[i]);
-            }
-            else
-            {
-                UIController.Instance.GambaButtons.gameObject.SetActive(false);
             }
         }
     }

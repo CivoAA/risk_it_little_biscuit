@@ -207,7 +207,7 @@ public class GameHud : MonoBehaviour
         canvas = gameObject.AddComponent<Canvas>();
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         canvas.pixelPerfect = true;
-        // Unter dem alten UI-Canvas: Level-Up, Evo, Gamba, Game Over und Sieg
+        // Unter dem alten UI-Canvas: Level-Up, Evo, Game Over und Sieg
         // liegen darueber, das Pausenmenue (200) sowieso.
         if (uiCanvas != null)
         {

@@ -240,17 +240,68 @@ public class CatalogTests
 
         store.SetUnlocked("default", "default.wind.move_speed_1", true);
         store.SetUnlocked("char_1", "char_1.wind.move_speed_1", true);
-        store.SkillCurrency = 42;
+        store.SetXp("char_1", 4200);
         store.Save();
 
         var reloaded = new SkillStore(tempDir);
         reloaded.Load();
 
-        Assert.AreEqual(42, reloaded.SkillCurrency);
+        Assert.AreEqual(4200, reloaded.XpOf("char_1"), 0.001);
+        Assert.AreEqual(0, reloaded.XpOf("default"), 0.001, "XP gehoeren dem Charakter, nicht allen.");
         Assert.IsTrue(reloaded.IsUnlocked("default", "default.wind.move_speed_1"));
         Assert.IsTrue(reloaded.IsUnlocked("char_1", "char_1.wind.move_speed_1"));
         Assert.IsFalse(reloaded.IsUnlocked("default", "char_1.wind.move_speed_1"),
             "Die Bäume dürfen sich nicht gegenseitig freischalten.");
+    }
+
+    [Test]
+    public void Skills_Boss_Erstsieg_zaehlt_einmal_je_Charakter()
+    {
+        var store = new SkillStore(tempDir);
+        store.Load();
+
+        Assert.IsTrue(store.AddBoss("char_0", "KeksKoenig"));
+        Assert.IsFalse(store.AddBoss("char_0", "KeksKoenig"), "Derselbe Boss gibt nur einmal ein Level.");
+        Assert.IsTrue(store.AddBoss("char_1", "KeksKoenig"), "Jeder Charakter muss selbst siegen.");
+        store.Save();
+
+        var reloaded = new SkillStore(tempDir);
+        reloaded.Load();
+
+        Assert.AreEqual(1, reloaded.BossCountOf("char_0"));
+        Assert.AreEqual(1, reloaded.BossCountOf("char_1"));
+        Assert.AreEqual(0, reloaded.BossCountOf("default"));
+    }
+
+    [Test]
+    public void Gegner_Ids_behalten_ihre_Zahlen()
+    {
+        // Die Prefabs speichern die Id als Zahl. Verschiebt sich eine, ist am
+        // Prefab ploetzlich ein anderer Gegner eingetragen.
+        Assert.AreEqual(2,  (int)EnemyId.EliteMarshmello);
+        Assert.AreEqual(13, (int)EnemyId.EliteMarshmelloGross);
+        Assert.AreEqual(16, (int)EnemyId.KeksKoenig);
+        Assert.AreEqual(22, (int)EnemyId.WeisseMessermaus);
+        Assert.AreEqual(25, (int)EnemyId.EliteFliegenpilz);
+        Assert.AreEqual(28, (int)EnemyId.Glutwurz);
+    }
+
+    [Test]
+    public void CharLevel_Kurve_trifft_die_Ankerpunkte()
+    {
+        Assert.AreEqual(0, CharLevel.LevelFor(0));
+        Assert.AreEqual(0, CharLevel.LevelFor(1749));
+        Assert.AreEqual(1, CharLevel.LevelFor(1750), "Level 1 = Ingame-Level 15.");
+        Assert.AreEqual(1, CharLevel.LevelFor(16199));
+        Assert.AreEqual(2, CharLevel.LevelFor(16200), "Level 2 = Ingame-Level 30.");
+        Assert.AreEqual(3, CharLevel.LevelFor(34830));
+
+        for (int level = 1; level < 50; level++)
+        {
+            Assert.AreEqual(level, CharLevel.LevelFor(CharLevel.XpForLevel(level)));
+            Assert.Greater(CharLevel.StepXp(level + 1), CharLevel.StepXp(level),
+                "Jedes Level muss teurer sein als das davor.");
+        }
     }
 
     // ==================================================================

@@ -458,7 +458,7 @@ public class EnemyWorkshop : EditorWindow
             "Rueckstoss (s)", "Wie lange ein Treffer ihn zurueckdrueckt. 0 = gar nicht."), d.pushTime);
 
         d.role = (EnemyRole)EditorGUILayout.EnumPopup(new GUIContent(
-            "Rolle", "Entscheidet ueber Truhe, Seelen und welche Erfolge zaehlen."), d.role);
+            "Rolle", "Entscheidet ueber Verhalten, Spawn-Regeln und welche Erfolge zaehlen."), d.role);
 
         DrawRoleHint(d.role);
         DrawThreat(d);
@@ -659,16 +659,23 @@ public class EnemyWorkshop : EditorWindow
             case EnemyRole.Normal:
                 text = "Zaehlt auf Kill100 / Kill1000 / Kill10000.";
                 break;
+            case EnemyRole.Elite:
+                text = "Klein und leuchtend, mehr Leben und mehr XP. Kommt immer einzeln "
+                     + "(nie aus dem Pool, nie mehrere pro Burst). Zaehlt auf die Elite-Erfolge "
+                     + "und raeumt beim Sterben die Kaefig-Wand weg.";
+                break;
             case EnemyRole.MiniBoss:
-                text = "Truhe, 1 Seele, Kill10Miniboss / Kill100Miniboss. "
-                     + "Raeumt beim Sterben die Kaefig-Wand weg. Nicht schiebbar.";
+                text = "Bosskampf mitten im Level - per Boss-Beat in den Wellenplan setzen. "
+                     + "Nicht schiebbar, zaehlt nicht zum Druck, beendet den Lauf nicht. "
+                     + "Gibt die XP oben und zieht beim Tod alle XP an.";
                 break;
             case EnemyRole.Boss:
                 text = "Laeuft NICHT von selbst - ein eigenes Skript muss ihn steuern "
-                     + "(wie EnemyKeckKoenig). 10 Seelen, ruft danach den Tod.";
+                     + "(wie EnemyKeckKoenig). Ruft danach den Tod. Der erste Sieg je "
+                     + "Charakter schenkt ein Charakter-Level.";
                 break;
             case EnemyRole.DeathBoss:
-                text = "Truhe, 50 Seelen, Erfolg \"Death\", zieht alle XP an.";
+                text = "Erfolg \"Death\", zieht alle XP an.";
                 break;
             default:
                 text = "Kaefig-Wand: zaehlt nicht zum Druck und gibt nichts.";
@@ -707,7 +714,7 @@ public class EnemyWorkshop : EditorWindow
                 Mathf.Pow(Mathf.Max(0.3f, d.speed) / EnemyCatalog.RefSpeed, EnemyCatalog.SpeedExponent),
                 100f / Mathf.Max(0.1f, threat));
 
-            if (d.role == EnemyRole.MiniBoss || d.role == EnemyRole.Boss || d.role == EnemyRole.DeathBoss)
+            if (EnemyCatalog.IsBossRole(d.role))
             {
                 text += "\nBosse zaehlen im Director nicht zum Druck - die Zahl ist nur zum Vergleich.";
             }
@@ -1778,7 +1785,7 @@ public class EnemyWorkshop : EditorWindow
 
         d.role = deathBoss ? EnemyRole.DeathBoss
                : bossBoss ? EnemyRole.Boss
-               : miniBoss ? EnemyRole.MiniBoss
+               : miniBoss ? EnemyRole.Elite   // der alte Schalter "MiniBoss" meint heute Elite
                : d.role;
 
         // "rightlooking == true" hiess frueher: spiegeln, wenn der Spieler

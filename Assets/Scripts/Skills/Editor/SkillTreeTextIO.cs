@@ -391,7 +391,7 @@ public static class SkillTreeTextIO
                     break;
 
                 case "price":
-                    node.price = ParseInt(value, 10, errors);
+                    node.price = ParseInt(value, 1, errors);
                     break;
 
                 case "name":
