@@ -34,15 +34,17 @@ public class SkillSaveManager : MonoBehaviour
     /// <summary>Setzt den aktiven Baum zurück und erstattet die Punkte.</summary>
     public void ResetAllSkills() => Skills.ResetActiveTree();
 
+    /// <summary>Charakter-Level des gewählten Charakters auf 0.</summary>
     public void ResetSkillCurrency()
     {
-        Skills.SetCurrency(0);
+        Skills.SetXp(Skills.ActiveTree, 0);
         WM_UIController.Instance?.UpdateSkillCurrencyText();
     }
 
+    /// <summary>Debug-Knopf: ein Charakter-Level mehr für den gewählten Charakter.</summary>
     public void GainSkillCurrency()
     {
-        Skills.AddCurrency(50);
+        Skills.SetXp(Skills.ActiveTree, CharLevel.XpForLevel(CharLevel.LevelFor(Skills.Xp) + 1));
         WM_UIController.Instance?.UpdateSkillCurrencyText();
     }
 
@@ -67,10 +69,6 @@ public class SkillSaveManager : MonoBehaviour
     }
 
     // ------------------------------------------------- Alte Aufrufwege
-
-    public void AddSkillCurrency(int amount) => Skills.AddCurrency(amount);
-
-    public bool TrySpendSkillCurrency(int amount) => Skills.TrySpend(amount);
 
     /// <summary>
     /// Früher wurden hier die Szenen-Knoten auf den Spielstand gesetzt. Den Baum

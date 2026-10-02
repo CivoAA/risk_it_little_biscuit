@@ -114,6 +114,9 @@ public class SpawnDirector : MonoBehaviour
     private float pressureScale = 1f;
     private float pressureScaleUntil;
 
+    /// <summary>Der laufende Miniboss eines Boss-Beats - solange er lebt, bleibt der Nachschub gedaempft.</summary>
+    private Enemy activeMiniBoss;
+
     private string announce;
     private float announceUntil;
     private string lastShownText;
@@ -275,7 +278,12 @@ public class SpawnDirector : MonoBehaviour
             case BeatKind.Boss:
                 DampenPressure(beat.PressureScale, beat.Duration);
                 Announce(beat.Announce);
-                SpawnBoss(beat.Enemy);
+                GameObject boss = SpawnBoss(beat.Enemy);
+
+                // Ein Miniboss ist ein Kampf mitten im Level: der Nachschub
+                // bleibt nur gedaempft, solange er lebt (siehe TopUpPressure).
+                Enemy bossEnemy = boss != null ? boss.GetComponent<Enemy>() : null;
+                if (bossEnemy != null && bossEnemy.Role == EnemyRole.MiniBoss) activeMiniBoss = bossEnemy;
                 break;
         }
     }
@@ -297,9 +305,9 @@ public class SpawnDirector : MonoBehaviour
         SpawnContext ctx = Context();
 
         // Der Kaefig: dichte Blocker-Wand etwas ausserhalb des Rings. Sie
-        // verschwindet, sobald der Miniboss faellt (siehe Enemy: alles auf dem
-        // Layer Enemy_barrier wird dann geraeumt) - ohne Miniboss stuende sie
-        // fuer immer, deshalb nur zusammen mit einem.
+        // verschwindet, sobald der Gegner in der Mitte faellt (siehe Enemy:
+        // alles auf dem Layer Enemy_barrier wird dann geraeumt) - ohne ihn
+        // stuende sie fuer immer, deshalb nur zusammen mit einem.
         if (beat.Cage && beat.Enemy != EnemyId.None)
         {
             float cageRadius = beat.Radius * 1.35f;
@@ -310,7 +318,13 @@ public class SpawnDirector : MonoBehaviour
             foreach (Vector2 point in points) Spawn(EnemyId.Blocker, point, false);
         }
 
-        if (beat.RingEnemy != EnemyId.None && beat.RingCount > 0)
+        // Elites kommen nur einzeln - als Ringfueller wuerde ein ganzer Kreis
+        // davon stehen.
+        if (beat.RingEnemy != EnemyId.None && beat.RingCount > 0 && EnemyCatalog.IsElite(beat.RingEnemy))
+        {
+            Debug.LogWarning($"[SpawnDirector] {beat.RingEnemy} ist ein Elite und taugt nicht als Ringgegner - Ring ohne Fueller.");
+        }
+        else if (beat.RingEnemy != EnemyId.None && beat.RingCount > 0)
         {
             points.Clear();
             Patterns.Ring.Fill(points, ctx, beat.RingCount, beat.Radius);
@@ -325,16 +339,16 @@ public class SpawnDirector : MonoBehaviour
         }
     }
 
-    private void SpawnBoss(EnemyId id)
+    private GameObject SpawnBoss(EnemyId id)
     {
-        if (id == EnemyId.None) return;
+        if (id == EnemyId.None) return null;
 
         // Der Keks-Koenig laeuft nicht selbst (siehe Enemy.FixedUpdate, BossBoss)
         // - er darf also nicht am aeussersten Rand stehen, sonst findet ihn
         // niemand.
         points.Clear();
         Patterns.Ring.Fill(points, Context(), 1, 10f);
-        if (points.Count > 0) Spawn(id, points[0], false);
+        return points.Count > 0 ? Spawn(id, points[0], false) : null;
     }
 
     private void DampenPressure(float scale, float seconds)
@@ -359,6 +373,14 @@ public class SpawnDirector : MonoBehaviour
     private void TopUpPressure()
     {
         if (phase == null) return;
+
+        // Miniboss gefallen: die Daempfung seines Boss-Beats endet sofort.
+        // (Unity-Vergleich: ein zerstoerter Gegner ist hier == null.)
+        if (!ReferenceEquals(activeMiniBoss, null) && activeMiniBoss == null)
+        {
+            activeMiniBoss = null;
+            pressureScaleUntil = runTime;
+        }
 
         if (runTime >= pressureScaleUntil) pressureScale = 1f;
 
@@ -509,7 +531,7 @@ public class SpawnDirector : MonoBehaviour
 
     /// <summary>
     /// Kein Gegner taucht mitten im Bild auf. Das Spawn-Rechteck allein reicht
-    /// dafuer nicht: Hinterhalt, Miniboss im Ring und Rudel setzen ihre Punkte
+    /// dafuer nicht: Hinterhalt, Elite im Ring und Rudel setzen ihre Punkte
     /// naeher an den Spieler, und die Kamera laeuft dem Spieler hinterher.
     /// Liegt ein Punkt im Bild (plus Rand), wird er von der Bildmitte aus in
     /// derselben Richtung bis knapp hinter den Rand geschoben - die Absicht des
@@ -541,6 +563,9 @@ public class SpawnDirector : MonoBehaviour
         float each = Mathf.Max(0.1f, SpawnCatalog.Threat(id));
         int count = Mathf.Clamp(Mathf.RoundToInt(threat * RunDifficulty.CountFactor / each), 1, 120);
 
+        // Elites kommen immer einzeln, egal wie viel Druck im Plan steht.
+        if (EnemyCatalog.IsElite(id)) count = 1;
+
         points.Clear();
         pattern.Fill(points, Context(), count, radius);
 
@@ -567,6 +592,7 @@ public class SpawnDirector : MonoBehaviour
         {
             enemy.RunThreat = SpawnCatalog.Threat(id);
             enemy.CanRecycle = recyclable;
+            enemy.SpawnedAs = id;
             RunDifficulty.Apply(enemy);
         }
 

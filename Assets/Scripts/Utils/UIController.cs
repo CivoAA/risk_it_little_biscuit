@@ -17,7 +17,6 @@ public class UIController : MonoBehaviour
     public GameObject WinPanel;
     public GameObject PausePanel;
     public GameObject LevelUpPanel;
-    public GameObject GambaPanel;
     public GameObject PowerUpPanel;
     public GameObject EvoPanel;
     public PowerUpDatabase PowerUpDatabase; // deine PowerUp-Liste
@@ -39,7 +38,6 @@ public class UIController : MonoBehaviour
     private List<(Sprite, string)> unlockedVisuals = new();
     private int currentIndex = 0;
     [SerializeField] private TMP_Text timerText;
-    [SerializeField] private TMP_Text MultiplireTextGamba;
 
     [Header("HUD")]
     [Tooltip("Aus = das alte HUD (Slider, Timer-Text, Item-Leisten) statt des GameHud.")]
@@ -48,7 +46,6 @@ public class UIController : MonoBehaviour
     [SerializeField] private bool useNewLevelUp = true;
 
     public LevelUpButton[] levelUpButtons;
-    public LevelUpButton GambaButtons;
     public List<Weapon> currentLevelUpWeapons = new List<Weapon>();
 
     void Awake()
@@ -70,8 +67,8 @@ public class UIController : MonoBehaviour
     }
 
     /// <summary>
-    /// Ohne aktives EventSystem kommt kein Klick an - Level-Up, Mixer, Evo und
-    /// Gamba waeren tot. Das EventSystem in GameCore ist absichtlich aus: kommt
+    /// Ohne aktives EventSystem kommt kein Klick an - Level-Up, Mixer und Evo
+    /// waeren tot. Das EventSystem in GameCore ist absichtlich aus: kommt
     /// der Lauf aus dem Hauptmenue, liegt dessen EventSystem noch geladen daneben,
     /// und zwei aktive melden Warnungen. Startet der Hub dagegen allein (Editor)
     /// oder die Map direkt, wird hart per LoadScene(Single) gewechselt und es
@@ -209,20 +206,6 @@ public class UIController : MonoBehaviour
         Time.timeScale = 1f;
     }
 
-    public void GambaPanelOpen()
-    {
-        EnsureEventSystem();
-        AudioController.Instance.PalySound(AudioController.Instance.LevelUpSound);
-        GambaPanel.SetActive(true);
-        Time.timeScale = 0f;
-        Gamba.Instance.wins = 1;
-        MultiplireTextGamba.text = "x1";
-    }
-    public void GambaPanelClose()
-    {
-        GambaPanel.SetActive(false);
-        Time.timeScale = 1f;
-    }
     public void RerollLevelUp()
     {
         bool hasEvo = currentLevelUpWeapons.Any(w => PlayerController.Instance.activeEvos.Contains(w));
@@ -290,12 +273,12 @@ public class UIController : MonoBehaviour
     public void GameOverStats()
     {
         CurrencyGained_Text.text = "Currency: +" + GameManager.Instance.currency;
-        CookieSoulsGained_Text.text = "Cookie Souls: +" + GameManager.Instance.gainedThroughAchievements;
+        CookieSoulsGained_Text.text = "Char XP: +" + Mathf.RoundToInt(GameManager.Instance.charXpGained);
     }
     public void GameWinStats()
     {
         CurrencyGained_WIN_Text.text = "Currency: +" + GameManager.Instance.currency;
-        CookieSoulsGained_WIN_Text.text = "Cookie Souls: +" + GameManager.Instance.gainedThroughAchievements;
+        CookieSoulsGained_WIN_Text.text = "Char XP: +" + Mathf.RoundToInt(GameManager.Instance.charXpGained);
     }
 
 

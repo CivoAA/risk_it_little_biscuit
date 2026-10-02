@@ -52,7 +52,7 @@ public enum SkillType
     // Wissens-Ast. Werte in Prozent eingeben: 1 = 1 %.
     FreeRerollChance    = 30,   // Chance, dass ein Reroll nichts kostet
     LevelUpHealPercent  = 31,   // heilt x % der Max-HP bei jedem Level-Up
-    SoulBonusPercent    = 32,   // +x % Seelen von Minibossen und Bossen
+    CharXpBonusPercent  = 32,   // +x % Charakter-XP (ausserhalb des Laufs)
     BossHealthReduction = 33,   // Bosse und Minibosse spawnen mit x % weniger Leben
     StartWeaponLevel    = 34,   // Startwaffe beginnt x Stufen höher (ganze Zahl)
 

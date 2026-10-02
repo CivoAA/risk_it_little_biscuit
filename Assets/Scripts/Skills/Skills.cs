@@ -6,6 +6,8 @@ using UnityEngine;
 /// Die Schnittstelle zum Skilltree. Statisch, ohne Szenenobjekt, ab dem ersten
 /// Frame verfügbar.
 ///
+///   Skills.Level / Points      - Charakter-Level und freie Skillpunkte
+///   Skills.AddXp(xp)           - Charakter-XP aus dem Lauf gutschreiben
 ///   Skills.CanUnlock(node)     - Vorbedingungen offen und genug Punkte?
 ///   Skills.TryUnlock(node)     - kaufen
 ///   Skills.IsUnlocked(node)
@@ -152,40 +154,110 @@ public static class Skills
     //  Punkte
     // ==================================================================
 
-    public static int Currency => Store.SkillCurrency;
+    //  Jeder Charakter sammelt eigene XP (alles, was er im Lauf einsammelt).
+    //  Jedes Charakter-Level gibt einen Skillpunkt für SEINEN Baum - die Kurve
+    //  steht in CharLevel. Dazu ein Level je Boss, den der Charakter zum ersten
+    //  Mal besiegt. Gespeichert werden XP und Boss-Siege; die freien Punkte sind
+    //  Level minus die Preise der offenen Knoten.
+
+    /// <summary>Gesammelte Charakter-XP des Baums.</summary>
+    public static double XpOf(SkillTreeDef tree) => tree != null ? Store.XpOf(tree.Id) : 0;
 
     /// <summary>
-    /// Skillpunkte gutschreiben. Läuft im Spiel in heissen Pfaden (jeder
-    /// Miniboss-Kill, jedes freigeschaltete Achievement), deshalb wird hier nur
-    /// vorgemerkt und gebündelt geschrieben - ein voller Dateischreibvorgang je
-    /// Gegner wäre ein Ruckler. Das Wegschreiben taktet
-    /// <see cref="AchievementRuntime"/>; wer es sofort auf der Platte braucht,
-    /// ruft danach <see cref="Flush"/>.
+    /// Charakter-Level = Level aus den XP plus eins je erstmals besiegtem Boss.
+    /// Der Boss schiebt die Kurve also um ein Level: was vorher fuer Level 10
+    /// gefehlt hat, fehlt danach fuer Level 11 - die XP-Schwellen bleiben, wo
+    /// sie sind, und das Maximum ist mit weniger XP erreicht.
     /// </summary>
-    public static void AddCurrency(int amount)
+    public static int LevelOf(SkillTreeDef tree) => CharLevel.LevelFor(XpOf(tree)) + BossLevelsOf(tree);
+
+    /// <summary>Geschenkte Level durch Boss-Erstsiege dieses Charakters.</summary>
+    public static int BossLevelsOf(SkillTreeDef tree) => tree != null ? Store.BossCountOf(tree.Id) : 0;
+
+    /// <summary>
+    /// Ein Boss ist gefallen. Beim ERSTEN Sieg des gewaehlten Charakters ueber
+    /// diesen Boss gibt es ein Charakter-Level; jeder Charakter muss jeden Boss
+    /// selbst einmal schlagen. True, wenn es das Level gab.
+    /// </summary>
+    public static bool RegisterBossVictory(string bossKey)
     {
-        Store.SkillCurrency += amount;
+        SkillTreeDef tree = ActiveTree;
+        if (tree == null || string.IsNullOrEmpty(bossKey)) return false;
+        if (!Store.AddBoss(tree.Id, bossKey)) return false;
+
+        Store.Save();
+        RaiseChanged();
+
+        Debug.Log($"[Skills] Erster Sieg ueber {bossKey} mit '{tree.Id}': +1 Charakter-Level.");
+        return true;
+    }
+
+    /// <summary>Vergisst die Boss-Siege eines Baums (Konsole, zum Testen).</summary>
+    public static void ResetBossVictories(SkillTreeDef tree)
+    {
+        if (tree == null) return;
+        Store.ClearBosses(tree.Id);
+        Store.Save();
+        RaiseChanged();
+    }
+
+    /// <summary>Hat der gewaehlte Charakter diesen Boss schon einmal besiegt?</summary>
+    public static bool HasBeatenBoss(string bossKey)
+        => ActiveTree != null && Store.HasBoss(ActiveTree.Id, bossKey);
+
+    /// <summary>Für Knoten ausgegebene Punkte im Baum.</summary>
+    public static int SpentIn(SkillTreeDef tree)
+    {
+        if (tree == null) return 0;
+
+        int spent = 0;
+        foreach (SkillNodeDef node in tree.AllNodes())
+        {
+            if (!node.IsStart && IsUnlocked(node)) spent += node.Price;
+        }
+        return spent;
+    }
+
+    /// <summary>Freie Skillpunkte im Baum.</summary>
+    public static int PointsIn(SkillTreeDef tree) => LevelOf(tree) - SpentIn(tree);
+
+    public static double Xp    => XpOf(ActiveTree);
+    public static int    Level => LevelOf(ActiveTree);
+
+    /// <summary>Freie Skillpunkte des gewählten Charakters.</summary>
+    public static int Points => PointsIn(ActiveTree);
+
+    /// <summary>
+    /// Charakter-XP für den gewählten Charakter gutschreiben. Läuft im Spiel bei
+    /// jedem eingesammelten XP-Kristall, deshalb wird nur vorgemerkt und
+    /// gebündelt geschrieben. Das Wegschreiben taktet
+    /// <see cref="AchievementRuntime"/>; wer es sofort auf der Platte braucht,
+    /// ruft danach <see cref="Flush"/>. <see cref="Changed"/> feuert nur, wenn
+    /// sich dabei das Level ändert.
+    /// </summary>
+    public static void AddXp(double amount)
+    {
+        SkillTreeDef tree = ActiveTree;
+        if (tree == null || amount <= 0) return;
+
+        double before = Store.XpOf(tree.Id);
+        Store.SetXp(tree.Id, before + amount);
         Store.MarkDirty();
+
+        if (CharLevel.LevelFor(before) != CharLevel.LevelFor(before + amount)) RaiseChanged();
+    }
+
+    /// <summary>Setzt die XP eines Baums direkt (Konsole).</summary>
+    public static void SetXp(SkillTreeDef tree, double xp)
+    {
+        if (tree == null) return;
+        Store.SetXp(tree.Id, xp);
+        Store.Save();
         RaiseChanged();
     }
 
     /// <summary>Schreibt vorgemerkte Änderungen sofort auf die Platte.</summary>
     public static void Flush() => Store.Flush();
-
-    public static void SetCurrency(int amount)
-    {
-        Store.SkillCurrency = amount;
-        Store.Save();
-        RaiseChanged();
-    }
-
-    public static bool TrySpend(int amount)
-    {
-        if (Store.SkillCurrency < amount) return false;
-        Store.SkillCurrency -= amount;
-        Store.Save();
-        return true;
-    }
 
     // ==================================================================
     //  Freischalten
@@ -213,7 +285,11 @@ public static class Skills
     }
 
     public static bool CanUnlock(SkillNodeDef node)
-        => node != null && !IsUnlocked(node) && RequirementsMet(node) && Currency >= node.Price;
+        => node != null && !IsUnlocked(node) && RequirementsMet(node) && CanAfford(node);
+
+    /// <summary>Genug freie Punkte im Baum dieses Knotens?</summary>
+    public static bool CanAfford(SkillNodeDef node)
+        => node != null && PointsIn(node.Branch.Tree) >= node.Price;
 
     /// <summary>Kauft einen Knoten. False, wenn gesperrt, schon offen oder zu teuer.</summary>
     public static bool TryUnlock(SkillNodeDef node)
@@ -226,10 +302,10 @@ public static class Skills
             return false;
         }
 
-        if (!TrySpend(node.Price))
+        if (!CanAfford(node))
         {
             Debug.Log($"[Skills] Nicht genug Skillpunkte für '{node.Key}' " +
-                      $"({Currency} von {node.Price}).");
+                      $"({PointsIn(node.Branch.Tree)} von {node.Price}).");
             return false;
         }
 
@@ -243,43 +319,38 @@ public static class Skills
         return true;
     }
 
-    /// <summary>Setzt einen Baum zurück und erstattet die ausgegebenen Punkte.</summary>
+    /// <summary>
+    /// Setzt einen Baum zurück. Die Punkte sind danach von selbst wieder frei,
+    /// weil sie aus dem Level gerechnet werden - das Level bleibt.
+    /// </summary>
     public static void ResetTree(SkillTreeDef tree)
     {
         Init();
         if (tree == null) return;
 
-        int refund = 0;
-
-        foreach (SkillNodeDef node in tree.AllNodes())
-        {
-            if (IsUnlocked(node)) refund += node.Price;
-        }
+        int refund = SpentIn(tree);
 
         Store.ClearTree(tree.Id);
-        Store.SkillCurrency += refund;
         Store.Save();
 
         RecalculateBonuses();
         RaiseChanged();
 
-        Debug.Log($"[Skills] '{tree.Id}' zurückgesetzt, {refund} Skillpunkte erstattet.");
+        Debug.Log($"[Skills] '{tree.Id}' zurückgesetzt, {refund} Skillpunkte wieder frei.");
     }
 
-    /// <summary>Setzt jeden Baum zurück, ohne zu erstatten - für den harten Reset.</summary>
+    /// <summary>Setzt jeden Baum UND alle Charakter-XP zurück - für den harten Reset.</summary>
     public static void ResetEverything()
     {
         Init();
 
-        foreach (SkillTreeDef tree in SkillTrees.All) Store.ClearTree(tree.Id);
-
-        Store.SkillCurrency = 0;
+        Store.ClearAll();
         Store.Save();
 
         RecalculateBonuses();
         RaiseChanged();
 
-        Debug.Log("[Skills] Alle Bäume zurückgesetzt, Skillpunkte auf 0.");
+        Debug.Log("[Skills] Alle Bäume und Charakter-Level zurückgesetzt.");
     }
 
     public static void ResetActiveTree() => ResetTree(ActiveTree);

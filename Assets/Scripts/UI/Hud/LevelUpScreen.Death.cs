@@ -181,7 +181,13 @@ public partial class LevelUpScreen
                         v => Mathf.RoundToInt(v).ToString(CultureInfo.InvariantCulture));
 
         coinChip.Set(Loc.Get("ui.death.coins", "COINS"), gm != null ? gm.currency : 0);
-        soulChip.Set(Loc.Get("ui.achievements.souls", "Cookie Souls").ToUpperInvariant(), gm != null ? gm.gainedThroughAchievements : 0);
+        // Charakter-XP aus diesem Lauf. Ist dabei ein Charakter-Level gefallen,
+        // steht das neue Level statt der Ueberschrift da.
+        int charLevel = Skills.Level;
+        string charLabel = gm != null && charLevel > gm.charLevelBeforeGame
+            ? string.Format(Loc.Get("ui.death.charlevelup", "CHAR LV {0}!"), charLevel)
+            : Loc.Get("ui.death.charxp", "CHAR XP");
+        soulChip.Set(charLabel, gm != null ? Mathf.RoundToInt(gm.charXpGained) : 0);
 
         // ---- Build ----
         buildLabel.Set(Loc.Get("ui.death.build", "YOUR BUILD"));

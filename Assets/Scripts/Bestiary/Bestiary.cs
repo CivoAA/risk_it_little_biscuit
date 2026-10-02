@@ -49,6 +49,13 @@ public static class Bestiary
     // Nach Namen, nicht nach Zahl: ein spaeter eingeschobener EnemyId-Wert
     // verschiebt so keine Zaehler. Unbekannte Namen bleiben erhalten.
     private static readonly Dictionary<string, int> kills = new Dictionary<string, int>();
+
+    /// <summary>Alte EnemyId-Namen -> neue. Beim Laden umgeschrieben, damit Zaehler bleiben.</summary>
+    private static readonly Dictionary<string, string> RenamedIds = new Dictionary<string, string>
+    {
+        { "MinibossFliegenpliz", nameof(EnemyId.EliteFliegenpilz) },
+        { "MiniBossMarshmello",  nameof(EnemyId.EliteMarshmelloGross) },
+    };
     private static bool loaded;
     private static bool dirty;
     private static List<EnemyId> enemies;
@@ -173,7 +180,11 @@ public static class Bestiary
 
             foreach (Entry e in file.entries)
             {
-                if (e != null && !string.IsNullOrEmpty(e.id)) kills[e.id] = Mathf.Max(0, e.kills);
+                if (e == null || string.IsNullOrEmpty(e.id)) continue;
+
+                string id = RenamedIds.TryGetValue(e.id, out string now) ? now : e.id;
+                kills.TryGetValue(id, out int had);
+                kills[id] = had + Mathf.Max(0, e.kills);
             }
         }
         catch (Exception e)

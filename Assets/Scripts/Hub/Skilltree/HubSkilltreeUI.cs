@@ -491,7 +491,12 @@ public class HubSkilltreeUI : MonoBehaviour
     {
         if (page == null) return;
 
-        pointsText.text = string.Format(Loc.Get("ui.skilltree.points", "{0} SKILLPUNKTE"), Skills.Currency);
+        pointsText.text = string.Format(Loc.Get("ui.skilltree.points", "{0} SKILLPUNKTE"), Skills.Points);
+
+        // Charakter-Level und Fortschritt zum naechsten, gleich hinter dem Namen.
+        int pct = Mathf.FloorToInt(CharLevel.Progress(Skills.Xp) * 100f);
+        treeName.text = Characters.DisplayName(Shop.SkinIndex).ToUpperInvariant() + "  " +
+                        string.Format(Loc.Get("ui.skilltree.charlevel", "LV {0}  {1}%"), Skills.Level, pct);
 
         int learned = 0, total = 0;
         foreach (SkillBranchDef b in branches)
@@ -604,7 +609,7 @@ public class HubSkilltreeUI : MonoBehaviour
         Color accent = node.Branch != null ? node.Branch.Color : Color.white;
         bool unlocked = node.IsStart || Skills.IsUnlocked(node);
         bool open = !unlocked && Skills.RequirementsMet(node);
-        bool affordable = open && Skills.Currency >= node.Price;
+        bool affordable = open && Skills.CanAfford(node);
 
         SetShape(node.Shape, true);
         shapeFill.color = unlocked ? accent : open ? (Color)GameHudSkin.Trough : (Color)GameHudSkin.StoneDark;

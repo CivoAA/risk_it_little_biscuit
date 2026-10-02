@@ -39,9 +39,6 @@ public sealed class AchievementDef
     /// <summary>Zielwert. 1 = einfacher Unlock, grösser = Fortschrittsbalken.</summary>
     public readonly float Goal;
 
-    /// <summary>Skill-Währung ("Cookie Souls"), die es beim Freischalten gibt.</summary>
-    public readonly int Souls;
-
     /// <summary>Optional: Unlock-ID, die beim Freischalten mit vergeben wird. Leer = keine.</summary>
     public readonly string GrantsUnlock;
 
@@ -57,7 +54,7 @@ public sealed class AchievementDef
     public int Order { get; internal set; }
 
     public AchievementDef(string id, string nameEn, string descEn, string iconKey, float goal,
-                          int souls, string grantsUnlock, AchievementCategory category,
+                          string grantsUnlock, AchievementCategory category,
                           bool hidden, string steamApiName)
     {
         Id           = id;
@@ -65,7 +62,6 @@ public sealed class AchievementDef
         DescEn       = descEn;
         IconKey      = string.IsNullOrEmpty(iconKey) ? id.ToLowerInvariant() : iconKey;
         Goal         = Mathf.Max(1f, goal);
-        Souls        = Mathf.Max(0, souls);
         GrantsUnlock = grantsUnlock;
         Category     = category;
         Hidden       = hidden;

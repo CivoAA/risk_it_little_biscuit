@@ -90,6 +90,7 @@ public class TestSceneBossSpawner : MonoBehaviour
         current = Instantiate(prefab, at, Quaternion.identity);
         current.name = prefab.name + " (Test)";
         currentEnemy = current.GetComponent<Enemy>();
+        if (currentEnemy != null) currentEnemy.SpawnedAs = id;
         currentKing = current.GetComponent<EnemyKeckKönig>();
         currentGlutwurz = current.GetComponent<EnemyGlutwurz>();
 
@@ -110,7 +111,7 @@ public class TestSceneBossSpawner : MonoBehaviour
         if (current == null) return false;
 
         // Destroy statt Leben auf 0: ueber Enemy.TakeDamage wuerde der ganze
-        // Todesfall mitlaufen (Truhe, Skill-Waehrung, SpawnDeath), und das
+        // Todesfall mitlaufen (Boss-Level, SpawnDeath), und das
         // gehoert nicht zum Aufraeumen dazu.
         Destroy(current);
         current = null;

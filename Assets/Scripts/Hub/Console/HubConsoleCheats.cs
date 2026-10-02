@@ -119,7 +119,7 @@ public static class HubConsoleCheats
         //                         "giberfolge First_Win" ein bestimmter
         //
         // Geht ueber Achievements.Unlock, also mit allem was dranhaengt:
-        // Cookie Souls, mitvergebene Unlocks und die Steam-Meldung.
+        // mitvergebene Unlocks und die Steam-Meldung.
         // ------------------------------------------------------------------
         HubConsole.Add("giberfolge", "schaltet Erfolge frei", (args, sink) =>
         {
@@ -199,20 +199,44 @@ public static class HubConsoleCheats
         }, hidden: true);
 
         // ------------------------------------------------------------------
-        // Seelen (Skillpunkte) schenken.  ->  "gibseelen" (1.000) oder "gibseelen 50"
+        // Charakter-XP schenken (gewaehlter Charakter).  ->  "gibxp" (16.200 = Level 2)
+        //                                                     oder "gibxp 5000"
         // ------------------------------------------------------------------
-        HubConsole.Add("gibseelen", "Seelen fuer den Skilltree", (args, sink) =>
+        HubConsole.Add("gibxp", "Charakter-XP fuer den gewaehlten Charakter", (args, sink) =>
         {
-            int betrag = ArgAsInt(args, 0, 1000);
+            int betrag = ArgAsInt(args, 0, (int)CharLevel.Level2Xp);
 
-            Skills.AddCurrency(betrag);
-            sink.Print($"+{betrag} Seelen. Neuer Stand: {Skills.Currency}");
+            SkillTreeDef tree = Skills.ActiveTree;
+            Skills.SetXp(tree, Skills.XpOf(tree) + betrag);
+            sink.Print($"+{betrag} XP. {CharStand()}");
         }, usage: "[anzahl]", hidden: true);
+
+        // ------------------------------------------------------------------
+        // Charakter-Level direkt setzen.  ->  "charlevel 10"   ("charlevel 0" = von vorn)
+        // ------------------------------------------------------------------
+        HubConsole.Add("charlevel", "setzt das Level des gewaehlten Charakters", (args, sink) =>
+        {
+            int level = UnityEngine.Mathf.Clamp(ArgAsInt(args, 0, 1), 0, CharLevel.MaxLevel);
+
+            Skills.SetXp(Skills.ActiveTree, CharLevel.XpForLevel(level - Skills.BossLevelsOf(Skills.ActiveTree)));
+            sink.Print(CharStand());
+        }, usage: "<level>", hidden: true);
+
+        // ------------------------------------------------------------------
+        // Boss-Erstsiege des gewaehlten Charakters vergessen.  ->  "bossreset"
+        // Danach gibt der naechste Sieg ueber jeden Boss wieder ein Level.
+        // ------------------------------------------------------------------
+        HubConsole.Add("bossreset", "vergisst die Boss-Siege des gewaehlten Charakters", (args, sink) =>
+        {
+            int vorher = Skills.BossLevelsOf(Skills.ActiveTree);
+            Skills.ResetBossVictories(Skills.ActiveTree);
+            sink.Print($"{vorher} Boss-Siege vergessen. {CharStand()}");
+        }, hidden: true);
 
         // ------------------------------------------------------------------
         // Skilltree zuruecksetzen.  ->  "skillreset"       Baum des gewaehlten Charakters
         //                               "skillreset alle"  jeder Baum
-        // Die ausgegebenen Seelen kommen in beiden Faellen zurueck aufs Konto.
+        // Die Punkte sind danach wieder frei, das Charakter-Level bleibt.
         // ------------------------------------------------------------------
         HubConsole.Add("skillreset", "setzt den Skilltree zurueck", (args, sink) =>
         {
@@ -222,14 +246,14 @@ public static class HubConsoleCheats
             if (alle)
             {
                 foreach (SkillTreeDef tree in SkillTrees.All) Skills.ResetTree(tree);
-                sink.Print($"Alle Skilltrees zurueckgesetzt. Seelen: {Skills.Currency}");
+                sink.Print($"Alle Skilltrees zurueckgesetzt. {CharStand()}");
                 return;
             }
 
             SkillTreeDef active = Skills.ActiveTree;
             Skills.ResetActiveTree();
             sink.Print($"Skilltree '{(active != null ? active.Id : "?")}' zurueckgesetzt. " +
-                       $"Seelen: {Skills.Currency}");
+                       CharStand());
         }, usage: "[alle]", hidden: true);
 
         // ------------------------------------------------------------------
@@ -248,4 +272,8 @@ public static class HubConsoleCheats
         if (args == null || index >= args.Length) return fallback;
         return int.TryParse(args[index], out int value) ? value : fallback;
     }
+
+    /// <summary>"Level 3 (34.830 XP), 2 Punkte frei" fuer den gewaehlten Charakter.</summary>
+    static string CharStand()
+        => $"Level {Skills.Level} ({Skills.Xp:N0} XP, {Skills.BossLevelsOf(Skills.ActiveTree)} Boss-Level), {Skills.Points} Punkte frei.";
 }

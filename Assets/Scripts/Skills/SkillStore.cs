@@ -4,13 +4,13 @@ using System.IO;
 using UnityEngine;
 
 /// <summary>
-/// Der Spielstand des Skilltrees: die Skillpunkte und pro Baum die Liste der
-/// freigeschalteten Knoten. Sonst nichts - Namen, Preise, Werte und Struktur
-/// kommen aus <see cref="SkillTrees"/>.
+/// Der Spielstand des Skilltrees: pro Baum (also pro Charakter) die gesammelten
+/// Charakter-XP und die Liste der freigeschalteten Knoten. Sonst nichts - Namen,
+/// Preise, Werte und Struktur kommen aus <see cref="SkillTrees"/>.
 ///
-/// Die Punkte liegen bewusst ausserhalb der Bäume: ein gemeinsamer Vorrat für
-/// alle Charaktere. Soll das später pro Charakter laufen, wandert das Feld in
-/// den Baum-Eintrag - das Format ist schon darauf vorbereitet.
+/// Skillpunkte werden nicht gespeichert, sondern gerechnet: Charakter-Level
+/// (aus den XP, siehe <see cref="CharLevel"/>, plus eins je erstmals besiegtem
+/// Boss) minus die Preise der offenen Knoten. Siehe <see cref="Skills.Points"/>.
 ///
 /// Dieselben Regeln wie bei Shop und Achievements: unbekannte Schlüssel bleiben
 /// in der Datei liegen, fehlende starten gesperrt. Ein Baum, den der Katalog
@@ -18,7 +18,11 @@ using UnityEngine;
 /// </summary>
 public class SkillStore
 {
-    public const int CurrentVersion = 2;
+    /// <summary>
+    /// v1: flache Zahlen-IDs. v2: Text-Schlüssel, Knoten mit Seelen gekauft.
+    /// v3: Charakter-XP pro Baum, Knoten mit Skillpunkten aus dem Level.
+    /// </summary>
+    public const int CurrentVersion = 3;
     private const string FileName = "skills.json";
 
     [Serializable]
@@ -27,34 +31,26 @@ public class SkillStore
         public string id;
         public List<string> unlocked = new List<string>();
 
-        /// <summary>Reserviert: Punkte pro Baum, falls die mal getrennt laufen sollen.</summary>
-        public int skillCurrency = -1;
+        /// <summary>Gesammelte Charakter-XP dieses Charakters.</summary>
+        public double xp;
+
+        /// <summary>
+        /// Bosse, die dieser Charakter schon einmal besiegt hat (EnemyId-Name).
+        /// Jeder davon ist ein geschenktes Charakter-Level.
+        /// </summary>
+        public List<string> bosses = new List<string>();
     }
 
     [Serializable]
     private class SaveFile
     {
         public int version = CurrentVersion;
-        public int skillCurrency;
         public List<TreeEntry> trees = new List<TreeEntry>();
-    }
-
-    // ---- Altes Format (v1): eine flache Liste von Zahlen-IDs. Die Zahlen sind
-    //      nach der Umstellung auf Text-Schlüssel nicht mehr zuzuordnen (sie waren
-    //      teils doppelt vergeben), deshalb wird der Fortschritt nicht übernommen -
-    //      nur die Punkte, und die ausgegebenen kommen als Erstattung zurück.
-    [Serializable]
-    private class LegacyFile
-    {
-        public List<int> unlockedSkillIDs = new List<int>();
-        public int skillCurrency;
     }
 
     private readonly string savePath;
     private readonly Dictionary<string, TreeEntry> byTree = new Dictionary<string, TreeEntry>();
     private readonly List<TreeEntry> order = new List<TreeEntry>();
-
-    public int SkillCurrency { get; set; }
 
     private bool dirty;
 
@@ -66,9 +62,9 @@ public class SkillStore
 
     /// <summary>
     /// Merkt eine Änderung vor, ohne zu schreiben. Für heisse Pfade wie die
-    /// Skillpunkte, die im Spiel pro Miniboss-Kill anfallen - dort wäre ein
-    /// Dateischreibvorgang je Gegner ein Ruckler. Weggeschrieben wird gebündelt
-    /// über <see cref="Flush"/> (siehe AchievementRuntime).
+    /// Charakter-XP, die im Spiel bei jedem XP-Kristall anfallen - dort wäre ein
+    /// Dateischreibvorgang je Aufsammeln ein Ruckler. Weggeschrieben wird
+    /// gebündelt über <see cref="Flush"/> (siehe AchievementRuntime).
     /// </summary>
     public void MarkDirty() => dirty = true;
 
@@ -99,6 +95,7 @@ public class SkillStore
     public void SetUnlocked(string treeId, string key, bool unlocked)
     {
         TreeEntry t = Get(treeId, true);
+        if (t == null) return;
 
         if (unlocked)
         {
@@ -122,6 +119,59 @@ public class SkillStore
         t?.unlocked.Clear();
     }
 
+    public double XpOf(string treeId)
+    {
+        TreeEntry t = Get(treeId, false);
+        return t != null ? t.xp : 0;
+    }
+
+    public void SetXp(string treeId, double xp)
+    {
+        TreeEntry t = Get(treeId, true);
+        if (t != null) t.xp = Math.Max(0, xp);
+    }
+
+    public int BossCountOf(string treeId)
+    {
+        TreeEntry t = Get(treeId, false);
+        return t != null ? t.bosses.Count : 0;
+    }
+
+    public bool HasBoss(string treeId, string bossKey)
+    {
+        TreeEntry t = Get(treeId, false);
+        return t != null && t.bosses.Contains(bossKey);
+    }
+
+    /// <summary>Merkt einen Boss als besiegt. False, wenn er schon drinstand.</summary>
+    public bool AddBoss(string treeId, string bossKey)
+    {
+        if (string.IsNullOrEmpty(bossKey)) return false;
+
+        TreeEntry t = Get(treeId, true);
+        if (t == null || t.bosses.Contains(bossKey)) return false;
+
+        t.bosses.Add(bossKey);
+        return true;
+    }
+
+    public void ClearBosses(string treeId)
+    {
+        TreeEntry t = Get(treeId, false);
+        t?.bosses.Clear();
+    }
+
+    /// <summary>Freischaltungen, XP und Boss-Siege aller Bäume weg - für den harten Reset.</summary>
+    public void ClearAll()
+    {
+        foreach (TreeEntry t in order)
+        {
+            t.unlocked.Clear();
+            t.bosses.Clear();
+            t.xp = 0;
+        }
+    }
+
     private TreeEntry Get(string treeId, bool create)
     {
         if (string.IsNullOrEmpty(treeId)) return null;
@@ -142,7 +192,6 @@ public class SkillStore
     {
         byTree.Clear();
         order.Clear();
-        SkillCurrency = 0;
 
         if (!File.Exists(savePath))
         {
@@ -163,10 +212,11 @@ public class SkillStore
         if (string.IsNullOrWhiteSpace(json)) return;
 
         if (TryReadCurrent(json)) return;
-        if (TryReadLegacy(json)) return;
 
-        Backup(".corrupt");
-        Debug.LogWarning($"[Skills] {FileName} war unlesbar und wurde als .corrupt gesichert.");
+        // v1 (flache Zahlen-IDs) oder kaputt: sichern und leer anfangen. Aus v1
+        // gab es nur Seelen zurück - und die gibt es nicht mehr.
+        Backup(".old");
+        Debug.LogWarning($"[Skills] {FileName} war nicht im aktuellen Format und wurde als .old gesichert.");
         Save();
     }
 
@@ -187,57 +237,34 @@ public class SkillStore
 
         if (file == null) return false;
 
-        SkillCurrency = file.skillCurrency;
+        // Bis v2 wurden Knoten mit Seelen gekauft. Die Punkte kommen jetzt aus dem
+        // Charakter-Level - alte Käufe würden sonst Punkte belegen, die noch keiner
+        // verdient hat. Einmalig alles zu, die alte Datei bleibt als Sicherung.
+        bool fromSouls = file.version < 3;
+        if (fromSouls) Backup(".v2.bak");
 
-        if (file.trees == null) return true;
-
-        foreach (TreeEntry t in file.trees)
+        if (file.trees != null)
         {
-            if (t == null || string.IsNullOrEmpty(t.id) || byTree.ContainsKey(t.id)) continue;
-            if (t.unlocked == null) t.unlocked = new List<string>();
-            byTree.Add(t.id, t);
-            order.Add(t);
+            foreach (TreeEntry t in file.trees)
+            {
+                if (t == null || string.IsNullOrEmpty(t.id) || byTree.ContainsKey(t.id)) continue;
+                if (t.unlocked == null || fromSouls) t.unlocked = new List<string>();
+                if (t.bosses == null) t.bosses = new List<string>();
+                if (fromSouls) t.xp = 0;
+                byTree.Add(t.id, t);
+                order.Add(t);
+            }
+        }
+
+        if (fromSouls)
+        {
+            Save();
+            Debug.Log($"[Skills] Alter Seelen-Spielstand: Skilltrees zurückgesetzt, " +
+                      $"Sicherung als {FileName}.v2.bak.");
         }
 
         return true;
     }
-
-    private bool TryReadLegacy(string json)
-    {
-        LegacyFile file;
-        try
-        {
-            file = JsonUtility.FromJson<LegacyFile>(json);
-        }
-        catch
-        {
-            return false;
-        }
-
-        if (file == null) return false;
-
-        // Die alten Zahlen-IDs waren teils doppelt vergeben und lassen sich den
-        // neuen Schlüsseln nicht sauber zuordnen. Statt falsch zuzuordnen wird
-        // alles zurückgesetzt und der Gegenwert erstattet: pro alter Freischaltung
-        // der damalige Durchschnittspreis. Passiert genau einmal.
-        int spent = (file.unlockedSkillIDs?.Count ?? 0) * LegacyRefundPerSkill;
-        SkillCurrency = file.skillCurrency + spent;
-
-        Backup(".v1.bak");
-        Save();
-
-        if (spent > 0)
-        {
-            Debug.Log($"[Skills] Alter Skill-Spielstand konnte nicht übernommen werden " +
-                      $"(Zahlen-IDs waren mehrdeutig). {spent} Skillpunkte erstattet, " +
-                      $"Sicherung als {FileName}.v1.bak.");
-        }
-
-        return true;
-    }
-
-    /// <summary>Fast alle alten Knoten kosteten 10; die beiden Crit-Knoten 50.</summary>
-    private const int LegacyRefundPerSkill = 10;
 
     // ==================================================================
     //  Speichern
@@ -254,7 +281,6 @@ public class SkillStore
         SaveFile file = new SaveFile
         {
             version = CurrentVersion,
-            skillCurrency = SkillCurrency,
             trees = order,
         };
 

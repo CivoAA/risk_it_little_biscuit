@@ -132,7 +132,7 @@ node id=wissen_oben_2  cat=Wissen lane=Oben  step=3 shape=Kreuz    price=30
      name="Zweite Wahl"      stat=RerollAmount:1           req=wissen_oben_1
 
 node id=wissen_mitte_3 cat=Wissen lane=Mitte step=3 shape=Kreis    price=30
-     name="Seelenkunde"      stat=SoulBonusPercent:10      req=wissen_mitte_2
+     name="Seelenkunde"      stat=CharXpBonusPercent:10     req=wissen_mitte_2
 
 node id=wissen_unten_2 cat=Wissen lane=Unten step=3 shape=Kreuz    price=30
      name="Verbannen"        stat=BanishAmount:1           req=wissen_unten_1

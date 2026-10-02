@@ -1642,7 +1642,7 @@ public class HubLevelSelectUI : MonoBehaviour
         //    Achievements und Unlocks vor dem Lauf schon offen waren, damit der
         //    Abschlussbildschirm nur die neuen zeigt. Ach.FirstGame wird hier
         //    bewusst NICHT freigeschaltet - das macht PlayerController.StartStats()
-        //    in der Zielszene (sonst fehlten die Souls in der Anzeige des ersten Laufs).
+        //    in der Zielszene, wo auch das Charakter-Level vor dem Lauf gemerkt wird.
         SessionProgressTracker.Instance?.SnapshotBeforeGame();
 
         // 3. Skilltree auf den gewaehlten Charakter stellen.

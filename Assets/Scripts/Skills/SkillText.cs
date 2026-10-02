@@ -42,7 +42,7 @@ public static class SkillText
             case SkillType.MixerAllLegendaryChance:
             case SkillType.FreeRerollChance:
             case SkillType.LevelUpHealPercent:
-            case SkillType.SoulBonusPercent:
+            case SkillType.CharXpBonusPercent:
             case SkillType.BossHealthReduction:
             case SkillType.OverhealShield:
             case SkillType.LastBreath:
@@ -95,7 +95,7 @@ public static class SkillText
             case SkillType.MixerAllLegendaryChance: return "{0}% Chance a mixer rolls all 3 legendary";
             case SkillType.FreeRerollChance:        return "{0}% Chance for a free reroll";
             case SkillType.LevelUpHealPercent:      return "Heal {0}% health on level up";
-            case SkillType.SoulBonusPercent:        return "+{0}% Souls from bosses";
+            case SkillType.CharXpBonusPercent:      return "+{0}% Character XP";
             case SkillType.BossHealthReduction:     return "Bosses spawn with {0}% less health";
             case SkillType.StartWeaponLevel:        return "+{0} Start weapon level";
             case SkillType.OverhealShield:          return "Overheal becomes a shield (max {0}% health)";

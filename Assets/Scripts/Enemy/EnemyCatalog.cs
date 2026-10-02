@@ -9,51 +9,53 @@ using UnityEngine;
 /// Stand frueher in SpawnCatalog.cs und ist hierher gewandert, weil jetzt der
 /// ganze Gegner an dieser Id haengt und nicht mehr nur sein Prefab.
 /// </summary>
+/// <remarks>
+/// Die Zahlen stehen fest dran, weil die Prefabs sie als Zahl speichern - ein
+/// geloeschter oder eingeschobener Eintrag darf keine andere Id verschieben.
+/// Der Name dagegen ist der Schluessel im Bestiarium (bestiary.json); beim
+/// Umbenennen dort in <see cref="Bestiary"/> die alte Schreibweise nachtragen.
+/// Freie Luecken (23, 24, 26, 27) waren Elite-/Miniboss-Entwuerfe, die nie
+/// einen Katalogeintrag bekommen haben.
+/// </remarks>
 public enum EnemyId
 {
     None = 0,
 
     // Grundgegner
-    Marshmello,
-    EliteMarshmello,
-    EvilSlime,
-    MausMitMesser,
-    MiniMilch,
-    SaureMilch,
-    Muffin,
-    Suppe,
-    Pancake,
-    Fetti,
+    Marshmello = 1,
+    EliteMarshmello = 2,
+    EvilSlime = 3,
+    MausMitMesser = 4,
+    MiniMilch = 5,
+    SaureMilch = 6,
+    Muffin = 7,
+    Suppe = 8,
+    Pancake = 9,
+    Fetti = 10,
 
     /// <summary>Eine der zehn Slime-Varianten, zufaellig gewaehlt.</summary>
-    Slime,
+    Slime = 11,
 
     // Besonderes
-    Blocker,              // bewegt sich kaum - das ist der Kaefig, nicht der Gegner
-    MiniBossMarshmello,
-    MesserMaus1,
-    MesserMaus2,
-    KeksKoenig,
+    Blocker = 12,              // bewegt sich kaum - das ist der Kaefig, nicht der Gegner
+    EliteMarshmelloGross = 13, // hiess MiniBossMarshmello
+    MesserMaus1 = 14,
+    MesserMaus2 = 15,
+    KeksKoenig = 16,
 
     // Neu (Gegner-Werkstatt)
-    Eichel,
-    Fliegenpilz,
-    Fluegeldolch,
-    Kirschslime,
-    Milchpanzer,
-    WeisseMessermaus,
+    Eichel = 17,
+    Fliegenpilz = 18,
+    Fluegeldolch = 19,
+    Kirschslime = 20,
+    Milchpanzer = 21,
+    WeisseMessermaus = 22,
 
-    // Wald (World3): Elite- und Miniboss-Fassungen der neuen Gegner.
-    // Gleiche Bilder, groesser gestellt - so wie der Miniboss-Marshmello in
-    // der Kueche auch nur ein groesserer Marshmello ist.
-    Sturmeichel,
-    Dolchschwarm,
-    MinibossFliegenpliz,
-    Rattenkoenigin,
-    Milchkoloss,
+    // Wald: Elite-Fassung des Fliegenpilzes.
+    EliteFliegenpilz = 25,     // hiess MinibossFliegenpliz
 
     /// <summary>Endboss des Waldes: der Baumriese, der Feuer speit (EnemyGlutwurz).</summary>
-    Glutwurz,
+    Glutwurz = 28,
 }
 
 /// <summary>
@@ -69,17 +71,30 @@ public enum EnemyRole
     /// <summary>Normaler Gegner. Zaehlt auf Kill100 / Kill1000 / Kill10000.</summary>
     Normal,
 
-    /// <summary>Laesst eine Truhe fallen, raeumt den Kaefig, gibt 1 Seele.</summary>
-    MiniBoss,
+    /// <summary>
+    /// Kleiner, leuchtender Gegner mit mehr Leben und mehr XP. Kommt IMMER
+    /// einzeln (der Director spawnt nie mehrere auf einmal und nimmt ihn nie
+    /// aus dem Pool). Raeumt den Kaefig, zaehlt auf die Elite-Erfolge.
+    /// Hiess bis Oktober 2026 "MiniBoss" - die Zahl 1 ist geblieben.
+    /// </summary>
+    Elite,
 
     /// <summary>Der Keks-Koenig: laeuft nicht selbst, ruft danach den Tod.</summary>
     Boss,
 
-    /// <summary>Der Tod. Zieht alle XP an, gibt 50 Seelen und eine Truhe.</summary>
+    /// <summary>Der Tod. Zieht alle XP an.</summary>
     DeathBoss,
 
     /// <summary>Kaefig-Wand. Zaehlt nicht zum Druck und gibt nichts.</summary>
     Blocker,
+
+    /// <summary>
+    /// Echter Miniboss: ein Bosskampf in der Mitte des Levels, gesetzt per
+    /// Boss-Beat im Wellenplan. Unverrueckbar wie ein Boss, beendet den Lauf
+    /// aber nicht. Gibt ordentlich XP (aus dem Katalog) und zieht beim Tod alle
+    /// XP an. Noch gibt es keinen.
+    /// </summary>
+    MiniBoss,
 }
 
 /// <summary>
@@ -196,10 +211,7 @@ public sealed class EnemyDef
     }
 
     /// <summary>Bosse und Minibosse lassen sich nicht ziehen oder wegschieben.</summary>
-    public bool IsBoss
-    {
-        get { return Role == EnemyRole.MiniBoss || Role == EnemyRole.Boss || Role == EnemyRole.DeathBoss; }
-    }
+    public bool IsBoss => EnemyCatalog.IsBossRole(Role);
 
     /// <summary>Wie lange ein Durchlauf der Laufanimation dauert - reine Anzeige.</summary>
     public float LoopSeconds(int frameCount)
@@ -236,17 +248,24 @@ public static class EnemyCatalog
     /// </summary>
     public const float GoldenHeartMaxHealth = 5f;
 
-    /// <summary>Seelen ("Cookie Souls") je Rolle.</summary>
-    public static int Souls(EnemyRole role)
-    {
-        switch (role)
-        {
-            case EnemyRole.MiniBoss:  return 1;
-            case EnemyRole.Boss:      return 10;
-            case EnemyRole.DeathBoss: return 50;
-            default:                  return 0;
-        }
-    }
+    /// <summary>
+    /// Miniboss, Boss und Tod: unverrueckbar, zaehlen nicht zum Druck, werden
+    /// nicht nach vorn geholt. Elites gehoeren NICHT dazu - die sind nur
+    /// starke Einzelgaenger.
+    /// </summary>
+    public static bool IsBossRole(EnemyRole role) =>
+        role == EnemyRole.MiniBoss || role == EnemyRole.Boss || role == EnemyRole.DeathBoss;
+
+    // ------------------------------------------------------------ Elite
+    //
+    // Elites kommen immer einzeln. Ein Burst mit einem Elite setzt genau
+    // einen, egal wie viel Druck im Plan steht; im Pool und als Ringfueller
+    // werden sie uebersprungen.
+
+    public static bool IsElite(EnemyId id) => Get(id)?.Role == EnemyRole.Elite;
+
+    /// <summary>Farbe des Leuchtens um Elite-Gegner.</summary>
+    public static readonly Color EliteGlow = new Color(1f, 0.82f, 0.25f);
 
     // ------------------------------------------------------------ Pixelgroesse
     //
@@ -376,7 +395,7 @@ public static class EnemyCatalog
 
         Def(EnemyId.EliteMarshmello, "Elite-Marshmello",
             health: 50f, damage: 6f, speed: 1.2f, exp: 20, pushTime: 0.25f,
-            role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
+            role: EnemyRole.Elite, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/fin_marshmallow.png", fps: 8f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Wave1/Elite_Marshmello.prefab");
@@ -388,9 +407,9 @@ public static class EnemyCatalog
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Wave1/Evil_Slim.prefab");
 
-        Def(EnemyId.MiniBossMarshmello, "Miniboss Marshmello",
+        Def(EnemyId.EliteMarshmelloGross, "Elite-Marshmello (gross)",
             health: 400f, damage: 7f, speed: 1.25f, exp: 450, pushTime: 0.3f,
-            role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
+            role: EnemyRole.Elite, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/freeze_marshmallow_miniboss.png", fps: 8f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Wave1/MiniBoss_Marshmello.prefab");
@@ -416,9 +435,9 @@ public static class EnemyCatalog
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Neu/Fliegenpilz.prefab");
 
-        Def(EnemyId.MinibossFliegenpliz, "Miniboss Fliegenpliz",
+        Def(EnemyId.EliteFliegenpilz, "Elite-Fliegenpilz",
             health: 200f, damage: 5f, speed: 1.25f, exp: 300, pushTime: 0.3f,
-            role: EnemyRole.MiniBoss, facing: EnemyFacing.Neutral,
+            role: EnemyRole.Elite, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/miniboss/miniboss_pilz.png", fps: 6f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Neu/Pilzkoenig.prefab");
@@ -528,14 +547,14 @@ public static class EnemyCatalog
 
         Def(EnemyId.MesserMaus1, "Messermaus (Welle 1)",
             health: 5000f, damage: 10f, speed: 2.5f, exp: 0, pushTime: 0f,
-            role: EnemyRole.MiniBoss, facing: EnemyFacing.Neutral,
+            role: EnemyRole.Elite, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/MesserMaus.png", fps: 8f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Wave1/MiniBoss_MesserMaus.prefab", archived: true);
 
         Def(EnemyId.MesserMaus2, "Messermaus (Welle 2)",
             health: 10000f, damage: 20f, speed: 1.5f, exp: 0, pushTime: 0f,
-            role: EnemyRole.MiniBoss, facing: EnemyFacing.Neutral,
+            role: EnemyRole.Elite, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/MesserMaus.png", fps: 8f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Wave2/MesserMaus_Wave2.prefab", archived: true);

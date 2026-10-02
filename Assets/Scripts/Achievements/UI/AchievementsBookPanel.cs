@@ -585,12 +585,6 @@ public class AchievementsBookPanel : MonoBehaviour
                     e.RewardIcon = GameHudSkin.Check;
                     e.RewardColor = GameHudSkin.Mint;
                 }
-                else if (def.Souls > 0)
-                {
-                    e.Reward = $"+{def.Souls} {Loc.Get("ui.achievements.souls", "Cookie Souls")}";
-                    e.RewardIcon = GameHudSkin.Coin;
-                    e.RewardColor = GameHudSkin.GoldLight;
-                }
 
                 entries.Add(e);
             }

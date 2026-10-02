@@ -50,7 +50,7 @@ MonoBehaviour:
     lane: 1
     step: 1
     shape: 0
-    price: 10
+    price: 1
     displayName: Schlagkraft
     description: 
     icon: {fileID: 0}
@@ -67,7 +67,7 @@ MonoBehaviour:
     lane: 0
     step: 2
     shape: 4
-    price: 15
+    price: 1
     displayName: Scharfer Blick
     description: 
     icon: {fileID: 0}
@@ -84,7 +84,7 @@ MonoBehaviour:
     lane: 1
     step: 2
     shape: 4
-    price: 15
+    price: 1
     displayName: Nachschlag
     description: 
     icon: {fileID: 0}
@@ -101,7 +101,7 @@ MonoBehaviour:
     lane: 2
     step: 2
     shape: 4
-    price: 15
+    price: 1
     displayName: Tiefer Schnitt
     description: 
     icon: {fileID: 0}
@@ -118,7 +118,7 @@ MonoBehaviour:
     lane: 0
     step: 3
     shape: 2
-    price: 20
+    price: 1
     displayName: Adlerauge
     description: 
     icon: {fileID: 0}
@@ -135,7 +135,7 @@ MonoBehaviour:
     lane: 2
     step: 3
     shape: 2
-    price: 20
+    price: 1
     displayName: Knochenbrecher
     description: 
     icon: {fileID: 0}
@@ -152,7 +152,7 @@ MonoBehaviour:
     lane: 1
     step: 4
     shape: 1
-    price: 30
+    price: 1
     displayName: Doppelwurf
     description: 
     icon: {fileID: 0}
@@ -171,7 +171,7 @@ MonoBehaviour:
     lane: 1
     step: 1
     shape: 0
-    price: 10
+    price: 1
     displayName: Tiefer Atem
     description: 
     icon: {fileID: 0}
@@ -188,7 +188,7 @@ MonoBehaviour:
     lane: 1
     step: 2
     shape: 4
-    price: 15
+    price: 1
     displayName: "Gest\xE4hlter K\xF6rper"
     description: 
     icon: {fileID: 0}
@@ -205,7 +205,7 @@ MonoBehaviour:
     lane: 1
     step: 4
     shape: 1
-    price: 50
+    price: 1
     displayName: "K\xF6rper und Geist"
     description: 
     icon: {fileID: 0}
@@ -227,7 +227,7 @@ MonoBehaviour:
     lane: 1
     step: 1
     shape: 0
-    price: 10
+    price: 1
     displayName: "Gl\xFCckskr\xFCmel"
     description: 
     icon: {fileID: 0}
@@ -288,7 +288,7 @@ MonoBehaviour:
     lane: 1
     step: 2
     shape: 4
-    price: 20
+    price: 1
     displayName: Kleeblatt
     description: 
     icon: {fileID: 0}
@@ -305,7 +305,7 @@ MonoBehaviour:
     lane: 0
     step: 2
     shape: 4
-    price: 20
+    price: 1
     displayName: Reiche Beute
     description: 
     icon: {fileID: 0}
@@ -322,7 +322,7 @@ MonoBehaviour:
     lane: 2
     step: 2
     shape: 4
-    price: 20
+    price: 1
     displayName: "Doppeltes Gl\xFCck"
     description: 
     icon: {fileID: 0}
@@ -339,7 +339,7 @@ MonoBehaviour:
     lane: 0
     step: 3
     shape: 2
-    price: 25
+    price: 1
     displayName: Goldenes Herz
     description: 
     icon: {fileID: 0}
@@ -356,7 +356,7 @@ MonoBehaviour:
     lane: 2
     step: 3
     shape: 2
-    price: 25
+    price: 1
     displayName: "Gl\xFCcksstr\xE4hne"
     description: 
     icon: {fileID: 0}
@@ -373,7 +373,7 @@ MonoBehaviour:
     lane: 0
     step: 4
     shape: 1
-    price: 30
+    price: 1
     displayName: Volltreffer
     description: 
     icon: {fileID: 0}
@@ -390,7 +390,7 @@ MonoBehaviour:
     lane: 2
     step: 4
     shape: 1
-    price: 30
+    price: 1
     displayName: Jackpot
     description: 
     icon: {fileID: 0}
@@ -407,7 +407,7 @@ MonoBehaviour:
     lane: 1
     step: 5
     shape: 3
-    price: 35
+    price: 2
     displayName: "Gl\xFCckskeks"
     description: 
     icon: {fileID: 0}
@@ -425,7 +425,7 @@ MonoBehaviour:
     lane: 1
     step: 3
     shape: 5
-    price: 25
+    price: 1
     displayName: Mixerregen
     description: 
     icon: {fileID: 0}
@@ -442,7 +442,7 @@ MonoBehaviour:
     lane: 1
     step: 1
     shape: 0
-    price: 15
+    price: 1
     displayName: Seelenkunde
     description: 
     icon: {fileID: 0}
@@ -459,7 +459,7 @@ MonoBehaviour:
     lane: 0
     step: 2
     shape: 4
-    price: 20
+    price: 1
     displayName: "Flei\xDFiger Sch\xFCler"
     description: 
     icon: {fileID: 0}
@@ -476,7 +476,7 @@ MonoBehaviour:
     lane: 2
     step: 2
     shape: 4
-    price: 20
+    price: 1
     displayName: Heilkunde
     description: 
     icon: {fileID: 0}
@@ -510,7 +510,7 @@ MonoBehaviour:
     lane: 0
     step: 3
     shape: 2
-    price: 25
+    price: 1
     displayName: Kluge Wahl
     description: 
     icon: {fileID: 0}
@@ -527,7 +527,7 @@ MonoBehaviour:
     lane: 2
     step: 3
     shape: 2
-    price: 25
+    price: 1
     displayName: Schwachpunkt
     description: 
     icon: {fileID: 0}
@@ -544,7 +544,7 @@ MonoBehaviour:
     lane: 1
     step: 4
     shape: 1
-    price: 30
+    price: 1
     displayName: Kartograf
     description: 
     icon: {fileID: 0}
@@ -563,7 +563,7 @@ MonoBehaviour:
     lane: 1
     step: 5
     shape: 3
-    price: 35
+    price: 2
     displayName: Meisterschaft
     description: 
     icon: {fileID: 0}
@@ -580,7 +580,7 @@ MonoBehaviour:
     lane: 0
     step: 4
     shape: 5
-    price: 40
+    price: 1
     displayName: Seelenschild
     description: 
     icon: {fileID: 0}
@@ -597,7 +597,7 @@ MonoBehaviour:
     lane: 2
     step: 4
     shape: 5
-    price: 40
+    price: 1
     displayName: Letzter Atem
     description: 
     icon: {fileID: 0}
@@ -614,7 +614,7 @@ MonoBehaviour:
     lane: 1
     step: 5
     shape: 3
-    price: 60
+    price: 2
     displayName: Kampfgeist
     description: 
     icon: {fileID: 0}
@@ -631,7 +631,7 @@ MonoBehaviour:
     lane: 0
     step: 2
     shape: 4
-    price: 20
+    price: 1
     displayName: Seelenhunger
     description: 
     icon: {fileID: 0}
@@ -648,7 +648,7 @@ MonoBehaviour:
     lane: 2
     step: 2
     shape: 4
-    price: 20
+    price: 1
     displayName: Ruhiger Puls
     description: 
     icon: {fileID: 0}
@@ -665,7 +665,7 @@ MonoBehaviour:
     lane: 1
     step: 3
     shape: 2
-    price: 25
+    price: 1
     displayName: Lebenskraft
     description: 
     icon: {fileID: 0}
@@ -684,7 +684,7 @@ MonoBehaviour:
     lane: 0
     step: 5
     shape: 3
-    price: 35
+    price: 2
     displayName: Vier Richtungen
     description: 
     icon: {fileID: 0}
@@ -701,7 +701,7 @@ MonoBehaviour:
     lane: 2
     step: 5
     shape: 3
-    price: 35
+    price: 2
     displayName: Abpraller
     description: 
     icon: {fileID: 0}

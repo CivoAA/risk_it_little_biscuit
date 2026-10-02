@@ -111,7 +111,7 @@ public static class SkillDefaults
             // Wissen, ebenfalls in Prozent.
             case SkillType.FreeRerollChance:        return 20f;
             case SkillType.LevelUpHealPercent:      return 5f;
-            case SkillType.SoulBonusPercent:        return 10f;
+            case SkillType.CharXpBonusPercent:      return 10f;
             case SkillType.BossHealthReduction:     return 5f;
             case SkillType.StartWeaponLevel:        return 1f;
             // Geist, in Prozent.
@@ -122,6 +122,6 @@ public static class SkillDefaults
         }
     }
 
-    /// <summary>Preisvorschlag fuer einen Knoten, je weiter rechts desto teurer.</summary>
-    public static int PriceForStep(int step) => 10 + Mathf.Max(0, step) * 5;
+    /// <summary>Preisvorschlag fuer einen neuen Knoten: 1 Skillpunkt (= 1 Charakter-Level).</summary>
+    public static int PriceForStep(int step) => 1;
 }

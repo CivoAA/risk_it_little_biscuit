@@ -184,15 +184,9 @@ public static class Achievements
 
     private static void GrantRewards(AchievementDef def)
     {
-        // In der Sandbox darf nichts nach aussen wirken: Souls und Unlocks würden
-        // sonst in skills.json bzw. unlocks.json landen.
+        // In der Sandbox darf nichts nach aussen wirken: Unlocks würden sonst in
+        // unlocks.json landen.
         if (sandbox) return;
-
-        if (def.Souls > 0)
-        {
-            Skills.AddCurrency(def.Souls);
-            WM_UIController.Instance?.UpdateSkillCurrencyText();
-        }
 
         if (!string.IsNullOrEmpty(def.GrantsUnlock))
         {
