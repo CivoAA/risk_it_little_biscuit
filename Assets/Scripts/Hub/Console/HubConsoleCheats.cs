@@ -257,6 +257,33 @@ public static class HubConsoleCheats
         }, usage: "[alle]", hidden: true);
 
         // ------------------------------------------------------------------
+        // Kompletter Spielstand auf Anfang.  ->  "werksreset ja"
+        // Gleicher Weg wie der Knopf in den Optionen (SaveReset): Shop, Unlocks,
+        // Skills/Charakter-Level, Erfolge, Verteiler, Bestiarium, Level-Rekorde.
+        // Einstellungen bleiben. Ohne "ja" passiert nichts.
+        // ------------------------------------------------------------------
+        HubConsole.Add("werksreset", "setzt den kompletten Spielstand zurueck", (args, sink) =>
+        {
+            bool bestaetigt = args != null && args.Length > 0 &&
+                              args[0].Equals("ja", System.StringComparison.OrdinalIgnoreCase);
+            if (!bestaetigt)
+            {
+                sink.Print("Loescht ALLES: Shop, Charaktere, Skills, Erfolge, Unlocks, Bestiarium, Rekorde.");
+                sink.Print("Wirklich? -> werksreset ja");
+                return;
+            }
+
+            if (!SaveReset.Allowed)
+            {
+                sink.PrintError("Geht nicht waehrend eines Laufs.");
+                return;
+            }
+
+            sink.Close();
+            SaveReset.ResetAll();
+        }, usage: "ja", hidden: true);
+
+        // ------------------------------------------------------------------
         // Ab hier: deine eigenen Codes.
         // ------------------------------------------------------------------
     }
