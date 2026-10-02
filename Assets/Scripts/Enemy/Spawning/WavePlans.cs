@@ -127,7 +127,7 @@ public static class WavePlans
     ///   Elite-Marshmello -> Eichel        (stand frueher im Pool der Kueche)
     ///   Messermaus       -> Elite-Fliegenpilz (Elite im Ring, ohne Kaefig -
     ///                                     die Kaefig-Wand ist archiviert)
-    ///   Muffin & Co.     -> Milchpanzer
+    ///   Muffin & Co.     -> Honey (und spaeter der verstaerkte Milchpanzer)
     ///
     /// Die Gegner kommen von leicht nach schwer dazu, jede Phase bringt einen
     /// neuen mit:
@@ -135,9 +135,10 @@ public static class WavePlans
     ///   Phase 1  Fliegenpilz (am Ende ein erster Kirschslime-Schwall)
     ///   Phase 2  + Kirschslime, + Weisse Messermaus
     ///   Phase 3  Fliegenpilz raus, + Eichel, + Fluegeldolch
-    ///   Phase 4  Kirschslime raus, + Milchpanzer
-    ///   Boss     Eichel, Milchpanzer, Fluegeldolch - und die Glutwurz, der
-    ///            Baumriese des Waldes (speit Feuer, siehe EnemyGlutwurz)
+    ///   Phase 4  Kirschslime raus, + Honey
+    ///   Boss     Eichel, Honey, Fluegeldolch, + Milchpanzer - und die Glutwurz,
+    ///            der Baumriese des Waldes (speit Feuer, siehe EnemyGlutwurz)
+    ///   Endlos   Eichel, Honey, Milchpanzer, Fluegeldolch
     ///
     /// Der Fluegeldolch (Fledermaus) kommt nur als Beimischung - in Rudeln ist
     /// er zu viel.
@@ -191,29 +192,31 @@ public static class WavePlans
         plan.Phase(290f)
             .Pool(EnemyId.Eichel, 40f)
             .Pool(EnemyId.WeisseMessermaus, 20f)
-            .Pool(EnemyId.Milchpanzer, 25f)
+            .Pool(EnemyId.Honey, 25f)
             .Pool(EnemyId.Fluegeldolch, 15f)
             .Pressure(240f, 350f)
             .Base(Patterns.Scatter)
             .Burst(20f, EnemyId.EliteFliegenpilz, 1f, Patterns.Ambush, 0f)
-            .Burst(50f, EnemyId.Milchpanzer, 40f, Patterns.Arc, 0f)
+            .Burst(50f, EnemyId.Honey, 40f, Patterns.Arc, 0f)
             .Burst(80f, EnemyId.EliteMarshmelloGross, 1f, Patterns.Arc, 0f)
             .Calm(110f, 8f, 0.15f)
             .Encircle(145f, EnemyId.EliteFliegenpilz, EnemyId.Eichel, 26, 15f, false, "PILZKOENIG!", 0.35f, 25f, 1.5f)
-            .Burst(225f, EnemyId.Milchpanzer, 60f, Patterns.Cluster, 0f)
+            .Burst(225f, EnemyId.Honey, 60f, Patterns.Cluster, 0f)
             .Burst(265f, EnemyId.EliteFliegenpilz, 1f, Patterns.Ambush, 0f);
 
         plan.Phase(600f)
-            .Pool(EnemyId.Eichel, 50f)
-            .Pool(EnemyId.Milchpanzer, 20f)
+            .Pool(EnemyId.Eichel, 45f)
+            .Pool(EnemyId.Honey, 15f)
+            .Pool(EnemyId.Milchpanzer, 10f)
             .Pool(EnemyId.Fluegeldolch, 30f)
             .Pressure(400f, 600f)
             .Base(Patterns.Scatter)
             .Boss(2f, EnemyId.Glutwurz, "GLUTWURZ", 0.4f);
 
         plan.EndlessPhase()
-            .Pool(EnemyId.Eichel, 45f)
-            .Pool(EnemyId.Milchpanzer, 30f)
+            .Pool(EnemyId.Eichel, 40f)
+            .Pool(EnemyId.Honey, 15f)
+            .Pool(EnemyId.Milchpanzer, 20f)
             .Pool(EnemyId.Fluegeldolch, 25f)
             .Pressure(140f, 140f)
             .Base(Patterns.Scatter)

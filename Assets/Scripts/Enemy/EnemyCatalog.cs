@@ -56,6 +56,9 @@ public enum EnemyId
 
     /// <summary>Endboss des Waldes: der Baumriese, der Feuer speit (EnemyGlutwurz).</summary>
     Glutwurz = 28,
+
+    /// <summary>Wald: Honig-Klumpen. Hat die Werte und den Platz des alten Milchpanzers uebernommen.</summary>
+    Honey = 29,
 }
 
 /// <summary>
@@ -457,11 +460,18 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Neu/Kirschslime.prefab");
 
         Def(EnemyId.Milchpanzer, "Milchpanzer",
-            health: 450f, damage: 10f, speed: 1.4f, exp: 350, pushTime: 0f,
+            health: 900f, damage: 14f, speed: 1.5f, exp: 650, pushTime: 0f,
             role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesRight,
             sheet: "Assets/Art/Gegner/new/wirklich_saure_milch_1.png", fps: 8f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Neu/Milchpanzer.prefab");
+
+        Def(EnemyId.Honey, "Honey",
+            health: 450f, damage: 10f, speed: 1.4f, exp: 350, pushTime: 0f,
+            role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/honey.png", fps: 8f,
+            colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
+            prefab: "");
 
         Def(EnemyId.WeisseMessermaus, "Weisse Messermaus",
             health: 15f, damage: 3f, speed: 2f, exp: 5, pushTime: 0.3f,
