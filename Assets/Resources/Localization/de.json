@@ -432,6 +432,7 @@
     { "key": "ui.options.audio.master", "value": "Gesamtlautstärke" },
     { "key": "ui.options.audio.music", "value": "Musik" },
     { "key": "ui.options.audio.sfx", "value": "Geräusche" },
+    { "key": "ui.options.audio.mute", "value": "AUS" },
     { "key": "ui.options.display.mode", "value": "Modus" },
     { "key": "ui.options.display.resolution", "value": "Auflösung" },
     { "key": "ui.options.display.damage", "value": "Schadenszahlen" },
