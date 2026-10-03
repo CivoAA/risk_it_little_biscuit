@@ -1,0 +1,471 @@
+fileFormatVersion: 2
+guid: bee2aac67bad46248fd2ce2dcc39d640
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2273931790145847763
+    second: schleimkoenig_hop_0
+  - first:
+      213: 3878451659481196860
+    second: schleimkoenig_hop_1
+  - first:
+      213: 3546196346167497743
+    second: schleimkoenig_hop_2
+  - first:
+      213: 3372038178357080280
+    second: schleimkoenig_hop_3
+  - first:
+      213: 4317881729645365209
+    second: schleimkoenig_hop_4
+  - first:
+      213: 1558477667835185370
+    second: schleimkoenig_hop_5
+  - first:
+      213: 4307736846268128181
+    second: schleimkoenig_hop_6
+  - first:
+      213: 2087592795416035273
+    second: schleimkoenig_hop_7
+  - first:
+      213: 3090010778250233573
+    second: schleimkoenig_hop_8
+  - first:
+      213: 1559484821246002450
+    second: schleimkoenig_hop_9
+  - first:
+      213: 3341161814563037942
+    second: schleimkoenig_hop_10
+  - first:
+      213: 4316400369848576775
+    second: schleimkoenig_hop_11
+  - first:
+      213: 4008908616206977206
+    second: schleimkoenig_hop_12
+  - first:
+      213: 3871705257944689178
+    second: schleimkoenig_hop_13
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 8192
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 8192
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 8192
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: schleimkoenig_hop_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 192
+        height: 176
+      alignment: 9
+      pivot: {x: 0.5416666666666666, y: 0.011363636363636364}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8a85ccb5cdae47b8a0de697fb595f6f9
+      internalID: 2273931790145847763
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: schleimkoenig_hop_1
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 192
+        height: 176
+      alignment: 9
+      pivot: {x: 0.5416666666666666, y: 0.011363636363636364}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5551740af1044c6e8b9067eac458676b
+      internalID: 3878451659481196860
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: schleimkoenig_hop_2
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 0
+        width: 192
+        height: 176
+      alignment: 9
+      pivot: {x: 0.5416666666666666, y: 0.011363636363636364}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8871f20ee5514bdcb1b8f7d2573e2ff0
+      internalID: 3546196346167497743
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: schleimkoenig_hop_3
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 0
+        width: 192
+        height: 176
+      alignment: 9
+      pivot: {x: 0.5416666666666666, y: 0.011363636363636364}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 85e7636e33d74cae9f634f311484fced
+      internalID: 3372038178357080280
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: schleimkoenig_hop_4
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 0
+        width: 192
+        height: 176
+      alignment: 9
+      pivot: {x: 0.5416666666666666, y: 0.011363636363636364}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d2f7bc86100e44c0ac5efd0edcc58b2f
+      internalID: 4317881729645365209
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: schleimkoenig_hop_5
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 0
+        width: 192
+        height: 176
+      alignment: 9
+      pivot: {x: 0.5416666666666666, y: 0.011363636363636364}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7323a216024d48b19a926c42a8cd6142
+      internalID: 1558477667835185370
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: schleimkoenig_hop_6
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 0
+        width: 192
+        height: 176
+      alignment: 9
+      pivot: {x: 0.5416666666666666, y: 0.011363636363636364}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f42c2a927e564636ba24791a834cb4d9
+      internalID: 4307736846268128181
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: schleimkoenig_hop_7
+      rect:
+        serializedVersion: 2
+        x: 1344
+        y: 0
+        width: 192
+        height: 176
+      alignment: 9
+      pivot: {x: 0.5416666666666666, y: 0.011363636363636364}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee4dd6d5e8654ad3ad22f409b6fa669d
+      internalID: 2087592795416035273
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: schleimkoenig_hop_8
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 0
+        width: 192
+        height: 176
+      alignment: 9
+      pivot: {x: 0.5416666666666666, y: 0.011363636363636364}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 967966e6b6c54db6ad44ca7ece86df54
+      internalID: 3090010778250233573
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: schleimkoenig_hop_9
+      rect:
+        serializedVersion: 2
+        x: 1728
+        y: 0
+        width: 192
+        height: 176
+      alignment: 9
+      pivot: {x: 0.5416666666666666, y: 0.011363636363636364}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 13e464066a3a446f9454397010753155
+      internalID: 1559484821246002450
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: schleimkoenig_hop_10
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 0
+        width: 192
+        height: 176
+      alignment: 9
+      pivot: {x: 0.5416666666666666, y: 0.011363636363636364}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 464c904d4d6a4fedb4d940f19a01dc13
+      internalID: 3341161814563037942
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: schleimkoenig_hop_11
+      rect:
+        serializedVersion: 2
+        x: 2112
+        y: 0
+        width: 192
+        height: 176
+      alignment: 9
+      pivot: {x: 0.5416666666666666, y: 0.011363636363636364}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6fdee973fb4f434d84fbc76ea4a029bf
+      internalID: 4316400369848576775
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: schleimkoenig_hop_12
+      rect:
+        serializedVersion: 2
+        x: 2304
+        y: 0
+        width: 192
+        height: 176
+      alignment: 9
+      pivot: {x: 0.5416666666666666, y: 0.011363636363636364}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 145c1bb1efcc4c51a659a6f712b38dfa
+      internalID: 4008908616206977206
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: schleimkoenig_hop_13
+      rect:
+        serializedVersion: 2
+        x: 2496
+        y: 0
+        width: 192
+        height: 176
+      alignment: 9
+      pivot: {x: 0.5416666666666666, y: 0.011363636363636364}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5cfedcc5678b42978d483288876f3cad
+      internalID: 3871705257944689178
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      schleimkoenig_hop_0: 2273931790145847763
+      schleimkoenig_hop_1: 3878451659481196860
+      schleimkoenig_hop_10: 3341161814563037942
+      schleimkoenig_hop_11: 4316400369848576775
+      schleimkoenig_hop_12: 4008908616206977206
+      schleimkoenig_hop_13: 3871705257944689178
+      schleimkoenig_hop_2: 3546196346167497743
+      schleimkoenig_hop_3: 3372038178357080280
+      schleimkoenig_hop_4: 4317881729645365209
+      schleimkoenig_hop_5: 1558477667835185370
+      schleimkoenig_hop_6: 4307736846268128181
+      schleimkoenig_hop_7: 2087592795416035273
+      schleimkoenig_hop_8: 3090010778250233573
+      schleimkoenig_hop_9: 1559484821246002450
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

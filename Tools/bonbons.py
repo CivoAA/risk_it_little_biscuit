@@ -110,14 +110,18 @@ def candy_layer(rx, ry, end_len, body, wrap, line, swirl=0):
     return outline(shifted, line), W + 2, H + 2
 
 
-def compose(layer, w, h, frame, line, sparkle=None):
+def compose(layer, w, h, frame, line, body_cols, sparkle=None):
     img = Image.new("RGBA", (S, S), CLEAR)
     ox = (S - w) // 2
     top = (S - h) // 2 - 1
     # ruhiger als Herz/Magnet: nur 0/1 px
     lift = 1 if 3 <= frame < 9 else 0
     shadow(img, S / 2.0, top + h - 2, max(4, w - 12 - lift * 2 + (w % 2)))
-    px = glint(layer, line, frame, start=0, steps=4, strength=0.45)
+    # Glanz nur ueber den Kern: auf Papier und Folie sah der Streifen wie ein
+    # Kratzer aus, der quer ueber das ganze Bonbon springt.
+    body = {q: c for q, c in layer.items() if c in body_cols}
+    px = dict(layer)
+    px.update(glint(body, line, frame, start=0, steps=5, strength=0.3))
     for (x, y), c in px.items():
         put(img, ox + x, top + y - lift, c)
     if sparkle:
@@ -127,7 +131,8 @@ def compose(layer, w, h, frame, line, sparkle=None):
 
 def sparkles(img, frame, ox, oy, w, h):
     core, arm = hx("ffffff"), hx("fff1a0", 200)
-    for (x, y, phase) in [(ox + w - 7, oy + 1, 1), (ox + 5, oy + h - 3, 7)]:
+    # erst nach dem Glanz (Bild 0-4), damit nicht alles gleichzeitig blinkt
+    for (x, y, phase) in [(ox + w - 8, oy + 2, 5), (ox + 7, oy + h - 4, 9)]:
         k = (frame - phase) % FRAMES
         if k < 3:
             star(img, x, y, [1, 2, 1][k], core, arm)
@@ -161,7 +166,10 @@ def build():
     for name, k in KINDS.items():
         layer, w, h = candy_layer(k["rx"], k["ry"], k["end_len"], k["body"], k["wrap"], k["line"],
                                   k["swirl"])
-        sheets[name] = [compose(layer, w, h, f, k["line"], k.get("sparkle")) for f in range(FRAMES)]
+        body_cols = set(k["body"].values()) - {k["body"].get("stripe")}
+        body_cols |= {mix(c, k["body"]["stripe"], 0.6) for c in k["body"].values()} if "stripe" in k["body"] else set()
+        sheets[name] = [compose(layer, w, h, f, k["line"], body_cols, k.get("sparkle"))
+                        for f in range(FRAMES)]
     return sheets
 
 

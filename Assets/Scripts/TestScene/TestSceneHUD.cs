@@ -371,19 +371,30 @@ public class TestSceneHUD : MonoBehaviour
             Destroy(bossMenu.GetChild(i).gameObject);
         }
 
-        List<EnemyId> bosses = TestSceneBossSpawner.Available();
-        if (bosses.Count == 0)
+        // Zwei Unterkategorien: die Endbosse und die Zwischenbosse.
+        List<EnemyId> bosses = TestSceneBossSpawner.Available(EnemyRole.Boss);
+        List<EnemyId> midBosses = TestSceneBossSpawner.Available(EnemyRole.MiniBoss);
+        if (bosses.Count == 0 && midBosses.Count == 0)
         {
             Label("<color=#FF6A4A>Kein Boss-Prefab gefunden.</color>", bossMenu, fontSize - 8,
                   TextAlignmentOptions.MidlineLeft);
             return;
         }
 
-        foreach (EnemyId id in bosses)
+        BossGroup("Bosse", bosses, new Color(0.22f, 0.15f, 0.12f, 1f));
+        BossGroup("Zwischenbosse", midBosses, new Color(0.17f, 0.12f, 0.24f, 1f));
+    }
+
+    private void BossGroup(string title, List<EnemyId> ids, Color color)
+    {
+        if (ids.Count == 0) return;
+
+        Label("<color=#9AA0A8>" + title + "</color>", bossMenu, fontSize - 8, TextAlignmentOptions.MidlineLeft);
+        foreach (EnemyId id in ids)
         {
             EnemyId captured = id;
             Button b = MakeButton(Bestiary.NameOf(id), bossMenu, 320f, () => SpawnBoss(captured));
-            b.GetComponent<Image>().color = new Color(0.22f, 0.15f, 0.12f, 1f);
+            b.GetComponent<Image>().color = color;
         }
     }
 

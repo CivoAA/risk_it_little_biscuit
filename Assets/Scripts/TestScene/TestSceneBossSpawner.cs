@@ -27,6 +27,7 @@ public class TestSceneBossSpawner : MonoBehaviour
     private Enemy currentEnemy;
     private EnemyKeckKönig currentKing;
     private EnemyGlutwurz currentGlutwurz;
+    private EnemySchleimkoenig currentSchleimkoenig;
 
     /// <summary>Steht gerade ein Boss?</summary>
     public bool Alive
@@ -47,6 +48,7 @@ public class TestSceneBossSpawner : MonoBehaviour
             if (current == null) return false;
             if (currentKing != null) return currentKing.IsPhaseTwo;
             if (currentGlutwurz != null) return currentGlutwurz.IsPhaseTwo;
+            if (currentSchleimkoenig != null) return currentSchleimkoenig.IsPhaseTwo;
             return false;
         }
     }
@@ -54,10 +56,19 @@ public class TestSceneBossSpawner : MonoBehaviour
     /// <summary>Alle Bosse aus dem Katalog, zu denen ein Prefab liegt.</summary>
     public static List<EnemyId> Available()
     {
+        return Available(EnemyRole.Boss);
+    }
+
+    /// <summary>
+    /// Alle Gegner einer Rolle (Boss oder Zwischenboss = MiniBoss) aus dem
+    /// Katalog, zu denen ein Prefab liegt.
+    /// </summary>
+    public static List<EnemyId> Available(EnemyRole role)
+    {
         var list = new List<EnemyId>();
         foreach (EnemyDef def in EnemyCatalog.All)
         {
-            if (def.Role != EnemyRole.Boss || def.Archived) continue;
+            if (def.Role != role || def.Archived) continue;
             if (LoadPrefab(def.Id) == null) continue;
             list.Add(def.Id);
         }
@@ -93,6 +104,7 @@ public class TestSceneBossSpawner : MonoBehaviour
         if (currentEnemy != null) currentEnemy.SpawnedAs = id;
         currentKing = current.GetComponent<EnemyKeckKönig>();
         currentGlutwurz = current.GetComponent<EnemyGlutwurz>();
+        currentSchleimkoenig = current.GetComponent<EnemySchleimkoenig>();
 
         // Gleiche Vorsicht wie ueberall sonst: erzeugt wird in der aktiven
         // Szene, und das muss nicht die sein, in der der Spieler steht.
@@ -118,6 +130,7 @@ public class TestSceneBossSpawner : MonoBehaviour
         currentEnemy = null;
         currentKing = null;
         currentGlutwurz = null;
+        currentSchleimkoenig = null;
         return true;
     }
 

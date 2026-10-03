@@ -59,6 +59,9 @@ public enum EnemyId
 
     /// <summary>Wald: Honig-Klumpen. Hat die Werte und den Platz des alten Milchpanzers uebernommen.</summary>
     Honey = 29,
+
+    /// <summary>Zwischenboss: grosser lila Schleim mit Krone, Riesensprung (EnemySchleimkoenig).</summary>
+    Schleimkoenig = 30,
 }
 
 /// <summary>
@@ -95,8 +98,9 @@ public enum EnemyRole
     /// Echter Miniboss: ein Bosskampf in der Mitte des Levels, gesetzt per
     /// Boss-Beat im Wellenplan. Unverrueckbar wie ein Boss, beendet den Lauf
     /// aber nicht. Gibt ordentlich XP (aus dem Katalog) und zieht beim Tod alle
-    /// XP an. Noch gibt es keinen.
+    /// XP an. In der Werkstatt heisst die Rolle "Zwischenboss".
     /// </summary>
+    [InspectorName("Zwischenboss")]
     MiniBoss,
 }
 
@@ -486,6 +490,13 @@ public static class EnemyCatalog
             sheet: "Assets/Art/Gegner/new/boss/baumboss_walk.png", fps: 12f,
             colliderRadius: 0.95f, colliderOffset: new Vector2(0f, 1.25f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Boss/Glutwurz.prefab");
+
+        Def(EnemyId.Schleimkoenig, "Schleimkoenig",
+            health: 2400f, damage: 12f, speed: 1.6f, exp: 600, pushTime: 0f,
+            role: EnemyRole.MiniBoss, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/miniboss/schleimkoenig_hop.png", fps: 12f,
+            colliderRadius: 1.15f, colliderOffset: new Vector2(0f, 0.85f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Zwischenboss/Schleimkoenig.prefab");
 
         // ---------------------------------------------------------- Archiv
         //

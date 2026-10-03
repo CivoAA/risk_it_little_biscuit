@@ -48,7 +48,7 @@ public static class GlutwurzBuilder
         Debug.Log("[Glutwurz] " + Register());
     }
 
-    private static string Build()
+    internal static string Build()
     {
         EnemyDef def = EnemyCatalog.Get(EnemyId.Glutwurz);
         if (def == null || string.IsNullOrEmpty(def.Prefab)) return "Kein Katalogeintrag fuer die Glutwurz.";

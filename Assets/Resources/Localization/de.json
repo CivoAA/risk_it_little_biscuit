@@ -698,6 +698,7 @@
     { "key": "level.2.desc", "value": "Zwischen den Bäumen wird es voll." },
     { "key": "enemy.KeksKoenig.name", "value": "Keks-König" },
     { "key": "enemy.Glutwurz.name", "value": "Glutwurz" },
+    { "key": "enemy.Schleimkoenig.name", "value": "Schleimkönig" },
     { "key": "ui.levelselect.recordstory", "value": "SCHNELLSTER SIEG" },
     { "key": "ui.levelselect.recordendless", "value": "LÄNGSTES ÜBERLEBEN" }
   ]
