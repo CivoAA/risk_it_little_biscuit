@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4644872724488557157}
   - component: {fileID: 3050359710049155506}
   - component: {fileID: 3589647297395735443}
-  - component: {fileID: -5958351196714020591}
+  - component: {fileID: 7310455118204521931}
   m_Layer: 0
   m_Name: ShuriBlastEvoPrefab
   m_TagString: Untagged
@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 4.18, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -79,7 +79,7 @@ SpriteRenderer:
   m_SortingLayerID: 1682636205
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: -8276253987220743879, guid: 61e3bc612d6fa5545ade16d0ce5acf0b, type: 3}
+  m_Sprite: {fileID: 2929191061464728564, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -125,7 +125,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 1
+  m_Radius: 3
 --- !u!114 &3589647297395735443
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -139,25 +139,68 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weapon: {fileID: 0}
---- !u!95 &-5958351196714020591
-Animator:
-  serializedVersion: 7
+--- !u!114 &7310455118204521931
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5320674717455628473}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 8887d48cdfe14064fa14836c75ffdc51, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc50626105934462ad03c4f1e8868e2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpriteFlipbook
+  frames:
+  - {fileID: 2929191061464728564, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 1758348326791897792, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 2205288622658223796, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 4164246774309326024, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 2850294170199004976, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 3302058023474358227, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 4415377424597906136, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 2661996206629442217, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 3284988964394822681, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 2381677963642711102, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 3401458449362954070, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 4581294285322213350, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 3278898129821595388, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 3847334575687188644, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 1604590529951678744, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 3407857654785221988, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 1297833396480978957, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 2749467338161774766, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 4441352522083611733, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 3748711865329427180, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 4398206576619244027, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 4444916653460562292, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 2793522340722941761, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 1923094708398498144, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 4138940083045796124, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 3111673485073105888, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 2654644386988133795, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 3016608862704545998, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 3223047802848844915, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 3679953455437512962, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 3280461223956050450, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 2490840858714930148, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 3218036773124045621, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 4056434485780992002, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 2148162303229398504, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 4455265416395922486, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 2231195494976405536, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 3190699249578701018, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 2380213876743977989, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 2036057158228123983, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 3863882957831001982, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 1905773190872876460, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 4328758516803503214, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 3917694578355191482, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 3026618347077954224, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 2039629885586623490, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 4009846852743159529, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  - {fileID: 1420687259217486712, guid: 58fdca724136466bafc9d9543127fca4, type: 3}
+  fps: 36
+  randomStart: 1
+  fadeIn: 0.08
+  fadeOut: 0.3

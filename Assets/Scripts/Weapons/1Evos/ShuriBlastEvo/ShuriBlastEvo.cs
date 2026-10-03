@@ -90,15 +90,10 @@ public class ShuriBlastEvo : Weapon
         // darum prallt er hier erst am Ende ab statt beim Treffer.
         int bouncesLeft = Ricochet.BouncesForThrow();
 
+        // Nicht in Flugrichtung drehen: die Drehung steckt in den Bildern
+        // (SpriteFlipbook), das Gesicht in der Mitte bleibt aufrecht.
         while (BOBA != null)
         {
-            Vector2 direction = targetPos - (Vector2)BOBA.transform.position;
-            if (direction.sqrMagnitude > 0.0001f)
-            {
-                float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-                BOBA.transform.rotation = Quaternion.Euler(0f, 0f, angle + 180f);
-            }
-
             while (BOBA != null && Vector3.Distance(BOBA.transform.position, targetPos) > 0.001f)
             {
                 BOBA.transform.position = Vector3.MoveTowards(
