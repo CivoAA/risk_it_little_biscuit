@@ -1,0 +1,1355 @@
+fileFormatVersion: 2
+guid: 58fdca724136466bafc9d9543127fca4
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2929191061464728564
+    second: shuri_blast_spin_0
+  - first:
+      213: 1758348326791897792
+    second: shuri_blast_spin_1
+  - first:
+      213: 2205288622658223796
+    second: shuri_blast_spin_2
+  - first:
+      213: 4164246774309326024
+    second: shuri_blast_spin_3
+  - first:
+      213: 2850294170199004976
+    second: shuri_blast_spin_4
+  - first:
+      213: 3302058023474358227
+    second: shuri_blast_spin_5
+  - first:
+      213: 4415377424597906136
+    second: shuri_blast_spin_6
+  - first:
+      213: 2661996206629442217
+    second: shuri_blast_spin_7
+  - first:
+      213: 3284988964394822681
+    second: shuri_blast_spin_8
+  - first:
+      213: 2381677963642711102
+    second: shuri_blast_spin_9
+  - first:
+      213: 3401458449362954070
+    second: shuri_blast_spin_10
+  - first:
+      213: 4581294285322213350
+    second: shuri_blast_spin_11
+  - first:
+      213: 3278898129821595388
+    second: shuri_blast_spin_12
+  - first:
+      213: 3847334575687188644
+    second: shuri_blast_spin_13
+  - first:
+      213: 1604590529951678744
+    second: shuri_blast_spin_14
+  - first:
+      213: 3407857654785221988
+    second: shuri_blast_spin_15
+  - first:
+      213: 1297833396480978957
+    second: shuri_blast_spin_16
+  - first:
+      213: 2749467338161774766
+    second: shuri_blast_spin_17
+  - first:
+      213: 4441352522083611733
+    second: shuri_blast_spin_18
+  - first:
+      213: 3748711865329427180
+    second: shuri_blast_spin_19
+  - first:
+      213: 4398206576619244027
+    second: shuri_blast_spin_20
+  - first:
+      213: 4444916653460562292
+    second: shuri_blast_spin_21
+  - first:
+      213: 2793522340722941761
+    second: shuri_blast_spin_22
+  - first:
+      213: 1923094708398498144
+    second: shuri_blast_spin_23
+  - first:
+      213: 4138940083045796124
+    second: shuri_blast_spin_24
+  - first:
+      213: 3111673485073105888
+    second: shuri_blast_spin_25
+  - first:
+      213: 2654644386988133795
+    second: shuri_blast_spin_26
+  - first:
+      213: 3016608862704545998
+    second: shuri_blast_spin_27
+  - first:
+      213: 3223047802848844915
+    second: shuri_blast_spin_28
+  - first:
+      213: 3679953455437512962
+    second: shuri_blast_spin_29
+  - first:
+      213: 3280461223956050450
+    second: shuri_blast_spin_30
+  - first:
+      213: 2490840858714930148
+    second: shuri_blast_spin_31
+  - first:
+      213: 3218036773124045621
+    second: shuri_blast_spin_32
+  - first:
+      213: 4056434485780992002
+    second: shuri_blast_spin_33
+  - first:
+      213: 2148162303229398504
+    second: shuri_blast_spin_34
+  - first:
+      213: 4455265416395922486
+    second: shuri_blast_spin_35
+  - first:
+      213: 2231195494976405536
+    second: shuri_blast_spin_36
+  - first:
+      213: 3190699249578701018
+    second: shuri_blast_spin_37
+  - first:
+      213: 2380213876743977989
+    second: shuri_blast_spin_38
+  - first:
+      213: 2036057158228123983
+    second: shuri_blast_spin_39
+  - first:
+      213: 3863882957831001982
+    second: shuri_blast_spin_40
+  - first:
+      213: 1905773190872876460
+    second: shuri_blast_spin_41
+  - first:
+      213: 4328758516803503214
+    second: shuri_blast_spin_42
+  - first:
+      213: 3917694578355191482
+    second: shuri_blast_spin_43
+  - first:
+      213: 3026618347077954224
+    second: shuri_blast_spin_44
+  - first:
+      213: 2039629885586623490
+    second: shuri_blast_spin_45
+  - first:
+      213: 4009846852743159529
+    second: shuri_blast_spin_46
+  - first:
+      213: 1420687259217486712
+    second: shuri_blast_spin_47
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 8192
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 8192
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 8192
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: shuri_blast_spin_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 586ef5d6d4524076938cb49a0ea9ccd7
+      internalID: 2929191061464728564
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_1
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f28a98da18724c5eac040551c02b8210
+      internalID: 1758348326791897792
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_2
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e741a0b4b5d44eb8e7362e7343d868b
+      internalID: 2205288622658223796
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_3
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d1ac423a5a6414cb3f0eb4a8bd884d3
+      internalID: 4164246774309326024
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_4
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9aa32d2f1c5a48a4ac7f2344347f846b
+      internalID: 2850294170199004976
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_5
+      rect:
+        serializedVersion: 2
+        x: 560
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d47e9adc864b493191fc975fe871b2dc
+      internalID: 3302058023474358227
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_6
+      rect:
+        serializedVersion: 2
+        x: 672
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0316994119ce498297539faaaacc1d8f
+      internalID: 4415377424597906136
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_7
+      rect:
+        serializedVersion: 2
+        x: 784
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 207985e90fac4cd185fed72baa9ca89c
+      internalID: 2661996206629442217
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_8
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 02406e384d77429f8da1a204b328b2f0
+      internalID: 3284988964394822681
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_9
+      rect:
+        serializedVersion: 2
+        x: 1008
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bbfb32baaa064ff286dd7f0c72ef415e
+      internalID: 2381677963642711102
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_10
+      rect:
+        serializedVersion: 2
+        x: 1120
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1eb3ded72e99488bab066c3d434d63f3
+      internalID: 3401458449362954070
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_11
+      rect:
+        serializedVersion: 2
+        x: 1232
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5a7501549ebd4a8083e6de3f489390ce
+      internalID: 4581294285322213350
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_12
+      rect:
+        serializedVersion: 2
+        x: 1344
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0cc55f0733584502ba06bec315961621
+      internalID: 3278898129821595388
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_13
+      rect:
+        serializedVersion: 2
+        x: 1456
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5487905ac0db453f852bd987155b27b7
+      internalID: 3847334575687188644
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_14
+      rect:
+        serializedVersion: 2
+        x: 1568
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cc87e2968513456ebd29077f261f568c
+      internalID: 1604590529951678744
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_15
+      rect:
+        serializedVersion: 2
+        x: 1680
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf5a20936a774c7eb214f205cf1c61d3
+      internalID: 3407857654785221988
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_16
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9950d354971f4331ad13e5320fa1a588
+      internalID: 1297833396480978957
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_17
+      rect:
+        serializedVersion: 2
+        x: 1904
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e1f4691caaa946f6a389e595071f0a44
+      internalID: 2749467338161774766
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_18
+      rect:
+        serializedVersion: 2
+        x: 2016
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2e25554719fd400194d5320990efe812
+      internalID: 4441352522083611733
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_19
+      rect:
+        serializedVersion: 2
+        x: 2128
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9c2b181766594ca1870aef2aa8129813
+      internalID: 3748711865329427180
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_20
+      rect:
+        serializedVersion: 2
+        x: 2240
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d6367598775b440dadad466a50626390
+      internalID: 4398206576619244027
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_21
+      rect:
+        serializedVersion: 2
+        x: 2352
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 43541743e6f1455590dd5b6ad8d063bd
+      internalID: 4444916653460562292
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_22
+      rect:
+        serializedVersion: 2
+        x: 2464
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 61659676beab4688835f5bc0ec5ba323
+      internalID: 2793522340722941761
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_23
+      rect:
+        serializedVersion: 2
+        x: 2576
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c8c7d2cd612848aaa4d6c8a8a1819611
+      internalID: 1923094708398498144
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_24
+      rect:
+        serializedVersion: 2
+        x: 2688
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5f9fb38761ef42998dc1deb109a9cedb
+      internalID: 4138940083045796124
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_25
+      rect:
+        serializedVersion: 2
+        x: 2800
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c386b61f72a24fbb94afeef9c84cf08c
+      internalID: 3111673485073105888
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_26
+      rect:
+        serializedVersion: 2
+        x: 2912
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0dfed7e13c404d0fbeb0c454587def23
+      internalID: 2654644386988133795
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_27
+      rect:
+        serializedVersion: 2
+        x: 3024
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0af2c1c5fba944549f5a0fab3d806193
+      internalID: 3016608862704545998
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_28
+      rect:
+        serializedVersion: 2
+        x: 3136
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5388d92000014d8ba20341d82ddf45c2
+      internalID: 3223047802848844915
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_29
+      rect:
+        serializedVersion: 2
+        x: 3248
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 03f4cb0323d8494497b91dc46f6c4626
+      internalID: 3679953455437512962
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_30
+      rect:
+        serializedVersion: 2
+        x: 3360
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c5ca4914bc5b4bddbe81dcea2123e812
+      internalID: 3280461223956050450
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_31
+      rect:
+        serializedVersion: 2
+        x: 3472
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f5b7066c168c4f76bd30a67d07835f80
+      internalID: 2490840858714930148
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_32
+      rect:
+        serializedVersion: 2
+        x: 3584
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b4277dea903452cb1fc7d13812c2c80
+      internalID: 3218036773124045621
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_33
+      rect:
+        serializedVersion: 2
+        x: 3696
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d9609d0a5ce49c98b6ca04eecef4b4e
+      internalID: 4056434485780992002
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_34
+      rect:
+        serializedVersion: 2
+        x: 3808
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f82ebbc2da1141a8965b90b94462c233
+      internalID: 2148162303229398504
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_35
+      rect:
+        serializedVersion: 2
+        x: 3920
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7b6b2c480c6c4a9f8d426ccdbdf71745
+      internalID: 4455265416395922486
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_36
+      rect:
+        serializedVersion: 2
+        x: 4032
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: af206cad97bc4dbfb58ef0d168b3c628
+      internalID: 2231195494976405536
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_37
+      rect:
+        serializedVersion: 2
+        x: 4144
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 11722bb2e15b454aaafc20eb4599d9ba
+      internalID: 3190699249578701018
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_38
+      rect:
+        serializedVersion: 2
+        x: 4256
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 43cced8cee9946aaa6e80f6ee54d4da4
+      internalID: 2380213876743977989
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_39
+      rect:
+        serializedVersion: 2
+        x: 4368
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 809293c43b5d4f66b36988d12401b431
+      internalID: 2036057158228123983
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_40
+      rect:
+        serializedVersion: 2
+        x: 4480
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e5c83a3c195d4b578422a9822509c30c
+      internalID: 3863882957831001982
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_41
+      rect:
+        serializedVersion: 2
+        x: 4592
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 849a8250b4f141d380514e8f6fc95f73
+      internalID: 1905773190872876460
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_42
+      rect:
+        serializedVersion: 2
+        x: 4704
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a92d3de07ed546148daecb1c5df861d3
+      internalID: 4328758516803503214
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_43
+      rect:
+        serializedVersion: 2
+        x: 4816
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1f881fdcbcd74425b35faf840cd6a3e2
+      internalID: 3917694578355191482
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_44
+      rect:
+        serializedVersion: 2
+        x: 4928
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bb93e90eef5e4339bc83db6b1ac55aa3
+      internalID: 3026618347077954224
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_45
+      rect:
+        serializedVersion: 2
+        x: 5040
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 50195f7e468741ffba977755d0538f45
+      internalID: 2039629885586623490
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_46
+      rect:
+        serializedVersion: 2
+        x: 5152
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 37d5a848412c42808f92a0508cbb8e1a
+      internalID: 4009846852743159529
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shuri_blast_spin_47
+      rect:
+        serializedVersion: 2
+        x: 5264
+        y: 0
+        width: 112
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 11e84b68fe2946638c8b5193a505f44f
+      internalID: 1420687259217486712
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      shuri_blast_spin_0: 2929191061464728564
+      shuri_blast_spin_1: 1758348326791897792
+      shuri_blast_spin_10: 3401458449362954070
+      shuri_blast_spin_11: 4581294285322213350
+      shuri_blast_spin_12: 3278898129821595388
+      shuri_blast_spin_13: 3847334575687188644
+      shuri_blast_spin_14: 1604590529951678744
+      shuri_blast_spin_15: 3407857654785221988
+      shuri_blast_spin_16: 1297833396480978957
+      shuri_blast_spin_17: 2749467338161774766
+      shuri_blast_spin_18: 4441352522083611733
+      shuri_blast_spin_19: 3748711865329427180
+      shuri_blast_spin_2: 2205288622658223796
+      shuri_blast_spin_20: 4398206576619244027
+      shuri_blast_spin_21: 4444916653460562292
+      shuri_blast_spin_22: 2793522340722941761
+      shuri_blast_spin_23: 1923094708398498144
+      shuri_blast_spin_24: 4138940083045796124
+      shuri_blast_spin_25: 3111673485073105888
+      shuri_blast_spin_26: 2654644386988133795
+      shuri_blast_spin_27: 3016608862704545998
+      shuri_blast_spin_28: 3223047802848844915
+      shuri_blast_spin_29: 3679953455437512962
+      shuri_blast_spin_3: 4164246774309326024
+      shuri_blast_spin_30: 3280461223956050450
+      shuri_blast_spin_31: 2490840858714930148
+      shuri_blast_spin_32: 3218036773124045621
+      shuri_blast_spin_33: 4056434485780992002
+      shuri_blast_spin_34: 2148162303229398504
+      shuri_blast_spin_35: 4455265416395922486
+      shuri_blast_spin_36: 2231195494976405536
+      shuri_blast_spin_37: 3190699249578701018
+      shuri_blast_spin_38: 2380213876743977989
+      shuri_blast_spin_39: 2036057158228123983
+      shuri_blast_spin_4: 2850294170199004976
+      shuri_blast_spin_40: 3863882957831001982
+      shuri_blast_spin_41: 1905773190872876460
+      shuri_blast_spin_42: 4328758516803503214
+      shuri_blast_spin_43: 3917694578355191482
+      shuri_blast_spin_44: 3026618347077954224
+      shuri_blast_spin_45: 2039629885586623490
+      shuri_blast_spin_46: 4009846852743159529
+      shuri_blast_spin_47: 1420687259217486712
+      shuri_blast_spin_5: 3302058023474358227
+      shuri_blast_spin_6: 4415377424597906136
+      shuri_blast_spin_7: 2661996206629442217
+      shuri_blast_spin_8: 3284988964394822681
+      shuri_blast_spin_9: 2381677963642711102
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:
