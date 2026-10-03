@@ -33,7 +33,7 @@ public class RandomVoidSpike : Weapon
         // Bewusst ohne CurrentDuration: das ist der Abstand zwischen zwei Spikes,
         // ein laengerer Wert waere hier eine Verschlechterung.
         float spawnDelay = stats[weaponLevel].duration;   // Zeit zwischen Spawns
-        float lifeTime = 0.75f;      // Lebensdauer pro Spike
+        float lifeTime = 0.82f;      // Lebensdauer pro Spike = Laenge von Voidspike.anim (Tools/void_spike.py)
         Scene gameScene = RunScene.Current;
         for (int i = 0; i < count; i++)
         {

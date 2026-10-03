@@ -14,6 +14,10 @@ using UnityEngine.UI;
 /// Bilanz zaehlt Zeile fuer Zeile hoch, dann die Beute, der Build Kachel fuer
 /// Kachel und zuletzt, was neu freigeschaltet wurde. Klick oder Taste
 /// ueberspringt den Auftritt; erst danach zaehlen die Knoepfe.
+///
+/// Der Win-Screen nach dem Boss ist dieselbe Seite in Festtagsfarben: WinPanel
+/// statt GameOverPanel schaltet sie an. Dann goldener Titel, die Figur huepft
+/// lebendig im Portraet, eine Krone faellt ihr auf den Kopf, Konfetti regnet.
 /// </summary>
 public partial class LevelUpScreen
 {
@@ -45,6 +49,18 @@ public partial class LevelUpScreen
     private int deathTileCount, newCount;
     private Sprite deadSprite;
 
+    // ---- Sieg ----
+    private const int ConfettiCount = 36;
+    private const float TCrown = 0.85f;
+    private const int WinFigure = 64;   // Zielgroesse der Figur im Portraet, in UI-Pixeln
+    private bool deathWon;
+    private Image crown, winImage;
+    private RectTransform winWindow;
+    private int crownX, crownY;
+    private Sprite winSprite;
+    private Vector2 winOffset;
+    private readonly List<Confetti> confetti = new List<Confetti>();
+
     // ==================================================================
     //  Aufbau
     // ==================================================================
@@ -53,6 +69,16 @@ public partial class LevelUpScreen
     {
         deathLayer = NewRect("Death", page);
         Place(deathLayer, new RectInt(0, 0, RefW, RefH));
+
+        // Konfetti zuerst - es rieselt hinter allen Karten.
+        var rng = new System.Random(7);
+        Color32[] confettiColors =
+        {
+            GameHudSkin.Gold, GameHudSkin.GoldLight, GameHudSkin.Jam, GameHudSkin.JamLight,
+            GameHudSkin.Icing, GameHudSkin.IcingLight, GameHudSkin.Mint, GameHudSkin.Cream,
+        };
+        for (int i = 0; i < ConfettiCount; i++)
+            confetti.Add(new Confetti(this, deathLayer, rng, confettiColors[i % confettiColors.Length]));
 
         deathTailL = Img("TailL", deathLayer, new RectInt(0, DeathTitleY + 4, 12, 16), GameHudSkin.RibbonTail(true), Color.white).rectTransform;
         deathTailR = Img("TailR", deathLayer, new RectInt(0, DeathTitleY + 4, 12, 16), GameHudSkin.RibbonTail(false), Color.white).rectTransform;
@@ -72,11 +98,26 @@ public partial class LevelUpScreen
         Img("BandLow", portraitRoot, new RectInt(4, 50, inner, inner - 46), GameHudSkin.White, GameHudSkin.ParchDark);
         portraitImage = Img("Dead", portraitRoot, new RectInt(4, 4, inner, inner), null, Color.white);
         portraitImage.preserveAspect = true;
+        // Sieg: die Figur wie im Medaillon oben links, in einem Fenster - was
+        // heraussteht (Schwert des Zwiebelritters), schneidet es ab.
+        winWindow = NewRect("WinWindow", portraitRoot);
+        Place(winWindow, new RectInt(4, 4, inner, inner));
+        winWindow.gameObject.AddComponent<RectMask2D>();
+        winImage = Img("Winner", winWindow, new RectInt(0, 0, inner, inner), null, Color.white);
+        RectTransform wr = winImage.rectTransform;
+        wr.anchorMin = wr.anchorMax = wr.pivot = new Vector2(0.5f, 0.5f);
         portraitCrack = Img("Crack", portraitRoot, new RectInt(0, 0, PortraitS, PortraitS), GameHudSkin.Ring, Color.clear, true);
         portraitBadge = Img("Badge", portraitRoot, new RectInt(PortraitS / 2 - 20, PortraitS - 6, 40, BadgeH), GameHudSkin.Badge,
                             Color.white, true).rectTransform;
         portraitBadgeText = Text("BadgeText", portraitBadge, new RectInt(0, 0, 40, BadgeH), SizeText, GameHudSkin.Ink,
                                  TextAlignmentOptions.Center, TextStyle.Plain);
+
+        // Krone sitzt auf der Oberkante des Rahmens, doppelt gross.
+        Sprite crownSprite = GameHudSkin.Crown;
+        int cw = Mathf.RoundToInt(crownSprite.rect.width) * 2, ch = Mathf.RoundToInt(crownSprite.rect.height) * 2;
+        crownX = (PortraitS - cw) / 2;
+        crownY = -ch + 6;
+        crown = Img("Crown", portraitRoot, new RectInt(crownX, crownY, cw, ch), crownSprite, Color.white);
 
         // ---- Bilanz ----
         statsRoot = NewRect("Stats", deathLayer);
@@ -122,9 +163,10 @@ public partial class LevelUpScreen
         inputFrom = now + 0.5f;
         PlayerController p = PlayerController.Instance;
         GameManager gm = GameManager.Instance;
+        deathWon = ui.WinPanel != null && ui.WinPanel.activeInHierarchy;
 
         // ---- Titel ----
-        deathTitle.Set(Loc.Get("ui.death.title", "CRUMBLED!"));
+        deathTitle.Set(deathWon ? Loc.Get("ui.win.title", "VICTORY!") : Loc.Get("ui.death.title", "CRUMBLED!"));
         int w = Mathf.CeilToInt(deathTitle.Width) + 28;
         w += w & 1;
         int x = (RefW - w) / 2;
@@ -135,31 +177,27 @@ public partial class LevelUpScreen
         deathTailL.anchoredPosition = new Vector2(x - 8, -(DeathTitleY + 4));
         deathTailR.anchoredPosition = new Vector2(x + w - 4, -(DeathTitleY + 4));
         SetPivotMiddle(deathRibbon);
-        deathSubtitle.Set(Loc.Get("ui.death.subtitle", "Your cookie crumbled - but your progress stays!"));
+        deathSubtitle.Set(deathWon
+            ? Loc.Get("ui.win.subtitle", "The boss is crumbs - your cookie wins!")
+            : Loc.Get("ui.death.subtitle", "Your cookie crumbled - but your progress stays!"));
 
-        // ---- Portraet: das Todesbild aus dem alten Panel ----
+        // ---- Portraet: Todesbild aus dem alten Panel, beim Sieg die lebende Figur ----
+        // Das alte WinPanel traegt ebenfalls das Todesbild - nur abschalten.
+        HideLegacySprites(ui.WinPanel);
         if (deadSprite == null) deadSprite = FindDeadSprite();
-        Sprite portrait = deadSprite;
-        if (portrait == null && p != null)
+        Sprite portrait = deathWon ? null : deadSprite;
+        if (!deathWon && portrait == null && p != null)
         {
             SpriteRenderer sr = p.GetComponentInChildren<SpriteRenderer>(true);
             if (sr != null) portrait = sr.sprite;
         }
         portraitImage.sprite = portrait;
         portraitImage.enabled = portrait != null;
-        if (portrait != null)
-        {
-            // Ganze Vergroesserung, bei grossen Bildern ein ganzer Teiler
-            // (1/2, 1/3, ...) - so bleibt jeder Pixel gleich breit.
-            int inner = PortraitS - 8;
-            int sw = Mathf.RoundToInt(portrait.rect.width), sh = Mathf.RoundToInt(portrait.rect.height);
-            int m = Mathf.Max(1, Mathf.Max(sw, sh));
-            float scale = m <= inner ? Mathf.Max(1, inner / m) : 1f / Mathf.CeilToInt(m / (float)inner);
-            int dw = Mathf.RoundToInt(sw * scale), dh = Mathf.RoundToInt(sh * scale);
-            RectTransform pr = portraitImage.rectTransform;
-            pr.sizeDelta = new Vector2(dw, dh);
-            pr.anchoredPosition = new Vector2(4 + (inner - dw) / 2, -(4 + (inner - dh) / 2));
-        }
+        if (portrait != null) FitPortrait(portrait);
+        SetActive(winWindow, deathWon);
+        winSprite = null;
+        if (deathWon) ShowWinner();
+        SetActive(crown, false);
         int level = p != null ? p.currentLevel : 1;
         portraitBadgeText.Set(Loc.Get("ui.hud.level", "LV") + " " + level);
         int bw = Mathf.CeilToInt(portraitBadgeText.Width) + 8;
@@ -170,7 +208,7 @@ public partial class LevelUpScreen
 
         // ---- Bilanz ----
         float time = gm != null ? gm.gameTime : 0f;
-        statRows[0].Set(GameHudSkin.Clock, Loc.Get("ui.death.time", "SURVIVED"), time, v =>
+        statRows[0].Set(GameHudSkin.Clock, deathWon ? Loc.Get("ui.win.time", "TIME") : Loc.Get("ui.death.time", "SURVIVED"), time, v =>
         {
             int s = Mathf.FloorToInt(v);
             return (s / 60) + ":" + (s % 60).ToString("00");
@@ -240,6 +278,7 @@ public partial class LevelUpScreen
         newCount = Mathf.Min(items.Count, newEntries.Count);
         newLabel.Set(items.Count > 0
             ? Loc.Get("ui.death.new", "NEW UNLOCKS") + (items.Count > newEntries.Count ? "  (+" + (items.Count - newEntries.Count) + ")" : "")
+            : deathWon ? Loc.Get("ui.win.new_none", "NOTHING NEW - BUT A WIN!")
             : Loc.Get("ui.death.new_none", "NOTHING NEW - NEXT TIME!"));
         newLabel.SetColor(items.Count > 0 ? GameHudSkin.GoldLight : GameHudSkin.StoneLight);
         for (int i = 0; i < newEntries.Count; i++)
@@ -257,6 +296,22 @@ public partial class LevelUpScreen
         menuButton.SetCount("", false);
     }
 
+    /// <summary>
+    /// Ganze Vergroesserung, bei grossen Bildern ein ganzer Teiler
+    /// (1/2, 1/3, ...) - so bleibt jeder Pixel gleich breit.
+    /// </summary>
+    private void FitPortrait(Sprite portrait)
+    {
+        int inner = PortraitS - 8;
+        int sw = Mathf.RoundToInt(portrait.rect.width), sh = Mathf.RoundToInt(portrait.rect.height);
+        int m = Mathf.Max(1, Mathf.Max(sw, sh));
+        float scale = m <= inner ? Mathf.Max(1, inner / m) : 1f / Mathf.CeilToInt(m / (float)inner);
+        int dw = Mathf.RoundToInt(sw * scale), dh = Mathf.RoundToInt(sh * scale);
+        RectTransform pr = portraitImage.rectTransform;
+        pr.sizeDelta = new Vector2(dw, dh);
+        pr.anchoredPosition = new Vector2(4 + (inner - dw) / 2, -(4 + (inner - dh) / 2));
+    }
+
     /// <summary>Das gemalte Todesbild haengt als SpriteRenderer im alten Panel - Bild merken, Renderer aus.</summary>
     private Sprite FindDeadSprite()
     {
@@ -268,6 +323,42 @@ public partial class LevelUpScreen
             sr.enabled = false;
         }
         return found;
+    }
+
+    /// <summary>
+    /// Dieselbe Figur wie im Medaillon oben links (GameHud: Idle von vorn,
+    /// atmet weiter). Skaliert wie dort nach dem Koerper, nur auf 64 statt 32.
+    /// </summary>
+    private void ShowWinner()
+    {
+        Sprite s = GameHud.PortraitFrame;
+        if (s == null && PlayerController.Instance != null)
+        {
+            SpriteRenderer sr = PlayerController.Instance.GetComponentInChildren<SpriteRenderer>(true);
+            if (sr != null) s = sr.sprite;
+        }
+        winImage.enabled = s != null;
+        if (s == null || s == winSprite) return;
+
+        winSprite = s;
+        winImage.sprite = s;
+        Rect body = CharacterLooks.BodyRect(s);
+        float tex = Mathf.Max(body.width, body.height);
+        float k = tex <= WinFigure ? Mathf.Floor(WinFigure / tex) : 1f / Mathf.Ceil(tex / WinFigure);
+        int w = Mathf.Max(2, Mathf.RoundToInt(s.rect.width * k) & ~1);
+        int h = Mathf.Max(2, Mathf.RoundToInt(s.rect.height * k) & ~1);
+        winImage.rectTransform.sizeDelta = new Vector2(w, h);
+        // Koerper mittig, die Fuesse etwas tiefer als die Mitte.
+        winOffset = new Vector2(Mathf.Round((s.rect.width / 2f - body.center.x) * k),
+                                Mathf.Round((s.rect.height / 2f - body.center.y) * k) - 2f);
+        SetPos(winImage.rectTransform, winOffset.x, winOffset.y);
+    }
+
+    private static void HideLegacySprites(GameObject panel)
+    {
+        if (panel == null) return;
+        foreach (SpriteRenderer sr in panel.GetComponentsInChildren<SpriteRenderer>(true))
+            sr.enabled = false;
     }
 
     private static void SetPivotMiddle(RectTransform r)
@@ -287,9 +378,11 @@ public partial class LevelUpScreen
     {
         float t = now - deathOpened;
 
-        // Etwas roetlicher und dunkler als die Auswahl-Fenster.
+        // Tod: etwas roetlicher und dunkler als die Auswahl-Fenster. Sieg: warmes Braungold.
         Color bc = backdrop.color;
-        backdrop.color = new Color(0.11f, 0.04f, 0.06f, Mathf.MoveTowards(bc.a, 0.96f, Time.unscaledDeltaTime * 3f));
+        backdrop.color = deathWon
+            ? new Color(0.12f, 0.08f, 0.03f, Mathf.MoveTowards(bc.a, 0.94f, Time.unscaledDeltaTime * 3f))
+            : new Color(0.11f, 0.04f, 0.06f, Mathf.MoveTowards(bc.a, 0.96f, Time.unscaledDeltaTime * 3f));
 
         // Klick oder Taste waehrend des Auftritts: sofort alles zeigen.
         if (t < TDone && now >= inputFrom
@@ -308,8 +401,11 @@ public partial class LevelUpScreen
         SetActive(deathRibbon, ribbonOn);
         SetActive(deathTailL, ribbonOn && tt >= 0.12f);
         SetActive(deathTailR, ribbonOn && tt >= 0.12f);
-        deathTitle.SetColor(tt >= 0f && tt < 0.5f && Mathf.Repeat(tt * 10f, 1f) < 0.5f
-                                ? (Color)GameHudSkin.JamLight : (Color)GameHudSkin.Cream);
+        // Tod blinkt rot, Sieg glitzert gold - und hoert damit nicht auf.
+        bool blink = deathWon
+            ? tt >= 0f && (tt < 0.5f ? Mathf.Repeat(tt * 10f, 1f) < 0.5f : Mathf.Repeat(now * 0.8f, 1f) < 0.12f)
+            : tt >= 0f && tt < 0.5f && Mathf.Repeat(tt * 10f, 1f) < 0.5f;
+        deathTitle.SetColor(blink ? (Color)(deathWon ? GameHudSkin.GoldLight : GameHudSkin.JamLight) : (Color)GameHudSkin.Cream);
         deathSubtitle.SetActive(t > TPortrait);
 
         // Einschlag: die ganze Seite ruckt kurz.
@@ -323,11 +419,19 @@ public partial class LevelUpScreen
         {
             int rise = pt < 0.06f ? 10 : pt < 0.12f ? 4 : pt < 0.18f ? -1 : 0;
             SetPos(portraitRoot, PortraitX, -(PortraitY + rise));
-            // Das Portraet pocht zweimal rot - dann bleibt es grau.
-            bool pulse = pt < 0.8f && Mathf.Repeat(pt * 5f, 1f) < 0.5f;
-            SetColor(portraitCrack, pulse ? (Color)GameHudSkin.Jam : new Color(0f, 0f, 0f, 0f));
-            SetColor(portraitImage, pt < 0.8f ? Color.white : new Color(0.82f, 0.78f, 0.8f, 1f));
+            if (deathWon) AnimateWinPortrait(now, pt);
+            else
+            {
+                // Das Portraet pocht zweimal rot - dann bleibt es grau.
+                bool pulse = pt < 0.8f && Mathf.Repeat(pt * 5f, 1f) < 0.5f;
+                SetColor(portraitCrack, pulse ? (Color)GameHudSkin.Jam : new Color(0f, 0f, 0f, 0f));
+                SetColor(portraitImage, pt < 0.8f ? Color.white : new Color(0.82f, 0.78f, 0.8f, 1f));
+            }
         }
+
+        // ---- Konfetti: setzt mit dem Titel ein ----
+        for (int i = 0; i < confetti.Count; i++)
+            confetti[i].Animate(now, deathWon ? tt - 0.12f : -1f);
 
         // ---- Bilanz ----
         SetActive(statsRoot, t >= TStats - 0.1f);
@@ -385,9 +489,69 @@ public partial class LevelUpScreen
         }
     }
 
+    /// <summary>
+    /// Sieger-Portraet: die Figur huepft, der Rahmen glueht gold, und kurz
+    /// danach faellt die Krone herein.
+    /// </summary>
+    private void AnimateWinPortrait(float now, float pt)
+    {
+        bool pulse = pt < 0.8f && Mathf.Repeat(pt * 5f, 1f) < 0.5f;
+        Color ring = pulse ? (Color)GameHudSkin.GoldLight : (Color)GameHudSkin.Gold;
+        if (!pulse) ring.a = pt < 0.8f ? 0f : Mathf.Repeat(now * 1.2f, 1f) < 0.5f ? 0.45f : 0.2f;
+        SetColor(portraitCrack, ring);
+
+        ShowWinner();
+
+        // Kleiner Freudensprung alle 0.7 s.
+        float hop = Mathf.Repeat(pt, 0.7f);
+        int lift = hop < 0.08f ? 2 : hop < 0.16f ? 3 : hop < 0.24f ? 1 : 0;
+        SetPos(winImage.rectTransform, winOffset.x, winOffset.y + lift);
+
+        // Krone: faellt von oben, prallt einmal ab, sitzt.
+        float ct = pt - (TCrown - TPortrait);
+        SetActive(crown, ct >= 0f);
+        if (ct >= 0f)
+        {
+            int drop = ct < 0.05f ? -24 : ct < 0.1f ? -10 : ct < 0.15f ? 2 : ct < 0.2f ? -2 : 0;
+            SetPos(crown.rectTransform, crownX, -(crownY + drop));
+        }
+    }
+
     // ==================================================================
     //  Bausteine
     // ==================================================================
+
+    /// <summary>Ein Konfettischnipsel: faellt, pendelt, dreht sich (2x3 und 3x2 im Wechsel).</summary>
+    private sealed class Confetti
+    {
+        private readonly RectTransform root;
+        private readonly float x0, speed, phase, sway, flip;
+
+        public Confetti(LevelUpScreen s, Transform parent, System.Random rng, Color color)
+        {
+            x0 = (float)rng.NextDouble() * RefW;
+            speed = 28f + (float)rng.NextDouble() * 34f;
+            phase = (float)rng.NextDouble() * (RefH + 20);
+            sway = 2f + (float)rng.NextDouble() * 6f;
+            flip = 0.12f + (float)rng.NextDouble() * 0.2f;
+            root = s.Img("Confetti", parent, new RectInt(0, 0, 2, 3), GameHudSkin.White, color).rectTransform;
+            root.gameObject.SetActive(false);
+        }
+
+        public void Animate(float now, float t)
+        {
+            SetActive(root, t >= 0f);
+            if (t < 0f) return;
+            // Erst ein Schwall von oben (alle starten ueber dem Bild), dann
+            // verteilt sich der Regen ueber die ganze Hoehe.
+            float y = Mathf.Repeat(phase * Mathf.Min(1f, t * 0.5f) + speed * t, RefH + 20) - 10;
+            float x = x0 + Mathf.Sin(now * 2f + phase) * sway;
+            bool wide = Mathf.Repeat(now + phase, flip * 2f) < flip;
+            var size = wide ? new Vector2(3, 2) : new Vector2(2, 3);
+            if (root.sizeDelta != size) root.sizeDelta = size;
+            SetPos(root, Mathf.Round(x), -Mathf.Round(y));
+        }
+    }
 
     /// <summary>Zeile der Bilanz: Symbol, Beschriftung, Wert zaehlt hoch.</summary>
     private sealed class DeathStatRow

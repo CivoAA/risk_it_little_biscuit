@@ -384,9 +384,9 @@ public class CatalogTests
         AssertNoArchived(WavePlans.World2Demo());
     }
 
-    /// <summary>Demo: Boss bei 13:00, danach beendet der Todes-Ramen den Lauf.</summary>
+    /// <summary>Demo: Boss bei 13:00, danach beendet der Verkohlte als Tod den Lauf.</summary>
     [Test]
-    public void World2Demo_Boss_bei_13_Minuten_und_Todes_Ramen_danach()
+    public void World2Demo_Boss_bei_13_Minuten_und_Verkohlter_Tod_danach()
     {
         RunPlan plan = WavePlans.World2Demo();
 
@@ -400,8 +400,8 @@ public class CatalogTests
         }
 
         Assert.AreEqual(780f, bossAt, 0.01f, "Boss soll bei 13:00 kommen.");
-        Assert.AreEqual(EnemyId.TodesRamen, plan.Finisher);
-        Assert.AreEqual(EnemyRole.DeathBoss, EnemyCatalog.Get(EnemyId.TodesRamen).Role);
+        Assert.AreEqual(EnemyId.VerkohlterTod, plan.Finisher);
+        Assert.AreEqual(EnemyRole.DeathBoss, EnemyCatalog.Get(EnemyId.VerkohlterTod).Role);
     }
 
     [Test]

@@ -533,6 +533,10 @@
     { "key": "ui.death.to_hub", "value": "TO THE HUB" },
     { "key": "ui.death.again", "value": "AGAIN" },
     { "key": "ui.death.menu", "value": "MAIN MENU" },
+    { "key": "ui.win.title", "value": "VICTORY!" },
+    { "key": "ui.win.subtitle", "value": "The boss is crumbs - your cookie wins!" },
+    { "key": "ui.win.time", "value": "TIME" },
+    { "key": "ui.win.new_none", "value": "NOTHING NEW - BUT A WIN!" },
 
     { "key": "ui.options.btn.done", "value": "DONE" },
     { "key": "ui.options.btn.feedback", "value": "FEEDBACK" },
@@ -699,6 +703,10 @@
     { "key": "enemy.KeksKoenig.name", "value": "Cookie King" },
     { "key": "enemy.Glutwurz.name", "value": "Emberroot" },
     { "key": "enemy.Schleimkoenig.name", "value": "Slime King" },
+    { "key": "enemy.Verkohlter.name", "value": "The Charred One" },
+    { "key": "enemy.VerkohlterTod.name", "value": "The Charred One" },
+    { "key": "boss.verkohlter.death", "value": "DEATH IS COMING FOR YOU!" },
+    { "key": "boss.verkohlter.phase2", "value": "THE CHARRED ONE SPLITS!" },
     { "key": "ui.levelselect.recordstory", "value": "FASTEST WIN" },
     { "key": "ui.levelselect.recordendless", "value": "LONGEST SURVIVAL" }
   ]
