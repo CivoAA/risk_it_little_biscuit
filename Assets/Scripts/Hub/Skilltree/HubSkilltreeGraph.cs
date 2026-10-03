@@ -407,8 +407,7 @@ public sealed class HubSkilltreeGraph : System.IDisposable
             // Symbol: eigenes Bild gewinnt, sonst Haken bzw. Schloss.
             Sprite symbol = null;
             Color symbolColor = Color.white;
-            // In der Demo gesperrte Kategorie: immer das Schloss, auch ueber eigenen Bildern.
-            if (d.Icon != null && (d.IsStart || !Skills.IsDemoLocked(d)))
+            if (d.Icon != null)
             {
                 symbol = d.Icon;
                 symbolColor = unlocked ? Color.white : new Color(1f, 1f, 1f, open ? 0.6f : 0.35f);

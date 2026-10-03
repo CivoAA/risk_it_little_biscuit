@@ -294,9 +294,7 @@ public static class Shop
     {
         // Was es nicht (mehr) gibt, wird zum Keks. Alte Spielstaende mit Grauem/Rotem
         // Keks (bis 29.09.2026, Index 3/4) landen seit 30.09. bei Toast/Zwiebelritter.
-        // In der Demo gesperrte Charaktere ebenso (ausser in der Sandbox: Tests, Test-Szene).
-        get => Store.SkinIndex >= 0 && Store.SkinIndex < Characters.Count
-               && (sandbox || !Demo.IsCharacterLocked(Store.SkinIndex)) ? Store.SkinIndex : 0;
+        get => Store.SkinIndex >= 0 && Store.SkinIndex < Characters.Count ? Store.SkinIndex : 0;
         set
         {
             if (Store.SkinIndex == value) return;
