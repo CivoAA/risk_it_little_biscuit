@@ -119,7 +119,7 @@ MonoBehaviour:
     step: 3
     shape: 2
     price: 1
-    displayName: "Breiter Fächer"
+    displayName: "Breiter F\xE4cher"
     description: 
     icon: {fileID: 0}
     rewards:
@@ -615,13 +615,13 @@ MonoBehaviour:
     step: 2
     shape: 4
     price: 1
-    displayName: "Rückenwind"
+    displayName: "R\xFCckenwind"
     description: 
     icon: {fileID: 0}
     rewards:
     - kind: 0
-      stat: 2
-      value: 0.1
+      stat: 4
+      value: 1
       grantId: 
       descriptionOverride: 
     requires:
@@ -654,8 +654,8 @@ MonoBehaviour:
     icon: {fileID: 0}
     rewards:
     - kind: 0
-      stat: 4
-      value: 1
+      stat: 2
+      value: 0.1
       grantId: 
       descriptionOverride: 
     requires:
@@ -685,7 +685,7 @@ MonoBehaviour:
     step: 5
     shape: 3
     price: 2
-    displayName: "Sturmböe"
+    displayName: "Sturmb\xF6e"
     description: 
     icon: {fileID: 0}
     rewards:
