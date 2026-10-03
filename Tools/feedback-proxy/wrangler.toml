@@ -1,0 +1,23 @@
+name = "biscuit-feedback"
+main = "worker.js"
+compatibility_date = "2025-09-01"
+
+# Drosselung. period darf nur 10 oder 60 Sekunden sein.
+# Pro IP: 2 Nachrichten pro Minute (das Spiel selbst wartet 30 s).
+[[ratelimits]]
+name = "PER_IP"
+namespace_id = "1001"
+  [ratelimits.simple]
+  limit = 2
+  period = 60
+
+# Insgesamt: 20 Nachrichten pro Minute - Notbremse, falls jemand viele IPs hat.
+[[ratelimits]]
+name = "GLOBAL"
+namespace_id = "1002"
+  [ratelimits.simple]
+  limit = 20
+  period = 60
+
+# Der Discord-Webhook ist KEIN Eintrag hier, sondern ein Secret:
+#   npx wrangler secret put DISCORD_WEBHOOK
