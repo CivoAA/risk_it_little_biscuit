@@ -442,16 +442,14 @@ def icons():
     A = lambda p: os.path.join(ROOT, p)
     out = {}
 
-    # Waffenicon: volle 64er Aufloesung wie ingame (wie das alte Icon), Wischbogen
-    # zeigen die Drehung
+    # Waffenicon: volle 64er Aufloesung wie ingame (wie das alte Icon). Ohne
+    # Wischbogen - die vier Haken um den Stern wirkten wie ein Hakenkreuz.
     big = {"rim": 2.2, "wobble": 0.9, "edge": 1.8, "pillow": 3.0, "shade_w": 2, "deep_w": 1,
            "chips": [(0.52, -0.12, "big"), (0.78, 0.08, "small")],
-           "sugar": [(0.40, 0.35), (0.66, -0.45)],
-           "smear": (40.0, 3.5, ((0.35, 220), (0.7, 140), (1.0, 70)))}
+           "sugar": [(0.40, 0.35), (0.66, -0.45)]}
     ic, _, glaze = render(64, 29.5, 8, big)
     face_small(ic, 64, FACE_64)
     out["Assets/Art/Icons/fin_white_Shuriken.png"] = Image.fromarray(ic, "RGBA")
-    big_ach = dict(big, smear=None)
 
     # Erfolg 64: Rahmen im 32er Raster (Innenflaeche x2..30 / y2..27, Unterlinie
     # Zeile 28), der Stern darin in voller Aufloesung wie beim alten Icon
@@ -459,7 +457,7 @@ def icons():
         A("Assets/Resources/Achievements/shuri_blast_evo.png"), 2,
         (2, 2, 30, 27, "#f6d8a0"), [], (2, 28, 29, ACH_UNDERLINE),
         Image.new("RGBA", (1, 1)), (0, 0))
-    ach, _, _ = render(52, 24.0, 8, big_ach)
+    ach, _, _ = render(52, 24.0, 8, big)
     face_small(ach, 52, FACE_64)
     out["Assets/Resources/Achievements/shuri_blast_evo.png"].alpha_composite(
         Image.fromarray(ach, "RGBA"), (6, 4))
