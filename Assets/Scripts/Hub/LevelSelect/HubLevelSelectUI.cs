@@ -1443,7 +1443,7 @@ public class HubLevelSelectUI : MonoBehaviour
         {
             try
             {
-                RunPlan plan = WavePlans.For(id);
+                RunPlan plan = WavePlans.ForMap(id);
                 info = new PlanInfo { Duration = plan.TotalDuration };
                 var kinds = new HashSet<EnemyId>();
 
