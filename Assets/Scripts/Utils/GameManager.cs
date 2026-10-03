@@ -125,7 +125,7 @@ public class GameManager : MonoBehaviour
     }
     IEnumerator ShowWinScreen()
     {
-        AudioController.Instance.PalySound(AudioController.Instance.WinSound);
+        // Bewusst ohne WinSound - der Sieg-Bildschirm kommt still.
         yield return new WaitForSeconds(1.5f);
         UIController.Instance.WinPanel.SetActive(true);
         UIController.Instance.GameWinStats();

@@ -1,0 +1,679 @@
+fileFormatVersion: 2
+guid: 9dbe89839d63432ea070368063fe9fe5
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4343331385661334849
+    second: verkohlter_schatten_ausbruch_0
+  - first:
+      213: 3005340136574234788
+    second: verkohlter_schatten_ausbruch_1
+  - first:
+      213: 4526651100075948037
+    second: verkohlter_schatten_ausbruch_2
+  - first:
+      213: 4151201535981351587
+    second: verkohlter_schatten_ausbruch_3
+  - first:
+      213: 3448545491924538189
+    second: verkohlter_schatten_ausbruch_4
+  - first:
+      213: 3324010987153068994
+    second: verkohlter_schatten_ausbruch_5
+  - first:
+      213: 3553358506543307374
+    second: verkohlter_schatten_ausbruch_6
+  - first:
+      213: 3258374364724696084
+    second: verkohlter_schatten_ausbruch_7
+  - first:
+      213: 2874336175852088464
+    second: verkohlter_schatten_ausbruch_8
+  - first:
+      213: 4561190774711306239
+    second: verkohlter_schatten_ausbruch_9
+  - first:
+      213: 1748924526017649980
+    second: verkohlter_schatten_ausbruch_10
+  - first:
+      213: 1665839817801672371
+    second: verkohlter_schatten_ausbruch_11
+  - first:
+      213: 4066982478095649486
+    second: verkohlter_schatten_ausbruch_12
+  - first:
+      213: 3820867944390795625
+    second: verkohlter_schatten_ausbruch_13
+  - first:
+      213: 1597114779542737750
+    second: verkohlter_schatten_ausbruch_14
+  - first:
+      213: 3132668223990259417
+    second: verkohlter_schatten_ausbruch_15
+  - first:
+      213: 1336437485234949610
+    second: verkohlter_schatten_ausbruch_16
+  - first:
+      213: 1621246176189721511
+    second: verkohlter_schatten_ausbruch_17
+  - first:
+      213: 1577382526882147710
+    second: verkohlter_schatten_ausbruch_18
+  - first:
+      213: 3527427336199665843
+    second: verkohlter_schatten_ausbruch_19
+  - first:
+      213: 3848855499837287691
+    second: verkohlter_schatten_ausbruch_20
+  - first:
+      213: 3547621617926227123
+    second: verkohlter_schatten_ausbruch_21
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 4096
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: verkohlter_schatten_ausbruch_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.03125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a80bb636ffa450fb94a64b84b039987
+      internalID: 4343331385661334849
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_schatten_ausbruch_1
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.03125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2d97fc270ae4246be575e879e2accac
+      internalID: 3005340136574234788
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_schatten_ausbruch_2
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.03125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9def1fa2ff2d4621941cb8b961fa85cd
+      internalID: 4526651100075948037
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_schatten_ausbruch_3
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.03125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5f58aee943ab439b9238c3f90de0c31e
+      internalID: 4151201535981351587
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_schatten_ausbruch_4
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.03125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8c859fccf8e740138d5a9e137944bd87
+      internalID: 3448545491924538189
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_schatten_ausbruch_5
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.03125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 917f31f08e9b444580f134ae1ef803c9
+      internalID: 3324010987153068994
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_schatten_ausbruch_6
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.03125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 339edb268fdb47fab0d2760357d06c7d
+      internalID: 3553358506543307374
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_schatten_ausbruch_7
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.03125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f008305d7334153bb6cc3dc8e714cab
+      internalID: 3258374364724696084
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_schatten_ausbruch_8
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.03125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 79cf668c3acf4314bd0848fdb8673ff0
+      internalID: 2874336175852088464
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_schatten_ausbruch_9
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.03125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 31d0765784b54afa8baf22894d723711
+      internalID: 4561190774711306239
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_schatten_ausbruch_10
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.03125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c4ab92202b1247ed8d7b51d4d229076b
+      internalID: 1748924526017649980
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_schatten_ausbruch_11
+      rect:
+        serializedVersion: 2
+        x: 1408
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.03125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fdac2d378ba947eeaeb326f0663b577b
+      internalID: 1665839817801672371
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_schatten_ausbruch_12
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.03125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c4396e6f8ee044eaa54605c01f876b7e
+      internalID: 4066982478095649486
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_schatten_ausbruch_13
+      rect:
+        serializedVersion: 2
+        x: 1664
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.03125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8b29ea3f0365487f9c763ad995c2d0a1
+      internalID: 3820867944390795625
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_schatten_ausbruch_14
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.03125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0757fd518c4245d8abb26292ddb40a3c
+      internalID: 1597114779542737750
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_schatten_ausbruch_15
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.03125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cf9e58bc789c4b67883b015d50f340f9
+      internalID: 3132668223990259417
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_schatten_ausbruch_16
+      rect:
+        serializedVersion: 2
+        x: 2048
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.03125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f9260e2a1bf34e779638c3c01e4526ae
+      internalID: 1336437485234949610
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_schatten_ausbruch_17
+      rect:
+        serializedVersion: 2
+        x: 2176
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.03125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 12f0a14a0aa94ccbbaace6810d075fcb
+      internalID: 1621246176189721511
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_schatten_ausbruch_18
+      rect:
+        serializedVersion: 2
+        x: 2304
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.03125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba45a76a85d1403f9e65dc5552201de3
+      internalID: 1577382526882147710
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_schatten_ausbruch_19
+      rect:
+        serializedVersion: 2
+        x: 2432
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.03125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 66783f400459451db79e5f34eb25a2cf
+      internalID: 3527427336199665843
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_schatten_ausbruch_20
+      rect:
+        serializedVersion: 2
+        x: 2560
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.03125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5ea7912b21bd4e53bfd0155fb8fc32db
+      internalID: 3848855499837287691
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_schatten_ausbruch_21
+      rect:
+        serializedVersion: 2
+        x: 2688
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.03125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 423cd1a4f574479d81928bf9cb85517e
+      internalID: 3547621617926227123
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      verkohlter_schatten_ausbruch_0: 4343331385661334849
+      verkohlter_schatten_ausbruch_1: 3005340136574234788
+      verkohlter_schatten_ausbruch_10: 1748924526017649980
+      verkohlter_schatten_ausbruch_11: 1665839817801672371
+      verkohlter_schatten_ausbruch_12: 4066982478095649486
+      verkohlter_schatten_ausbruch_13: 3820867944390795625
+      verkohlter_schatten_ausbruch_14: 1597114779542737750
+      verkohlter_schatten_ausbruch_15: 3132668223990259417
+      verkohlter_schatten_ausbruch_16: 1336437485234949610
+      verkohlter_schatten_ausbruch_17: 1621246176189721511
+      verkohlter_schatten_ausbruch_18: 1577382526882147710
+      verkohlter_schatten_ausbruch_19: 3527427336199665843
+      verkohlter_schatten_ausbruch_2: 4526651100075948037
+      verkohlter_schatten_ausbruch_20: 3848855499837287691
+      verkohlter_schatten_ausbruch_21: 3547621617926227123
+      verkohlter_schatten_ausbruch_3: 4151201535981351587
+      verkohlter_schatten_ausbruch_4: 3448545491924538189
+      verkohlter_schatten_ausbruch_5: 3324010987153068994
+      verkohlter_schatten_ausbruch_6: 3553358506543307374
+      verkohlter_schatten_ausbruch_7: 3258374364724696084
+      verkohlter_schatten_ausbruch_8: 2874336175852088464
+      verkohlter_schatten_ausbruch_9: 4561190774711306239
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

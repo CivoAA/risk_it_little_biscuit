@@ -3202,6 +3202,7 @@ MonoBehaviour:
   overflowCap: 2
   maxSpawnsPerTick: 8
   maxAlive: 400
+  maxQueuedSpawnsPerFrame: 25
   planOverride: 
   chaosOverride: 0
 --- !u!114 &169274302
@@ -3269,6 +3270,10 @@ MonoBehaviour:
     prefab: {fileID: 832527063143758692, guid: 1f7862a7e3611de42baf6951dd41df79, type: 3}
   - id: 31
     prefab: {fileID: 6755053901380119664, guid: c7b04ac8c4074d91ad46899aae22293f, type: 3}
+  - id: 32
+    prefab: {fileID: 7233771346681985496, guid: 135affd1445d8bf4bad97d5374b6c42e, type: 3}
+  - id: 33
+    prefab: {fileID: 310728532540033225, guid: 55b192980ab8360428cb7a1ec018edea, type: 3}
   slimeVariants:
   - {fileID: 606865734669720050, guid: add6d643a19561648bbc903ec25242f6, type: 3}
   - {fileID: 514329318404290448, guid: d736393565fd85b42be26fb5c2b12e64, type: 3}

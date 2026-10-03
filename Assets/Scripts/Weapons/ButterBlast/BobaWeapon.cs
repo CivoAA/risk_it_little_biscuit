@@ -63,8 +63,12 @@ public class BobaWeapon : Weapon
         Vector2 direction = (enemyPos - shooterPos).normalized;
         Vector2 targetPos = enemyPos + direction * Overshoot;
 
+        // Der Butterblock zeigt im Sprite nach rechts (Licht von oben). Beim
+        // Flug nach links wird er gespiegelt, damit die Oberseite oben bleibt.
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        BOBA.transform.rotation = Quaternion.Euler(0f, 0f, angle + 180f);
+        BOBA.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+        SpriteRenderer sr = BOBA.GetComponent<SpriteRenderer>();
+        if (sr != null) sr.flipY = direction.x < 0f;
 
         while (BOBA != null && Vector3.Distance(BOBA.transform.position, targetPos) > 0.001f)
         {
@@ -88,9 +92,9 @@ public class BobaWeapon : Weapon
 
     /// <summary>
     /// Halbe Breite des Korridors, in dem ein Gegner als "auf der Linie" zaehlt:
-    /// halbe Hoehe des Butter-Colliders (0,67 x Scale 2 / 2) plus etwas Koerper.
+    /// halbe Hoehe des Butter-Colliders (0,7 x Scale 2 / 2) plus etwas Koerper.
     /// </summary>
-    private const float LineHalfWidth = 0.8f;
+    private const float LineHalfWidth = 0.85f;
 
     /// <summary>
     /// Der Schuss durchdringt alles - also nicht stur auf den naechsten Gegner,

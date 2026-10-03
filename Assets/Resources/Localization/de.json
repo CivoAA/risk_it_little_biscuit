@@ -535,6 +535,10 @@
     { "key": "ui.death.to_hub", "value": "ZUM HUB" },
     { "key": "ui.death.again", "value": "NOCHMAL" },
     { "key": "ui.death.menu", "value": "HAUPTMENÜ" },
+    { "key": "ui.win.title", "value": "GESCHAFFT!" },
+    { "key": "ui.win.subtitle", "value": "Der Boss ist Krümel - dein Keks hat gewonnen!" },
+    { "key": "ui.win.time", "value": "ZEIT" },
+    { "key": "ui.win.new_none", "value": "DIESMAL NICHTS NEUES - ABER EIN SIEG!" },
 
     { "key": "ui.options.btn.done", "value": "FERTIG" },
     { "key": "ui.options.btn.feedback", "value": "FEEDBACK" },
@@ -701,6 +705,10 @@
     { "key": "enemy.KeksKoenig.name", "value": "Keks-König" },
     { "key": "enemy.Glutwurz.name", "value": "Glutwurz" },
     { "key": "enemy.Schleimkoenig.name", "value": "Schleimkönig" },
+    { "key": "enemy.Verkohlter.name", "value": "Der Verkohlte" },
+    { "key": "enemy.VerkohlterTod.name", "value": "Der Verkohlte" },
+    { "key": "boss.verkohlter.death", "value": "DER TOD WIRD DICH HOLEN!" },
+    { "key": "boss.verkohlter.phase2", "value": "DER VERKOHLTE SPALTET SICH!" },
     { "key": "ui.levelselect.recordstory", "value": "SCHNELLSTER SIEG" },
     { "key": "ui.levelselect.recordendless", "value": "LÄNGSTES ÜBERLEBEN" }
   ]
