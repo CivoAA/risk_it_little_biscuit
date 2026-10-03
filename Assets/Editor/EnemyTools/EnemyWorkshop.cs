@@ -93,6 +93,9 @@ public class EnemyWorkshop : EditorWindow
         public Vector2 colliderOffset;
         public float scale;
         public string prefab;
+        public int hopFirst = -1, hopLast = -1;
+
+        public bool Hops => hopFirst >= 0 && hopLast >= hopFirst;
 
         public static Draft From(EnemyDef def)
         {
@@ -115,6 +118,8 @@ public class EnemyWorkshop : EditorWindow
                 colliderOffset = def.ColliderOffset,
                 scale = def.Scale,
                 prefab = def.Prefab,
+                hopFirst = def.HopFirst,
+                hopLast = def.HopLast,
             };
         }
 
@@ -458,6 +463,8 @@ public class EnemyWorkshop : EditorWindow
             DrawPreview(d);
         }
 
+        DrawHopFields(d);
+
         EditorGUILayout.Space(6f);
 
         // ------------------------------------------------------- Kampfwerte
@@ -521,6 +528,38 @@ public class EnemyWorkshop : EditorWindow
 
         EditorGUILayout.EndScrollView();
         EditorGUILayout.EndVertical();
+    }
+
+    /// <summary>
+    /// Huepfen: der Gegner bewegt sich nur in den Luftbildern. Die Bilder
+    /// zaehlen ab 0, wie in der Vorschau.
+    /// </summary>
+    private void DrawHopFields(Draft d)
+    {
+        bool hops = EditorGUILayout.Toggle(new GUIContent(
+            "Huepft", "Bewegt sich nur, solange die Animation ihn in der Luft zeigt."), d.Hops);
+
+        if (!hops)
+        {
+            d.hopFirst = d.hopLast = -1;
+            return;
+        }
+
+        // Ohne geladenes Sheet nichts zurechtstutzen - sonst wuerden die
+        // Katalogwerte beim Speichern auf 0 fallen.
+        int last = frames.Length > 0 ? frames.Length - 1 : int.MaxValue;
+        if (!d.Hops)
+        {
+            d.hopFirst = Mathf.Min(1, last);
+            d.hopLast = Mathf.Max(d.hopFirst, Mathf.Min(last - 1, d.hopFirst + 2));
+        }
+
+        EditorGUI.indentLevel++;
+        d.hopFirst = Mathf.Clamp(EditorGUILayout.IntField(new GUIContent(
+            "Erstes Luftbild", "Ab diesem Bild (0 = erstes) ist er in der Luft."), d.hopFirst), 0, last);
+        d.hopLast = Mathf.Clamp(EditorGUILayout.IntField(new GUIContent(
+            "Letztes Luftbild", "Bis einschliesslich diesem Bild."), d.hopLast), d.hopFirst, last);
+        EditorGUI.indentLevel--;
     }
 
     private void DrawSheetField(Draft d)
@@ -1571,6 +1610,19 @@ public class EnemyWorkshop : EditorWindow
                                           ? enemy.EditorDestroyEffect
                                           : DefaultDestroyEffect());
 
+        // Huepfer kommen nur in der Luft vom Fleck. Der Katalog sagt, welche
+        // Bilder Luft sind; ohne Eintrag laeuft der Gegner normal.
+        HopMovement hop = root.GetComponent<HopMovement>();
+        if (d.Hops)
+        {
+            if (hop == null) hop = root.AddComponent<HopMovement>();
+            hop.EditorSetAirFrames(d.hopFirst, d.hopLast);
+        }
+        else if (hop != null)
+        {
+            DestroyImmediate(hop, true);
+        }
+
         // Das alte EnemyTeleport macht dasselbe wie das Nachziehen im
         // SpawnDirector, nur ungebuendelt und gegen dessen Spawn-Muster. An
         // einem neu gebauten Gegner hat es nichts mehr verloren.
@@ -2399,7 +2451,10 @@ public class EnemyWorkshop : EditorWindow
                     + ", colliderOffset: new Vector2(" + F(d.colliderOffset.x)
                     + ", " + F(d.colliderOffset.y) + "), scale: " + F(d.scale) + ",");
         sb.AppendLine("            prefab: \"" + Escape(d.prefab) + "\""
-                    + (d.archived ? ", archived: true" : "") + ");");
+                    + (d.archived ? ", archived: true" : "")
+                    + (d.Hops ? ", hopFirst: " + d.hopFirst.ToString(CultureInfo.InvariantCulture)
+                              + ", hopLast: " + d.hopLast.ToString(CultureInfo.InvariantCulture) : "")
+                    + ");");
     }
 
     /// <summary>Zahl als C#-Literal - immer mit Punkt, egal welche Systemsprache.</summary>
