@@ -19,10 +19,16 @@ public class Vortex : Weapon
 {
     [SerializeField] private GameObject prefab;
 
-    [Tooltip("Streuung um das Ziel, wenn mehrere Wirbel gleichzeitig gesetzt werden.")]
-    [SerializeField] private float spreadRadius = 2f;
+    [Tooltip("Mindestabstand zwischen Spieler und Wirbelrand (Tiles). Steht der Spieler im Sog, zieht der Wirbel die Gegner auf ihn zu.")]
+    [SerializeField] private float playerGap = 2f;
+
+    [Tooltip("Mindestabstand zwischen den Raendern zweier Wirbel (Tiles). Ueberlappen sie, ziehen sie die Gegner hin und her.")]
+    [SerializeField] private float vortexGap = 0.3f;
 
     public List<Enemy> enemiesInRange = new List<Enemy>();
+
+    /// <summary>Wirbel, die gerade stehen - neue duerfen sie nicht ueberlappen.</summary>
+    private readonly List<GameObject> liveVortices = new List<GameObject>();
 
     private float spawnCounter;
     private bool spawning;
@@ -59,9 +65,10 @@ public class Vortex : Weapon
             // Waffe kann waehrend der Salve durch eine Evo ersetzt werden
             if (!IsActive) break;
 
-            Vector2 pos = PickSpawnPoint(i);
+            Vector2 pos = PickSpawnPoint();
 
             GameObject vortex = Instantiate(prefab, pos, Quaternion.identity);
+            liveVortices.Add(vortex);
 
             if (gameScene.IsValid() && gameScene.isLoaded)
             {
@@ -78,44 +85,83 @@ public class Vortex : Weapon
         spawning = false;
     }
 
-    /// <summary>Erster Wirbel mitten in den Pulk, weitere leicht versetzt.</summary>
-    private Vector2 PickSpawnPoint(int index)
+    /// <summary>Radius eines Wirbels in Tiles: Collider 0,5 x Scale (range x AOERange).</summary>
+    private float VortexRadius
     {
-        Vector2 center = ClosestEnemyPosition();
-        if (index == 0) return center;
-
-        return center + Random.insideUnitCircle * spreadRadius;
+        get { return 0.5f * CurrentStats.range * PlayerController.Instance.AOERange; }
     }
 
     /// <summary>
-    /// Position des naechsten Gegners. Ist keiner in Reichweite, wird blind in
-    /// die Naehe gesetzt - so laeuft der Cooldown nicht ins Leere, wenn gerade
-    /// eine Welle nachrueckt.
+    /// Auf den naechsten Gegner, der weit genug vom Spieler weg steht und an
+    /// dem der Wirbel keinen anderen ueberlappt. Gibt es keinen solchen
+    /// Gegner, wird ein freier Platz auf einem Ring um den Spieler gesucht -
+    /// beginnend in Richtung des naechsten Gegners, damit der Wirbel trotzdem
+    /// dort landet, wo die Welle herkommt.
     /// </summary>
-    private Vector2 ClosestEnemyPosition()
+    private Vector2 PickSpawnPoint()
     {
+        liveVortices.RemoveAll(v => v == null);
+
+        Vector2 myPos = transform.position;
+        float radius = VortexRadius;
+        float minFromPlayer = radius + playerGap;
+
+        Enemy best = null;
+        float bestDistance = Mathf.Infinity;
         Enemy closest = null;
         float closestDistance = Mathf.Infinity;
-        Vector2 myPos = transform.position;
 
         foreach (Enemy enemy in enemiesInRange)
         {
             if (enemy == null) continue;
 
-            float distance = Vector2.Distance(myPos, enemy.transform.position);
+            Vector2 pos = enemy.transform.position;
+            float distance = Vector2.Distance(myPos, pos);
+
             if (distance < closestDistance)
             {
                 closestDistance = distance;
                 closest = enemy;
             }
+
+            if (distance < minFromPlayer || distance >= bestDistance) continue;
+            if (OverlapsLiveVortex(pos, radius)) continue;
+
+            bestDistance = distance;
+            best = enemy;
         }
 
-        if (closest == null)
+        if (best != null) return best.transform.position;
+
+        Vector2 baseDir = closest != null
+            ? ((Vector2)closest.transform.position - myPos).normalized
+            : Random.insideUnitCircle.normalized;
+        if (baseDir == Vector2.zero) baseDir = Vector2.right;
+
+        // Ringe nach aussen, auf jedem Ring abwechselnd links/rechts der Grundrichtung.
+        for (int ring = 0; ring < 3; ring++)
         {
-            return myPos + Random.insideUnitCircle.normalized * spreadRadius;
+            float distance = minFromPlayer + ring * radius;
+            for (int step = 0; step <= 6; step++)
+            {
+                float angle = 30f * ((step + 1) / 2) * (step % 2 == 1 ? 1f : -1f);
+                Vector2 pos = myPos + (Vector2)(Quaternion.Euler(0f, 0f, angle) * baseDir) * distance;
+                if (!OverlapsLiveVortex(pos, radius)) return pos;
+            }
         }
 
-        return closest.transform.position;
+        return myPos + baseDir * minFromPlayer;
+    }
+
+    private bool OverlapsLiveVortex(Vector2 pos, float radius)
+    {
+        float minDistance = 2f * radius + vortexGap;
+        foreach (GameObject vortex in liveVortices)
+        {
+            if (vortex == null) continue;
+            if (Vector2.Distance(pos, vortex.transform.position) < minDistance) return true;
+        }
+        return false;
     }
 
     private void OnTriggerEnter2D(Collider2D collider)

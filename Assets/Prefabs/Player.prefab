@@ -1410,7 +1410,6 @@ MonoBehaviour:
   posssibleEvo: 0
   hasBeenRemoved: 0
   prefab: {fileID: 5032096153979561519, guid: 00aaf5cede8116f4b831454182d4dd21, type: 3}
-  spreadRadius: 2
   enemiesInRange: []
 --- !u!58 &7067996135502071808
 CircleCollider2D:
@@ -2437,42 +2436,42 @@ MonoBehaviour:
   stats:
   - cooldown: 4
     duration: 0
-    damage: 4
+    damage: 6.1
     range: 0
     AttackSpeed: 0
     shots: 1
     description: 
   - cooldown: 4
     duration: 0
-    damage: 4
+    damage: 6.1
     range: 0.1
     AttackSpeed: 0
     shots: 2
     description: 
   - cooldown: 4
     duration: 0
-    damage: 5
+    damage: 7.1
     range: 0.2
     AttackSpeed: 0
     shots: 3
     description: 
   - cooldown: 4
     duration: 0
-    damage: 5
+    damage: 7.1
     range: 0.3
     AttackSpeed: 0
     shots: 4
     description: 
   - cooldown: 4
     duration: 0
-    damage: 6
+    damage: 8.1
     range: 0.4
     AttackSpeed: 0
     shots: 5
     description: 
   - cooldown: 4
     duration: 0
-    damage: 6
+    damage: 8.1
     range: 0.5
     AttackSpeed: 0
     shots: 6
