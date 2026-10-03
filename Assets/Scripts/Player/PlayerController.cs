@@ -640,6 +640,26 @@ public class PlayerController : MonoBehaviour
 
 
     /// <summary>
+    /// Der Tod holt den Spieler: kein Ausweichen, keine Unverwundbarkeit,
+    /// kein Schild, keine Wiederbelebung. Nur fuer den Finisher nach dem Boss
+    /// (EnemyVerkohlter als Tod) - der Lauf ist da schon gewonnen, die
+    /// Explosion soll ihn nur sicher beenden.
+    /// </summary>
+    public void Execute()
+    {
+        if (!gameObject.activeSelf) return;
+
+        playerHealth = 0f;
+        shield = 0f;
+        UIController.Instance.UpdateHealthSlider();
+        AudioController.Instance.PalyModifiedSound(AudioController.Instance.PlayerHit);
+
+        gameObject.SetActive(false);
+        GameManager.Instance.GameOver();
+        WM_UIController.Instance?.UpdateCurrencyText();
+    }
+
+    /// <summary>
     /// Faengt einen toedlichen Treffer ab, solange noch eine Ladung des Buffs
     /// "Zweite Chance" uebrig ist. Gibt true zurueck, wenn der Tod verhindert
     /// wurde - dann laeuft TakeDamage ohne GameOver weiter.

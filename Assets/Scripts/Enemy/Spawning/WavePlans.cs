@@ -366,7 +366,7 @@ public static class WavePlans
             .Encircle(60f, EnemyId.None, EnemyId.Eichel, 20, 14f, false, "RING!", 0.35f, 25f, 1.5f)
             .Burst(90f, EnemyId.EliteMarshmelloGross, 1f, Patterns.Arc, 0f);
 
-        plan.EndWith(EnemyId.TodesRamen);
+        plan.EndWith(EnemyId.VerkohlterTod);
 
         return plan;
     }

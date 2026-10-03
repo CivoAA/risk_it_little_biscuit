@@ -371,10 +371,13 @@ public class TestSceneHUD : MonoBehaviour
             Destroy(bossMenu.GetChild(i).gameObject);
         }
 
-        // Zwei Unterkategorien: die Endbosse und die Zwischenbosse.
+        // Vier Unterkategorien: die Endbosse, die Zwischenbosse, die Elites und
+        // der Tod (Finisher nach dem Boss - toetet hier ohne Sieg, weil kein Boss lag).
         List<EnemyId> bosses = TestSceneBossSpawner.Available(EnemyRole.Boss);
         List<EnemyId> midBosses = TestSceneBossSpawner.Available(EnemyRole.MiniBoss);
-        if (bosses.Count == 0 && midBosses.Count == 0)
+        List<EnemyId> elites = TestSceneBossSpawner.Available(EnemyRole.Elite);
+        List<EnemyId> deaths = TestSceneBossSpawner.Available(EnemyRole.DeathBoss);
+        if (bosses.Count == 0 && midBosses.Count == 0 && elites.Count == 0 && deaths.Count == 0)
         {
             Label("<color=#FF6A4A>Kein Boss-Prefab gefunden.</color>", bossMenu, fontSize - 8,
                   TextAlignmentOptions.MidlineLeft);
@@ -383,9 +386,11 @@ public class TestSceneHUD : MonoBehaviour
 
         BossGroup("Bosse", bosses, new Color(0.22f, 0.15f, 0.12f, 1f));
         BossGroup("Zwischenbosse", midBosses, new Color(0.17f, 0.12f, 0.24f, 1f));
+        BossGroup("Elites", elites, new Color(0.24f, 0.20f, 0.08f, 1f));
+        BossGroup("Tod (nach dem Boss)", deaths, new Color(0.10f, 0.08f, 0.10f, 1f), " (Tod)");
     }
 
-    private void BossGroup(string title, List<EnemyId> ids, Color color)
+    private void BossGroup(string title, List<EnemyId> ids, Color color, string suffix = "")
     {
         if (ids.Count == 0) return;
 
@@ -393,7 +398,7 @@ public class TestSceneHUD : MonoBehaviour
         foreach (EnemyId id in ids)
         {
             EnemyId captured = id;
-            Button b = MakeButton(Bestiary.NameOf(id), bossMenu, 320f, () => SpawnBoss(captured));
+            Button b = MakeButton(Bestiary.NameOf(id) + suffix, bossMenu, 320f, () => SpawnBoss(captured));
             b.GetComponent<Image>().color = color;
         }
     }

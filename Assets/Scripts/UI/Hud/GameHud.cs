@@ -434,6 +434,12 @@ public class GameHud : MonoBehaviour
 
     // ---------- Portraet ----------
 
+    /// <summary>
+    /// Das Bild, das gerade im Medaillon oben links steht (Idle von vorn).
+    /// Der Win-Screen zeigt dieselbe Figur.
+    /// </summary>
+    public static Sprite PortraitFrame { get; private set; }
+
     private void UpdatePortrait()
     {
         PlayerController player = PlayerController.Instance;
@@ -452,6 +458,7 @@ public class GameHud : MonoBehaviour
         Sprite s = IdleFrame();
         if (s == null) s = playerSprite.sprite;
         if (s == null) return;
+        PortraitFrame = s;
 
         portrait.enabled = true;
         if (portrait.sprite != s)

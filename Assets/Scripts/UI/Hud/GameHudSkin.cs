@@ -702,6 +702,16 @@ public static partial class GameHudSkin
         ".g.g.g.",
     }, BoneColors));
 
+    /// <summary>Krone fuer den Win-Screen: faellt dem Sieger aufs Portraet.</summary>
+    public static Sprite Crown => Get("crown", () => Outlined(new[]
+    {
+        "h...h...h",
+        "hy.hyy.yd",
+        "hyyyyyyyd",
+        "hryyryyrd",
+        "ooooooooo",
+    }, GoldColors));
+
     private static Dictionary<char, Color32> BoneColors => boneColors ??= new Dictionary<char, Color32>
     {
         { 'w', Cream }, { 'g', ParchDark }, { 'k', Ink },

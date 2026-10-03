@@ -137,6 +137,7 @@ public class UIController : MonoBehaviour
         HideLegacy(EvoPanel);
         HideLegacy(PowerUpPanel);
         HideLegacy(GameOverPanel);
+        HideLegacy(WinPanel);
     }
 
     private static void HideLegacy(GameObject go)
