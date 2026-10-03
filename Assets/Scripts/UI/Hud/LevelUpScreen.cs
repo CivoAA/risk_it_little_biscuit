@@ -301,6 +301,8 @@ public partial class LevelUpScreen : MonoBehaviour
     private Mode WantedMode()
     {
         if (ui.GameOverPanel != null && ui.GameOverPanel.activeInHierarchy) return Mode.Death;
+        // Sieg: derselbe Abschluss, nur festlich (EnterDeath schaut auf WinPanel).
+        if (ui.WinPanel != null && ui.WinPanel.activeInHierarchy) return Mode.Death;
         if (ui.EvoPanel != null && ui.EvoPanel.activeInHierarchy) return Mode.Book;
         if (ui.LevelUpPanel != null && ui.LevelUpPanel.activeInHierarchy) return Mode.Choose;
         if (ui.PowerUpPanel != null && ui.PowerUpPanel.activeInHierarchy) return Mode.Mixer;

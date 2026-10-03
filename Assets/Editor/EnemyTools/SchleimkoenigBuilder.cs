@@ -258,7 +258,8 @@ public static class SpecialBuilders
 {
     public static bool Handles(EnemyId id)
     {
-        return id == EnemyId.Glutwurz || id == EnemyId.Schleimkoenig;
+        return id == EnemyId.Glutwurz || id == EnemyId.Schleimkoenig
+            || id == EnemyId.Verkohlter || id == EnemyId.VerkohlterTod;
     }
 
     /// <summary>Baut nur das Prefab. Eintragen in GameCore macht die Werkstatt selbst.</summary>
@@ -268,6 +269,8 @@ public static class SpecialBuilders
         {
             case EnemyId.Glutwurz: return GlutwurzBuilder.Build();
             case EnemyId.Schleimkoenig: return SchleimkoenigBuilder.Build();
+            case EnemyId.Verkohlter:
+            case EnemyId.VerkohlterTod: return VerkohlterBuilder.Build(id);
             default: return id + ": kein eigener Bauer.";
         }
     }

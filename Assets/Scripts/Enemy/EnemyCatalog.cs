@@ -68,6 +68,20 @@ public enum EnemyId
     /// beendet den Lauf. Werte wie der alte Tod (fin_tot_0), Bild vom Ramen.
     /// </summary>
     TodesRamen = 31,
+
+    /// <summary>
+    /// Der Verkohlte: ein im Ofen vergessener Keks, Boss der Dunkelwelt
+    /// (EnemyVerkohlter). Glutausbruch, Kruemelwurf, Aschesprung, ab der
+    /// Haelfte Schattenklone. Steht noch in keinem Wellenplan - Test-Szene.
+    /// </summary>
+    Verkohlter = 32,
+
+    /// <summary>
+    /// Der Verkohlte als Tod (Finisher der Demo): taucht im Bild auf, laeuft
+    /// ein Stueck auf den Spieler zu und explodiert in einer Zone, der niemand
+    /// entkommt. Gleiche Bilder, gleiches Skript, Rolle DeathBoss.
+    /// </summary>
+    VerkohlterTod = 33,
 }
 
 /// <summary>
@@ -436,8 +450,8 @@ public static class EnemyCatalog
         Def(EnemyId.EliteMarshmelloGross, "Elite-Marshmello (gross)",
             health: 400f, damage: 7f, speed: 1.25f, exp: 450, pushTime: 0.3f,
             role: EnemyRole.Elite, facing: EnemyFacing.Neutral,
-            sheet: "Assets/Art/Gegner/freeze_marshmallow_miniboss.png", fps: 8f,
-            colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
+            sheet: "Assets/Art/Gegner/new/boss/fledermaus_flug.png", fps: 12f,
+            colliderRadius: 0.55f, colliderOffset: new Vector2(0f, -0.12f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Wave1/MiniBoss_Marshmello.prefab");
 
         Def(EnemyId.KeksKoenig, "Keks-Koenig",
@@ -526,6 +540,22 @@ public static class EnemyCatalog
             sheet: "Assets/Art/Gegner/V2_fin_ramen.png", fps: 2f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Neu/TodesRamen.prefab");
+
+        Def(EnemyId.Verkohlter, "Der Verkohlte",
+            health: 6000f, damage: 25f, speed: 1.9f, exp: 0, pushTime: 0f,
+            role: EnemyRole.Boss, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/boss/verkohlter_walk.png", fps: 12f,
+            colliderRadius: 0.85f, colliderOffset: new Vector2(0f, 1.0f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Boss/Verkohlter.prefab");
+
+        // Der Tod der Demo: unverwundbar, die Explosion toetet immer
+        // (PlayerController.Execute). Weil der Boss schon liegt, ist das ein Sieg.
+        Def(EnemyId.VerkohlterTod, "Der Verkohlte (Tod)",
+            health: 300000f, damage: 101f, speed: 3.2f, exp: 0, pushTime: 0f,
+            role: EnemyRole.DeathBoss, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/boss/verkohlter_walk.png", fps: 12f,
+            colliderRadius: 0.85f, colliderOffset: new Vector2(0f, 1.0f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Boss/VerkohlterTod.prefab");
 
         // ---------------------------------------------------------- Archiv
         //

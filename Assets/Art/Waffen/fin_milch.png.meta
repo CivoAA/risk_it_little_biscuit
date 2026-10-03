@@ -158,10 +158,10 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 160
+        height: 96
+      alignment: 9
+      pivot: {x: 0.7625, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -178,12 +178,12 @@ TextureImporter:
       name: fin_milch_1
       rect:
         serializedVersion: 2
-        x: 64
+        x: 160
         y: 0
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 160
+        height: 96
+      alignment: 9
+      pivot: {x: 0.7625, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -200,12 +200,12 @@ TextureImporter:
       name: fin_milch_2
       rect:
         serializedVersion: 2
-        x: 128
+        x: 320
         y: 0
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 160
+        height: 96
+      alignment: 9
+      pivot: {x: 0.7625, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -222,12 +222,12 @@ TextureImporter:
       name: fin_milch_3
       rect:
         serializedVersion: 2
-        x: 192
+        x: 480
         y: 0
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 160
+        height: 96
+      alignment: 9
+      pivot: {x: 0.7625, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -236,6 +236,94 @@ TextureImporter:
       bones: []
       spriteID: 55cc7db05a8623c50800000000000000
       internalID: 6643487458402487381
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fin_milch_4
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 0
+        width: 160
+        height: 96
+      alignment: 9
+      pivot: {x: 0.7625, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1d2d6574606a45ba0800000000000000
+      internalID: -1167172901717060915
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fin_milch_5
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 0
+        width: 160
+        height: 96
+      alignment: 9
+      pivot: {x: 0.7625, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 883b008e045e4b9c0800000000000000
+      internalID: -1256964207896815547
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fin_milch_6
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 0
+        width: 160
+        height: 96
+      alignment: 9
+      pivot: {x: 0.7625, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e8311812476f404a0800000000000000
+      internalID: -491962388207790434
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fin_milch_7
+      rect:
+        serializedVersion: 2
+        x: 1120
+        y: 0
+        width: 160
+        height: 96
+      alignment: 9
+      pivot: {x: 0.7625, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f8a3b82f6f04db00800000000000000
+      internalID: 3972195141754604316
       vertices: []
       indices: 
       edges: []
@@ -258,6 +346,10 @@ TextureImporter:
       fin_milch_1: 122726879859269036
       fin_milch_2: 6843309904579233990
       fin_milch_3: 6643487458402487381
+      fin_milch_4: -1167172901717060915
+      fin_milch_5: -1256964207896815547
+      fin_milch_6: -491962388207790434
+      fin_milch_7: 3972195141754604316
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
