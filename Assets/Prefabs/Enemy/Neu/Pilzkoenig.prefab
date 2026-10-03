@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1113968018770178679}
   - component: {fileID: 1698262921488515043}
   - component: {fileID: 4124212300020632294}
+  - component: {fileID: 7785978081765539720}
   m_Layer: 7
   m_Name: Pilzkoenig
   m_TagString: Enemy
@@ -156,8 +157,8 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Radius: 0.28125
+  m_Offset: {x: 0, y: -0.12}
+  m_Radius: 0.45
 --- !u!95 &1698262921488515043
 Animator:
   serializedVersion: 7
@@ -168,7 +169,7 @@ Animator:
   m_GameObject: {fileID: 4109926496035422963}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: fe677ea8e6ff41a4cb896d1c6ef65ef3, type: 2}
+  m_Controller: {fileID: 9100000, guid: 4350bbb46e9924c458056c6365e58efc, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -205,3 +206,18 @@ MonoBehaviour:
   MiniBoss: 0
   BossBoss: 0
   Death_Boss: 0
+--- !u!114 &7785978081765539720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4109926496035422963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ad85bef22319653a3038d4eb7c6461c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HopMovement
+  firstAirFrame: 3
+  lastAirFrame: 9
+  keepAverageSpeed: 1

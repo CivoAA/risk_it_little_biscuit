@@ -193,10 +193,20 @@ public sealed class EnemyDef
     /// <summary>Wohin die Werkstatt das Prefab baut. Leer = noch keins gebaut.</summary>
     public readonly string Prefab;
 
+    /// <summary>
+    /// Huepfer: erstes und letztes Bild der Laufanimation, in denen der Gegner
+    /// in der Luft ist. Nur dann kommt er vom Fleck (<see cref="HopMovement"/>,
+    /// die Werkstatt haengt es beim Bauen an). -1 = laeuft normal.
+    /// </summary>
+    public readonly int HopFirst, HopLast;
+
+    public bool Hops => HopFirst >= 0 && HopLast >= HopFirst;
+
     public EnemyDef(EnemyId id, string name, float health, float damage, float speed, int exp,
                     float pushTime, EnemyRole role, EnemyFacing facing,
                     string sheet, float fps, float colliderRadius, Vector2 colliderOffset,
-                    float scale, string prefab, bool archived = false)
+                    float scale, string prefab, bool archived = false,
+                    int hopFirst = -1, int hopLast = -1)
     {
         Id             = id;
         Name           = string.IsNullOrEmpty(name) ? id.ToString() : name;
@@ -215,6 +225,8 @@ public sealed class EnemyDef
         ColliderOffset = colliderOffset;
         Scale          = scale <= 0f ? 1f : scale;
         Prefab         = prefab ?? "";
+        HopFirst       = hopFirst;
+        HopLast        = hopLast;
     }
 
     /// <summary>Bosse und Minibosse lassen sich nicht ziehen oder wegschieben.</summary>
@@ -378,11 +390,12 @@ public static class EnemyCatalog
                             int exp, float pushTime, EnemyRole role,
                             EnemyFacing facing, string sheet, float fps,
                             float colliderRadius, Vector2 colliderOffset, float scale,
-                            string prefab, bool archived = false)
+                            string prefab, bool archived = false,
+                            int hopFirst = -1, int hopLast = -1)
     {
         var def = new EnemyDef(id, name, health, damage, speed, exp, pushTime,
                                role, facing, sheet, fps, colliderRadius, colliderOffset,
-                               scale, prefab, archived);
+                               scale, prefab, archived, hopFirst, hopLast);
         lookup[id] = def;
         all.Add(def);
     }
@@ -445,9 +458,9 @@ public static class EnemyCatalog
         Def(EnemyId.EliteFliegenpilz, "Elite-Fliegenpilz",
             health: 200f, damage: 5f, speed: 1.25f, exp: 300, pushTime: 0.3f,
             role: EnemyRole.Elite, facing: EnemyFacing.Neutral,
-            sheet: "Assets/Art/Gegner/new/miniboss/miniboss_pilz.png", fps: 6f,
-            colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
-            prefab: "Assets/Prefabs/Enemy/Neu/Pilzkoenig.prefab");
+            sheet: "Assets/Art/Gegner/new/elite/fliegenpilz_elite_hop.png", fps: 12f,
+            colliderRadius: 0.45f, colliderOffset: new Vector2(0f, -0.12f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Neu/Pilzkoenig.prefab", hopFirst: 3, hopLast: 9);
 
         Def(EnemyId.Fluegeldolch, "Fluegeldolch",
             health: 14f, damage: 3f, speed: 2.1f, exp: 6, pushTime: 0.2f,
@@ -461,7 +474,7 @@ public static class EnemyCatalog
             role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/new/new_slime.png", fps: 10f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
-            prefab: "Assets/Prefabs/Enemy/Neu/Kirschslime.prefab");
+            prefab: "Assets/Prefabs/Enemy/Neu/Kirschslime.prefab", hopFirst: 4, hopLast: 6);
 
         Def(EnemyId.Milchpanzer, "Milchpanzer",
             health: 900f, damage: 14f, speed: 1.5f, exp: 650, pushTime: 0f,

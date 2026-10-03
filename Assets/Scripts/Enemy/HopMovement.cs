@@ -27,6 +27,16 @@ public class HopMovement : MonoBehaviour
 
     private Animator animator;
 
+#if UNITY_EDITOR
+    /// <summary>Nur fuer die Werkstatt: Luftbilder aus dem Katalog eintragen.</summary>
+    public void EditorSetAirFrames(int first, int last)
+    {
+        firstAirFrame = first;
+        lastAirFrame = last;
+        keepAverageSpeed = true;
+    }
+#endif
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
