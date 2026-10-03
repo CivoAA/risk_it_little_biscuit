@@ -202,6 +202,10 @@ public class JuicyMainMenu : MonoBehaviour
 
     private void Start()
     {
+        // Demo: keine Erfolge, also auch kein Eintrag dafuer - der Rest rueckt nach.
+        if (Demo.AchievementsOff)
+            entries.RemoveAll(e => e != null && string.Equals(e.label, "achievements", System.StringComparison.OrdinalIgnoreCase));
+
         if (entries.Count == 0)
         {
             Debug.LogWarning("[JuicyMainMenu] Keine Einträge eingetragen.", this);

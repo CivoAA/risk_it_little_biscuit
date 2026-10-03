@@ -261,8 +261,39 @@ public class HubLevelSelectUI : MonoBehaviour
     void Awake()
     {
         EnsureSfxSource();
+        ApplyDemoOrder();
         Build();
     }
+
+    /// <summary>
+    /// Platz in der Inspector-Liste je Station - die Uebersetzung
+    /// (level.N.name) haengt daran, nicht an der Position auf dem Weg.
+    /// </summary>
+    private readonly List<int> sourceIndex = new List<int>();
+
+    /// <summary>
+    /// Demo: das Level aus <see cref="Demo.FirstLevelPlan"/> (Wald) rueckt
+    /// nach vorn, der Rest behaelt seine Reihenfolge - die Kueche steht damit
+    /// auf Platz 2. Die Szene bleibt unangetastet.
+    /// </summary>
+    void ApplyDemoOrder()
+    {
+        sourceIndex.Clear();
+        for (int i = 0; i < levels.Count; i++) sourceIndex.Add(i);
+        if (!Demo.Active) return;
+
+        int first = levels.FindIndex(e => e != null &&
+            string.Equals((e.planId ?? "").Trim(), Demo.FirstLevelPlan, System.StringComparison.OrdinalIgnoreCase));
+        if (first <= 0) return;
+
+        LevelEntry entry = levels[first];
+        levels.RemoveAt(first);
+        levels.Insert(0, entry);
+        sourceIndex.RemoveAt(first);
+        sourceIndex.Insert(0, first);
+    }
+
+    int SourceIndex(int index) => index >= 0 && index < sourceIndex.Count ? sourceIndex[index] : index;
 
     void OnEnable() => Loc.LanguageChanged += OnLanguageChanged;
 
@@ -893,6 +924,7 @@ public class HubLevelSelectUI : MonoBehaviour
             LevelEntry e = levels[s.Level];
 
             bool open = IsOpenLevel(e);
+            bool demoLocked = IsDemoLocked(e);
             bool linked = IsLinked(e);
             bool isSel = s.Level == selected;
             bool isHover = i == hoverStation;
@@ -908,12 +940,12 @@ public class HubLevelSelectUI : MonoBehaviour
             {
                 s.Preview.sprite = pic;
                 s.Preview.rectTransform.sizeDelta = new Vector2(pic.rect.width, pic.rect.height);
-                s.Preview.color = open ? (linked ? Color.white : new Color(0.7f, 0.66f, 0.68f, 1f))
+                s.Preview.color = open ? (linked && !demoLocked ? Color.white : new Color(0.7f, 0.66f, 0.68f, 1f))
                                        : new Color(0.28f, 0.24f, 0.27f, 1f);
             }
             else s.Preview.color = Color.clear;
 
-            s.Lock.color = !open ? Color.white : Color.clear;
+            s.Lock.color = !open || demoLocked ? Color.white : Color.clear;
             s.Question.color = open && (!linked || pic == null) ? OptionsKit.WithAlpha(GameHudSkin.Cream, 0.8f) : Color.clear;
 
             s.Number.text = (s.Level + 1).ToString();
@@ -924,7 +956,8 @@ public class HubLevelSelectUI : MonoBehaviour
         for (int i = 0; i < dotPos.Count && i < dots.Count; i++)
         {
             int next = pageIndex * PerPage + dotSegment[i] + 1;
-            bool lit = next < levels.Count && IsOpenLevel(levels[next]) && IsLinked(levels[next]);
+            bool lit = next < levels.Count && IsOpenLevel(levels[next]) && !IsDemoLocked(levels[next])
+                       && IsLinked(levels[next]);
             dots[i].sprite = GameHudSkin.TrailDot(lit);
         }
 
@@ -944,6 +977,7 @@ public class HubLevelSelectUI : MonoBehaviour
         LevelEntry e = Current;
         bool any = e != null;
         bool open = any && IsOpenLevel(e);
+        bool demoLocked = any && IsDemoLocked(e);
         bool linked = any && IsLinked(e);
 
         mapLabel.text = any ? string.Format(Loc.Get("ui.levelselect.map", "KARTE {0}"), selected + 1) : "";
@@ -960,7 +994,7 @@ public class HubLevelSelectUI : MonoBehaviour
         // Status oben rechts
         string status; Color statusCol;
         if (!any) { status = ""; statusCol = Color.clear; }
-        else if (!open) { status = Loc.Get("ui.levelselect.locked", "GESPERRT"); statusCol = GameHudSkin.StoneLight; }
+        else if (!open || demoLocked) { status = Loc.Get("ui.levelselect.locked", "GESPERRT"); statusCol = GameHudSkin.StoneLight; }
         else if (!linked) { status = Loc.Get("ui.levelselect.soon", "BALD"); statusCol = GameHudSkin.Gold; }
         else { status = Loc.Get("ui.levelselect.open", "OFFEN"); statusCol = GameHudSkin.Mint; }
         statusChip.enabled = statusText.enabled = status.Length > 0;
@@ -1028,12 +1062,14 @@ public class HubLevelSelectUI : MonoBehaviour
         endlessBtn.Disabled = !endlessOk;
         storyBtn.Active = storyOk && !endlessChosen;
         endlessBtn.Active = endlessOk && endlessChosen;
+        // Demo: Endless bleibt sichtbar, traegt aber ein Schloss.
+        SetButton(endlessBtn, Loc.Get("ui.levelselect.endless", "ENDLESS"), Demo.EndlessLocked ? GameHudSkin.Lock : null);
 
         // Spielen
-        bool canPlay = open && linked;
+        bool canPlay = open && linked && !demoLocked;
         playBtn.Disabled = !canPlay;
         if (!any || canPlay) SetButton(playBtn, Loc.Get("ui.levelselect.play", "SPIELEN"), GameHudSkin.Arrow);
-        else if (!open) SetButton(playBtn, Loc.Get("ui.levelselect.locked", "GESPERRT"), GameHudSkin.Lock);
+        else if (!open || demoLocked) SetButton(playBtn, Loc.Get("ui.levelselect.locked", "GESPERRT"), GameHudSkin.Lock);
         else SetButton(playBtn, Loc.Get("ui.levelselect.soon", "BALD"), null);
     }
 
@@ -1042,9 +1078,12 @@ public class HubLevelSelectUI : MonoBehaviour
         LevelEntry e = Current;
         bool open = e != null && IsOpenLevel(e);
         bool linked = e != null && IsLinked(e);
+        bool demoLocked = IsDemoLocked(e);
 
-        veil.color = !open ? new Color(0.07f, 0.05f, 0.06f, 0.72f) : Color.clear;
-        bigLock.color = !open ? Color.white : Color.clear;
+        // In der Demo gesperrt: das Bild bleibt zu sehen, nur leicht verhangen.
+        veil.color = !open ? new Color(0.07f, 0.05f, 0.06f, 0.72f)
+                   : demoLocked ? new Color(0.07f, 0.05f, 0.06f, 0.4f) : Color.clear;
+        bigLock.color = !open || demoLocked ? Color.white : Color.clear;
 
         bool soon = open && !linked;
         tape.color = soon ? Color.white : Color.clear;
@@ -1405,13 +1444,13 @@ public class HubLevelSelectUI : MonoBehaviour
     {
         LevelEntry e = levels[index];
         // Uebersetzung nach Position in der Liste, der Inspector ist der Rueckfall
-        return Loc.Get("level." + (index + 1) + ".name", e.displayName ?? "");
+        return Loc.Get("level." + (SourceIndex(index) + 1) + ".name", e.displayName ?? "");
     }
 
     string LevelDesc(int index)
     {
         LevelEntry e = levels[index];
-        return Loc.Get("level." + (index + 1) + ".desc", e.description ?? "");
+        return Loc.Get("level." + (SourceIndex(index) + 1) + ".desc", e.description ?? "");
     }
 
     Ambience AmbienceFor(LevelEntry e)
@@ -1470,7 +1509,26 @@ public class HubLevelSelectUI : MonoBehaviour
                     }
                 }
 
-                foreach (Phase phase in plan.Phases) AddPhase(phase);
+                // Dauer = bis der Boss kommt. Die Boss-Phase ist nur ein langes
+                // Polster fuer den Kampf; mitgezaehlt stand hier ~23 statt ~13 min.
+                float offset = 0f, bossAt = -1f;
+                foreach (Phase phase in plan.Phases)
+                {
+                    AddPhase(phase);
+                    if (bossAt < 0f)
+                    {
+                        foreach (Beat b in phase.Beats)
+                        {
+                            if (b.Kind != BeatKind.Boss) continue;
+                            EnemyDef def = EnemyCatalog.Get(b.Enemy);
+                            if (def == null || def.Role != EnemyRole.Boss) continue;
+                            bossAt = offset + b.Time;
+                            break;
+                        }
+                    }
+                    offset += phase.Duration;
+                }
+                if (bossAt >= 0f) info.Duration = bossAt;
                 AddPhase(plan.Endless);
                 info.Kinds = kinds.Count;
             }
@@ -1552,16 +1610,27 @@ public class HubLevelSelectUI : MonoBehaviour
     //  Unlocks
     // ==================================================================
 
-    bool IsOpenLevel(LevelEntry e) => StoryUnlocked(e) || EndlessUnlocked(e);
+    /// <summary>
+    /// Freigeschaltet und damit sichtbar. Ein Level, das nur die Demo sperrt,
+    /// zaehlt hier als offen: man sieht es ganz, nur mit Schloss - spielen
+    /// laesst es sich trotzdem nicht (<see cref="StoryUnlocked"/>/<see cref="EndlessUnlocked"/>).
+    /// </summary>
+    bool IsOpenLevel(LevelEntry e) => StoryOpen(e) || EndlessOpen(e);
 
-    bool StoryUnlocked(LevelEntry e)
+    bool IsDemoLocked(LevelEntry e) => e != null && Demo.IsLevelLocked(e.planId);
+
+    bool StoryUnlocked(LevelEntry e) => StoryOpen(e) && !IsDemoLocked(e);
+
+    bool EndlessUnlocked(LevelEntry e) => EndlessOpen(e) && !IsDemoLocked(e) && !Demo.EndlessLocked;
+
+    bool StoryOpen(LevelEntry e)
     {
         if (e == null) return false;
         if (string.IsNullOrWhiteSpace(e.storyUnlockId)) return true;
         return Unlocks.IsUnlocked(e.storyUnlockId);
     }
 
-    bool EndlessUnlocked(LevelEntry e)
+    bool EndlessOpen(LevelEntry e)
     {
         if (e == null || !e.endlessAvailable) return false;
         if (string.IsNullOrWhiteSpace(e.endlessUnlockId)) return true;

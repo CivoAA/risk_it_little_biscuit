@@ -100,6 +100,8 @@ public class HubCharacterSelectUI : MonoBehaviour
     private const float PortraitFps = 6f;
 
     private static readonly Color Silhouette = new Color(0.11f, 0.08f, 0.1f, 1f);
+    /// <summary>In der Demo gesperrt: sichtbar, aber etwas abgedunkelt unter dem Schloss.</summary>
+    private static readonly Color DemoDim = new Color(0.55f, 0.52f, 0.55f, 1f);
 
     // ==================================================================
     //  Zustand
@@ -569,7 +571,7 @@ public class HubCharacterSelectUI : MonoBehaviour
         spotColor = spotTarget = SpotColorFor(cursor);
         cursorAt = -10f;
         chosenAt = -10f;
-        ShowPage(cursor / PerPage);
+        ShowPage(Characters.PositionOf(cursor) / PerPage);
         Refresh();
         LayoutPage(true);
 
@@ -671,7 +673,8 @@ public class HubCharacterSelectUI : MonoBehaviour
     void Move(int step)
     {
         if (Characters.Count == 0) return;
-        int next = Mathf.Clamp(cursor + step, 0, Characters.Count - 1);
+        // Gelaufen wird ueber die Plaetze, nicht ueber den Index (Demo sortiert um).
+        int next = Characters.AtPosition(Mathf.Clamp(Characters.PositionOf(cursor) + step, 0, Characters.Count - 1));
         if (next == cursor) return;
         SetCursor(next, true);
     }
@@ -684,17 +687,18 @@ public class HubCharacterSelectUI : MonoBehaviour
         if (target == pageIndex) return;
 
         // Der Cursor wandert mit, auf denselben Platz der neuen Seite.
-        int within = cursor - pageIndex * PerPage;
-        SetCursor(Mathf.Min(target * PerPage + within, Characters.Count - 1), true);
+        int within = Characters.PositionOf(cursor) - pageIndex * PerPage;
+        SetCursor(Characters.AtPosition(Mathf.Min(target * PerPage + within, Characters.Count - 1)), true);
     }
 
     void SetCursor(int index, bool sound)
     {
-        if (index == cursor && index / PerPage == pageIndex) return;
+        if (index == cursor && Characters.PositionOf(index) / PerPage == pageIndex) return;
         cursor = index;
         cursorAt = Time.unscaledTime;
         spotTarget = SpotColorFor(cursor);
-        if (cursor / PerPage != pageIndex) ShowPage(cursor / PerPage);
+        int targetPage = Characters.PositionOf(cursor) / PerPage;
+        if (targetPage != pageIndex) ShowPage(targetPage);
         if (sound) PlaySfx(moveClip, false);
         Refresh();
     }
@@ -777,7 +781,7 @@ public class HubCharacterSelectUI : MonoBehaviour
         {
             SlotView s = slots[i];
             int c = pageIndex * PerPage + i;
-            s.Character = c < Characters.Count ? c : -1;
+            s.Character = c < Characters.Count ? Characters.AtPosition(c) : -1;
             s.Root.SetActive(s.Character >= 0 || showEmptySlots);
 
             // Versetzte Startphase - sonst atmen alle Kekse im Gleichtakt.
@@ -801,6 +805,7 @@ public class HubCharacterSelectUI : MonoBehaviour
             SlotView s = slots[i];
             bool real = s.Character >= 0;
             bool open = real && Characters.IsAvailable(s.Character);
+            bool shown = real && Characters.IsRevealed(s.Character);
             bool isCursor = real && s.Character == cursor;
             bool isHover = i == hoverSlot;
 
@@ -812,7 +817,7 @@ public class HubCharacterSelectUI : MonoBehaviour
 
             int win = Slot - 2 * SlotInset;
             s.Back.sprite = real ? GameHudSkin.SlotBack(win, win) : GameHudSkin.SlotEmpty(win, win);
-            s.Back.color = real && open ? Color.Lerp(Color.white, CharacterLooks.AccentFor(s.Character), 0.3f)
+            s.Back.color = real && shown ? Color.Lerp(Color.white, CharacterLooks.AccentFor(s.Character), 0.3f)
                          : real ? new Color(0.55f, 0.5f, 0.52f, 1f) : Color.white;
 
             s.Question.enabled = !real;
@@ -864,17 +869,24 @@ public class HubCharacterSelectUI : MonoBehaviour
     {
         bool any = Characters.Count > 0;
         int c = Mathf.Clamp(cursor, 0, Mathf.Max(0, Characters.Count - 1));
-        bool open = any && Characters.IsAvailable(c);
+        // open = zeigen; selectable = waehlen. In der Demo gesperrte
+        // Charaktere sind offen, aber nicht waehlbar - mit Schloss.
+        bool open = any && Characters.IsRevealed(c);
+        bool selectable = any && Characters.IsAvailable(c);
 
         // Name: Titelschrift, solange sie passt - sonst die schmalere.
         string name = !any ? "" : open ? Characters.DisplayName(c).ToUpperInvariant() : "???";
         FitTitle(nameText, nameShadow, name, InfoW);
 
         Color accent = CharacterLooks.AccentFor(c);
-        taglineText.text = open ? Characters.Tagline(c) : "";
-        taglineText.color = Color.Lerp(accent, GameHudSkin.Cream, 0.35f);
-        descText.text = !any ? "" : open ? Characters.Description(c)
-                      : Loc.Get("ui.charselect.lockedhint", "Noch nicht freigeschaltet.");
+        // In der Demo gesperrt: statt des Spruchs der Hinweis, in Warnfarbe.
+        // (Die Labels haben kein Rich Text - Farbe nur ueber das ganze Feld.)
+        bool demoLocked = open && !selectable;
+        taglineText.text = !open ? "" : demoLocked ? Demo.LockedHint : Characters.Tagline(c);
+        taglineText.color = demoLocked ? (Color)GameHudSkin.JamLight : Color.Lerp(accent, GameHudSkin.Cream, 0.35f);
+        descText.text = !any ? ""
+                      : !open ? Loc.Get("ui.charselect.lockedhint", "Noch nicht freigeschaltet.")
+                      : Characters.Description(c);
 
         // Startwaffe
         WeaponDef weapon = open ? WeaponCatalog.Find(Characters.StartWeaponId(c)) : null;
@@ -933,14 +945,14 @@ public class HubCharacterSelectUI : MonoBehaviour
         skillTotal.text = sumDone + "/" + sumAll;
 
         // Buehne: Nummer und Schild
-        int key = c - pageIndex * PerPage + 1;
+        int key = Characters.PositionOf(c) - pageIndex * PerPage + 1;
         keyChip.enabled = stageKey.enabled = any && key >= 1 && key <= PerPage;
         stageKey.text = key.ToString();
 
         bool isChosen = any && c == chosen;
-        bool showStatus = any && (isChosen || !open);
+        bool showStatus = any && (isChosen || !selectable);
         statusChip.enabled = statusText.enabled = statusIcon.enabled = showStatus;
-        stageLock.enabled = any && !open;
+        stageLock.enabled = any && !selectable;
         if (showStatus)
         {
             string label = isChosen ? Loc.Get("ui.charselect.active", "AKTIV") : Loc.Get("ui.charselect.locked", "GESPERRT");
@@ -1052,7 +1064,7 @@ public class HubCharacterSelectUI : MonoBehaviour
             }
 
             bool isCursor = s.Character == cursor;
-            bool available = Characters.IsAvailable(s.Character);
+            bool available = Characters.IsRevealed(s.Character);
 
             // Gemaltes Portraet (CharacterLooks.portrait): steht still, unter dem
             // Cursor huepft die Figur und der Strahlenkranz dreht sich. Gesperrte
@@ -1064,7 +1076,7 @@ public class HubCharacterSelectUI : MonoBehaviour
                 int k = isCursor && animate ? Mathf.FloorToInt(now * PortraitFps) % icon.Length : 0;
                 s.Portrait.enabled = true;
                 s.Portrait.sprite = icon[k];
-                s.Portrait.color = Color.white;
+                s.Portrait.color = Characters.IsAvailable(s.Character) ? Color.white : DemoDim;
                 s.Portrait.rectTransform.sizeDelta = new Vector2(icon[k].rect.width, icon[k].rect.height);
                 s.Portrait.rectTransform.anchoredPosition = Vector2.zero;
             }
@@ -1084,7 +1096,7 @@ public class HubCharacterSelectUI : MonoBehaviour
                 Vector2 shift = new Vector2(Mathf.Round((frame.rect.width / 2f - body.center.x) * bk),
                                             Mathf.Round((frame.rect.height / 2f - body.center.y) * bk));
                 s.Portrait.rectTransform.anchoredPosition = shift + new Vector2(0f, -Mathf.Round(body.height * bk * 6f / 64f));
-                s.Portrait.color = Characters.IsAvailable(s.Character) ? Color.white : Silhouette;
+                s.Portrait.color = !available ? Silhouette : Characters.IsAvailable(s.Character) ? Color.white : DemoDim;
             }
 
             float glow = 0f;
@@ -1144,7 +1156,7 @@ public class HubCharacterSelectUI : MonoBehaviour
                 else if (right > StageX + StageW - StageMargin) x -= right - (StageX + StageW - StageMargin);
             }
             OptionsKit.Move(stageChar.rectTransform, x, y, size.x, size.y);
-            stageChar.color = Characters.IsAvailable(c) ? Color.white : Silhouette;
+            stageChar.color = Characters.IsAvailable(c) ? Color.white : Characters.IsRevealed(c) ? DemoDim : Silhouette;
         }
 
         // Kruemel steigen im Licht langsam auf

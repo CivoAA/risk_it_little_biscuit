@@ -269,12 +269,20 @@ public static class Skills
     /// nicht im Spielstand.
     /// </summary>
     public static bool IsUnlocked(SkillNodeDef node)
-        => node != null && (node.IsStart || Store.IsUnlocked(node.Branch.Tree.Id, node.Key));
+        => node != null && (node.IsStart || (!IsDemoLocked(node) && Store.IsUnlocked(node.Branch.Tree.Id, node.Key)));
+
+    /// <summary>
+    /// Liegt der Knoten in einer Kategorie, die die Demo sperrt? Dann zaehlt
+    /// er weder als gelernt noch laesst er sich lernen - sichtbar bleibt er.
+    /// </summary>
+    public static bool IsDemoLocked(SkillNodeDef node)
+        => node != null && node.Branch != null && Demo.IsSkillCategoryLocked(node.Branch.Category);
 
     /// <summary>Alle Vorbedingungen offen? Sagt noch nichts über den Preis.</summary>
     public static bool RequirementsMet(SkillNodeDef node)
     {
         if (node == null) return false;
+        if (IsDemoLocked(node)) return false;
 
         foreach (SkillNodeDef parent in node.Requires)
         {

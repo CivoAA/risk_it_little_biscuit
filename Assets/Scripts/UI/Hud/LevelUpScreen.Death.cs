@@ -227,7 +227,9 @@ public partial class LevelUpScreen
         // ---- Neu freigeschaltet ----
         var items = new List<(Sprite icon, string name)>();
         SessionProgressTracker tracker = SessionProgressTracker.Instance;
-        if (tracker != null)
+        // Demo: keine Erfolge, und die Freischaltungen gelten dem Shop, der zu ist -
+        // der ganze Block "Neu freigeschaltet" bleibt weg.
+        if (tracker != null && !Demo.AchievementsOff)
         {
             foreach (AchievementDef def in tracker.newAchievements)
                 if (def != null) items.Add((def.Icon, def.Name));
@@ -349,7 +351,7 @@ public partial class LevelUpScreen
         }
 
         // ---- Neu ----
-        SetActive(newLabelRoot, t >= TNew);
+        SetActive(newLabelRoot, t >= TNew && !Demo.AchievementsOff);
         for (int i = 0; i < newCount; i++)
             newEntries[i].Animate(now, t - TNew - i * 0.12f);
 

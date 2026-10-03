@@ -23,6 +23,9 @@ public class TeleportToShop : HubInteractable
     [SerializeField] private AudioSource sfxSource;
     [SerializeField, Range(0f, 1f)] private float sfxVolume = 1f;
 
+    /// <summary>Demo: der Shop ist zu, also auch der Weg dorthin.</summary>
+    protected override bool DemoLocked => Demo.ShopLocked;
+
     protected override void Start()
     {
         base.Start();

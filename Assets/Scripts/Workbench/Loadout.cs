@@ -354,7 +354,8 @@ public static class Loadout
     /// </summary>
     public static void PrepareForRun()
     {
-        if (sandbox) return;
+        // In der Demo ist der Verteiler fest vorgegeben (Demo.AllowsInRun).
+        if (sandbox || Demo.Active) return;
 
         SyncCharacter();
 
@@ -413,6 +414,9 @@ public static class Loadout
     /// </summary>
     public static bool AllowsInRun(string weaponId)
     {
+        // Demo: fester Verteiler, die Werkbank ist zu. Die Test-Szene darf alles.
+        if (Demo.Active && !sandbox) return Demo.AllowsInRun(weaponId, CurrentCharacter);
+
         if (!IsActive) return true;
         if (string.IsNullOrEmpty(weaponId)) return true;
 

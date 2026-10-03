@@ -408,6 +408,8 @@
     { "key": "ui.charselect.active", "value": "ACTIVE" },
     { "key": "ui.charselect.locked", "value": "LOCKED" },
     { "key": "ui.charselect.lockedhint", "value": "Not unlocked yet." },
+    { "key": "ui.demo.locked", "value": "DEMO" },
+    { "key": "ui.demo.lockedhint", "value": "Locked in the demo." },
     { "key": "ui.charselect.back", "value": "BACK" },
     { "key": "character.0.name", "value": "Cookie" },
     { "key": "character.0.tagline", "value": "The classic" },

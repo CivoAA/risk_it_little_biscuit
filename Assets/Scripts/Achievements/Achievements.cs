@@ -122,7 +122,8 @@ public static class Achievements
     /// <summary>Schaltet ein Achievement frei. Ist es schon offen, passiert nichts.</summary>
     public static void Unlock(AchievementDef def)
     {
-        if (def == null) return;
+        // Demo: keine Erfolge - weder lokal noch bei Steam, also auch keine Anzeige.
+        if (def == null || Demo.AchievementsOff) return;
 
         AchievementStore s = Store;
         if (s.IsUnlocked(def.Id)) return;
@@ -165,7 +166,7 @@ public static class Achievements
     /// </summary>
     public static void Progress(AchievementDef def, float amount)
     {
-        if (def == null || amount <= 0f) return;
+        if (def == null || amount <= 0f || Demo.AchievementsOff) return;
 
         AchievementStore s = Store;
         if (s.IsUnlocked(def.Id)) return;

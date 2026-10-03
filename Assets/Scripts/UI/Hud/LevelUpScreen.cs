@@ -953,8 +953,21 @@ public partial class LevelUpScreen : MonoBehaviour
         if (p == null || p.EvoCombinations == null) return list;
         foreach (EvoRecipe r in p.EvoCombinations)
             if (r != null && r.EvoWeapon != null) list.Add(r);
+
+        // Demo: die Evos, die hier ueberhaupt entstehen koennen, stehen vorn -
+        // sonst in der alten Reihenfolge (stabil, darum kein List.Sort).
+        if (Demo.Active)
+        {
+            var possible = list.FindAll(DemoPossible);
+            list.RemoveAll(DemoPossible);
+            list.InsertRange(0, possible);
+        }
         return list;
     }
+
+    private static bool DemoPossible(EvoRecipe r) =>
+        r.RequiredWeapon1 != null && r.RequiredWeapon2 != null &&
+        Demo.IsEvoPossible(r.RequiredWeapon1.weaponID, r.RequiredWeapon2.weaponID);
 
     private int PageCount(int n) => Mathf.Max(1, (n + EntriesPerPage - 1) / EntriesPerPage);
 

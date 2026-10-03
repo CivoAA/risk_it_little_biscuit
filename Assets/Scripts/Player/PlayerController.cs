@@ -216,7 +216,9 @@ public class PlayerController : MonoBehaviour
         if (currentLevel >= 1 && currentLevel - 1 < playerLevels.Count
             && experience >= playerLevels[currentLevel - 1])
         {
-            LevelUp();
+            // Demo, alles ausgereizt: die Leiste bleibt voll, es wird nicht weitergelevelt.
+            if (CanLevelUp) LevelUp();
+            else experience = playerLevels[currentLevel - 1];
         }
         // Bei pausiertem Spiel (Level-Up-Panel, Pause-Menue, Mixer, ...) laufen
         // die Updates weiter, obwohl Time.timeScale 0 ist. Eingaben duerfen dann
@@ -510,6 +512,13 @@ public class PlayerController : MonoBehaviour
         WeaponSlots        += Shop.GetInt(Shop.WeaponSlot);
         EvoSlots           += Shop.GetInt(Shop.EvoSlot);
 
+        // Demo: feste Slots, der Shop ist dort zu.
+        if (Demo.Active && !Loadout.SandboxMode)
+        {
+            BuffSlots = Demo.BuffSlots;
+            EvoSlots  = Demo.EvoSlots;
+        }
+
         if (GameManager.Instance != null)
         {
             GameManager.Instance.charLevelBeforeGame = Skills.Level;
@@ -716,6 +725,15 @@ public class PlayerController : MonoBehaviour
         while (currentLevel >= 1 && currentLevel - 1 < playerLevels.Count
             && experience >= playerLevels[currentLevel - 1] && LevelUpSelectet == true)
         {
+            // Demo: nichts mehr zu holen - die Leiste bleibt voll stehen, kein Level-Up.
+            // Hier frisch gefragt, nicht ueber den Zwischenspeicher: ein Panel
+            // ohne eine einzige Karte waere eine Sackgasse.
+            if (Demo.Active && LevelUpChoices().Count == 0)
+            {
+                experience = playerLevels[currentLevel - 1];
+                break;
+            }
+
             LevelUpSelectet = false;
             experience -= playerLevels[currentLevel - 1];
             playerMaxHealth += 1f;
@@ -758,7 +776,30 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void RandomWeapon()
+    /// <summary>
+    /// Demo: Level-Up nur, solange es noch etwas zu holen oder zu verbessern
+    /// gibt. Wie hoch das Level damit wird, haengt am Build (Slots, Evo, ...);
+    /// die Charakter-XP fuer den Skilltree zaehlen davon unabhaengig weiter
+    /// (<see cref="GetExperience"/>). Das Ergebnis haelt eine Viertelsekunde -
+    /// Update fragt bei voller Leiste sonst jeden Frame nach.
+    /// </summary>
+    private bool CanLevelUp
+    {
+        get
+        {
+            if (!Demo.Active) return true;
+            if (Time.unscaledTime < canLevelUpCheckedUntil) return canLevelUpCached;
+
+            canLevelUpCached = LevelUpChoices().Count > 0;
+            canLevelUpCheckedUntil = Time.unscaledTime + 0.25f;
+            return canLevelUpCached;
+        }
+    }
+    private bool canLevelUpCached = true;
+    private float canLevelUpCheckedUntil;
+
+    /// <summary>Was ein Level-Up gerade anbieten kann - ohne die Muenz-Belohnung.</summary>
+    private List<Weapon> LevelUpChoices()
     {
         int maxWeaponSlots = WeaponSlots;
         int maxBuffSlots = BuffSlots;
@@ -851,10 +892,20 @@ public class PlayerController : MonoBehaviour
                         !b.hasBeenRemoved))
                     .ToList();
             }
-            if (availableWeapons.Count == 0)
-            {
-                availableWeapons = maxLevelStuff.ToList();
-            }
+        }
+
+        return availableWeapons;
+    }
+
+    public void RandomWeapon()
+    {
+        List<Weapon> availableWeapons = LevelUpChoices();
+
+        // Alles ausgereizt: die Muenz-Belohnung (maxLevelStuff). Nicht in der
+        // Demo - dort gibt es dann gar kein Level-Up mehr (siehe CanLevelUp).
+        if (availableWeapons.Count == 0 && !Demo.Active)
+        {
+            availableWeapons = maxLevelStuff.ToList();
         }
 
         availableWeapons = availableWeapons.OrderBy(x => rng.Next()).ToList();
@@ -922,6 +973,10 @@ public class PlayerController : MonoBehaviour
         if (!Loadout.AllowsInRun(weapon.weaponID))
             return false;
 
+        // Demo: was der feste Verteiler zulaesst, ist auch ohne Shop-Kauf offen.
+        if (Demo.Active && !Loadout.SandboxMode)
+            return true;
+
         // 3. Standardwaffen → immer freigeschaltet
         HashSet<string> defaultUnlockedWeapons = new HashSet<string>
         {
@@ -956,6 +1011,9 @@ public class PlayerController : MonoBehaviour
         // Der Verteiler von der Werkbank, dieselbe Regel wie bei den Waffen.
         if (!Loadout.AllowsInRun(buff.weaponID))
             return false;
+
+        if (Demo.Active && !Loadout.SandboxMode)
+            return true;
 
         // Standardmäßig immer freigeschaltete Buffs
         HashSet<string> defaultUnlockedBuffs = new HashSet<string>
