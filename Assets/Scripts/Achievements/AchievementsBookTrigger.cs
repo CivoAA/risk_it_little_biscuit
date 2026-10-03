@@ -30,9 +30,6 @@ public class AchievementsBookTrigger : HubInteractable
         outlineMode = OutlineMode.NurInReichweite;
     }
 
-    /// <summary>Demo: keine Erfolge, also bleibt das Buch zu.</summary>
-    protected override bool DemoLocked => Demo.AchievementsOff;
-
     protected override void OnInteract()
     {
         AchievementsBookPanel.Open(startTab);

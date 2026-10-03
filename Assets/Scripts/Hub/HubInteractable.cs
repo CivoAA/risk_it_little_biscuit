@@ -75,50 +75,6 @@ public abstract class HubInteractable : MonoBehaviour
         else Debug.LogWarning($"{name}: kein GameObject mit Tag 'Player' gefunden - Interaktion bleibt aus.");
 
         SetupOutline();
-        if (DemoLocked) SetupDemoLock();
-    }
-
-    // ==================================================================
-    //  Demo-Sperre
-    // ==================================================================
-
-    /// <summary>
-    /// In der Demo gesperrt: ein Schloss schwebt ueber dem Objekt, statt des
-    /// [E]-Hinweises steht <see cref="Demo.LockedHint"/> da, und die Taste tut
-    /// nichts. Unterklassen sagen hier, ob die Demo sie sperrt.
-    /// </summary>
-    protected virtual bool DemoLocked => false;
-
-    /// <summary>Hub-Kacheln haben 32 Pixel je Unit, die GameHud-Symbole 100 - so wird ein Pixel zu zweien.</summary>
-    const float DemoLockScale = 100f / 32f * 2f;
-
-    void SetupDemoLock()
-    {
-        SpriteRenderer[] parts = GetComponentsInChildren<SpriteRenderer>(true);
-        Bounds bounds = new Bounds(transform.position, Vector3.zero);
-        int layer = 0, order = 0;
-        bool any = false;
-
-        foreach (SpriteRenderer r in parts)
-        {
-            if (r.sprite == null) continue;
-            if (!any) { bounds = r.bounds; layer = r.sortingLayerID; order = r.sortingOrder; any = true; }
-            else { bounds.Encapsulate(r.bounds); order = Mathf.Max(order, r.sortingOrder); }
-        }
-
-        Sprite lockSprite = GameHudSkin.Lock;
-        float halfHeight = lockSprite.rect.height / 100f * DemoLockScale / 2f;
-
-        var go = new GameObject("DemoLock");
-        go.transform.SetParent(transform, false);
-        go.transform.position = new Vector3(bounds.center.x, bounds.max.y + halfHeight + 2f / 32f, transform.position.z);
-        go.transform.localScale = new Vector3(DemoLockScale / Mathf.Max(0.0001f, transform.lossyScale.x),
-                                              DemoLockScale / Mathf.Max(0.0001f, transform.lossyScale.y), 1f);
-
-        SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
-        sr.sprite = lockSprite;
-        sr.sortingLayerID = layer;
-        sr.sortingOrder = order + 10;
     }
 
     void SetupOutline()
@@ -181,12 +137,6 @@ public abstract class HubInteractable : MonoBehaviour
 
         if (outline != null && outlineMode == OutlineMode.NurInReichweite)
             outline.SetVisible(active);
-
-        if (DemoLocked)
-        {
-            if (active) HubUI.Instance.RequestPrompt(Demo.LockedHint);
-            return;
-        }
 
         if (showPrompt && active) HubUI.Instance.RequestPrompt(promptText);
         if (active && Input.GetKeyDown(interactKey) && ConsumeInteractPress()) OnInteract();

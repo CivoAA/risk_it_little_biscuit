@@ -394,13 +394,7 @@ public class SpawnDirector : MonoBehaviour
         if (finisherSpawned || plan.Finisher == EnemyId.None || GameSession.IsEndless) return;
 
         // Unity-Vergleich: ein zerstoerter Boss ist hier == null.
-        bool ownBossDown = !ReferenceEquals(activeBoss, null) && activeBoss == null;
-
-        // Jeder andere Boss zaehlt auch - einer von Hand in die Szene gezogen
-        // oder per Cheat geholt: sein Tod setzt GameManager.bossSpawned.
-        bool anyBossDown = GameManager.Instance != null && GameManager.Instance.bossSpawned;
-
-        if (!ownBossDown && !anyBossDown) return;
+        if (ReferenceEquals(activeBoss, null) || activeBoss != null) return;
 
         finisherSpawned = true;
         activeBoss = null;

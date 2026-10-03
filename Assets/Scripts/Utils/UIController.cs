@@ -295,9 +295,6 @@ public class UIController : MonoBehaviour
 
     void CollectVisuals()
     {
-        // Demo: am Ende eines Laufs wird nichts Neues angezeigt.
-        if (Demo.AchievementsOff) return;
-
         foreach (AchievementDef def in SessionProgressTracker.Instance.newAchievements)
         {
             if (def != null)
