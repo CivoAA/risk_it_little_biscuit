@@ -303,8 +303,16 @@ public class HubSkilltreeUI : MonoBehaviour
             v.IconImg = OptionsKit.Img("Icon", v.Root, 0, 0, 1, 1, b.Icon);
             FitIcon(v.IconImg, b.Icon, 5, 6, 18, 18, 1);
 
-            v.Label = OptionsKit.Label("Name", v.Root, 27, 3, CatW - 29, 13, b.Name.ToUpperInvariant(), textFont,
+            // In der Demo gesperrt: Schloss rechts, der Name macht ihm Platz.
+            bool demoLocked = Demo.IsSkillCategoryLocked(b.Category);
+            v.Label = OptionsKit.Label("Name", v.Root, 27, 3, demoLocked ? CatW - 41 : CatW - 29, 13, b.Name.ToUpperInvariant(), textFont,
                                        OptionsKit.SizeText, GameHudSkin.Cream, TextAlignmentOptions.Left);
+            if (demoLocked)
+            {
+                Sprite lockSprite = GameHudSkin.Lock;
+                OptionsKit.Img("DemoLock", v.Root, CatW - 13, Mathf.Floor((CatH - lockSprite.rect.height) / 2f),
+                               lockSprite.rect.width, lockSprite.rect.height, lockSprite);
+            }
             v.Label.overflowMode = TextOverflowModes.Ellipsis;
             v.Count = OptionsKit.Label("Count", v.Root, 27, 14, CatW - 29, 13, "", textFont,
                                        OptionsKit.SizeText, GameHudSkin.Stone, TextAlignmentOptions.Left);
@@ -561,7 +569,7 @@ public class HubSkilltreeUI : MonoBehaviour
             v.Label.color = ink;
 
             CountBranch(b, out int d, out int t);
-            v.Count.text = $"{d}/{t}";
+            v.Count.text = Demo.IsSkillCategoryLocked(b.Category) ? Demo.LockedLabel : $"{d}/{t}";
             v.Count.color = sel ? new Color(ink.r, ink.g, ink.b, 0.75f)
                           : d == t && t > 0 ? (Color)GameHudSkin.Mint : (Color)GameHudSkin.ParchDark;
         }
@@ -677,6 +685,12 @@ public class HubSkilltreeUI : MonoBehaviour
             ? b.Description
             : $"{b.Description}\n<color=#{ColorUtility.ToHtmlStringRGB(GameHudSkin.StoneLight)}>{b.Quote}</color>";
 
+        if (Demo.IsSkillCategoryLocked(b.Category))
+        {
+            SetStatus(GameHudSkin.Lock, Demo.LockedHint, GameHudSkin.JamLight);
+            return;
+        }
+
         CountBranch(b, out int d, out int t);
         SetStatus(d == t && t > 0 ? GameHudSkin.Check : null,
                   string.Format(Loc.Get("ui.skilltree.branch.count", "{0} von {1} gelernt"), d, t),
@@ -746,6 +760,8 @@ public class HubSkilltreeUI : MonoBehaviour
     /// <summary>Welche Knoten noch fehlen. Mehr als zwei werden nicht aufgezaehlt.</summary>
     static string MissingText(SkillNodeDef node)
     {
+        if (Skills.IsDemoLocked(node)) return Demo.LockedHint;
+
         string locked = Loc.Get("ui.skilltree.status.locked", "GESPERRT");
         var missing = new List<string>();
         foreach (SkillNodeDef parent in node.Requires)

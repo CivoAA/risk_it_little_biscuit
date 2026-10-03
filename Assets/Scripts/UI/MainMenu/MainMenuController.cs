@@ -32,7 +32,8 @@ public class MainMenuController : MonoBehaviour
 
     public void PlayEndless()
     {
-        GameSession.SelectedMode = GameMode.Endless;
+        // In der Demo ist Endless gesperrt - der Hub oeffnet dann normal.
+        GameSession.SelectedMode = Demo.EndlessLocked ? GameMode.Story : GameMode.Endless;
         LoadScene(endlessSceneName);
     }
 

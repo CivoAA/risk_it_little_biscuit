@@ -408,6 +408,8 @@
     { "key": "ui.charselect.active", "value": "AKTIV" },
     { "key": "ui.charselect.locked", "value": "GESPERRT" },
     { "key": "ui.charselect.lockedhint", "value": "Noch nicht freigeschaltet." },
+    { "key": "ui.demo.locked", "value": "DEMO" },
+    { "key": "ui.demo.lockedhint", "value": "In der Demo gesperrt." },
     { "key": "ui.charselect.back", "value": "ZURÜCK" },
     { "key": "character.0.name", "value": "Keks" },
     { "key": "character.0.tagline", "value": "Der Klassiker" },

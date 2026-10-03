@@ -104,6 +104,39 @@ public static class Characters
 
     public static int Count => StartWeaponByskin.Length;
 
+    /// <summary>
+    /// Welcher Charakter auf Platz <paramref name="position"/> der Auswahl im
+    /// Hub steht. Normal ist das der Index selbst; in der Demo stehen die
+    /// waehlbaren vorne und die gesperrten dahinter, sonst in Index-Reihenfolge.
+    /// Der Index (Spielstand, Skin, Skilltree) aendert sich dadurch nicht.
+    /// </summary>
+    public static int AtPosition(int position)
+    {
+        if (position < 0 || position >= Count) return -1;
+        if (!Demo.Active) return position;
+
+        int pos = 0;
+        for (int pass = 0; pass < 2; pass++)
+        {
+            for (int i = 0; i < Count; i++)
+            {
+                if (Demo.IsCharacterLocked(i) != (pass == 1)) continue;
+                if (pos++ == position) return i;
+            }
+        }
+        return position;
+    }
+
+    /// <summary>Gegenstueck zu <see cref="AtPosition"/>: auf welchem Platz steht der Charakter?</summary>
+    public static int PositionOf(int skinIndex)
+    {
+        for (int p = 0; p < Count; p++)
+        {
+            if (AtPosition(p) == skinIndex) return p;
+        }
+        return Mathf.Clamp(skinIndex, 0, Mathf.Max(0, Count - 1));
+    }
+
     public static int StartWeaponIndex(int skinIndex)
     {
         if (StartWeaponByskin.Length == 0) return 0;
@@ -137,8 +170,15 @@ public static class Characters
     public static string Description(int skinIndex) =>
         Loc.Get($"character.{skinIndex}.desc", Pick(DescriptionByskin, skinIndex));
 
-    /// <summary>Darf der Charakter gewaehlt werden? Ohne Unlock-Id immer.</summary>
-    public static bool IsAvailable(int skinIndex)
+    /// <summary>Darf der Charakter gewaehlt werden? Ohne Unlock-Id immer - ausser die Demo sperrt ihn.</summary>
+    public static bool IsAvailable(int skinIndex) => IsRevealed(skinIndex) && !Demo.IsCharacterLocked(skinIndex);
+
+    /// <summary>
+    /// Darf die Auswahl den Charakter zeigen (Name, Figur, Beschreibung)? Nur
+    /// die Unlock-Id zaehlt - einen in der Demo gesperrten sieht man trotzdem,
+    /// nur mit Schloss.
+    /// </summary>
+    public static bool IsRevealed(int skinIndex)
     {
         string id = Pick(UnlockIdByskin, skinIndex);
         return string.IsNullOrWhiteSpace(id) || Unlocks.IsUnlocked(id);

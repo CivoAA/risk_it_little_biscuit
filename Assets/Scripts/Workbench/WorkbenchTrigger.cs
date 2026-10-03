@@ -26,6 +26,9 @@ public class WorkbenchTrigger : HubInteractable
         outlineMode = OutlineMode.NurInReichweite;
     }
 
+    /// <summary>Demo: der Verteiler ist fest vorgegeben (<see cref="Demo"/>).</summary>
+    protected override bool DemoLocked => Demo.WorkbenchLocked;
+
     protected override void OnInteract()
     {
         WorkbenchPanel.Open();

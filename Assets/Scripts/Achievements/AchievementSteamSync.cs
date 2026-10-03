@@ -19,7 +19,8 @@ public static class AchievementSteamSync
 {
     private static bool storePending;
 
-    private static bool Available => SteamManager.Initialized && !Achievements.SandboxMode;
+    // Demo: Steam bekommt nichts gemeldet und gibt nichts zurueck.
+    private static bool Available => SteamManager.Initialized && !Achievements.SandboxMode && !Demo.AchievementsOff;
 
     /// <summary>Meldet ein lokal freigeschaltetes Achievement an Steam.</summary>
     public static void Push(AchievementDef def)

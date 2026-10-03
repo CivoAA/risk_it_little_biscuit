@@ -505,10 +505,10 @@ public static class EnemyCatalog
 
         Def(EnemyId.Honey, "Honey",
             health: 450f, damage: 10f, speed: 1.4f, exp: 350, pushTime: 0f,
-            role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/new/honey.png", fps: 8f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
-            prefab: "");
+            prefab: "Assets/Prefabs/Enemy/Neu/Honey.prefab");
 
         Def(EnemyId.WeisseMessermaus, "Weisse Messermaus",
             health: 15f, damage: 3f, speed: 2f, exp: 5, pushTime: 0.3f,
@@ -531,9 +531,6 @@ public static class EnemyCatalog
             colliderRadius: 1.15f, colliderOffset: new Vector2(0f, 0.85f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Zwischenboss/Schleimkoenig.prefab");
 
-        // Der Tod nach dem Boss: Werte von fin_tot_0, Prefab ist eine Kopie von
-        // fin_ramen_0. Holt den Spieler ein und toetet ihn - weil der Boss schon
-        // liegt, zaehlt der Lauf als Sieg (GameManager.bossSpawned).
         Def(EnemyId.TodesRamen, "Todes-Ramen",
             health: 300000f, damage: 101f, speed: 11f, exp: 0, pushTime: 0f,
             role: EnemyRole.DeathBoss, facing: EnemyFacing.ArtFacesLeft,

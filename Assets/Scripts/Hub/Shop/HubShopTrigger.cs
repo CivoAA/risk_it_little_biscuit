@@ -17,6 +17,8 @@ public class HubShopTrigger : HubInteractable
         promptText = "[E] Shop";
     }
 
+    protected override bool DemoLocked => Demo.ShopLocked;
+
     protected override void Start()
     {
         base.Start();
