@@ -375,7 +375,45 @@ public class CatalogTests
     [Test]
     public void World2_benutzt_keine_archivierten_Gegner()
     {
-        RunPlan plan = WavePlans.World2();
+        AssertNoArchived(WavePlans.World2());
+    }
+
+    [Test]
+    public void World2Demo_benutzt_keine_archivierten_Gegner()
+    {
+        AssertNoArchived(WavePlans.World2Demo());
+    }
+
+    /// <summary>Demo: Boss bei 13:00, danach beendet der Todes-Ramen den Lauf.</summary>
+    [Test]
+    public void World2Demo_Boss_bei_13_Minuten_und_Todes_Ramen_danach()
+    {
+        RunPlan plan = WavePlans.World2Demo();
+
+        float start = 0f;
+        float bossAt = -1f;
+        foreach (Phase phase in plan.Phases)
+        {
+            foreach (Beat beat in phase.Beats)
+                if (beat.Kind == BeatKind.Boss) bossAt = start + beat.Time;
+            start += phase.Duration;
+        }
+
+        Assert.AreEqual(780f, bossAt, 0.01f, "Boss soll bei 13:00 kommen.");
+        Assert.AreEqual(EnemyId.TodesRamen, plan.Finisher);
+        Assert.AreEqual(EnemyRole.DeathBoss, EnemyCatalog.Get(EnemyId.TodesRamen).Role);
+    }
+
+    [Test]
+    public void Wald_Schalter_zeigt_auf_einen_Waldplan()
+    {
+        Assert.That(WavePlans.WaldPlan, Is.EqualTo("World2").Or.EqualTo("World2Demo"));
+        Assert.AreEqual(WavePlans.WaldPlan, WavePlans.ForMap("World2").Id);
+    }
+
+    private static void AssertNoArchived(RunPlan plan)
+    {
+        AssertActive(plan.Finisher, "Nach dem Boss");
 
         var phases = new List<Phase>(plan.Phases);
         if (plan.Endless != null) phases.Add(plan.Endless);

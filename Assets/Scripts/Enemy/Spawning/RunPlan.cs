@@ -228,9 +228,22 @@ public class RunPlan
     /// </summary>
     public Phase Endless;
 
+    /// <summary>
+    /// Kommt im Story-Modus, sobald der Boss gefallen ist, und beendet den
+    /// Lauf (ein DeathBoss wie der Todes-Ramen). Weil der Boss da schon liegt,
+    /// zaehlt der Tod als Sieg. None = nach dem Boss geht es endlos weiter.
+    /// </summary>
+    public EnemyId Finisher = EnemyId.None;
+
     public RunPlan(string id)
     {
         Id = id;
+    }
+
+    /// <summary>Setzt den <see cref="Finisher"/> - wer nach dem Boss den Lauf beendet.</summary>
+    public void EndWith(EnemyId finisher)
+    {
+        Finisher = finisher;
     }
 
     /// <summary>Haengt eine Phase an und gibt sie zum Weiterbauen zurueck.</summary>

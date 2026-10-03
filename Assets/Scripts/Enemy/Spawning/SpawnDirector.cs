@@ -80,6 +80,10 @@ public class SpawnDirector : MonoBehaviour
     [Tooltip("Harte Obergrenze an gleichzeitigen Gegnern, unabhaengig vom Druck.")]
     [SerializeField] private int maxAlive = 400;
 
+    [Tooltip("Hoechstens so viele Gegner aus Bursts und Ringen pro Frame. Ein Ring mit Kaefig " +
+             "sind fast 200 Gegner - auf einen Schlag gab das einen spuerbaren Haenger.")]
+    [SerializeField] private int maxQueuedSpawnsPerFrame = 25;
+
     [Header("Plan")]
     [Tooltip("Leer = der Plan der geladenen Map-Szene (MapDefinition).")]
     [SerializeField] private string planOverride = "";
@@ -117,6 +121,10 @@ public class SpawnDirector : MonoBehaviour
     /// <summary>Der laufende Miniboss eines Boss-Beats - solange er lebt, bleibt der Nachschub gedaempft.</summary>
     private Enemy activeMiniBoss;
 
+    /// <summary>Der Boss aus dem Boss-Beat. Faellt er, kommt der Finisher des Plans.</summary>
+    private Enemy activeBoss;
+    private bool finisherSpawned;
+
     private string announce;
     private float announceUntil;
     private string lastShownText;
@@ -127,6 +135,16 @@ public class SpawnDirector : MonoBehaviour
     private bool timeLaserUnlocked;
 
     private readonly List<Vector2> points = new List<Vector2>(64);
+
+    private struct QueuedSpawn
+    {
+        public EnemyId Id;
+        public Vector2 Position;
+        public bool Recyclable;
+    }
+
+    /// <summary>Gegner aus Bursts und Ringen, die noch auf ihren Frame warten.</summary>
+    private readonly Queue<QueuedSpawn> spawnQueue = new Queue<QueuedSpawn>(256);
 
     // ------------------------------------------------------------------ Start
 
@@ -153,7 +171,7 @@ public class SpawnDirector : MonoBehaviour
             ? planOverride
             : (MapDefinition.Active != null ? MapDefinition.Active.PlanId : "");
 
-        plan = WavePlans.For(planId);
+        plan = WavePlans.ForMap(planId);
 
         foreach (Phase p in plan.Phases) p.Beats.Sort((a, b) => a.Time.CompareTo(b.Time));
         if (plan.Endless != null) plan.Endless.Beats.Sort((a, b) => a.Time.CompareTo(b.Time));
@@ -164,9 +182,32 @@ public class SpawnDirector : MonoBehaviour
         }
 
         EnterPhase(0);
+        PrewarmDeathEffects();
 
         Debug.Log($"[SpawnDirector] Plan \"{plan.Id}\" mit {plan.Phases.Count} Phasen " +
                   $"({plan.TotalDuration:0}s) gestartet.");
+    }
+
+    /// <summary>
+    /// Todeseffekte vorab anlegen (<see cref="RunPool"/>): der erste grosse
+    /// Haufen, der auf einmal faellt, wuerde sie sonst alle im selben Frame
+    /// neu erzeugen. Praktisch teilen sich alle Gegner denselben Effekt.
+    /// </summary>
+    private void PrewarmDeathEffects()
+    {
+        if (catalog == null) return;
+
+        var effects = new HashSet<GameObject>();
+        foreach (EnemyId id in System.Enum.GetValues(typeof(EnemyId)))
+        {
+            if (id == EnemyId.None) continue;
+
+            GameObject prefab = catalog.Prefab(id);
+            Enemy enemy = prefab != null ? prefab.GetComponent<Enemy>() : null;
+            if (enemy != null && enemy.DeathEffect != null) effects.Add(enemy.DeathEffect);
+        }
+
+        foreach (GameObject effect in effects) RunPool.Prewarm(effect, 80, "Effekte");
     }
 
     // ----------------------------------------------------------------- Update
@@ -183,6 +224,8 @@ public class SpawnDirector : MonoBehaviour
 
         AdvancePhase();
         FireDueBeats();
+        DrainSpawnQueue();
+        CheckFinisher();
 
         maintenanceTimer += dt;
         if (maintenanceTimer >= MaintenanceTick)
@@ -284,6 +327,7 @@ public class SpawnDirector : MonoBehaviour
                 // bleibt nur gedaempft, solange er lebt (siehe TopUpPressure).
                 Enemy bossEnemy = boss != null ? boss.GetComponent<Enemy>() : null;
                 if (bossEnemy != null && bossEnemy.Role == EnemyRole.MiniBoss) activeMiniBoss = bossEnemy;
+                if (bossEnemy != null && bossEnemy.Role == EnemyRole.Boss) activeBoss = bossEnemy;
                 break;
         }
     }
@@ -315,7 +359,7 @@ public class SpawnDirector : MonoBehaviour
 
             points.Clear();
             Patterns.Ring.Fill(points, ctx, cageCount, cageRadius);
-            foreach (Vector2 point in points) Spawn(EnemyId.Blocker, point, false);
+            foreach (Vector2 point in points) Enqueue(EnemyId.Blocker, point, false);
         }
 
         // Elites kommen nur einzeln - als Ringfueller wuerde ein ganzer Kreis
@@ -328,15 +372,36 @@ public class SpawnDirector : MonoBehaviour
         {
             points.Clear();
             Patterns.Ring.Fill(points, ctx, beat.RingCount, beat.Radius);
-            foreach (Vector2 point in points) Spawn(beat.RingEnemy, point, false);
+            foreach (Vector2 point in points) Enqueue(beat.RingEnemy, point, false);
         }
 
         if (beat.Enemy != EnemyId.None)
         {
             points.Clear();
             Patterns.Ring.Fill(points, ctx, 1, beat.Radius * 0.55f);
-            if (points.Count > 0) Spawn(beat.Enemy, points[0], false);
+            if (points.Count > 0) Enqueue(beat.Enemy, points[0], false);
         }
+    }
+
+    /// <summary>
+    /// Boss gefallen: im Story-Modus kommt jetzt der Finisher des Plans (z.B.
+    /// der Todes-Ramen) und beendet den Lauf. Der Boss-Tod hat da schon
+    /// <c>GameManager.bossSpawned</c> gesetzt - der Tod durch den Finisher
+    /// zeigt deshalb den Sieg-Bildschirm. Im Endless-Modus geht es weiter.
+    /// </summary>
+    private void CheckFinisher()
+    {
+        if (finisherSpawned || plan.Finisher == EnemyId.None || GameSession.IsEndless) return;
+
+        // Unity-Vergleich: ein zerstoerter Boss ist hier == null.
+        if (ReferenceEquals(activeBoss, null) || activeBoss != null) return;
+
+        finisherSpawned = true;
+        activeBoss = null;
+
+        points.Clear();
+        Patterns.Ring.Fill(points, Context(), 1, 12f);
+        if (points.Count > 0) Spawn(plan.Finisher, points[0], false);
     }
 
     private GameObject SpawnBoss(EnemyId id)
@@ -571,7 +636,28 @@ public class SpawnDirector : MonoBehaviour
         points.Clear();
         pattern.Fill(points, Context(), count, radius);
 
-        foreach (Vector2 point in points) Spawn(id, point, recyclable);
+        foreach (Vector2 point in points) Enqueue(id, point, recyclable);
+    }
+
+    /// <summary>
+    /// Burst- und Ring-Gegner kommen nicht alle im selben Frame, sondern
+    /// hoechstens <see cref="maxQueuedSpawnsPerFrame"/> pro Frame. Bei 25 pro
+    /// Frame steht auch ein voller Kaefig nach gut einer Zehntelsekunde - mit
+    /// blossem Auge nicht zu sehen, aber ohne den Haenger.
+    /// </summary>
+    private void Enqueue(EnemyId id, Vector2 position, bool recyclable)
+    {
+        spawnQueue.Enqueue(new QueuedSpawn { Id = id, Position = position, Recyclable = recyclable });
+    }
+
+    private void DrainSpawnQueue()
+    {
+        int budget = Mathf.Max(1, maxQueuedSpawnsPerFrame);
+        while (spawnQueue.Count > 0 && budget-- > 0)
+        {
+            QueuedSpawn next = spawnQueue.Dequeue();
+            Spawn(next.Id, next.Position, next.Recyclable);
+        }
     }
 
     private GameObject Spawn(EnemyId id, Vector2 position, bool recyclable)

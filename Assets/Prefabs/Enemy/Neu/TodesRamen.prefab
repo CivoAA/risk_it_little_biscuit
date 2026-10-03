@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 7844371066901444899}
   - component: {fileID: 492824497293477183}
   m_Layer: 7
-  m_Name: fin_ramen_0
+  m_Name: TodesRamen
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -64,6 +64,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cf2a57836f388849a7ebd06e6eea9ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 31
   spriteRenderer: {fileID: 2348138440028338294}
   rb: {fileID: 492824497293477183}
   moveSpeed: 0.5
@@ -119,7 +120,7 @@ SpriteRenderer:
   m_SortingLayerID: 1017924483
   m_SortingLayer: 3
   m_SortingOrder: 1
-  m_Sprite: {fileID: -8857475594137898598, guid: 505bcc6069925a444ac21aa3c561e0bb, type: 3}
+  m_Sprite: {fileID: 8853435731291974455, guid: 9082504ab7c351246a81a81ff576814d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

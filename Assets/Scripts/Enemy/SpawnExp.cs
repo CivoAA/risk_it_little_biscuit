@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class SpawnExp : MonoBehaviour
 {
@@ -39,8 +38,10 @@ public class SpawnExp : MonoBehaviour
         bool ownLuckyPrefab = lucky && luckyPrefab != null;
         if (ownLuckyPrefab) prefabToSpawn = luckyPrefab;
 
-        // Prefab instanziieren
-        GameObject exp = Instantiate(prefabToSpawn, pos, transform.rotation);
+        // Aus dem Pool holen (landet dabei in der Lauf-Szene) - bei grossen
+        // Haufen fallen Hunderte Bonbons kurz nacheinander.
+        GameObject exp = RunPool.Spawn(prefabToSpawn, pos, transform.rotation, "Exp");
+        if (exp == null) return;
 
         ExpPickup xp = exp.GetComponent<ExpPickup>();
 
@@ -61,12 +62,19 @@ public class SpawnExp : MonoBehaviour
         {
             xp.xpValue = expAmount;
         }
+    }
 
-        // optional in die Lauf-Szene verschieben
-        Scene gameScene = RunScene.Current;
-        if (gameScene.IsValid() && gameScene.isLoaded)
-        {
-            SceneManager.MoveGameObjectToScene(exp, gameScene);
-        }
+    /// <summary>
+    /// Bonbon-Bilder laden und ein paar Bonbons anlegen, solange der Lauf noch
+    /// laedt - sonst passiert beides beim ersten Kill mitten im Gefecht.
+    /// </summary>
+    void Start()
+    {
+        if (Instance != this) return;
+
+        foreach (string look in new[] { "candy_small", "candy_medium", "candy_big", "candy_lucky" })
+            PickUps.LoadFrames(look);
+
+        RunPool.Prewarm(smallPrefab, 60, "Exp");
     }
 }

@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 
@@ -41,6 +42,7 @@ public class WavePlanWorkshop : EditorWindow
         {
             case "World1": return "Karte 1 - Kueche";
             case "World2": return "Karte 2 - Wald";
+            case "World2Demo": return "Welt2 Wald Demo (Karte 2)";
             default: return "keiner Karte zugeordnet";
         }
     }
@@ -89,6 +91,7 @@ public class WavePlanWorkshop : EditorWindow
     {
         public string id;
         public string note = "";
+        public EnemyId finisher = EnemyId.None;
         public readonly List<PhaseDraft> phases = new List<PhaseDraft>();
     }
 
@@ -129,7 +132,7 @@ public class WavePlanWorkshop : EditorWindow
         foreach (string id in WavePlans.AllIds)
         {
             RunPlan plan = WavePlans.For(id);
-            var draft = new PlanDraft { id = id };
+            var draft = new PlanDraft { id = id, finisher = plan.Finisher };
 
             notes.TryGetValue(id, out draft.note);
 
@@ -278,7 +281,8 @@ public class WavePlanWorkshop : EditorWindow
         for (int i = 0; i < plans.Count; i++)
         {
             bool on = i == selected;
-            bool now = GUILayout.Toggle(on, plans[i].id + "\n" + MapOf(plans[i].id),
+            string label = plans[i].id + (plans[i].id == WavePlans.WaldPlan ? "   (laeuft im Wald)" : "");
+            bool now = GUILayout.Toggle(on, label + "\n" + MapOf(plans[i].id),
                                         "Button", GUILayout.Height(38f));
             if (now && !on)
             {
@@ -288,6 +292,8 @@ public class WavePlanWorkshop : EditorWindow
         }
 
         EditorGUILayout.EndScrollView();
+
+        DrawWaldSwitch();
 
         EditorGUILayout.LabelField("Vergleichskurve", EditorStyles.miniBoldLabel);
         string[] names = plans.Select(p => p.id).Prepend("keine").ToArray();
@@ -327,6 +333,11 @@ public class WavePlanWorkshop : EditorWindow
         }
 
         EditorGUILayout.Space(4f);
+        plan.finisher = EnemyPopup(new GUIContent("Nach dem Boss",
+            "Kommt im Story-Modus, sobald der Boss gefallen ist, und beendet den Lauf "
+          + "(zaehlt als Sieg). (keiner) = nach dem Boss geht es endlos weiter."),
+            plan.finisher, true);
+
         if (GUILayout.Button("Phase anhaengen"))
         {
             int insertAt = plan.phases.FindIndex(p => p.endless);
@@ -340,6 +351,55 @@ public class WavePlanWorkshop : EditorWindow
 
         EditorGUILayout.EndScrollView();
         EditorGUILayout.EndVertical();
+    }
+
+    // ---------------------------------------------------------- Wald-Schalter
+
+    /// <summary>Die Plaene, zwischen denen der Wald (Karte 2) umschalten kann.</summary>
+    private static readonly string[] WaldPlans = { "World2", "World2Demo" };
+
+    /// <summary>
+    /// Welcher Plan im Wald laeuft - voller Wald oder Demo. Die Karte bleibt
+    /// auf planId "World2"; umgelenkt wird ueber WavePlans.WaldPlan, und genau
+    /// diese eine Zeile schreibt der Schalter neu.
+    /// </summary>
+    private void DrawWaldSwitch()
+    {
+        EditorGUILayout.LabelField("Im Wald laeuft", EditorStyles.miniBoldLabel);
+
+        int current = System.Array.IndexOf(WaldPlans, WavePlans.WaldPlan);
+        int picked = GUILayout.Toolbar(current, new[] { "Voll", "Demo" });
+        if (picked == current || picked < 0) return;
+
+        if (dirty && !EditorUtility.DisplayDialog("Wald umschalten",
+                "Beim Umschalten wird neu kompiliert - die offenen Aenderungen werden "
+              + "dafuer vorher gespeichert.", "Speichern und umschalten", "Abbrechen"))
+        {
+            return;
+        }
+
+        if (dirty) Save();
+        WriteWaldPlan(WaldPlans[picked]);
+    }
+
+    private static void WriteWaldPlan(string id)
+    {
+        string full = Path.GetFullPath(PlansPath);
+        string text = File.ReadAllText(full);
+
+        var line = new Regex("(public const string WaldPlan = \")[^\"]*(\";)");
+        if (!line.IsMatch(text))
+        {
+            EditorUtility.DisplayDialog("Wellenplaene",
+                "Die Zeile 'public const string WaldPlan = ...' fehlt in WavePlans.cs.", "Ok");
+            return;
+        }
+
+        text = line.Replace(text, "${1}" + id + "${2}", 1);
+        File.WriteAllText(full, text, new UTF8Encoding(false));
+        AssetDatabase.ImportAsset(PlansPath);
+
+        Debug.Log("[Wellenplaene] Im Wald laeuft jetzt " + id + ".");
     }
 
     // -------------------------------------------------------- Ueberschneidung
@@ -852,6 +912,12 @@ public class WavePlanWorkshop : EditorWindow
         sb.AppendLine("        var plan = new RunPlan(\"" + plan.id + "\");");
 
         foreach (PhaseDraft phase in plan.phases) AppendPhase(sb, phase);
+
+        if (plan.finisher != EnemyId.None)
+        {
+            sb.AppendLine();
+            sb.AppendLine("        plan.EndWith(EnemyId." + plan.finisher + ");");
+        }
 
         sb.AppendLine();
         sb.AppendLine("        return plan;");

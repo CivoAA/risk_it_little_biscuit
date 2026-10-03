@@ -25,12 +25,41 @@ public class ExpPickup : MonoBehaviour
     private float idleTime;
 
     // Globale Liste aller Candies im Spiel
-    private static readonly List<ExpPickup> allCandies = new List<ExpPickup>();
+    private static readonly HashSet<ExpPickup> allCandies = new HashSet<ExpPickup>();
     private static bool attractTriggered = false;
+
+    // Bonbons kommen aus dem RunPool und werden wiederverwendet: alles, was
+    // ein Bonbon waehrend seines Lebens aendert, wird beim Aktivieren
+    // zurueckgesetzt, und eingerichtet wird erst im ersten Update - dann hat
+    // SpawnExp xpValue und Aussehen schon gesetzt.
+    private bool initialized;
+    private SpriteRenderer[] renderers;
+    private Color[] baseColors;
 
     private void Awake()
     {
+        renderers = GetComponentsInChildren<SpriteRenderer>(true);
+        baseColors = new Color[renderers.Length];
+        for (int i = 0; i < renderers.Length; i++) baseColors[i] = renderers[i].color;
+    }
+
+    private void OnEnable()
+    {
         allCandies.Add(this);
+        movingToPlayer = false;
+        playerTransform = null;
+        chaseTimer = 0f;
+        initialized = false;
+    }
+
+    private void OnDisable()
+    {
+        allCandies.Remove(this);
+        look = null;
+
+        // Der Glueckstreffer faerbt golden ein - das gilt nur fuer dieses Leben.
+        for (int i = 0; i < renderers.Length; i++)
+            if (renderers[i] != null) renderers[i].color = baseColors[i];
     }
 
     /// <summary>
@@ -47,9 +76,10 @@ public class ExpPickup : MonoBehaviour
     public static string LookFor(int xp) =>
         xp >= BigFrom ? "candy_big" : xp >= MediumFrom ? "candy_medium" : "candy_small";
 
-    private void Start()
+    private void Initialize()
     {
-        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        initialized = true;
+        if (spriteRenderer == null) spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         idleFrames = PickUps.LoadFrames(look ?? LookFor(xpValue));
         if (idleFrames != null)
             idleTime = Random.Range(0, idleFrames.Length) / Mathf.Max(0.01f, idleFps);
@@ -60,11 +90,6 @@ public class ExpPickup : MonoBehaviour
     {
         if (idleFrames == null || spriteRenderer == null) return;
         spriteRenderer.sprite = idleFrames[Mathf.FloorToInt(idleTime * idleFps) % idleFrames.Length];
-    }
-
-    private void OnDestroy()
-    {
-        allCandies.Remove(this);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -78,6 +103,8 @@ public class ExpPickup : MonoBehaviour
 
     private void Update()
     {
+        if (!initialized) Initialize();
+
         idleTime += Time.deltaTime;
         AnimateIdle();
 
@@ -151,6 +178,7 @@ public class ExpPickup : MonoBehaviour
         if (pc != null)
             pc.GetExperience(xpValue);
 
-        Destroy(gameObject);
+        // Zurueck in den Pool (siehe SpawnExp) - aus dem Pool stammt fast jedes Bonbon.
+        RunPool.Release(gameObject);
     }
 }

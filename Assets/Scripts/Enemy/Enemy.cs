@@ -384,7 +384,7 @@ public class Enemy : MonoBehaviour
         else if (hop != null) speed *= hop.SpeedFactor;   // Huepfer: nur in der Luft
 
         Vector2 chase = (Vector2)direction * speed;
-        Vector2 push = Separation(ref chase);
+        Vector2 push = ThrottledSeparation(ref chase);
 
         rb.linearVelocity = chase + externalVelocity + push * baseSpeed * SeparationStrength;
     }
@@ -618,6 +618,13 @@ public class Enemy : MonoBehaviour
     /// <summary>Wie stark weggedrueckt wird, als Anteil des eigenen Tempos.</summary>
     private const float SeparationStrength = 2f;
 
+    /// <summary>Abstand neu rechnen jeden n-ten Physikschritt (siehe <see cref="ThrottledSeparation"/>).</summary>
+    private const int SeparationEvery = 3;
+
+    private int separationPhase = -1;
+    private Vector2 lastPush;
+    private Vector2 lastChaseFix;
+
     private static readonly Collider2D[] separationHits = new Collider2D[16];
     private static readonly Dictionary<Collider2D, Enemy> byCollider = new Dictionary<Collider2D, Enemy>();
 
@@ -677,6 +684,40 @@ public class Enemy : MonoBehaviour
     private void UnregisterCollider()
     {
         if (ownCollider != null) byCollider.Remove(ownCollider);
+    }
+
+    /// <summary>
+    /// <see cref="Separation"/> nur jeden <see cref="SeparationEvery"/>-ten
+    /// Physikschritt, dazwischen gilt das letzte Ergebnis weiter.
+    ///
+    /// Die Abfrage ist pro Gegner der teuerste Teil des Physikschritts. Bei
+    /// 500+ Gegnern dauerte ein Schritt so lange, dass Unity im naechsten Frame
+    /// mehrere Schritte nachholen musste - und jeder davon wieder alle Abfragen
+    /// machte. Das war der kurze Freeze nach grossen Wellen. Jeder Gegner hat
+    /// seinen eigenen Versatz, damit nicht alle im selben Schritt rechnen.
+    ///
+    /// Die Kaefig-Wand steht praktisch still - bei ihrem Tempo wirkt der
+    /// Abstand ohnehin nicht, sie rechnet ihn deshalb gar nicht erst.
+    /// </summary>
+    private Vector2 ThrottledSeparation(ref Vector2 chase)
+    {
+        if (role == EnemyRole.Blocker) return Vector2.zero;
+
+        if (separationPhase < 0) separationPhase = Random.Range(0, SeparationEvery);
+
+        int step = Mathf.RoundToInt(Time.fixedTime / Time.fixedDeltaTime);
+        if ((step + separationPhase) % SeparationEvery == 0)
+        {
+            Vector2 before = chase;
+            lastPush = Separation(ref chase);
+            lastChaseFix = chase - before;
+            return lastPush;
+        }
+
+        // Rueckstoss dreht die Laufrichtung um - die alte Korrektur zeigt dann
+        // in die falsche Richtung.
+        if (pushCounter <= 0f) chase += lastChaseFix;
+        return lastPush;
     }
 
     /// <summary>
@@ -953,8 +994,7 @@ public class Enemy : MonoBehaviour
     {
         if (destroyEffect == null) return;
 
-        GameObject effect = Instantiate(destroyEffect, transform.position, transform.rotation);
-        MoveToRunScene(effect);
+        RunPool.Spawn(destroyEffect, transform.position, transform.rotation, "Effekte");
     }
 
     /// <summary>
@@ -996,6 +1036,9 @@ public class Enemy : MonoBehaviour
 
         SpawnExp.Instance.SpawnEP(transform.position, lucky ? experienceToGive * 2 : experienceToGive, lucky);
     }
+
+    /// <summary>Todeseffekt-Prefab - der SpawnDirector legt davon beim Laden einen Vorrat an.</summary>
+    public GameObject DeathEffect => destroyEffect;
 
     private static void MoveToRunScene(GameObject spawned)
     {

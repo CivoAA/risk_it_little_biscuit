@@ -37,12 +37,33 @@ public static class WavePlans
         switch ((planId ?? "").Trim().ToLowerInvariant())
         {
             case "world2": return World2();
+            case "world2demo": return World2Demo();
             default: return World1();
         }
     }
 
+    /// <summary>
+    /// Welcher Plan im Wald wirklich laeuft: "World2" (voller Wald) oder
+    /// "World2Demo" (leichter, fuer die Demo). Die Karte selbst traegt weiter
+    /// "World2" als planId - umgeschaltet wird nur hier. Die Wellenplan-Werkstatt
+    /// schreibt diese Zeile beim Umschalten neu.
+    /// </summary>
+    public const string WaldPlan = "World2Demo";
+
+    /// <summary>
+    /// Wie <see cref="For"/>, aber mit dem Wald-Schalter: die planId einer
+    /// Karte ("World2") wird auf den gerade aktiven Waldplan umgelenkt. Das
+    /// nimmt der Director beim Laufstart.
+    /// </summary>
+    public static RunPlan ForMap(string planId)
+    {
+        string id = (planId ?? "").Trim();
+        if (string.Equals(id, "World2", System.StringComparison.OrdinalIgnoreCase)) id = WaldPlan;
+        return For(id);
+    }
+
     /// <summary>Alle Plaene, die es gibt - fuer die Werkstatt und den Vergleich.</summary>
-    public static readonly string[] AllIds = { "World1", "World2" };
+    public static readonly string[] AllIds = { "World1", "World2", "World2Demo" };
 
     // ================================================================
     // WERKSTATT-ANFANG - alles hier drin schreibt das Tool neu.
@@ -146,12 +167,22 @@ public static class WavePlans
     /// Elites kommen nicht nur im Ring, sondern immer wieder zwischendurch -
     /// aber immer genau EINER pro Burst. Der Director setzt bei Elites nie
     /// mehr als einen, egal welcher Druck dasteht, und nimmt sie nie aus dem Pool.
+    ///
+    /// Die ersten 5 Sekunden sind ein Anlauf mit nur etwa 3 Fliegenpilzen -
+    /// damit schwache Chars (z.B. Shorikookie) Level 2 erreichen und man kurz
+    /// ins Spiel findet. Phase 1 ist dafuer 5 s kuerzer, alles danach liegt
+    /// zeitlich wie vorher.
     /// </summary>
     public static RunPlan World2()
     {
         var plan = new RunPlan("World2");
 
-        plan.Phase(120f)
+        plan.Phase(5f)
+            .Pool(EnemyId.Fliegenpilz, 100f)
+            .Pressure(3.3f, 3.3f)
+            .Base(Patterns.Scatter);
+
+        plan.Phase(115f)
             .Pool(EnemyId.Fliegenpilz, 100f)
             .Pressure(12f, 39f)
             .Base(Patterns.Scatter)
@@ -223,6 +254,119 @@ public static class WavePlans
             .Burst(30f, EnemyId.EliteFliegenpilz, 1f, Patterns.Ambush, 0f)
             .Encircle(60f, EnemyId.None, EnemyId.Eichel, 26, 14f, false, "RING!", 0.35f, 25f, 1.5f)
             .Burst(90f, EnemyId.EliteMarshmelloGross, 1f, Patterns.Arc, 0f);
+
+        return plan;
+    }
+
+    // ------------------------------------------------------------- World2Demo
+
+    /// <summary>
+    /// Welt2 Wald Demo - der Wald fuer die Demo. Dieselbe Karte, dieselben
+    /// Gegner in derselben Reihenfolge, derselbe Boss wie World2 - nur leichter,
+    /// weil in der Demo nicht alle Chars, Skills und Features offen sind.
+    ///
+    /// Gegenueber World2:
+    ///
+    ///   Druck            etwa 70 % in jeder Phase
+    ///   Schwalle         kleiner (etwa zwei Drittel)
+    ///   Elites           eine pro Phase statt zwei bis drei
+    ///   Ringe            weniger Gegner im Ring
+    ///   Atempausen       je eine zusaetzliche in Phase 3 und 4
+    ///   Zeitplan         die harten Stellen 2 min spaeter, Boss schon bei 13:00
+    ///   Ende             Boss tot -> der Todes-Ramen kommt und beendet den
+    ///                    Lauf (zaehlt als Sieg)
+    ///
+    /// Ablauf:
+    ///
+    ///   0:00  Anlauf, ~3 Fliegenpilze (5 s)
+    ///   0:05  Fliegenpilze
+    ///   2:00  + Kirschslime, + Weisse Messermaus - 5 statt 3 min lang, damit
+    ///         die erste harte Stelle (Eichel, Fluegeldolch) erst bei ~8:00
+    ///         kommt statt bei ~6:00
+    ///   7:00  Eichel, Fluegeldolch
+    ///  12:00  kurzer Uebergang ohne neuen Druck-Sprung - der Sprung von
+    ///         ~11:00 (Honey) faellt damit auf 13:00 und geht im Boss auf
+    ///  13:00  Glutwurz
+    ///
+    /// Anlauf (5 s, ~3 Fliegenpilze) wie im vollen Wald. Welcher der beiden
+    /// Plaene laeuft, steht in WavePlans.WaldPlan (Umschalter in der Werkstatt).
+    /// </summary>
+    public static RunPlan World2Demo()
+    {
+        var plan = new RunPlan("World2Demo");
+
+        plan.Phase(5f)
+            .Pool(EnemyId.Fliegenpilz, 100f)
+            .Pressure(3.3f, 3.3f)
+            .Base(Patterns.Scatter);
+
+        plan.Phase(115f)
+            .Pool(EnemyId.Fliegenpilz, 100f)
+            .Pressure(10f, 28f)
+            .Base(Patterns.Scatter)
+            .Burst(45f, EnemyId.Fliegenpilz, 10f, Patterns.Arc, 0f)
+            .Burst(80f, EnemyId.Kirschslime, 10f, Patterns.Column, 0f)
+            .Encircle(105f, EnemyId.EliteFliegenpilz, EnemyId.Fliegenpilz, 14, 13f, false, "RING!", 0.35f, 25f, 1.5f);
+
+        plan.Phase(300f)
+            .Pool(EnemyId.Fliegenpilz, 55f)
+            .Pool(EnemyId.Kirschslime, 30f)
+            .Pool(EnemyId.WeisseMessermaus, 15f)
+            .Pressure(28f, 56f)
+            .Base(Patterns.Scatter)
+            .Burst(5f, EnemyId.Kirschslime, 10f, Patterns.Arc, 0f)
+            .Calm(75f, 10f, 0.15f)
+            .Burst(105f, EnemyId.WeisseMessermaus, 16f, Patterns.Cluster, 0f)
+            .Burst(135f, EnemyId.EliteFliegenpilz, 1f, Patterns.Ambush, 0f)
+            .Burst(150f, EnemyId.Kirschslime, 18f, Patterns.Scatter, 0f)
+            .Calm(195f, 10f, 0.15f)
+            .Burst(225f, EnemyId.WeisseMessermaus, 18f, Patterns.Cluster, 0f)
+            .Burst(270f, EnemyId.Kirschslime, 20f, Patterns.Arc, 0f);
+
+        plan.Phase(300f)
+            .Pool(EnemyId.Kirschslime, 30f)
+            .Pool(EnemyId.WeisseMessermaus, 25f)
+            .Pool(EnemyId.Eichel, 30f)
+            .Pool(EnemyId.Fluegeldolch, 15f)
+            .Pressure(70f, 140f)
+            .Base(Patterns.Scatter)
+            .Burst(40f, EnemyId.Eichel, 16f, Patterns.Ambush, 0f)
+            .Burst(60f, EnemyId.Fluegeldolch, 12f, Patterns.Arc, 0f)
+            .Calm(95f, 10f, 0.15f)
+            .Encircle(125f, EnemyId.EliteFliegenpilz, EnemyId.Kirschslime, 18, 14f, false, "PILZKOENIG!", 0.35f, 25f, 1.5f)
+            .Burst(195f, EnemyId.WeisseMessermaus, 20f, Patterns.Cluster, 0f)
+            .Calm(215f, 10f, 0.15f)
+            .Burst(235f, EnemyId.EliteMarshmelloGross, 1f, Patterns.Ambush, 0f)
+            .Burst(250f, EnemyId.Eichel, 26f, Patterns.Column, 0f);
+
+        plan.Phase(58f)
+            .Pool(EnemyId.Eichel, 40f)
+            .Pool(EnemyId.WeisseMessermaus, 25f)
+            .Pool(EnemyId.Kirschslime, 15f)
+            .Pool(EnemyId.Fluegeldolch, 20f)
+            .Pressure(140f, 155f)
+            .Base(Patterns.Scatter);
+
+        plan.Phase(600f)
+            .Pool(EnemyId.Eichel, 45f)
+            .Pool(EnemyId.Honey, 15f)
+            .Pool(EnemyId.Milchpanzer, 10f)
+            .Pool(EnemyId.Fluegeldolch, 30f)
+            .Pressure(280f, 420f)
+            .Base(Patterns.Scatter)
+            .Boss(2f, EnemyId.Glutwurz, "GLUTWURZ", 0.4f);
+
+        plan.EndlessPhase()
+            .Pool(EnemyId.Eichel, 40f)
+            .Pool(EnemyId.Honey, 15f)
+            .Pool(EnemyId.Milchpanzer, 20f)
+            .Pool(EnemyId.Fluegeldolch, 25f)
+            .Pressure(100f, 100f)
+            .Base(Patterns.Scatter)
+            .Encircle(60f, EnemyId.None, EnemyId.Eichel, 20, 14f, false, "RING!", 0.35f, 25f, 1.5f)
+            .Burst(90f, EnemyId.EliteMarshmelloGross, 1f, Patterns.Arc, 0f);
+
+        plan.EndWith(EnemyId.TodesRamen);
 
         return plan;
     }
