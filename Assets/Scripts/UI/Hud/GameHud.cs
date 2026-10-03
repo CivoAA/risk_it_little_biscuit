@@ -65,7 +65,7 @@ public class GameHud : MonoBehaviour
     private const int CoinDX = 3, CoinDY = 3, CoinSize = 7;
 
     // ---- unten: Boss ----
-    // Nur solange ein Gegner mit der Rolle Boss lebt. Unten mittig, damit es
+    // Nur solange ein Gegner mit der Rolle Boss oder Zwischenboss lebt. Unten mittig, damit es
     // nicht mit Uhr und Ansage-Band oben kollidiert - und weil man beim
     // Ausweichen ohnehin auf den Boden schaut, wo die Warnflaechen liegen.
     private const int BossW = 168, BossH = 24, BossBottom = 6;
@@ -696,7 +696,8 @@ public class GameHud : MonoBehaviour
                 nextBossSearch = now + 0.5f;
                 foreach (Enemy e in Enemy.Alive)
                 {
-                    if (e == null || e.Role != EnemyRole.Boss) continue;
+                    // Auch Zwischenbosse bekommen die Leiste - sie sind ein Bosskampf.
+                    if (e == null || (e.Role != EnemyRole.Boss && e.Role != EnemyRole.MiniBoss)) continue;
                     boss = e;
                     bossShown = bossTrail = e.HealthFraction;
                     bossName.Set(Bestiary.NameOf(e.Id).ToUpperInvariant());

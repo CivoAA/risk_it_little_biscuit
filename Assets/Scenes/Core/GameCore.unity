@@ -3265,6 +3265,8 @@ MonoBehaviour:
     prefab: {fileID: 4109926496035422963, guid: c244ff776d19c9b42a5c7b16aeb68981, type: 3}
   - id: 28
     prefab: {fileID: 1600278546617180414, guid: 14c72811c8086d043bda9cc52f2e8771, type: 3}
+  - id: 30
+    prefab: {fileID: 832527063143758692, guid: 1f7862a7e3611de42baf6951dd41df79, type: 3}
   slimeVariants:
   - {fileID: 606865734669720050, guid: add6d643a19561648bbc903ec25242f6, type: 3}
   - {fileID: 514329318404290448, guid: d736393565fd85b42be26fb5c2b12e64, type: 3}
@@ -12494,6 +12496,7 @@ MonoBehaviour:
   boomerangEvo: {fileID: 0}
   bombSawEvo: {fileID: 0}
   stickyShatterEvo: {fileID: 0}
+  typhoonFanEvo: {fileID: 0}
 --- !u!1 &701650279
 GameObject:
   m_ObjectHideFlags: 0
@@ -15724,8 +15727,8 @@ MonoBehaviour:
   currencyGainMultiplire: 1
   itemMenu: {fileID: 697346956}
   itemMenuBuffs: {fileID: 1475766309}
-  skillCurrencyBeforeGame: 0
-  gainedThroughAchievements: 0
+  charLevelBeforeGame: 0
+  charXpGained: 0
   kills: 0
 --- !u!224 &843623375
 RectTransform:

@@ -133,6 +133,12 @@ public class Enemy : MonoBehaviour
 
     public bool IsElite => role == EnemyRole.Elite;
 
+    /// <summary>Beruehrungsschaden nach Lauf-Skalierung. Fuer Attacken, die ein Vielfaches davon machen.</summary>
+    public float ContactDamage => damage;
+
+    /// <summary>Lauftempo gerade jetzt (Katalog, Lauf-Skalierung, Slow). Fuer Gegner, die sich selbst steuern.</summary>
+    public float CurrentSpeed => baseSpeed * slowFactor;
+
     /// <summary>Die Rolle dieses Gegners. Der Director und die Erfolge fragen danach.</summary>
     public EnemyRole Role => role;
 
@@ -196,6 +202,20 @@ public class Enemy : MonoBehaviour
     /// auf None) die einzige Stelle, an der man erfaehrt, WER er ist.
     /// </summary>
     [System.NonSerialized] public EnemyId SpawnedAs = EnemyId.None;
+
+    /// <summary>
+    /// Steuert sich selbst (eigenes Skript setzt die Geschwindigkeit). Dann
+    /// schiebt <see cref="FixedUpdate"/> nicht mehr Richtung Spieler - sonst
+    /// liefe ein Huepfer am Boden weiter oder ein Springer in der Luft.
+    /// Bosse mit Rolle Boss steuern sich ohnehin selbst.
+    /// </summary>
+    [System.NonSerialized] public bool SelfSteered;
+
+    /// <summary>
+    /// Gerade nicht zu treffen (z.B. hoch in der Luft ueber dem Bildrand).
+    /// <see cref="TakeDamage"/> ignoriert dann alles.
+    /// </summary>
+    [System.NonSerialized] public bool Untouchable;
 
     /// <summary>Wer der Gegner ist: Katalog-Id, sonst wie der Director ihn gesetzt hat.</summary>
     public EnemyId Identity => id != EnemyId.None ? id : SpawnedAs;
@@ -351,7 +371,7 @@ public class Enemy : MonoBehaviour
         // Der Keks-Koenig steuert sich selbst (Sprint, Stehenbleiben zwischen
         // den Attacken). Wuerde hier zusaetzlich geschoben, liefe er waehrend
         // seiner eigenen Attacken weiter.
-        if (role == EnemyRole.Boss || rb == null) return;
+        if (role == EnemyRole.Boss || SelfSteered || rb == null) return;
 
         direction = PursuitDirection(player);
         UpdateBlocked(player, dt);
@@ -770,6 +790,8 @@ public class Enemy : MonoBehaviour
     /// <param name="knockback">Anteil des Rueckstosses, 1 = normal, 0 = keiner.</param>
     public virtual void TakeDamage(float damage, float? slowMultiplier = null, float knockback = 1f)
     {
+        if (Untouchable) return;
+
         float finalDamage = damage * PlayerController.Instance.damageMultiplier * Bestiary.DamageFactor(id);
         float critChance = PlayerController.Instance.critChance;
         float critDamage = PlayerController.Instance.critDamage;

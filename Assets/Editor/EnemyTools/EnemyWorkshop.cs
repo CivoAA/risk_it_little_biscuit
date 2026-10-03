@@ -331,10 +331,10 @@ public class EnemyWorkshop : EditorWindow
 
         listScroll = EditorGUILayout.BeginScrollView(listScroll);
 
-        for (int i = 0; i < drafts.Count; i++)
-        {
-            if (!drafts[i].archived) DrawListEntry(i);
-        }
+        // Nach Rolle gruppiert: Gegner, Zwischenbosse, Bosse.
+        DrawListGroup("Gegner", d => !EnemyCatalog.IsBossRole(d.role));
+        DrawListGroup("Zwischenbosse", d => d.role == EnemyRole.MiniBoss);
+        DrawListGroup("Bosse", d => d.role == EnemyRole.Boss || d.role == EnemyRole.DeathBoss);
 
         // Das Archiv liegt zugeklappt unten: weg aus dem Blick, aber nicht weg.
         int archivedCount = drafts.Count(x => x.archived);
@@ -371,6 +371,22 @@ public class EnemyWorkshop : EditorWindow
         }
 
         EditorGUILayout.EndVertical();
+    }
+
+    private void DrawListGroup(string title, System.Func<Draft, bool> belongs)
+    {
+        bool any = false;
+        for (int i = 0; i < drafts.Count; i++)
+        {
+            if (drafts[i].archived || !belongs(drafts[i])) continue;
+            if (!any)
+            {
+                EditorGUILayout.Space(4f);
+                EditorGUILayout.LabelField(title, EditorStyles.boldLabel);
+                any = true;
+            }
+            DrawListEntry(i);
+        }
     }
 
     private void DrawListEntry(int i)
@@ -1281,7 +1297,14 @@ public class EnemyWorkshop : EditorWindow
             }
         }
 
-        if (exists)
+        if (SpecialBuilders.Handles(d.id))
+        {
+            EditorGUILayout.HelpBox(
+                "Hat einen eigenen Bauer (mehrere Bildstreifen, Kinder, eigene Steuerung). "
+              + "Der Knopf oben baut ihn darueber - Werte vorher speichern.",
+                MessageType.Info);
+        }
+        else if (exists)
         {
             EditorGUILayout.HelpBox(
                 "Dieses Prefab gibt es schon. Neu bauen setzt Sprite, Trefferkreis, "
@@ -1442,6 +1465,11 @@ public class EnemyWorkshop : EditorWindow
     /// </summary>
     private string BuildPrefab(Draft d)
     {
+        // Bosse mit eigenem Aufbau (mehrere Streifen, Kinder) baut ihr
+        // eigenes Skript - die normale Bauweise wuerde sie auf einen
+        // Laufclip zurueckstutzen.
+        if (SpecialBuilders.Handles(d.id)) return SpecialBuilders.Build(d.id);
+
         // Vor dem Laden der Sprites: deren Masse (und damit der Trefferkreis)
         // haengen an der Pixeldichte.
         if (!KeepsOwnScale(d)) SetPixelsPerUnit(d.sheet);
