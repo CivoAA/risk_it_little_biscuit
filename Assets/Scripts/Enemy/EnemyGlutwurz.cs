@@ -209,10 +209,10 @@ public class EnemyGlutwurz : MonoBehaviour
         phaseTwo = true;
         Stand();
 
-        if (SpawnDirector.Active != null) SpawnDirector.Active.Say("DIE GLUTWURZ ENTBRENNT!");
+        if (SpawnDirector.Active != null) SpawnDirector.Active.Say(Loc.Get("boss.glutwurz.phase2", "DIE GLUTWURZ ENTBRENNT!"));
         if (DamageNumberController.Instance != null)
         {
-            DamageNumberController.Instance.CreateText("PHASE 2!", transform.position + Vector3.up * 3f);
+            DamageNumberController.Instance.CreateText(Loc.Get("boss.phase2", "PHASE 2!"), transform.position + Vector3.up * 3f);
         }
 
         // Bruellen ohne Feuer: Maul auf, die Zungen schlagen schon raus, und

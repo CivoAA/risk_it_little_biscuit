@@ -14,6 +14,8 @@ using UnityEngine;
 /// </summary>
 public class AchievementsBookTrigger : HubInteractable
 {
+    protected override string PromptKey => "hub.prompt.achievements";
+
     [Header("Buch")]
     [Tooltip("Reiter, der beim Oeffnen vorne liegt: 0 = Erfolge, 1 = Unlocks.")]
     [SerializeField] private int startTab = 0;

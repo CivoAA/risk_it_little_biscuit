@@ -30,6 +30,7 @@ public class HubShopUI : MonoBehaviour
     // Inhalt und Reihenfolge stehen im Katalog Shop.cs - hier gibt es dazu
     // bewusst kein Inspector-Feld mehr.
 
+    // Die Beschriftungen sind nur der Rueckfall - uebersetzt wird ueber ui.shop.*.
     [Header("Beschriftungen")]
     [SerializeField] private string titleLabel = "SHOP";
     [SerializeField] private string goldLabel  = "GOLD:";
@@ -211,6 +212,7 @@ public class HubShopUI : MonoBehaviour
     GameObject root;          // ganzer Canvasbereich, wird an- und ausgeschaltet
     RectTransform screen;     // exakt 320x180 darin - daran haengt alles Ausgemessene
     TextMeshProUGUI goldValueText, detailNameText, detailText, priceValueText, buyText;
+    TextMeshProUGUI titleText, goldText, priceText, backText, resetText;
     Image detailIcon, buyImage, backImage, resetImage;
     Sprite resetSprite, resetHoverSprite;
     GameObject scrollbarRoot;
@@ -314,12 +316,12 @@ public class HubShopUI : MonoBehaviour
         var title = HubUiKit.NewText("Title", screen, font, titleFontSize,
                                      titleColor, TextAlignmentOptions.Center);
         HubUiKit.Place((RectTransform)title.transform, titleArea);
-        title.text = titleLabel;
+        titleText = title;
 
         var gold = HubUiKit.NewText("GoldLabel", screen, font, goldFontSize,
                                     goldTextColor, TextAlignmentOptions.Left);
         HubUiKit.Place((RectTransform)gold.transform, goldTextArea);
-        gold.text = goldLabel;
+        goldText = gold;
 
         var goldCoin = HubUiKit.NewImage("GoldCoin", screen, coinSprite, Color.white);
         HubUiKit.Place((RectTransform)goldCoin.transform, goldCoinArea);
@@ -352,7 +354,7 @@ public class HubShopUI : MonoBehaviour
         var price = HubUiKit.NewText("PriceLabel", screen, font, detailNameFontSize,
                                      rowTextColor, TextAlignmentOptions.Left);
         HubUiKit.Place((RectTransform)price.transform, priceTextArea);
-        price.text = priceLabel;
+        priceText = price;
 
         var priceCoin = HubUiKit.NewImage("PriceCoin", screen, coinSprite, Color.white);
         HubUiKit.Place((RectTransform)priceCoin.transform, priceCoinArea);
@@ -373,7 +375,6 @@ public class HubShopUI : MonoBehaviour
         buyText = HubUiKit.NewText("BuyLabel", screen, font, buttonFontSize,
                                    buyTextColor, TextAlignmentOptions.Center);
         HubUiKit.Place((RectTransform)buyText.transform, buyArea);
-        buyText.text = buyLabel;
         buyEnabledColor = buyTextColor;
 
         backImage = HubUiKit.NewImage("BackHit", screen, null, Color.clear);
@@ -385,7 +386,7 @@ public class HubShopUI : MonoBehaviour
         var back = HubUiKit.NewText("BackLabel", screen, font, buttonFontSize,
                                     backTextColor, TextAlignmentOptions.Center);
         HubUiKit.Place((RectTransform)back.transform, backArea);
-        back.text = backLabel;
+        backText = back;
 
         if (showResetButton)
         {
@@ -400,15 +401,28 @@ public class HubShopUI : MonoBehaviour
             AddClick(resetImage.gameObject, ResetShop);
             AddHover(resetImage.gameObject, SetResetHover);
 
-            var resetText = HubUiKit.NewText("ResetLabel", resetImage.transform, font, buttonFontSize,
+            resetText = HubUiKit.NewText("ResetLabel", resetImage.transform, font, buttonFontSize,
                                              resetLabelColor, TextAlignmentOptions.Center);
             HubUiKit.Stretch((RectTransform)resetText.transform);
             resetText.raycastTarget = false;
-            resetText.text = resetButtonLabel;
         }
 
+        ApplyLabels();
         root.SetActive(false);
     }
+
+    /// <summary>Feste Beschriftungen in der aktuellen Sprache - bei jedem Oeffnen neu.</summary>
+    void ApplyLabels()
+    {
+        titleText.text = Loc.Get("ui.shop.title", titleLabel);
+        goldText.text  = Loc.Get("ui.shop.gold", goldLabel);
+        priceText.text = Loc.Get("ui.shop.price", priceLabel);
+        buyText.text   = Loc.Get("ui.shop.buy", buyLabel);
+        backText.text  = Loc.Get("ui.shop.back", backLabel);
+        if (resetText != null) resetText.text = Loc.Get("ui.shop.reset", resetButtonLabel);
+    }
+
+    string MaxLabel => Loc.Get("ui.shop.max", maxLabel);
 
     /// <summary>
     /// Unitys Scrollbar statt Eigenbau: Ziehen am Griff, Klick auf die Spur und
@@ -695,6 +709,7 @@ public class HubShopUI : MonoBehaviour
         if (IsOpen) return;
 
         Build();
+        ApplyLabels();
         HubUiKit.EnsureEventSystem();
 
         IsOpen = true;
@@ -866,7 +881,7 @@ public class HubShopUI : MonoBehaviour
             }
             else if (maxed)
             {
-                row.Price.text = maxLabel;
+                row.Price.text = MaxLabel;
                 row.Price.color = rowLockedColor;
                 row.Coin.enabled = false;
             }
@@ -912,7 +927,7 @@ public class HubShopUI : MonoBehaviour
 
         detailText.text = BuildDescription(entry, maxed);
 
-        priceValueText.text = !hasCosts ? "-" : maxed ? maxLabel : price.ToString();
+        priceValueText.text = !hasCosts ? "-" : maxed ? MaxLabel : price.ToString();
         priceValueText.color = (hasCosts && !maxed && price > Currency)
             ? tooExpensiveColor : rowTextColor;
 
@@ -931,13 +946,13 @@ public class HubShopUI : MonoBehaviour
         if (!string.IsNullOrEmpty(text)) lines.Add(text.Trim());
 
         if (entry.MaxLevel > 0)
-            lines.Add(string.Format(levelFormat, Shop.LevelOf(entry), entry.MaxLevel));
+            lines.Add(string.Format(Loc.Get("ui.shop.level", levelFormat), Shop.LevelOf(entry), entry.MaxLevel));
 
         if (entry.Values.Count > 0)
         {
             string current = Nice(Shop.CurrentValue(entry));
             lines.Add(maxed
-                ? string.Format(upgradeFormat, current, maxLabel)
+                ? string.Format(upgradeFormat, current, MaxLabel)
                 : string.Format(upgradeFormat, current, Nice(Shop.NextValue(entry))));
         }
 

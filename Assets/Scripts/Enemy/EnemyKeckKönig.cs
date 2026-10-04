@@ -213,10 +213,10 @@ public class EnemyKeckKönig : MonoBehaviour
         phaseTwo = true;
         Signal("PhaseTwo");
 
-        if (SpawnDirector.Active != null) SpawnDirector.Active.Say("DER KOENIG WIRD WUETEND!");
+        if (SpawnDirector.Active != null) SpawnDirector.Active.Say(Loc.Get("boss.kekskoenig.phase2", "DER KÖNIG WIRD WÜTEND!"));
         if (DamageNumberController.Instance != null)
         {
-            DamageNumberController.Instance.CreateText("PHASE 2!", transform.position);
+            DamageNumberController.Instance.CreateText(Loc.Get("boss.phase2", "PHASE 2!"), transform.position);
         }
 
         // Kurz aufplustern statt zusammenziehen: das ist ausdruecklich kein

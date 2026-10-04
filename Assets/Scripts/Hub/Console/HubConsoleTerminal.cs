@@ -12,6 +12,8 @@ using UnityEngine;
 /// </summary>
 public class HubConsoleTerminal : HubInteractable
 {
+    protected override string PromptKey => "hub.prompt.terminal";
+
     /// <summary>Ein Cheat-Code, der ohne Code-Aenderung auskommt.</summary>
     [System.Serializable]
     public class CheatCode
@@ -96,7 +98,7 @@ public class HubConsoleTerminal : HubInteractable
     {
         if (entry.nurEinmal && entry.schonBenutzt)
         {
-            sink.PrintError("Den hast du schon eingeloest.");
+            sink.PrintError(HubConsole.T("code.used", "Den hast du schon eingelöst."));
             return;
         }
 
@@ -106,7 +108,7 @@ public class HubConsoleTerminal : HubInteractable
         {
             if (Unlocks.Find(entry.unlockId) == null)
             {
-                sink.PrintError($"Unlock '{entry.unlockId}' steht auf keiner Liste.");
+                sink.PrintError(string.Format(HubConsole.T("unknown.id", "'{0}' steht auf keiner Liste."), entry.unlockId));
             }
             else
             {
@@ -121,7 +123,9 @@ public class HubConsoleTerminal : HubInteractable
             etwasPassiert = true;
         }
 
-        if (!string.IsNullOrEmpty(entry.antwort)) sink.Print(entry.antwort);
+        // Uebersetzung der Antwort: ui.console.code.[code], sonst der Inspector-Text.
+        if (!string.IsNullOrEmpty(entry.antwort))
+            sink.Print(HubConsole.T("code." + entry.code.Trim().ToLowerInvariant(), entry.antwort));
 
         // Nur verbrauchen, wenn auch wirklich etwas angekommen ist - sonst
         // waere ein Code bei fehlendem Manager still fuer immer weg.

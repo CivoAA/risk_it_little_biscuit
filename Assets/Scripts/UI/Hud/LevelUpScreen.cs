@@ -1125,7 +1125,10 @@ public partial class LevelUpScreen : MonoBehaviour
         if (kind == Kind.Buff) BuffLines(w, from, to, lines);
         else WeaponLines(from, to, lines);
 
-        if (lines.Count == 0 && IsRealText(to.description)) description = to.description.Trim();
+        // Der Text steht im Prefab (bzw. im Waffenskript) - uebersetzt wird ueber
+        // weapon.[id].lvl[stufe], der Prefab-Text ist der Rueckfall.
+        if (lines.Count == 0 && IsRealText(to.description))
+            description = Loc.Get($"weapon.{w.weaponID}.lvl{next}", to.description.Trim());
         return lines;
     }
 

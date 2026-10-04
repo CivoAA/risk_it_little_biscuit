@@ -320,7 +320,7 @@ public class SpawnDirector : MonoBehaviour
 
             case BeatKind.Boss:
                 DampenPressure(beat.PressureScale, beat.Duration);
-                Announce(beat.Announce);
+                Announce(PlanText(beat.Announce));
                 GameObject boss = SpawnBoss(beat.Enemy);
 
                 // Ein Miniboss ist ein Kampf mitten im Level: der Nachschub
@@ -339,7 +339,8 @@ public class SpawnDirector : MonoBehaviour
     /// </summary>
     private IEnumerator RunEncirclement(Beat beat)
     {
-        Announce(string.IsNullOrEmpty(beat.Announce) ? "ACHTUNG!" : beat.Announce);
+        Announce(string.IsNullOrEmpty(beat.Announce) ? Loc.Get("wave.announce.achtung", "ACHTUNG!")
+                                                     : PlanText(beat.Announce));
         if (warningSound != null) warningSound.Play();
 
         DampenPressure(beat.PressureScale, beat.Duration + beat.WarnTime);
@@ -705,6 +706,23 @@ public class SpawnDirector : MonoBehaviour
     public void Say(string text)
     {
         Announce(text);
+    }
+
+    /// <summary>
+    /// Ansage aus dem Wellenplan uebersetzen: "KEKS-KOENIG" sucht unter
+    /// wave.announce.kekskoenig (nur Buchstaben und Ziffern, klein). Fehlt der
+    /// Eintrag, bleibt der Text aus dem Plan stehen.
+    /// </summary>
+    private static string PlanText(string text)
+    {
+        if (string.IsNullOrEmpty(text)) return text;
+
+        var key = new System.Text.StringBuilder("wave.announce.");
+        foreach (char c in text.ToLowerInvariant())
+        {
+            if (char.IsLetterOrDigit(c)) key.Append(c);
+        }
+        return Loc.Get(key.ToString(), text);
     }
 
     private void Announce(string text)

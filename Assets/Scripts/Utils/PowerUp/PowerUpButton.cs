@@ -104,7 +104,7 @@ public class PowerUpButton : MonoBehaviour
                 if (b != null && b.gameObject.activeSelf && b.assignedPowerUp != null)
                     b.ApplyTo(player);
             }
-            DamageNumberController.Instance?.CreateText("Jackpot!", player.transform.position);
+            DamageNumberController.Instance?.CreateText(Loc.Get("ui.mixer.jackpot", "JACKPOT!"), player.transform.position);
         }
         else if (!ApplyTo(player))
         {

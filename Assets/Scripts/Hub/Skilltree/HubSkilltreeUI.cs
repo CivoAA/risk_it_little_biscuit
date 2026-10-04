@@ -16,10 +16,13 @@ using UnityEngine.UI;
 ///    Mitte       Banner mit dem Pfadnamen, darunter der Baum (HubSkilltreeGraph)
 ///    rechts      der Knoten unter der Maus bzw. der gewaehlte: Form, Name,
 ///                Wirkung, Preis/Zustand
-///    Fussleiste  ZURUECK              Tastenhinweis              LERNEN
+///    Fussleiste  ZURUECK  RESET        Tastenhinweis             LERNEN
 ///
 ///  Klick auf einen Knoten waehlt ihn, LERNEN (oder ein zweiter Klick, Enter)
 ///  kauft ihn. So kauft niemand aus Versehen im Vorbeiklicken.
+///
+///  RESET vergisst nach einer Rueckfrage alle Knoten dieses Baums. Die Punkte
+///  sind danach von selbst wieder frei (sie werden aus dem Level gerechnet).
 ///
 ///  WO DER INHALT HERKOMMT: aus dem Baum-Asset des Charakters unter
 ///  Assets/Resources/SkillTrees/ (Tools -> Skilltree -> Editor). Beim Oeffnen
@@ -67,7 +70,11 @@ public class HubSkilltreeUI : MonoBehaviour
     const int DetX = FieldX + FieldW + 6, DetW = InX + InW - DetX;
     const int PlateS = 40;
 
-    const int FootY = 226, FootH = 18, BackW = 76;
+    const int FootY = 226, FootH = 18, BackW = 76, ResetW = 56;
+
+    const int DlgX = 146, DlgY = 92, DlgW = 188, DlgH = 86;
+    const int DlgTextY = 101, DlgTextH = 40;
+    const int DlgBtnY = 150, DlgBtnW = 80, DlgBtnH = 18;
 
     // ==================================================================
     //  Zustand
@@ -100,7 +107,9 @@ public class HubSkilltreeUI : MonoBehaviour
     Image plateImg, shapeShadow, shapeFill, shapeGloss, shapeOutline, plateIcon, statusIcon;
     TextMeshProUGUI detailName, detailSub, detailDesc, statusText;
     Image detailRule;
-    SkinButton learnButton;
+    SkinButton learnButton, resetButton;
+
+    RectTransform dialog, dialogPage;
 
     int openedOnFrame = -1;
 
@@ -173,6 +182,7 @@ public class HubSkilltreeUI : MonoBehaviour
         if (canvasGo != null) Destroy(canvasGo);
         canvasGo = null;
         page = null;
+        dialog = dialogPage = null;
     }
 
     void OnLanguageChanged()
@@ -370,8 +380,13 @@ public class HubSkilltreeUI : MonoBehaviour
         SkinButton.Create(page, InX, FootY, BackW, FootH, Loc.Get("ui.skilltree.back", "ZURÜCK"), textFont,
                           SkinButton.Kind.Wood, Close);
 
-        OptionsKit.Label("Hint", page, InX + BackW + 6, FootY + 2, DetX - InX - BackW - 12, 13,
-                         Loc.Get("ui.skilltree.hint", "W/S PFAD   A/D KNOTEN   ENTER LERNEN"), textFont,
+        resetButton = SkinButton.Create(page, InX + BackW + 4, FootY, ResetW, FootH,
+                                        Loc.Get("ui.skilltree.reset", "RESET"), textFont,
+                                        SkinButton.Kind.Danger, AskReset);
+
+        int hintX = InX + BackW + 4 + ResetW + 6;
+        OptionsKit.Label("Hint", page, hintX, FootY + 2, DetX - hintX - 6, 13,
+                         Loc.Get("ui.skilltree.hint", "W/S PFAD  A/D KNOTEN  ENTER LERNEN"), textFont,
                          OptionsKit.SizeText, GameHudSkin.Stone, TextAlignmentOptions.Center);
 
         learnButton = SkinButton.Create(page, DetX, FootY, DetW, FootH, Loc.Get("ui.skilltree.learn", "LERNEN"),
@@ -391,12 +406,24 @@ public class HubSkilltreeUI : MonoBehaviour
         {
             lastScreen = size;
             OptionsKit.Layout(page, scaler, Content);
+            if (dialogPage != null) dialogPage.anchoredPosition = page.anchoredPosition;
         }
 
         graph.Animate(Time.unscaledTime);
 
         // Das [E], mit dem das Fenster aufgeht, darf es nicht gleich schliessen.
         if (Time.frameCount == openedOnFrame) return;
+
+        // Offene Rueckfrage: nur ESC/E bricht ab, der Baum dahinter ruht.
+        if (dialog != null)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.E))
+            {
+                OptionsKit.PlayClick();
+                CloseDialog();
+            }
+            return;
+        }
 
         if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.E))
         {
@@ -490,6 +517,64 @@ public class HubSkilltreeUI : MonoBehaviour
     }
 
     // ==================================================================
+    //  Zuruecksetzen
+    // ==================================================================
+
+    void AskReset()
+    {
+        SkillTreeDef tree = Skills.ActiveTree;
+        if (tree == null || dialog != null || Skills.SpentIn(tree) <= 0) return;
+
+        // Eigene Ebene ueber der Seite: als letztes Kind gezeichnet, und die
+        // vollflaechige Abdunklung faengt jeden Klick daneben ab.
+        Image shade = OptionsKit.Stretch("Dialog", canvasGo.transform, GameHudSkin.White,
+                                         new Color(0.06f, 0.04f, 0.05f, 0.7f));
+        shade.raycastTarget = true;
+        dialog = shade.rectTransform;
+
+        dialogPage = OptionsKit.Rect("Page", dialog, 0, 0, OptionsKit.RefW, OptionsKit.RefH);
+        dialogPage.anchoredPosition = page.anchoredPosition;
+
+        string question = string.Format(
+            Loc.Get("ui.skilltree.reset.confirm", "Skilltree von {0} zurücksetzen? Du bekommst {1} Skillpunkte zurück."),
+            Characters.DisplayName(Shop.SkinIndex), Skills.SpentIn(tree));
+
+        OptionsKit.Img("Card", dialogPage, DlgX, DlgY, DlgW, DlgH, GameHudSkin.Card, true);
+        TextMeshProUGUI q = OptionsKit.Label("Question", dialogPage, DlgX + 10, DlgTextY, DlgW - 20, DlgTextH,
+                                             question, textFont, OptionsKit.SizeText, GameHudSkin.Parchment,
+                                             TextAlignmentOptions.Center);
+        q.textWrappingMode = TextWrappingModes.Normal;
+
+        int gap = DlgW - 20 - 2 * DlgBtnW;
+        SkinButton.Create(dialogPage, DlgX + 10, DlgBtnY, DlgBtnW, DlgBtnH,
+                          Loc.Get("ui.pause.dialog.cancel", "ABBRECHEN"), textFont, SkinButton.Kind.Wood,
+                          CloseDialog);
+        SkinButton.Create(dialogPage, DlgX + 10 + DlgBtnW + gap, DlgBtnY, DlgBtnW, DlgBtnH,
+                          Loc.Get("ui.pause.dialog.confirm", "BESTÄTIGEN"), textFont, SkinButton.Kind.Danger,
+                          ConfirmReset);
+    }
+
+    void CloseDialog()
+    {
+        if (dialog == null) return;
+        dialog.SetParent(null, false);
+        Destroy(dialog.gameObject);
+        dialog = dialogPage = null;
+    }
+
+    void ConfirmReset()
+    {
+        CloseDialog();
+
+        selectedNode = null;
+        graph.Selected = null;
+        Skills.ResetActiveTree();   // feuert Changed -> Baum und Anzeige frisch
+
+        AudioController ac = AudioController.Instance;
+        if (ac != null) ac.PalySound(ac.MenuClick);
+    }
+
+    // ==================================================================
     //  Anzeige
     // ==================================================================
 
@@ -518,6 +603,9 @@ public class HubSkilltreeUI : MonoBehaviour
         }
         learnedText.text = string.Format(Loc.Get("ui.skilltree.learned", "GELERNT {0}/{1}"), learned, total);
         SetFill(learnedFill, 78, total > 0 ? learned / (float)total : 0f);
+
+        // Nichts gelernt, nichts zurueckzugeben.
+        resetButton.Disabled = Skills.SpentIn(Skills.ActiveTree) <= 0;
 
         RefreshCategories();
         RefreshBanner();

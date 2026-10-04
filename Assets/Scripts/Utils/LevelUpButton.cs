@@ -144,7 +144,7 @@ public class LevelUpButton : MonoBehaviour
             if (assingedWeapon.weaponLevel >= 0)
             {
                 DamageNumberController.Instance.CreateText(
-                    "Can't banish active weapons!",
+                    Loc.Get("ui.levelup.cant_banish_owned", "You can't banish what you own"),
                     player.transform.position
                 );
                 AudioController.Instance.PalySound(AudioController.Instance.MenuClick);
@@ -155,7 +155,7 @@ public class LevelUpButton : MonoBehaviour
             if (player.activeEvos.Contains(assingedWeapon))
             {
                 DamageNumberController.Instance.CreateText(
-                    "Can't banish Evos!",
+                    Loc.Get("ui.levelup.cant_banish_evo", "Evos can't be banished"),
                     player.transform.position
                 );
                 AudioController.Instance.PalySound(AudioController.Instance.MenuClick);
