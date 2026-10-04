@@ -12,9 +12,7 @@ using UnityEngine.SceneManagement;
 /// sie das Entladen des Levels und stehen beim naechsten Lauf noch herum.
 /// Darum schieben die Spawner jedes erzeugte Objekt hierher.
 ///
-/// Frueher stand an jeder dieser Stellen SceneManager.GetSceneByName("Game").
-/// Mit den eigenen Map-Szenen heisst die Lauf-Szene aber GameCore - und in der
-/// Test-Szene wieder anders. Deshalb die Frage andersherum stellen: die
+/// Die Lauf-Szene heisst GameCore - in der Test-Szene aber anders. Deshalb die Frage andersherum stellen: die
 /// Lauf-Szene ist die, in der der Spieler steht.
 /// </summary>
 public static class RunScene
@@ -27,17 +25,14 @@ public static class RunScene
     {
         get
         {
-            // Der Spieler steht im alten System in Game, im neuen in GameCore
-            // und in der Test-Szene in test_scene - immer in der richtigen.
+            // Der Spieler steht in GameCore oder in der Test-Szene in
+            // test_scene - immer in der richtigen.
             if (PlayerController.Instance != null)
             {
                 return PlayerController.Instance.gameObject.scene;
             }
 
-            Scene scene = SceneManager.GetSceneByName("Game");
-            if (scene.IsValid() && scene.isLoaded) return scene;
-
-            scene = SceneManager.GetSceneByName(MapSceneSystem.CoreScene);
+            Scene scene = SceneManager.GetSceneByName(MapSceneSystem.CoreScene);
             if (scene.IsValid() && scene.isLoaded) return scene;
 
             return default;
