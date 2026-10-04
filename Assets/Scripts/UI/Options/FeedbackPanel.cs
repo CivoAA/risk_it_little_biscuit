@@ -152,7 +152,7 @@ public class FeedbackPanel : MonoBehaviour
 
         // Hinweiszeile - wird nach einem Sendeversuch zur Statuszeile.
         status = OptionsKit.Label("Status", page, InX, InfoY, InW, 13,
-                                  Loc.Get("ui.feedback.info", "Mitgesendet: Spielversion, System und Szene."),
+                                  Loc.Get("ui.feedback.info", "Mitgesendet: Spielversion, System, Hardware und Szene."),
                                   textFont, OptionsKit.SizeText, GameHudSkin.Stone, TextAlignmentOptions.Center);
 
         cancelButton = SkinButton.Create(page, InX, FootY, FootW, FootH,

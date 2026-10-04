@@ -7,19 +7,21 @@ using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Schickt eine Rueckmeldung aus dem <see cref="FeedbackPanel"/> als
-/// Nachricht in einen Discord-Kanal - ueber einen Webhook, ohne Server
-/// dazwischen.
+/// Nachricht in einen Discord-Kanal.
 ///
-/// DIE WEBHOOK-URL STEHT NICHT IM CODE. Das Repo ist oeffentlich; wer die URL
-/// kennt, kann in den Kanal schreiben. Sie liegt stattdessen in
+/// DER DISCORD-WEBHOOK STEHT NICHT IM SPIEL. Alles unter Resources landet
+/// lesbar im Build - wer die Webhook-URL hat, kann in den Kanal schreiben,
+/// @everyone pingen oder den Webhook loeschen. Deshalb geht die Nachricht an
+/// einen kleinen Cloudflare Worker (Tools/feedback-proxy), der den Webhook als
+/// Geheimnis haelt, pro IP drosselt und die Nachricht neu zusammenbaut.
+/// Dessen Adresse steht in
 ///
 ///   Assets/Resources/Feedback/webhook.txt      (eine Zeile, nur die URL)
 ///
 /// und dieser Ordner steht in .gitignore. Wer ohne die Datei baut, bekommt
 /// ein Spiel, in dem SENDEN "kein Webhook eingerichtet" meldet - sonst
-/// bricht nichts. Achtung: im fertigen Build steckt die URL trotzdem und
-/// laesst sich mit etwas Muehe herausziehen. Wird der Kanal zugemuellt,
-/// in Discord einen neuen Webhook anlegen und die Datei tauschen.
+/// bricht nichts. Eine Discord-URL direkt in der Datei geht nur im Editor;
+/// ein Build bricht dann ab (SteamBuildCheck).
 ///
 /// Mitgeschickt wird, was man zum Nachstellen braucht: Spielversion, Build-Art,
 /// System, Hardware, Aufloesung, Sprache, geladene Szenen, Laufzeit.
@@ -36,8 +38,9 @@ public static class FeedbackReport
     /// <summary>Mindestabstand zwischen zwei Sendungen, gegen Doppelklicks und Spam.</summary>
     public const float Cooldown = 30f;
 
-    private const string WebhookResource = "Feedback/webhook";
-    private const string WebhookPrefix = "https://discord.com/api/webhooks/";
+    public const string WebhookResource = "Feedback/webhook";
+    public const string DiscordPrefix = "https://discord.com/api/webhooks/";
+    private const string HttpsPrefix = "https://";
 
     private static float lastSent = -999f;
 
@@ -50,7 +53,10 @@ public static class FeedbackReport
             TextAsset file = Resources.Load<TextAsset>(WebhookResource);
             if (file == null) return null;
             string url = file.text.Trim();
-            return url.StartsWith(WebhookPrefix) ? url : null;
+            if (!url.StartsWith(HttpsPrefix)) return null;
+            // Direkt an Discord nur im Editor - im Build ginge sonst der Webhook mit raus.
+            if (url.StartsWith(DiscordPrefix) && !Application.isEditor) return null;
+            return url;
         }
     }
 
@@ -63,7 +69,7 @@ public static class FeedbackReport
         string url = WebhookUrl;
         if (url == null)
         {
-            Debug.LogWarning("[Feedback] Kein Webhook - erwartet wird eine Zeile mit der URL in " +
+            Debug.LogWarning("[Feedback] Keine Adresse - erwartet wird eine Zeile mit der Proxy-URL in " +
                              "Assets/Resources/" + WebhookResource + ".txt");
             done(false);
             yield break;

@@ -16,3 +16,6 @@ UserSettings/
 # Discord-Webhook fuer das Feedback-Fenster (FeedbackReport.cs) - Repo ist oeffentlich
 Assets/Resources/Feedback/
 Assets/Resources/Feedback.meta
+
+# Cloudflare-Wrangler-Cache (enthaelt Account-ID und E-Mail)
+Tools/feedback-proxy/.wrangler/

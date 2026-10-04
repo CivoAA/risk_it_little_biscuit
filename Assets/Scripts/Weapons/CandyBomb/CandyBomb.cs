@@ -37,7 +37,7 @@ public class CandyBomb : Weapon
             float totalScale = stats[weaponLevel].range + PlayerController.Instance.AOERange;
             candyBomb.transform.localScale = Vector3.one * totalScale;
 
-            // 🔹 In "Game"-Szene verschieben (falls nötig)
+            // 🔹 In die Lauf-Szene verschieben (falls nötig)
             Scene gameScene = RunScene.Current;
             if (gameScene.IsValid() && gameScene.isLoaded)
             {
