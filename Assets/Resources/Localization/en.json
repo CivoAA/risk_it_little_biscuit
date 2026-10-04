@@ -549,7 +549,7 @@
     { "key": "ui.feedback.message", "value": "Description" },
     { "key": "ui.feedback.message.bug", "value": "What happened? What were you doing?" },
     { "key": "ui.feedback.message.feedback", "value": "What do you like, what is missing?" },
-    { "key": "ui.feedback.info", "value": "Also sent: game version, system and scene." },
+    { "key": "ui.feedback.info", "value": "Also sent: game version, system, hardware and scene." },
     { "key": "ui.feedback.cancel", "value": "CANCEL" },
     { "key": "ui.feedback.send", "value": "SEND" },
     { "key": "ui.feedback.status.sending", "value": "Sending..." },
