@@ -174,7 +174,7 @@ public class HubConsoleUI : MonoBehaviour, IHubConsoleSink
         tRect.sizeDelta = new Vector2(tRect.sizeDelta.x, titleFontSize + 3f);
         tRect.anchoredPosition = new Vector2(0f, -padding * 0.6f);
         title.alignment = TextAlignmentOptions.TopLeft;
-        title.text = titleText;
+        title.text = HubConsole.T("title", titleText);
 
         float titleBlock = padding * 0.6f + titleFontSize + 3f;
 
@@ -369,7 +369,8 @@ public class HubConsoleUI : MonoBehaviour, IHubConsoleSink
 
         logLines.Clear();
         if (greeting != null)
-            foreach (string line in greeting) Print(line);
+            for (int i = 0; i < greeting.Length; i++)
+                Print(HubConsole.T("greeting." + i, greeting[i]));
         RedrawLog();
 
         historyCursor = -1;

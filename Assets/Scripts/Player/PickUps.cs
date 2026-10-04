@@ -121,7 +121,7 @@ public class PickUps : MonoBehaviour
                 float bonus = EnemyCatalog.GoldenHeartMaxHealth;
                 p.playerMaxHealth += bonus;
                 p.Heal(p.playerMaxHealth * 0.1f + bonus);
-                DamageNumberController.Instance?.CreateText($"+{bonus:0} Max HP", transform.position);
+                DamageNumberController.Instance?.CreateText(string.Format(Loc.Get("ui.float.maxhp", "+{0} Max HP"), bonus.ToString("0")), transform.position);
             }
             else if(PickUp_id == 99)
             {

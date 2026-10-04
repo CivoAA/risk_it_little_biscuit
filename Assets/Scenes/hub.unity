@@ -1045,6 +1045,7 @@ MonoBehaviour:
   - {fileID: 0}
   pages:
   - Diese Statue zeigt den Held des Zuckers.
+  locKey: statue_hero
   speaker: 
   portrait: {fileID: 0}
   portraitTalking: {fileID: 0}
@@ -8610,6 +8611,7 @@ MonoBehaviour:
   - "Bei hundertachtzig Grad hinein,\nnach zehn Minuten duftet\u2019s fein.\nDann
     lass sie ruh\u2019n, greif sp\xE4ter zu \u2014\nund schon sind deine Kekse im
     Nu!"
+  locKey: recipe
   speaker: 
   portrait: {fileID: 0}
   portraitTalking: {fileID: 0}
@@ -9281,6 +9283,7 @@ MonoBehaviour:
     weitergeh\u2019n!"
   - "Kr\xFCmel voraus!\nDie Zukunft liegt in unserer Hand!\nKr\xFCmel voraus!\nF\xFCr
     das ganze Zuckerland!"
+  locKey: anthem
   speaker: 
   portrait: {fileID: 0}
   portraitTalking: {fileID: 0}
@@ -14282,6 +14285,7 @@ MonoBehaviour:
     ihre Waffen niederzulegen.
   - "So endete der gro\xDFe Cookie-Krieg. Jener mutige Keks aber wird bis zum heutigen
     Tage als Held des Zuckers gefeiert."
+  locKey: chronicle
   speaker: 
   portrait: {fileID: 0}
   portraitTalking: {fileID: 0}
@@ -14331,6 +14335,7 @@ MonoBehaviour:
   - {fileID: 0}
   pages:
   - Das ist eine Statue, die den ersten gebackenen Keks zeigt.
+  locKey: statue_keks
   speaker: 
   portrait: {fileID: 0}
   portraitTalking: {fileID: 0}
@@ -14730,6 +14735,7 @@ MonoBehaviour:
     ihre Waffen niederzulegen.
   - "So endete der gro\xDFe Cookie-Krieg. Jener mutige Keks aber wird bis zum heutigen
     Tage als Held des Zuckers gefeiert."
+  locKey: chronicle
   speaker: 
   portrait: {fileID: 0}
   portraitTalking: {fileID: 0}
@@ -16335,6 +16341,7 @@ MonoBehaviour:
     weitergeh\u2019n!"
   - "Kr\xFCmel voraus!\nDie Zukunft liegt in unserer Hand!\nKr\xFCmel voraus!\nF\xFCr
     das ganze Zuckerland!"
+  locKey: anthem
   speaker: 
   portrait: {fileID: 0}
   portraitTalking: {fileID: 0}
@@ -16550,6 +16557,7 @@ MonoBehaviour:
   - "Bei hundertachtzig Grad hinein,\nnach zehn Minuten duftet\u2019s fein.\nDann
     lass sie ruh\u2019n, greif sp\xE4ter zu \u2014\nund schon sind deine Kekse im
     Nu!"
+  locKey: recipe
   speaker: 
   portrait: {fileID: 0}
   portraitTalking: {fileID: 0}

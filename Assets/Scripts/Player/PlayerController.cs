@@ -370,7 +370,7 @@ public class PlayerController : MonoBehaviour
 
         rageUntil = Time.time + RageDuration;
         rageReadyAt = Time.time + RageCooldown;
-        DamageNumberController.Instance?.CreateText("RAGE!", transform.position);
+        DamageNumberController.Instance?.CreateText(Loc.Get("ui.float.rage", "RAGE!"), transform.position);
     }
 
     // ------------------------------------------------------------------
@@ -406,7 +406,7 @@ public class PlayerController : MonoBehaviour
 
         kawarimiUntil = Time.time + KawarimiDuration;
         kawarimiReadyAt = kawarimiUntil + KawarimiCooldown;
-        DamageNumberController.Instance?.CreateText("KAWARIMI!", transform.position);
+        DamageNumberController.Instance?.CreateText(Loc.Get("ui.float.kawarimi", "KAWARIMI!"), transform.position);
     }
 
     /// <summary>
@@ -444,7 +444,7 @@ public class PlayerController : MonoBehaviour
 
         stickyRiceReadyAt = Time.time + StickyRice.Duration + StickyRice.Cooldown;
         StickyRice.Fire();
-        DamageNumberController.Instance?.CreateText("KLEBREIS!", transform.position);
+        DamageNumberController.Instance?.CreateText(Loc.Get("ui.float.klebreis", "KLEBREIS!"), transform.position);
     }
 
     // ------------------------------------------------------------------
@@ -461,7 +461,7 @@ public class PlayerController : MonoBehaviour
 
         whirlwindReadyAt = Time.time + Whirlwind.Duration + Whirlwind.Cooldown;
         Whirlwind.Fire(transform);
-        DamageNumberController.Instance?.CreateText("WIRBELSTURM!", transform.position);
+        DamageNumberController.Instance?.CreateText(Loc.Get("ui.float.wirbelsturm", "WIRBELSTURM!"), transform.position);
     }
 
     public void StartStats()
@@ -660,7 +660,7 @@ public class PlayerController : MonoBehaviour
         if (secondChanceCharges <= 0) return false;
 
         secondChanceCharges--;
-        Revive(secondChanceHealthPercent, secondChanceImmunity, "Second Chance!");
+        Revive(secondChanceHealthPercent, secondChanceImmunity, Loc.Get("ui.float.second_chance", "Second Chance!"));
 
         // Aufgebraucht: der Buff verschwindet fuer den Rest des Laufs und gibt
         // seinen Platz frei, damit ein neuer Buff reinkann.
@@ -680,7 +680,7 @@ public class PlayerController : MonoBehaviour
         luckyReviveRolled = true;
         if (UnityEngine.Random.value >= luckyReviveChance) return false;
 
-        Revive(luckyReviveHealthPercent, luckyReviveImmunity, "Lucky!");
+        Revive(luckyReviveHealthPercent, luckyReviveImmunity, Loc.Get("ui.float.lucky", "Lucky!"));
         return true;
     }
 

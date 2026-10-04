@@ -7,6 +7,8 @@ using UnityEngine;
 /// </summary>
 public class HubCharacterSelectTrigger : HubInteractable
 {
+    protected override string PromptKey => "hub.prompt.character";
+
     [Header("Charakterauswahl")]
     [Tooltip("Leer lassen - dann wird die HubCharacterSelectUI auf diesem Objekt genommen.")]
     [SerializeField] private HubCharacterSelectUI characterSelect;

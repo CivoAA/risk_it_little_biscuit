@@ -8,6 +8,8 @@ using UnityEngine;
 /// </summary>
 public class TeleportToShop : HubInteractable
 {
+    protected override string PromptKey => "hub.prompt.enter";
+
     [Header("Ziel")]
     [Tooltip("Die Gegenstelle. Leer lassen geht, solange genau zwei Teleporter " +
              "in der Szene stehen - dann finden sie sich beim Start selbst.")]

@@ -213,7 +213,7 @@ public class UIController : MonoBehaviour
 
         if (hasEvo)
         {
-            DamageNumberController.Instance.CreateText("Can't reroll Evo weapons!", PlayerController.Instance.transform.position);
+            DamageNumberController.Instance.CreateText(Loc.Get("ui.levelup.evo_no_reroll", "Evos can't be rerolled"), PlayerController.Instance.transform.position);
             AudioController.Instance.PalySound(AudioController.Instance.MenuClick);
             return;
         }
@@ -224,7 +224,7 @@ public class UIController : MonoBehaviour
 
             // Skilltree "Sparsamer Reroll": mit etwas Glueck kostet er nichts.
             if (Random.value * 100f < PlayerController.Instance.freeRerollChance)
-                DamageNumberController.Instance?.CreateText("Free Reroll!", PlayerController.Instance.transform.position);
+                DamageNumberController.Instance?.CreateText(Loc.Get("ui.float.free_reroll", "Free Reroll!"), PlayerController.Instance.transform.position);
             else
                 PlayerController.Instance.rerollAmount -= 1;
 
@@ -232,7 +232,7 @@ public class UIController : MonoBehaviour
         }
         else
         {
-            DamageNumberController.Instance.CreateText("No more Rerolles left", PlayerController.Instance.transform.position);
+            DamageNumberController.Instance.CreateText(Loc.Get("ui.levelup.no_rerolls", "No rerolls left"), PlayerController.Instance.transform.position);
             AudioController.Instance.PalySound(AudioController.Instance.MenuClick);
         }
         RefreshRerollandBanish();
@@ -254,7 +254,7 @@ public class UIController : MonoBehaviour
         }
         else
         {
-            DamageNumberController.Instance.CreateText("No more Banishes left", PlayerController.Instance.transform.position);
+            DamageNumberController.Instance.CreateText(Loc.Get("ui.levelup.no_banish", "No banishes left"), PlayerController.Instance.transform.position);
         }
         AudioController.Instance.PalySound(AudioController.Instance.MenuClick);
         RefreshRerollandBanish();

@@ -7,6 +7,8 @@ using UnityEngine;
 /// </summary>
 public class HubLevelSelectTrigger : HubInteractable
 {
+    protected override string PromptKey => "hub.prompt.levelselect";
+
     [Header("Levelauswahl")]
     [Tooltip("Leer lassen - dann wird die HubLevelSelectUI auf diesem Objekt genommen.")]
     [SerializeField] private HubLevelSelectUI levelSelect;

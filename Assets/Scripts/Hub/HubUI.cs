@@ -459,7 +459,8 @@ public class HubUI : MonoBehaviour
     {
         typer.Play(pages[pageIndex]);
         bool last = pageIndex >= pages.Length - 1;
-        string action = last ? "Klick zum Schließen" : "Klick für weiter";
+        string action = last ? Loc.Get("ui.dialogue.close", "Klick zum Schließen")
+                             : Loc.Get("ui.dialogue.next", "Klick für weiter");
         hintText.text = (pageIndex + 1) + "/" + pages.Length + "   " + action;
     }
 

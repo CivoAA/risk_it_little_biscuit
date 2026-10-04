@@ -29,7 +29,7 @@ public static class HubConsoleCheats
             int betrag = ArgAsInt(args, 0, 500000);
 
             Shop.AddCurrency(betrag);
-            sink.Print($"+{betrag} Muenzen. Neuer Stand: {Shop.Currency}");
+            sink.Print(string.Format(T("cheat.coins", "+{0} Münzen. Neuer Stand: {1}"), betrag, Shop.Currency));
         }, hidden: true);
 
         // ------------------------------------------------------------------
@@ -46,8 +46,8 @@ public static class HubConsoleCheats
             }
 
             sink.Print(neu > 0
-                ? $"{neu} Sachen freigeschaltet. Viel Spass damit."
-                : "War schon alles offen. Gierig.");
+                ? string.Format(T("cheat.unlocks", "{0} Sachen freigeschaltet. Viel Spaß damit."), neu)
+                : T("cheat.allopen", "War schon alles offen. Gierig."));
         }, hidden: true);
 
         // ------------------------------------------------------------------
@@ -59,7 +59,7 @@ public static class HubConsoleCheats
             // nachschlagen muss.
             if (args.Length == 0)
             {
-                sink.Print("freischalten <id> - bekannte IDs:");
+                sink.Print(T("cheat.unlock.ids", "freischalten <id> - bekannte IDs:"));
                 foreach (UnlockDef u in Unlocks.All)
                     sink.Print($"  {(u.IsUnlocked ? "[x]" : "[ ]")} {u.Id}");
                 return;
@@ -68,12 +68,12 @@ public static class HubConsoleCheats
             string id = args[0];
             if (Unlocks.Find(id) == null)
             {
-                sink.PrintError($"'{id}' steht auf keiner Liste.");
+                sink.PrintError(string.Format(T("unknown.id", "'{0}' steht auf keiner Liste."), id));
                 return;
             }
 
             Unlocks.Grant(id);
-            sink.Print($"'{id}' ist jetzt offen.");
+            sink.Print(string.Format(T("cheat.unlock.done", "'{0}' ist jetzt offen."), id));
         }, usage: "<id>", hidden: true);
 
         // ------------------------------------------------------------------
@@ -81,9 +81,10 @@ public static class HubConsoleCheats
         // ------------------------------------------------------------------
         HubConsole.Add("status", "zeigt Muenzen und Fortschritt", (args, sink) =>
         {
-            sink.Print($"Muenzen: {Shop.Currency}");
+            sink.Print(string.Format(T("status.coins", "Münzen: {0}"), Shop.Currency));
 
-            sink.Print($"Freigeschaltet: {Unlocks.UnlockedCount} von {Unlocks.TotalCount}");
+            sink.Print(string.Format(T("status.unlocks", "Freigeschaltet: {0} von {1}"),
+                                     Unlocks.UnlockedCount, Unlocks.TotalCount));
         });
 
         // ------------------------------------------------------------------
@@ -95,8 +96,9 @@ public static class HubConsoleCheats
             int erstattet = Shop.ResetAllUpgrades();
 
             sink.Print(erstattet > 0
-                ? $"Shop zurueckgesetzt. {erstattet} Muenzen erstattet, neuer Stand: {Shop.Currency}"
-                : $"Shop war schon leer. Stand: {Shop.Currency}");
+                ? string.Format(T("cheat.shopreset", "Shop zurückgesetzt. {0} Münzen erstattet, neuer Stand: {1}"),
+                                erstattet, Shop.Currency)
+                : string.Format(T("cheat.shopreset.none", "Shop war schon leer. Stand: {0}"), Shop.Currency));
         }, hidden: true);
 
         // ------------------------------------------------------------------
@@ -134,15 +136,15 @@ public static class HubConsoleCheats
 
                     Achievements.Unlock(d);
                     int offen = Achievements.TotalCount - Achievements.UnlockedCount;
-                    sink.Print($"'{d.Id}' freigeschaltet. Noch {offen} zu holen.");
+                    sink.Print(string.Format(T("cheat.ach.next", "'{0}' freigeschaltet. Noch {1} zu holen."), d.Id, offen));
                     return;
                 }
 
-                sink.Print("Alles schon geschafft. Respekt.");
+                sink.Print(T("cheat.ach.done", "Alles schon geschafft. Respekt."));
                 return;
             }
 
-            if (was.Equals("alle", System.StringComparison.OrdinalIgnoreCase))
+            if (IsAll(was))
             {
                 // Ueber Ach.All laufen und nicht ueber Achievements.Locked():
                 // der Katalog bleibt beim Freischalten unveraendert, der
@@ -156,27 +158,27 @@ public static class HubConsoleCheats
                 }
 
                 sink.Print(neu > 0
-                    ? $"{neu} Erfolge freigeschaltet. Das war's dann wohl."
-                    : "War schon alles offen. Gierig.");
+                    ? string.Format(T("cheat.ach.all", "{0} Erfolge freigeschaltet. Das war's dann wohl."), neu)
+                    : T("cheat.allopen", "War schon alles offen. Gierig."));
                 return;
             }
 
             AchievementDef def = Ach.Find(was);
             if (def == null)
             {
-                sink.PrintError($"'{was}' steht auf keiner Liste. " +
-                                "-> giberfolge / giberfolge alle / giberfolge <id>");
+                sink.PrintError(string.Format(T("unknown.id", "'{0}' steht auf keiner Liste."), was) + " " +
+                                T("cheat.ach.usage", "-> giberfolge / giberfolge alle / giberfolge <id>"));
                 return;
             }
 
             if (def.IsUnlocked)
             {
-                sink.Print($"'{def.Id}' war schon offen.");
+                sink.Print(string.Format(T("cheat.ach.already", "'{0}' war schon offen."), def.Id));
                 return;
             }
 
             Achievements.Unlock(def);
-            sink.Print($"'{def.Id}' freigeschaltet.");
+            sink.Print(string.Format(T("cheat.ach.one", "'{0}' freigeschaltet."), def.Id));
         }, usage: "[alle|<id>]", hidden: true);
 
         // ------------------------------------------------------------------
@@ -193,9 +195,8 @@ public static class HubConsoleCheats
             AchievementsBookPanel.RefreshIfOpen();
 
             sink.Print(vorher > 0
-                ? $"{vorher} Erfolge zurueckgesetzt. Bei Steam bleiben sie stehen, " +
-                  "das geht nur dort."
-                : "Da war nichts zurueckzusetzen.");
+                ? string.Format(T("cheat.ach.reset", "{0} Erfolge zurückgesetzt. Bei Steam bleiben sie stehen, das geht nur dort."), vorher)
+                : T("cheat.ach.reset.none", "Da war nichts zurückzusetzen."));
         }, hidden: true);
 
         // ------------------------------------------------------------------
@@ -230,7 +231,7 @@ public static class HubConsoleCheats
         {
             int vorher = Skills.BossLevelsOf(Skills.ActiveTree);
             Skills.ResetBossVictories(Skills.ActiveTree);
-            sink.Print($"{vorher} Boss-Siege vergessen. {CharStand()}");
+            sink.Print(string.Format(T("cheat.bossreset", "{0} Boss-Siege vergessen."), vorher) + " " + CharStand());
         }, hidden: true);
 
         // ------------------------------------------------------------------
@@ -240,20 +241,19 @@ public static class HubConsoleCheats
         // ------------------------------------------------------------------
         HubConsole.Add("skillreset", "setzt den Skilltree zurueck", (args, sink) =>
         {
-            bool alle = args != null && args.Length > 0 &&
-                        args[0].Equals("alle", System.StringComparison.OrdinalIgnoreCase);
+            bool alle = args != null && args.Length > 0 && IsAll(args[0]);
 
             if (alle)
             {
                 foreach (SkillTreeDef tree in SkillTrees.All) Skills.ResetTree(tree);
-                sink.Print($"Alle Skilltrees zurueckgesetzt. {CharStand()}");
+                sink.Print(T("cheat.skillreset.all", "Alle Skilltrees zurückgesetzt.") + " " + CharStand());
                 return;
             }
 
             SkillTreeDef active = Skills.ActiveTree;
             Skills.ResetActiveTree();
-            sink.Print($"Skilltree '{(active != null ? active.Id : "?")}' zurueckgesetzt. " +
-                       CharStand());
+            sink.Print(string.Format(T("cheat.skillreset", "Skilltree '{0}' zurückgesetzt."),
+                                     active != null ? active.Id : "?") + " " + CharStand());
         }, usage: "[alle]", hidden: true);
 
         // ------------------------------------------------------------------
@@ -265,17 +265,18 @@ public static class HubConsoleCheats
         HubConsole.Add("werksreset", "setzt den kompletten Spielstand zurueck", (args, sink) =>
         {
             bool bestaetigt = args != null && args.Length > 0 &&
-                              args[0].Equals("ja", System.StringComparison.OrdinalIgnoreCase);
+                              (args[0].Equals("ja", System.StringComparison.OrdinalIgnoreCase) ||
+                               args[0].Equals("yes", System.StringComparison.OrdinalIgnoreCase));
             if (!bestaetigt)
             {
-                sink.Print("Loescht ALLES: Shop, Charaktere, Skills, Erfolge, Unlocks, Bestiarium, Rekorde.");
-                sink.Print("Wirklich? -> werksreset ja");
+                sink.Print(T("cheat.wipe.warn", "Löscht ALLES: Shop, Charaktere, Skills, Erfolge, Unlocks, Bestiarium, Rekorde."));
+                sink.Print(T("cheat.wipe.confirm", "Wirklich? -> werksreset ja"));
                 return;
             }
 
             if (!SaveReset.Allowed)
             {
-                sink.PrintError("Geht nicht waehrend eines Laufs.");
+                sink.PrintError(T("cheat.wipe.inrun", "Geht nicht während eines Laufs."));
                 return;
             }
 
@@ -300,7 +301,15 @@ public static class HubConsoleCheats
         return int.TryParse(args[index], out int value) ? value : fallback;
     }
 
-    /// <summary>"Level 3 (34.830 XP), 2 Punkte frei" fuer den gewaehlten Charakter.</summary>
+    /// <summary>"Level 3 (34.830 XP, 1 Boss-Level), 2 Punkte frei." fuer den gewaehlten Charakter.</summary>
     static string CharStand()
-        => $"Level {Skills.Level} ({Skills.Xp:N0} XP, {Skills.BossLevelsOf(Skills.ActiveTree)} Boss-Level), {Skills.Points} Punkte frei.";
+        => string.Format(T("cheat.charstand", "Level {0} ({1} XP, {2} Boss-Level), {3} Punkte frei."),
+                         Skills.Level, Skills.Xp.ToString("N0"), Skills.BossLevelsOf(Skills.ActiveTree), Skills.Points);
+
+    /// <summary>"alle" oder "all" - die englische Fassung des Arguments geht auch.</summary>
+    static bool IsAll(string arg)
+        => arg.Equals("alle", System.StringComparison.OrdinalIgnoreCase) ||
+           arg.Equals("all", System.StringComparison.OrdinalIgnoreCase);
+
+    static string T(string key, string fallback) => HubConsole.T(key, fallback);
 }
