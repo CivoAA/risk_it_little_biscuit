@@ -9,6 +9,10 @@ public class BookHint : HubInteractable
     [TextArea(3, 10)]
     public string[] pages;
 
+    [Tooltip("Uebersetzung: Seite i steht in den Sprachdateien unter hub.book.<locKey>.<i>. " +
+             "Fehlt ein Eintrag, gilt die Seite oben. Leer = Seiten unuebersetzt.")]
+    public string locKey;
+
     [Header("Sprecher (optional)")]
     [Tooltip("Name auf dem Reiter ueber der Box. Leer = kein Reiter.")]
     public string speaker;
@@ -17,6 +21,8 @@ public class BookHint : HubInteractable
     [Tooltip("Dasselbe Portrait mit offenem Mund - wechselt beim Tippen. Leer = nur wippen.")]
     public Sprite portraitTalking;
 
+    protected override string PromptKey => "hub.prompt.read";
+
     protected override void OnInteract()
     {
         if (pages == null || pages.Length == 0)
@@ -24,6 +30,16 @@ public class BookHint : HubInteractable
             Debug.LogWarning($"{name}: keine Seiten gesetzt.");
             return;
         }
-        HubUI.Instance.ShowDialogue(pages, speaker, portrait, portraitTalking);
+        HubUI.Instance.ShowDialogue(LocalizedPages(), speaker, portrait, portraitTalking);
+    }
+
+    string[] LocalizedPages()
+    {
+        if (string.IsNullOrEmpty(locKey)) return pages;
+
+        var shown = new string[pages.Length];
+        for (int i = 0; i < pages.Length; i++)
+            shown[i] = Loc.Get($"hub.book.{locKey}.{i}", pages[i]);
+        return shown;
     }
 }

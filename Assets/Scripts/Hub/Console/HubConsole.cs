@@ -189,8 +189,8 @@ public static class HubConsole
 
         if (!lookup.TryGetValue(name, out Command cmd))
         {
-            sink.PrintError("'" + name + "' kennt das Terminal nicht.");
-            sink.Print("Tipp: 'hilfe' zeigt, was geht.");
+            sink.PrintError(string.Format(T("unknown", "'{0}' kennt das Terminal nicht."), name));
+            sink.Print(T("unknown.tip", "Tipp: 'hilfe' zeigt, was geht."));
             return;
         }
 
@@ -201,7 +201,7 @@ public static class HubConsole
         }
         catch (Exception e)
         {
-            sink.PrintError("Das Terminal hat sich verschluckt. Nichts ist passiert.");
+            sink.PrintError(T("crash", "Das Terminal hat sich verschluckt. Nichts ist passiert."));
             Debug.LogError($"HubConsole: Befehl '{cmd.Name}' hat geworfen - {e}");
         }
     }
@@ -212,14 +212,14 @@ public static class HubConsole
     {
         Add("hilfe", "zeigt diese Liste", (args, sink) =>
         {
-            sink.Print("Bekannte Befehle:");
+            sink.Print(T("help.title", "Bekannte Befehle:"));
             foreach (Command c in order)
             {
                 if (c.Hidden) continue;
                 PrintCommand(c, sink);
             }
             sink.Print("");
-            sink.Print("Und ein paar Dinge, die hier nicht stehen.");
+            sink.Print(T("help.more", "Und ein paar Dinge, die hier nicht stehen."));
         });
         AddAlias("help", "hilfe");
         AddAlias("?", "hilfe");
@@ -228,12 +228,12 @@ public static class HubConsole
         // Verstecken in "hilfe" sinnlos.
         Add("allebefehle", "zeigt alle Befehle, auch die Cheats", (args, sink) =>
         {
-            sink.Print("Befehle:");
+            sink.Print(T("all.commands", "Befehle:"));
             foreach (Command c in order)
                 if (!c.Hidden) PrintCommand(c, sink);
 
             sink.Print("");
-            sink.Print("Cheats:");
+            sink.Print(T("all.cheats", "Cheats:"));
             foreach (Command c in order)
                 if (c.Hidden) PrintCommand(c, sink);
         }, hidden: true);
@@ -248,9 +248,18 @@ public static class HubConsole
         AddAlias("quit", "ende");
     }
 
+    /// <summary>
+    /// Beschreibung und Argumente stehen beim Registrieren fest; angezeigt wird
+    /// die Uebersetzung unter ui.console.cmd.[name] bzw. ui.console.usage.[name],
+    /// sonst der Text aus Add().
+    /// </summary>
     static void PrintCommand(Command c, IHubConsoleSink sink)
     {
-        string left = string.IsNullOrEmpty(c.Usage) ? c.Name : c.Name + " " + c.Usage;
-        sink.Print("  " + left.PadRight(20) + c.Description);
+        string usage = string.IsNullOrEmpty(c.Usage) ? "" : T("usage." + c.Name, c.Usage);
+        string left = usage.Length == 0 ? c.Name : c.Name + " " + usage;
+        sink.Print("  " + left.PadRight(20) + T("cmd." + c.Name, c.Description));
     }
+
+    /// <summary>Terminaltext in der aktuellen Sprache (ui.console.[key]).</summary>
+    public static string T(string key, string fallback) => Loc.Get("ui.console." + key, fallback);
 }

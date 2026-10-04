@@ -6,6 +6,8 @@ using UnityEngine;
 /// </summary>
 public class HubShopTrigger : HubInteractable
 {
+    protected override string PromptKey => "hub.prompt.shop";
+
     [Header("Shop")]
     [Tooltip("Leer lassen - dann wird die HubShopUI auf diesem Objekt genommen.")]
     [SerializeField] private HubShopUI shop;

@@ -14,6 +14,8 @@ using UnityEngine;
 /// </summary>
 public class WorkbenchTrigger : HubInteractable
 {
+    protected override string PromptKey => "hub.prompt.workbench";
+
     private void Reset()
     {
         // Die Zone sitzt vor dem Moebel: die Werkbank steht an der Wand, der

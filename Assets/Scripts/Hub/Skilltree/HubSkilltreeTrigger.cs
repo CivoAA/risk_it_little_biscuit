@@ -7,6 +7,8 @@ using UnityEngine;
 /// </summary>
 public class HubSkilltreeTrigger : HubInteractable
 {
+    protected override string PromptKey => "hub.prompt.skilltree";
+
     [Header("Skilltree")]
     [Tooltip("Leer lassen - dann wird die HubSkilltreeUI auf diesem Objekt genommen.")]
     [SerializeField] private HubSkilltreeUI skilltree;

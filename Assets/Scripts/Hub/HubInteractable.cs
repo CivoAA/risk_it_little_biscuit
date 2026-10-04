@@ -188,9 +188,19 @@ public abstract class HubInteractable : MonoBehaviour
             return;
         }
 
-        if (showPrompt && active) HubUI.Instance.RequestPrompt(promptText);
+        if (showPrompt && active) HubUI.Instance.RequestPrompt(PromptText);
         if (active && Input.GetKeyDown(interactKey) && ConsumeInteractPress()) OnInteract();
     }
+
+    /// <summary>
+    /// Schluessel des [E]-Hinweises in den Sprachdateien (hub.prompt.*). Null =
+    /// promptText aus dem Inspector bleibt unuebersetzt.
+    /// </summary>
+    protected virtual string PromptKey => null;
+
+    /// <summary>Text des [E]-Hinweises - uebersetzt ueber <see cref="PromptKey"/>, sonst promptText.</summary>
+    protected virtual string PromptText =>
+        string.IsNullOrEmpty(PromptKey) ? promptText : Loc.Get(PromptKey, promptText);
 
     protected abstract void OnInteract();
 
