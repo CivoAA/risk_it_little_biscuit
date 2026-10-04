@@ -10,16 +10,15 @@ using UnityEngine.SceneManagement;
 /// (<see cref="MapBootstrap"/>), darum muss beim Start eines Levels nur die
 /// Map-Szene geladen werden - egal ob aus dem Hub oder direkt aus dem Editor.
 ///
-/// Die alte Game.unity, in der alle Welten uebereinander lagen und ein
-/// WorldSelector die richtige freischaltete, wird nicht mehr angesteuert. Sie
-/// liegt nur noch als Vorlage fuer die Test-Szene herum.
+/// Die alte Game.unity, in der alle Welten uebereinander lagen, ist geloescht.
+/// Auch die Test-Szene wird aus GameCore gebaut (TestSceneBuilder).
 /// </summary>
 public static class MapSceneSystem
 {
     /// <summary>Die Szene mit allem Gemeinsamen. Liegt unter Assets/Scenes/Core.</summary>
     public const string CoreScene = "GameCore";
 
-    /// <summary>Map-Szenen heissen "Map_World" + Map-ID - so wie die Welten in Game.unity.</summary>
+    /// <summary>Map-Szenen heissen "Map_World" + Map-ID - so wie frueher die Welten in Game.unity.</summary>
     public const string MapScenePrefix = "Map_World";
 
     private static readonly System.Collections.Generic.HashSet<string> missingWarned =

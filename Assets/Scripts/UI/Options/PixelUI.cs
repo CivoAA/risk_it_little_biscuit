@@ -63,7 +63,7 @@ public static class PixelUI
     /// <summary>
     /// Sucht die Pixel-Font des Projekts (ThaleahFat). Die liegt nicht in einem
     /// Resources-Ordner, ist aber geladen, sobald irgendein TMP-Text im Spiel sie
-    /// benutzt - Game.unity und World Map.unity tun das. Wird sie nicht gefunden,
+    /// benutzt - GameCore.unity und World Map.unity tun das. Wird sie nicht gefunden,
     /// fällt TMP auf seine Standardschrift zurück.
     ///
     /// Für Oberflächen mit deutschem Text ist <see cref="FindTextFont"/> die

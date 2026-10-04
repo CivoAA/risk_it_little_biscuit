@@ -6,32 +6,27 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// Erzeugt "Assets/Scenes/test_scene.unity" als Kopie der Game-Szene, entfernt
-/// Map und Gegner und baut das Test-Rig ein.
+/// Erzeugt "Assets/Scenes/test_scene.unity" als Kopie von GameCore, entfernt
+/// Spawner und Gegner und baut das Test-Rig ein. GameCore bringt keine Map mit
+/// (die liegt in den Map_World-Szenen), die Test-Szene laeuft also auf leerem
+/// Grund.
 ///
-/// Die Game-Szene selbst wird dabei nie verändert – es wird nur kopiert.
+/// GameCore selbst wird dabei nie verändert – es wird nur kopiert.
 /// Der Builder ist beliebig oft wiederholbar: ein vorhandenes test_scene.unity
-/// wird ersetzt, sodass die Test-Szene jederzeit auf den aktuellen Stand der
-/// Game-Szene nachgezogen werden kann.
+/// wird ersetzt, sodass die Test-Szene jederzeit auf den aktuellen Stand von
+/// GameCore nachgezogen werden kann.
 /// </summary>
 public static class TestSceneBuilder
 {
-    private const string SourceScenePath = "Assets/Scenes/Game.unity";
+    private const string SourceScenePath = "Assets/Scenes/Core/GameCore.unity";
     private const string TargetScenePath = "Assets/Scenes/test_scene.unity";
     private const string DummySourcePrefab = "Assets/Prefabs/Enemy/fin_slime.prefab";
 
     /// <summary>Root-Objekte, die in der Test-Szene nichts zu suchen haben.</summary>
     private static readonly string[] RootsToDelete =
     {
-        "Grid",                  // Tilemaps der drei Welten inkl. EnemySpawner/Waves
+        "Spawn Director",        // Gegnerwellen - in der Test-Szene spawnt nur DummyArena
         "squiddy_funny_walk_0",  // übrig gebliebener Gegner
-    };
-
-    /// <summary>Pfade unterhalb von Root-Objekten, die entfernt werden.</summary>
-    private static readonly string[] ChildrenToDelete =
-    {
-        "Managers/World Manager",     // WorldSelector: aktiviert Welten + EnemySpawner
-        "Managers/TileMapGenerator1", // erzeugt die Map
     };
 
     [MenuItem("Tools/Szenen/Test-Szene neu bauen", false, 100)]
@@ -41,8 +36,8 @@ public static class TestSceneBuilder
         {
             bool replace = EditorUtility.DisplayDialog(
                 "Test-Szene neu bauen",
-                "test_scene.unity existiert bereits und wird durch eine frische Kopie der " +
-                "Game-Szene ersetzt.\n\nEigene Änderungen in der Test-Szene gehen dabei verloren.",
+                "test_scene.unity existiert bereits und wird durch eine frische Kopie von " +
+                "GameCore ersetzt.\n\nEigene Änderungen in der Test-Szene gehen dabei verloren.",
                 "Ersetzen", "Abbrechen");
 
             if (!replace)
@@ -85,7 +80,7 @@ public static class TestSceneBuilder
 
         Scene scene = EditorSceneManager.OpenScene(TargetScenePath, OpenSceneMode.Single);
 
-        StripMapAndEnemies(scene);
+        StripSpawnersAndEnemies(scene);
         ActivateEventSystem(scene);
         SetupCamera(scene);
         Transform player = FindRoot(scene, "Player");
@@ -103,31 +98,15 @@ public static class TestSceneBuilder
 
     // ------------------------------------------------------------------
 
-    private static void StripMapAndEnemies(Scene scene)
+    private static void StripSpawnersAndEnemies(Scene scene)
     {
         List<GameObject> roots = scene.GetRootGameObjects().ToList();
 
         foreach (GameObject root in roots)
         {
-            // Alle Baum-Instanzen der Map (Tree1 / Tree2, auch "Tree1 (1)").
-            bool isTree = root.name.StartsWith("Tree1") || root.name.StartsWith("Tree2");
-
-            if (isTree || RootsToDelete.Contains(root.name))
+            if (RootsToDelete.Contains(root.name))
             {
                 Object.DestroyImmediate(root);
-            }
-        }
-
-        foreach (string path in ChildrenToDelete)
-        {
-            Transform target = FindByPath(scene, path);
-            if (target != null)
-            {
-                Object.DestroyImmediate(target.gameObject);
-            }
-            else
-            {
-                Debug.LogWarning($"[TestSceneBuilder] '{path}' nicht gefunden – übersprungen.");
             }
         }
 
@@ -146,8 +125,7 @@ public static class TestSceneBuilder
         Transform eventSystem = FindRoot(scene, "EventSystem");
         if (eventSystem != null)
         {
-            // In der Game-Szene deaktiviert, weil die World Map ein EventSystem
-            // mitbringt. Die Test-Szene läuft allein und braucht ein eigenes.
+            // Die Test-Szene läuft allein und braucht ein eigenes EventSystem.
             eventSystem.gameObject.SetActive(true);
         }
     }
@@ -168,8 +146,8 @@ public static class TestSceneBuilder
             camera.backgroundColor = new Color(0.13f, 0.15f, 0.19f, 1f);
         }
 
-        // Im echten Spiel hört die World-Map-Kamera; die Test-Szene läuft allein
-        // und bräuchte sonst gar keinen Listener – dann bleibt alles stumm.
+        // Die Test-Szene läuft allein und bräuchte sonst gar keinen Listener –
+        // dann bleibt alles stumm.
         AudioListener listener = cameraTransform.GetComponent<AudioListener>();
         if (listener != null)
         {

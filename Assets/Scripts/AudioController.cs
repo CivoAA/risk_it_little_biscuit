@@ -127,25 +127,21 @@ public class AudioController : MonoBehaviour
     /// </summary>
     private static bool IsRunLive()
     {
-        foreach (string name in new[] { MapSceneSystem.CoreScene, "Game" })
-        {
-            Scene scene = SceneManager.GetSceneByName(name);
-            if (!scene.IsValid() || !scene.isLoaded) continue;
-            foreach (GameObject root in scene.GetRootGameObjects())
-                if (root.activeSelf) return true;
-        }
+        Scene scene = SceneManager.GetSceneByName(MapSceneSystem.CoreScene);
+        if (!scene.IsValid() || !scene.isLoaded) return false;
+        foreach (GameObject root in scene.GetRootGameObjects())
+            if (root.activeSelf) return true;
         return false;
     }
 
     private static bool IsRunScene(string sceneName)
     {
-        // Im neuen System heisst die Lauf-Szene GameCore; "Game" ist die alte.
-        return sceneName == "Game" || sceneName == MapSceneSystem.CoreScene;
+        return sceneName == MapSceneSystem.CoreScene;
     }
 
     public void SwitchMusic(string sceneName)
     {
-        // nicht jede Szene hat die beiden Musikquellen verdrahtet (z.B. Game/World Map)
+        // nicht jede Szene hat die beiden Musikquellen verdrahtet (z.B. World Map)
         if (audioSources == null || audioSources.Length < 2) return;
 
         if (sceneName == "Main Menu" || sceneName == "World Map")
