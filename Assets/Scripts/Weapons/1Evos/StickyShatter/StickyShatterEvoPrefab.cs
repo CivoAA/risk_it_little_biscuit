@@ -1,94 +1,12 @@
-using System.Collections.Generic;
-using UnityEngine;
-
 /// <summary>
-/// Eine Marmeladenlache der <see cref="StickyShatterEvo"/>. Tickt Schaden und
-/// uebergibt dabei den Slow-Multiplikator an <see cref="Enemy.TakeDamage"/> -
-/// derselbe Weg, den auch der Time Laser nutzt.
+/// Eine Marmeladenlache der <see cref="StickyShatterEvo"/>. Alles Uebrige -
+/// Schaden, Einkochen, Marmeladenbad - kommt aus <see cref="AreaWeaponPrefabJamJar"/>;
+/// hier kommt nur die Bremse dazu, die ueber <see cref="Enemy.TakeDamage"/>
+/// laeuft (derselbe Weg wie beim Time Laser).
 /// </summary>
-public class StickyShatterEvoPrefab : MonoBehaviour
+public class StickyShatterEvoPrefab : AreaWeaponPrefabJamJar
 {
-    public StickyShatterEvo weapon;
-    public List<Enemy> enemiesInRange = new List<Enemy>();
+    protected override float? Slow => (weapon as StickyShatterEvo)?.SlowMultiplier;
 
-    private float lifeTimer;
-    private SpriteFlipbook look;   // Grafik + Ausblenden, siehe Tools/waffen_modelle.py
-    private float tickCounter;
-
-    void Start()
-    {
-        if (weapon == null)
-        {
-            weapon = WeaponFinder.Find<StickyShatterEvo>("Sticky Shatter Evo");
-        }
-
-        if (weapon == null || !weapon.IsActive)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        lifeTimer = weapon.CurrentDuration;
-        look = GetComponent<SpriteFlipbook>();
-        transform.localScale = Vector3.one
-            * weapon.CurrentStats.range
-            * PlayerController.Instance.AOERange;
-
-        if (AudioController.Instance != null)
-        {
-            AudioController.Instance.PalySound(AudioController.Instance.areaWeaponSpawn, 0.5f);
-        }
-    }
-
-    void Update()
-    {
-        if (weapon == null || !weapon.IsActive)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        lifeTimer -= Time.deltaTime;
-        if (look != null) look.SetLifeLeft(lifeTimer);
-        if (lifeTimer <= 0f)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        tickCounter -= Time.deltaTime;
-        if (tickCounter > 0f) return;
-
-        tickCounter = Mathf.Max(0.05f, weapon.CurrentStats.AttackSpeed);
-
-        for (int i = enemiesInRange.Count - 1; i >= 0; i--)
-        {
-            if (enemiesInRange[i] == null)
-            {
-                enemiesInRange.RemoveAt(i);
-                continue;
-            }
-
-            enemiesInRange[i].TakeDamage(weapon.CurrentStats.damage, weapon.SlowMultiplier, 0f);
-        }
-    }
-
-    private void OnTriggerEnter2D(Collider2D collider)
-    {
-        if (!collider.CompareTag("Enemy")) return;
-
-        Enemy enemy = collider.GetComponent<Enemy>();
-        if (enemy != null && !enemiesInRange.Contains(enemy))
-        {
-            enemiesInRange.Add(enemy);
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collider)
-    {
-        if (!collider.CompareTag("Enemy")) return;
-
-        Enemy enemy = collider.GetComponent<Enemy>();
-        if (enemy != null) enemiesInRange.Remove(enemy);
-    }
+    protected override AreaWeaponJamJar FindWeapon() => WeaponFinder.Find<StickyShatterEvo>("Sticky Shatter Evo");
 }

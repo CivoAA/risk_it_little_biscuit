@@ -59,4 +59,8 @@ public enum SkillType
     // Geist-Ast. Werte in Prozent eingeben: 1 = 1 %.
     OverhealShield      = 35,   // Überheilung wird Schild, bis x % der Max-HP
     LastBreath          = 36,   // unter 30 % Leben: +x % Tempo, doppelte Regeneration
+
+    // Waffen. Werte in Prozent eingeben: 1 = 1 %.
+    IncreaseDuration    = 37,   // +x % Wirkdauer aller Waffen
+    ReduceCooldown      = 38,   // -x % Abklingzeit aller Waffen
 }

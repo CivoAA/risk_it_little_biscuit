@@ -48,12 +48,12 @@ public class EnemyWorkshop : EditorWindow
 
     private const string CatalogPath = "Assets/Scripts/Enemy/EnemyCatalog.cs";
     private const string AnimFolder = "Assets/Animations/Gegner/Neu";
-    private const string PrefabFolder = "Assets/Prefabs/Enemy/Neu";
+    private const string PrefabFolder = "Assets/Prefabs/Enemy/Gegner";
     private const string EnemyPrefabRoot = "Assets/Prefabs/Enemy";
     private const string CoreScenePath = "Assets/Scenes/Core/GameCore.unity";
 
     /// <summary>Vorlage fuer Material und Sortierebene - so sieht Neues aus wie Altes.</summary>
-    private const string TemplatePrefab = "Assets/Prefabs/Enemy/fin_marshmallow_0.prefab";
+    private const string TemplatePrefab = "Assets/Prefabs/Enemy/Archiv/Vorlagen/fin_marshmallow_0.prefab";
 
     private const string SortingLayer = "Objects";
 
@@ -336,8 +336,9 @@ public class EnemyWorkshop : EditorWindow
 
         listScroll = EditorGUILayout.BeginScrollView(listScroll);
 
-        // Nach Rolle gruppiert: Gegner, Zwischenbosse, Bosse.
-        DrawListGroup("Gegner", d => !EnemyCatalog.IsBossRole(d.role));
+        // Nach Rolle gruppiert: Gegner, Elite-Gegner, Zwischenbosse, Bosse.
+        DrawListGroup("Gegner", d => !EnemyCatalog.IsBossRole(d.role) && d.role != EnemyRole.Elite);
+        DrawListGroup("Elite-Gegner", d => d.role == EnemyRole.Elite);
         DrawListGroup("Zwischenbosse", d => d.role == EnemyRole.MiniBoss);
         DrawListGroup("Bosse", d => d.role == EnemyRole.Boss || d.role == EnemyRole.DeathBoss);
 

@@ -54,7 +54,7 @@ public static class Bestiary
     private static readonly Dictionary<string, string> RenamedIds = new Dictionary<string, string>
     {
         { "MinibossFliegenpliz", nameof(EnemyId.EliteFliegenpilz) },
-        { "MiniBossMarshmello",  nameof(EnemyId.EliteMarshmelloGross) },
+        { "MiniBossMarshmello",  nameof(EnemyId.EliteFluegdolch) },
     };
     private static bool loaded;
     private static bool dirty;

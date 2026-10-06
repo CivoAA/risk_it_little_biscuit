@@ -48,6 +48,12 @@ public static class SkillGrants
     /// <summary>Salatfaecher: jeder 5. Schlag geht als Kreis rundherum, mit doppelt so vielen Wellen (siehe <see cref="SaladFan"/>).</summary>
     public const string Sturmboe = "toast_sturmboe";
 
+    /// <summary>Marmeladenlachen: je Tick in derselben Lache mehr Schaden, hoechstens 250 % (siehe <see cref="AreaWeaponPrefabJamJar"/>).</summary>
+    public const string Einkochen = "marmelade_einkochen";
+
+    /// <summary>Jam Jar / Sticky Shatter: jedes 3. Glas fliegt in die dichteste Gegnergruppe (siehe <see cref="AreaWeaponJamJar"/>).</summary>
+    public const string Zielwurf = "marmelade_zielwurf";
+
     // ------------------------------------------------------------ Wissen
 
     /// <summary>Bestiarium: +1 % Schaden je 1000 Kills einer Gegnerart (siehe <see cref="Bestiary"/>).</summary>
@@ -72,6 +78,9 @@ public static class SkillGrants
 
     /// <summary>Wirbelsturm: unter 40 % Leben 5 s lang alle Gegner in der Naehe wegdruecken (alle 35 s, siehe <see cref="Whirlwind"/>).</summary>
     public const string Wirbelsturm = "wirbelsturm";
+
+    /// <summary>Marmeladenbad: 1 s still in der eigenen Marmelade, dann 1 Leben alle 0.25 s (siehe <see cref="JamBath"/>).</summary>
+    public const string Marmeladenbad = "marmeladenbad";
 
     // ==================================================================
     //  Der Katalog - was hier steht, steht im Editor zur Auswahl.
@@ -105,6 +114,12 @@ public static class SkillGrants
         new Def(Spaltwelle, "Spaltwelle",
                 "Der erste Gegner, den eine Salatwelle trifft, spaltet zwei kleinere Wellen in entgegengesetzte Richtungen ab."),
 
+        new Def(Einkochen, "Einkochen",
+                "Je laenger ein Gegner in derselben Marmeladenlache steht, desto mehr Schaden nimmt er: +15% je Tick, hoechstens 250%. Gilt auch fuer Sticky Shatter."),
+
+        new Def(Zielwurf, "Zielwurf",
+                "Jedes 3. Glas fliegt mitten in die groesste Gegnergruppe in deiner Naehe. Gilt auch fuer Sticky Shatter."),
+
         new Def(Sturmboe, "Sturmboe",
                 "Jeder 5. Schlag des Salatfaechers geht einmal im Kreis um dich herum - mit doppelt so vielen Wellen."),
 
@@ -128,6 +143,9 @@ public static class SkillGrants
 
         new Def(Wirbelsturm, "Wirbelsturm",
                 "Faellt dein Leben unter 40%, wirbelst du 5 Sekunden lang alle Gegner in deiner Naehe weg (alle 35 Sekunden). Bosse nicht."),
+
+        new Def(Marmeladenbad, "Marmeladenbad",
+                "Stehst du 1 Sekunde still in deiner Marmelade, heilst du 1 Leben alle 0,25 Sekunden."),
     };
 
     /// <summary>Eintrag zu einer Id. Null, wenn die Id nicht (mehr) im Katalog steht.</summary>

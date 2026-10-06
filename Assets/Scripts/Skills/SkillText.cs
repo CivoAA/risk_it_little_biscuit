@@ -46,6 +46,8 @@ public static class SkillText
             case SkillType.BossHealthReduction:
             case SkillType.OverhealShield:
             case SkillType.LastBreath:
+            case SkillType.IncreaseDuration:
+            case SkillType.ReduceCooldown:
                 return value.ToString("0.#");
 
             case SkillType.IncreaseSpeed:
@@ -100,6 +102,8 @@ public static class SkillText
             case SkillType.StartWeaponLevel:        return "+{0} Start weapon level";
             case SkillType.OverhealShield:          return "Overheal becomes a shield (max {0}% health)";
             case SkillType.LastBreath:              return "Below 30% health: +{0}% speed, double regen";
+            case SkillType.IncreaseDuration:        return "+{0}% Duration";
+            case SkillType.ReduceCooldown:          return "-{0}% Cooldown";
             default:                            return "{0}";
         }
     }

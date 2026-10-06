@@ -21,7 +21,7 @@ public static class SchleimkoenigBuilder
 {
     private const string ArtFolder = "Assets/Art/Gegner/new/miniboss/";
     private const string CoreScenePath = "Assets/Scenes/Core/GameCore.unity";
-    private const string TemplatePrefab = "Assets/Prefabs/Enemy/fin_marshmallow_0.prefab";
+    private const string TemplatePrefab = "Assets/Prefabs/Enemy/Archiv/Vorlagen/fin_marshmallow_0.prefab";
     private const string SortingLayerName = "Objects";
     private static readonly string[] LayerCandidates = { "Enemys ", "Enemys", "Enemy" };
 

@@ -38,7 +38,7 @@ public enum EnemyId
 
     // Besonderes
     Blocker = 12,              // bewegt sich kaum - das ist der Kaefig, nicht der Gegner
-    EliteMarshmelloGross = 13, // hiess MiniBossMarshmello
+    EliteFluegdolch = 13, // hiess MiniBossMarshmello
     MesserMaus1 = 14,
     MesserMaus2 = 15,
     KeksKoenig = 16,
@@ -428,31 +428,31 @@ public static class EnemyCatalog
 
         Def(EnemyId.Marshmello, "Marshmello",
             health: 3f, damage: 2f, speed: 1.5f, exp: 1, pushTime: 0.25f,
-            role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesRight,
             sheet: "Assets/Art/Gegner/freeze_marshmallow.png", fps: 8f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
-            prefab: "Assets/Prefabs/Enemy/Wave1/Marshmello.prefab");
+            prefab: "Assets/Prefabs/Enemy/Gegner/Marshmello.prefab");
 
         Def(EnemyId.EliteMarshmello, "Elite-Marshmello",
             health: 50f, damage: 6f, speed: 1.2f, exp: 20, pushTime: 0.25f,
-            role: EnemyRole.Elite, facing: EnemyFacing.Neutral,
+            role: EnemyRole.Elite, facing: EnemyFacing.ArtFacesRight,
             sheet: "Assets/Art/Gegner/fin_marshmallow.png", fps: 8f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
-            prefab: "Assets/Prefabs/Enemy/Wave1/Elite_Marshmello.prefab");
+            prefab: "Assets/Prefabs/Enemy/Elite_Gegner/Elite_Marshmello.prefab");
 
         Def(EnemyId.EvilSlime, "Boeser Slime",
             health: 7f, damage: 4f, speed: 1.5f, exp: 3, pushTime: 0.2f,
             role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/fin_evil_slime.png", fps: 8f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
-            prefab: "Assets/Prefabs/Enemy/Wave1/Evil_Slim.prefab");
+            prefab: "Assets/Prefabs/Enemy/Gegner/Evil_Slim.prefab");
 
-        Def(EnemyId.EliteMarshmelloGross, "Elite-Marshmello (gross)",
+        Def(EnemyId.EliteFluegdolch, "Elite-Fluegdolch",
             health: 400f, damage: 7f, speed: 1.25f, exp: 450, pushTime: 0.3f,
             role: EnemyRole.Elite, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/boss/fledermaus_flug.png", fps: 12f,
             colliderRadius: 0.55f, colliderOffset: new Vector2(0f, -0.12f), scale: 1f,
-            prefab: "Assets/Prefabs/Enemy/Wave1/MiniBoss_Marshmello.prefab");
+            prefab: "Assets/Prefabs/Enemy/Elite_Gegner/Elite-Fluegdolch.prefab");
 
         Def(EnemyId.KeksKoenig, "Keks-Koenig",
             health: 5000f, damage: 38.7f, speed: 4f, exp: 0, pushTime: 0f,
@@ -463,59 +463,66 @@ public static class EnemyCatalog
 
         Def(EnemyId.Eichel, "Eichel",
             health: 45f, damage: 5f, speed: 1.3f, exp: 18, pushTime: 0.2f,
-            role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/new/eichel.png", fps: 8f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
-            prefab: "Assets/Prefabs/Enemy/Neu/Eichel.prefab");
+            prefab: "Assets/Prefabs/Enemy/Gegner/Eichel.prefab");
+
+        Def(EnemyId.Muffin, "Muffin",
+            health: 45f, damage: 5f, speed: 1.3f, exp: 18, pushTime: 0.2f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesRight,
+            sheet: "Assets/Art/Gegner/fin_muffin.png", fps: 8f,
+            colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/muffin.prefab");
 
         Def(EnemyId.Fliegenpilz, "Fliegenpilz",
             health: 3.8f, damage: 2f, speed: 1.5f, exp: 1, pushTime: 0.25f,
             role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/pilz1.png", fps: 6f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
-            prefab: "Assets/Prefabs/Enemy/Neu/Fliegenpilz.prefab");
+            prefab: "Assets/Prefabs/Enemy/Gegner/Fliegenpilz.prefab");
 
         Def(EnemyId.EliteFliegenpilz, "Elite-Fliegenpilz",
             health: 200f, damage: 5f, speed: 1.25f, exp: 300, pushTime: 0.3f,
             role: EnemyRole.Elite, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/elite/fliegenpilz_elite_hop.png", fps: 12f,
             colliderRadius: 0.45f, colliderOffset: new Vector2(0f, -0.12f), scale: 1f,
-            prefab: "Assets/Prefabs/Enemy/Neu/Pilzkoenig.prefab", hopFirst: 3, hopLast: 9);
+            prefab: "Assets/Prefabs/Enemy/Elite_Gegner/Pilzkoenig.prefab", hopFirst: 3, hopLast: 9);
 
         Def(EnemyId.Fluegeldolch, "Fluegeldolch",
             health: 14f, damage: 3f, speed: 2.1f, exp: 6, pushTime: 0.2f,
-            role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesRight,
             sheet: "Assets/Art/Gegner/new/image.png", fps: 12f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
-            prefab: "Assets/Prefabs/Enemy/Neu/Fluegeldolch.prefab");
+            prefab: "Assets/Prefabs/Enemy/Gegner/Fluegeldolch.prefab");
 
         Def(EnemyId.Kirschslime, "Kirschslime",
             health: 9f, damage: 3f, speed: 1.6f, exp: 3, pushTime: 0.2f,
             role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/new/new_slime.png", fps: 10f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
-            prefab: "Assets/Prefabs/Enemy/Neu/Kirschslime.prefab", hopFirst: 4, hopLast: 6);
+            prefab: "Assets/Prefabs/Enemy/Gegner/Kirschslime.prefab", hopFirst: 4, hopLast: 6);
 
         Def(EnemyId.Milchpanzer, "Milchpanzer",
             health: 900f, damage: 14f, speed: 1.5f, exp: 650, pushTime: 0f,
             role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesRight,
             sheet: "Assets/Art/Gegner/new/wirklich_saure_milch_1.png", fps: 8f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
-            prefab: "Assets/Prefabs/Enemy/Neu/Milchpanzer.prefab");
+            prefab: "Assets/Prefabs/Enemy/Gegner/Milchpanzer.prefab");
 
         Def(EnemyId.Honey, "Honey",
             health: 450f, damage: 10f, speed: 1.4f, exp: 350, pushTime: 0f,
-            role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/new/honey.png", fps: 8f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
-            prefab: "");
+            prefab: "Assets/Prefabs/Enemy/Gegner/Honey.prefab");
 
         Def(EnemyId.WeisseMessermaus, "Weisse Messermaus",
             health: 15f, damage: 3f, speed: 2f, exp: 5, pushTime: 0.3f,
             role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/new/MausMesser.png", fps: 6f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
-            prefab: "Assets/Prefabs/Enemy/Neu/WeisseMessermaus.prefab");
+            prefab: "Assets/Prefabs/Enemy/Gegner/WeisseMessermaus.prefab");
 
         Def(EnemyId.Glutwurz, "Glutwurz",
             health: 7500f, damage: 40f, speed: 2.2f, exp: 0, pushTime: 0f,
@@ -529,32 +536,27 @@ public static class EnemyCatalog
             role: EnemyRole.MiniBoss, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/miniboss/schleimkoenig_hop.png", fps: 12f,
             colliderRadius: 1.15f, colliderOffset: new Vector2(0f, 0.85f), scale: 1f,
-            prefab: "Assets/Prefabs/Enemy/Zwischenboss/Schleimkoenig.prefab");
+            prefab: "Assets/Prefabs/Enemy/Mini_Boss/Schleimkoenig.prefab");
 
-        // Der Tod nach dem Boss: Werte von fin_tot_0, Prefab ist eine Kopie von
-        // fin_ramen_0. Holt den Spieler ein und toetet ihn - weil der Boss schon
-        // liegt, zaehlt der Lauf als Sieg (GameManager.bossSpawned).
         Def(EnemyId.TodesRamen, "Todes-Ramen",
             health: 300000f, damage: 101f, speed: 11f, exp: 0, pushTime: 0f,
             role: EnemyRole.DeathBoss, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/V2_fin_ramen.png", fps: 2f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
-            prefab: "Assets/Prefabs/Enemy/Neu/TodesRamen.prefab");
+            prefab: "Assets/Prefabs/Enemy/Boss/TodesRamen.prefab");
 
         Def(EnemyId.Verkohlter, "Der Verkohlte",
             health: 6000f, damage: 25f, speed: 1.9f, exp: 0, pushTime: 0f,
             role: EnemyRole.Boss, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/boss/verkohlter_walk.png", fps: 12f,
-            colliderRadius: 0.85f, colliderOffset: new Vector2(0f, 1.0f), scale: 1f,
+            colliderRadius: 0.85f, colliderOffset: new Vector2(0f, 1f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Boss/Verkohlter.prefab");
 
-        // Der Tod der Demo: unverwundbar, die Explosion toetet immer
-        // (PlayerController.Execute). Weil der Boss schon liegt, ist das ein Sieg.
         Def(EnemyId.VerkohlterTod, "Der Verkohlte (Tod)",
             health: 300000f, damage: 101f, speed: 3.2f, exp: 0, pushTime: 0f,
             role: EnemyRole.DeathBoss, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/boss/verkohlter_walk.png", fps: 12f,
-            colliderRadius: 0.85f, colliderOffset: new Vector2(0f, 1.0f), scale: 1f,
+            colliderRadius: 0.85f, colliderOffset: new Vector2(0f, 1f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Boss/VerkohlterTod.prefab");
 
         // ---------------------------------------------------------- Archiv
@@ -567,77 +569,70 @@ public static class EnemyCatalog
             role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/fin_MausMesser1.png", fps: 8f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
-            prefab: "Assets/Prefabs/Enemy/Wave1/MausMesser.prefab", archived: true);
+            prefab: "Assets/Prefabs/Enemy/Archiv/MausMesser.prefab", archived: true);
 
         Def(EnemyId.MiniMilch, "Mini-Milch",
             health: 90f, damage: 7f, speed: 2.5f, exp: 70, pushTime: 0f,
             role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/fin_saure_milch.png", fps: 8f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
-            prefab: "Assets/Prefabs/Enemy/Wave2/mini_milch.prefab", archived: true);
+            prefab: "Assets/Prefabs/Enemy/Archiv/mini_milch.prefab", archived: true);
 
         Def(EnemyId.SaureMilch, "Saure Milch",
             health: 190f, damage: 10f, speed: 3f, exp: 187, pushTime: 0f,
             role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/fin_saure_milch.png", fps: 8f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
-            prefab: "Assets/Prefabs/Enemy/Wave2/saure_milch.prefab", archived: true);
-
-        Def(EnemyId.Muffin, "Muffin",
-            health: 400f, damage: 12f, speed: 1.75f, exp: 200, pushTime: 0.01f,
-            role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
-            sheet: "Assets/Art/Gegner/fin_muffin.png", fps: 8f,
-            colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
-            prefab: "Assets/Prefabs/Enemy/Wave2/muffin.prefab", archived: true);
+            prefab: "Assets/Prefabs/Enemy/Archiv/saure_milch.prefab", archived: true);
 
         Def(EnemyId.Suppe, "Ramen",
             health: 1111f, damage: 25f, speed: 0.9f, exp: 555, pushTime: 0f,
             role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/fin_ramen.png", fps: 8f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
-            prefab: "Assets/Prefabs/Enemy/Wave3/ramen.prefab", archived: true);
+            prefab: "Assets/Prefabs/Enemy/Archiv/ramen.prefab", archived: true);
 
         Def(EnemyId.Pancake, "Pfannkuchen",
             health: 600f, damage: 18f, speed: 1.75f, exp: 300, pushTime: 0.05f,
             role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/fin_pencake.png", fps: 8f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
-            prefab: "Assets/Prefabs/Enemy/Wave3/pancake.prefab", archived: true);
+            prefab: "Assets/Prefabs/Enemy/Archiv/pancake.prefab", archived: true);
 
         Def(EnemyId.Fetti, "Fetti",
             health: 750f, damage: 20f, speed: 1.2f, exp: 450, pushTime: 0f,
             role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/fett.png", fps: 8f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
-            prefab: "Assets/Prefabs/Enemy/Wave3/fetti.prefab", archived: true);
+            prefab: "Assets/Prefabs/Enemy/Archiv/fetti.prefab", archived: true);
 
         Def(EnemyId.Slime, "Slime (10 Farben)",
             health: 150f, damage: 6f, speed: 2f, exp: 100, pushTime: 0.1f,
             role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/fin_slime_new.png", fps: 8f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
-            prefab: "Assets/Prefabs/Enemy/Blue_Slime_Variants/Slime_Variant_Blue.prefab", archived: true);
+            prefab: "Assets/Prefabs/Enemy/Archiv/Blue_Slime_Variants/Slime_Variant_Blue.prefab", archived: true);
 
         Def(EnemyId.Blocker, "Kaefig-Wand",
             health: 500f, damage: 1f, speed: 0.03f, exp: 0, pushTime: 0f,
             role: EnemyRole.Blocker, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/Slimes.png", fps: 8f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
-            prefab: "Assets/Prefabs/Enemy/Blue_Slime_Variants/Blocker.prefab", archived: true);
+            prefab: "Assets/Prefabs/Enemy/Archiv/Blue_Slime_Variants/Blocker.prefab", archived: true);
 
         Def(EnemyId.MesserMaus1, "Messermaus (Welle 1)",
             health: 5000f, damage: 10f, speed: 2.5f, exp: 0, pushTime: 0f,
             role: EnemyRole.Elite, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/MesserMaus.png", fps: 8f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
-            prefab: "Assets/Prefabs/Enemy/Wave1/MiniBoss_MesserMaus.prefab", archived: true);
+            prefab: "Assets/Prefabs/Enemy/Archiv/MiniBoss_MesserMaus.prefab", archived: true);
 
         Def(EnemyId.MesserMaus2, "Messermaus (Welle 2)",
             health: 10000f, damage: 20f, speed: 1.5f, exp: 0, pushTime: 0f,
             role: EnemyRole.Elite, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/MesserMaus.png", fps: 8f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
-            prefab: "Assets/Prefabs/Enemy/Wave2/MesserMaus_Wave2.prefab", archived: true);
+            prefab: "Assets/Prefabs/Enemy/Archiv/MesserMaus_Wave2.prefab", archived: true);
     }
     // ================================================================
     // WERKSTATT-ENDE
