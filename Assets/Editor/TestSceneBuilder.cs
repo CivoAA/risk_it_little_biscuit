@@ -20,7 +20,7 @@ public static class TestSceneBuilder
 {
     private const string SourceScenePath = "Assets/Scenes/Core/GameCore.unity";
     private const string TargetScenePath = "Assets/Scenes/test_scene.unity";
-    private const string DummySourcePrefab = "Assets/Prefabs/Enemy/fin_slime.prefab";
+    private const string DummySourcePrefab = "Assets/Prefabs/Enemy/Archiv/Vorlagen/fin_slime.prefab";
 
     /// <summary>Root-Objekte, die in der Test-Szene nichts zu suchen haben.</summary>
     private static readonly string[] RootsToDelete =

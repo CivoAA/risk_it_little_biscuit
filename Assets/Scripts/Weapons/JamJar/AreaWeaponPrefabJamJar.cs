@@ -1,72 +1,188 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
+/// <summary>
+/// Eine Marmeladenlache. Tickt alle AttackSpeed Sekunden Schaden an jedem
+/// Gegner darin und verschwindet nach duration Sekunden. Gemeinsam fuer Jam Jar
+/// und die Evo (<see cref="StickyShatterEvoPrefab"/>, die nur noch bremst).
+///
+/// Skilltree:
+///   Einkochen     - je Tick in derselben Lache mehr Schaden, bis <see cref="SimmerMaxFactor"/>.
+///   Marmeladenbad - <see cref="JamBath"/> fragt ueber <see cref="IsInAnyPuddle"/>, ob der Spieler drinsteht.
+/// </summary>
 public class AreaWeaponPrefabJamJar : MonoBehaviour
 {
     public AreaWeaponJamJar weapon;
-    private Vector3 targetSize;
-    private float timer;
-    public List<Enemy> enemiesInRange;
-    private float counter;
+    public List<Enemy> enemiesInRange = new List<Enemy>();
 
-    void Start()
+    // ------------------------------------------------------------ Einkochen
+
+    /// <summary>So viel mehr Schaden je Tick, den ein Gegner schon in derselben Lache steht.</summary>
+    public const float SimmerStep = 0.15f;
+
+    /// <summary>Hoechstens so viel Schaden wie normal (2.5 = 250 %).</summary>
+    public const float SimmerMaxFactor = 2.5f;
+
+    /// <summary>Schadensfaktor fuer den Tick, nachdem ein Gegner schon <paramref name="ticks"/> Ticks drinsteht.</summary>
+    public static float SimmerFactor(int ticks) => Mathf.Min(SimmerMaxFactor, 1f + SimmerStep * ticks);
+
+    private readonly Dictionary<Enemy, int> simmerTicks = new Dictionary<Enemy, int>();
+
+    // ------------------------------------------------------------ Aussehen
+
+    /// <summary>So lange waechst eine Lache auf volle Groesse (ohne eigene Animation).</summary>
+    private const float GrowTime = 0.25f;
+
+    /// <summary>So lange schrumpft sie am Ende weg (ohne eigene Animation).</summary>
+    private const float ShrinkTime = 0.25f;
+
+    private static readonly List<AreaWeaponPrefabJamJar> active = new List<AreaWeaponPrefabJamJar>();
+
+    private CircleCollider2D area;
+    private SpriteFlipbook look;
+    private Vector3 fullSize;
+    private float lifeTimer;
+    private float age;
+    private float tickCounter;
+
+    /// <summary>Die Bremse fuer Gegner in der Lache. Null = keine.</summary>
+    protected virtual float? Slow => null;
+
+    /// <summary>Notnagel, falls die Lache ohne Waffe gespawnt wurde.</summary>
+    protected virtual AreaWeaponJamJar FindWeapon() => WeaponFinder.Find<AreaWeaponJamJar>("Throwing Jam Jar");
+
+    protected virtual void Start()
     {
-        weapon = WeaponFinder.Find<AreaWeaponJamJar>("Throwing Jam Jar");
+        if (weapon == null) weapon = FindWeapon();
+
         if (weapon == null || !weapon.IsActive)
         {
             Destroy(gameObject);
             return;
         }
-        //Destroy(gameObject, weapon.duration);
-        targetSize = Vector3.one * weapon.CurrentStats.range * PlayerController.Instance.AOERange;
-        transform.localScale = Vector3.zero;
-        timer = weapon.CurrentDuration;
-        AudioController.Instance.PalySound(AudioController.Instance.JarJamBreakingGlass, 0.1f);
-        AudioController.Instance.PalySound(AudioController.Instance.areaWeaponSpawn, 0.5f);
+
+        area = GetComponent<CircleCollider2D>();
+        look = GetComponent<SpriteFlipbook>();
+        lifeTimer = weapon.CurrentDuration;
+        fullSize = Vector3.one * weapon.CurrentStats.range * PlayerController.Instance.AOERange;
+
+        // Mit eigener Animation blendet die Lache selbst ein und aus - sonst
+        // waechst und schrumpft sie.
+        transform.localScale = look != null ? fullSize : Vector3.zero;
+
+        if (AudioController.Instance != null)
+        {
+            AudioController.Instance.PalySound(AudioController.Instance.areaWeaponSpawn, 0.5f);
+        }
     }
 
-    void Update()
-    {
-        if (weapon == null || !weapon.IsActive) return;
+    protected virtual void OnEnable() => active.Add(this);
 
-        //grow and shrink towards targetSize
-        transform.localScale = Vector3.MoveTowards(transform.localScale, targetSize, Time.deltaTime * 3);
-        timer -= Time.deltaTime;
-        if (timer <= 0)
+    protected virtual void OnDisable() => active.Remove(this);
+
+    protected virtual void Update()
+    {
+        if (weapon == null || !weapon.IsActive)
         {
             Destroy(gameObject);
+            return;
         }
-        // periodic damage
-        counter -= Time.deltaTime;
-        if (counter <= 0)
+
+        age += Time.deltaTime;
+        lifeTimer -= Time.deltaTime;
+
+        if (lifeTimer <= 0f)
         {
-            counter = weapon.CurrentStats.AttackSpeed;
-            for (int i = enemiesInRange.Count - 1; i >= 0; i--)
+            Destroy(gameObject);
+            return;
+        }
+
+        if (look != null)
+        {
+            look.SetLifeLeft(lifeTimer);
+        }
+        else
+        {
+            float grow = Mathf.Clamp01(age / GrowTime);
+            float shrink = Mathf.Clamp01(lifeTimer / ShrinkTime);
+            transform.localScale = fullSize * Mathf.Min(grow, shrink);
+        }
+
+        tickCounter -= Time.deltaTime;
+        if (tickCounter > 0f) return;
+
+        tickCounter = Mathf.Max(0.05f, weapon.CurrentStats.AttackSpeed);
+        DamageTick();
+    }
+
+    private void DamageTick()
+    {
+        bool simmer = Skills.HasGrant(SkillGrants.Einkochen);
+        float damage = weapon.CurrentStats.damage;
+        float? slow = Slow;
+
+        for (int i = enemiesInRange.Count - 1; i >= 0; i--)
+        {
+            Enemy enemy = enemiesInRange[i];
+            if (enemy == null)
             {
-                // zerstörte Gegner aus der Liste entfernen statt Exception
-                if (enemiesInRange[i] == null)
-                {
-                    enemiesInRange.RemoveAt(i);
-                    continue;
-                }
-                enemiesInRange[i].TakeDamage(weapon.CurrentStats.damage, knockback: 0f);
+                enemiesInRange.RemoveAt(i);
+                continue;
             }
+
+            float tickDamage = damage;
+            if (simmer)
+            {
+                simmerTicks.TryGetValue(enemy, out int ticks);
+                tickDamage *= SimmerFactor(ticks);
+                simmerTicks[enemy] = ticks + 1;
+            }
+
+            enemy.TakeDamage(tickDamage, slow, 0f);
         }
     }
-    
-    private  void OnTriggerEnter2D(Collider2D collider)
+
+    protected virtual void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.CompareTag("Enemy"))
-        {
-            enemiesInRange.Add(collider.GetComponent<Enemy>());
-        }
+        if (!collider.CompareTag("Enemy")) return;
+
+        Enemy enemy = collider.GetComponent<Enemy>();
+        if (enemy != null && !enemiesInRange.Contains(enemy)) enemiesInRange.Add(enemy);
     }
-    
-    private void OnTriggerExit2D(Collider2D collider)
+
+    protected virtual void OnTriggerExit2D(Collider2D collider)
     {
-        if (collider.CompareTag("Enemy"))
+        if (!collider.CompareTag("Enemy")) return;
+
+        Enemy enemy = collider.GetComponent<Enemy>();
+        if (enemy == null) return;
+
+        enemiesInRange.Remove(enemy);
+        // Einkochen faengt in der naechsten Lache wieder von vorn an.
+        simmerTicks.Remove(enemy);
+    }
+
+    // ------------------------------------------------------------ Marmeladenbad
+
+    /// <summary>Liegt <paramref name="point"/> in dieser Lache?</summary>
+    public bool Covers(Vector2 point)
+    {
+        if (area == null || lifeTimer <= 0f) return false;
+
+        Vector2 center = transform.TransformPoint(area.offset);
+        Vector3 scale = transform.lossyScale;
+        float radius = area.radius * Mathf.Max(Mathf.Abs(scale.x), Mathf.Abs(scale.y));
+
+        return (point - center).sqrMagnitude <= radius * radius;
+    }
+
+    /// <summary>Steht <paramref name="point"/> in irgendeiner Marmeladenlache?</summary>
+    public static bool IsInAnyPuddle(Vector2 point)
+    {
+        for (int i = 0; i < active.Count; i++)
         {
-            enemiesInRange.Remove(collider.GetComponent<Enemy>());
+            if (active[i] != null && active[i].Covers(point)) return true;
         }
+        return false;
     }
 }

@@ -279,7 +279,7 @@ public class CatalogTests
         // Die Prefabs speichern die Id als Zahl. Verschiebt sich eine, ist am
         // Prefab ploetzlich ein anderer Gegner eingetragen.
         Assert.AreEqual(2,  (int)EnemyId.EliteMarshmello);
-        Assert.AreEqual(13, (int)EnemyId.EliteMarshmelloGross);
+        Assert.AreEqual(13, (int)EnemyId.EliteFluegdolch);
         Assert.AreEqual(16, (int)EnemyId.KeksKoenig);
         Assert.AreEqual(22, (int)EnemyId.WeisseMessermaus);
         Assert.AreEqual(25, (int)EnemyId.EliteFliegenpilz);

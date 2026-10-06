@@ -551,8 +551,11 @@ public class PlayerController : MonoBehaviour
         bossHealthReduction     += Skills.Bonus(SkillType.BossHealthReduction);
         overhealShieldPercent   += Skills.Bonus(SkillType.OverhealShield);
         lastBreathSpeedPercent  += Skills.Bonus(SkillType.LastBreath);
+        durationMultiplier      += Skills.Bonus(SkillType.IncreaseDuration) / 100f;
+        cooldownMultiplier      -= Skills.Bonus(SkillType.ReduceCooldown) / 100f;
 
         if (Skills.HasGrant(SkillGrants.Kartograf)) MixerCompass.Ensure();
+        if (Skills.HasGrant(SkillGrants.Marmeladenbad)) JamBath.Ensure(this);
     }
 
     public void PlayerHealthReg()

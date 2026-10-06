@@ -100,7 +100,7 @@ public static class WavePlans
             .Pressure(100f, 200f)
             .Base(Patterns.Scatter)
             .Burst(40f, EnemyId.SaureMilch, 30f, Patterns.Ambush, 0f)
-            .Burst(60f, EnemyId.EliteMarshmelloGross, 1f, Patterns.Ambush, 0f)
+            .Burst(60f, EnemyId.EliteFluegdolch, 1f, Patterns.Ambush, 0f)
             .Calm(95f, 10f, 0.15f)
             .Encircle(125f, EnemyId.MesserMaus1, EnemyId.Marshmello, 22, 14f, true, "MESSERMAUS!", 0.35f, 25f, 1.5f)
             .Burst(195f, EnemyId.Muffin, 35f, Patterns.Cluster, 0f)
@@ -122,7 +122,7 @@ public static class WavePlans
             .Pressure(400f, 600f)
             .Base(Patterns.Scatter)
             .Boss(2f, EnemyId.KeksKoenig, "KEKS-KOENIG", 0.4f)
-            .Burst(240f, EnemyId.EliteMarshmelloGross, 1f, Patterns.Arc, 0f);
+            .Burst(240f, EnemyId.EliteFluegdolch, 1f, Patterns.Arc, 0f);
 
         plan.EndlessPhase()
             .Pool(EnemyId.Slime, 70f)
@@ -200,7 +200,7 @@ public static class WavePlans
             .Burst(60f, EnemyId.EliteFliegenpilz, 1f, Patterns.Ambush, 0f)
             .Calm(75f, 10f, 0.15f)
             .Burst(105f, EnemyId.WeisseMessermaus, 24f, Patterns.Cluster, 0f)
-            .Burst(135f, EnemyId.EliteMarshmelloGross, 1f, Patterns.Ambush, 0f)
+            .Burst(135f, EnemyId.EliteFluegdolch, 1f, Patterns.Ambush, 0f)
             .Burst(150f, EnemyId.Kirschslime, 30f, Patterns.Scatter, 0f);
 
         plan.Phase(300f)
@@ -210,14 +210,14 @@ public static class WavePlans
             .Pool(EnemyId.Fluegeldolch, 15f)
             .Pressure(100f, 200f)
             .Base(Patterns.Scatter)
-            .Burst(20f, EnemyId.EliteMarshmelloGross, 1f, Patterns.Ambush, 0f)
+            .Burst(20f, EnemyId.EliteFluegdolch, 1f, Patterns.Ambush, 0f)
             .Burst(40f, EnemyId.Eichel, 25f, Patterns.Ambush, 0f)
             .Burst(60f, EnemyId.Fluegeldolch, 20f, Patterns.Arc, 0f)
             .Calm(95f, 10f, 0.15f)
             .Encircle(125f, EnemyId.EliteFliegenpilz, EnemyId.Kirschslime, 22, 14f, false, "PILZKOENIG!", 0.35f, 25f, 1.5f)
-            .Burst(125f, EnemyId.EliteMarshmelloGross, 1f, Patterns.Ambush, 0f)
+            .Burst(125f, EnemyId.EliteFluegdolch, 1f, Patterns.Ambush, 0f)
             .Burst(195f, EnemyId.WeisseMessermaus, 30f, Patterns.Cluster, 0f)
-            .Burst(225f, EnemyId.EliteMarshmelloGross, 1f, Patterns.Arc, 0f)
+            .Burst(225f, EnemyId.EliteFluegdolch, 1f, Patterns.Arc, 0f)
             .Burst(250f, EnemyId.Eichel, 40f, Patterns.Column, 0f);
 
         plan.Phase(290f)
@@ -229,7 +229,7 @@ public static class WavePlans
             .Base(Patterns.Scatter)
             .Burst(20f, EnemyId.EliteFliegenpilz, 1f, Patterns.Ambush, 0f)
             .Burst(50f, EnemyId.Honey, 40f, Patterns.Arc, 0f)
-            .Burst(80f, EnemyId.EliteMarshmelloGross, 1f, Patterns.Arc, 0f)
+            .Burst(80f, EnemyId.EliteFluegdolch, 1f, Patterns.Arc, 0f)
             .Calm(110f, 8f, 0.15f)
             .Encircle(145f, EnemyId.EliteFliegenpilz, EnemyId.Eichel, 26, 15f, false, "PILZKOENIG!", 0.35f, 25f, 1.5f)
             .Burst(225f, EnemyId.Honey, 60f, Patterns.Cluster, 0f)
@@ -253,7 +253,7 @@ public static class WavePlans
             .Base(Patterns.Scatter)
             .Burst(30f, EnemyId.EliteFliegenpilz, 1f, Patterns.Ambush, 0f)
             .Encircle(60f, EnemyId.None, EnemyId.Eichel, 26, 14f, false, "RING!", 0.35f, 25f, 1.5f)
-            .Burst(90f, EnemyId.EliteMarshmelloGross, 1f, Patterns.Arc, 0f);
+            .Burst(90f, EnemyId.EliteFluegdolch, 1f, Patterns.Arc, 0f);
 
         return plan;
     }
@@ -336,7 +336,7 @@ public static class WavePlans
             .Encircle(125f, EnemyId.EliteFliegenpilz, EnemyId.Kirschslime, 18, 14f, false, "PILZKOENIG!", 0.35f, 25f, 1.5f)
             .Burst(195f, EnemyId.WeisseMessermaus, 20f, Patterns.Cluster, 0f)
             .Calm(215f, 10f, 0.15f)
-            .Burst(235f, EnemyId.EliteMarshmelloGross, 1f, Patterns.Ambush, 0f)
+            .Burst(235f, EnemyId.EliteFluegdolch, 1f, Patterns.Ambush, 0f)
             .Burst(250f, EnemyId.Eichel, 26f, Patterns.Column, 0f);
 
         plan.Phase(58f)
@@ -364,7 +364,7 @@ public static class WavePlans
             .Pressure(100f, 100f)
             .Base(Patterns.Scatter)
             .Encircle(60f, EnemyId.None, EnemyId.Eichel, 20, 14f, false, "RING!", 0.35f, 25f, 1.5f)
-            .Burst(90f, EnemyId.EliteMarshmelloGross, 1f, Patterns.Arc, 0f);
+            .Burst(90f, EnemyId.EliteFluegdolch, 1f, Patterns.Arc, 0f);
 
         plan.EndWith(EnemyId.VerkohlterTod);
 

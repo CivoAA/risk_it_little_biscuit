@@ -19,7 +19,7 @@ public static class VerkohlterBuilder
     private const string ArtFolder = "Assets/Art/Gegner/new/boss/";
     private const string EffectPrefab = "Assets/Prefabs/Enemy/Boss/Verkohlter_Zerfall.prefab";
     private const string CoreScenePath = "Assets/Scenes/Core/GameCore.unity";
-    private const string TemplatePrefab = "Assets/Prefabs/Enemy/fin_marshmallow_0.prefab";
+    private const string TemplatePrefab = "Assets/Prefabs/Enemy/Archiv/Vorlagen/fin_marshmallow_0.prefab";
     private const string SortingLayerName = "Objects";
     private static readonly string[] LayerCandidates = { "Enemys ", "Enemys", "Enemy" };
 

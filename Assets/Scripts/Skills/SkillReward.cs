@@ -117,6 +117,9 @@ public static class SkillDefaults
             // Geist, in Prozent.
             case SkillType.OverhealShield:          return 20f;
             case SkillType.LastBreath:              return 20f;
+            // Waffen, in Prozent.
+            case SkillType.IncreaseDuration:        return 15f;
+            case SkillType.ReduceCooldown:          return 10f;
             case SkillType.None:               return 0f;
             default:                            return 1f;
         }

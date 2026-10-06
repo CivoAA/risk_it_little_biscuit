@@ -1,27 +1,26 @@
-using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Sticky Shatter Evo (Throwing Jam Jar + AOE Range).
 ///
 /// Statt einer einzelnen Pfuetze zerspringt das Glas in mehrere Scherben, die
 /// jeweils eine eigene kleinere Marmeladenlache hinterlassen. Die Lachen
-/// verlangsamen Gegner zusaetzlich - das macht aus der reinen Zufallswurf-
-/// Waffe echte Zonenkontrolle.
+/// verlangsamen Gegner zusaetzlich - das macht aus der Wurfwaffe echte
+/// Zonenkontrolle.
+///
+/// Erbt Wurf, Flug und Zielwurf von <see cref="AreaWeaponJamJar"/>; nur der
+/// Aufprall ist anders. Die Lachen (<see cref="StickyShatterEvoPrefab"/>) erben
+/// Einkochen und Marmeladenbad.
 ///
 /// cooldown    = Pause zwischen zwei Wuerfen
 /// duration    = Lebensdauer einer Lache
 /// damage      = Schaden pro Tick
-/// range       = Radius einer einzelnen Lache
+/// range       = Groesse einer einzelnen Lache
 /// AttackSpeed = Abstand zwischen zwei Ticks
-/// shots       = Anzahl Scherben (+ playerShots)
+/// shots       = Anzahl Scherben. Extra-Schuss zaehlt bewusst nicht.
 /// </summary>
-public class StickyShatterEvo : Weapon
+public class StickyShatterEvo : AreaWeaponJamJar
 {
-    [SerializeField] private GameObject jarPrefab;    // fliegendes Glas
-    [SerializeField] private GameObject puddlePrefab; // Lache nach dem Aufprall
-
     [Tooltip("Wie weit die Scherben vom Aufschlagpunkt wegfliegen.")]
     [SerializeField] private float shardSpread = 2.5f;
 
@@ -29,61 +28,18 @@ public class StickyShatterEvo : Weapon
     [Range(0.05f, 1f)]
     [SerializeField] private float slowMultiplier = 0.5f;
 
-    [SerializeField] private float throwRange = 5f;
-
-    private float spawnCounter;
-
     public float SlowMultiplier { get { return slowMultiplier; } }
 
-    void Update()
+    protected override void UnlockAchievements()
     {
-        if (!IsActive) return;
-
         // Die Evo hat nur eine Stufe: aktiv sein heisst, sie wurde erhalten.
         Achievements.Unlock(Ach.StickyShatterEvo);
-
-        spawnCounter -= Time.deltaTime;
-        if (spawnCounter <= 0f)
-        {
-            spawnCounter = CurrentCooldown;
-            StartCoroutine(ThrowJar(RandomSpawnPoint()));
-        }
-    }
-
-    private IEnumerator ThrowJar(Vector2 targetPos)
-    {
-        GameObject jar = Instantiate(jarPrefab, transform.position, transform.rotation);
-
-        Scene gameScene = RunScene.Current;
-        if (gameScene.IsValid() && gameScene.isLoaded)
-        {
-            SceneManager.MoveGameObjectToScene(jar, gameScene);
-        }
-
-        while (jar != null && Vector2.Distance(jar.transform.position, targetPos) > 0.05f)
-        {
-            jar.transform.position = Vector3.MoveTowards(
-                jar.transform.position, targetPos, 10f * Time.deltaTime);
-            yield return null;
-        }
-
-        if (jar != null) Destroy(jar);
-
-        if (AudioController.Instance != null)
-        {
-            AudioController.Instance.PalySound(AudioController.Instance.JarJamBreakingGlass, 0.1f);
-        }
-
-        Shatter(targetPos, gameScene);
     }
 
     /// <summary>Erste Lache auf den Aufschlagpunkt, die restlichen im Kreis darum.</summary>
-    private void Shatter(Vector2 center, Scene gameScene)
+    protected override void Landed(Vector2 center)
     {
-        if (!IsActive) return;
-
-        int shards = Mathf.Max(1, Mathf.RoundToInt(
-            CurrentStats.shots + PlayerController.Instance.ExtraShots));
+        int shards = Mathf.Max(1, Mathf.RoundToInt(CurrentStats.shots));
 
         for (int i = 0; i < shards; i++)
         {
@@ -96,20 +52,7 @@ public class StickyShatterEvo : Weapon
                     Mathf.Sin(angle * Mathf.Deg2Rad)) * shardSpread;
             }
 
-            GameObject puddle = Instantiate(puddlePrefab, pos, Quaternion.identity);
-
-            if (gameScene.IsValid() && gameScene.isLoaded)
-            {
-                SceneManager.MoveGameObjectToScene(puddle, gameScene);
-            }
-
-            StickyShatterEvoPrefab script = puddle.GetComponent<StickyShatterEvoPrefab>();
-            if (script != null) script.weapon = this;
+            SpawnPuddle(pos);
         }
-    }
-
-    private Vector2 RandomSpawnPoint()
-    {
-        return (Vector2)transform.position + Random.insideUnitCircle * throwRange;
     }
 }
