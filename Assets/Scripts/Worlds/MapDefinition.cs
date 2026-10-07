@@ -31,7 +31,30 @@ public class MapDefinition : MonoBehaviour
              "Leer = die allgemeine Lauf-Musik vom AudioController.")]
     [SerializeField] private AudioClip music;
 
+    [Tooltip("Karte ist ein Gang, in dem man nur nach links und rechts laeuft (Kueche). " +
+             "Gegner spawnen dann nur zwischen Spawn Min Y und Spawn Max Y.")]
+    [SerializeField] private bool limitSpawnY;
+
+    [Tooltip("Unterste Spawnhoehe in Weltkoordinaten (knapp ueber der unteren Wand).")]
+    [SerializeField] private float spawnMinY = -9.5f;
+
+    [Tooltip("Oberste Spawnhoehe in Weltkoordinaten (knapp unter der oberen Wand).")]
+    [SerializeField] private float spawnMaxY = 9f;
+
     public string MapName => mapName;
+
+    /// <summary>
+    /// Spawnband der Karte: Gegner tauchen nur zwischen <paramref name="minY"/>
+    /// und <paramref name="maxY"/> auf. False = die Karte ist offen, keine Grenze.
+    /// Rauslaufen duerfen sie trotzdem - die Waende halten Gegner nicht auf,
+    /// sie laufen von selbst wieder rein.
+    /// </summary>
+    public bool TryGetSpawnBand(out float minY, out float maxY)
+    {
+        minY = Mathf.Min(spawnMinY, spawnMaxY);
+        maxY = Mathf.Max(spawnMinY, spawnMaxY);
+        return limitSpawnY;
+    }
 
     public int LegacyMapId => legacyMapId;
 
