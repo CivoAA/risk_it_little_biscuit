@@ -577,7 +577,7 @@ public class SpawnDirector : MonoBehaviour
             phase.BasePattern.Fill(points, ctx, 1, 0f);
             if (points.Count == 0) continue;
 
-            enemy.transform.position = KeepOffScreen(points[0]);
+            enemy.transform.position = SpawnPoint(points[0]);
             enemy.ResetBlocked();
         }
     }
@@ -595,6 +595,37 @@ public class SpawnDirector : MonoBehaviour
             HalfWidth = spawnHalfWidth,
             HalfHeight = spawnHalfHeight,
         };
+    }
+
+    /// <summary>Wo ein Gegner wirklich auftaucht: ausserhalb des Bildes und im Spawnband der Karte.</summary>
+    private Vector2 SpawnPoint(Vector2 point)
+    {
+        return KeepInMap(KeepOffScreen(point));
+    }
+
+    /// <summary>
+    /// Karten, die ein Gang sind (Kueche: nur links/rechts laufen), haben ein
+    /// Spawnband (<see cref="MapDefinition.TryGetSpawnBand"/>). Punkte ober-
+    /// oder unterhalb werden in das Band gezogen. Landen sie dabei im Bild,
+    /// gehen sie waagerecht knapp hinter den linken oder rechten Bildrand -
+    /// in einem Gang kommen die Gegner eben von der Seite.
+    /// </summary>
+    private Vector2 KeepInMap(Vector2 point)
+    {
+        MapDefinition map = MapDefinition.Active;
+        if (map == null || !map.TryGetSpawnBand(out float minY, out float maxY)) return point;
+        if (point.y >= minY && point.y <= maxY) return point;
+
+        point.y = Mathf.Clamp(point.y, minY, maxY);
+
+        if (!ViewBounds.TryGetWorldRect(out Rect view)) return point;
+
+        Rect safe = new Rect(view.xMin - offScreenMargin, view.yMin - offScreenMargin,
+                             view.width + offScreenMargin * 2f, view.height + offScreenMargin * 2f);
+        if (!safe.Contains(point)) return point;
+
+        point.x = point.x < safe.center.x ? safe.xMin : safe.xMax;
+        return point;
     }
 
     /// <summary>
@@ -670,7 +701,7 @@ public class SpawnDirector : MonoBehaviour
             return null;
         }
 
-        position = KeepOffScreen(position);
+        position = SpawnPoint(position);
 
         GameObject spawned = Instantiate(prefab, position, Quaternion.identity);
 

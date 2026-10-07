@@ -366,6 +366,32 @@ public class CatalogTests
     //  Wellenplaene
     // ==================================================================
 
+    [Test]
+    public void World1_benutzt_keine_archivierten_Gegner()
+    {
+        AssertNoArchived(WavePlans.World1());
+    }
+
+    /// <summary>Kueche: Demo-Skalierung auf 20 Minuten gestreckt, Keks-Koenig bei 20:00.</summary>
+    [Test]
+    public void World1_Keks_Koenig_bei_20_Minuten()
+    {
+        RunPlan plan = WavePlans.World1();
+
+        float start = 0f;
+        float bossAt = -1f;
+        EnemyId boss = EnemyId.None;
+        foreach (Phase phase in plan.Phases)
+        {
+            foreach (Beat beat in phase.Beats)
+                if (beat.Kind == BeatKind.Boss) { bossAt = start + beat.Time; boss = beat.Enemy; }
+            start += phase.Duration;
+        }
+
+        Assert.AreEqual(1200f, bossAt, 0.01f, "Boss soll bei 20:00 kommen.");
+        Assert.AreEqual(EnemyId.KeksKoenig, boss);
+    }
+
     /// <summary>
     /// Der Wald spielt nur aktive Gegner. Archivierte spawnen zwar weiter,
     /// wenn ein Plan sie nennt (siehe EnemyDef.Archived) - genau deshalb

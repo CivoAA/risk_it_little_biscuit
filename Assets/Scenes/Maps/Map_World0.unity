@@ -67950,6 +67950,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapDefinition
   mapName: World0
   legacyMapId: 0
+  limitSpawnY: 1
+  spawnMinY: -9.5
+  spawnMaxY: 9
 --- !u!4 &1710145270
 Transform:
   m_ObjectHideFlags: 0
