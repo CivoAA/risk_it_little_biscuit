@@ -405,6 +405,22 @@ public class SpawnDirector : MonoBehaviour
         if (points.Count > 0) Spawn(plan.Finisher, points[0], false);
     }
 
+    /// <summary>
+    /// Nur fuer <see cref="RunDebugKeys"/>: setzt einen Boss sofort hin, genau
+    /// wie ein Boss-Beat im Wellenplan (Ansage, gedaempfter Nachschub, Boss-Leiste).
+    /// </summary>
+    public GameObject DebugSpawnBoss(EnemyId id)
+    {
+        DampenPressure(0.4f, 999f);
+        Announce(Bestiary.NameOf(id).ToUpperInvariant());
+        GameObject boss = SpawnBoss(id);
+
+        Enemy bossEnemy = boss != null ? boss.GetComponent<Enemy>() : null;
+        if (bossEnemy != null && bossEnemy.Role == EnemyRole.MiniBoss) activeMiniBoss = bossEnemy;
+        if (bossEnemy != null && bossEnemy.Role == EnemyRole.Boss) activeBoss = bossEnemy;
+        return boss;
+    }
+
     private GameObject SpawnBoss(EnemyId id)
     {
         if (id == EnemyId.None) return null;

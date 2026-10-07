@@ -1,0 +1,1043 @@
+fileFormatVersion: 2
+guid: 86288b886a784b1da6ae6aa5369fbba1
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1344275590031291212
+    second: boeser_slime_kriech_0
+  - first:
+      213: 3262589814105074248
+    second: boeser_slime_kriech_1
+  - first:
+      213: 2723458007193944065
+    second: boeser_slime_kriech_2
+  - first:
+      213: 2494296145143756674
+    second: boeser_slime_kriech_3
+  - first:
+      213: 3429537129830547934
+    second: boeser_slime_kriech_4
+  - first:
+      213: 1708540021896350486
+    second: boeser_slime_kriech_5
+  - first:
+      213: 2312080245842231802
+    second: boeser_slime_kriech_6
+  - first:
+      213: 3334575707143653859
+    second: boeser_slime_kriech_7
+  - first:
+      213: 2122578112917148964
+    second: boeser_slime_kriech_8
+  - first:
+      213: 2448993883551528141
+    second: boeser_slime_kriech_9
+  - first:
+      213: 1637631001330518113
+    second: boeser_slime_kriech_10
+  - first:
+      213: 2765370705731108423
+    second: boeser_slime_kriech_11
+  - first:
+      213: 2604903674987394400
+    second: boeser_slime_kriech_12
+  - first:
+      213: 1294986977053871870
+    second: boeser_slime_kriech_13
+  - first:
+      213: 2157962856239953213
+    second: boeser_slime_kriech_14
+  - first:
+      213: 1649452026848920352
+    second: boeser_slime_kriech_15
+  - first:
+      213: 1940619820926642235
+    second: boeser_slime_kriech_16
+  - first:
+      213: 2420829483704521640
+    second: boeser_slime_kriech_17
+  - first:
+      213: 1350535803424147457
+    second: boeser_slime_kriech_18
+  - first:
+      213: 3833680246734875885
+    second: boeser_slime_kriech_19
+  - first:
+      213: 2625462808228257903
+    second: boeser_slime_kriech_20
+  - first:
+      213: 1480237651627744981
+    second: boeser_slime_kriech_21
+  - first:
+      213: 4445592022648751325
+    second: boeser_slime_kriech_22
+  - first:
+      213: 2338771694460086972
+    second: boeser_slime_kriech_23
+  - first:
+      213: 2111854953892924081
+    second: boeser_slime_kriech_24
+  - first:
+      213: 1709018250924936801
+    second: boeser_slime_kriech_25
+  - first:
+      213: 3358883613963213053
+    second: boeser_slime_kriech_26
+  - first:
+      213: 1160810450553229817
+    second: boeser_slime_kriech_27
+  - first:
+      213: 1526309856671262645
+    second: boeser_slime_kriech_28
+  - first:
+      213: 1780256344491581349
+    second: boeser_slime_kriech_29
+  - first:
+      213: 3477038384193065561
+    second: boeser_slime_kriech_30
+  - first:
+      213: 3208347599965337678
+    second: boeser_slime_kriech_31
+  - first:
+      213: 2593542533512569746
+    second: boeser_slime_kriech_32
+  - first:
+      213: 4488585127677100998
+    second: boeser_slime_kriech_33
+  - first:
+      213: 1483293213955753438
+    second: boeser_slime_kriech_34
+  - first:
+      213: 4389818293882717180
+    second: boeser_slime_kriech_35
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: boeser_slime_kriech_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.4791666666666667, y: 0.3958333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 970d6a96288b4b8798462f77a40d186b
+      internalID: 1344275590031291212
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boeser_slime_kriech_1
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 0
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.4791666666666667, y: 0.3958333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f701bbc24bbd4b62bbeb55455df7f399
+      internalID: 3262589814105074248
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boeser_slime_kriech_2
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.4791666666666667, y: 0.3958333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9900eff1e9d249f7acbb79733cc58eb6
+      internalID: 2723458007193944065
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boeser_slime_kriech_3
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 0
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.4791666666666667, y: 0.3958333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 974b4ef7fe8b42d7ac3313e8a254cb90
+      internalID: 2494296145143756674
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boeser_slime_kriech_4
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.4791666666666667, y: 0.3958333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f38d66346fad4219a65d0a38eb6539ea
+      internalID: 3429537129830547934
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boeser_slime_kriech_5
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 0
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.4791666666666667, y: 0.3958333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 705b7f361dd94d6d9e11d591c1a2e19a
+      internalID: 1708540021896350486
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boeser_slime_kriech_6
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 0
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.4791666666666667, y: 0.3958333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 475dd796d861424cb8eec7b5822b4b59
+      internalID: 2312080245842231802
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boeser_slime_kriech_7
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 0
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.4791666666666667, y: 0.3958333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0bfabbbf01184497966bbaae8ea0016d
+      internalID: 3334575707143653859
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boeser_slime_kriech_8
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 0
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.4791666666666667, y: 0.3958333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: acdfb093eca0481a8eedd31d7ce0bfba
+      internalID: 2122578112917148964
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boeser_slime_kriech_9
+      rect:
+        serializedVersion: 2
+        x: 432
+        y: 0
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.4791666666666667, y: 0.3958333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0ced273fc76e4518a00fda0c7968aef3
+      internalID: 2448993883551528141
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boeser_slime_kriech_10
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 0
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.4791666666666667, y: 0.3958333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 108edc409bfa4f1e91464f57d14262bd
+      internalID: 1637631001330518113
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boeser_slime_kriech_11
+      rect:
+        serializedVersion: 2
+        x: 528
+        y: 0
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.4791666666666667, y: 0.3958333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 93909c8924a845eba97793098263500b
+      internalID: 2765370705731108423
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boeser_slime_kriech_12
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 0
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.4791666666666667, y: 0.3958333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f664386e462d4dcba04ddc3ce9174f45
+      internalID: 2604903674987394400
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boeser_slime_kriech_13
+      rect:
+        serializedVersion: 2
+        x: 624
+        y: 0
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.4791666666666667, y: 0.3958333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6c4dc9d02a9a4f47b1ab0c5633fedef7
+      internalID: 1294986977053871870
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boeser_slime_kriech_14
+      rect:
+        serializedVersion: 2
+        x: 672
+        y: 0
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.4791666666666667, y: 0.3958333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4592df1c70474e5eb568924d5ab8c626
+      internalID: 2157962856239953213
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boeser_slime_kriech_15
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 0
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.4791666666666667, y: 0.3958333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b178bf6f8c834701b17d19c1ae8a0cd5
+      internalID: 1649452026848920352
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boeser_slime_kriech_16
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 0
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.4791666666666667, y: 0.3958333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9723eec24d2346ea91fa72461440bdcf
+      internalID: 1940619820926642235
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boeser_slime_kriech_17
+      rect:
+        serializedVersion: 2
+        x: 816
+        y: 0
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.4791666666666667, y: 0.3958333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e209b2813aa144ef80b24399af518ac8
+      internalID: 2420829483704521640
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boeser_slime_kriech_18
+      rect:
+        serializedVersion: 2
+        x: 864
+        y: 0
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.4791666666666667, y: 0.3958333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 45e4329d3a664c6081ff6172eb749e35
+      internalID: 1350535803424147457
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boeser_slime_kriech_19
+      rect:
+        serializedVersion: 2
+        x: 912
+        y: 0
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.4791666666666667, y: 0.3958333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f6c4c23f6e2240a19f25294b6b838175
+      internalID: 3833680246734875885
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boeser_slime_kriech_20
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 0
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.4791666666666667, y: 0.3958333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2a0fbf9ebdff47f9aa8821f17ac74e47
+      internalID: 2625462808228257903
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boeser_slime_kriech_21
+      rect:
+        serializedVersion: 2
+        x: 1008
+        y: 0
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.4791666666666667, y: 0.3958333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2e7ed1a2ce1b4a50a801645eb2d02a48
+      internalID: 1480237651627744981
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boeser_slime_kriech_22
+      rect:
+        serializedVersion: 2
+        x: 1056
+        y: 0
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.4791666666666667, y: 0.3958333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9fdc5f30f1124d0f989f47294d515ad4
+      internalID: 4445592022648751325
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boeser_slime_kriech_23
+      rect:
+        serializedVersion: 2
+        x: 1104
+        y: 0
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.4791666666666667, y: 0.3958333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5807c33933874eb2ab256488965f3d7e
+      internalID: 2338771694460086972
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boeser_slime_kriech_24
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 0
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.4791666666666667, y: 0.3958333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f0fd5ebd2e6d4908828398d0c6b9afc7
+      internalID: 2111854953892924081
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boeser_slime_kriech_25
+      rect:
+        serializedVersion: 2
+        x: 1200
+        y: 0
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.4791666666666667, y: 0.3958333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f0d20d2c619491aa6151f2d849d338c
+      internalID: 1709018250924936801
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boeser_slime_kriech_26
+      rect:
+        serializedVersion: 2
+        x: 1248
+        y: 0
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.4791666666666667, y: 0.3958333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b4c6c9fa47064363923f74ceec0c6008
+      internalID: 3358883613963213053
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boeser_slime_kriech_27
+      rect:
+        serializedVersion: 2
+        x: 1296
+        y: 0
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.4791666666666667, y: 0.3958333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e08a21044f9b420c802ad6592f1fafe5
+      internalID: 1160810450553229817
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boeser_slime_kriech_28
+      rect:
+        serializedVersion: 2
+        x: 1344
+        y: 0
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.4791666666666667, y: 0.3958333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9959a70310af40bbb61f0dc4d170b064
+      internalID: 1526309856671262645
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boeser_slime_kriech_29
+      rect:
+        serializedVersion: 2
+        x: 1392
+        y: 0
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.4791666666666667, y: 0.3958333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0880c1b7c51d49cc961fda6fbcbcf899
+      internalID: 1780256344491581349
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boeser_slime_kriech_30
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 0
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.4791666666666667, y: 0.3958333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 44805a1ba3054e6da4070188e7f02f05
+      internalID: 3477038384193065561
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boeser_slime_kriech_31
+      rect:
+        serializedVersion: 2
+        x: 1488
+        y: 0
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.4791666666666667, y: 0.3958333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a9a7a55f08184d948b2aae7135efb6ee
+      internalID: 3208347599965337678
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boeser_slime_kriech_32
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 0
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.4791666666666667, y: 0.3958333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f6ee270351742c686b91ea41c9712ff
+      internalID: 2593542533512569746
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boeser_slime_kriech_33
+      rect:
+        serializedVersion: 2
+        x: 1584
+        y: 0
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.4791666666666667, y: 0.3958333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 50a16fbf0d7a4323813d3314f1324d17
+      internalID: 4488585127677100998
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boeser_slime_kriech_34
+      rect:
+        serializedVersion: 2
+        x: 1632
+        y: 0
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.4791666666666667, y: 0.3958333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f40d320b92284418a6f63c2581833787
+      internalID: 1483293213955753438
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: boeser_slime_kriech_35
+      rect:
+        serializedVersion: 2
+        x: 1680
+        y: 0
+        width: 48
+        height: 48
+      alignment: 9
+      pivot: {x: 0.4791666666666667, y: 0.3958333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9aeb21902ca24ebf8c9b748d6bc216cf
+      internalID: 4389818293882717180
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      boeser_slime_kriech_0: 1344275590031291212
+      boeser_slime_kriech_1: 3262589814105074248
+      boeser_slime_kriech_10: 1637631001330518113
+      boeser_slime_kriech_11: 2765370705731108423
+      boeser_slime_kriech_12: 2604903674987394400
+      boeser_slime_kriech_13: 1294986977053871870
+      boeser_slime_kriech_14: 2157962856239953213
+      boeser_slime_kriech_15: 1649452026848920352
+      boeser_slime_kriech_16: 1940619820926642235
+      boeser_slime_kriech_17: 2420829483704521640
+      boeser_slime_kriech_18: 1350535803424147457
+      boeser_slime_kriech_19: 3833680246734875885
+      boeser_slime_kriech_2: 2723458007193944065
+      boeser_slime_kriech_20: 2625462808228257903
+      boeser_slime_kriech_21: 1480237651627744981
+      boeser_slime_kriech_22: 4445592022648751325
+      boeser_slime_kriech_23: 2338771694460086972
+      boeser_slime_kriech_24: 2111854953892924081
+      boeser_slime_kriech_25: 1709018250924936801
+      boeser_slime_kriech_26: 3358883613963213053
+      boeser_slime_kriech_27: 1160810450553229817
+      boeser_slime_kriech_28: 1526309856671262645
+      boeser_slime_kriech_29: 1780256344491581349
+      boeser_slime_kriech_3: 2494296145143756674
+      boeser_slime_kriech_30: 3477038384193065561
+      boeser_slime_kriech_31: 3208347599965337678
+      boeser_slime_kriech_32: 2593542533512569746
+      boeser_slime_kriech_33: 4488585127677100998
+      boeser_slime_kriech_34: 1483293213955753438
+      boeser_slime_kriech_35: 4389818293882717180
+      boeser_slime_kriech_4: 3429537129830547934
+      boeser_slime_kriech_5: 1708540021896350486
+      boeser_slime_kriech_6: 2312080245842231802
+      boeser_slime_kriech_7: 3334575707143653859
+      boeser_slime_kriech_8: 2122578112917148964
+      boeser_slime_kriech_9: 2448993883551528141
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

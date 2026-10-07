@@ -429,22 +429,22 @@ public static class EnemyCatalog
         Def(EnemyId.Marshmello, "Marshmello",
             health: 3f, damage: 2f, speed: 1.5f, exp: 1, pushTime: 0.25f,
             role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesRight,
-            sheet: "Assets/Art/Gegner/freeze_marshmallow.png", fps: 8f,
-            colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
+            sheet: "Assets/Art/Gegner/new/marshmallow_watschel.png", fps: 16f,
+            colliderRadius: 0.45f, colliderOffset: new Vector2(0f, 0.5f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Gegner/Marshmello.prefab");
 
         Def(EnemyId.EliteMarshmello, "Elite-Marshmello",
             health: 50f, damage: 6f, speed: 1.2f, exp: 20, pushTime: 0.25f,
             role: EnemyRole.Elite, facing: EnemyFacing.ArtFacesRight,
-            sheet: "Assets/Art/Gegner/fin_marshmallow.png", fps: 8f,
-            colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
+            sheet: "Assets/Art/Gegner/new/marshmallow_elite_lauf.png", fps: 16f,
+            colliderRadius: 0.5f, colliderOffset: new Vector2(0f, 0.69f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Elite_Gegner/Elite_Marshmello.prefab");
 
         Def(EnemyId.EvilSlime, "Boeser Slime",
             health: 7f, damage: 4f, speed: 1.5f, exp: 3, pushTime: 0.2f,
             role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
-            sheet: "Assets/Art/Gegner/fin_evil_slime.png", fps: 8f,
-            colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
+            sheet: "Assets/Art/Gegner/new/boeser_slime_kriech.png", fps: 16f,
+            colliderRadius: 0.3f, colliderOffset: new Vector2(0f, -0.18f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Gegner/Evil_Slim.prefab");
 
         Def(EnemyId.EliteFluegdolch, "Elite-Fluegdolch",
@@ -457,8 +457,8 @@ public static class EnemyCatalog
         Def(EnemyId.KeksKoenig, "Keks-Koenig",
             health: 5000f, damage: 38.7f, speed: 4f, exp: 0, pushTime: 0f,
             role: EnemyRole.Boss, facing: EnemyFacing.ArtFacesLeft,
-            sheet: "Assets/Art/Gegner/fin_der_konig_des_spielfelds.png", fps: 8f,
-            colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
+            sheet: "Assets/Art/Gegner/new/boss/kekskoenig_lauf.png", fps: 12f,
+            colliderRadius: 1.95f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Boss/KecksKoenig.prefab");
 
         Def(EnemyId.Eichel, "Eichel",
@@ -559,6 +559,13 @@ public static class EnemyCatalog
             colliderRadius: 0.85f, colliderOffset: new Vector2(0f, 1f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Boss/VerkohlterTod.prefab");
 
+        Def(EnemyId.Pancake, "Pfannkuchen",
+            health: 600f, damage: 18f, speed: 1.75f, exp: 300, pushTime: 0.05f,
+            role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/pfannkuchen_hop.png", fps: 16f,
+            colliderRadius: 0.72f, colliderOffset: new Vector2(0f, 0.72f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Archiv/pancake.prefab");
+
         // ---------------------------------------------------------- Archiv
         //
         // Weggelegt, nicht geloescht. In der Werkstatt unter "Archiv"
@@ -591,13 +598,6 @@ public static class EnemyCatalog
             sheet: "Assets/Art/Gegner/fin_ramen.png", fps: 8f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Archiv/ramen.prefab", archived: true);
-
-        Def(EnemyId.Pancake, "Pfannkuchen",
-            health: 600f, damage: 18f, speed: 1.75f, exp: 300, pushTime: 0.05f,
-            role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
-            sheet: "Assets/Art/Gegner/fin_pencake.png", fps: 8f,
-            colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
-            prefab: "Assets/Prefabs/Enemy/Archiv/pancake.prefab", archived: true);
 
         Def(EnemyId.Fetti, "Fetti",
             health: 750f, damage: 20f, speed: 1.2f, exp: 450, pushTime: 0f,

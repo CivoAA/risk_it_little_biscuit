@@ -1,0 +1,731 @@
+fileFormatVersion: 2
+guid: 519c2973be3947d68610725f9ad3d964
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3630911170872071620
+    second: marshmallow_watschel_0
+  - first:
+      213: 2350065274263365672
+    second: marshmallow_watschel_1
+  - first:
+      213: 2924213317359793418
+    second: marshmallow_watschel_2
+  - first:
+      213: 1780319077516868762
+    second: marshmallow_watschel_3
+  - first:
+      213: 2509324769075182863
+    second: marshmallow_watschel_4
+  - first:
+      213: 3114386251717492855
+    second: marshmallow_watschel_5
+  - first:
+      213: 3670338954415485643
+    second: marshmallow_watschel_6
+  - first:
+      213: 4018891053416263297
+    second: marshmallow_watschel_7
+  - first:
+      213: 1223024919903705234
+    second: marshmallow_watschel_8
+  - first:
+      213: 1577052898629415721
+    second: marshmallow_watschel_9
+  - first:
+      213: 4042958035955000803
+    second: marshmallow_watschel_10
+  - first:
+      213: 4394441479165863384
+    second: marshmallow_watschel_11
+  - first:
+      213: 3957594074410989672
+    second: marshmallow_watschel_12
+  - first:
+      213: 2746468250116374040
+    second: marshmallow_watschel_13
+  - first:
+      213: 4033589714177341545
+    second: marshmallow_watschel_14
+  - first:
+      213: 1475330357077093425
+    second: marshmallow_watschel_15
+  - first:
+      213: 2815008281425868274
+    second: marshmallow_watschel_16
+  - first:
+      213: 3600021226140529347
+    second: marshmallow_watschel_17
+  - first:
+      213: 3716596581707383602
+    second: marshmallow_watschel_18
+  - first:
+      213: 2803236230526324755
+    second: marshmallow_watschel_19
+  - first:
+      213: 3943829417285867262
+    second: marshmallow_watschel_20
+  - first:
+      213: 1552405514281250548
+    second: marshmallow_watschel_21
+  - first:
+      213: 2664305419105159695
+    second: marshmallow_watschel_22
+  - first:
+      213: 2916610746487166988
+    second: marshmallow_watschel_23
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: marshmallow_watschel_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 40
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 840df65dea1c4f8ab348d9d9eed4508a
+      internalID: 3630911170872071620
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_watschel_1
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 0
+        width: 40
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 99b72a432fb34a608993d1cc5c798bbc
+      internalID: 2350065274263365672
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_watschel_2
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 0
+        width: 40
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6e46f1f3c60d4b438c8fb35896fa9359
+      internalID: 2924213317359793418
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_watschel_3
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 0
+        width: 40
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1cfb8ae93cfe47d09fc2dfe6e68d98aa
+      internalID: 1780319077516868762
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_watschel_4
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 0
+        width: 40
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bb9e8bee8ec64c009276b81c93b2638f
+      internalID: 2509324769075182863
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_watschel_5
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 0
+        width: 40
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 24e0c813124a48068f4252b025bd5244
+      internalID: 3114386251717492855
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_watschel_6
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 0
+        width: 40
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d8cd2928fea04914bc412bd6ef513855
+      internalID: 3670338954415485643
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_watschel_7
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 0
+        width: 40
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1a21c28a9d414c36af9e7f83dc098373
+      internalID: 4018891053416263297
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_watschel_8
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 0
+        width: 40
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fe6480bdc22f40b8a09c4789e9c2e966
+      internalID: 1223024919903705234
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_watschel_9
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 0
+        width: 40
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cf87902f3c484146b56f2105d3c440b0
+      internalID: 1577052898629415721
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_watschel_10
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 0
+        width: 40
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 65de7e3360d74177a1ea35af6919e7ae
+      internalID: 4042958035955000803
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_watschel_11
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 0
+        width: 40
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 351ac10a4180439d9a941bfa22453762
+      internalID: 4394441479165863384
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_watschel_12
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 0
+        width: 40
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c371a5afcc16475ba8938f13d3d7298d
+      internalID: 3957594074410989672
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_watschel_13
+      rect:
+        serializedVersion: 2
+        x: 520
+        y: 0
+        width: 40
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 898e9b69595c430ca5ade993440c8423
+      internalID: 2746468250116374040
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_watschel_14
+      rect:
+        serializedVersion: 2
+        x: 560
+        y: 0
+        width: 40
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ebd7d2f895634499b57f317bec716fb0
+      internalID: 4033589714177341545
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_watschel_15
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 0
+        width: 40
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 614fdb20f5bc4e60882e41af77a6a25c
+      internalID: 1475330357077093425
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_watschel_16
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 0
+        width: 40
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: af27c9ad69d84b4e83d13f14506f5b1c
+      internalID: 2815008281425868274
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_watschel_17
+      rect:
+        serializedVersion: 2
+        x: 680
+        y: 0
+        width: 40
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 850998bc160742ae93332dd73fdf0004
+      internalID: 3600021226140529347
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_watschel_18
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 0
+        width: 40
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4cf6502effef4d51ad0dcd43243c4d49
+      internalID: 3716596581707383602
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_watschel_19
+      rect:
+        serializedVersion: 2
+        x: 760
+        y: 0
+        width: 40
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6ba1ecdd8ed145dbb600c87c5970b97e
+      internalID: 2803236230526324755
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_watschel_20
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 0
+        width: 40
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c4a49fc27b9f4cdbbe9c38d8ecc00b3a
+      internalID: 3943829417285867262
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_watschel_21
+      rect:
+        serializedVersion: 2
+        x: 840
+        y: 0
+        width: 40
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8606893f4c854f52ac32acd17ee5afff
+      internalID: 1552405514281250548
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_watschel_22
+      rect:
+        serializedVersion: 2
+        x: 880
+        y: 0
+        width: 40
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8ac17bfb33274561a219c161931b92f3
+      internalID: 2664305419105159695
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_watschel_23
+      rect:
+        serializedVersion: 2
+        x: 920
+        y: 0
+        width: 40
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3124c16cbf5d49c98a4dfc2e17a7a804
+      internalID: 2916610746487166988
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      marshmallow_watschel_0: 3630911170872071620
+      marshmallow_watschel_1: 2350065274263365672
+      marshmallow_watschel_10: 4042958035955000803
+      marshmallow_watschel_11: 4394441479165863384
+      marshmallow_watschel_12: 3957594074410989672
+      marshmallow_watschel_13: 2746468250116374040
+      marshmallow_watschel_14: 4033589714177341545
+      marshmallow_watschel_15: 1475330357077093425
+      marshmallow_watschel_16: 2815008281425868274
+      marshmallow_watschel_17: 3600021226140529347
+      marshmallow_watschel_18: 3716596581707383602
+      marshmallow_watschel_19: 2803236230526324755
+      marshmallow_watschel_2: 2924213317359793418
+      marshmallow_watschel_20: 3943829417285867262
+      marshmallow_watschel_21: 1552405514281250548
+      marshmallow_watschel_22: 2664305419105159695
+      marshmallow_watschel_23: 2916610746487166988
+      marshmallow_watschel_3: 1780319077516868762
+      marshmallow_watschel_4: 2509324769075182863
+      marshmallow_watschel_5: 3114386251717492855
+      marshmallow_watschel_6: 3670338954415485643
+      marshmallow_watschel_7: 4018891053416263297
+      marshmallow_watschel_8: 1223024919903705234
+      marshmallow_watschel_9: 1577052898629415721
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

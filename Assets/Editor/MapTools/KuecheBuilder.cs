@@ -216,6 +216,11 @@ public static class KuecheBuilder
 
                 if (tile == null) continue; // nie eine Zelle loeschen
                 map.SetTile(cell, tile);
+                // SetTile behaelt Drehung und Farbe der alten Zelle. Aus der
+                // Wald-Vorlage sind ~100 Zellen je Chunk um 180 Grad gedreht -
+                // dort hing die untere Sockelleiste verkehrt herum in der Wand.
+                map.SetTransformMatrix(cell, Matrix4x4.identity);
+                map.SetColor(cell, Color.white);
                 painted++;
             }
             EditorUtility.SetDirty(map);

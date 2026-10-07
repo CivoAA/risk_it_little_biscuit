@@ -1834,7 +1834,7 @@ public class EnemyWorkshop : EditorWindow
         if (file.Contains("evil_slime")) return EnemyId.EvilSlime;
         if (file.Contains("muffin")) return EnemyId.Muffin;
         if (file.Contains("ramen")) return EnemyId.Suppe;
-        if (file.Contains("pencake")) return EnemyId.Pancake;
+        if (file.Contains("pencake") || file.Contains("pfannkuchen")) return EnemyId.Pancake;
         if (file.Contains("saure_milch")) return EnemyId.SaureMilch;
         if (file.Contains("fett")) return EnemyId.Fetti;
         if (file.Contains("blocker")) return EnemyId.Blocker;

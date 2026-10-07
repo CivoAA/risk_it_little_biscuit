@@ -1,0 +1,939 @@
+fileFormatVersion: 2
+guid: a0f16d931a7d4d1c9c1301049208ada3
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3618044336921562671
+    second: marshmallow_elite_lauf_0
+  - first:
+      213: 4524538766256610398
+    second: marshmallow_elite_lauf_1
+  - first:
+      213: 3067563827784137172
+    second: marshmallow_elite_lauf_2
+  - first:
+      213: 2291404755820563954
+    second: marshmallow_elite_lauf_3
+  - first:
+      213: 1240770563287259223
+    second: marshmallow_elite_lauf_4
+  - first:
+      213: 1962344947398152680
+    second: marshmallow_elite_lauf_5
+  - first:
+      213: 3828892201521970556
+    second: marshmallow_elite_lauf_6
+  - first:
+      213: 3101699757281299579
+    second: marshmallow_elite_lauf_7
+  - first:
+      213: 2967440123174599872
+    second: marshmallow_elite_lauf_8
+  - first:
+      213: 1617912169608871972
+    second: marshmallow_elite_lauf_9
+  - first:
+      213: 4005194872330862824
+    second: marshmallow_elite_lauf_10
+  - first:
+      213: 1873495187031302310
+    second: marshmallow_elite_lauf_11
+  - first:
+      213: 3920544765636823835
+    second: marshmallow_elite_lauf_12
+  - first:
+      213: 4238496146965825796
+    second: marshmallow_elite_lauf_13
+  - first:
+      213: 3626842581097934114
+    second: marshmallow_elite_lauf_14
+  - first:
+      213: 4226044519431967706
+    second: marshmallow_elite_lauf_15
+  - first:
+      213: 3420076349133121805
+    second: marshmallow_elite_lauf_16
+  - first:
+      213: 3232660674083722381
+    second: marshmallow_elite_lauf_17
+  - first:
+      213: 3506526748480780904
+    second: marshmallow_elite_lauf_18
+  - first:
+      213: 1864542582072959741
+    second: marshmallow_elite_lauf_19
+  - first:
+      213: 1261083799598403031
+    second: marshmallow_elite_lauf_20
+  - first:
+      213: 3368463878723823998
+    second: marshmallow_elite_lauf_21
+  - first:
+      213: 1671840037499389589
+    second: marshmallow_elite_lauf_22
+  - first:
+      213: 4569064177329272990
+    second: marshmallow_elite_lauf_23
+  - first:
+      213: 4486099122065770542
+    second: marshmallow_elite_lauf_24
+  - first:
+      213: 3880401511659971198
+    second: marshmallow_elite_lauf_25
+  - first:
+      213: 3751162188124604673
+    second: marshmallow_elite_lauf_26
+  - first:
+      213: 2909383799608249195
+    second: marshmallow_elite_lauf_27
+  - first:
+      213: 1189663736245143535
+    second: marshmallow_elite_lauf_28
+  - first:
+      213: 2401978422614239593
+    second: marshmallow_elite_lauf_29
+  - first:
+      213: 3259674545953178529
+    second: marshmallow_elite_lauf_30
+  - first:
+      213: 4537083941097185799
+    second: marshmallow_elite_lauf_31
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: marshmallow_elite_lauf_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 56
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ab2e965e783413e82c77890d972cb79
+      internalID: 3618044336921562671
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_elite_lauf_1
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 0
+        width: 56
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ead511c4df6144cea74d59e818c42529
+      internalID: 4524538766256610398
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_elite_lauf_2
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 0
+        width: 56
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bbfea72fc084423db4a54a7841b40866
+      internalID: 3067563827784137172
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_elite_lauf_3
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 0
+        width: 56
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d2cd9789d7ce444dade8acdae886157c
+      internalID: 2291404755820563954
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_elite_lauf_4
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 0
+        width: 56
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2b1ca9075d704d3d844dafc4fa2fa7ad
+      internalID: 1240770563287259223
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_elite_lauf_5
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 0
+        width: 56
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3883b38522664cada685abb6dbd29315
+      internalID: 1962344947398152680
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_elite_lauf_6
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 0
+        width: 56
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f7b6f633dd84414785eee1b6ef182789
+      internalID: 3828892201521970556
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_elite_lauf_7
+      rect:
+        serializedVersion: 2
+        x: 392
+        y: 0
+        width: 56
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f4a96ea36bd845059fdc77fe97f88fdc
+      internalID: 3101699757281299579
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_elite_lauf_8
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 0
+        width: 56
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4b0a15dbc31a4e6bbeba90c993d277ed
+      internalID: 2967440123174599872
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_elite_lauf_9
+      rect:
+        serializedVersion: 2
+        x: 504
+        y: 0
+        width: 56
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b5e129a9a48944928c928fe034026643
+      internalID: 1617912169608871972
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_elite_lauf_10
+      rect:
+        serializedVersion: 2
+        x: 560
+        y: 0
+        width: 56
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 037bd23e445e429d9b23c09890e35a07
+      internalID: 4005194872330862824
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_elite_lauf_11
+      rect:
+        serializedVersion: 2
+        x: 616
+        y: 0
+        width: 56
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 80889e97d5b046d78cfed789b0ac69f3
+      internalID: 1873495187031302310
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_elite_lauf_12
+      rect:
+        serializedVersion: 2
+        x: 672
+        y: 0
+        width: 56
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e653b2bf0dbc4fb7af795e358d26a025
+      internalID: 3920544765636823835
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_elite_lauf_13
+      rect:
+        serializedVersion: 2
+        x: 728
+        y: 0
+        width: 56
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dc3f4e8a4a624c508dc8291be428dc13
+      internalID: 4238496146965825796
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_elite_lauf_14
+      rect:
+        serializedVersion: 2
+        x: 784
+        y: 0
+        width: 56
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a0727d111f5f482d89e54d397bb05102
+      internalID: 3626842581097934114
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_elite_lauf_15
+      rect:
+        serializedVersion: 2
+        x: 840
+        y: 0
+        width: 56
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 126751159ece48c0affe8ee6df2b89f3
+      internalID: 4226044519431967706
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_elite_lauf_16
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 0
+        width: 56
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: acb5bd4da7f7404981814a4735d99884
+      internalID: 3420076349133121805
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_elite_lauf_17
+      rect:
+        serializedVersion: 2
+        x: 952
+        y: 0
+        width: 56
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b050ac77f4f44d80b77d93a4bcf2baff
+      internalID: 3232660674083722381
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_elite_lauf_18
+      rect:
+        serializedVersion: 2
+        x: 1008
+        y: 0
+        width: 56
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 290a18c069d040baa3e4eeafe072a3f7
+      internalID: 3506526748480780904
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_elite_lauf_19
+      rect:
+        serializedVersion: 2
+        x: 1064
+        y: 0
+        width: 56
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 59f048a803784f24b7f36683e238b6d1
+      internalID: 1864542582072959741
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_elite_lauf_20
+      rect:
+        serializedVersion: 2
+        x: 1120
+        y: 0
+        width: 56
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 53625826939047158efa5916f31977d3
+      internalID: 1261083799598403031
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_elite_lauf_21
+      rect:
+        serializedVersion: 2
+        x: 1176
+        y: 0
+        width: 56
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0bed72d84ca44f49a97c826c002df3a8
+      internalID: 3368463878723823998
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_elite_lauf_22
+      rect:
+        serializedVersion: 2
+        x: 1232
+        y: 0
+        width: 56
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9057b6c0b1ef4f77ad8eb28aac5e4bc6
+      internalID: 1671840037499389589
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_elite_lauf_23
+      rect:
+        serializedVersion: 2
+        x: 1288
+        y: 0
+        width: 56
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b1d292e2301c4b3880b18acc8a3fb78c
+      internalID: 4569064177329272990
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_elite_lauf_24
+      rect:
+        serializedVersion: 2
+        x: 1344
+        y: 0
+        width: 56
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 77faf9afa3064a499182dac0c7dd54a3
+      internalID: 4486099122065770542
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_elite_lauf_25
+      rect:
+        serializedVersion: 2
+        x: 1400
+        y: 0
+        width: 56
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6f2814cfe40c43c48c6095966c4638d6
+      internalID: 3880401511659971198
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_elite_lauf_26
+      rect:
+        serializedVersion: 2
+        x: 1456
+        y: 0
+        width: 56
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b38770296cf747fc8b35fd92d596c9c0
+      internalID: 3751162188124604673
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_elite_lauf_27
+      rect:
+        serializedVersion: 2
+        x: 1512
+        y: 0
+        width: 56
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 58e89e8df3664cc3a62d3d838aecbdb8
+      internalID: 2909383799608249195
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_elite_lauf_28
+      rect:
+        serializedVersion: 2
+        x: 1568
+        y: 0
+        width: 56
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 22aa05cf7d5b4e75b7218ba14f2da494
+      internalID: 1189663736245143535
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_elite_lauf_29
+      rect:
+        serializedVersion: 2
+        x: 1624
+        y: 0
+        width: 56
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0a84d2e86d3842f9a857731cf2551f39
+      internalID: 2401978422614239593
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_elite_lauf_30
+      rect:
+        serializedVersion: 2
+        x: 1680
+        y: 0
+        width: 56
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4b9a8d920f2a4f03a84f379115ef83b6
+      internalID: 3259674545953178529
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marshmallow_elite_lauf_31
+      rect:
+        serializedVersion: 2
+        x: 1736
+        y: 0
+        width: 56
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 31b1b2c41ba64c709c09e9d5fb79b76d
+      internalID: 4537083941097185799
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      marshmallow_elite_lauf_0: 3618044336921562671
+      marshmallow_elite_lauf_1: 4524538766256610398
+      marshmallow_elite_lauf_10: 4005194872330862824
+      marshmallow_elite_lauf_11: 1873495187031302310
+      marshmallow_elite_lauf_12: 3920544765636823835
+      marshmallow_elite_lauf_13: 4238496146965825796
+      marshmallow_elite_lauf_14: 3626842581097934114
+      marshmallow_elite_lauf_15: 4226044519431967706
+      marshmallow_elite_lauf_16: 3420076349133121805
+      marshmallow_elite_lauf_17: 3232660674083722381
+      marshmallow_elite_lauf_18: 3506526748480780904
+      marshmallow_elite_lauf_19: 1864542582072959741
+      marshmallow_elite_lauf_2: 3067563827784137172
+      marshmallow_elite_lauf_20: 1261083799598403031
+      marshmallow_elite_lauf_21: 3368463878723823998
+      marshmallow_elite_lauf_22: 1671840037499389589
+      marshmallow_elite_lauf_23: 4569064177329272990
+      marshmallow_elite_lauf_24: 4486099122065770542
+      marshmallow_elite_lauf_25: 3880401511659971198
+      marshmallow_elite_lauf_26: 3751162188124604673
+      marshmallow_elite_lauf_27: 2909383799608249195
+      marshmallow_elite_lauf_28: 1189663736245143535
+      marshmallow_elite_lauf_29: 2401978422614239593
+      marshmallow_elite_lauf_3: 2291404755820563954
+      marshmallow_elite_lauf_30: 3259674545953178529
+      marshmallow_elite_lauf_31: 4537083941097185799
+      marshmallow_elite_lauf_4: 1240770563287259223
+      marshmallow_elite_lauf_5: 1962344947398152680
+      marshmallow_elite_lauf_6: 3828892201521970556
+      marshmallow_elite_lauf_7: 3101699757281299579
+      marshmallow_elite_lauf_8: 2967440123174599872
+      marshmallow_elite_lauf_9: 1617912169608871972
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

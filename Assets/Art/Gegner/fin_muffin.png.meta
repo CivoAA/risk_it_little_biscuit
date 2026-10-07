@@ -11,6 +11,9 @@ TextureImporter:
   - first:
       213: 5500914160919984893
     second: fin_muffin_2
+  - first:
+      213: 1863421037163037889
+    second: fin_muffin_3
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -210,6 +213,28 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: fin_muffin_3
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8638e3662bdc4823a8ff38650176d680
+      internalID: 1863421037163037889
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -229,6 +254,7 @@ TextureImporter:
       fin_muffin_0: -9002960899391148338
       fin_muffin_1: -112140429177494837
       fin_muffin_2: 5500914160919984893
+      fin_muffin_3: 1863421037163037889
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
