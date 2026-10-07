@@ -16,6 +16,9 @@ public class RandomObjectSpawner : MonoBehaviour
     public int maxObjectsPerBlock = 1;
     [Tooltip("Luecke zwischen zwei Mixer-Feldern, in Feld-Durchmessern (1 = ein ganzes Feld dazwischen).")]
     public float mixerGap = 1f;
+    [Tooltip("Nur fuer Props (alles ausser Mixern): Mindestabstand zu Mixer-Feldern, zu anderen " +
+             "Props dieses Spawners und zum Spieler. 0 = wie frueher ein Versuch ohne Pruefung.")]
+    public float propSpacing = 0f;
 
     [Header("No-Spawn-Zone um Kamera")]
     public Transform leftNoSpawnPoint;
@@ -23,6 +26,7 @@ public class RandomObjectSpawner : MonoBehaviour
 
     private HashSet<int> generatedBlocks = new HashSet<int>();
     private GameObject[] mixerPrefabs;
+    private readonly List<Vector2> placedProps = new List<Vector2>();
 
     private void Update()
     {
@@ -69,10 +73,11 @@ public class RandomObjectSpawner : MonoBehaviour
                 ? spawnablePrefabs[Random.Range(0, spawnablePrefabs.Length)]
                 : mixerPrefabs[Random.Range(0, mixerPrefabs.Length)];
 
-            // Mixer wuerfeln neu, bis ihr Feld frei steht - normale Objekte
-            // haben wie bisher einen Versuch.
+            // Mixer wuerfeln neu, bis ihr Feld frei steht - Props mit
+            // propSpacing ebenso, alle anderen haben wie bisher einen Versuch.
             bool isMixer = System.Array.IndexOf(mixerPrefabs, prefab) >= 0;
-            int attempts = isMixer ? MixerPlacement.Attempts : 1;
+            bool spacedProp = !isMixer && propSpacing > 0f;
+            int attempts = isMixer ? MixerPlacement.Attempts : spacedProp ? 8 : 1;
             bool found = false;
             float randomX = 0f, randomY = 0f;
 
@@ -85,13 +90,16 @@ public class RandomObjectSpawner : MonoBehaviour
                 if (IsInNoSpawnZone(randomX))
                     continue;
 
-                found = !isMixer || MixerPlacement.IsFree(prefab, new Vector2(randomX, randomY), mixerGap);
+                Vector2 spot = new Vector2(randomX, randomY);
+                found = isMixer ? MixerPlacement.IsFree(prefab, spot, mixerGap)
+                      : !spacedProp || IsPropSpotFree(spot);
             }
 
             if (!found)
                 continue;
 
             GameObject spawnedObject = Instantiate(prefab, new Vector3(randomX, randomY, 0f), Quaternion.identity);
+            if (spacedProp) placedProps.Add(new Vector2(randomX, randomY));
 
             Scene gameScene = RunScene.Current;
             if (gameScene.IsValid() && gameScene.isLoaded)
@@ -103,6 +111,39 @@ public class RandomObjectSpawner : MonoBehaviour
                 Debug.LogWarning("⚠️ Keine Lauf-Szene gefunden! Objekt bleibt in aktueller Scene.");
             }
         }
+    }
+
+    /// <summary>
+    /// Ein Prop haelt <see cref="propSpacing"/> Abstand zu Spieler, eigenen
+    /// Props und Mixer-Feldern. Mixer selbst weichen den Props ueber deren
+    /// <see cref="MixerBlocker"/> aus - je nachdem, wer zuerst steht.
+    /// </summary>
+    private bool IsPropSpotFree(Vector2 spot)
+    {
+        float minSqr = propSpacing * propSpacing;
+
+        if (player != null && ((Vector2)player.position - spot).sqrMagnitude < minSqr)
+            return false;
+
+        for (int i = 0; i < placedProps.Count; i++)
+        {
+            if ((placedProps[i] - spot).sqrMagnitude < minSqr)
+                return false;
+        }
+
+        var mixers = MixerObject.All;
+        for (int i = 0; i < mixers.Count; i++)
+        {
+            MixerObject mixer = mixers[i];
+            if (mixer == null) continue;
+
+            GameObject go = mixer.gameObject;
+            float min = MixerPlacement.FieldRadius(go) + propSpacing * 0.5f;
+            if ((MixerPlacement.FieldCenter(go, go.transform.position) - spot).sqrMagnitude < min * min)
+                return false;
+        }
+
+        return true;
     }
 
     private bool IsInNoSpawnZone(float x)

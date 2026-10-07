@@ -1,0 +1,54 @@
+{
+ "props": [
+  {
+   "name": "kochtopf",
+   "colliderW": 48,
+   "colliderH": 10
+  },
+  {
+   "name": "mehlsack",
+   "colliderW": 40,
+   "colliderH": 9
+  },
+  {
+   "name": "milchtuete",
+   "colliderW": 32,
+   "colliderH": 6
+  },
+  {
+   "name": "marmeladenglas",
+   "colliderW": 32,
+   "colliderH": 7
+  },
+  {
+   "name": "nudelholz",
+   "colliderW": 76,
+   "colliderH": 8
+  },
+  {
+   "name": "ei",
+   "colliderW": 18,
+   "colliderH": 5
+  },
+  {
+   "name": "teekanne",
+   "colliderW": 40,
+   "colliderH": 7
+  },
+  {
+   "name": "salzstreuer",
+   "colliderW": 16,
+   "colliderH": 5
+  },
+  {
+   "name": "tasse",
+   "colliderW": 34,
+   "colliderH": 6
+  },
+  {
+   "name": "kaese",
+   "colliderW": 46,
+   "colliderH": 8
+  }
+ ]
+}
