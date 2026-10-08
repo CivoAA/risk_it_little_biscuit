@@ -710,6 +710,8 @@
     { "key": "level.1.desc", "value": "Mehl, Zucker und Ärger. Hier fängt alles an." },
     { "key": "level.2.name", "value": "Wald" },
     { "key": "level.2.desc", "value": "Zwischen den Bäumen wird es voll." },
+    { "key": "level.5.name", "value": "Vulkan" },
+    { "key": "level.5.desc", "value": "Heiße Asche, kochende Lava. Bloß nicht reinfallen!" },
     { "key": "enemy.KeksKoenig.name", "value": "Keks-König" },
     { "key": "enemy.Glutwurz.name", "value": "Glutwurz" },
     { "key": "enemy.Schleimkoenig.name", "value": "Schleimkönig" },
@@ -717,6 +719,8 @@
     { "key": "enemy.VerkohlterTod.name", "value": "Der Verkohlte" },
     { "key": "boss.verkohlter.death", "value": "DER TOD WIRD DICH HOLEN!" },
     { "key": "boss.verkohlter.phase2", "value": "DER VERKOHLTE SPALTET SICH!" },
+    { "key": "boss.verkohlter.phase3", "value": "DER VERKOHLTE HOLT TIEF LUFT ..." },
+    { "key": "boss.verkohlter.heart", "value": "DAS HERZ DES VERKOHLTEN" },
     { "key": "ui.levelselect.recordstory", "value": "SCHNELLSTER SIEG" },
     { "key": "ui.levelselect.recordendless", "value": "LÄNGSTES ÜBERLEBEN" },
 
@@ -1098,6 +1102,23 @@
     { "key": "ui.console.cheat.wipe.warn", "value": "Löscht ALLES: Shop, Charaktere, Skills, Erfolge, Unlocks, Bestiarium, Rekorde." },
     { "key": "ui.console.cheat.wipe.confirm", "value": "Wirklich? -> werksreset ja" },
     { "key": "ui.console.cheat.wipe.inrun", "value": "Geht nicht während eines Laufs." },
-    { "key": "ui.console.cheat.charstand", "value": "Level {0} ({1} XP, {2} Boss-Level), {3} Punkte frei." }
+    { "key": "ui.console.cheat.charstand", "value": "Level {0} ({1} XP, {2} Boss-Level), {3} Punkte frei." },
+
+    { "key": "weapon.choco_chips.name", "value": "Schoko-Salve" },
+    { "key": "weapon.choco_chips.desc", "value": "Schießt deine eigenen Schokostückchen auf den nächsten Gegner, kurz hintereinander und leicht gestreut. Höhere Stufen schießen mehr Stückchen, die mehrere Gegner durchschlagen." },
+    { "key": "weapon.choco_chips.lvl0", "value": "Drei Schokostückchen auf den nächsten Gegner" },
+    { "key": "weapon.choco_chips.lvl1", "value": "Viertes Stückchen" },
+    { "key": "weapon.choco_chips.lvl2", "value": "Schaden +1, durchschlägt 2 Gegner" },
+    { "key": "weapon.choco_chips.lvl3", "value": "Fünftes Stückchen, Schaden +1, schneller" },
+    { "key": "weapon.choco_chips.lvl4", "value": "Sechstes Stückchen, durchschlägt 3 Gegner" },
+    { "key": "weapon.choco_chips.lvl5", "value": "Siebtes Stückchen, Schaden +1, schneller" },
+    { "key": "weapon.milk_dunk.name", "value": "Milch-Tunker" },
+    { "key": "weapon.milk_dunk.desc", "value": "Tunkt sich in Milch und schickt einen Milchring um dich herum. Er stößt alle Gegner weg und macht sie kurz langsamer. Höhere Stufen machen den Ring größer und schicken Nachwellen hinterher." },
+    { "key": "weapon.milk_dunk.lvl0", "value": "Ein Milchring stößt alle Gegner um dich weg" },
+    { "key": "weapon.milk_dunk.lvl1", "value": "Schaden +2, größerer Ring" },
+    { "key": "weapon.milk_dunk.lvl2", "value": "Eine Nachwelle" },
+    { "key": "weapon.milk_dunk.lvl3", "value": "Schaden +2, größerer Ring" },
+    { "key": "weapon.milk_dunk.lvl4", "value": "Schaden +2, größerer Ring, schneller" },
+    { "key": "weapon.milk_dunk.lvl5", "value": "Zweite Nachwelle, Schaden +2" }
   ]
 }

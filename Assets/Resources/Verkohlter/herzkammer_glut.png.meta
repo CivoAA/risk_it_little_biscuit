@@ -1,0 +1,523 @@
+fileFormatVersion: 2
+guid: 9e8f64f6444244a5bdc3249ea575a245
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2310812459430076924
+    second: herzkammer_glut_0
+  - first:
+      213: 3602059782652339029
+    second: herzkammer_glut_1
+  - first:
+      213: 4211346401178818313
+    second: herzkammer_glut_2
+  - first:
+      213: 3238468526626615845
+    second: herzkammer_glut_3
+  - first:
+      213: 4146870925565492785
+    second: herzkammer_glut_4
+  - first:
+      213: 3417102915765948456
+    second: herzkammer_glut_5
+  - first:
+      213: 3988777158612413955
+    second: herzkammer_glut_6
+  - first:
+      213: 2343301000307731306
+    second: herzkammer_glut_7
+  - first:
+      213: 2724806339075327544
+    second: herzkammer_glut_8
+  - first:
+      213: 1616441793901737222
+    second: herzkammer_glut_9
+  - first:
+      213: 1727738361459478022
+    second: herzkammer_glut_10
+  - first:
+      213: 2121992320368730967
+    second: herzkammer_glut_11
+  - first:
+      213: 3502790753276430705
+    second: herzkammer_glut_12
+  - first:
+      213: 1287110171753339681
+    second: herzkammer_glut_13
+  - first:
+      213: 2612596868095460268
+    second: herzkammer_glut_14
+  - first:
+      213: 2720373041966067276
+    second: herzkammer_glut_15
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 4096
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: herzkammer_glut_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1776
+        width: 942
+        height: 592
+      alignment: 9
+      pivot: {x: 0.5021231422505308, y: 0.4442567567567568}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8fad7b6835ce436b97f37308f2a8cbb7
+      internalID: 2310812459430076924
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: herzkammer_glut_1
+      rect:
+        serializedVersion: 2
+        x: 942
+        y: 1776
+        width: 942
+        height: 592
+      alignment: 9
+      pivot: {x: 0.5021231422505308, y: 0.4442567567567568}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7c6370665add4942b96347b2c789121c
+      internalID: 3602059782652339029
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: herzkammer_glut_2
+      rect:
+        serializedVersion: 2
+        x: 1884
+        y: 1776
+        width: 942
+        height: 592
+      alignment: 9
+      pivot: {x: 0.5021231422505308, y: 0.4442567567567568}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f9d86c6badca4f6d8a2b997902b62762
+      internalID: 4211346401178818313
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: herzkammer_glut_3
+      rect:
+        serializedVersion: 2
+        x: 2826
+        y: 1776
+        width: 942
+        height: 592
+      alignment: 9
+      pivot: {x: 0.5021231422505308, y: 0.4442567567567568}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0d78d230c22f4488b165b86f4a50ebac
+      internalID: 3238468526626615845
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: herzkammer_glut_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1184
+        width: 942
+        height: 592
+      alignment: 9
+      pivot: {x: 0.5021231422505308, y: 0.4442567567567568}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b04a4cb4c850486989f17b9989e1a8f8
+      internalID: 4146870925565492785
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: herzkammer_glut_5
+      rect:
+        serializedVersion: 2
+        x: 942
+        y: 1184
+        width: 942
+        height: 592
+      alignment: 9
+      pivot: {x: 0.5021231422505308, y: 0.4442567567567568}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 85d0403dfd254d709100aadd5f394a6a
+      internalID: 3417102915765948456
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: herzkammer_glut_6
+      rect:
+        serializedVersion: 2
+        x: 1884
+        y: 1184
+        width: 942
+        height: 592
+      alignment: 9
+      pivot: {x: 0.5021231422505308, y: 0.4442567567567568}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a4c1ca17261441518e8ef72285f41f4b
+      internalID: 3988777158612413955
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: herzkammer_glut_7
+      rect:
+        serializedVersion: 2
+        x: 2826
+        y: 1184
+        width: 942
+        height: 592
+      alignment: 9
+      pivot: {x: 0.5021231422505308, y: 0.4442567567567568}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f68d5d4986684fd98ecef8578ab2481a
+      internalID: 2343301000307731306
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: herzkammer_glut_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 592
+        width: 942
+        height: 592
+      alignment: 9
+      pivot: {x: 0.5021231422505308, y: 0.4442567567567568}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6fb4c12087f94e8096704228f6a2118c
+      internalID: 2724806339075327544
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: herzkammer_glut_9
+      rect:
+        serializedVersion: 2
+        x: 942
+        y: 592
+        width: 942
+        height: 592
+      alignment: 9
+      pivot: {x: 0.5021231422505308, y: 0.4442567567567568}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ebc7c54f98c049cb93ec9d6e1f8c39e7
+      internalID: 1616441793901737222
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: herzkammer_glut_10
+      rect:
+        serializedVersion: 2
+        x: 1884
+        y: 592
+        width: 942
+        height: 592
+      alignment: 9
+      pivot: {x: 0.5021231422505308, y: 0.4442567567567568}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f01260cac8314ed6b16ce562dda103bd
+      internalID: 1727738361459478022
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: herzkammer_glut_11
+      rect:
+        serializedVersion: 2
+        x: 2826
+        y: 592
+        width: 942
+        height: 592
+      alignment: 9
+      pivot: {x: 0.5021231422505308, y: 0.4442567567567568}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 915c8c6653254ea186d6c957cb15c56e
+      internalID: 2121992320368730967
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: herzkammer_glut_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 942
+        height: 592
+      alignment: 9
+      pivot: {x: 0.5021231422505308, y: 0.4442567567567568}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 35b0ee9d2de1497db24390297ad0f6e6
+      internalID: 3502790753276430705
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: herzkammer_glut_13
+      rect:
+        serializedVersion: 2
+        x: 942
+        y: 0
+        width: 942
+        height: 592
+      alignment: 9
+      pivot: {x: 0.5021231422505308, y: 0.4442567567567568}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 589a8ca62de245109cb179c57f7afb82
+      internalID: 1287110171753339681
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: herzkammer_glut_14
+      rect:
+        serializedVersion: 2
+        x: 1884
+        y: 0
+        width: 942
+        height: 592
+      alignment: 9
+      pivot: {x: 0.5021231422505308, y: 0.4442567567567568}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 95d0469fa85646ef8a06369380fd3277
+      internalID: 2612596868095460268
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: herzkammer_glut_15
+      rect:
+        serializedVersion: 2
+        x: 2826
+        y: 0
+        width: 942
+        height: 592
+      alignment: 9
+      pivot: {x: 0.5021231422505308, y: 0.4442567567567568}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c07a0300b414dcf84e727a56df5b211
+      internalID: 2720373041966067276
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      herzkammer_glut_0: 2310812459430076924
+      herzkammer_glut_1: 3602059782652339029
+      herzkammer_glut_10: 1727738361459478022
+      herzkammer_glut_11: 2121992320368730967
+      herzkammer_glut_12: 3502790753276430705
+      herzkammer_glut_13: 1287110171753339681
+      herzkammer_glut_14: 2612596868095460268
+      herzkammer_glut_15: 2720373041966067276
+      herzkammer_glut_2: 4211346401178818313
+      herzkammer_glut_3: 3238468526626615845
+      herzkammer_glut_4: 4146870925565492785
+      herzkammer_glut_5: 3417102915765948456
+      herzkammer_glut_6: 3988777158612413955
+      herzkammer_glut_7: 2343301000307731306
+      herzkammer_glut_8: 2724806339075327544
+      herzkammer_glut_9: 1616441793901737222
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

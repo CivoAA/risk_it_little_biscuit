@@ -710,6 +710,8 @@
     { "key": "level.1.desc", "value": "Flour, sugar and trouble. This is where it all begins." },
     { "key": "level.2.name", "value": "Forest" },
     { "key": "level.2.desc", "value": "It gets crowded between the trees." },
+    { "key": "level.5.name", "value": "Volcano" },
+    { "key": "level.5.desc", "value": "Hot ash, boiling lava. Whatever you do, don't fall in!" },
     { "key": "enemy.KeksKoenig.name", "value": "Cookie King" },
     { "key": "enemy.Glutwurz.name", "value": "Emberroot" },
     { "key": "enemy.Schleimkoenig.name", "value": "Slime King" },
@@ -717,6 +719,8 @@
     { "key": "enemy.VerkohlterTod.name", "value": "The Charred One" },
     { "key": "boss.verkohlter.death", "value": "DEATH IS COMING FOR YOU!" },
     { "key": "boss.verkohlter.phase2", "value": "THE CHARRED ONE SPLITS!" },
+    { "key": "boss.verkohlter.phase3", "value": "THE CHARRED ONE TAKES A DEEP BREATH ..." },
+    { "key": "boss.verkohlter.heart", "value": "THE HEART OF THE CHARRED ONE" },
     { "key": "ui.levelselect.recordstory", "value": "FASTEST WIN" },
     { "key": "ui.levelselect.recordendless", "value": "LONGEST SURVIVAL" },
 
@@ -1098,6 +1102,23 @@
     { "key": "ui.console.cheat.wipe.warn", "value": "Deletes EVERYTHING: shop, characters, skills, achievements, unlocks, bestiary, records." },
     { "key": "ui.console.cheat.wipe.confirm", "value": "Really? -> werksreset yes" },
     { "key": "ui.console.cheat.wipe.inrun", "value": "Can't do that during a run." },
-    { "key": "ui.console.cheat.charstand", "value": "Level {0} ({1} XP, {2} boss levels), {3} points free." }
+    { "key": "ui.console.cheat.charstand", "value": "Level {0} ({1} XP, {2} boss levels), {3} points free." },
+
+    { "key": "weapon.choco_chips.name", "value": "Choco Chips" },
+    { "key": "weapon.choco_chips.desc", "value": "Fires your own chocolate chips at the nearest enemy in a quick, slightly spread burst. Higher levels fire more chips that pierce through several enemies." },
+    { "key": "weapon.choco_chips.lvl0", "value": "Three chocolate chips at the nearest enemy" },
+    { "key": "weapon.choco_chips.lvl1", "value": "Fourth chip" },
+    { "key": "weapon.choco_chips.lvl2", "value": "Damage +1, pierces 2 enemies" },
+    { "key": "weapon.choco_chips.lvl3", "value": "Fifth chip, damage +1, faster" },
+    { "key": "weapon.choco_chips.lvl4", "value": "Sixth chip, pierces 3 enemies" },
+    { "key": "weapon.choco_chips.lvl5", "value": "Seventh chip, damage +1, faster" },
+    { "key": "weapon.milk_dunk.name", "value": "Milk Dunk" },
+    { "key": "weapon.milk_dunk.desc", "value": "Dunks itself in milk and sends a milk ring out around you. It knocks every enemy back and briefly slows them. Higher levels make the ring bigger and add echo waves." },
+    { "key": "weapon.milk_dunk.lvl0", "value": "A milk ring knocks back every enemy around you" },
+    { "key": "weapon.milk_dunk.lvl1", "value": "Damage +2, bigger ring" },
+    { "key": "weapon.milk_dunk.lvl2", "value": "One echo wave" },
+    { "key": "weapon.milk_dunk.lvl3", "value": "Damage +2, bigger ring" },
+    { "key": "weapon.milk_dunk.lvl4", "value": "Damage +2, bigger ring, faster" },
+    { "key": "weapon.milk_dunk.lvl5", "value": "Second echo wave, damage +2" }
   ]
 }

@@ -452,6 +452,28 @@ public class TestSceneHUD : MonoBehaviour
         if (bossSpawner != null) SetHint(bossSpawner.GlutwurzLeap());
     }
 
+    /// <summary>
+    /// Verkohlter mit 10 Leben: laeuft an und saugt den Spieler gleich ein
+    /// (Phase 3, Herzkammer). Dasselbe wie F10.
+    /// </summary>
+    private void VerkohlterHeart()
+    {
+        SetBossMenu(false);
+        if (bossSpawner == null) return;
+        if (VerkohlterHerzkammer.Active != null)
+        {
+            SetHint("Die Herzkammer ist noch offen.");
+            return;
+        }
+        string result = bossSpawner.Spawn(EnemyId.Verkohlter);
+        if (bossSpawner.Boss != null)
+        {
+            bossSpawner.Boss.DebugSetHealth(10f);
+            result = "Verkohlter mit 10 Leben - gleich wird eingesaugt.";
+        }
+        SetHint(result);
+    }
+
     private void ToggleGodMode()
     {
         PlayerController player = PlayerController.Instance;
@@ -616,6 +638,7 @@ public class TestSceneHUD : MonoBehaviour
 
         GameObject row6 = Row(panel);
         MakeButton("Glutwurz: Feuerkreis", row6.transform, 250f, GlutwurzLeap);
+        MakeButton("Verkohlter: Herz", row6.transform, 220f, VerkohlterHeart);
 
         defaultHint = $"[{toggleLoadoutKey}] Waffen-Menü   [ESC] Pause";
         hintText = Label(defaultHint, panel, fontSize - 8, TextAlignmentOptions.MidlineLeft);

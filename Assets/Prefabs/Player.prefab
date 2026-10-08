@@ -2120,6 +2120,8 @@ MonoBehaviour:
   - {fileID: 200782388726875803}
   - {fileID: 3847261950183746615}
   - {fileID: 2938475610293847561}
+  - {fileID: 5000454638203962994}
+  - {fileID: 8707970117108101809}
   activeBuffs:
   - {fileID: 1329916437877316911}
   - {fileID: 3253892304407363630}
@@ -3443,6 +3445,8 @@ Transform:
   - {fileID: 6026130219430473917}
   - {fileID: 5719823461172849302}
   - {fileID: 4827361950172638495}
+  - {fileID: 4827105885955503705}
+  - {fileID: 2594292310069502368}
   m_Father: {fileID: 4991830239493606234}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6430632289492379781
@@ -10318,3 +10322,111 @@ MonoBehaviour:
   hasBeenRemoved: 0
   waveSprite: {fileID: 0}
   originOffset: {x: 0, y: 0.4}
+--- !u!1 &5502203603492450215
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4827105885955503705}
+  - component: {fileID: 5000454638203962994}
+  m_Layer: 0
+  m_Name: Choco Chips
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4827105885955503705
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5502203603492450215}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3466192261950400575}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5000454638203962994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5502203603492450215}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bd397c8ad0246aeab2ea3b3759b618c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::ChocoChips
+  weaponID: choco_chips
+  weaponLevel: -1
+  maxweaponLevel: 5
+  stats: []
+  weaponImage: {fileID: 3566468386455610697, guid: 144a07fa5e744f69be7ebefa9cbacf82, type: 3}
+  weaponIcon: {fileID: 3566468386455610697, guid: 144a07fa5e744f69be7ebefa9cbacf82, type: 3}
+  weaponIconEvo: {fileID: 0}
+  posssibleEvo: 0
+  hasBeenRemoved: 0
+  originOffset: {x: 0, y: 0.4}
+--- !u!1 &4211775316238896249
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2594292310069502368}
+  - component: {fileID: 8707970117108101809}
+  m_Layer: 0
+  m_Name: Milk Dunk
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2594292310069502368
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4211775316238896249}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3466192261950400575}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8707970117108101809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4211775316238896249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00cb20b043c64dd2b520b3ae2b2c854c, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::MilkDunk
+  weaponID: milk_dunk
+  weaponLevel: -1
+  maxweaponLevel: 5
+  stats: []
+  weaponImage: {fileID: 1264960877773989393, guid: 3f6a4010576a40a6a0bfe664e10c1563, type: 3}
+  weaponIcon: {fileID: 1264960877773989393, guid: 3f6a4010576a40a6a0bfe664e10c1563, type: 3}
+  weaponIconEvo: {fileID: 0}
+  posssibleEvo: 0
+  hasBeenRemoved: 0
+  originOffset: {x: 0, y: 0.3}

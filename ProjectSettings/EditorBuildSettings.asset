@@ -27,6 +27,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Maps/Map_World3.unity
     guid: 2cb70c008672b2f49a4e17d021e28a7a
   - enabled: 1
+    path: Assets/Scenes/Maps/Map_World4.unity
+    guid: a27ce63e34295a342a21364cf200304d
+  - enabled: 1
     path: Assets/Scenes/Core/GameCore.unity
     guid: 0022c260a6f636a43af569d2d6b56891
   m_configObjects:

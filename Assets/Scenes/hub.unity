@@ -15013,14 +15013,14 @@ MonoBehaviour:
     storyUnlockId: 
     endlessAvailable: 1
     endlessUnlockId: 
-  - displayName: 
-    description: 
-    preview: {fileID: 0}
-    previewWide: {fileID: 0}
-    mapId: -1
+  - displayName: Vulkan
+    description: Heisse Asche, kochende Lava. Nicht reinfallen!
+    preview: {fileID: 2549919105394312539, guid: 7c289ab671d344a181b868fa08c6b9d9, type: 3}
+    previewWide: {fileID: 3096021773689214460, guid: 940e761b26674e2dac7518fc782af19d, type: 3}
+    mapId: 4
     sceneToLoad: 
     planId: 
-    ambience: 0
+    ambience: 5
     storyUnlockId: Level5_Story
     endlessAvailable: 1
     endlessUnlockId: 

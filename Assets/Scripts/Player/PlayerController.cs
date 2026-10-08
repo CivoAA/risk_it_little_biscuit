@@ -140,6 +140,13 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private float immunityDuration;
     [SerializeField] private float immunityTimer;
+    /// <summary>
+    /// Gerade in einer Zwischensequenz gefangen (der Verkohlte saugt ihn ein):
+    /// keine Eingabe, keine eigene Bewegung, kein Schaden. Wer das setzt,
+    /// bewegt den Spieler selbst und gibt ihn danach wieder frei.
+    /// </summary>
+    [System.NonSerialized] public bool Captured;
+
     private int hitsoundinterval = 10;
     private PlayerHitFeedback hitFeedback;
     private static readonly System.Random rng = new System.Random();
@@ -222,7 +229,12 @@ public class PlayerController : MonoBehaviour
         // die Updates weiter, obwohl Time.timeScale 0 ist. Eingaben duerfen dann
         // nicht ausgewertet werden: sonst dreht sich der Spieler im Menue mit
         // A/D mit - und mit ihm jede Waffe, die sich an LastMoveX orientiert.
-        if (Time.timeScale > 0f)
+        if (Captured)
+        {
+            playerMoveDirection = Vector3.zero;
+            animator.SetBool("moving", false);
+        }
+        else if (Time.timeScale > 0f)
         {
             float inputX = Input.GetAxisRaw("Horizontal");
             float inputY = Input.GetAxisRaw("Vertical");
@@ -263,6 +275,9 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        // In der Zwischensequenz bewegt ihn jemand anderes.
+        if (Captured) return;
+
         // Skilltree "Letzter Atem": unter 30 % Leben schneller.
         float speed = IsLastBreath ? moveSpeed * (1f + lastBreathSpeedPercent / 100f) : moveSpeed;
         // Skilltree "Kawarimi": waehrend der Wirkung deutlich schneller, um wegzurennen.
@@ -567,7 +582,7 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        if (isImmune) return;
+        if (isImmune || Captured) return;
 
         // Kawarimi: waehrend der Wirkung weicht der Spieler allem aus.
         if (IsKawarimi || UnityEngine.Random.value < dodgeChance)
@@ -937,6 +952,11 @@ public class PlayerController : MonoBehaviour
                 return true;
         }
 
+        // 1b. Waffen, die einem anderen Charakter allein gehoeren (Schoko-Salve
+        //     nur fuer den Keks) - auch nicht ueber einen alten Verteiler.
+        if (!Characters.IsWeaponAllowed(weapon.weaponID, Shop.RunSkinIndex))
+            return false;
+
         // 2. Der Verteiler von der Werkbank. Solange der Spieler dort nichts
         //    uebernommen hat, sagt Loadout zu allem ja - ein alter Spielstand
         //    verhaelt sich also genau wie vorher. Die Startwaffe oben kommt
@@ -960,7 +980,13 @@ public class PlayerController : MonoBehaviour
             "vortex",
             "turret",
             "sword_slash",
-            "salad_fan"
+            "salad_fan",
+            // Schoko-Salve ist die Startwaffe des Kekses (fuer alle anderen
+            // oben unter 1b gesperrt). Der Shurikookie war es frueher und
+            // haengt darum nicht mehr am Shop: ohne Startwaffe kaeme ihn keiner frei.
+            "choco_chips",
+            "milk_dunk",
+            "shurikookie"
         };
 
         if (defaultUnlockedWeapons.Contains(weapon.weaponID))

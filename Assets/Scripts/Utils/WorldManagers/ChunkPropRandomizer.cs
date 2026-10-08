@@ -26,6 +26,14 @@ public class ChunkPropRandomizer : MonoBehaviour
     [Header("Verteilung")]
     public float edgeMargin = 1f;
     public float minDistance = 3f;
+
+    [Tooltip("Abstand Bildrand zu Bildrand statt Mitte zu Mitte - fuer Props sehr " +
+             "unterschiedlicher Groesse (Lavaloecher). minDistance ist dann die Luecke.")]
+    public bool spacingByBounds;
+
+    [Tooltip("Props nie auf ein Mixer-Feld wuerfeln. Die Mixer stehen schon, wenn ein " +
+             "Chunk umgesetzt wird - ohne das koennte ein Loch einen Mixer schlucken.")]
+    public bool avoidMixers;
     [Range(0f, 1f)] public float clumping = 0.4f;
     public float clumpSize = 14f;
 
@@ -42,10 +50,12 @@ public class ChunkPropRandomizer : MonoBehaviour
 
     private Transform[] props;
     private Vector3[] baseScales;
+    private Rect[] footprints;          // lokales Bildrechteck je Prop (Pivot = 0,0)
     private Vector3 lastPosition;
     private int shuffleCount;
 
     private readonly List<Vector2> placed = new List<Vector2>();
+    private readonly List<Rect> placedRects = new List<Rect>();
 
     private void Awake()
     {
@@ -56,10 +66,12 @@ public class ChunkPropRandomizer : MonoBehaviour
         baseScales = new Vector3[count];
 
         float divisor = Mathf.Max(0.0001f, editorScaleMid);
+        footprints = new Rect[count];
         for (int i = 0; i < count; i++)
         {
             props[i] = propContainer.GetChild(i);
             baseScales[i] = props[i].localScale / divisor;
+            footprints[i] = Footprint(props[i]);
         }
 
         lastPosition = transform.position;
@@ -97,6 +109,7 @@ public class ChunkPropRandomizer : MonoBehaviour
         visible = Mathf.Clamp(visible, 1, props.Length);
 
         placed.Clear();
+        placedRects.Clear();
 
         for (int i = 0; i < props.Length; i++)
         {
@@ -126,11 +139,23 @@ public class ChunkPropRandomizer : MonoBehaviour
                 }
 
                 bool tooClose = false;
-                for (int k = 0; k < placed.Count; k++)
+                if (spacingByBounds)
                 {
-                    if ((placed[k] - local).sqrMagnitude < minSqr) { tooClose = true; break; }
+                    Rect r = Shifted(footprints[i], local);
+                    for (int k = 0; k < placedRects.Count; k++)
+                    {
+                        if (Gap(placedRects[k], r) < minDistance) { tooClose = true; break; }
+                    }
+                }
+                else
+                {
+                    for (int k = 0; k < placed.Count; k++)
+                    {
+                        if ((placed[k] - local).sqrMagnitude < minSqr) { tooClose = true; break; }
+                    }
                 }
                 if (tooClose) continue;
+                if (avoidMixers && TouchesMixer(Shifted(footprints[i], local))) continue;
 
                 found = true;
                 break;
@@ -143,6 +168,7 @@ public class ChunkPropRandomizer : MonoBehaviour
             }
 
             placed.Add(local);
+            placedRects.Add(Shifted(footprints[i], local));
             prop.gameObject.SetActive(true);
             prop.localPosition = new Vector3(local.x, local.y, prop.localPosition.z);
 
@@ -155,5 +181,48 @@ public class ChunkPropRandomizer : MonoBehaviour
                 if (renderer != null) renderer.flipX = rng.Next(2) == 0;
             }
         }
+    }
+    /// <summary>Bildrechteck eines Props relativ zu seinem Pivot (Sprite-Grenzen, sonst ein Punkt).</summary>
+    private static Rect Footprint(Transform prop)
+    {
+        var renderer = prop.GetComponentInChildren<SpriteRenderer>(true);
+        if (renderer == null || renderer.sprite == null) return new Rect(0f, 0f, 0f, 0f);
+
+        Bounds b = renderer.sprite.bounds;
+        Vector3 s = prop.localScale;
+        return Rect.MinMaxRect(b.min.x * Mathf.Abs(s.x), b.min.y * Mathf.Abs(s.y),
+                               b.max.x * Mathf.Abs(s.x), b.max.y * Mathf.Abs(s.y));
+    }
+
+    private static Rect Shifted(Rect r, Vector2 by) => new Rect(r.position + by, r.size);
+
+    /// <summary>Luecke zwischen zwei Rechtecken (negativ = sie ueberlappen).</summary>
+    private static float Gap(Rect a, Rect b)
+    {
+        float gx = Mathf.Max(a.xMin - b.xMax, b.xMin - a.xMax);
+        float gy = Mathf.Max(a.yMin - b.yMax, b.yMin - a.yMax);
+        return Mathf.Max(gx, gy);
+    }
+
+    /// <summary>Beruehrt das (lokale) Rechteck ein Mixer-Feld?</summary>
+    private bool TouchesMixer(Rect local)
+    {
+        Vector2 origin = transform.position;
+        Rect world = Shifted(local, origin);
+
+        var mixers = MixerObject.All;
+        for (int i = 0; i < mixers.Count; i++)
+        {
+            MixerObject mixer = mixers[i];
+            if (mixer == null) continue;
+
+            GameObject go = mixer.gameObject;
+            Vector2 center = MixerPlacement.FieldCenter(go, go.transform.position);
+            float radius = MixerPlacement.FieldRadius(go);
+            Vector2 closest = new Vector2(Mathf.Clamp(center.x, world.xMin, world.xMax),
+                                          Mathf.Clamp(center.y, world.yMin, world.yMax));
+            if ((center - closest).sqrMagnitude < radius * radius) return true;
+        }
+        return false;
     }
 }
