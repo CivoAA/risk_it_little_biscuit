@@ -286,7 +286,11 @@ public static class WavePlans
     ///   7:00  Eichel, Fluegeldolch
     ///  12:00  kurzer Uebergang ohne neuen Druck-Sprung - der Sprung von
     ///         ~11:00 (Honey) faellt damit auf 13:00 und geht im Boss auf
+    ///  12:30  + Honey (Kirschslime und Messermaus treten etwas zurueck)
     ///  13:00  Glutwurz
+    ///
+    /// Kein Milchpanzer in der Demo - sein Anteil im Boss und im Endlos-Teil
+    /// ist an Honey gegangen.
     ///
     /// Anlauf (5 s, ~3 Fliegenpilze) wie im vollen Wald. Welcher der beiden
     /// Plaene laeuft, steht in WavePlans.WaldPlan (Umschalter in der Werkstatt).
@@ -339,18 +343,26 @@ public static class WavePlans
             .Burst(235f, EnemyId.EliteMarshmelloGross, 1f, Patterns.Ambush, 0f)
             .Burst(250f, EnemyId.Eichel, 26f, Patterns.Column, 0f);
 
-        plan.Phase(58f)
+        plan.Phase(30f)
             .Pool(EnemyId.Eichel, 40f)
             .Pool(EnemyId.WeisseMessermaus, 25f)
             .Pool(EnemyId.Kirschslime, 15f)
             .Pool(EnemyId.Fluegeldolch, 20f)
-            .Pressure(140f, 155f)
+            .Pressure(140f, 147.5f)
+            .Base(Patterns.Scatter);
+
+        plan.Phase(28f)
+            .Pool(EnemyId.Eichel, 40f)
+            .Pool(EnemyId.WeisseMessermaus, 20f)
+            .Pool(EnemyId.Kirschslime, 10f)
+            .Pool(EnemyId.Honey, 15f)
+            .Pool(EnemyId.Fluegeldolch, 20f)
+            .Pressure(147.5f, 155f)
             .Base(Patterns.Scatter);
 
         plan.Phase(600f)
             .Pool(EnemyId.Eichel, 45f)
-            .Pool(EnemyId.Honey, 15f)
-            .Pool(EnemyId.Milchpanzer, 10f)
+            .Pool(EnemyId.Honey, 25f)
             .Pool(EnemyId.Fluegeldolch, 30f)
             .Pressure(280f, 420f)
             .Base(Patterns.Scatter)
@@ -358,8 +370,7 @@ public static class WavePlans
 
         plan.EndlessPhase()
             .Pool(EnemyId.Eichel, 40f)
-            .Pool(EnemyId.Honey, 15f)
-            .Pool(EnemyId.Milchpanzer, 20f)
+            .Pool(EnemyId.Honey, 35f)
             .Pool(EnemyId.Fluegeldolch, 25f)
             .Pressure(100f, 100f)
             .Base(Patterns.Scatter)
