@@ -212,9 +212,24 @@ public class SpawnDirector : MonoBehaviour
 
     // ----------------------------------------------------------------- Update
 
+    /// <summary>
+    /// Angehalten: kein Nachschub, keine Beats, kein Nachziehen - nur Ansagen
+    /// laufen weiter. Solange der Spieler im Herzen des Verkohlten steht, gibt
+    /// es um ihn herum keine Welt, in die etwas gespawnt werden koennte.
+    /// </summary>
+    [System.NonSerialized] public bool Suspended;
+
     void Update()
     {
         if (!RunIsActive()) return;
+
+        if (Suspended)
+        {
+            // Die Uhr laeuft weiter (Ansagen haengen an ihr), die Phase nicht.
+            runTime += Time.deltaTime;
+            UpdateText();
+            return;
+        }
 
         float dt = Time.deltaTime;
         runTime += dt;

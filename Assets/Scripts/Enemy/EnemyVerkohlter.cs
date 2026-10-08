@@ -22,6 +22,20 @@ using UnityEngine;
 ///                 dreimal um den Spieler herum - einmal echt (Feuer), zweimal
 ///                 als Schatten (violett, nicht zu treffen). Alle drei
 ///                 explodieren gleichzeitig, die Schatten zerfallen danach.
+///   Phase 3       bei 15 % Leben: er holt Luft und saugt den Spieler ein -
+///                 nicht auszuweichen, eine Zwischensequenz (Gegner in der
+///                 Naehe fliegen mit in den Schlund). Iris zu, und der Spieler
+///                 faellt in die Herzkammer (<see cref="VerkohlterHerzkammer"/>).
+///                 Dort ist der Boss nur noch sein schlagendes Herz in der
+///                 Mitte - mit eigener, voller Lebensleiste (35 % seines
+///                 Lebens, fuellt sich bei der Landung auf). Bis dahin kann er
+///                 nicht sterben (<see cref="Enemy.MinHealthFraction"/>).
+///                 Das Herz greift noch nicht an - das kommt spaeter.
+///   Herz-Tod      der toedliche Treffer wird angehalten (Enemy.HoldDeath):
+///                 das Herz ueberhitzt, ein Blitz, die Kruste bricht, Brocken
+///                 fallen ins Becken, der Kern verglueht; die Kammer wird
+///                 dunkel. Erst dann stirbt der Boss (Beute, Boss-Sieg) - im
+///                 Lauf folgt der Sieg-Bildschirm, in der Test-Szene der Rueckweg.
 ///
 /// <b>Als Tod</b> (EnemyId.VerkohlterTod, Rolle DeathBoss - Finisher der Demo)
 ///
@@ -43,6 +57,32 @@ public class EnemyVerkohlter : MonoBehaviour
     // ------------------------------------------------------------- Balancing
 
     private const float PhaseTwoAt = 0.5f;
+    private const float PhaseThreeAt = 0.15f;
+
+    // --- Phase 3: Einsaugen
+    /// <summary>So lange zieht der Sog, bis der Spieler im Schlund ist.</summary>
+    private const float SuckTime = 2.1f;
+    /// <summary>Gegner in diesem Umkreis fliegen mit in den Schlund.</summary>
+    private const float SuckEnemyRange = 14f;
+    private const float SogFps = 16f;
+    /// <summary>Ab diesem Bild des Schluckens zieht sich die Blende zu.</summary>
+    private const int IrisCloseFrame = 3;
+    private const float IrisCloseTime = 0.55f;
+    private const float BlackHold = 0.4f;
+    private const float IrisOpenTime = 0.9f;
+    private const float FallHeight = 7.5f;
+    private const float FallTime = 0.55f;
+    private const float HeartHitRadius = 1.15f;
+
+    /// <summary>Das Herz hat so viel Leben wie dieser Anteil des ganzen Verkohlten.</summary>
+    private const float HeartHealthShare = 0.35f;
+    /// <summary>So lange fuellt sich die Lebensleiste des Herzens bei der Landung.</summary>
+    private const float HeartBarFill = 1.1f;
+
+    // --- Herz-Tod (Bilder aus verkohlter_herz_tod)
+    private const int HeartOverheatFrames = 10;
+    private const int HeartFlashFrame = 10;
+    private static readonly Color FlashColor = new Color(1f, 0.95f, 0.82f, 1f);
 
     private const float WalkSpeed = 1.9f;
     private const float WalkSpeedPhase2 = 2.4f;
@@ -161,7 +201,24 @@ public class EnemyVerkohlter : MonoBehaviour
 
     private Actor self;
 
+    // --- Phase 3
+    private bool entered;
+    private bool phaseThree;
+    private bool heartMode;
+    private bool heartDying;
+    private VerkohlterHerzkammer chamber;
+    private PlayerPuppet puppet;
+    private ScreenIris iris;
+    private SpriteRenderer sog;
+    private Sprite[] heartFrames;
+    private readonly List<Enemy> swallowed = new List<Enemy>();
+
     public bool IsPhaseTwo => enemy != null && enemy.HealthFraction <= PhaseTwoAt;
+
+    /// <summary>Phase 3 laeuft (Einsaugen oder schon im Herzen).</summary>
+    public bool IsPhaseThree => phaseThree;
+
+    private bool PhaseThreeDue => !IsDeath && enemy != null && enemy.HealthFraction <= PhaseThreeAt;
 
     /// <summary>Der Finisher der Demo statt des Bosskampfs.</summary>
     private bool IsDeath => enemy != null && enemy.Id == EnemyId.VerkohlterTod;
@@ -193,6 +250,11 @@ public class EnemyVerkohlter : MonoBehaviour
             SetGone(true);
             if (body != null) body.enabled = false;
         }
+        else
+        {
+            // Bis er den Spieler eingesaugt hat, stirbt er nicht.
+            enemy.MinHealthFraction = PhaseThreeAt;
+        }
     }
 
     private void OnEnable()
@@ -203,20 +265,42 @@ public class EnemyVerkohlter : MonoBehaviour
     private void OnDisable()
     {
         StopAllCoroutines();
+        ClearAttacks();
+        velocity = Vector2.zero;
+        AbortSwallow();
+    }
+
+    /// <summary>Laufende Attacken weg: Warnungen, Brocken, Glutflecken, Schatten.</summary>
+    private void ClearAttacks()
+    {
         foreach (BossTelegraphMarker m in markers) if (m != null) m.Cancel();
         markers.Clear();
         foreach (GameObject go in spawned) if (go != null) Destroy(go);
         spawned.Clear();
-        velocity = Vector2.zero;
     }
 
     private void FixedUpdate()
     {
-        if (rb != null) rb.linearVelocity = velocity;
+        if (rb != null && rb.bodyType == RigidbodyType2D.Dynamic) rb.linearVelocity = velocity;
     }
 
     private void Update()
     {
+        // Phase 3 bricht alles ab, auch mitten in einer Attacke.
+        if (!phaseThree && entered && PhaseThreeDue && PlayerAlive)
+        {
+            phaseThree = true;
+            StopAllCoroutines();
+            StartCoroutine(PhaseThree());
+            return;
+        }
+
+        if (heartMode)
+        {
+            AnimateHeart();
+            return;
+        }
+
         if (loop == null || loop.Length == 0 || body == null) return;
         loopTime += Time.deltaTime;
         body.sprite = loop[Mathf.FloorToInt(loopTime * Fps) % loop.Length];
@@ -228,6 +312,7 @@ public class EnemyVerkohlter : MonoBehaviour
     {
         yield return null;
         yield return Walk(EntryWalk);
+        entered = true;
 
         int step = 0;
         while (true)
@@ -236,6 +321,15 @@ public class EnemyVerkohlter : MonoBehaviour
             {
                 Loop(idle);
                 velocity = Vector2.zero;
+                yield return null;
+                continue;
+            }
+
+            // Phase 3 faengt Update ab - bis dahin hier nur warten.
+            if (PhaseThreeDue)
+            {
+                velocity = Vector2.zero;
+                Loop(idle);
                 yield return null;
                 continue;
             }
@@ -556,6 +650,393 @@ public class EnemyVerkohlter : MonoBehaviour
         sr.enabled = false;
         if (shadowIdle != null && shadowIdle.Length > 0) sr.sprite = shadowIdle[0];
         return new Actor { Root = sr.transform, Renderer = sr, Shadow = true };
+    }
+
+    // =============================================================== Phase 3
+
+    /// <summary>
+    /// Einsaugen und ab ins Herz. Der Spieler ist von Anfang an gefangen
+    /// (<see cref="PlayerPuppet"/>) - das ist kein Angriff, dem man
+    /// ausweichen kann, sondern der Uebergang in die letzte Phase.
+    ///
+    ///   0.0 s   Luft holen (Bilder 0-7), Boden grollt, Sog setzt ein
+    ///   0.7 s   Sog (8-15 Schleife): der Spieler wirbelt in den Schlund,
+    ///           Gegner in der Naehe fliegen mit
+    ///   2.8 s   Schlucken (16-23): Maul zu, Schluck rutscht runter,
+    ///           die Blende zieht sich um ihn zu
+    ///   schwarz Kammer aufbauen, Boss wird zum Herzen, Kamera springt
+    ///   +0.4 s  Blende geht ueber dem Herzen auf, der Spieler faellt von
+    ///           oben in die Kammer und landet vor dem Becken
+    ///   danach  Titel, Spieler frei, das Herz ist zu treffen
+    /// </summary>
+    private IEnumerator PhaseThree()
+    {
+        ClearAttacks();
+        velocity = Vector2.zero;
+        SetGone(true);
+        if (body != null) body.enabled = true;
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector2.zero;
+            rb.bodyType = RigidbodyType2D.Kinematic;
+        }
+        Loop(null);
+
+        // Waehrend er einsaugt, kommt nichts nach.
+        if (SpawnDirector.Active != null)
+        {
+            SpawnDirector.Active.Suspended = true;
+            SpawnDirector.Active.Say(Loc.Get("boss.verkohlter.phase3", "DER VERKOHLTE HOLT TIEF LUFT ..."));
+        }
+
+        puppet = new PlayerPuppet(PlayerController.Instance);
+        puppet.UsePuppet(true);
+        Vector2 startFeet = puppet.Position;
+        puppet.Pose(startFeet, 1f, 0f, Vector2.one);
+
+        Sprite[] inhale = VerkohlterArt.Strip("verkohlter_einsaugen");
+        Sprite[] sogFrames = VerkohlterArt.Strip("verkohlter_sog");
+        Vector2 maw = rb.position + VerkohlterArt.MawOffset;
+
+        // --- 1. Luft holen
+        ScreenShake.Kick(2f, 0.9f);
+        VerkohlterSounds.Suck();
+        for (int i = 0; i < VerkohlterArt.InhaleFrames; i++)
+        {
+            Show(self, inhale, i);
+            yield return new WaitForSeconds(1f / Fps);
+        }
+
+        // --- 2. Sog
+        sog = NewSprite("Sog", (body != null ? body.sortingOrder : 1) + 6);
+        sog.transform.position = VerkohlterArt.Snap(maw);
+
+        float side = startFeet.x < maw.x ? -1f : 1f;      // in welche Richtung er wirbelt
+        Vector2 startCenter = startFeet + Vector2.up * 0.5f;
+        Vector2 rel = startCenter - maw;
+        float r0 = Mathf.Max(0.6f, rel.magnitude);
+        float a0 = Mathf.Atan2(rel.y / 0.75f, rel.x);
+        CollectSwallowed(maw);
+
+        float t = 0f;
+        while (t < SuckTime)
+        {
+            t += Time.deltaTime;
+            float u = Mathf.Clamp01(t / SuckTime);
+
+            Show(self, inhale, VerkohlterArt.SuckFirst + Mathf.FloorToInt(t * Fps) % VerkohlterArt.SuckFrames);
+            if (sogFrames.Length > 0) sog.sprite = sogFrames[Mathf.FloorToInt(t * SogFps) % sogFrames.Length];
+            sog.color = new Color(1f, 1f, 1f, Mathf.Clamp01(t / 0.35f));
+            ScreenShake.Kick(1f + 2f * u, 0.15f);
+
+            // Die Puppe wirbelt spiralig rein, wird klein und dreht sich immer schneller.
+            float e = Mathf.Pow(u, 2.3f);
+            float r = r0 * (1f - e);
+            float a = a0 + side * u * u * Mathf.PI * 2.2f;
+            Vector2 center = maw + new Vector2(Mathf.Cos(a) * r, Mathf.Sin(a) * r * 0.75f);
+            float scale = Mathf.Lerp(0.12f, 1f, Mathf.Clamp01(r / 1.8f));
+            float spin = -side * Mathf.Pow(u, 2.5f) * 900f;
+            puppet.Pose(center - Vector2.up * (0.5f * scale), scale, spin, Vector2.one);
+
+            // Der echte Spieler (und damit die Kamera) gleitet ruhig zum Schlund -
+            // eine wirbelnde Kamera waere zu viel.
+            float s = u * u * (3f - 2f * u);
+            puppet.MovePlayer(Vector2.Lerp(startFeet, maw - Vector2.up * 0.5f, s));
+
+            PullSwallowed(maw, u, Time.deltaTime);
+            yield return null;
+        }
+
+        // --- 3. Schlucken
+        puppet.Pose(maw, 0f, 0f, Vector2.one);
+        EatRemaining();
+        Despawn(sog.gameObject);
+        sog = null;
+        VerkohlterSounds.StopAll();
+        VerkohlterSounds.Gulp();
+        Boom(6f, 0.5f);
+
+        iris = ScreenIris.Create();
+        Vector2 bodyCenter = rb.position + BodyCenter;
+        for (int i = 0; i < VerkohlterArt.GulpFrames; i++)
+        {
+            Show(self, inhale, VerkohlterArt.GulpFirst + i);
+            if (i >= IrisCloseFrame) break;
+            yield return new WaitForSeconds(1f / Fps);
+        }
+        // Rest des Schluckens laeuft weiter, waehrend die Blende zugeht
+        StartCoroutine(PlayRange(inhale, VerkohlterArt.GulpFirst + IrisCloseFrame + 1,
+                                 VerkohlterArt.GulpFirst + VerkohlterArt.GulpFrames - 1));
+        yield return VerkohlterHerzkammer.IrisMove(iris, () => VerkohlterHerzkammer.ViewportOf(bodyCenter),
+                                                   0.7f, 0f, IrisCloseTime, true);
+        iris.Close();
+
+        // --- 4. Schwarz: rein ins Herz
+        Vector2 returnPoint = rb.position;
+        chamber = VerkohlterHerzkammer.Open(enemy, returnPoint);
+        BecomeHeart();
+
+        // Eigener Lebenspool fuer das Herz - die Leiste startet leer und
+        // fuellt sich, wenn die Blende aufgeht.
+        float heartPool = enemy.MaxHealth * HeartHealthShare;
+        enemy.MinHealthFraction = 0f;
+        enemy.ResetHealthPool(heartPool, 0f);
+
+        Vector2 landing = chamber.LandingSpot;
+        puppet.MovePlayer(landing, carryCompanions: true);
+        chamber.FollowPlayer();
+        Vector2 fallFrom = landing + Vector2.up * FallHeight;
+        puppet.Pose(fallFrom, 1f, 0f, Vector2.one);
+
+        yield return new WaitForSeconds(BlackHold);
+
+        // --- 5. Blende auf, der Spieler faellt rein
+        // Die Kamera springt erst im naechsten LateUpdate in die Kammer - die
+        // Blende rechnet deshalb mit dem Kamerapunkt der Kammer.
+        Vector2 heartView = chamber.Viewport(chamber.HeartPosition);
+        StartCoroutine(VerkohlterHerzkammer.IrisMove(iris, () => heartView, 0f, 1.3f, IrisOpenTime, false));
+        StartCoroutine(FillHeartBar(heartPool));
+        yield return new WaitForSeconds(0.15f);
+
+        t = 0f;
+        while (t < FallTime)
+        {
+            t += Time.deltaTime;
+            float u = Mathf.Clamp01(t / FallTime);
+            Vector2 feet = Vector2.Lerp(fallFrom, landing, u * u);
+            float stretch = 1f + 0.25f * u;
+            puppet.Pose(feet, 1f, Mathf.Sin(u * Mathf.PI) * 25f, new Vector2(1f / stretch, stretch));
+            yield return null;
+        }
+
+        // Landung: stauchen, Staub, Wumms
+        Boom(4f, 0.3f);
+        chamber.Puff(landing);
+        float[] squashY = { 0.6f, 0.75f, 1.12f, 0.96f, 1f };
+        foreach (float sy in squashY)
+        {
+            puppet.Pose(landing, 1f, 0f, new Vector2(1f / sy, sy));
+            yield return new WaitForSeconds(0.06f);
+        }
+        puppet.Pose(landing, 1f, 0f, Vector2.one);
+
+        if (SpawnDirector.Active != null)
+            SpawnDirector.Active.Say(Loc.Get("boss.verkohlter.heart", "DAS HERZ DES VERKOHLTEN"));
+
+        yield return new WaitForSeconds(0.35f);
+
+        // --- 6. Los geht's
+        puppet.Release();
+        puppet = null;
+        if (iris != null) Destroy(iris.gameObject);
+        iris = null;
+
+        enemy.ResetHealthPool(heartPool, 1f);
+        enemy.HoldDeath = true;
+        enemy.SkipDeathEffect = true;
+        enemy.DeathHeld += OnHeartKilled;
+        SetGone(false);
+    }
+
+    /// <summary>Die Leiste des Herzens laeuft von leer auf voll (es ist dabei noch nicht zu treffen).</summary>
+    private IEnumerator FillHeartBar(float pool)
+    {
+        float t = 0f;
+        while (t < HeartBarFill)
+        {
+            t += Time.deltaTime;
+            float q = Mathf.Clamp01(t / HeartBarFill);
+            enemy.ResetHealthPool(pool, 1f - (1f - q) * (1f - q));
+            yield return null;
+        }
+        enemy.ResetHealthPool(pool, 1f);
+    }
+
+    // ------------------------------------------------------------- Herz-Tod
+
+    private void OnHeartKilled()
+    {
+        if (heartDying) return;
+        StopAllCoroutines();
+        StartCoroutine(HeartDeath());
+    }
+
+    /// <summary>
+    /// Das Herz zerfaellt (verkohlter_herz_tod, 37 Bilder): 0-9 ueberhitzen mit
+    /// immer schnellerem Pochen, 10 Blitz + Bersten, dann fliegt die Kruste
+    /// auseinander. Das letzte Bild (Brocken am Boden) bleibt in der Kammer
+    /// liegen, dann stirbt der Boss wirklich.
+    /// </summary>
+    private IEnumerator HeartDeath()
+    {
+        heartMode = false;
+        heartDying = true;
+        SetGone(true);
+        velocity = Vector2.zero;
+        if (chamber != null) chamber.HeartDying();
+
+        Sprite[] death = VerkohlterArt.Strip("verkohlter_herz_tod");
+        if (body != null) body.transform.localPosition = Vector3.zero;
+        iris = ScreenIris.Create();
+
+        for (int i = 0; i < death.Length; i++)
+        {
+            if (body != null) body.sprite = death[i];
+
+            if (i < HeartOverheatFrames)
+            {
+                // immer schnelleres Pochen, das Bild zittert mit
+                if (i == 0 || i == 3 || i == 5 || i == 7 || i == 8 || i == 9) VerkohlterSounds.Lub();
+                ScreenShake.Kick(1f + i * 0.35f, 0.12f);
+            }
+            else if (i == HeartFlashFrame)
+            {
+                VerkohlterSounds.Crack();
+                Boom(8f, 0.8f);
+                iris.Flash(FlashColor, 0.7f);
+            }
+            else if (i <= HeartFlashFrame + 4)
+            {
+                iris.Flash(FlashColor, 0.7f * (1f - (i - HeartFlashFrame) / 4f));
+            }
+            yield return new WaitForSeconds(1f / Fps);
+        }
+
+        if (iris != null) Destroy(iris.gameObject);
+        iris = null;
+
+        // Die Brocken bleiben liegen, der Boss geht.
+        if (chamber != null && death.Length > 0 && body != null)
+            chamber.LeaveRemains(death[death.Length - 1], body.transform.position);
+        heartDying = false;
+        enemy.FinishHeldDeath();
+    }
+
+    private IEnumerator PlayRange(Sprite[] strip, int from, int to)
+    {
+        for (int i = from; i <= to; i++)
+        {
+            Show(self, strip, i);
+            yield return new WaitForSeconds(1f / Fps);
+        }
+    }
+
+    /// <summary>Gegner, die mit in den Schlund fliegen (alle im Umkreis, ausser ihm selbst).</summary>
+    private void CollectSwallowed(Vector2 maw)
+    {
+        swallowed.Clear();
+        var list = new List<Enemy>(Enemy.Alive);
+        foreach (Enemy e in list)
+        {
+            if (e == null || e == enemy) continue;
+            if (Vector2.Distance(e.transform.position, maw) > SuckEnemyRange) continue;
+            Rigidbody2D erb = e.GetComponent<Rigidbody2D>();
+            if (erb != null) erb.simulated = false;
+            swallowed.Add(e);
+        }
+    }
+
+    private void PullSwallowed(Vector2 maw, float u, float dt)
+    {
+        float speed = 1.2f + 17f * u * u;
+        for (int i = swallowed.Count - 1; i >= 0; i--)
+        {
+            Enemy e = swallowed[i];
+            if (e == null)
+            {
+                swallowed.RemoveAt(i);
+                continue;
+            }
+            Vector2 p = e.transform.position;
+            Vector2 to = maw - p;
+            float d = to.magnitude;
+            if (d <= speed * dt + 0.1f)
+            {
+                swallowed.RemoveAt(i);
+                Destroy(e.gameObject);      // gefressen - keine Beute
+                continue;
+            }
+            // leicht spiralig, damit es nach Sog aussieht und nicht nach Magnet
+            Vector2 dir = to / d;
+            Vector2 swirl = new Vector2(-dir.y, dir.x) * 0.45f;
+            p += (dir + swirl).normalized * speed * dt;
+            e.transform.position = new Vector3(p.x, p.y, e.transform.position.z);
+            float shrink = Mathf.Clamp(d / 1.6f, 0.15f, 1f);
+            e.transform.localScale = new Vector3(Mathf.Sign(e.transform.localScale.x) * shrink, shrink, 1f);
+        }
+    }
+
+    /// <summary>Was beim Schlucken noch unterwegs war, ist jetzt auch drin.</summary>
+    private void EatRemaining()
+    {
+        foreach (Enemy e in swallowed) if (e != null) Destroy(e.gameObject);
+        swallowed.Clear();
+    }
+
+    /// <summary>
+    /// Ab hier ist der Boss sein Herz: mitten in der Kammer, eigenes Bild,
+    /// runde Trefferflaeche um das Herz, steht fest (kinematisch).
+    /// </summary>
+    private void BecomeHeart()
+    {
+        heartFrames = VerkohlterArt.Strip("verkohlter_herz");
+        heartMode = true;
+        Loop(null);
+        Teleport(chamber.HeartPosition);
+        if (body != null)
+        {
+            body.enabled = true;
+            body.flipX = false;
+            body.transform.localPosition = Vector3.zero;
+        }
+        if (hitbox is CircleCollider2D circle)
+        {
+            circle.offset = Vector2.zero;
+            circle.radius = HeartHitRadius;
+        }
+        AnimateHeart();
+    }
+
+    private void AnimateHeart()
+    {
+        if (body == null || heartFrames == null || heartFrames.Length == 0) return;
+        int f = chamber != null ? chamber.Frame : 0;
+        body.sprite = heartFrames[f % heartFrames.Length];
+        // Schwebt: zwei Pixel auf und ab, ganzzahlig
+        float bob = Mathf.Round(Mathf.Sin(Time.time * 1.7f) * 2f) / VerkohlterArt.PixelsPerUnit;
+        body.transform.localPosition = new Vector3(0f, bob, 0f);
+    }
+
+    private void LateUpdate()
+    {
+        // Enemy dreht das Bild zum Spieler - das Herz hat keine Blickrichtung.
+        if ((heartMode || heartDying) && body != null) body.flipX = false;
+    }
+
+    /// <summary>
+    /// Der Boss verschwindet mitten in der Sequenz (Test-Szene "Boss weg",
+    /// Lauf zu Ende): Spieler freigeben, Blende weg, Welt wieder an. Steht die
+    /// Kammer schon, raeumt sie selbst auf, sobald sie merkt, dass er fehlt.
+    /// </summary>
+    private void AbortSwallow()
+    {
+        if (puppet != null && !puppet.Released) puppet.Release();
+        puppet = null;
+        if (iris != null) Destroy(iris.gameObject);
+        iris = null;
+        if (phaseThree && !heartMode)
+        {
+            VerkohlterSounds.StopAll();
+            if (SpawnDirector.Active != null) SpawnDirector.Active.Suspended = false;
+            foreach (Enemy e in swallowed)
+            {
+                if (e == null) continue;
+                Rigidbody2D erb = e.GetComponent<Rigidbody2D>();
+                if (erb != null) erb.simulated = true;
+                e.transform.localScale = Vector3.one;
+            }
+            swallowed.Clear();
+        }
     }
 
     // =================================================================== Tod

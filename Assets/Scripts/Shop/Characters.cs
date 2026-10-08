@@ -30,7 +30,7 @@ using UnityEngine;
 public static class Characters
 {
     /// <summary>Startwaffe je Charakter - Index in PlayerController.activeWeapon.</summary>
-    private static readonly int[] StartWeaponByskin = { 2, 1, 11, 19, 18 };
+    private static readonly int[] StartWeaponByskin = { 20, 1, 11, 19, 18 };
 
     /// <summary>
     /// Dieselbe Startwaffe noch einmal, diesmal als <c>Weapon.weaponID</c>.
@@ -46,11 +46,26 @@ public static class Characters
     /// </summary>
     private static readonly string[] StartWeaponIdByskin =
     {
-        "shurikookie",   // 0 - Keks
+        "choco_chips",   // 0 - Keks (Schoko-Salve; frueher "shurikookie" = Index 2)
         "jam_jar",       // 1 - Marmelade
         "blade_swarm",   // 2 - Onigiri
         "salad_fan",     // 3 - Toast
         "sword_slash",   // 4 - Zwiebelritter
+    };
+
+    /// <summary>
+    /// Waffe, die NUR dieser Charakter bekommt - leer heisst: keine. Alle
+    /// anderen sehen sie weder in der Werkbank noch im Level-Up. Gedacht fuer
+    /// Startwaffen, die zur Figur gehoeren (der Keks schiesst seine eigenen
+    /// Schokostueckchen); die uebrigen Startwaffen bleiben fuer alle offen.
+    /// </summary>
+    private static readonly string[] ExclusiveWeaponIdByskin =
+    {
+        "choco_chips",   // 0 - Keks
+        "",
+        "",
+        "",
+        "",
     };
 
     /// <summary>
@@ -118,6 +133,21 @@ public static class Characters
     {
         if (StartWeaponIdByskin.Length == 0) return "";
         return StartWeaponIdByskin[Mathf.Clamp(skinIndex, 0, StartWeaponIdByskin.Length - 1)];
+    }
+
+    /// <summary>
+    /// Darf dieser Charakter die Waffe bekommen? Nein nur dann, wenn sie einem
+    /// anderen Charakter allein gehoert (<see cref="ExclusiveWeaponIdByskin"/>).
+    /// </summary>
+    public static bool IsWeaponAllowed(string weaponId, int skinIndex)
+    {
+        if (string.IsNullOrEmpty(weaponId)) return true;
+
+        for (int skin = 0; skin < ExclusiveWeaponIdByskin.Length; skin++)
+        {
+            if (skin != skinIndex && ExclusiveWeaponIdByskin[skin] == weaponId) return false;
+        }
+        return true;
     }
 
     public static string NameOf(int skinIndex)

@@ -150,6 +150,8 @@ public static class WeaponCatalog
     public static readonly WeaponDef Turret        = Def("turret", "Turret", PoolKind.Weapon);
     public static readonly WeaponDef SwordSlash    = Def("sword_slash", "Sword Slash", PoolKind.Weapon);
     public static readonly WeaponDef SaladFan      = Def("salad_fan", "Salad Fan", PoolKind.Weapon);
+    public static readonly WeaponDef ChocoChips    = Def("choco_chips", "Choco Chips", PoolKind.Weapon);
+    public static readonly WeaponDef MilkDunk      = Def("milk_dunk", "Milk Dunk", PoolKind.Weapon);
 
     // ==================================================================
     //  Buffs

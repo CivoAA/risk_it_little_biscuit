@@ -1,0 +1,419 @@
+fileFormatVersion: 2
+guid: d4d0021001eb46bd8fd69826eee69fb9
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2425976541265111509
+    second: vulkan_lava_mittel_a_0
+  - first:
+      213: 4475072172331158085
+    second: vulkan_lava_mittel_a_1
+  - first:
+      213: 3284276646217251592
+    second: vulkan_lava_mittel_a_2
+  - first:
+      213: 2058741768307083014
+    second: vulkan_lava_mittel_a_3
+  - first:
+      213: 3997528959503665613
+    second: vulkan_lava_mittel_a_4
+  - first:
+      213: 2120610586368186345
+    second: vulkan_lava_mittel_a_5
+  - first:
+      213: 3016194875697833416
+    second: vulkan_lava_mittel_a_6
+  - first:
+      213: 1728587929939951234
+    second: vulkan_lava_mittel_a_7
+  - first:
+      213: 4058499620961032526
+    second: vulkan_lava_mittel_a_8
+  - first:
+      213: 2429837986993005255
+    second: vulkan_lava_mittel_a_9
+  - first:
+      213: 1775874698785125573
+    second: vulkan_lava_mittel_a_10
+  - first:
+      213: 2043347801769613202
+    second: vulkan_lava_mittel_a_11
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: vulkan_lava_mittel_a_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 98
+        height: 85
+      alignment: 9
+      pivot: {x: 0.47959183673469385, y: 0.43529411764705883}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2196182dfb27429b8fc572a04156c8a5
+      internalID: 2425976541265111509
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vulkan_lava_mittel_a_1
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 0
+        width: 98
+        height: 85
+      alignment: 9
+      pivot: {x: 0.47959183673469385, y: 0.43529411764705883}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b805658b083346bdbe25a7b8c91b0761
+      internalID: 4475072172331158085
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vulkan_lava_mittel_a_2
+      rect:
+        serializedVersion: 2
+        x: 196
+        y: 0
+        width: 98
+        height: 85
+      alignment: 9
+      pivot: {x: 0.47959183673469385, y: 0.43529411764705883}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1ce1fa27ba554c108af3337f9aa63451
+      internalID: 3284276646217251592
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vulkan_lava_mittel_a_3
+      rect:
+        serializedVersion: 2
+        x: 294
+        y: 0
+        width: 98
+        height: 85
+      alignment: 9
+      pivot: {x: 0.47959183673469385, y: 0.43529411764705883}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7bcde756dd5c4328b8b17a014640fad1
+      internalID: 2058741768307083014
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vulkan_lava_mittel_a_4
+      rect:
+        serializedVersion: 2
+        x: 392
+        y: 0
+        width: 98
+        height: 85
+      alignment: 9
+      pivot: {x: 0.47959183673469385, y: 0.43529411764705883}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c476b8d97204c4d95103677a5aa68da
+      internalID: 3997528959503665613
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vulkan_lava_mittel_a_5
+      rect:
+        serializedVersion: 2
+        x: 490
+        y: 0
+        width: 98
+        height: 85
+      alignment: 9
+      pivot: {x: 0.47959183673469385, y: 0.43529411764705883}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 93810ffd24ba4452a76e86f5058d6119
+      internalID: 2120610586368186345
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vulkan_lava_mittel_a_6
+      rect:
+        serializedVersion: 2
+        x: 588
+        y: 0
+        width: 98
+        height: 85
+      alignment: 9
+      pivot: {x: 0.47959183673469385, y: 0.43529411764705883}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0108597056fd40c9a2eaab87f6226357
+      internalID: 3016194875697833416
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vulkan_lava_mittel_a_7
+      rect:
+        serializedVersion: 2
+        x: 686
+        y: 0
+        width: 98
+        height: 85
+      alignment: 9
+      pivot: {x: 0.47959183673469385, y: 0.43529411764705883}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b78b55d42abb4fbb92067a1618d4f3aa
+      internalID: 1728587929939951234
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vulkan_lava_mittel_a_8
+      rect:
+        serializedVersion: 2
+        x: 784
+        y: 0
+        width: 98
+        height: 85
+      alignment: 9
+      pivot: {x: 0.47959183673469385, y: 0.43529411764705883}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da8e78aa47f747ddb5ee6d553a122afc
+      internalID: 4058499620961032526
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vulkan_lava_mittel_a_9
+      rect:
+        serializedVersion: 2
+        x: 882
+        y: 0
+        width: 98
+        height: 85
+      alignment: 9
+      pivot: {x: 0.47959183673469385, y: 0.43529411764705883}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9865dc263b844faf83483dc936ba4e33
+      internalID: 2429837986993005255
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vulkan_lava_mittel_a_10
+      rect:
+        serializedVersion: 2
+        x: 980
+        y: 0
+        width: 98
+        height: 85
+      alignment: 9
+      pivot: {x: 0.47959183673469385, y: 0.43529411764705883}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f048871787df4f61bc29f0edd57dad49
+      internalID: 1775874698785125573
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vulkan_lava_mittel_a_11
+      rect:
+        serializedVersion: 2
+        x: 1078
+        y: 0
+        width: 98
+        height: 85
+      alignment: 9
+      pivot: {x: 0.47959183673469385, y: 0.43529411764705883}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 71a6d87c18404db3904200ab1d1916c3
+      internalID: 2043347801769613202
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      vulkan_lava_mittel_a_0: 2425976541265111509
+      vulkan_lava_mittel_a_1: 4475072172331158085
+      vulkan_lava_mittel_a_10: 1775874698785125573
+      vulkan_lava_mittel_a_11: 2043347801769613202
+      vulkan_lava_mittel_a_2: 3284276646217251592
+      vulkan_lava_mittel_a_3: 2058741768307083014
+      vulkan_lava_mittel_a_4: 3997528959503665613
+      vulkan_lava_mittel_a_5: 2120610586368186345
+      vulkan_lava_mittel_a_6: 3016194875697833416
+      vulkan_lava_mittel_a_7: 1728587929939951234
+      vulkan_lava_mittel_a_8: 4058499620961032526
+      vulkan_lava_mittel_a_9: 2429837986993005255
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

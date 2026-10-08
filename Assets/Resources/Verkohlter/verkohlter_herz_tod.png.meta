@@ -1,0 +1,1069 @@
+fileFormatVersion: 2
+guid: 6af096d78187414389e2f9a4ec9bdcac
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1922475794065232595
+    second: verkohlter_herz_tod_0
+  - first:
+      213: 2908691628931532166
+    second: verkohlter_herz_tod_1
+  - first:
+      213: 3303613950840970706
+    second: verkohlter_herz_tod_2
+  - first:
+      213: 3788989037534262781
+    second: verkohlter_herz_tod_3
+  - first:
+      213: 3678499915679984351
+    second: verkohlter_herz_tod_4
+  - first:
+      213: 4051093696095235435
+    second: verkohlter_herz_tod_5
+  - first:
+      213: 1436093520073858857
+    second: verkohlter_herz_tod_6
+  - first:
+      213: 3994237507444000645
+    second: verkohlter_herz_tod_7
+  - first:
+      213: 2567876087282156980
+    second: verkohlter_herz_tod_8
+  - first:
+      213: 3659042767417687130
+    second: verkohlter_herz_tod_9
+  - first:
+      213: 1963007060838198662
+    second: verkohlter_herz_tod_10
+  - first:
+      213: 1202810674263842300
+    second: verkohlter_herz_tod_11
+  - first:
+      213: 3869738053002943915
+    second: verkohlter_herz_tod_12
+  - first:
+      213: 2749756205256029845
+    second: verkohlter_herz_tod_13
+  - first:
+      213: 3254936400010552858
+    second: verkohlter_herz_tod_14
+  - first:
+      213: 3903656198489010490
+    second: verkohlter_herz_tod_15
+  - first:
+      213: 4270166128424358813
+    second: verkohlter_herz_tod_16
+  - first:
+      213: 4177654149188452781
+    second: verkohlter_herz_tod_17
+  - first:
+      213: 3346622314336460785
+    second: verkohlter_herz_tod_18
+  - first:
+      213: 4387795081271394620
+    second: verkohlter_herz_tod_19
+  - first:
+      213: 3942751484591516503
+    second: verkohlter_herz_tod_20
+  - first:
+      213: 3797633660546097244
+    second: verkohlter_herz_tod_21
+  - first:
+      213: 3561168041119887137
+    second: verkohlter_herz_tod_22
+  - first:
+      213: 2287193834442804753
+    second: verkohlter_herz_tod_23
+  - first:
+      213: 4536060244545215314
+    second: verkohlter_herz_tod_24
+  - first:
+      213: 1260621984510851102
+    second: verkohlter_herz_tod_25
+  - first:
+      213: 1725868280472088278
+    second: verkohlter_herz_tod_26
+  - first:
+      213: 2642957464697512832
+    second: verkohlter_herz_tod_27
+  - first:
+      213: 2355388517556268843
+    second: verkohlter_herz_tod_28
+  - first:
+      213: 2688575485359686744
+    second: verkohlter_herz_tod_29
+  - first:
+      213: 1303797724131649840
+    second: verkohlter_herz_tod_30
+  - first:
+      213: 3665079970333319683
+    second: verkohlter_herz_tod_31
+  - first:
+      213: 2762266573436358371
+    second: verkohlter_herz_tod_32
+  - first:
+      213: 3763823571846955399
+    second: verkohlter_herz_tod_33
+  - first:
+      213: 4581562263264434408
+    second: verkohlter_herz_tod_34
+  - first:
+      213: 2561104742582386650
+    second: verkohlter_herz_tod_35
+  - first:
+      213: 2414479356287463549
+    second: verkohlter_herz_tod_36
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 4096
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: verkohlter_herz_tod_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 992
+        width: 288
+        height: 248
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5806451612903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ccc688c3f03e4305b68ff3020ff47df5
+      internalID: 1922475794065232595
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_tod_1
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 992
+        width: 288
+        height: 248
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5806451612903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f1614bc50e8a49edadf57d4602331113
+      internalID: 2908691628931532166
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_tod_2
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 992
+        width: 288
+        height: 248
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5806451612903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5fa276a8f9fd45e9bc9c2c5c1e4480eb
+      internalID: 3303613950840970706
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_tod_3
+      rect:
+        serializedVersion: 2
+        x: 864
+        y: 992
+        width: 288
+        height: 248
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5806451612903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6dfe9f60800d438782cafb997b990186
+      internalID: 3788989037534262781
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_tod_4
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 992
+        width: 288
+        height: 248
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5806451612903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d5c82e0f349e41c38061e664f0dcfc04
+      internalID: 3678499915679984351
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_tod_5
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 992
+        width: 288
+        height: 248
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5806451612903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 456567326db44f5bbe29e04981f95140
+      internalID: 4051093696095235435
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_tod_6
+      rect:
+        serializedVersion: 2
+        x: 1728
+        y: 992
+        width: 288
+        height: 248
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5806451612903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b6c6597cb6d5460e812f3b514c5ac7b3
+      internalID: 1436093520073858857
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_tod_7
+      rect:
+        serializedVersion: 2
+        x: 2016
+        y: 992
+        width: 288
+        height: 248
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5806451612903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 297c02f1bd86432296226534fb7c5b1b
+      internalID: 3994237507444000645
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_tod_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 744
+        width: 288
+        height: 248
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5806451612903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c891c8197a1d429ab10ab4798f9ae0b2
+      internalID: 2567876087282156980
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_tod_9
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 744
+        width: 288
+        height: 248
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5806451612903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fc02a71e11324bf5bc8632f522229971
+      internalID: 3659042767417687130
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_tod_10
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 744
+        width: 288
+        height: 248
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5806451612903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 56046664d2ee44e18d4851503bbeafca
+      internalID: 1963007060838198662
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_tod_11
+      rect:
+        serializedVersion: 2
+        x: 864
+        y: 744
+        width: 288
+        height: 248
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5806451612903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4a1ff4d60fbd4fa4bdff9dbd1dcf301e
+      internalID: 1202810674263842300
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_tod_12
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 744
+        width: 288
+        height: 248
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5806451612903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8c2e0717cefb41888fb4822dadafe60d
+      internalID: 3869738053002943915
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_tod_13
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 744
+        width: 288
+        height: 248
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5806451612903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 37b0eb72fe14487c951934f2efd3c393
+      internalID: 2749756205256029845
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_tod_14
+      rect:
+        serializedVersion: 2
+        x: 1728
+        y: 744
+        width: 288
+        height: 248
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5806451612903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: acdaaae80f544d6d8a8abc35227dcede
+      internalID: 3254936400010552858
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_tod_15
+      rect:
+        serializedVersion: 2
+        x: 2016
+        y: 744
+        width: 288
+        height: 248
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5806451612903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 96703deb12824eefb6fc70c5b87463b8
+      internalID: 3903656198489010490
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_tod_16
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 496
+        width: 288
+        height: 248
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5806451612903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cb58d265684741829100bff39f007731
+      internalID: 4270166128424358813
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_tod_17
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 496
+        width: 288
+        height: 248
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5806451612903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f801d14abe0e4d7e9f23b8d596f15c1e
+      internalID: 4177654149188452781
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_tod_18
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 496
+        width: 288
+        height: 248
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5806451612903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 17ad65a184274738b0f7a2b3ea53fef2
+      internalID: 3346622314336460785
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_tod_19
+      rect:
+        serializedVersion: 2
+        x: 864
+        y: 496
+        width: 288
+        height: 248
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5806451612903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 752f2a024b6346a0bcca720e18685ab3
+      internalID: 4387795081271394620
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_tod_20
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 496
+        width: 288
+        height: 248
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5806451612903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a61eac6adafa4ab1af1ffa5b49f418bf
+      internalID: 3942751484591516503
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_tod_21
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 496
+        width: 288
+        height: 248
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5806451612903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2fac04571d2b4ed6bfd0734e118f4b92
+      internalID: 3797633660546097244
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_tod_22
+      rect:
+        serializedVersion: 2
+        x: 1728
+        y: 496
+        width: 288
+        height: 248
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5806451612903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f114b70aa6e4e02b39f0e42f249ecda
+      internalID: 3561168041119887137
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_tod_23
+      rect:
+        serializedVersion: 2
+        x: 2016
+        y: 496
+        width: 288
+        height: 248
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5806451612903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5676ad5ca14f4dd2bbb0ea8e21b13479
+      internalID: 2287193834442804753
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_tod_24
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 248
+        width: 288
+        height: 248
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5806451612903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f64d938f288b4b71903d7378f90403a8
+      internalID: 4536060244545215314
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_tod_25
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 248
+        width: 288
+        height: 248
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5806451612903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a63cbf16b00c40009d07669c76b18005
+      internalID: 1260621984510851102
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_tod_26
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 248
+        width: 288
+        height: 248
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5806451612903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 11893572f5ea4aaa8ea8151269d312b0
+      internalID: 1725868280472088278
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_tod_27
+      rect:
+        serializedVersion: 2
+        x: 864
+        y: 248
+        width: 288
+        height: 248
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5806451612903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e75b1c078d448a99f5537f0bbcdd88c
+      internalID: 2642957464697512832
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_tod_28
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 248
+        width: 288
+        height: 248
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5806451612903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e5a206d9cebf4df98b4d34388f90c8fe
+      internalID: 2355388517556268843
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_tod_29
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 248
+        width: 288
+        height: 248
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5806451612903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7b12f79c22444d49abb9171123f30f00
+      internalID: 2688575485359686744
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_tod_30
+      rect:
+        serializedVersion: 2
+        x: 1728
+        y: 248
+        width: 288
+        height: 248
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5806451612903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 67eb3ca0506049b88c9ab2632a4b729d
+      internalID: 1303797724131649840
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_tod_31
+      rect:
+        serializedVersion: 2
+        x: 2016
+        y: 248
+        width: 288
+        height: 248
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5806451612903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f1930bc6063a49e5af649e3798dccc80
+      internalID: 3665079970333319683
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_tod_32
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 288
+        height: 248
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5806451612903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 981cada2b77b4b7f88b4d897c35946f1
+      internalID: 2762266573436358371
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_tod_33
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 0
+        width: 288
+        height: 248
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5806451612903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 796302262e6e4f1db6b0ceec56b91e5e
+      internalID: 3763823571846955399
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_tod_34
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 0
+        width: 288
+        height: 248
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5806451612903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b025ec7f7efd49079890ab19d64c9b07
+      internalID: 4581562263264434408
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_tod_35
+      rect:
+        serializedVersion: 2
+        x: 864
+        y: 0
+        width: 288
+        height: 248
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5806451612903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 350b8e795a6b4bc7a95658e5176501fa
+      internalID: 2561104742582386650
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_tod_36
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 0
+        width: 288
+        height: 248
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5806451612903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f7d9144994d541b1a1dea81031e572ad
+      internalID: 2414479356287463549
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      verkohlter_herz_tod_0: 1922475794065232595
+      verkohlter_herz_tod_1: 2908691628931532166
+      verkohlter_herz_tod_10: 1963007060838198662
+      verkohlter_herz_tod_11: 1202810674263842300
+      verkohlter_herz_tod_12: 3869738053002943915
+      verkohlter_herz_tod_13: 2749756205256029845
+      verkohlter_herz_tod_14: 3254936400010552858
+      verkohlter_herz_tod_15: 3903656198489010490
+      verkohlter_herz_tod_16: 4270166128424358813
+      verkohlter_herz_tod_17: 4177654149188452781
+      verkohlter_herz_tod_18: 3346622314336460785
+      verkohlter_herz_tod_19: 4387795081271394620
+      verkohlter_herz_tod_2: 3303613950840970706
+      verkohlter_herz_tod_20: 3942751484591516503
+      verkohlter_herz_tod_21: 3797633660546097244
+      verkohlter_herz_tod_22: 3561168041119887137
+      verkohlter_herz_tod_23: 2287193834442804753
+      verkohlter_herz_tod_24: 4536060244545215314
+      verkohlter_herz_tod_25: 1260621984510851102
+      verkohlter_herz_tod_26: 1725868280472088278
+      verkohlter_herz_tod_27: 2642957464697512832
+      verkohlter_herz_tod_28: 2355388517556268843
+      verkohlter_herz_tod_29: 2688575485359686744
+      verkohlter_herz_tod_3: 3788989037534262781
+      verkohlter_herz_tod_30: 1303797724131649840
+      verkohlter_herz_tod_31: 3665079970333319683
+      verkohlter_herz_tod_32: 2762266573436358371
+      verkohlter_herz_tod_33: 3763823571846955399
+      verkohlter_herz_tod_34: 4581562263264434408
+      verkohlter_herz_tod_35: 2561104742582386650
+      verkohlter_herz_tod_36: 2414479356287463549
+      verkohlter_herz_tod_4: 3678499915679984351
+      verkohlter_herz_tod_5: 4051093696095235435
+      verkohlter_herz_tod_6: 1436093520073858857
+      verkohlter_herz_tod_7: 3994237507444000645
+      verkohlter_herz_tod_8: 2567876087282156980
+      verkohlter_herz_tod_9: 3659042767417687130
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

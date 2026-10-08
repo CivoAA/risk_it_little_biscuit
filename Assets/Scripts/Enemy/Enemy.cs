@@ -171,6 +171,38 @@ public class Enemy : MonoBehaviour
         health = Mathf.Max(1f, maxHealth * Mathf.Clamp01(fraction));
     }
 
+    /// <summary>
+    /// Setzt das Leben auf einen festen Wert (mindestens 1). Fuer die
+    /// Testtaste "Verkohlter auf 10 HP" - der Bezugspunkt fuer
+    /// <see cref="HealthFraction"/> bleibt das volle Leben.
+    /// </summary>
+    public void DebugSetHealth(float hp)
+    {
+        if (maxHealth <= 0f) maxHealth = health;
+        health = Mathf.Max(1f, hp);
+    }
+
+    /// <summary>Volles Leben (nach Lauf-Skalierung) - Bezugspunkt von <see cref="HealthFraction"/>.</summary>
+    public float MaxHealth
+    {
+        get
+        {
+            if (maxHealth <= 0f) maxHealth = health;
+            return maxHealth;
+        }
+    }
+
+    /// <summary>
+    /// Neuer Lebenspool fuer eine eigene Phase (das Herz des Verkohlten): volles
+    /// Leben = <paramref name="newMax"/>, aktuell ein Anteil davon. Die
+    /// Boss-Leiste zeigt ab dann diesen Pool.
+    /// </summary>
+    public void ResetHealthPool(float newMax, float fraction)
+    {
+        maxHealth = Mathf.Max(1f, newMax);
+        health = Mathf.Max(1f, maxHealth * Mathf.Clamp01(fraction));
+    }
+
     // ---------------------------------------------------------------- Register
 
     private static readonly List<Enemy> alive = new List<Enemy>();
@@ -216,6 +248,30 @@ public class Enemy : MonoBehaviour
     /// <see cref="TakeDamage"/> ignoriert dann alles.
     /// </summary>
     [System.NonSerialized] public bool Untouchable;
+
+    /// <summary>
+    /// Unter diesen Anteil des vollen Lebens faellt der Gegner nicht - er
+    /// stirbt also auch nicht. 0 = aus. Der Verkohlte haelt sich so am Leben,
+    /// bis er den Spieler eingesaugt hat (Phase 3); stand er vorher schon
+    /// darunter (Testtaste), bleibt er beim alten Stand stehen.
+    /// </summary>
+    [System.NonSerialized] public float MinHealthFraction;
+
+    /// <summary>
+    /// Toedlicher Treffer stirbt nicht sofort: der Gegner wird unberuehrbar,
+    /// meldet <see cref="DeathHeld"/> und wartet, bis sein Skript
+    /// <see cref="FinishHeldDeath"/> ruft (das Herz des Verkohlten zerfaellt
+    /// erst, dann gibt es Beute und Sieg).
+    /// </summary>
+    [System.NonSerialized] public bool HoldDeath;
+
+    /// <summary>Kommt einmal, wenn ein Gegner mit <see cref="HoldDeath"/> toedlich getroffen wurde.</summary>
+    public event System.Action DeathHeld;
+
+    /// <summary>Beim Tod keinen Todeseffekt des Prefabs abspielen (das Skript zeigt einen eigenen).</summary>
+    [System.NonSerialized] public bool SkipDeathEffect;
+
+    private bool deathHeld;
 
     /// <summary>Wer der Gegner ist: Katalog-Id, sonst wie der Director ihn gesetzt hat.</summary>
     public EnemyId Identity => id != EnemyId.None ? id : SpawnedAs;
@@ -847,7 +903,13 @@ public class Enemy : MonoBehaviour
             DamageNumberController.Instance.CreateNumber(finalDamage, transform.position);
         }
 
+        float before = health;
         health -= finalDamage;
+        if (MinHealthFraction > 0f)
+        {
+            float floor = Mathf.Min(before, Mathf.Max(1f, maxHealth * MinHealthFraction));
+            if (health < floor) health = floor;
+        }
 
         if (LifeSteal.Instance != null)
         {
@@ -858,6 +920,17 @@ public class Enemy : MonoBehaviour
 
         if (health <= 0f)
         {
+            if (HoldDeath)
+            {
+                health = 0f;
+                if (!deathHeld)
+                {
+                    deathHeld = true;
+                    Untouchable = true;
+                    DeathHeld?.Invoke();
+                }
+                return;
+            }
             Die();
             return;
         }
@@ -894,6 +967,13 @@ public class Enemy : MonoBehaviour
     }
 
     // ----------------------------------------------------------------- Tod
+
+    /// <summary>Den angehaltenen Tod jetzt ausfuehren (Beute, Erfolge, Boss-Sieg, weg).</summary>
+    public void FinishHeldDeath()
+    {
+        if (this == null) return;
+        Die();
+    }
 
     private void Die()
     {
@@ -992,7 +1072,7 @@ public class Enemy : MonoBehaviour
 
     private void SpawnDeathEffect()
     {
-        if (destroyEffect == null) return;
+        if (destroyEffect == null || SkipDeathEffect) return;
 
         RunPool.Spawn(destroyEffect, transform.position, transform.rotation, "Effekte");
     }

@@ -47,7 +47,7 @@ using UnityEngine.UI;
 ///                     (level.N.name / level.N.desc) fehlt.
 ///       Preview / Preview Wide       Bild der Station (50x50) und Panorama (82x46).
 ///       Ambience      Stimmung im Panorama. Auto = nach Plan (World1 Kueche,
-///                     World2 Wald), sonst Staub.
+///                     World2 Wald), sonst Staub. Volcano = Glut + Asche.
 ///  3. Sperren ist optional: Story Unlock Id / Endless Unlock Id leer = offen.
 ///  4. Play() macht daraus denselben Ablauf wie die World Map.
 /// ---------------------------------------------------------------------------
@@ -58,7 +58,7 @@ public class HubLevelSelectUI : MonoBehaviour
     /// <summary>Steht offen? Der Hub sperrt solange seine Interaktionen.</summary>
     public static bool IsOpen { get; private set; }
 
-    public enum Ambience { Auto, None, Dust, Kitchen, Forest }
+    public enum Ambience { Auto, None, Dust, Kitchen, Forest, Volcano }
 
     /// <summary>Ein Level in der Auswahl.</summary>
     [System.Serializable]
@@ -996,11 +996,15 @@ public class HubLevelSelectUI : MonoBehaviour
         }
         else bossIcon.color = Color.clear;
 
-        bossName.text = hasBoss ? Bestiary.NameOf(plan.Boss).ToUpperInvariant() : "";
-        bossNone.text = hasBoss ? "" : !open ? "???" : Loc.Get("ui.levelselect.noboss", "Noch unbekannt.");
-
         // Bestwert der Karte im gewaehlten Modus
         bool rec = open && linked && e.mapId >= 0;
+
+        string none = hasBoss ? "" : !open ? "???" : Loc.Get("ui.levelselect.noboss", "Noch unbekannt.");
+        // Steht darunter ein Bestwert (Welt ohne Wellenplan), ist unter dem Namen
+        // kein Platz - der Hinweis rueckt dann in die Namenszeile.
+        bossName.text = hasBoss ? Bestiary.NameOf(plan.Boss).ToUpperInvariant() : rec ? none : "";
+        bossName.color = hasBoss ? GameHudSkin.Cream : GameHudSkin.Stone;
+        bossNone.text = rec ? "" : none;
         float best = !rec ? 0f : endlessChosen ? LevelRecords.EndlessBest(e.mapId) : LevelRecords.StoryBest(e.mapId);
         recordLabel.text = !rec ? "" : endlessChosen
             ? Loc.Get("ui.levelselect.recordendless", "LÄNGSTES ÜBERLEBEN")
@@ -1184,6 +1188,31 @@ public class HubLevelSelectUI : MonoBehaviour
                     y = rise * WinH;
                     a = (0.35f + 0.35f * Mathf.Sin(now * 2.4f + m.Phase)) * Mathf.Clamp01(rise * 6f) * Mathf.Clamp01((1f - rise) * 6f);
                     SetMote(img, x, y, 1, 1, OptionsKit.WithAlpha(GameHudSkin.Cream, Mathf.Max(0f, a)));
+                    break;
+
+                case Ambience.Volcano:
+                    img.sprite = GameHudSkin.White;
+                    if (i % 4 == 0)
+                    {
+                        // Ascheflocken: sinken langsam, treiben nach rechts
+                        float sink = Mathf.Repeat(m.Seed.y + now * 0.03f * m.Speed, 1f);
+                        x = Mathf.Repeat(m.Seed.x * WinW + now * 4f * m.Speed + Mathf.Sin(now * 1.3f + m.Phase) * 5f, WinW);
+                        y = sink * WinH;
+                        a = 0.55f * Mathf.Clamp01(sink * 6f) * Mathf.Clamp01((1f - sink) * 6f);
+                        SetMote(img, x, y, 2, 1, new Color(0.62f, 0.57f, 0.57f, a));
+                    }
+                    else
+                    {
+                        // Glut: steigt aus der Lava, flackert, verglueht nach oben
+                        float life = Mathf.Repeat(m.Seed.y - now * 0.11f * m.Speed, 1f);   // 1 unten .. 0 oben
+                        x = m.Seed.x * WinW + Mathf.Sin(now * 1.7f * m.Speed + m.Phase) * 6f
+                            + (1f - life) * 14f * (m.Seed.x - 0.5f);
+                        y = (0.3f + 0.7f * life) * WinH;
+                        float flick = 0.65f + 0.35f * Mathf.Sin(now * 9f + m.Phase * 3f);
+                        a = Mathf.Clamp01(life * 1.8f) * Mathf.Clamp01((1f - life) * 10f) * flick;
+                        Color ember = Color.Lerp(new Color(1f, 0.34f, 0.1f), new Color(1f, 0.85f, 0.38f), life);
+                        SetMote(img, x, y, 1, 1, OptionsKit.WithAlpha(ember, a));
+                    }
                     break;
 
                 default:

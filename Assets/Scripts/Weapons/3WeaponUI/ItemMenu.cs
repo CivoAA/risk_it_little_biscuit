@@ -148,10 +148,11 @@ public class ItemMenu : MonoBehaviour
         // Schritt 1: Waffen + Evos sammeln (mit isEvo). Fehlende Objekte fallen
         // dabei einfach raus, statt die ganze Liste zu sprengen.
         var allWeapons = new List<(int level, int maxLevel, Sprite sprite, bool isEvo)>();
+        var collected = new HashSet<Weapon>();
 
         void Collect(Weapon weapon, bool isEvo)
         {
-            if (weapon == null) return;
+            if (weapon == null || !collected.Add(weapon)) return;
             allWeapons.Add((weapon.weaponLevel, weapon.maxweaponLevel, weapon.weaponIcon, isEvo));
         }
 
@@ -186,6 +187,17 @@ public class ItemMenu : MonoBehaviour
         Collect(bombSawEvo, true);
         Collect(stickyShatterEvo, true);
         Collect(typhoonFanEvo, true);
+
+        // Alles, was oben (noch) nicht namentlich steht - z.B. Schoko-Salve und
+        // Milch-Tunker. Neue Waffen tauchen damit von selbst oben links auf.
+        PlayerController player = PlayerController.Instance;
+        if (player != null)
+        {
+            if (player.activeWeapon != null)
+                foreach (Weapon w in player.activeWeapon) Collect(w, false);
+            if (player.activeEvos != null)
+                foreach (Weapon w in player.activeEvos) Collect(w, true);
+        }
 
         // Schritt 2: Bereits angezeigte Waffen
         List<Sprite> currentSprites = new List<Sprite>();

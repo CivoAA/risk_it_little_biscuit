@@ -749,7 +749,8 @@ public class WorkbenchPanel : MonoBehaviour
         }
         libTiles.Clear();
 
-        List<WeaponDef> defs = WeaponCatalog.OfKind(tab);
+        // Waffen, die einem anderen Charakter allein gehoeren, gar nicht erst zeigen.
+        List<WeaponDef> defs = Loadout.Available(tab);
         LockedFirst(defs);
         libCharacter = Loadout.CurrentCharacter;
         int rowsCount = Mathf.CeilToInt(defs.Count / (float)LibCols);

@@ -166,10 +166,25 @@ public static class Loadout
     /// Kommen Waffen dazu, zieht die Zahl von selbst nach.
     /// </summary>
     public static int RequiredWeapons =>
-        Mathf.Min(WeaponSlots, WeaponCatalog.CountOfKind(PoolKind.Weapon));
+        Mathf.Min(WeaponSlots, Available(PoolKind.Weapon).Count);
 
     public static int RequiredBuffs =>
         Mathf.Min(BuffSlots, WeaponCatalog.CountOfKind(PoolKind.Buff));
+
+    /// <summary>
+    /// Darf der gewaehlte Charakter das in den Verteiler legen? Nein bei einer
+    /// Waffe, die einem anderen Charakter allein gehoert
+    /// (<see cref="Characters.IsWeaponAllowed"/>, z.B. die Schoko-Salve des Kekses).
+    /// </summary>
+    public static bool IsAvailable(string id) => Characters.IsWeaponAllowed(id, CurrentCharacter);
+
+    /// <summary>Katalog einer Art ohne das, was dem gewaehlten Charakter nicht zusteht.</summary>
+    public static List<WeaponDef> Available(PoolKind kind)
+    {
+        List<WeaponDef> list = WeaponCatalog.OfKind(kind);
+        list.RemoveAll(def => !IsAvailable(def.Id));
+        return list;
+    }
 
     public static int Capacity(PoolKind kind) => kind == PoolKind.Buff ? BuffSlots : WeaponSlots;
     public static int Required(PoolKind kind) => kind == PoolKind.Buff ? RequiredBuffs : RequiredWeapons;
@@ -197,18 +212,22 @@ public static class Loadout
     /// </summary>
     private static bool EnsureLocked()
     {
+        // Was dem Charakter nicht (mehr) zusteht, fliegt raus - etwa eine
+        // Schoko-Salve, die vor der Sperre im Verteiler eines anderen lag.
+        bool removed = Store.Weapons.RemoveAll(w => !IsAvailable(w)) > 0;
+
         string id = LockedWeaponId;
-        if (string.IsNullOrEmpty(id)) return false;
+        if (string.IsNullOrEmpty(id)) return removed;
         if (WeaponCatalog.Find(id) == null)
         {
             Debug.LogWarning($"[Werkbank] Startwaffe '{id}' steht nicht im Katalog - " +
                              "siehe Characters.StartWeaponIdByskin.");
-            return false;
+            return removed;
         }
 
         List<string> weapons = Store.Weapons;
         int at = weapons.IndexOf(id);
-        if (at == 0) return false;
+        if (at == 0) return removed;
 
         if (at > 0) weapons.RemoveAt(at);
         else if (weapons.Count >= WeaponSlots) weapons.RemoveAt(weapons.Count - 1);
@@ -272,6 +291,7 @@ public static class Loadout
     {
         WeaponDef def = WeaponCatalog.Find(id);
         if (def == null || def.Kind == PoolKind.Evo) return false;
+        if (!IsAvailable(id)) return false;
         if (Contains(id) || IsFull(def.Kind)) return false;
 
         Get(def.Kind).Add(id);
@@ -322,7 +342,7 @@ public static class Loadout
     /// <summary>Stopft eine Gruppe mit zufaellig gezogenen Eintraegen bis zum Anschlag.</summary>
     private static void FillGroupRandom(PoolKind kind)
     {
-        List<WeaponDef> pool = WeaponCatalog.OfKind(kind);
+        List<WeaponDef> pool = Available(kind);
 
         // Fisher-Yates auf einer Kopie: zieht ohne Zuruecklegen und ohne
         // die Katalogreihenfolge anzufassen.
