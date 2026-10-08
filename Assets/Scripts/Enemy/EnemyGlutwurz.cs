@@ -23,6 +23,14 @@ using UnityEngine;
 ///     hat, glimmt danach der Boden - ein paar Glutnester entlang der letzten
 ///     Linie, die kurz darauf aufplatzen.
 ///
+///   Feuerkreis - egal in welcher Phase
+///     Ist er gut 2 Sekunden nicht mehr im Bild (der Spieler laeuft weg),
+///     springt er neben den Spieler, bruellt und zieht ein Oval aus Feuer um
+///     beide (<see cref="FireArena"/>, 1.5 Kamerabilder breit und hoch). Der
+///     Sprung selbst macht keinen Schaden. Das Feuer steht, bis er tot ist -
+///     ein zweites Mal weglaufen geht nicht. Die Uhr laeuft erst, wenn man ihn
+///     einmal gesehen hat (er kommt von ausserhalb des Bildes herein).
+///
 /// Drei Sachen sind Absicht (dieselben wie beim Keks-Koenig):
 ///
 ///   1. Der Aim-Lock (<see cref="AimLock"/>) liegt VOR dem Feuer. Die Bahn
@@ -104,6 +112,28 @@ public class EnemyGlutwurz : MonoBehaviour
     // --- Phasenwechsel
     private const float PhaseTwoRoar = 1.3f;
 
+    // --- Feuerkreis
+    /// <summary>So lange darf er ausser Sicht sein, dann springt er.</summary>
+    private const float LeapAfterOffscreen = 2f;
+
+    /// <summary>Hat man ihn nie gesehen (Flucht ab Ankunft), zaehlt die Uhr ab dann trotzdem.</summary>
+    private const float LeapUnseenAfter = 12f;
+
+    /// <summary>Wie weit er aus dem Bild sein muss - halb drin zaehlt als gesehen.</summary>
+    private const float OffscreenMargin = 1f;
+
+    private const float LeapCrouch = 0.3f;
+    private const float LeapTime = 0.9f;
+    private const float LeapHeight = 3f;
+
+    /// <summary>So weit neben dem Spieler landet er - weit genug, dass er ihn nicht beruehrt.</summary>
+    private const float LeapSide = 3f;
+
+    private const float LeapRoar = 1.1f;
+
+    /// <summary>Das Oval ist so viele Kamerabilder breit und hoch.</summary>
+    private const float ArenaScreens = 1.5f;
+
     private const float PlayerRadius = 0.45f;
 
     /// <summary>Maulmitte ueber dem Pivot (Fuesse) - gemessen von Tools/baumboss.py.</summary>
@@ -144,7 +174,26 @@ public class EnemyGlutwurz : MonoBehaviour
 
     private readonly List<BossTelegraphMarker> live = new List<BossTelegraphMarker>();
 
+    private FireArena arena;
+    private bool seen;
+    private float alive;
+    private float offscreen;
+    private bool leaping;
+    private bool leapRequested;
+
     public bool IsPhaseTwo => phaseTwo;
+
+    /// <summary>Steht der Feuerkreis schon?</summary>
+    public bool HasArena => arena != null;
+
+    /// <summary>
+    /// Nur fuer die Test-Szene: springt beim naechsten Halt zwischen zwei
+    /// Attacken, auch wenn er gerade im Bild steht. Ein alter Kreis geht dabei aus.
+    /// </summary>
+    public void RequestLeap()
+    {
+        leapRequested = true;
+    }
 
     // ------------------------------------------------------------------ Start
 
@@ -174,10 +223,15 @@ public class EnemyGlutwurz : MonoBehaviour
         }
         live.Clear();
         if (beam != null) beam.gameObject.SetActive(false);
+
+        if (arena != null) arena.Extinguish();
+        arena = null;
     }
 
     private void Update()
     {
+        WatchView();
+
         if (clip == null || clip.Length == 0) return;
 
         clipTime += Time.deltaTime;
@@ -194,6 +248,12 @@ public class EnemyGlutwurz : MonoBehaviour
 
         while (true)
         {
+            if (ShouldLeap)
+            {
+                yield return Leap();
+                continue;
+            }
+
             if (!phaseTwo && enemy.HealthFraction <= PhaseTwoAt)
             {
                 yield return EnterPhaseTwo();
@@ -217,23 +277,168 @@ public class EnemyGlutwurz : MonoBehaviour
 
         // Bruellen ohne Feuer: Maul auf, die Zungen schlagen schon raus, und
         // das Holz glimmt ab jetzt nach. Kein Angriff - nur die Ansage.
-        // Wie beim Feuer: er bleibt in der Ansicht, in der er gerade steht
+        yield return Roar(PhaseTwoRoar, RageColor);
+    }
+
+    /// <summary>
+    /// Maul auf, bruellen, Maul zu. Wie beim Feuer bleibt er in der Ansicht,
+    /// in der er gerade steht. Mit <paramref name="tint"/> faerbt er sich dabei
+    /// dauerhaft um.
+    /// </summary>
+    private IEnumerator Roar(float seconds, Color? tint = null)
+    {
         Sprite[] open = facingBack ? Pick(roarBack, roar) : roar;
         Sprite[] loop = facingBack ? Pick(roarLoopBack, roarLoop) : roarLoop;
+        Color from = baseColor;
         Play(open, Fps, false);
         float t = 0f;
-        while (t < PhaseTwoRoar)
+        while (t < seconds)
         {
             t += Time.deltaTime;
             rb.linearVelocity = Vector2.zero;
             if (t > open.Length / Fps && clip != loop) Play(loop, Fps, true);
-            sprite.color = Color.Lerp(baseColor, RageColor, t / PhaseTwoRoar);
+            if (tint.HasValue) sprite.color = Color.Lerp(from, tint.Value, t / seconds);
             yield return null;
         }
-        baseColor = RageColor;
+        if (tint.HasValue) baseColor = tint.Value;
 
         Play(open, Fps, false, true);
         yield return Hold(open.Length / Fps);
+    }
+
+    // ------------------------------------------------------------ Feuerkreis
+
+    private bool ShouldLeap =>
+        !leaping && PlayerAlive && (leapRequested || (arena == null && offscreen >= LeapAfterOffscreen));
+
+    /// <summary>
+    /// Zaehlt mit, wie lange er ausser Sicht ist. Erst ab dem Moment, in dem
+    /// man ihn einmal gesehen hat - er kommt ja von ausserhalb des Bildes.
+    /// </summary>
+    private void WatchView()
+    {
+        alive += Time.deltaTime;
+        if (arena != null || leaping) return;
+
+        if (OnScreen())
+        {
+            seen = true;
+            offscreen = 0f;
+        }
+        else if (seen || alive >= LeapUnseenAfter)
+        {
+            offscreen += Time.deltaTime;
+        }
+    }
+
+    private bool OnScreen()
+    {
+        if (!ViewBounds.TryGetWorldRect(out Rect view)) return true;
+
+        // Gemessen an der Koerpermitte, nicht an den Fuessen
+        Vector2 body = (Vector2)transform.position + Vector2.up * 1.25f * transform.lossyScale.y;
+        view.xMin -= OffscreenMargin;
+        view.yMin -= OffscreenMargin;
+        view.xMax += OffscreenMargin;
+        view.yMax += OffscreenMargin;
+        return view.Contains(body);
+    }
+
+    /// <summary>
+    /// In die Knie, Sprung neben den Spieler (er zielt im Flug nach, landet
+    /// also wirklich daneben), Landung, Bruellen - und der Feuerkreis zieht
+    /// sich um beide. Waehrend des Flugs ist er nicht anfassbar: der Sprung
+    /// macht keinen Schaden.
+    /// </summary>
+    private IEnumerator Leap()
+    {
+        leaping = true;
+        leapRequested = false;
+        if (arena != null) arena.Extinguish();
+        arena = null;
+
+        Stand();
+        Vector3 scale = transform.localScale;
+
+        // In die Knie
+        Play(Walk(facingBack), Fps * 0.3f, true);
+        float t = 0f;
+        while (t < LeapCrouch)
+        {
+            t += Time.deltaTime;
+            rb.linearVelocity = Vector2.zero;
+            float squash = Mathf.Sin(Mathf.Clamp01(t / LeapCrouch) * Mathf.PI * 0.5f) * 0.18f;
+            transform.localScale = new Vector3(scale.x * (1f + squash * 0.5f), scale.y * (1f - squash), scale.z);
+            yield return null;
+        }
+
+        // Landeseite: die, von der er kommt - so springt er nicht ueber den Spieler hinweg
+        Vector2 from = rb.position;
+        float side = from.x >= PlayerPos.x ? 1f : -1f;
+        float height = LeapHeight + Vector2.Distance(from, PlayerPos) * 0.08f;
+
+        rb.linearVelocity = Vector2.zero;
+        rb.simulated = false;
+        Play(Walk(false), 0.01f, false);
+
+        t = 0f;
+        Vector2 to = from;
+        while (t < LeapTime)
+        {
+            t += Time.deltaTime;
+            float k = Mathf.Clamp01(t / LeapTime);
+            if (PlayerAlive) to = PlayerPos + new Vector2(side * LeapSide, 0f);
+
+            Vector2 ground = Vector2.Lerp(from, to, k);
+            transform.position = ground + Vector2.up * (height * 4f * k * (1f - k));
+            float stretch = Mathf.Sin(k * Mathf.PI) * 0.12f;
+            transform.localScale = new Vector3(scale.x * (1f - stretch * 0.5f), scale.y * (1f + stretch), scale.z);
+            yield return null;
+        }
+
+        // Landung
+        transform.position = to;
+        rb.position = to;
+        rb.simulated = true;
+        rb.linearVelocity = Vector2.zero;
+        facingBack = false;
+
+        t = 0f;
+        while (t < 0.18f)
+        {
+            t += Time.deltaTime;
+            float squash = Mathf.Sin(Mathf.Clamp01(t / 0.18f) * Mathf.PI) * 0.15f;
+            transform.localScale = new Vector3(scale.x * (1f + squash * 0.5f), scale.y * (1f - squash), scale.z);
+            rb.linearVelocity = Vector2.zero;
+            yield return null;
+        }
+        transform.localScale = scale;
+
+        BuildArena(to);
+        if (SpawnDirector.Active != null)
+        {
+            SpawnDirector.Active.Say(Loc.Get("boss.glutwurz.arena", "DIE GLUTWURZ LAESST DICH NICHT ENTKOMMEN!"));
+        }
+
+        yield return Roar(LeapRoar);
+
+        offscreen = 0f;
+        leaping = false;
+    }
+
+    private void BuildArena(Vector2 landing)
+    {
+        Vector2 center = PlayerAlive ? PlayerPos : landing;
+
+        Vector2 halfAxes = new Vector2(15f, 8.4f);
+        if (ViewBounds.TryGetWorldRect(out Rect view))
+        {
+            halfAxes = new Vector2(view.width, view.height) * (ArenaScreens * 0.5f);
+        }
+
+        Sprite[] flames = beam != null ? beam.EndFrames : null;
+        // Order 0 wie der Spieler: dann sortiert das Feuer mit ihm nach der Hoehe
+        arena = FireArena.Build(center, halfAxes, landing, flames, sprite.sortingLayerName, 0);
     }
 
     private IEnumerator Walk(float seconds)
@@ -241,6 +446,9 @@ public class EnemyGlutwurz : MonoBehaviour
         float left = seconds;
         while (left > 0f)
         {
+            // Weggelaufen: das Laufen bricht ab, Brain laesst ihn springen
+            if (ShouldLeap) yield break;
+
             left -= Time.deltaTime;
 
             float speed = phaseTwo ? WalkSpeedPhase2 : WalkSpeed;

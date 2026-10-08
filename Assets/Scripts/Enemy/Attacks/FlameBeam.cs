@@ -70,6 +70,9 @@ public class FlameBeam : MonoBehaviour
     /// <summary>Halbe Dicke des brennenden Kerns in Welt-Einheiten.</summary>
     public float HalfWidth => CorePx / Ppu * Scale;
 
+    /// <summary>Die Spitze des Strahls - der Feuerkreis (<see cref="FireArena"/>) stellt sie hochkant.</summary>
+    public Sprite[] EndFrames => endFrames;
+
     /// <summary>Faehrt gerade zurueck (nach <see cref="Stop"/>).</summary>
     public bool Stopping => stopping;
 

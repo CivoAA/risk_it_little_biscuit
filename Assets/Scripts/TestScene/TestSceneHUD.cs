@@ -442,6 +442,16 @@ public class TestSceneHUD : MonoBehaviour
         SetHint("Boss auf 50 % - Phase 2 startet nach der laufenden Attacke.");
     }
 
+    /// <summary>
+    /// Laesst die Glutwurz springen und den Feuerkreis ziehen, ohne dass man
+    /// erst 2 Sekunden aus dem Bild laufen muss.
+    /// </summary>
+    private void GlutwurzLeap()
+    {
+        SetBossMenu(false);
+        if (bossSpawner != null) SetHint(bossSpawner.GlutwurzLeap());
+    }
+
     private void ToggleGodMode()
     {
         PlayerController player = PlayerController.Instance;
@@ -603,6 +613,9 @@ public class TestSceneHUD : MonoBehaviour
         Button godButton = MakeButton("Unsterblich: AUS", row5.transform, 200f, ToggleGodMode);
         godButtonLabel = godButton.GetComponentInChildren<TextMeshProUGUI>();
         MakeButton("Boss weg", row5.transform, 118f, ClearBoss);
+
+        GameObject row6 = Row(panel);
+        MakeButton("Glutwurz: Feuerkreis", row6.transform, 250f, GlutwurzLeap);
 
         defaultHint = $"[{toggleLoadoutKey}] Waffen-Menü   [ESC] Pause";
         hintText = Label(defaultHint, panel, fontSize - 8, TextAlignmentOptions.MidlineLeft);

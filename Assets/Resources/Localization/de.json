@@ -767,6 +767,7 @@
     { "key": "wave.announce.glutwurz", "value": "GLUTWURZ" },
     { "key": "boss.phase2", "value": "PHASE 2!" },
     { "key": "boss.glutwurz.phase2", "value": "DIE GLUTWURZ ENTBRENNT!" },
+    { "key": "boss.glutwurz.arena", "value": "DIE GLUTWURZ LÄSST DICH NICHT ENTKOMMEN!" },
     { "key": "boss.kekskoenig.phase2", "value": "DER KÖNIG WIRD WÜTEND!" },
 
     { "key": "ui.float.maxhp", "value": "+{0} Max HP" },

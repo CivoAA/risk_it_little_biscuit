@@ -120,6 +120,25 @@ public class TestSceneBossSpawner : MonoBehaviour
         return name + " steht. Viel Glueck.";
     }
 
+    /// <summary>
+    /// Feuerkreis der Glutwurz ausloesen, ohne erst wegzulaufen. Steht keine
+    /// Glutwurz, wird eine hingestellt - sie springt dann gleich los.
+    /// </summary>
+    public string GlutwurzLeap()
+    {
+        if (currentGlutwurz == null)
+        {
+            string spawned = Spawn(EnemyId.Glutwurz);
+            if (currentGlutwurz == null) return spawned;
+        }
+
+        bool rebuild = currentGlutwurz.HasArena;
+        currentGlutwurz.RequestLeap();
+        return rebuild
+            ? "Glutwurz springt erneut - der alte Feuerkreis geht aus."
+            : "Glutwurz springt nach der laufenden Attacke.";
+    }
+
     /// <summary>Raeumt den Boss weg. True, wenn wirklich einer dastand.</summary>
     public bool Clear()
     {
