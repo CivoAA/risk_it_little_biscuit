@@ -463,7 +463,7 @@ public static class EnemyCatalog
 
         Def(EnemyId.Eichel, "Eichel",
             health: 45f, damage: 5f, speed: 1.3f, exp: 18, pushTime: 0.2f,
-            role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/new/eichel.png", fps: 8f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Neu/Eichel.prefab");
@@ -504,7 +504,7 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Neu/Milchpanzer.prefab");
 
         Def(EnemyId.Honey, "Honey",
-            health: 450f, damage: 10f, speed: 1.4f, exp: 350, pushTime: 0f,
+            health: 450f, damage: 10f, speed: 1.4f, exp: 100, pushTime: 0f,
             role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/new/honey.png", fps: 8f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
@@ -542,16 +542,14 @@ public static class EnemyCatalog
             health: 6000f, damage: 25f, speed: 1.9f, exp: 0, pushTime: 0f,
             role: EnemyRole.Boss, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/boss/verkohlter_walk.png", fps: 12f,
-            colliderRadius: 0.85f, colliderOffset: new Vector2(0f, 1.0f), scale: 1f,
+            colliderRadius: 0.85f, colliderOffset: new Vector2(0f, 1f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Boss/Verkohlter.prefab");
 
-        // Der Tod der Demo: unverwundbar, die Explosion toetet immer
-        // (PlayerController.Execute). Weil der Boss schon liegt, ist das ein Sieg.
         Def(EnemyId.VerkohlterTod, "Der Verkohlte (Tod)",
             health: 300000f, damage: 101f, speed: 3.2f, exp: 0, pushTime: 0f,
             role: EnemyRole.DeathBoss, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/boss/verkohlter_walk.png", fps: 12f,
-            colliderRadius: 0.85f, colliderOffset: new Vector2(0f, 1.0f), scale: 1f,
+            colliderRadius: 0.85f, colliderOffset: new Vector2(0f, 1f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Boss/VerkohlterTod.prefab");
 
         // ---------------------------------------------------------- Archiv

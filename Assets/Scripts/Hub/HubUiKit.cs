@@ -76,13 +76,6 @@ public static class HubUiKit
     /// </summary>
     public static void EnsureEventSystem()
     {
-        if (EventSystem.current != null) return;
-
-        EventSystem existing = Object.FindAnyObjectByType<EventSystem>(FindObjectsInactive.Include);
-        if (existing != null) { existing.gameObject.SetActive(true); return; }
-
-        var go = new GameObject("EventSystem (Hub)");
-        go.AddComponent<EventSystem>();
-        go.AddComponent<StandaloneInputModule>();
+        EventSystemGuard.Ensure();
     }
 }

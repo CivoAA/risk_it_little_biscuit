@@ -1371,8 +1371,6 @@ public class WorkbenchPanel : MonoBehaviour
 
     private static void EnsureEventSystem()
     {
-        if (EventSystem.current != null) return;
-        GameObject es = new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
-        DontDestroyOnLoad(es);
+        EventSystemGuard.Ensure();
     }
 }

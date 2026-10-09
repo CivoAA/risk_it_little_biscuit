@@ -714,23 +714,7 @@ public class TestSceneHUD : MonoBehaviour
 
     private static void EnsureEventSystem()
     {
-        if (UnityEngine.EventSystems.EventSystem.current != null)
-        {
-            return;
-        }
-
-        UnityEngine.EventSystems.EventSystem existing =
-            FindFirstObjectByType<UnityEngine.EventSystems.EventSystem>(FindObjectsInactive.Include);
-
-        if (existing != null)
-        {
-            existing.gameObject.SetActive(true);
-            return;
-        }
-
-        GameObject go = new GameObject("EventSystem (Test)");
-        go.AddComponent<UnityEngine.EventSystems.EventSystem>();
-        go.AddComponent<UnityEngine.EventSystems.StandaloneInputModule>();
+        EventSystemGuard.Ensure();
     }
 
     // ------------------------------------------------------------------

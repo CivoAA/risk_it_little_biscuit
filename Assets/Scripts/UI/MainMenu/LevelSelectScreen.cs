@@ -32,8 +32,7 @@ public class LevelSelectScreen : MonoBehaviour
         scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand;
 
         gameObject.AddComponent<GraphicRaycaster>();
-        if (EventSystem.current == null)
-            new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
+        EventSystemGuard.Ensure();
 
         Image bg = PixelUI.Panel("Background", transform, Vector2.zero, Vector2.zero, PixelUI.PanelFill);
         RectTransform br = bg.rectTransform;

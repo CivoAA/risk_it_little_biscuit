@@ -3274,6 +3274,8 @@ MonoBehaviour:
     prefab: {fileID: 7233771346681985496, guid: 135affd1445d8bf4bad97d5374b6c42e, type: 3}
   - id: 33
     prefab: {fileID: 310728532540033225, guid: 55b192980ab8360428cb7a1ec018edea, type: 3}
+  - id: 29
+    prefab: {fileID: 9041181917556633870, guid: e975c9baac98ff842a681ea8898293ca, type: 3}
   slimeVariants:
   - {fileID: 606865734669720050, guid: add6d643a19561648bbc903ec25242f6, type: 3}
   - {fileID: 514329318404290448, guid: d736393565fd85b42be26fb5c2b12e64, type: 3}
@@ -32025,7 +32027,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1972127194
 MonoBehaviour:
   m_ObjectHideFlags: 0
