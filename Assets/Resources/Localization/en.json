@@ -1153,6 +1153,15 @@
     { "key": "weapon.royal_splat.lvl2", "value": "The glob bounces on twice" },
     { "key": "weapon.royal_splat.lvl3", "value": "Sticky puddle: where it lands last, enemies get stuck" },
     { "key": "weapon.royal_splat.lvl4", "value": "Bounces three times, bigger splat" },
-    { "key": "weapon.royal_splat.lvl5", "value": "Damage +6, at the end it bursts into three mini globs" }
+    { "key": "weapon.royal_splat.lvl5", "value": "Damage +6, at the end it bursts into three mini globs" },
+
+    { "key": "weapon.mochi_melody.name", "value": "Mochi Melody" },
+    { "key": "weapon.mochi_melody.desc", "value": "Mochi sings on the beat: on beats one to three a note flies off and chases an enemy, on four a colorful chord ring bursts around her, shoving everyone back and slowing them. Every note that hits makes the chord louder." },
+    { "key": "weapon.mochi_melody.lvl0", "value": "Mochi sings: three notes per bar chase enemies, on four a chord ring bursts" },
+    { "key": "weapon.mochi_melody.lvl1", "value": "Damage +1, the chord slows for longer" },
+    { "key": "weapon.mochi_melody.lvl2", "value": "Two notes per beat, faster tempo" },
+    { "key": "weapon.mochi_melody.lvl3", "value": "Note chain: every note jumps on to a second enemy after hitting" },
+    { "key": "weapon.mochi_melody.lvl4", "value": "Damage +1, faster tempo, bigger chord ring" },
+    { "key": "weapon.mochi_melody.lvl5", "value": "Grand finale: three notes per beat, every fourth bar ends in a shower of notes" }
   ]
 }

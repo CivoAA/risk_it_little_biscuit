@@ -155,6 +155,7 @@ public static class WeaponCatalog
     public static readonly WeaponDef MochiStrand   = Def("mochi_strand", "Mochi Strand", PoolKind.Weapon);
     public static readonly WeaponDef FoxFire       = Def("foxfire", "Fox Fire", PoolKind.Weapon);
     public static readonly WeaponDef RoyalSplat    = Def("royal_splat", "Royal Splat", PoolKind.Weapon);
+    public static readonly WeaponDef MochiMelody   = Def("mochi_melody", "Mochi Melody", PoolKind.Weapon);
 
     // ==================================================================
     //  Buffs

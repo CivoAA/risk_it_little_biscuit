@@ -13,7 +13,7 @@ using UnityEngine;
 ///               Test-Szene, dort ueber den TestSceneBossSpawner.
 ///   F7          Schoko-Salve geben bzw. eine Stufe hoeher
 ///   F8          Milch-Tunker geben bzw. eine Stufe hoeher
-///   F6          Mochi-Faden geben bzw. eine Stufe hoeher
+///   F6          Mochi-Melodie geben bzw. eine Stufe hoeher
 ///   F5          Fuchsfeuer geben bzw. eine Stufe hoeher
 ///   F4          Koenigsplumps geben bzw. eine Stufe hoeher
 ///   Shift + F4-F8  nur noch diese Waffe: alle anderen Waffen und Evos weg,
@@ -33,7 +33,7 @@ public class RunDebugKeys : MonoBehaviour
     private const KeyCode SpawnCharredKey = KeyCode.F10;
     private const KeyCode ChocoChipsKey = KeyCode.F7;
     private const KeyCode MilkDunkKey = KeyCode.F8;
-    private const KeyCode MochiStrandKey = KeyCode.F6;
+    private const KeyCode MochiMelodyKey = KeyCode.F6;
     private const KeyCode FoxFireKey = KeyCode.F5;
     private const KeyCode RoyalSplatKey = KeyCode.F4;
     private const float CharredHealth = 10f;
@@ -66,9 +66,9 @@ public class RunDebugKeys : MonoBehaviour
             return;
         }
 
-        if (Input.GetKeyDown(MochiStrandKey))
+        if (Input.GetKeyDown(MochiMelodyKey))
         {
-            GiveWeapon<MochiStrand>("Mochi-Faden");
+            GiveWeapon<MochiMelody>("Mochi-Melodie");
             return;
         }
 

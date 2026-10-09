@@ -987,8 +987,10 @@ public class PlayerController : MonoBehaviour
             "choco_chips",
             "milk_dunk",
             "shurikookie",
-            // Mochi-Faden: Mochis Startwaffe, fuer alle anderen unter 1b gesperrt.
-            "mochi_strand",
+            // Mochi-Melodie: Mochis Startwaffe, fuer alle anderen unter 1b gesperrt.
+            // (Der Mochi-Faden "mochi_strand" war es bis 10.10.2026 - ohne Eintrag
+            // hier und ohne Shop-Eintrag bekommt ihn niemand mehr.)
+            "mochi_melody",
             // Fuchsfeuer: Inaris Startwaffe, ebenso exklusiv.
             "foxfire",
             // Koenigsplumps: Startwaffe des Schleimkoenigs, ebenso exklusiv.

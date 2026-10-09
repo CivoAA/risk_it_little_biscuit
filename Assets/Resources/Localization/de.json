@@ -1153,6 +1153,15 @@
     { "key": "weapon.royal_splat.lvl2", "value": "Der Klops hüpft zweimal weiter" },
     { "key": "weapon.royal_splat.lvl3", "value": "Klebrige Pfütze: Wo er zuletzt landet, bleiben Gegner kleben" },
     { "key": "weapon.royal_splat.lvl4", "value": "Hüpft dreimal weiter, größerer Platscher" },
-    { "key": "weapon.royal_splat.lvl5", "value": "Schaden +6, zum Schluss zerplatzt er in drei Mini-Klopse" }
+    { "key": "weapon.royal_splat.lvl5", "value": "Schaden +6, zum Schluss zerplatzt er in drei Mini-Klopse" },
+
+    { "key": "weapon.mochi_melody.name", "value": "Mochi-Melodie" },
+    { "key": "weapon.mochi_melody.desc", "value": "Mochi singt im Takt: Auf den Schlägen eins bis drei fliegt je eine Note los und jagt einen Gegner, auf der Vier platzt ein bunter Akkord-Ring um sie herum, der alle wegschubst und bremst. Jede Note, die trifft, macht den Akkord lauter." },
+    { "key": "weapon.mochi_melody.lvl0", "value": "Mochi singt: drei Noten pro Takt jagen Gegner, auf der Vier platzt ein Akkord-Ring" },
+    { "key": "weapon.mochi_melody.lvl1", "value": "Schaden +1, der Akkord bremst länger" },
+    { "key": "weapon.mochi_melody.lvl2", "value": "Zwei Noten pro Schlag, schnelleres Tempo" },
+    { "key": "weapon.mochi_melody.lvl3", "value": "Notenkette: Jede Note springt nach dem Treffer zu einem zweiten Gegner" },
+    { "key": "weapon.mochi_melody.lvl4", "value": "Schaden +1, schnelleres Tempo, größerer Akkord-Ring" },
+    { "key": "weapon.mochi_melody.lvl5", "value": "Großes Finale: drei Noten pro Schlag, jeder vierte Takt endet mit einem Notenregen" }
   ]
 }

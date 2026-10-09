@@ -30,7 +30,7 @@ using UnityEngine;
 public static class Characters
 {
     /// <summary>Startwaffe je Charakter - Index in PlayerController.activeWeapon.</summary>
-    private static readonly int[] StartWeaponByskin = { 20, 1, 11, 19, 18, 22, 23, 24 };
+    private static readonly int[] StartWeaponByskin = { 20, 1, 11, 19, 18, 25, 23, 24 };
 
     /// <summary>
     /// Dieselbe Startwaffe noch einmal, diesmal als <c>Weapon.weaponID</c>.
@@ -51,7 +51,7 @@ public static class Characters
         "blade_swarm",   // 2 - Onigiri
         "salad_fan",     // 3 - Toast
         "sword_slash",   // 4 - Zwiebelritter
-        "mochi_strand",  // 5 - Mochi (Mochi-Faden; vorher vorlaeufig "shurikookie")
+        "mochi_melody",  // 5 - Mochi (Mochi-Melodie seit 10.10.2026; davor Mochi-Faden "mochi_strand")
         "foxfire",       // 6 - Inari (Fuchsfeuer; vorher vorlaeufig "shurikookie")
         "royal_splat",   // 7 - Schleimkoenig (Koenigsplumps)
     };
@@ -69,7 +69,7 @@ public static class Characters
         "",
         "",
         "",
-        "mochi_strand",  // 5 - Mochi
+        "mochi_melody",  // 5 - Mochi
         "foxfire",       // 6 - Inari
         "royal_splat",   // 7 - Schleimkoenig
     };

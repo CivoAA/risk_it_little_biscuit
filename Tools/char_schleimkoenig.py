@@ -158,8 +158,13 @@ ORB_KEY = {'l': 'lf', 'L': 'lfd', 'o': 'vo', 'V': 'v1', 'v': 'v2', 'w': 'v0',
 # Posen: rx, ry, lift, Kronenversatz (+ = tiefer), Zepter-Neigung (px oben),
 # Haende hoch (px), Augen ('o' offen, '-' zu, 'x' gekniffen), Blaeschen-Phase,
 # Spritzer-Phase (0 keiner, 1 frisch, 2 weiter weg), Funkeln (None/0/1)
+# Koerper etwas groesser als die Posen unten notiert (10.10.2026: "ein kleines
+# bisschen groesser") - Gesicht, Krone und Zepter bleiben gleich gross.
+SCALE = 1.1
+
+
 def pose(rx, ry, lift=0, crown=0, tilt=0, hands=0, eyes='o', bub=0, drop=0, spark=None):
-    return dict(rx=rx, ry=ry, lift=lift, crown=crown, tilt=tilt, hands=hands,
+    return dict(rx=rx * SCALE, ry=ry * SCALE, lift=lift, crown=crown, tilt=tilt, hands=hands,
                 eyes=eyes, bub=bub, drop=drop, spark=spark)
 
 
@@ -375,6 +380,9 @@ def scepter(img, hand, tilt, side):
     """Goldstab durch die Hand, Weintraube oben. Wird VOR dem Koerper gemalt -
     die Hand liegt dann ueber dem Stab und haelt ihn."""
     hxp, hyp = hand
+    # gequetscht ragt die Hand weit raus - der Stab bleibt drinnen, sonst
+    # stoesst die Traube an den Zellrand (die Hand liegt trotzdem darueber)
+    hxp = CX + max(-10.5, min(10.5, hxp - CX))
     bx, by = int(round(hxp - 0.5)), int(round(hyp)) + 4
     tx, ty = bx + tilt * side, int(round(hyp)) - 6
     shaft = line_px(bx, by, tx, ty)
@@ -395,6 +403,7 @@ def drops(img, bottom, rx, phase):
     for s in (-1, 1):
         d = rx + (2 if phase == 1 else 4)
         x = int(round(CX + s * d)) - (1 if s < 0 else 0)
+        x = max(2, min(F - 3, x))         # Spritzer nie am Zellrand abschneiden
         y = bottom - (1 if phase == 1 else 3)
         put(img, x, y, 's1')
         put(img, x, y + 1, 'ol')

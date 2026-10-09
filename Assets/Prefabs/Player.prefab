@@ -2125,6 +2125,7 @@ MonoBehaviour:
   - {fileID: 723500250103365740}
   - {fileID: 7014266575022002265}
   - {fileID: 4266359328006293607}
+  - {fileID: 1153859984778591767}
   activeBuffs:
   - {fileID: 1329916437877316911}
   - {fileID: 3253892304407363630}
@@ -3453,6 +3454,7 @@ Transform:
   - {fileID: 4051431265336526000}
   - {fileID: 988683467715402007}
   - {fileID: 1808685469523212151}
+  - {fileID: 4482878347644214275}
   m_Father: {fileID: 4991830239493606234}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6430632289492379781
@@ -10598,3 +10600,58 @@ MonoBehaviour:
   posssibleEvo: 0
   hasBeenRemoved: 0
   throwHeight: 0.75
+--- !u!1 &6728190237814075013
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4482878347644214275}
+  - component: {fileID: 1153859984778591767}
+  m_Layer: 0
+  m_Name: Mochi Melody
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4482878347644214275
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6728190237814075013}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3466192261950400575}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1153859984778591767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6728190237814075013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 093acc6bcdf142c59b87c3786cb92c78, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::MochiMelody
+  weaponID: mochi_melody
+  weaponLevel: -1
+  maxweaponLevel: 5
+  stats: []
+  weaponImage: {fileID: 3455439064490797819, guid: 644ce2f35a0e48acbaaea0978b9501ab, type: 3}
+  weaponIcon: {fileID: 3455439064490797819, guid: 644ce2f35a0e48acbaaea0978b9501ab, type: 3}
+  weaponIconEvo: {fileID: 0}
+  posssibleEvo: 0
+  hasBeenRemoved: 0
+  originOffset: {x: 0, y: 0.45}
+  singOffset: {x: 0, y: 0.95}
