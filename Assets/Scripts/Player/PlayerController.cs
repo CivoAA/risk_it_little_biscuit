@@ -986,7 +986,13 @@ public class PlayerController : MonoBehaviour
             // haengt darum nicht mehr am Shop: ohne Startwaffe kaeme ihn keiner frei.
             "choco_chips",
             "milk_dunk",
-            "shurikookie"
+            "shurikookie",
+            // Mochi-Faden: Mochis Startwaffe, fuer alle anderen unter 1b gesperrt.
+            "mochi_strand",
+            // Fuchsfeuer: Inaris Startwaffe, ebenso exklusiv.
+            "foxfire",
+            // Koenigsplumps: Startwaffe des Schleimkoenigs, ebenso exklusiv.
+            "royal_splat"
         };
 
         if (defaultUnlockedWeapons.Contains(weapon.weaponID))

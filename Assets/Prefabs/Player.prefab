@@ -2122,6 +2122,9 @@ MonoBehaviour:
   - {fileID: 2938475610293847561}
   - {fileID: 5000454638203962994}
   - {fileID: 8707970117108101809}
+  - {fileID: 723500250103365740}
+  - {fileID: 7014266575022002265}
+  - {fileID: 4266359328006293607}
   activeBuffs:
   - {fileID: 1329916437877316911}
   - {fileID: 3253892304407363630}
@@ -3447,6 +3450,9 @@ Transform:
   - {fileID: 4827361950172638495}
   - {fileID: 4827105885955503705}
   - {fileID: 2594292310069502368}
+  - {fileID: 4051431265336526000}
+  - {fileID: 988683467715402007}
+  - {fileID: 1808685469523212151}
   m_Father: {fileID: 4991830239493606234}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6430632289492379781
@@ -10430,3 +10436,165 @@ MonoBehaviour:
   posssibleEvo: 0
   hasBeenRemoved: 0
   originOffset: {x: 0, y: 0.3}
+--- !u!1 &7830253535120893234
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4051431265336526000}
+  - component: {fileID: 723500250103365740}
+  m_Layer: 0
+  m_Name: Mochi Strand
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4051431265336526000
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7830253535120893234}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3466192261950400575}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &723500250103365740
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7830253535120893234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ea29c15f08541849e28bf85aa073f4e, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::MochiStrand
+  weaponID: mochi_strand
+  weaponLevel: -1
+  maxweaponLevel: 5
+  stats: []
+  weaponImage: {fileID: 2221183367554273109, guid: 11d8f2bf8d514ed398d23bc3aadbb80b, type: 3}
+  weaponIcon: {fileID: 2221183367554273109, guid: 11d8f2bf8d514ed398d23bc3aadbb80b, type: 3}
+  weaponIconEvo: {fileID: 0}
+  posssibleEvo: 0
+  hasBeenRemoved: 0
+  originOffset: {x: 0, y: 0.4}
+--- !u!1 &927921914439290183
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 988683467715402007}
+  - component: {fileID: 7014266575022002265}
+  m_Layer: 0
+  m_Name: Fox Fire
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &988683467715402007
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 927921914439290183}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3466192261950400575}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7014266575022002265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 927921914439290183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ab9a3bac62406f9688ec36bac9915b, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::FoxFire
+  weaponID: foxfire
+  weaponLevel: -1
+  maxweaponLevel: 5
+  stats: []
+  weaponImage: {fileID: 4228068921110120819, guid: 0750c7d7a30445ed9c546433d7c66f29, type: 3}
+  weaponIcon: {fileID: 4228068921110120819, guid: 0750c7d7a30445ed9c546433d7c66f29, type: 3}
+  weaponIconEvo: {fileID: 0}
+  posssibleEvo: 0
+  hasBeenRemoved: 0
+  originOffset: {x: 0, y: 0.45}
+--- !u!1 &3034345958183835387
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1808685469523212151}
+  - component: {fileID: 4266359328006293607}
+  m_Layer: 0
+  m_Name: Royal Splat
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1808685469523212151
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3034345958183835387}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3466192261950400575}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4266359328006293607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3034345958183835387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ccb9a344f6c42729f4ea9b2e3f993d4, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::RoyalSplat
+  weaponID: royal_splat
+  weaponLevel: -1
+  maxweaponLevel: 5
+  stats: []
+  weaponImage: {fileID: 3526305591666443358, guid: 24e25b86c9ee4aeeb5b7d43004ec4de6, type: 3}
+  weaponIcon: {fileID: 3526305591666443358, guid: 24e25b86c9ee4aeeb5b7d43004ec4de6, type: 3}
+  weaponIconEvo: {fileID: 0}
+  posssibleEvo: 0
+  hasBeenRemoved: 0
+  throwHeight: 0.75

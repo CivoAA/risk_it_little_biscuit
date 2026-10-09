@@ -216,6 +216,12 @@ public class Enemy : MonoBehaviour
     public static IReadOnlyList<Enemy> Alive => alive;
 
     /// <summary>
+    /// Jeder Treffer per <see cref="TakeDamage"/>: Gegner und roher Schaden
+    /// (vor Damage-Buff und Crit). Kommt auch fuer Treffer, die ihn toeten.
+    /// </summary>
+    public static event System.Action<Enemy, float> Damaged;
+
+    /// <summary>
     /// Was dieser Gegner im Druck-Budget wiegt. Setzt der Director beim
     /// Spawnen; wer anders erzeugt wird, zaehlt als 1.
     /// </summary>
@@ -910,6 +916,10 @@ public class Enemy : MonoBehaviour
             float floor = Mathf.Min(before, Mathf.Max(1f, maxHealth * MinHealthFraction));
             if (health < floor) health = floor;
         }
+
+        // Fuer Waffen, die Treffer weiterreichen (Mochi-Faden) - roher Schaden
+        // vor Multiplikatoren, weil der Empfaenger sie selbst noch einmal anwendet.
+        Damaged?.Invoke(this, damage);
 
         if (LifeSteal.Instance != null)
         {

@@ -1,71 +1,86 @@
 # -*- coding: utf-8 -*-
-"""Erzeugt die Erfolgs-Kapsel fuer den Hub: 80x128, drei Frames (Blasen + Funkeln).
+"""Erfolgs-Kapsel fuer den Hub, Version 2: 80x128, 16 Frames als Endlosschleife.
 
 Aufruf aus dem Projektordner:
     python Tools/kapsel_erfolgsbuch.py Assets/Art/World-Objects
+    python Tools/kapsel_erfolgsbuch.py <ordner> --vorschau   # + GIF und Bogen
 
-Schreibt kapsel_erfolgsbuch.png (Frame 1), _2.png und _3.png. Die .meta-Dateien
-bleiben liegen, die GUIDs aendern sich also nicht. Braucht nur Pillow.
+Schreibt kapsel_erfolgsbuch.png (Frame 1) und kapsel_erfolgsbuch_2..16.png.
+Vorhandene .meta-Dateien bleiben liegen (GUIDs aendern sich nicht); fehlende
+legt das Skript als Single-Sprite mit Pivot (0.5, 0.35) und PPU 32 an.
+Im Hub spielt SpriteFrameLoop die Bilder ab (frameTime 0.1).
 
-Stilregeln, abgelesen an altar.png, goldstatue5.png, werkstatt.png und bib.png:
-  * Jede Farbe hier kommt aus einem bestehenden Hub-Asset - nichts Neues erfunden.
-  * Kein Dithering. Geschattet wird in flaechigen Baendern mit klarer Kante.
-  * Wenige Stufen pro Material, niedriger Kontrast, entsaettigt.
-  * Eine dunkle Aussenlinie, Glanzlichter als 1px-Linie in Creme.
+Die erste Kapsel war ein flacher Bogen. Diese hier ist als echter Koerper
+gebaut: jedes Teil ist ein Zylinder in leichter Aufsicht (Ellipsen mit
+Verhaeltnis K), schattiert ueber die Normale - Licht von links oben vorn -
+und danach hart in die Materialrampe gestuft. Kein Dithering, wie im Rest
+des Hubs; die Tiefe kommt aus Ellipsenkanten, Baendern und Glanz.
+
+Aufbau von oben nach unten:
+  Messingknauf -> Glaskuppel (Luft) -> Fluessigkeitsspiegel -> leuchtende
+  Fluessigkeit mit schwebendem Buch, Mini-Trophaeen und Blasen ->
+  Messingkragen mit Nieten -> Holztrommel mit Keks-Wappen -> Sockelplatte.
 """
-import math, os, sys
+import math, os, sys, uuid, random
 from PIL import Image
 
 W, H = 80, 128
+FRAMES = 16
+K = 0.13                      # Ellipsen-Verhaeltnis (Aufsicht)
+CX = 40.0                     # Mittelachse auf der Pixelgrenze 39|40
 
-# ------------------------------------------------- Palette (alle aus dem Hub)
-INK     = (59, 36, 51)      # 3B2433  Aussenlinie
-INK2    = (14, 19, 53)      # 0E1335  tiefster Schatten
-PLUM    = (99, 65, 69)      # 634145  weiche Schattenkante
-MAUVE   = (121, 65, 76)     # 79414C
+# ------------------------------------------------------------------ Paletten
+INK   = (59, 36, 51)          # 3B2433 Hub-Aussenlinie
+INK2  = (38, 24, 40)          # tiefster Schatten unten
 
-WD_D    = (131, 90, 80)     # 835A50
-WD      = (146, 85, 39)     # 925527
-WD_M    = (159, 90, 53)     # 9F5A35
-WD_L    = (177, 119, 62)    # B1773E
-WD_L2   = (182, 121, 72)    # B67948
+# Leuchtfluessigkeit: von Rostrot (Wand, Tiefe) bis Fast-Weiss (Kern)
+LQ = [(104, 46, 48), (140, 66, 46), (178, 98, 52), (208, 136, 62),
+      (228, 172, 82), (241, 205, 118), (250, 230, 168), (255, 248, 222)]
+# Luft in der Kuppel: kuehles Pflaume, nach unten warm angeleuchtet
+AIR = [(66, 40, 60), (84, 52, 72), (104, 64, 80), (132, 80, 82),
+       (166, 104, 82), (200, 140, 92)]
+# Messing
+BR  = [(59, 36, 51), (96, 56, 46), (138, 88, 44), (178, 128, 56),
+       (212, 172, 82), (236, 210, 128), (250, 240, 196)]
+# Holz (Hub-Toene 925527/9F5A35/B1773E, Schatten nach Pflaume verschoben)
+WD  = [(59, 36, 51), (86, 46, 52), (114, 62, 46), (146, 85, 39),
+       (164, 100, 52), (182, 124, 66), (206, 154, 92)]
+# Einband weinrot wie die Buecher im Regal (bib.png)
+BK  = [(59, 36, 51), (87, 20, 69), (124, 34, 71), (150, 45, 86),
+       (176, 74, 110), (204, 116, 140)]
+PAGE = [(176, 120, 92), (214, 170, 120), (238, 214, 166), (250, 240, 210)]
+WHITE = (255, 250, 232)
 
-GOLD_D  = (196, 147, 71)    # C49347
-GOLD    = (214, 176, 80)    # D6B050
-GOLD_L  = (217, 182, 107)   # D9B66B
-CREAM   = (230, 206, 141)   # E6CE8D
-CREAM2  = (230, 196, 147)   # E6C493
-WHITE   = (245, 237, 202)   # F5EDCA
-PEACH   = (225, 171, 116)   # E1AB74
 
-BOOK_D  = (87, 20, 69)      # 571445
-BOOK    = (124, 34, 71)     # 7C2247
-BOOK_L  = (150, 45, 86)     # 962D56
-BOOK_H  = (167, 69, 113)    # A74571
+def clamp(v, a, b):
+    return a if v < a else b if v > b else v
 
-# Leuchtkern von hell nach satt. Nur vier klar getrennte Stufen - mehr ergeben
-# konzentrische Ringe statt einer leuchtenden Roehre, und der Hub schattiert
-# ohnehin in wenigen Flaechen pro Material.
-GLOW = [CREAM, GOLD, GOLD_D, WD_L]
 
-SPARK = WHITE
+def ramp(r, v):
+    """v in 0..1 -> Farbe der Rampe r, hart gestuft."""
+    return r[clamp(int(round(v * (len(r) - 1))), 0, len(r) - 1)]
+
+
+def rstep(r, i):
+    return r[clamp(i, 0, len(r) - 1)]
 
 
 class Buf:
     def __init__(self):
         self.px = [[None] * W for _ in range(H)]
+        self.part = [[None] * W for _ in range(H)]
 
-    def set(self, x, y, c):
+    def set(self, x, y, c, part=None):
         if 0 <= x < W and 0 <= y < H:
             self.px[y][x] = c
+            if part is not None:
+                self.part[y][x] = part
 
     def get(self, x, y):
         return self.px[y][x] if 0 <= x < W and 0 <= y < H else None
 
-    def rect(self, x0, x1, y0, y1, c):
-        for y in range(y0, y1 + 1):
-            for x in range(x0, x1 + 1):
-                self.set(x, y, c)
+    def partof(self, x, y):
+        return self.part[y][x] if 0 <= x < W and 0 <= y < H else None
 
     def image(self):
         im = Image.new("RGBA", (W, H), (0, 0, 0, 0))
@@ -78,375 +93,827 @@ class Buf:
         return im
 
 
-# ------------------------------------------------------- Kapsel-Silhouette
-CX = 40.0            # Mittelachse liegt auf der Pixelgrenze 39|40
-RX = 28.0            # halbe Breite der Roehre
-DOME_CY = 36.5       # Mittelpunkt der Kuppel-Ellipse
-DOME_RY = 32.5
-GLASS_TOP = 4
-GLASS_BOT = 104      # darunter deckt der Sockel ab
+# ------------------------------------------------------------ Licht & Formen
+LX, LY, LZ = -0.55, -0.45, 0.70          # Licht von links oben vorn
+_n = math.sqrt(LX * LX + LY * LY + LZ * LZ)
+LX, LY, LZ = LX / _n, LY / _n, LZ / _n
 
 
-def in_glass(x, y):
-    px, py = x + 0.5, y + 0.5
-    if py > GLASS_BOT + 0.5 or py < GLASS_TOP:
+def lambert(nx, ny, nz):
+    return max(0.0, nx * LX + ny * LY + nz * LZ)
+
+
+def spec(nx, ny, nz, power=18):
+    # Halbvektor zwischen Licht und Blick (0,0,1)
+    hx, hy, hz = LX, LY, LZ + 1.0
+    m = math.sqrt(hx * hx + hy * hy + hz * hz)
+    return max(0.0, (nx * hx + ny * hy + nz * hz) / m) ** power
+
+
+# -------------------------------------------------------------- Geometrie
+GR = 26.0                          # Glas-Aussenradius  -> x 14..65
+CYL_TOP = 37.0                     # ab hier ist das Glas senkrecht
+DOME_RY = 27.0                     # Kuppelhoehe -> Scheitel y=10
+GLASS_BOT = 93                     # Glas steckt im Kragen (Ring oben y=95)
+SURF_Y = 42.0                      # Fluessigkeitsspiegel (Mitte der Ellipse)
+
+
+def glass_halfwidth(py):
+    if py >= CYL_TOP:
+        return GR
+    dy = (CYL_TOP - py) / DOME_RY
+    if dy >= 1.0:
+        return 0.0
+    return GR * math.sqrt(1.0 - dy * dy)
+
+
+def in_glass(px, py):
+    if py < CYL_TOP - DOME_RY:
         return False
-    if py >= DOME_CY:
-        return abs(px - CX) <= RX
-    dy = (DOME_CY - py) / DOME_RY
-    if dy > 1.0:
+    hw = glass_halfwidth(py)
+    if abs(px - CX) > hw:
         return False
-    return abs(px - CX) <= RX * math.sqrt(1.0 - dy * dy)
+    # unten endet das Glas an der vorderen Kante seiner Bodenellipse im Kragen
+    u = (px - CX) / GR
+    return int(py) <= GLASS_BOT + int(round(GR * K * math.sqrt(max(0.0, 1 - u * u))))
 
 
-def distance_field(mask):
-    """Chamfer-Distanz bis zum ersten Pixel ausserhalb der Maske."""
+def glass_normal(px, py):
+    """Normale der Glasaussenhaut (Zylinder bzw. Kuppel-Ellipsoid)."""
+    dx = (px - CX) / GR
+    if py >= CYL_TOP:
+        nx = clamp(dx, -1, 1)
+        return nx, 0.0, math.sqrt(max(0.0, 1 - nx * nx))
+    dy = (py - CYL_TOP) / DOME_RY
+    nz2 = 1 - dx * dx - dy * dy
+    nz = math.sqrt(max(0.0, nz2))
+    nx, ny = dx, dy * (GR / DOME_RY)          # Ellipsoid-Gradient
+    m = math.sqrt(nx * nx + ny * ny + nz * nz) or 1
+    return nx / m, ny / m, nz / m
+
+
+GMASK = [[in_glass(x + 0.5, y + 0.5) for x in range(W)] for y in range(H)]
+
+
+def dist_field(mask):
     INF = 9999.0
     d = [[0.0 if not mask[y][x] else INF for x in range(W)] for y in range(H)]
     for y in range(H):
         for x in range(W):
-            if d[y][x] == 0.0:
-                continue
-            best = d[y][x]
-            for dx, dy, w in ((-1, 0, 1.0), (0, -1, 1.0), (-1, -1, 1.41421), (1, -1, 1.41421)):
-                nx, ny = x + dx, y + dy
-                v = (d[ny][nx] if 0 <= nx < W and 0 <= ny < H else 0.0) + w
-                if v < best:
-                    best = v
-            d[y][x] = best
+            if d[y][x]:
+                for dx, dy, w in ((-1, 0, 1), (0, -1, 1), (-1, -1, 1.414), (1, -1, 1.414)):
+                    nx, ny = x + dx, y + dy
+                    v = (d[ny][nx] if 0 <= nx < W and 0 <= ny < H else 0) + w
+                    d[y][x] = min(d[y][x], v)
     for y in range(H - 1, -1, -1):
         for x in range(W - 1, -1, -1):
-            best = d[y][x]
-            for dx, dy, w in ((1, 0, 1.0), (0, 1, 1.0), (1, 1, 1.41421), (-1, 1, 1.41421)):
-                nx, ny = x + dx, y + dy
-                v = (d[ny][nx] if 0 <= nx < W and 0 <= ny < H else 0.0) + w
-                if v < best:
-                    best = v
-            d[y][x] = best
+            if d[y][x]:
+                for dx, dy, w in ((1, 0, 1), (0, 1, 1), (1, 1, 1.414), (-1, 1, 1.414)):
+                    nx, ny = x + dx, y + dy
+                    v = (d[ny][nx] if 0 <= nx < W and 0 <= ny < H else 0) + w
+                    d[y][x] = min(d[y][x], v)
     return d
 
 
-MASK = [[in_glass(x, y) for x in range(W)] for y in range(H)]
-DIST = distance_field(MASK)
+GDIST = dist_field(GMASK)
 
 
-def is_rim(x, y):
-    """Silhouettenpixel mit freiem 4er-Nachbarn - so bleibt die Linie geschlossen."""
-    if not MASK[y][x]:
-        return False
-    for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-        nx, ny = x + dx, y + dy
-        if not (0 <= nx < W and 0 <= ny < H) or not MASK[ny][nx]:
-            return True
-    return False
+def surf_front(px):
+    """y der Vorderkante des Fluessigkeitsspiegels."""
+    u = (px - CX) / (GR - 1.5)
+    return SURF_Y + (GR - 1.5) * K * math.sqrt(max(0.0, 1 - u * u))
 
 
-def cavity(x, y):
-    return 0 <= x < W and 0 <= y < H and MASK[y][x] and DIST[y][x] > 4.4
+def surf_back(px):
+    u = (px - CX) / (GR - 1.5)
+    return SURF_Y - (GR - 1.5) * K * math.sqrt(max(0.0, 1 - u * u))
 
 
-def glow_step(x, y):
-    """Welche Stufe der Leuchtrampe gehoert hierhin? Die Helligkeit haengt vor
-    allem am Abstand zur Glaswand und an der Hoehe - so entstehen Baender, die
-    der Roehre folgen, statt konzentrischer Ringe. Bewusst hart gestuft: der
-    Hub schattiert in Flaechen, nicht in Verlaeufen."""
-    px, py = x + 0.5, y + 0.5
-    wall = max(0.0, min(1.0, (17.0 - DIST[y][x]) / 13.0))      # Rand wird satt
-    tief = max(0.0, min(1.0, (py - 60.0) / 42.0))              # unten wird satt
-    dx, dy = (px - CX) / 20.0, (py - 50.0) / 24.0
-    kern = max(0.0, 1.0 - math.sqrt(dx * dx + dy * dy))        # Licht um das Buch
-    seite = (px - CX) / 28.0                                   # Licht von links oben
-    t = 0.35 + wall * 3.0 + tief * 1.3 + seite * 0.5 - kern * 1.4
-    return max(0, min(len(GLOW) - 1, int(round(t))))
+# ---------------------------------------------------------------- Animation
+def wave(frame, period=FRAMES, phase=0.0):
+    return math.sin(2 * math.pi * (frame / period + phase))
 
 
-# ------------------------------------------------------------------- Glas
-def draw_glass(buf):
+def book_bob(frame):
+    # -1, 0 oder +1 px, weich: lange auf den Endpunkten verweilen
+    v = wave(frame, phase=0.0)
+    return -1 if v > 0.45 else (1 if v < -0.45 else 0)
+
+
+BOOK_W, BOOK_H = 21, 27
+BOOK_X0 = 29                       # linke Kante des Deckels (inkl. Ruecken)
+BOOK_Y0 = 56
+DEPTH = 2                          # sichtbare Buchdicke (schraeg nach rechts oben)
+
+
+def book_rect(frame):
+    y0 = BOOK_Y0 + book_bob(frame)
+    return BOOK_X0, y0, BOOK_X0 + BOOK_W - 1, y0 + BOOK_H - 1
+
+
+def book_center(frame):
+    x0, y0, x1, y1 = book_rect(frame)
+    return (x0 + x1 + 1) / 2 + 1, (y0 + y1 + 1) / 2
+
+
+# ------------------------------------------------------------------ Glas
+def liquid_value(px, py, frame):
+    bx, by = book_center(frame)
+    u = (px - CX) / GR
+    thick = (1 - u * u) ** 0.7                       # Mitte: viel Leuchtvolumen
+    dx, dy = (px - bx) / 17.0, (py - by) / 21.0
+    r2 = dx * dx + dy * dy
+    glow = 1.0 if r2 < 0.55 else math.exp(-(r2 - 0.55) * 1.6)
+    pulse = 0.04 * wave(frame, phase=0.25)            # sanftes Atmen
+    deep = max(0.0, (py - 82.0) / 16.0) * 0.12       # zum Boden hin satter
+    side = -u * 0.07                                 # links etwas heller
+    return -0.10 + 0.56 * thick + (0.55 + pulse) * glow - deep + side
+
+
+def air_value(px, py):
+    u = (px - CX) / GR
+    near = clamp(1.0 - (SURF_Y - py) / 14.0, 0, 1)   # Schein vom Spiegel
+    return 0.08 + 0.50 * near ** 3 + 0.22 * (1 - u * u) - 0.10 * u
+
+
+def draw_glass(buf, frame):
     for y in range(H):
         for x in range(W):
-            if not MASK[y][x]:
+            if not GMASK[y][x]:
                 continue
-            if is_rim(x, y):
-                buf.set(x, y, INK)
-                continue
-            d = DIST[y][x]
-            if d <= 2.05:
-                buf.set(x, y, WHITE)          # Lichtkante der Glaswand
-            elif d <= 3.05:
-                buf.set(x, y, CREAM)
-            elif d <= 4.05:
-                buf.set(x, y, GOLD_D)         # Innenkante, trennt Wand vom Kern
+            px, py = x + 0.5, y + 0.5
+            d = GDIST[y][x]
+            in_liquid = py > surf_back(px) if py < SURF_Y + 4 else True
+            on_surface = surf_back(px) < py <= surf_front(px)
+
+            if on_surface:
+                # Spiegel in Aufsicht: hell, nach hinten etwas dunkler
+                t = (py - surf_back(px)) / max(0.5, surf_front(px) - surf_back(px))
+                c = rstep(LQ, 5 if t > 0.45 else 4)
+            elif in_liquid:
+                v = liquid_value(px, py, frame)
+                if py - surf_front(px) < 2.5:
+                    v -= 0.16                     # Schatten direkt unter dem Spiegel
+                c = ramp(LQ, v)
             else:
-                buf.set(x, y, GLOW[glow_step(x, y)])
+                c = ramp(AIR, air_value(px, py))
+
+            # Glaswand: innen eine dunklere Kante, auf der Schattenseite
+            # (rechts) dahinter eine helle Lichtkante - das Glas hat Dicke.
+            if d <= 2.05:
+                if in_liquid and not on_surface:
+                    c = rstep(LQ, 1 if px < CX else 0)
+                else:
+                    c = rstep(AIR, 1)
+            elif d <= 3.05 and px > CX + 6:
+                c = rstep(LQ, 6) if in_liquid and not on_surface else rstep(AIR, 4)
+            buf.set(x, y, c, "glass")
+
+    # Spiegelkanten: vorn eine helle Meniskuslinie, hinten eine dunkle Fuge
+    for x in range(W):
+        px = x + 0.5
+        if abs(px - CX) > GR - 2.5:
+            continue
+        yf = int(math.floor(surf_front(px)))
+        yb = int(math.floor(surf_back(px)))
+        if GMASK[yf][x] and GDIST[yf][x] > 2.05:
+            buf.set(x, yf, rstep(LQ, 7 if px < CX + 8 else 6))
+        if GMASK[yb][x] and GDIST[yb][x] > 2.05:
+            buf.set(x, yb, rstep(LQ, 3))
 
 
-def draw_glass_light(buf):
-    """Glanz im Glas. Die Lichter liegen auf konstantem Abstand zur Aussenkante,
-    folgen also der Form und reissen nirgends auf. Zwischen Wand und Glanz bleibt
-    ein satter Streifen stehen - sonst verschwimmt beides zu einer breiten
-    hellen Kante und die Roehre wirkt flach."""
+def glass_glints(buf, frame):
+    """Reflexe auf der Aussenhaut: folgen der Normalen, also der Form."""
     for y in range(H):
         for x in range(W):
-            if not cavity(x, y):
+            if not GMASK[y][x] or GDIST[y][x] <= 1.05:
                 continue
-            d = DIST[y][x]
-            if not (7.0 < d <= 9.0):
+            px, py = x + 0.5, y + 0.5
+            if py > GLASS_BOT - 3:
                 continue
-            inner = d > 8.0
-            left = x < CX - 8
-            if 10 <= y <= 28 and not inner:
-                buf.set(x, y, WHITE)                    # Bogen unter der Kuppel
-            elif left and 26 <= y <= 58:
-                buf.set(x, y, WHITE if not inner else CREAM)
-            elif left and y <= 72 and not inner:
-                buf.set(x, y, CREAM)
-            elif not left and 46 <= y <= 66 and not inner:
-                buf.set(x, y, GOLD_L)                   # knapper Gegenglanz rechts
+            nx, ny, nz = glass_normal(px, py)
+            sp = spec(nx, ny, nz, 30)
+            # Hauptstreifen links (Fensterreflex), mit einer Luecke
+            if py >= CYL_TOP - 2:
+                if -0.74 <= nx <= -0.56 and (py <= 67 or 80 <= py <= 91) and not (58 <= py <= 60):
+                    buf.set(x, y, WHITE if -0.70 <= nx <= -0.60 else rstep(LQ, 6))
+                elif -0.50 <= nx <= -0.46 and 48 <= py <= 66:
+                    buf.set(x, y, rstep(LQ, 6))
+                elif 0.70 <= nx <= 0.76 and 60 <= py <= 88:
+                    buf.set(x, y, rstep(LQ, 5))          # Gegenglanz rechts
+            else:
+                # Kuppel: Bogenreflex oben links + Glanzpunkt
+                dx = (px - CX) / GR
+                dy = (py - CYL_TOP) / DOME_RY
+                rr = math.sqrt(dx * dx + dy * dy)
+                ang = math.degrees(math.atan2(dy, dx))      # -180..0 oben
+                if 0.70 <= rr <= 0.86 and -168 <= ang <= -112:
+                    buf.set(x, y, WHITE if rr <= 0.80 else (226, 196, 186))
+                elif 0.56 <= rr <= 0.62 and -150 <= ang <= -128:
+                    buf.set(x, y, AIR[3])                   # zweiter, innerer Bogen
+                elif 0.80 <= rr <= 0.85 and -50 <= ang <= -22:
+                    buf.set(x, y, AIR[4])
 
-    # kurzer, schmaler Streifen weiter innen
-    for y in range(50, 76):
-        if cavity(25, y):
-            buf.set(25, y, CREAM if y < 70 else GOLD_L)
 
-
-# --------------------------------------------------------------------- Buch
-# Deutlich kleiner als vorher: 24x32 statt 35x48. Der Einband ist weinrot wie
-# die Buecher im Regal (bib.png) - Braun wuerde im Goldlicht verschwinden.
-BK_L, BK_R = 28, 51
-BK_T, BK_B = 36, 67
-SP_W = 4                      # Breite des Buchruecken
-
-# Keks-Medaillon, 9x9, von Hand gesetzt
-MEDAL = [
-    "..#####..",
-    ".#######.",
-    "#########",
-    "#########",
-    "#########",
-    "#########",
-    "#########",
-    ".#######.",
-    "..#####..",
+# ------------------------------------------------------------------ Buch
+COOKIE = [
+    "..###..",
+    ".#####.",
+    "#######",
+    "#######",
+    "#######",
+    ".#####.",
+    "..###..",
 ]
 
 
-def draw_medal(buf, ox, oy, face, shade, line, chip):
-    ins = lambda ix, iy: 0 <= ix < 9 and 0 <= iy < 9 and MEDAL[iy][ix] == "#"
-    for iy in range(9):
-        for ix in range(9):
-            if not ins(ix, iy):
-                continue
-            rand = any(not ins(ix + dx, iy + dy) for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)))
-            buf.set(ox + ix, oy + iy, line if rand else (face if (ix - 4) + (iy - 4) <= 0 else shade))
-    for ix, iy in ((3, 2), (6, 3), (2, 5), (5, 6)):
-        buf.set(ox + ix, oy + iy, chip)
-
-
-def draw_book(buf):
+def draw_book(buf, frame):
+    x0, y0, x1, y1 = book_rect(frame)
     p = buf.set
 
-    # Schatten des schwebenden Buchs im Lichtnebel
-    for x in range(BK_L + 3, BK_R - 1):
-        for dy in range(3, 6):
-            y = BK_B + dy
-            if not cavity(x, y):
+    # Leuchthof: Fluessigkeit direkt um das Buch zwei Stufen heller
+    for y in range(y0 - DEPTH - 4, y1 + 5):
+        for x in range(x0 - 4, x1 + DEPTH + 5):
+            if not (0 <= x < W and 0 <= y < H) or not GMASK[y][x] or GDIST[y][x] <= 3.05:
                 continue
-            if min(x - (BK_L + 3), (BK_R - 2) - x) < dy - 2:
-                continue
-            p(x, y, GLOW[min(len(GLOW) - 1, glow_step(x, y) + 1)])
+            ex = max(x0 - x, 0, x - (x1 + DEPTH))
+            ey = max(y0 - DEPTH - y, 0, y - y1)
+            dd = math.sqrt(ex * ex + ey * ey)
+            c = buf.get(x, y)
+            if c in LQ and dd > 0:
+                bump = 1 if dd <= 2.2 else 0
+                p(x, y, rstep(LQ, LQ.index(c) + bump))
 
-    buf.rect(BK_L, BK_R, BK_T, BK_B, BOOK_L)
+    # Seitenschnitt (Seiten) oben und rechts, schraeg nach hinten versetzt
+    for y in range(y0 - DEPTH, y1 - DEPTH + 1):
+        for x in range(x0 + DEPTH, x1 + DEPTH + 1):
+            p(x, y, PAGE[2])
+    for y in range(y0 - DEPTH, y1 - DEPTH + 1):            # rechte Seitenflaeche
+        for k in range(1, DEPTH + 1):
+            x = x1 + k
+            p(x, y, PAGE[1] if (y - y0) % 3 == 1 else PAGE[2])
+    for x in range(x0 + DEPTH, x1 + DEPTH + 1):            # obere Seitenflaeche
+        p(x, y0 - DEPTH, PAGE[3])
+        p(x, y0 - DEPTH + 1, PAGE[2] if x % 3 else PAGE[3])
+    # hinterer Deckel lugt oben rechts heraus
+    for x in range(x0 + DEPTH + 1, x1 + DEPTH + 1):
+        p(x, y0 - DEPTH - 1, BK[2])
+    for y in range(y0 - DEPTH, y1 - DEPTH):
+        p(x1 + DEPTH + 1, y, BK[1])
 
-    # Buchruecken links, mit einer Lichtkante
-    buf.rect(BK_L, BK_L + SP_W, BK_T, BK_B, BOOK_D)
-    for y in range(BK_T + 1, BK_B):
-        p(BK_L + 1, y, BOOK)
-    for band in (BK_T + 6, BK_B - 8):
-        for x in range(BK_L + 1, BK_L + SP_W + 1):
-            p(x, band, GOLD)
-
-    # Seitenschnitt: unten dick, rechts eine schmale Kante
-    buf.rect(BK_L + SP_W + 1, BK_R - 1, BK_B - 2, BK_B - 1, WHITE)
-    for x in range(BK_L + SP_W + 2, BK_R - 1):
-        p(x, BK_B - 1, CREAM2)
-    for y in range(BK_T + 2, BK_B - 2):
-        p(BK_R - 1, y, CREAM2)
-
-    # Deckel
-    buf.rect(BK_L + SP_W + 1, BK_R - 2, BK_T + 1, BK_B - 3, BOOK_L)
-    for x in range(BK_L + SP_W + 1, BK_R - 1):
-        p(x, BK_T + 1, BOOK_H)                  # Licht von oben links
-    for y in range(BK_T + 1, BK_B - 2):
-        p(BK_L + SP_W + 1, y, BOOK_H)
-    for y in range(BK_T + 2, BK_B - 2):
-        p(BK_R - 2, y, BOOK)
-    for x in range(BK_L + SP_W + 2, BK_R - 1):
-        p(x, BK_B - 3, BOOK)
-
-    draw_medal(buf, 36, 43, GOLD_L, GOLD, INK, WD_M)
-
-    # zwei gepraegte Zeilen als "Titel"
-    for y, x0, x1 in ((56, 37, 45), (59, 39, 43)):
+    # Vorderdeckel
+    for y in range(y0, y1 + 1):
         for x in range(x0, x1 + 1):
-            p(x, y, GOLD)
+            p(x, y, BK[3])
+    # Licht von links oben, Schatten unten rechts
+    for x in range(x0 + 4, x1):
+        p(x, y0 + 1, BK[4])
+    for y in range(y0 + 1, y1):
+        p(x1 - 1, y, BK[2])
+    for x in range(x0 + 4, x1):
+        p(x, y1 - 1, BK[2])
+    # Ruecken links, gerundet
+    for y in range(y0, y1 + 1):
+        p(x0, y, BK[2]); p(x0 + 1, y, BK[4]); p(x0 + 2, y, BK[3]); p(x0 + 3, y, BK[1])
+    for band in (y0 + 4, y1 - 4):
+        for x in range(x0, x0 + 3):
+            p(x, band, BR[5] if x == x0 + 1 else BR[4])
+            p(x, band + 1, BR[3])
 
-    # Aussenlinie, Ecken gerundet
-    for x in range(BK_L + 1, BK_R):
-        p(x, BK_T, INK); p(x, BK_B, INK)
-    for y in range(BK_T + 1, BK_B):
-        p(BK_L, y, INK); p(BK_R, y, INK)
-    for x, y in ((BK_L, BK_T), (BK_R, BK_T), (BK_L, BK_B), (BK_R, BK_B)):
-        buf.set(x, y, GLOW[glow_step(x, y)])
+    # Goldrahmen-Linie auf dem Deckel
+    fx0, fx1, fy0, fy1 = x0 + 6, x1 - 3, y0 + 3, y1 - 3
+    for x in range(fx0, fx1 + 1):
+        p(x, fy0, BR[4]); p(x, fy1, BR[3])
+    for y in range(fy0, fy1 + 1):
+        p(fx0, y, BR[4]); p(fx1, y, BR[3])
 
+    # Eckbeschlaege
+    for (cx, cy, sx, sy) in ((x1, y0, -1, 1), (x1, y1, -1, -1)):
+        for i in range(3):
+            for j in range(3 - i):
+                p(cx + sx * i, cy + sy * j, BR[5] if (i + j) == 0 else BR[4] if sy > 0 else BR[3])
 
-# ------------------------------------------------------------------ Sockel
-# (y0, y1, x0, x1) von oben nach unten - der Sockel liegt ueber dem Glas
-TIERS = [
-    (96, 103, 7, 72),      # Kragen, in dem die Kapsel steckt
-    (104, 107, 11, 68),    # Taille
-    (108, 117, 8, 71),     # Korpus mit Wappen
-    (118, 121, 4, 75),     # Stufe
-    (122, 127, 2, 77),     # Grundplatte
-]
-
-
-def draw_base(buf):
-    solid = [[False] * W for _ in range(H)]
-    for (y0, y1, x0, x1) in TIERS:
-        for y in range(y0, y1 + 1):
-            for x in range(x0, x1 + 1):
-                if y == y0 and (x == x0 or x == x1) and y0 in (96, 118, 122):
-                    continue                       # obere Ecken leicht brechen
-                solid[y][x] = True
-
-    for (y0, y1, x0, x1) in TIERS:
-        h = y1 - y0
-        for y in range(y0, y1 + 1):
-            for x in range(x0, x1 + 1):
-                if not solid[y][x]:
-                    continue
-                k = y - y0
-                if k == 0:
-                    c = WD_L
-                elif k == 1:
-                    c = WD_L2
-                elif k >= h:
-                    c = PLUM
-                elif k >= h - 1:
-                    c = WD
-                else:
-                    c = WD_M
-                buf.set(x, y, c)
-
-        # Zierrillen im Korpus, links und rechts vom Wappen
-        if y0 == 108:
-            for gy in (110, 114):
-                for seg in (range(12, 34), range(47, 68)):
-                    for x in seg:
-                        buf.set(x, gy, WD)
-                        buf.set(x, gy + 1, WD_L)
-
-        # Seitenlicht: links eine Spur heller, rechts abgedunkelt
-        for y in range(y0 + 2, y1):
-            if solid[y][x0]:
-                buf.set(x0, y, WD_L)
-            if solid[y][x0 + 1]:
-                buf.set(x0 + 1, y, WD_L2)
-            for off in (0, 1):
-                if solid[y][x1 - off]:
-                    buf.set(x1 - off, y, WD if off else WD_D)
-
-    draw_medal(buf, 36, 108, GOLD, GOLD_D, INK, WD)
-
-    # geschlossene Aussenlinie um den ganzen Sockel
-    for y in range(95, H):
-        for x in range(W):
-            if not solid[y][x]:
+    # Keks-Wappen in der Mitte
+    mx = (fx0 + fx1) // 2 - 3
+    my = y0 + 7
+    for iy in range(7):
+        for ix in range(7):
+            if COOKIE[iy][ix] != "#":
                 continue
-            for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-                nx, ny = x + dx, y + dy
-                out = not (0 <= nx < W and 0 <= ny < H) or not solid[ny][nx]
-                if out and not (dy == -1 and y == 96):
-                    buf.set(x, y, INK if y < 124 else INK2)
-                    break
-    for x in range(2, 78):
-        if solid[96][x] and not MASK[95][x]:
-            buf.set(x, 96, INK)
+            edge = any(not (0 <= ix + a < 7 and 0 <= iy + b < 7) or COOKIE[iy + b][ix + a] != "#"
+                       for a, b in ((1, 0), (-1, 0), (0, 1), (0, -1)))
+            lit = (ix - 3) + (iy - 3) < 0
+            if edge:
+                c = BR[3] if not lit else BR[5]
+            else:
+                c = BR[5] if lit else BR[4]
+            p(mx + ix, my + iy, c)
+    for ix, iy in ((2, 2), (4, 3), (2, 4), (4, 5)):
+        p(mx + ix, my + iy, WD[3])
+    # Titelzeilen
+    for x in range(mx - 1, mx + 8):
+        p(x, my + 10, BR[4])
+    for x in range(mx + 1, mx + 6):
+        p(x, my + 12, BR[3])
 
-    # Lichtabdruck der Kapsel auf dem Kragen
-    for x in range(W):
-        if not MASK[95][x]:
-            continue
-        for y, c in ((96, CREAM2), (97, PEACH)):
-            if buf.get(x, y) not in (None, INK, INK2):
-                buf.set(x, y, c)
+    # Aussenlinie des Buchs (Deckel + Buchblock)
+    shape = set()
+    for y in range(y0 - DEPTH - 1, y1 + 1):
+        for x in range(x0, x1 + DEPTH + 2):
+            front = x0 <= x <= x1 and y0 <= y <= y1
+            back = x0 + DEPTH <= x <= x1 + DEPTH + 1 and y0 - DEPTH - 1 <= y <= y1 - DEPTH
+            if front or back:
+                shape.add((x, y))
+    for (x, y) in shape:
+        if any((x + a, y + b) not in shape for a, b in ((1, 0), (-1, 0), (0, 1), (0, -1))):
+            p(x, y, INK)
+    # Ecken abrunden
+    for (x, y) in ((x0, y0), (x0, y1), (x1 + DEPTH + 1, y0 - DEPTH - 1)):
+        p(x, y, buf.get(x - 1, y) if (x - 1, y) not in shape else buf.get(x, y + 1))
+    # Kante zwischen Deckel und Seitenschnitt
+    for k in range(1, DEPTH + 1):
+        p(x1 + k, y0 - k, INK)
+    p(x0 + DEPTH - 1, y0 - 1, INK)
+    for x in range(x0 + 1, x1 + 1):
+        p(x, y0, INK if x < x0 + 4 else BK[1])
+    p(x0 + 1, y0, INK)
+    for x in range(x0 + 4, x1 + 1):
+        p(x, y0, BK[1])
+
+    # Schatten unter dem Buch in der Fluessigkeit
+    for x in range(x0 + 2, x1 + 1):
+        y = y1 + 1
+        c = buf.get(x, y)
+        if c in LQ:
+            p(x, y, rstep(LQ, LQ.index(c) - 2))
+        c = buf.get(x + 1, y + 1)
+        if c in LQ and x < x1:
+            p(x + 1, y + 1, rstep(LQ, LQ.index(c) - 1))
 
 
-# ---------------------------------------------------------- Funkeln/Blasen
-SPARKS = [(27, 28, 1), (52, 22, 0), (63, 44, 1), (19, 60, 0), (60, 72, 1),
-          (29, 92, 0), (47, 31, 2), (33, 95, 1), (63, 90, 0), (17, 46, 2),
-          (36, 18, 0), (21, 74, 1)]
-
-BUBBLES = [  # x, start-y, radius, tempo
-    (28, 90, 2, 7), (47, 86, 1, 9), (34, 72, 1, 6), (56, 80, 2, 8),
-    (22, 84, 1, 10), (61, 64, 1, 7), (40, 92, 2, 9), (51, 56, 1, 6),
-    (25, 50, 1, 8), (64, 53, 1, 9), (44, 78, 1, 11), (18, 66, 1, 7),
+# ------------------------------------------------------- Mini-Trophaeen
+# o = Kontur, h = Licht, m = Mitte, d = Schatten
+STAR = [
+    "....o....",
+    "...oho...",
+    "ooohhmooo",
+    "ohhhmmmdo",
+    ".ohmmmdo.",
+    "..ommmo..",
+    ".ommodmo.",
+    ".omo.odo.",
+    ".oo...oo.",
 ]
-BUB_TOP, BUB_BOT = 13, 94
-# Blasen vor dem dunklen Buch: gedaempfte Toene, sonst stanzen sie Loecher hinein
-BUB_DIM = {WHITE: BOOK_H, CREAM: BOOK_L, GOLD_L: BOOK_L, GOLD_D: BOOK_D}
+MEDAL = [
+    "oo.oo",
+    "ohodo",
+    ".ooo.",
+    "ohhmo",
+    "ohmdo",
+    "omddo",
+    ".ooo.",
+]
+def draw_trinket(buf, pat, ox, oy, cols):
+    for iy, row in enumerate(pat):
+        for ix, ch in enumerate(row):
+            if ch not in cols:
+                continue
+            x, y = ox + ix, oy + iy
+            if not GMASK[y][x] or GDIST[y][x] <= 3.05:
+                continue
+            buf.set(x, y, cols[ch])
 
 
-def draw_sparks(buf, frame):
-    for (x, y, phase) in SPARKS:
-        stage = (frame + phase) % 3
-        if stage == 2 or not cavity(x, y):
-            continue
-        buf.set(x, y, SPARK)
-        if stage == 0:
-            for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-                if cavity(x + dx, y + dy):
-                    buf.set(x + dx, y + dy, CREAM)
+def draw_trinkets(buf, frame):
+    def bob(ph):
+        v = wave(frame, phase=ph)
+        return int(round(v * 1.4))
+    # dunkle Silhouetten in der Fluessigkeit, Oberkante angestrahlt
+    gold = {"o": INK, "h": WHITE, "m": BR[5], "d": BR[3]}
+    draw_trinket(buf, STAR, 17, 69 + bob(0.30), gold)
+    medal = dict(gold)
+    medal["o"] = INK
+    draw_trinket(buf, MEDAL, 56, 49 + bob(0.65), medal)
+    # Baendchen der Medaille rot
+    for (ix, iy) in ((1, 1), (3, 1)):
+        x, y = 56 + ix, 49 + bob(0.65) + iy
+        if GMASK[y][x]:
+            buf.set(x, y, BK[3] if ix == 1 else BK[2])
+
+
+# ------------------------------------------------------------------ Blasen
+# (x, y_start, y_ende, radius, Versatz in Frames). Jede Blase legt ihre
+# Strecke in genau FRAMES Bildern zurueck -> nahtlose Schleife.
+BUBBLES = [
+    (24, 92, 46, 1, 0), (30, 94, 50, 2, 5), (45, 93, 46, 1, 9),
+    (55, 92, 47, 2, 2), (60, 90, 52, 1, 12), (20, 88, 58, 1, 7),
+    (36, 92, 84, 1, 3), (50, 90, 82, 1, 11), (40, 94, 46, 1, 14),
+    (27, 76, 47, 1, 10), (58, 72, 47, 1, 6),
+]
 
 
 def draw_bubbles(buf, frame):
     def put(x, y, c):
-        if not cavity(x, y):
-            return
-        if BK_L <= x <= BK_R and BK_T <= y <= BK_B:
-            c = BUB_DIM.get(c, c)
-        buf.set(x, y, c)
+        if 0 <= x < W and 0 <= y < H and GMASK[y][x] and GDIST[y][x] > 3.05:
+            if y + 0.5 > surf_front(x + 0.5):
+                buf.set(x, y, c)
 
-    span = BUB_BOT - BUB_TOP
-    for (bx, by, r, speed) in BUBBLES:
-        y = BUB_TOP + ((by - BUB_TOP) - speed * frame) % span
-        x = bx + ((frame + bx) % 2 if r > 1 else 0)
+    for (bx, ys, ye, r, off) in BUBBLES:
+        t = ((frame + off) % FRAMES) / FRAMES
+        # leicht beschleunigt aufsteigen
+        y = int(round(ys + (ye - ys) * (t * 0.6 + t * t * 0.4)))
+        x = bx + (1 if math.sin((frame + off) * 1.3 + bx) > 0.5 else 0)
+        if y <= int(surf_front(x + 0.5)) + 1:
+            # an der Oberflaeche: kleiner Ring
+            yy = int(surf_front(x + 0.5))
+            for dx in (-1, 1):
+                if GMASK[yy][x + dx]:
+                    buf.set(x + dx, yy, WHITE)
+            continue
         if r <= 1:
             put(x, y, WHITE)
-            put(x, y + 1, CREAM)
+            c = buf.get(x, y + 1)
+            if c in LQ:
+                put(x, y + 1, rstep(LQ, LQ.index(c) + 1))
         else:
-            for dx, dy, c in ((0, -1, WHITE), (1, -1, WHITE), (-1, 0, WHITE),
-                              (0, 0, CREAM), (1, 0, CREAM), (2, 0, CREAM),
-                              (-1, 1, CREAM), (0, 1, GOLD_D), (1, 1, GOLD_D), (2, 1, GOLD_D)):
-                put(x + dx, y + dy, c)
+            ring = ((0, -1), (1, -1), (-1, 0), (2, 0), (-1, 1), (2, 1), (0, 2), (1, 2))
+            for dx, dy in ring:
+                c = buf.get(x + dx, y + dy)
+                if c in LQ:
+                    put(x + dx, y + dy, rstep(LQ, LQ.index(c) + 2))
+            put(x, y, WHITE)
+            c = buf.get(x + 1, y + 1)
+            if c in LQ:
+                put(x + 1, y + 1, rstep(LQ, LQ.index(c) + 1))
+
+
+DROPS = [(24, 30), (31, 22), (55, 27), (60, 37), (19, 40), (47, 17), (36, 34)]
+
+
+def draw_drops(buf):
+    """Kondenstropfen innen an der Kuppel: Lichtpunkt oben, Schatten drunter."""
+    for (x, y) in DROPS:
+        if not GMASK[y][x] or GDIST[y][x] <= 2.5 or y + 1.5 > surf_back(x + 0.5):
+            continue
+        buf.set(x, y, (226, 196, 186))
+        buf.set(x, y + 1, AIR[0])
+
+
+def draw_sparks(buf, frame):
+    """Funken in der Kuppel-Luft, die auf- und abblenden."""
+    sparks = [(27, 26, 0), (51, 20, 5), (38, 15, 10), (58, 33, 3), (22, 36, 8), (45, 31, 13)]
+    for (x, y, off) in sparks:
+        st = (frame + off) % FRAMES
+        if st >= 6 or not GMASK[y][x] or GDIST[y][x] <= 2.5:
+            continue
+        rise = st // 2
+        yy = y - rise
+        if st in (2, 3):
+            buf.set(x, yy, WHITE)
+            for a, b in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                if GMASK[yy + b][x + a]:
+                    buf.set(x + a, yy + b, AIR[5])
+        else:
+            buf.set(x, yy, AIR[5] if st != 5 else AIR[4])
+
+
+# ----------------------------------------------------------------- Sockel
+# Der Sockel rechnet in ganzen Zeilen: jede Spalte bekommt einen festen
+# Ellipsen-Versatz e(x), und alle Kanten eines Teils laufen um genau diesen
+# Versatz verschoben. So sind Lichtkante, Baender und Fuge exakt parallel -
+# einzeln gerundete Kurven bekommen ungleiche Treppenstufen und flimmern.
+class Ring:
+    def __init__(self, r, top, height):
+        self.r, self.top, self.h = r, top, height
+        self.ry = r * K
+
+    def u(self, x):
+        return (x + 0.5 - CX) / self.r
+
+    def e(self, x):
+        u = self.u(x)
+        if abs(u) > 1.0:
+            return None
+        return int(round(self.ry * math.sqrt(1.0 - u * u)))
+
+    def rows_top(self, x):
+        e = self.e(x)
+        return [] if e is None else list(range(self.top - e, self.top + e + 1))
+
+    def rows_side(self, x):
+        e = self.e(x)
+        return [] if e is None else list(range(self.top + e + 1, self.top + e + self.h + 1))
+
+
+COLLAR_R = Ring(29.5, 95, 6)       # Messingkragen
+DRUM_R = Ring(32.5, 104, 10)       # Holztrommel
+PLINTH_R = Ring(36.5, 117, 3)      # Sockelplatte
+
+
+def side_light(ring, x):
+    u = clamp(ring.u(x), -1, 1)
+    nz = math.sqrt(max(0.0, 1 - u * u))
+    return lambert(u, 0.0, nz), spec(u, 0.0, nz, 40)
+
+
+def paint_ring(buf, ring, part, side_fn, top_fn):
+    for x in range(W):
+        e = ring.e(x)
+        if e is None:
+            continue
+        for y in ring.rows_top(x):
+            buf.set(x, y, top_fn(x, y - (ring.top - e), 2 * e + 1), part)
+        for k, y in enumerate(ring.rows_side(x)):
+            buf.set(x, y, side_fn(x, k), part)
+
+
+def glass_bottom(x):
+    """Letzte Glaszeile in dieser Spalte."""
+    ys = [y for y in range(H) if GMASK[y][x]]
+    return max(ys) if ys else None
+
+
+def draw_collar(buf, frame):
+    r = COLLAR_R
+
+    def side(x, k):
+        l, sp = side_light(r, x)
+        v = 0.06 + 0.78 * l ** 1.2 + 0.7 * sp
+        if k == 0:
+            v += 0.20                          # Lichtkante
+        elif k == r.h - 1:
+            v -= 0.30                          # Fuge unten
+        elif k == r.h - 2:
+            v -= 0.08
+        return ramp(BR, clamp(v, 0, 1))
+
+    def top(x, k, n):
+        u = r.u(x)
+        v = 0.62 - 0.18 * u + (0.10 if abs(u) < 0.55 else 0)   # Glasschein vorn
+        if k == n - 1:
+            v += 0.16                          # Vorderkante
+        return ramp(BR, clamp(v, 0, 1))
+
+    paint_ring(buf, r, "collar", side, top)
+
+    # Nieten
+    for u in (-0.86, -0.6, -0.3, 0.0, 0.3, 0.6, 0.86):
+        x = int(math.floor(CX + u * r.r))
+        rows = r.rows_side(x)
+        if len(rows) < 4:
+            continue
+        y = rows[3]
+        buf.set(x, y, BR[6] if u < 0.35 else BR[5])
+        buf.set(x + 1, y, BR[2] if u < 0.35 else BR[1])
+        buf.set(x, y + 1, BR[2])
+        buf.set(x + 1, y + 1, BR[1])
+
+
+def draw_drum(buf, frame):
+    r = DRUM_R
+
+    def side(x, k):
+        l, sp = side_light(r, x)
+        if k in (0, 1, r.h - 2, r.h - 1):      # Messingbaender
+            v = 0.04 + 0.80 * l ** 1.2 + 0.6 * sp
+            v += {0: 0.18, 1: -0.04, r.h - 2: 0.04, r.h - 1: -0.30}[k]
+            return ramp(BR, clamp(v, 0, 1))
+        v = 0.02 + 0.70 * l ** 1.3 + 0.25 * sp
+        if k == 2:
+            v -= 0.18                          # Schatten unter dem Band
+        return ramp(WD, clamp(v, 0, 1))
+
+    def top(x, k, n):
+        u = r.u(x)
+        v = 0.70 - 0.20 * u
+        if k == n - 1:
+            v += 0.14
+        return ramp(WD, clamp(v, 0, 1))
+
+    paint_ring(buf, r, "drum", side, top)
+
+    # Fugen der Holzdauben
+    for k in range(-5, 6):
+        x = int(math.floor(CX + math.sin(k * 0.27) * r.r))
+        for kk, y in enumerate(r.rows_side(x)):
+            if 3 <= kk <= r.h - 3 and buf.get(x, y) in WD:
+                c = buf.get(x, y)
+                buf.set(x, y, rstep(WD, WD.index(c) - 1))
+
+    draw_medallion(buf, CX, r.top + r.e(39) + 1 + r.h / 2.0)
+
+
+# Keks-Medaillon vorn auf der Trommel: Messingring, darin ein Schokokeks
+COOKIE_CHIPS = [(-2, -2), (1, -3), (2, 0), (-2, 1), (0, 2), (-1, -1)]
+
+
+def draw_medallion(buf, mx, my):
+    for y in range(int(my) - 7, int(my) + 7):
+        for x in range(int(mx) - 7, int(mx) + 7):
+            dx, dy = x + 0.5 - mx, y + 0.5 - my
+            d = math.sqrt(dx * dx + dy * dy)
+            if d > 6.0:
+                continue
+            ang = (dx * -0.7 + dy * -0.7) / max(d, 0.01)       # +1 = oben links
+            if d > 5.0:
+                c = INK
+            elif d > 3.6:
+                v = 0.55 + 0.35 * ang
+                if d > 4.4 and ang > 0.3:
+                    v += 0.2                                # Lichtkante aussen
+                c = ramp(BR, clamp(v, 0, 1))
+            elif d > 2.9 and ang < 0.2:
+                c = WD[2]                                   # Keksrand im Schatten
+            else:
+                v = 0.62 + 0.30 * ang
+                c = ramp(WD, clamp(v, 0, 1))
+            buf.set(x, y, c)
+    cx, cy = int(math.floor(mx)), int(math.floor(my))
+    for (a, b) in COOKIE_CHIPS:
+        buf.set(cx + a, cy + b, WD[1])
+    buf.set(cx - 2, cy - 3, WD[6])
+    buf.set(cx - 3, cy - 2, WD[6])
+    # Glanzpunkt auf dem Ring
+    buf.set(cx - 3, cy - 4, BR[6])
+    buf.set(cx - 4, cy - 3, BR[6])
+
+
+def draw_plinth(buf):
+    r = PLINTH_R
+
+    def side(x, k):
+        l, sp = side_light(r, x)
+        v = -0.02 + 0.60 * l ** 1.3 + 0.2 * sp
+        if k == 0:
+            v += 0.16
+        if k == r.h - 1:
+            v -= 0.12
+        return ramp(WD, clamp(v, 0, 1))
+
+    def top(x, k, n):
+        u = r.u(x)
+        v = 0.56 - 0.20 * u
+        if k == n - 1:
+            v += 0.16
+        return ramp(WD, clamp(v, 0, 1))
+
+    paint_ring(buf, r, "plinth", side, top)
+    # Fuesse
+    for fx in (7, 68):
+        top_y = max(r.rows_side(fx + 2)) + 1
+        for y in range(top_y, min(H, top_y + 2)):
+            for x in range(fx, fx + 5):
+                buf.set(x, y, BR[4] if x == fx + 1 else BR[3] if x < fx + 3 else BR[2], "foot")
+
+
+def contact_shadows(buf):
+    """Wo ein Teil auf dem naechsten steht, liegt eine dunkle Fuge."""
+    for upper, lower, part in ((COLLAR_R, DRUM_R, "drum"), (DRUM_R, PLINTH_R, "plinth")):
+        for x in range(W):
+            rs = upper.rows_side(x)
+            if not rs:
+                continue
+            for k in (1, 2):
+                y = rs[-1] + k
+                if buf.partof(x, y) != part:
+                    continue
+                c = buf.get(x, y)
+                for rmp in (WD, BR):
+                    if c in rmp:
+                        buf.set(x, y, rstep(rmp, rmp.index(c) - (3 if k == 1 else 1)))
+
+
+def glass_seat(buf):
+    """Spalt zwischen Glas und Kragen + Glasschein auf dem Ring."""
+    for x in range(W):
+        yb = glass_bottom(x)
+        if yb is None:
+            continue
+        y = yb + 1
+        if buf.partof(x, y) == "collar":
+            buf.set(x, y, BR[1])
+            if buf.partof(x, y + 1) == "collar" and (y + 1) in COLLAR_R.rows_top(x):
+                u = abs(COLLAR_R.u(x))
+                buf.set(x, y + 1, rstep(BR, 6 if u < 0.45 else 5))
+
+
+# ----------------------------------------------------------------- Kappe
+CAP_R = Ring(9.5, 9, 3)            # Messingkappe auf dem Scheitel
+
+
+def draw_cap(buf):
+    r = CAP_R
+    # Schatten der Kappe auf der Kuppel
+    for x in range(W):
+        rs = r.rows_side(x)
+        if rs and GMASK[rs[-1] + 1][x]:
+            buf.set(x, rs[-1] + 1, AIR[0])
+
+    def side(x, k):
+        l, sp = side_light(r, x)
+        v = 0.04 + 0.8 * l ** 1.2 + 0.8 * sp + (0.18 if k == 0 else -0.25 if k == r.h - 1 else 0)
+        return ramp(BR, clamp(v, 0, 1))
+
+    def top(x, k, n):
+        return ramp(BR, clamp(0.66 - 0.2 * r.u(x) + (0.14 if k == n - 1 else 0), 0, 1))
+
+    paint_ring(buf, r, "cap", side, top)
+    # Hals + Knauf
+    for x in range(38, 42):
+        buf.set(x, 6, BR[4] if x < 40 else BR[2], "cap")
+        buf.set(x, 7, BR[3] if x < 40 else BR[1], "cap")
+    kx, ky, kr = CX, 3.5, 3.1
+    for y in range(0, 8):
+        for x in range(32, 48):
+            px, py = x + 0.5, y + 0.5
+            dx, dy = (px - kx) / kr, (py - ky) / kr
+            if dx * dx + dy * dy > 1:
+                continue
+            nz = math.sqrt(max(0.0, 1 - dx * dx - dy * dy))
+            v = 0.08 + 0.8 * lambert(dx, dy, nz) + 0.9 * spec(dx, dy, nz, 25)
+            buf.set(x, y, ramp(BR, clamp(v, 0, 1)), "cap")
+
+
+# --------------------------------------------------------------- Aussenlinie
+def outline(buf):
+    solid = [[buf.px[y][x] is not None for x in range(W)] for y in range(H)]
+    out = []
+    for y in range(H):
+        for x in range(W):
+            if not solid[y][x]:
+                continue
+            for a, b in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                nx, ny = x + a, y + b
+                if not (0 <= nx < W and 0 <= ny < H) or not solid[ny][nx]:
+                    out.append((x, y))
+                    break
+    for (x, y) in out:
+        buf.set(x, y, INK2 if y >= 118 else INK)
 
 
 def build(frame):
     buf = Buf()
-    draw_glass(buf)
-    draw_glass_light(buf)
-    draw_book(buf)
-    draw_sparks(buf, frame)
+    draw_plinth(buf)
+    draw_drum(buf, frame)
+    draw_collar(buf, frame)
+    contact_shadows(buf)
+    draw_glass(buf, frame)
+    glass_seat(buf)
+    draw_trinkets(buf, frame)
+    draw_book(buf, frame)
     draw_bubbles(buf, frame)
-    draw_base(buf)
+    draw_drops(buf)
+    draw_sparks(buf, frame)
+    glass_glints(buf, frame)
+    draw_cap(buf)
+    outline(buf)
     return buf.image()
 
 
+# --------------------------------------------------------------------- Meta
+def write_meta(png_path, template):
+    meta = png_path + ".meta"
+    if os.path.exists(meta) or not os.path.exists(template):
+        return
+    with open(template, "r", encoding="utf-8") as f:
+        txt = f.read()
+    import re
+    txt = re.sub(r"guid: [0-9a-f]{32}", "guid: " + uuid.uuid4().hex, txt, count=1)
+    txt = re.sub(r"spriteID: [0-9a-f]{32}", "spriteID: " + uuid.uuid4().hex, txt)
+    txt = re.sub(r"internalID: -?\d+", "internalID: %d" % random.randint(10 ** 8, 2 ** 31 - 1), txt)
+    with open(meta, "w", encoding="utf-8", newline="\n") as f:
+        f.write(txt)
+    print("meta angelegt:", meta)
+
+
+def frame_name(i):
+    return "kapsel_erfolgsbuch.png" if i == 0 else "kapsel_erfolgsbuch_%d.png" % (i + 1)
+
+
 if __name__ == "__main__":
-    out = sys.argv[1] if len(sys.argv) > 1 else "."
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    out = args[0] if args else "."
     os.makedirs(out, exist_ok=True)
-    names = ["kapsel_erfolgsbuch.png", "kapsel_erfolgsbuch_2.png", "kapsel_erfolgsbuch_3.png"]
-    for f, name in enumerate(names):
-        path = os.path.join(out, name)
-        build(f).save(path)
-        print("geschrieben:", path)
+    frames = [build(f) for f in range(FRAMES)]
+    template = os.path.join(out, "kapsel_erfolgsbuch.png.meta")
+    for i, im in enumerate(frames):
+        path = os.path.join(out, frame_name(i))
+        im.save(path)
+        write_meta(path, template)
+    print("geschrieben: %d Frames nach %s" % (FRAMES, out))
+
+    if "--vorschau" in sys.argv:
+        sc = 5
+        big = [f.resize((W * sc, H * sc), Image.NEAREST) for f in frames]
+        bg = (52, 40, 58, 255)
+        gif = []
+        for b in big:
+            g = Image.new("RGBA", b.size, bg)
+            g.alpha_composite(b)
+            gif.append(g.convert("RGB"))
+        gif[0].save(os.path.join(out, "vorschau.gif"), save_all=True,
+                    append_images=gif[1:], duration=100, loop=0)
+        sheet = Image.new("RGBA", (W * sc * 2 + 30, H * sc + 20), bg)
+        sheet.alpha_composite(big[0], (10, 10))
+        sheet.alpha_composite(big[FRAMES // 2], (W * sc + 20, 10))
+        sheet.save(os.path.join(out, "vorschau.png"))

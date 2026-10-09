@@ -152,6 +152,9 @@ public static class WeaponCatalog
     public static readonly WeaponDef SaladFan      = Def("salad_fan", "Salad Fan", PoolKind.Weapon);
     public static readonly WeaponDef ChocoChips    = Def("choco_chips", "Choco Chips", PoolKind.Weapon);
     public static readonly WeaponDef MilkDunk      = Def("milk_dunk", "Milk Dunk", PoolKind.Weapon);
+    public static readonly WeaponDef MochiStrand   = Def("mochi_strand", "Mochi Strand", PoolKind.Weapon);
+    public static readonly WeaponDef FoxFire       = Def("foxfire", "Fox Fire", PoolKind.Weapon);
+    public static readonly WeaponDef RoyalSplat    = Def("royal_splat", "Royal Splat", PoolKind.Weapon);
 
     // ==================================================================
     //  Buffs

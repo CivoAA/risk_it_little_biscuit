@@ -13,9 +13,12 @@ using UnityEngine;
 ///               Test-Szene, dort ueber den TestSceneBossSpawner.
 ///   F7          Schoko-Salve geben bzw. eine Stufe hoeher
 ///   F8          Milch-Tunker geben bzw. eine Stufe hoeher
-///   Shift + F7/F8  nur noch diese Waffe: alle anderen Waffen und Evos weg,
+///   F6          Mochi-Faden geben bzw. eine Stufe hoeher
+///   F5          Fuchsfeuer geben bzw. eine Stufe hoeher
+///   F4          Koenigsplumps geben bzw. eine Stufe hoeher
+///   Shift + F4-F8  nur noch diese Waffe: alle anderen Waffen und Evos weg,
 ///               sie selbst auf Stufe 1 - zum Vergleichen als Startwaffe.
-///               F7/F8 gehen ueberall, wo ein Spieler steht (auch Test-Szene).
+///               F4-F8 gehen ueberall, wo ein Spieler steht (auch Test-Szene).
 ///
 /// Ein frueher per Taste gesetzter Koenig wird vorher entfernt: zwei auf
 /// einmal sagen ueber die Attacken nichts aus, weil man nicht mehr sieht,
@@ -30,6 +33,9 @@ public class RunDebugKeys : MonoBehaviour
     private const KeyCode SpawnCharredKey = KeyCode.F10;
     private const KeyCode ChocoChipsKey = KeyCode.F7;
     private const KeyCode MilkDunkKey = KeyCode.F8;
+    private const KeyCode MochiStrandKey = KeyCode.F6;
+    private const KeyCode FoxFireKey = KeyCode.F5;
+    private const KeyCode RoyalSplatKey = KeyCode.F4;
     private const float CharredHealth = 10f;
 
     private GameObject king;
@@ -57,6 +63,24 @@ public class RunDebugKeys : MonoBehaviour
         if (Input.GetKeyDown(MilkDunkKey))
         {
             GiveWeapon<MilkDunk>("Milch-Tunker");
+            return;
+        }
+
+        if (Input.GetKeyDown(MochiStrandKey))
+        {
+            GiveWeapon<MochiStrand>("Mochi-Faden");
+            return;
+        }
+
+        if (Input.GetKeyDown(FoxFireKey))
+        {
+            GiveWeapon<FoxFire>("Fuchsfeuer");
+            return;
+        }
+
+        if (Input.GetKeyDown(RoyalSplatKey))
+        {
+            GiveWeapon<RoyalSplat>("Koenigsplumps");
             return;
         }
 
