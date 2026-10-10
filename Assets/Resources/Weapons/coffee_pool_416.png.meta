@@ -1,0 +1,419 @@
+fileFormatVersion: 2
+guid: bb1aa30f0fde463e817638da99168f28
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3843812606323106013
+    second: coffee_pool_416_0
+  - first:
+      213: 4611535650065099204
+    second: coffee_pool_416_1
+  - first:
+      213: 3550615565895065429
+    second: coffee_pool_416_2
+  - first:
+      213: 3189557548877390802
+    second: coffee_pool_416_3
+  - first:
+      213: 2010905717323151998
+    second: coffee_pool_416_4
+  - first:
+      213: 1225548488518116541
+    second: coffee_pool_416_5
+  - first:
+      213: 4246378528156318767
+    second: coffee_pool_416_6
+  - first:
+      213: 1707964063402643925
+    second: coffee_pool_416_7
+  - first:
+      213: 1793853723451028208
+    second: coffee_pool_416_8
+  - first:
+      213: 3714419641783871187
+    second: coffee_pool_416_9
+  - first:
+      213: 4571275420260192610
+    second: coffee_pool_416_10
+  - first:
+      213: 4388740495679841320
+    second: coffee_pool_416_11
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 8192
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 8192
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 8192
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: coffee_pool_416_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 416
+        height: 258
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc3fc65866f448459e5c8572055e7c98
+      internalID: 3843812606323106013
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coffee_pool_416_1
+      rect:
+        serializedVersion: 2
+        x: 416
+        y: 0
+        width: 416
+        height: 258
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d7f7889ad9fa4d76bfb7202e6d009bd8
+      internalID: 4611535650065099204
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coffee_pool_416_2
+      rect:
+        serializedVersion: 2
+        x: 832
+        y: 0
+        width: 416
+        height: 258
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 759d05945c384f4f8907f4365d7d45bd
+      internalID: 3550615565895065429
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coffee_pool_416_3
+      rect:
+        serializedVersion: 2
+        x: 1248
+        y: 0
+        width: 416
+        height: 258
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 39e31439fa0b48dc9cc5d81305ffceb3
+      internalID: 3189557548877390802
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coffee_pool_416_4
+      rect:
+        serializedVersion: 2
+        x: 1664
+        y: 0
+        width: 416
+        height: 258
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f6f549dafc8431a8aac0b7fbf288bb2
+      internalID: 2010905717323151998
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coffee_pool_416_5
+      rect:
+        serializedVersion: 2
+        x: 2080
+        y: 0
+        width: 416
+        height: 258
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 14ec920128e0423e9a8795c256d4d11a
+      internalID: 1225548488518116541
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coffee_pool_416_6
+      rect:
+        serializedVersion: 2
+        x: 2496
+        y: 0
+        width: 416
+        height: 258
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aafa98f1590b4885809ba3e2dbdcec49
+      internalID: 4246378528156318767
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coffee_pool_416_7
+      rect:
+        serializedVersion: 2
+        x: 2912
+        y: 0
+        width: 416
+        height: 258
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6a97d251a2c2479399aad3f7547f82c7
+      internalID: 1707964063402643925
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coffee_pool_416_8
+      rect:
+        serializedVersion: 2
+        x: 3328
+        y: 0
+        width: 416
+        height: 258
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ddb66a8f560c4f998b99863a55521d77
+      internalID: 1793853723451028208
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coffee_pool_416_9
+      rect:
+        serializedVersion: 2
+        x: 3744
+        y: 0
+        width: 416
+        height: 258
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6942d0fa9cc24e4bbf84b1ee37d6534e
+      internalID: 3714419641783871187
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coffee_pool_416_10
+      rect:
+        serializedVersion: 2
+        x: 4160
+        y: 0
+        width: 416
+        height: 258
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b44864e6f5034bf09edef97f9fe3e9df
+      internalID: 4571275420260192610
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coffee_pool_416_11
+      rect:
+        serializedVersion: 2
+        x: 4576
+        y: 0
+        width: 416
+        height: 258
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a44234a8406e4893b1c59279926b5b02
+      internalID: 4388740495679841320
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      coffee_pool_416_0: 3843812606323106013
+      coffee_pool_416_1: 4611535650065099204
+      coffee_pool_416_10: 4571275420260192610
+      coffee_pool_416_11: 4388740495679841320
+      coffee_pool_416_2: 3550615565895065429
+      coffee_pool_416_3: 3189557548877390802
+      coffee_pool_416_4: 2010905717323151998
+      coffee_pool_416_5: 1225548488518116541
+      coffee_pool_416_6: 4246378528156318767
+      coffee_pool_416_7: 1707964063402643925
+      coffee_pool_416_8: 1793853723451028208
+      coffee_pool_416_9: 3714419641783871187
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

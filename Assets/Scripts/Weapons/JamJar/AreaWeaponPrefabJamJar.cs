@@ -38,8 +38,12 @@ public class AreaWeaponPrefabJamJar : MonoBehaviour
 
     private static readonly List<AreaWeaponPrefabJamJar> active = new List<AreaWeaponPrefabJamJar>();
 
+    /// <summary>Durchmesser der Lache in Pixeln je Einheit range x AOE (Stufen aus Tools/marmelade.py).</summary>
+    public const float PixelsPerRange = 204.8f;
+
     private CircleCollider2D area;
     private SpriteFlipbook look;
+    private PixelPool pool;
     private Vector3 fullSize;
     private float lifeTimer;
     private float age;
@@ -64,11 +68,28 @@ public class AreaWeaponPrefabJamJar : MonoBehaviour
         area = GetComponent<CircleCollider2D>();
         look = GetComponent<SpriteFlipbook>();
         lifeTimer = weapon.CurrentDuration;
-        fullSize = Vector3.one * weapon.CurrentStats.range * PlayerController.Instance.AOERange;
+        float size = weapon.CurrentStats.range * PlayerController.Instance.AOERange;
+        fullSize = Vector3.one * size;
 
-        // Mit eigener Animation blendet die Lache selbst ein und aus - sonst
-        // waechst und schrumpft sie.
-        transform.localScale = look != null ? fullSize : Vector3.zero;
+        // Pixelgenaue Lache: Groessenstufe statt Massstab, Kollider passend dazu.
+        pool = GetComponent<PixelPool>();
+        if (pool != null && pool.Begin(size * PixelsPerRange))
+        {
+            transform.position = PixelPool.Snap(transform.position);
+            if (area != null)
+            {
+                area.offset = Vector2.zero;
+                area.radius = pool.SizeUnits * 0.5f;
+            }
+            pool.SetLifeLeft(lifeTimer);
+        }
+        else
+        {
+            pool = null;
+            // Mit eigener Animation blendet die Lache selbst ein und aus - sonst
+            // waechst und schrumpft sie.
+            transform.localScale = look != null ? fullSize : Vector3.zero;
+        }
 
         if (AudioController.Instance != null)
         {
@@ -97,7 +118,11 @@ public class AreaWeaponPrefabJamJar : MonoBehaviour
             return;
         }
 
-        if (look != null)
+        if (pool != null)
+        {
+            pool.SetLifeLeft(lifeTimer);
+        }
+        else if (look != null)
         {
             look.SetLifeLeft(lifeTimer);
         }
