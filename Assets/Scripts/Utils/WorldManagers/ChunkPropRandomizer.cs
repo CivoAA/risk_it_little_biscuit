@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 /// <summary>
 /// Wuerfelt die Props (Baeume) eines Chunks neu, sobald der
@@ -34,6 +35,9 @@ public class ChunkPropRandomizer : MonoBehaviour
     [Tooltip("Props nie auf ein Mixer-Feld wuerfeln. Die Mixer stehen schon, wenn ein " +
              "Chunk umgesetzt wird - ohne das koennte ein Loch einen Mixer schlucken.")]
     public bool avoidMixers;
+    [Tooltip("Hindernisse (Props mit Collider) nie mit dem Fuss auf diese Bodenfliesen " +
+             "wuerfeln - z.B. die Pflasterwege im Geisterwald. Liest die Tilemap am Chunk. Leer = aus.")]
+    public TileBase[] avoidTiles;
     [Range(0f, 1f)] public float clumping = 0.4f;
     public float clumpSize = 14f;
 
@@ -51,6 +55,9 @@ public class ChunkPropRandomizer : MonoBehaviour
     private Transform[] props;
     private Vector3[] baseScales;
     private Rect[] footprints;          // lokales Bildrechteck je Prop (Pivot = 0,0)
+    private bool[] solid;               // Prop hat einen Collider (fuer avoidTiles)
+    private Tilemap floor;
+    private HashSet<TileBase> avoid;
     private Vector3 lastPosition;
     private int shuffleCount;
 
@@ -67,11 +74,20 @@ public class ChunkPropRandomizer : MonoBehaviour
 
         float divisor = Mathf.Max(0.0001f, editorScaleMid);
         footprints = new Rect[count];
+        solid = new bool[count];
         for (int i = 0; i < count; i++)
         {
             props[i] = propContainer.GetChild(i);
             baseScales[i] = props[i].localScale / divisor;
             footprints[i] = Footprint(props[i]);
+            solid[i] = props[i].GetComponent<Collider2D>() != null;
+        }
+
+        if (avoidTiles != null && avoidTiles.Length > 0)
+        {
+            floor = GetComponent<Tilemap>();
+            avoid = new HashSet<TileBase>(avoidTiles);
+            avoid.Remove(null);
         }
 
         lastPosition = transform.position;
@@ -156,6 +172,7 @@ public class ChunkPropRandomizer : MonoBehaviour
                 }
                 if (tooClose) continue;
                 if (avoidMixers && TouchesMixer(Shifted(footprints[i], local))) continue;
+                if (solid[i] && OnAvoidedTile(local)) continue;
 
                 found = true;
                 break;
@@ -202,6 +219,19 @@ public class ChunkPropRandomizer : MonoBehaviour
         float gx = Mathf.Max(a.xMin - b.xMax, b.xMin - a.xMax);
         float gy = Mathf.Max(a.yMin - b.yMax, b.yMin - a.yMax);
         return Mathf.Max(gx, gy);
+    }
+
+    /// <summary>Steht der Fuss (Pivot, eine halbe Einheit links und rechts) auf einer gesperrten Fliese?</summary>
+    private bool OnAvoidedTile(Vector2 local)
+    {
+        if (floor == null || avoid == null || avoid.Count == 0) return false;
+        Vector3 foot = transform.position + (Vector3)local;
+        for (int k = -1; k <= 1; k++)
+        {
+            TileBase tile = floor.GetTile(floor.WorldToCell(foot + new Vector3(k * 0.5f, 0f, 0f)));
+            if (tile != null && avoid.Contains(tile)) return true;
+        }
+        return false;
     }
 
     /// <summary>Beruehrt das (lokale) Rechteck ein Mixer-Feld?</summary>

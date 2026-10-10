@@ -58,7 +58,7 @@ public class HubLevelSelectUI : MonoBehaviour
     /// <summary>Steht offen? Der Hub sperrt solange seine Interaktionen.</summary>
     public static bool IsOpen { get; private set; }
 
-    public enum Ambience { Auto, None, Dust, Kitchen, Forest, Volcano, Snow }
+    public enum Ambience { Auto, None, Dust, Kitchen, Forest, Volcano, Snow, Ghost }
 
     /// <summary>Ein Level in der Auswahl.</summary>
     [System.Serializable]
@@ -1238,6 +1238,34 @@ public class HubLevelSelectUI : MonoBehaviour
                         a = 0.85f * Mathf.Clamp01(drop * 8f) * Mathf.Clamp01((1f - drop) * 8f);
                         float size = i % 3 == 0 ? 2f : 1f;
                         SetMote(img, x, y, size, size, new Color(1f, 1f, 1f, a));
+                    }
+                    break;
+
+                case Ambience.Ghost:
+                    if (i % 7 == 0)
+                    {
+                        // Fledermaus: flattert schnell quer durchs Bild, Fluegel als 3x1 / 1x1
+                        img.sprite = GameHudSkin.White;
+                        float fly = Mathf.Repeat(m.Seed.x + now * 0.09f * m.Speed, 1.4f) - 0.2f;
+                        x = fly * WinW;
+                        y = WinH * (0.1f + 0.3f * m.Seed.y) + Mathf.Sin(now * 5f + m.Phase) * 3f;
+                        bool wingsUp = Mathf.Repeat(now * 9f + m.Phase, 1f) < 0.5f;
+                        SetMote(img, x, y, wingsUp ? 3 : 1, 1, new Color(0.1f, 0.06f, 0.14f, 0.9f));
+                    }
+                    else
+                    {
+                        // Irrlichter: schweben in Kurven ueber dem Boden, glimmen auf und verloeschen
+                        img.sprite = GameHudSkin.Firefly;
+                        x = m.Seed.x * WinW + Mathf.Sin(now * 0.45f * m.Speed + m.Phase) * 14f;
+                        y = WinH * (0.45f + 0.5f * m.Seed.y) + Mathf.Sin(now * 0.8f * m.Speed + m.Phase * 2f) * 6f;
+                        a = Mathf.Clamp01(Mathf.Sin(now * 1.3f * m.Speed + m.Phase) * 1.6f);
+                        Color wisp = (i % 3) switch
+                        {
+                            0 => new Color(0.5f, 1f, 0.9f),
+                            1 => new Color(0.8f, 0.6f, 1f),
+                            _ => new Color(1f, 0.75f, 0.4f),
+                        };
+                        SetMote(img, x, y, 3, 3, OptionsKit.WithAlpha(wisp, a));
                     }
                     break;
 

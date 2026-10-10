@@ -721,6 +721,8 @@
     { "key": "level.2.desc", "value": "It gets crowded between the trees." },
     { "key": "level.3.name", "value": "Ice Cream Glacier" },
     { "key": "level.3.desc", "value": "Vanilla snow, waffle pines and slippery ice. Brakes are for quitters!" },
+    { "key": "level.4.name", "value": "Haunted Forest" },
+    { "key": "level.4.desc", "value": "Gingerbread trees, jack-o'-lanterns and will-o'-wisps. Stay in the light!" },
     { "key": "level.5.name", "value": "Volcano" },
     { "key": "level.5.desc", "value": "Hot ash, boiling lava. Whatever you do, don't fall in!" },
     { "key": "enemy.KeksKoenig.name", "value": "Cookie King" },

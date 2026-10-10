@@ -721,6 +721,8 @@
     { "key": "level.2.desc", "value": "Zwischen den Bäumen wird es voll." },
     { "key": "level.3.name", "value": "Eisgletscher" },
     { "key": "level.3.desc", "value": "Vanilleschnee, Waffeltannen und spiegelglattes Eis. Wer bremst, verliert!" },
+    { "key": "level.4.name", "value": "Geisterwald" },
+    { "key": "level.4.desc", "value": "Lebkuchenbäume, Kürbislaternen und Irrlichter. Bleib im Licht!" },
     { "key": "level.5.name", "value": "Vulkan" },
     { "key": "level.5.desc", "value": "Heiße Asche, kochende Lava. Bloß nicht reinfallen!" },
     { "key": "enemy.KeksKoenig.name", "value": "Keks-König" },

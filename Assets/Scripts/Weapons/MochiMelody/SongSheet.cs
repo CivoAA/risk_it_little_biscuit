@@ -12,7 +12,7 @@ using UnityEngine;
 /// heisst: Mochi spielt frei in ihrem eigenen Tempo (<see cref="Solo"/>).
 ///
 /// Die Werte stammen aus Tools/eis_musik.py, kueche_musik.py, vulkan_musik.py,
-/// herz_musik.py (komponiert) bzw. aus einer
+/// herz_musik.py, geist_musik.py (komponiert) bzw. aus einer
 /// Beat-/Akkord-Analyse der fertigen Dateien (Wald, Off to Osaka) - siehe
 /// Tools/musik_analyse.py. Neues Stueck: dort analysieren, hier eintragen.
 /// </summary>
@@ -75,6 +75,7 @@ public class SongSheet
     private static readonly int[] CMajorPenta = { 0, 2, 4, 7, 9 };      // C D E G A
     private static readonly int[] GMajorPenta = { 7, 9, 11, 2, 4 };     // G A H D E
     private static readonly int[] CMinorPenta = { 0, 3, 5, 7, 10 };     // C Es F G B
+    private static readonly int[] EMinorPenta = { 4, 7, 9, 11, 2 };     // E G A H D
 
     private static readonly Dictionary<string, SongSheet> sheets = new Dictionary<string, SongSheet>
     {
@@ -162,6 +163,28 @@ public class SongSheet
                 "Ab G"),                                        // Wende
             scale = CMinorPenta,
             seed = 5,
+        },
+
+        // "Mitternacht im Lebkuchenwald" (Geisterwald): e-Moll, 116 BPM, gerade
+        // Achtel, 56 Takte, beginnt genau auf der Eins - fuer Mochi komponiert.
+        // Akkorde 1:1 aus Tools/geist_musik.py (SECTIONS/PROG_*), "B" = H-Dur.
+        ["geist"] = new SongSheet
+        {
+            clipName = "geist",
+            bpm = 116f,
+            firstDownbeat = 0.0,
+            bars = 56,
+            chords = Concat(
+                "Em Em C B",                                    // Intro
+                "Em C Am B Em C D B",                           // A
+                "Em C Am B Em C D B",                           // A'
+                "C D G Em Am B Em Em",                          // B (Refrain)
+                "Em Am Em B Em Am C B",                         // C (Mochis Buehne)
+                "Em C Am B Em C D B",                           // A''
+                "C D G Em Am B Em Em",                          // B'
+                "Am C B B"),                                    // Wende
+            scale = EMinorPenta,
+            seed = 6,
         },
 
         // Wald: d-Moll, 132 BPM, Dm-B-F-C in Schleife (16 Takte), Analyse.
