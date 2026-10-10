@@ -11,11 +11,17 @@ using UnityEngine;
 ///   F10         Der Verkohlte mit 10 Leben: er laeuft an und saugt den
 ///               Spieler sofort ein (Phase 3, Herzkammer). Geht auch in der
 ///               Test-Szene, dort ueber den TestSceneBossSpawner.
+///   F3          Das Gespenst / Squiddy (Endboss Geisterwald) wie ein Boss-Beat,
+///               auch in der Test-Szene
+///   Shift + F3  dasselbe auf halbem Leben - die Enthuellung startet sofort
 ///   F7          Schoko-Salve geben bzw. eine Stufe hoeher
 ///   F8          Milch-Tunker geben bzw. eine Stufe hoeher
-///   Shift + F7/F8  nur noch diese Waffe: alle anderen Waffen und Evos weg,
+///   F6          Mochi-Melodie geben bzw. eine Stufe hoeher
+///   F5          Fuchsfeuer geben bzw. eine Stufe hoeher
+///   F4          Koenigsplumps geben bzw. eine Stufe hoeher
+///   Shift + F4-F8  nur noch diese Waffe: alle anderen Waffen und Evos weg,
 ///               sie selbst auf Stufe 1 - zum Vergleichen als Startwaffe.
-///               F7/F8 gehen ueberall, wo ein Spieler steht (auch Test-Szene).
+///               F4-F8 gehen ueberall, wo ein Spieler steht (auch Test-Szene).
 ///
 /// Ein frueher per Taste gesetzter Koenig wird vorher entfernt: zwei auf
 /// einmal sagen ueber die Attacken nichts aus, weil man nicht mehr sieht,
@@ -28,12 +34,17 @@ public class RunDebugKeys : MonoBehaviour
 {
     private const KeyCode SpawnKingKey = KeyCode.F9;
     private const KeyCode SpawnCharredKey = KeyCode.F10;
+    private const KeyCode SpawnSquiddyKey = KeyCode.F3;
     private const KeyCode ChocoChipsKey = KeyCode.F7;
     private const KeyCode MilkDunkKey = KeyCode.F8;
+    private const KeyCode MochiMelodyKey = KeyCode.F6;
+    private const KeyCode FoxFireKey = KeyCode.F5;
+    private const KeyCode RoyalSplatKey = KeyCode.F4;
     private const float CharredHealth = 10f;
 
     private GameObject king;
     private GameObject charred;
+    private GameObject squiddy;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void Install()
@@ -57,6 +68,30 @@ public class RunDebugKeys : MonoBehaviour
         if (Input.GetKeyDown(MilkDunkKey))
         {
             GiveWeapon<MilkDunk>("Milch-Tunker");
+            return;
+        }
+
+        if (Input.GetKeyDown(MochiMelodyKey))
+        {
+            GiveWeapon<MochiMelody>("Mochi-Melodie");
+            return;
+        }
+
+        if (Input.GetKeyDown(FoxFireKey))
+        {
+            GiveWeapon<FoxFire>("Fuchsfeuer");
+            return;
+        }
+
+        if (Input.GetKeyDown(RoyalSplatKey))
+        {
+            GiveWeapon<RoyalSplat>("Koenigsplumps");
+            return;
+        }
+
+        if (Input.GetKeyDown(SpawnSquiddyKey))
+        {
+            SpawnSquiddy();
             return;
         }
 
@@ -124,6 +159,42 @@ public class RunDebugKeys : MonoBehaviour
         Debug.Log("[RunDebugKeys] " + text);
         if (DamageNumberController.Instance != null)
             DamageNumberController.Instance.CreateText(text, player.transform.position + Vector3.up * 1.2f);
+    }
+
+    /// <summary>
+    /// Das Gespenst (Squiddy). Mit Shift gleich auf halbem Leben: das Laken
+    /// kommt sofort runter. Im Lauf wie ein Boss-Beat, sonst ueber den
+    /// Boss-Spawner der Test-Szene.
+    /// </summary>
+    private void SpawnSquiddy()
+    {
+        bool reveal = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+        if (squiddy != null) Destroy(squiddy);
+        squiddy = null;
+
+        SpawnDirector director = SpawnDirector.Active;
+        if (director != null)
+        {
+            squiddy = director.DebugSpawnBoss(EnemyId.Squiddy);
+        }
+        else
+        {
+            TestSceneBossSpawner spawner = FindAnyObjectByType<TestSceneBossSpawner>();
+            if (spawner != null)
+            {
+                spawner.Spawn(EnemyId.Squiddy);
+                if (spawner.Boss != null) squiddy = spawner.Boss.gameObject;
+            }
+        }
+
+        Enemy enemy = squiddy != null ? squiddy.GetComponent<Enemy>() : null;
+        if (enemy == null)
+        {
+            Debug.LogWarning("[RunDebugKeys] Squiddy konnte nicht gespawnt werden (kein Lauf / kein Prefab im SpawnCatalog?).");
+            return;
+        }
+        if (reveal) enemy.DebugSetHealthFraction(0.5f);
+        Debug.Log("[RunDebugKeys] Das Gespenst gespawnt" + (reveal ? " (Enthuellung)." : "."));
     }
 
     /// <summary>

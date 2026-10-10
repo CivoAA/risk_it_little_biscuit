@@ -29,6 +29,7 @@ public class TestSceneBossSpawner : MonoBehaviour
     private EnemyGlutwurz currentGlutwurz;
     private EnemySchleimkoenig currentSchleimkoenig;
     private EnemyVerkohlter currentVerkohlter;
+    private EnemySquiddy currentSquiddy;
 
     /// <summary>Steht gerade ein Boss?</summary>
     public bool Alive
@@ -51,6 +52,7 @@ public class TestSceneBossSpawner : MonoBehaviour
             if (currentGlutwurz != null) return currentGlutwurz.IsPhaseTwo;
             if (currentSchleimkoenig != null) return currentSchleimkoenig.IsPhaseTwo;
             if (currentVerkohlter != null) return currentVerkohlter.IsPhaseTwo;
+            if (currentSquiddy != null) return currentSquiddy.IsPhaseTwo;
             return false;
         }
     }
@@ -108,6 +110,7 @@ public class TestSceneBossSpawner : MonoBehaviour
         currentGlutwurz = current.GetComponent<EnemyGlutwurz>();
         currentSchleimkoenig = current.GetComponent<EnemySchleimkoenig>();
         currentVerkohlter = current.GetComponent<EnemyVerkohlter>();
+        currentSquiddy = current.GetComponent<EnemySquiddy>();
 
         // Gleiche Vorsicht wie ueberall sonst: erzeugt wird in der aktiven
         // Szene, und das muss nicht die sein, in der der Spieler steht.
@@ -154,6 +157,7 @@ public class TestSceneBossSpawner : MonoBehaviour
         currentGlutwurz = null;
         currentSchleimkoenig = null;
         currentVerkohlter = null;
+        currentSquiddy = null;
         return true;
     }
 

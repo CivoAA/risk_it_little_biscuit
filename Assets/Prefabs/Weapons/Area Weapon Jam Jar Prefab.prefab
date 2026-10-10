@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7223592874745254888}
   - component: {fileID: 3694744776434971380}
   - component: {fileID: 8167507351367580153}
+  - component: {fileID: 1834297078128730250}
   m_Layer: 0
   m_Name: Area Weapon Jam Jar Prefab
   m_TagString: Untagged
@@ -92,8 +93,8 @@ SpriteRenderer:
   m_SortingLayerID: 1682636205
   m_SortingLayer: 2
   m_SortingOrder: -2
-  m_Sprite: {fileID: 2367161928690977624, guid: 399dd036fbace5c4b900ef996679a31c, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.8862745}
+  m_Sprite: {fileID: 4372584650409857344, guid: 6de63191e208499a82252a87d1ac7410, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -139,3 +140,31 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0.008156776, y: -0.01631403}
   m_Radius: 3.1924572
+--- !u!114 &1834297078128730250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7273595992386994556}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53f9e514caaf44c992320ba509ee2327, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PixelPool
+  resourcePrefix: Weapons/jam_puddle_
+  sizes:
+  - 120
+  - 144
+  - 168
+  - 192
+  - 216
+  - 240
+  - 264
+  appearFrames: 3
+  loopFrames: 6
+  vanishFrames: 3
+  appearFps: 18
+  loopFps: 8
+  vanishFps: 14
+  fadeOut: 0.12

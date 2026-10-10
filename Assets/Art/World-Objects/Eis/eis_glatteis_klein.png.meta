@@ -1,0 +1,523 @@
+fileFormatVersion: 2
+guid: efb36c60109b4925b7fbf673114aa1a1
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3468311781054190242
+    second: eis_glatteis_klein_0
+  - first:
+      213: 2195328959246641905
+    second: eis_glatteis_klein_1
+  - first:
+      213: 2759890312244989755
+    second: eis_glatteis_klein_2
+  - first:
+      213: 1479212245813970592
+    second: eis_glatteis_klein_3
+  - first:
+      213: 2006281161487453269
+    second: eis_glatteis_klein_4
+  - first:
+      213: 1510577390324190660
+    second: eis_glatteis_klein_5
+  - first:
+      213: 2281924131109396569
+    second: eis_glatteis_klein_6
+  - first:
+      213: 2213259821482750215
+    second: eis_glatteis_klein_7
+  - first:
+      213: 2973905773560356149
+    second: eis_glatteis_klein_8
+  - first:
+      213: 4431267471013078448
+    second: eis_glatteis_klein_9
+  - first:
+      213: 1501650315093178921
+    second: eis_glatteis_klein_10
+  - first:
+      213: 4605274232781955946
+    second: eis_glatteis_klein_11
+  - first:
+      213: 2699248150601154606
+    second: eis_glatteis_klein_12
+  - first:
+      213: 1587058862671116162
+    second: eis_glatteis_klein_13
+  - first:
+      213: 2799449334208551456
+    second: eis_glatteis_klein_14
+  - first:
+      213: 3628767997465532616
+    second: eis_glatteis_klein_15
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 4096
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: eis_glatteis_klein_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 88
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5161}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 98420a6795c7489898099d20d0a4789c
+      internalID: 3468311781054190242
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eis_glatteis_klein_1
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 0
+        width: 88
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5161}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c8524993a0534461a55c1e355851a978
+      internalID: 2195328959246641905
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eis_glatteis_klein_2
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 0
+        width: 88
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5161}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ad72b9d667854ab89690d1383f49db5a
+      internalID: 2759890312244989755
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eis_glatteis_klein_3
+      rect:
+        serializedVersion: 2
+        x: 264
+        y: 0
+        width: 88
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5161}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c1cf0ce752cf4f48ae4de9b0fcf81aa7
+      internalID: 1479212245813970592
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eis_glatteis_klein_4
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 0
+        width: 88
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5161}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1c2ea497dec3446cb7efb323ee5f4d80
+      internalID: 2006281161487453269
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eis_glatteis_klein_5
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 0
+        width: 88
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5161}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 76a2730bc93f445ab47a427dc7313d1c
+      internalID: 1510577390324190660
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eis_glatteis_klein_6
+      rect:
+        serializedVersion: 2
+        x: 528
+        y: 0
+        width: 88
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5161}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ff2421cf9d3848358b03ecda762d9121
+      internalID: 2281924131109396569
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eis_glatteis_klein_7
+      rect:
+        serializedVersion: 2
+        x: 616
+        y: 0
+        width: 88
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5161}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 42ba6edff59b4878b11cc48a5e397bef
+      internalID: 2213259821482750215
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eis_glatteis_klein_8
+      rect:
+        serializedVersion: 2
+        x: 704
+        y: 0
+        width: 88
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5161}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9699c833621a49ea8a4164c1bd0b4100
+      internalID: 2973905773560356149
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eis_glatteis_klein_9
+      rect:
+        serializedVersion: 2
+        x: 792
+        y: 0
+        width: 88
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5161}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 46051f901ffe4f298de31057ac704556
+      internalID: 4431267471013078448
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eis_glatteis_klein_10
+      rect:
+        serializedVersion: 2
+        x: 880
+        y: 0
+        width: 88
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5161}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0a67f7596d4248e0a89b37c7908d8276
+      internalID: 1501650315093178921
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eis_glatteis_klein_11
+      rect:
+        serializedVersion: 2
+        x: 968
+        y: 0
+        width: 88
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5161}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c5a32f9f9aa246feb3c150ac3694c445
+      internalID: 4605274232781955946
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eis_glatteis_klein_12
+      rect:
+        serializedVersion: 2
+        x: 1056
+        y: 0
+        width: 88
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5161}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 45c013fb38e349d5a1593bb4de67c50e
+      internalID: 2699248150601154606
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eis_glatteis_klein_13
+      rect:
+        serializedVersion: 2
+        x: 1144
+        y: 0
+        width: 88
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5161}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea0d685552be41ae9082a3e7028ad95d
+      internalID: 1587058862671116162
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eis_glatteis_klein_14
+      rect:
+        serializedVersion: 2
+        x: 1232
+        y: 0
+        width: 88
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5161}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d64eb0236db94a10b6f39d7da4bccb67
+      internalID: 2799449334208551456
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eis_glatteis_klein_15
+      rect:
+        serializedVersion: 2
+        x: 1320
+        y: 0
+        width: 88
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5161}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab5e614ca6ab4afcbef248d68729db57
+      internalID: 3628767997465532616
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      eis_glatteis_klein_0: 3468311781054190242
+      eis_glatteis_klein_1: 2195328959246641905
+      eis_glatteis_klein_10: 1501650315093178921
+      eis_glatteis_klein_11: 4605274232781955946
+      eis_glatteis_klein_12: 2699248150601154606
+      eis_glatteis_klein_13: 1587058862671116162
+      eis_glatteis_klein_14: 2799449334208551456
+      eis_glatteis_klein_15: 3628767997465532616
+      eis_glatteis_klein_2: 2759890312244989755
+      eis_glatteis_klein_3: 1479212245813970592
+      eis_glatteis_klein_4: 2006281161487453269
+      eis_glatteis_klein_5: 1510577390324190660
+      eis_glatteis_klein_6: 2281924131109396569
+      eis_glatteis_klein_7: 2213259821482750215
+      eis_glatteis_klein_8: 2973905773560356149
+      eis_glatteis_klein_9: 4431267471013078448
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

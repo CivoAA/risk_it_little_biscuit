@@ -253,6 +253,7 @@ public class AudioController : MonoBehaviour
         }
 
         if (fade && audible) FadeOutCopy(src);
+        StopStinger(fade);
 
         src.Stop();
         src.mute = true;
@@ -278,9 +279,100 @@ public class AudioController : MonoBehaviour
         }
     }
 
+    // ------------------------------------------------------ Boss-Musik im Lauf
+
+    private AudioSource stingerSource;
+
+    /// <summary>Das Stueck, das gerade als Lauf-Musik eingelegt ist (auch wenn es still steht).</summary>
+    public AudioClip CurrentRunClip =>
+        audioSources != null && audioSources.Length >= 2 && audioSources[1] != null ? audioSources[1].clip : null;
+
+    /// <summary>
+    /// Laesst die Lauf-Musik ausklingen, ohne den Lauf zu beenden - die Quelle
+    /// bleibt fuer <see cref="SwapRunMusic"/> bereit (z.B. waehrend der
+    /// Verkohlte den Spieler einsaugt).
+    /// </summary>
+    public void FadeRunMusic(float duration)
+    {
+        if (!runMusicActive || audioSources == null || audioSources.Length < 2 || audioSources[1] == null) return;
+        AudioSource src = audioSources[1];
+        if (runMusicRoutine != null)
+        {
+            StopCoroutine(runMusicRoutine);
+            runMusicRoutine = null;
+        }
+        if (src.isPlaying && !src.mute && src.volume > 0f) FadeOutCopy(src, duration);
+        src.Stop();
+    }
+
+    /// <summary>
+    /// Legt mitten im Lauf ein anderes Stueck auf die Lauf-Musik-Quelle
+    /// (Bosskampf) und spielt es von vorn - so laeuft auch die Mochi-Melodie
+    /// (MusicClock liest audioSources[1]) gleich im neuen Takt mit. Was noch
+    /// klingt, blendet in <paramref name="fadeOut"/> aus.
+    /// </summary>
+    public void SwapRunMusic(AudioClip clip, float fadeOut, float fadeIn)
+    {
+        if (!runMusicActive || clip == null) return;
+        if (audioSources == null || audioSources.Length < 2 || audioSources[1] == null) return;
+        AudioSource src = audioSources[1];
+        if (runMusicRoutine != null)
+        {
+            StopCoroutine(runMusicRoutine);
+            runMusicRoutine = null;
+        }
+        if (src.isPlaying && !src.mute && src.volume > 0f) FadeOutCopy(src, fadeOut);
+
+        src.Stop();
+        src.clip = clip;
+        src.mute = false;
+        src.volume = fadeIn > 0f ? 0f : runMusicVolume;
+        src.Play();
+        if (fadeIn > 0f) runMusicRoutine = StartCoroutine(FadeRunIn(src, fadeIn));
+    }
+
+    private IEnumerator FadeRunIn(AudioSource src, float duration)
+    {
+        yield return FadeIn(src, runMusicVolume, duration);
+        runMusicRoutine = null;
+    }
+
+    /// <summary>
+    /// Ein Stueck einmal ueber die Lauf-Musik spielen (Finale nach dem
+    /// Bosskampf) - laeuft ueber den Musik-Kanal, endet mit dem Lauf.
+    /// </summary>
+    public void PlayRunStinger(AudioClip clip)
+    {
+        if (clip == null || audioSources == null || audioSources.Length < 2 || audioSources[1] == null) return;
+        if (stingerSource == null)
+        {
+            GameObject go = new GameObject("RunStinger");
+            go.transform.SetParent(transform, false);
+            stingerSource = go.AddComponent<AudioSource>();
+            stingerSource.playOnAwake = false;
+            stingerSource.loop = false;
+            stingerSource.spatialBlend = 0f;
+        }
+        AudioSource music = audioSources[1];
+        stingerSource.outputAudioMixerGroup = music.outputAudioMixerGroup;
+        stingerSource.priority = music.priority;
+        stingerSource.volume = runMusicVolume;
+        stingerSource.clip = clip;
+        stingerSource.Play();
+    }
+
+    private void StopStinger(bool fade)
+    {
+        if (stingerSource == null || !stingerSource.isPlaying) return;
+        if (fade) FadeOutCopy(stingerSource);
+        stingerSource.Stop();
+    }
+
     // Eine Kopie spielt an derselben Stelle weiter und klingt aus - so kann
     // die Quelle selbst sofort gestoppt und fuer das naechste Stueck frei sein.
-    private void FadeOutCopy(AudioSource src)
+    private void FadeOutCopy(AudioSource src) => FadeOutCopy(src, musicFadeOut);
+
+    private void FadeOutCopy(AudioSource src, float duration)
     {
         if (src.clip == null) return;
 
@@ -296,7 +388,7 @@ public class AudioController : MonoBehaviour
         copy.loop = false;
         copy.time = src.time;
         copy.Play();
-        StartCoroutine(FadeOutAndDestroy(copy, musicFadeOut));
+        StartCoroutine(FadeOutAndDestroy(copy, duration));
     }
 
     private static IEnumerator FadeOutAndDestroy(AudioSource src, float duration)

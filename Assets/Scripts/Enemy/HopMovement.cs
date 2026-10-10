@@ -25,6 +25,10 @@ public class HopMovement : MonoBehaviour
              "Aus: in der Luft genau Katalog-Tempo, im Schnitt also deutlich langsamer.")]
     [SerializeField] private bool keepAverageSpeed = true;
 
+    [Tooltip("Bilder je Sprung, wenn die Animation mehrere Spruenge hintereinander zeigt (z.B. normal + Blinzeln). " +
+             "Die Luftbilder gelten dann in jedem Sprung. 0 = die ganze Animation ist ein Sprung.")]
+    [SerializeField] private int cycleFrames = 0;
+
     private Animator animator;
 
 #if UNITY_EDITOR
@@ -60,6 +64,12 @@ public class HopMovement : MonoBehaviour
 
             float t = animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
             int frame = Mathf.Clamp(Mathf.FloorToInt((t - Mathf.Floor(t)) * frameCount), 0, frameCount - 1);
+
+            if (cycleFrames > 0 && cycleFrames < frameCount)
+            {
+                frame %= cycleFrames;
+                frameCount = cycleFrames;
+            }
 
             if (frame < firstAirFrame || frame > lastAirFrame) return 0f;
             if (!keepAverageSpeed) return 1f;

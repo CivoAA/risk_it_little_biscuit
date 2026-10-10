@@ -1,0 +1,419 @@
+fileFormatVersion: 2
+guid: 2968cf7330514a08b9df5b68f3047106
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3707255241926946913
+    second: squiddy_nessel_tentakel_0
+  - first:
+      213: 4359790111101371618
+    second: squiddy_nessel_tentakel_1
+  - first:
+      213: 3730230210764933392
+    second: squiddy_nessel_tentakel_2
+  - first:
+      213: 4170293141538171609
+    second: squiddy_nessel_tentakel_3
+  - first:
+      213: 3623807193872196199
+    second: squiddy_nessel_tentakel_4
+  - first:
+      213: 3336129451438646808
+    second: squiddy_nessel_tentakel_5
+  - first:
+      213: 3745329674037585891
+    second: squiddy_nessel_tentakel_6
+  - first:
+      213: 4270410775211646736
+    second: squiddy_nessel_tentakel_7
+  - first:
+      213: 1685296830191392398
+    second: squiddy_nessel_tentakel_8
+  - first:
+      213: 2055728071702219569
+    second: squiddy_nessel_tentakel_9
+  - first:
+      213: 3298382561415335135
+    second: squiddy_nessel_tentakel_10
+  - first:
+      213: 2747491474167560732
+    second: squiddy_nessel_tentakel_11
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: squiddy_nessel_tentakel_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 40
+        height: 88
+      alignment: 9
+      pivot: {x: 0.5, y: 0.09090909090909091}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 51c2418f15cb48009090775573a438d0
+      internalID: 3707255241926946913
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: squiddy_nessel_tentakel_1
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 0
+        width: 40
+        height: 88
+      alignment: 9
+      pivot: {x: 0.5, y: 0.09090909090909091}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3806cc796b2c4e11a5850bc028ffa73e
+      internalID: 4359790111101371618
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: squiddy_nessel_tentakel_2
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 0
+        width: 40
+        height: 88
+      alignment: 9
+      pivot: {x: 0.5, y: 0.09090909090909091}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b6bcc5d583e4297a13fc1ea75630a41
+      internalID: 3730230210764933392
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: squiddy_nessel_tentakel_3
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 0
+        width: 40
+        height: 88
+      alignment: 9
+      pivot: {x: 0.5, y: 0.09090909090909091}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 772b3d8c5fca4ecd8ae9c332c2c9afc8
+      internalID: 4170293141538171609
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: squiddy_nessel_tentakel_4
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 0
+        width: 40
+        height: 88
+      alignment: 9
+      pivot: {x: 0.5, y: 0.09090909090909091}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a8d36f0557b143f7b298bf4d7e5f8959
+      internalID: 3623807193872196199
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: squiddy_nessel_tentakel_5
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 0
+        width: 40
+        height: 88
+      alignment: 9
+      pivot: {x: 0.5, y: 0.09090909090909091}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f622814aac024c4e812ec17fb62ccae4
+      internalID: 3336129451438646808
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: squiddy_nessel_tentakel_6
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 0
+        width: 40
+        height: 88
+      alignment: 9
+      pivot: {x: 0.5, y: 0.09090909090909091}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 088f884e44e0483aaa957952ae7944eb
+      internalID: 3745329674037585891
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: squiddy_nessel_tentakel_7
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 0
+        width: 40
+        height: 88
+      alignment: 9
+      pivot: {x: 0.5, y: 0.09090909090909091}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d10151bfabee4f1188d24efe21fc6d5c
+      internalID: 4270410775211646736
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: squiddy_nessel_tentakel_8
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 0
+        width: 40
+        height: 88
+      alignment: 9
+      pivot: {x: 0.5, y: 0.09090909090909091}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee921478a6614c7cae005d6f87cdca6e
+      internalID: 1685296830191392398
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: squiddy_nessel_tentakel_9
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 0
+        width: 40
+        height: 88
+      alignment: 9
+      pivot: {x: 0.5, y: 0.09090909090909091}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 167c0a21d8864d8bb5f4b35e2e8f5249
+      internalID: 2055728071702219569
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: squiddy_nessel_tentakel_10
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 0
+        width: 40
+        height: 88
+      alignment: 9
+      pivot: {x: 0.5, y: 0.09090909090909091}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2d82505d331049aca98978b965533059
+      internalID: 3298382561415335135
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: squiddy_nessel_tentakel_11
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 0
+        width: 40
+        height: 88
+      alignment: 9
+      pivot: {x: 0.5, y: 0.09090909090909091}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 30ee0662d23e43a283ab1f5059ac0239
+      internalID: 2747491474167560732
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      squiddy_nessel_tentakel_0: 3707255241926946913
+      squiddy_nessel_tentakel_1: 4359790111101371618
+      squiddy_nessel_tentakel_10: 3298382561415335135
+      squiddy_nessel_tentakel_11: 2747491474167560732
+      squiddy_nessel_tentakel_2: 3730230210764933392
+      squiddy_nessel_tentakel_3: 4170293141538171609
+      squiddy_nessel_tentakel_4: 3623807193872196199
+      squiddy_nessel_tentakel_5: 3336129451438646808
+      squiddy_nessel_tentakel_6: 3745329674037585891
+      squiddy_nessel_tentakel_7: 4270410775211646736
+      squiddy_nessel_tentakel_8: 1685296830191392398
+      squiddy_nessel_tentakel_9: 2055728071702219569
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

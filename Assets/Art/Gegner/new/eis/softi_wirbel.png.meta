@@ -1,0 +1,939 @@
+fileFormatVersion: 2
+guid: 1df7bb8e04a84e8aa2fff36b40f966e2
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1674392418869818604
+    second: softi_wirbel_0
+  - first:
+      213: 2723131670924630359
+    second: softi_wirbel_1
+  - first:
+      213: 3186572519677833740
+    second: softi_wirbel_2
+  - first:
+      213: 1644569541864432636
+    second: softi_wirbel_3
+  - first:
+      213: 2259220566680972079
+    second: softi_wirbel_4
+  - first:
+      213: 1164140280778687997
+    second: softi_wirbel_5
+  - first:
+      213: 3507615252511485144
+    second: softi_wirbel_6
+  - first:
+      213: 3233673025544987541
+    second: softi_wirbel_7
+  - first:
+      213: 1561546632055741526
+    second: softi_wirbel_8
+  - first:
+      213: 3130491352154778608
+    second: softi_wirbel_9
+  - first:
+      213: 3811520512425814497
+    second: softi_wirbel_10
+  - first:
+      213: 4253559843232124001
+    second: softi_wirbel_11
+  - first:
+      213: 3820121751282258432
+    second: softi_wirbel_12
+  - first:
+      213: 4164862072227599562
+    second: softi_wirbel_13
+  - first:
+      213: 4510391608005028738
+    second: softi_wirbel_14
+  - first:
+      213: 1997257928269619358
+    second: softi_wirbel_15
+  - first:
+      213: 4108977088089523812
+    second: softi_wirbel_16
+  - first:
+      213: 2837307824766465348
+    second: softi_wirbel_17
+  - first:
+      213: 1278404502824334348
+    second: softi_wirbel_18
+  - first:
+      213: 3036635826579787504
+    second: softi_wirbel_19
+  - first:
+      213: 2261440188189909210
+    second: softi_wirbel_20
+  - first:
+      213: 3497312191564639782
+    second: softi_wirbel_21
+  - first:
+      213: 2370555611322060362
+    second: softi_wirbel_22
+  - first:
+      213: 3135458129157861060
+    second: softi_wirbel_23
+  - first:
+      213: 1536590367279809173
+    second: softi_wirbel_24
+  - first:
+      213: 2767552642673882569
+    second: softi_wirbel_25
+  - first:
+      213: 4260152080372244107
+    second: softi_wirbel_26
+  - first:
+      213: 1166871755006241845
+    second: softi_wirbel_27
+  - first:
+      213: 1659389977420284545
+    second: softi_wirbel_28
+  - first:
+      213: 1513898057653827882
+    second: softi_wirbel_29
+  - first:
+      213: 2105838534402443152
+    second: softi_wirbel_30
+  - first:
+      213: 3760336300224803828
+    second: softi_wirbel_31
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: softi_wirbel_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dd5af3784dea443c86f8c7f5cdcda406
+      internalID: 1674392418869818604
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: softi_wirbel_1
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d7d5f7b8c7694228abf2ce294a05d964
+      internalID: 2723131670924630359
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: softi_wirbel_2
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0774cb0e5c5d48a39c836ecfdafd2860
+      internalID: 3186572519677833740
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: softi_wirbel_3
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 793f0d9566e8489a86d6a72d804beb20
+      internalID: 1644569541864432636
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: softi_wirbel_4
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 584037ef0bf6476bb2a5e3239963e73a
+      internalID: 2259220566680972079
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: softi_wirbel_5
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c46630af45d42a1ab6377e24b71a68e
+      internalID: 1164140280778687997
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: softi_wirbel_6
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 47cb276f729d4ead962805bef8e2e624
+      internalID: 3507615252511485144
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: softi_wirbel_7
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aebd4cf1aad14a6285fe301d18907223
+      internalID: 3233673025544987541
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: softi_wirbel_8
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 09eb61628c504f40acd4577c1b80b5dc
+      internalID: 1561546632055741526
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: softi_wirbel_9
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d1f615dff5b14bba8ae8c3eb0a65c1b6
+      internalID: 3130491352154778608
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: softi_wirbel_10
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d6cd0d9bfda8402888706af265e7feec
+      internalID: 3811520512425814497
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: softi_wirbel_11
+      rect:
+        serializedVersion: 2
+        x: 704
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eee782f0f62d4a7791b97dffa2f770ab
+      internalID: 4253559843232124001
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: softi_wirbel_12
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 783366263d2b4e33b6b0ab86d857c9c4
+      internalID: 3820121751282258432
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: softi_wirbel_13
+      rect:
+        serializedVersion: 2
+        x: 832
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6985b8cf27d243198818623709de1888
+      internalID: 4164862072227599562
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: softi_wirbel_14
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cc5ffb562f714ab18e93e2157501ea39
+      internalID: 4510391608005028738
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: softi_wirbel_15
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 95e859b16e0d4b928b5c5fa65cfcf6e8
+      internalID: 1997257928269619358
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: softi_wirbel_16
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: efa581550c8b4247ab155d716f998fa6
+      internalID: 4108977088089523812
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: softi_wirbel_17
+      rect:
+        serializedVersion: 2
+        x: 1088
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c01860020f5e41bc858b26d5e0cc8dd6
+      internalID: 2837307824766465348
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: softi_wirbel_18
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c70aa7c9d5fe4aac81b0533503197a45
+      internalID: 1278404502824334348
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: softi_wirbel_19
+      rect:
+        serializedVersion: 2
+        x: 1216
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 85057c1ba1b0432ea536830a8c2af7a2
+      internalID: 3036635826579787504
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: softi_wirbel_20
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 28a5f5433da54c528748ac1c984386d8
+      internalID: 2261440188189909210
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: softi_wirbel_21
+      rect:
+        serializedVersion: 2
+        x: 1344
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae445a192f4d434b9964045611208c73
+      internalID: 3497312191564639782
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: softi_wirbel_22
+      rect:
+        serializedVersion: 2
+        x: 1408
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1d482420d6eb4f7badceadc7778b3075
+      internalID: 2370555611322060362
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: softi_wirbel_23
+      rect:
+        serializedVersion: 2
+        x: 1472
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1ec53f74e3e84460acd1d4df526ea6f7
+      internalID: 3135458129157861060
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: softi_wirbel_24
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bae5966549cd462fabdc26b439829027
+      internalID: 1536590367279809173
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: softi_wirbel_25
+      rect:
+        serializedVersion: 2
+        x: 1600
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f05d1e2d5644489497750b51eceb3c2e
+      internalID: 2767552642673882569
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: softi_wirbel_26
+      rect:
+        serializedVersion: 2
+        x: 1664
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5b6dae9accd8447d83ee6833c55b0706
+      internalID: 4260152080372244107
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: softi_wirbel_27
+      rect:
+        serializedVersion: 2
+        x: 1728
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2652cc6367624f0ab2d06035366e09a0
+      internalID: 1166871755006241845
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: softi_wirbel_28
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b68eef2e812844acaf559d2907d91bee
+      internalID: 1659389977420284545
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: softi_wirbel_29
+      rect:
+        serializedVersion: 2
+        x: 1856
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 37b682969e3847a99240f5ec7b3373ba
+      internalID: 1513898057653827882
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: softi_wirbel_30
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b6c200293a524e1a85e1b4c926bcaac8
+      internalID: 2105838534402443152
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: softi_wirbel_31
+      rect:
+        serializedVersion: 2
+        x: 1984
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee2c8f865494475eb354576ebba3862f
+      internalID: 3760336300224803828
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      softi_wirbel_0: 1674392418869818604
+      softi_wirbel_1: 2723131670924630359
+      softi_wirbel_10: 3811520512425814497
+      softi_wirbel_11: 4253559843232124001
+      softi_wirbel_12: 3820121751282258432
+      softi_wirbel_13: 4164862072227599562
+      softi_wirbel_14: 4510391608005028738
+      softi_wirbel_15: 1997257928269619358
+      softi_wirbel_16: 4108977088089523812
+      softi_wirbel_17: 2837307824766465348
+      softi_wirbel_18: 1278404502824334348
+      softi_wirbel_19: 3036635826579787504
+      softi_wirbel_2: 3186572519677833740
+      softi_wirbel_20: 2261440188189909210
+      softi_wirbel_21: 3497312191564639782
+      softi_wirbel_22: 2370555611322060362
+      softi_wirbel_23: 3135458129157861060
+      softi_wirbel_24: 1536590367279809173
+      softi_wirbel_25: 2767552642673882569
+      softi_wirbel_26: 4260152080372244107
+      softi_wirbel_27: 1166871755006241845
+      softi_wirbel_28: 1659389977420284545
+      softi_wirbel_29: 1513898057653827882
+      softi_wirbel_3: 1644569541864432636
+      softi_wirbel_30: 2105838534402443152
+      softi_wirbel_31: 3760336300224803828
+      softi_wirbel_4: 2259220566680972079
+      softi_wirbel_5: 1164140280778687997
+      softi_wirbel_6: 3507615252511485144
+      softi_wirbel_7: 3233673025544987541
+      softi_wirbel_8: 1561546632055741526
+      softi_wirbel_9: 3130491352154778608
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

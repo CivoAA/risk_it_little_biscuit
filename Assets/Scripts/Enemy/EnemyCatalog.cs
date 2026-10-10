@@ -82,6 +82,41 @@ public enum EnemyId
     /// entkommt. Gleiche Bilder, gleiches Skript, Rolle DeathBoss.
     /// </summary>
     VerkohlterTod = 33,
+
+    // Eiswelt (Eisgletscher, Karte 3)
+
+    /// <summary>Kugel Minz-Schoko-Eis, schlittert auf ihrer Schmelzpfuetze. Grundgegner.</summary>
+    Minzkugel = 34,
+
+    /// <summary>Raketen-Wassereis, springt auf dem Stiel wie auf einem Pogo-Stick (HopMovement).</summary>
+    Raketeneis = 35,
+
+    /// <summary>Elite: Waffeltuete mit wirbelnder Softeis-Frisur, schaukelt auf der Spitze.</summary>
+    Softi = 36,
+
+    /// <summary>
+    /// Endboss der Eiswelt: Kaiserpinguin aus Eiscreme (EnemyEiskaiser).
+    /// Kaiser-Kick (Lawinenkugel), Frostring mit Luecken, der einfriert.
+    /// </summary>
+    Eiskaiser = 37,
+
+    /// <summary>
+    /// Die Lawinenkugel aus dem Kaiser-Kick: rollt dem Spieler nach und frisst
+    /// die Horde (EiskaiserLawinenkugel). Kommt nur vom Eiskaiser, in keinem Plan.
+    /// </summary>
+    Lawinenkugel = 38,
+
+    // Geisterwald (Karte 4)
+
+    /// <summary>
+    /// Endboss des Geisterwalds: Phase 1 ein grosses Laken-Gespenst, darunter
+    /// steckt Squiddy, die Traubengelee-Qualle mit Heiligenschein (EnemySquiddy).
+    /// Katalogname "Das Gespenst" - die Enthuellung soll eine Ueberraschung bleiben.
+    /// </summary>
+    Squiddy = 39,
+
+    /// <summary>Baby-Squiddy aus der Quallen-Brut (SquiddyBaby). Kommt nur von Squiddy, in keinem Plan.</summary>
+    QuallenBaby = 40,
 }
 
 /// <summary>
@@ -565,6 +600,55 @@ public static class EnemyCatalog
             sheet: "Assets/Art/Gegner/new/pfannkuchen_hop.png", fps: 16f,
             colliderRadius: 0.72f, colliderOffset: new Vector2(0f, 0.72f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Archiv/pancake.prefab");
+
+        Def(EnemyId.Minzkugel, "Minzkugel",
+            health: 4f, damage: 2f, speed: 1.5f, exp: 1, pushTime: 0.25f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/eis/minzkugel_gleit.png", fps: 14f,
+            colliderRadius: 0.34f, colliderOffset: new Vector2(0f, 0.38f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Minzkugel.prefab");
+
+        Def(EnemyId.Raketeneis, "Raketeneis",
+            health: 12f, damage: 3f, speed: 2f, exp: 4, pushTime: 0.2f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/eis/raketeneis_hops.png", fps: 14f,
+            colliderRadius: 0.3f, colliderOffset: new Vector2(0f, 0.72f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Raketeneis.prefab", hopFirst: 3, hopLast: 9);
+
+        Def(EnemyId.Softi, "Softi",
+            health: 280f, damage: 6f, speed: 1.2f, exp: 350, pushTime: 0.3f,
+            role: EnemyRole.Elite, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/eis/softi_wirbel.png", fps: 16f,
+            colliderRadius: 0.5f, colliderOffset: new Vector2(0f, 0.95f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Elite_Gegner/Softi.prefab");
+
+        Def(EnemyId.Eiskaiser, "Eiskaiser",
+            health: 7000f, damage: 30f, speed: 1.7f, exp: 0, pushTime: 0f,
+            role: EnemyRole.Boss, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/boss/eiskaiser_walk.png", fps: 12f,
+            colliderRadius: 1.0f, colliderOffset: new Vector2(0f, 1.15f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Boss/Eiskaiser.prefab");
+
+        Def(EnemyId.Lawinenkugel, "Lawinenkugel",
+            health: 200f, damage: 14f, speed: 4.4f, exp: 0, pushTime: 0f,
+            role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/boss/eiskaiser_kugel.png", fps: 12f,
+            colliderRadius: 0.2f, colliderOffset: new Vector2(0f, 0.22f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Boss/Lawinenkugel.prefab");
+
+        Def(EnemyId.Squiddy, "Das Gespenst",
+            health: 7200f, damage: 30f, speed: 1.9f, exp: 0, pushTime: 0f,
+            role: EnemyRole.Boss, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/boss/squiddy_geist_schweben.png", fps: 12f,
+            colliderRadius: 1.2f, colliderOffset: new Vector2(0f, 2.05f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Boss/Squiddy.prefab");
+
+        Def(EnemyId.QuallenBaby, "Baby-Squiddy",
+            health: 70f, damage: 10f, speed: 2.4f, exp: 6, pushTime: 0f,
+            role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/boss/squiddy_baby.png", fps: 12f,
+            colliderRadius: 0.32f, colliderOffset: new Vector2(0f, 0.55f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Boss/QuallenBaby.prefab");
 
         // ---------------------------------------------------------- Archiv
         //

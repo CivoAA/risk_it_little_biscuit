@@ -68622,7 +68622,7 @@ MonoBehaviour:
   mapName: World4
   legacyMapId: 4
   planId: 
-  music: {fileID: 0}
+  music: {fileID: 8300000, guid: ba1ba79eaed24ddbbfcc4ce4f30eda04, type: 3}
   limitSpawnY: 0
   spawnMinY: -9.5
   spawnMaxY: 9

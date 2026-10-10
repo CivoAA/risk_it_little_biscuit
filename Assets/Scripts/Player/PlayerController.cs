@@ -147,6 +147,14 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     [System.NonSerialized] public bool Captured;
 
+    /// <summary>
+    /// Eingefroren (Frostring des Eiskaisers) bis zu diesem Zeitpunkt: steht
+    /// still, Waffen feuern weiter. Setzt und verkuerzt <see cref="PlayerIceBlock"/>.
+    /// </summary>
+    [System.NonSerialized] public float FrozenUntil;
+
+    public bool IsFrozen => Time.time < FrozenUntil;
+
     private int hitsoundinterval = 10;
     private PlayerHitFeedback hitFeedback;
     private static readonly System.Random rng = new System.Random();
@@ -278,13 +286,23 @@ public class PlayerController : MonoBehaviour
         // In der Zwischensequenz bewegt ihn jemand anderes.
         if (Captured) return;
 
+        // Im Eisblock: kein Schritt, auch kein Weiterrutschen auf Glatteis.
+        if (IsFrozen)
+        {
+            rb.linearVelocity = Vector2.zero;
+            DecayShield(Time.fixedDeltaTime);
+            return;
+        }
+
         // Skilltree "Letzter Atem": unter 30 % Leben schneller.
         float speed = IsLastBreath ? moveSpeed * (1f + lastBreathSpeedPercent / 100f) : moveSpeed;
         // Skilltree "Kawarimi": waehrend der Wirkung deutlich schneller, um wegzurennen.
         if (IsKawarimi) speed *= 1f + KawarimiSpeedBonus;
         // Taifunfaecher-Evo: Rueckenwind in der eigenen Windschneise.
         if (TyphoonFan.HasTailwind) speed *= 1f + TyphoonFan.TailwindBonus;
-        rb.linearVelocity = new Vector3(playerMoveDirection.x * speed, playerMoveDirection.y * speed);
+        Vector2 wanted = new Vector2(playerMoveDirection.x * speed, playerMoveDirection.y * speed);
+        // Eiswelt: auf Glatteis rutscht man (sonst kommt wanted unveraendert zurueck).
+        rb.linearVelocity = Glatteis.Steer(rb.position, rb.linearVelocity, wanted, Time.fixedDeltaTime);
 
         DecayShield(Time.fixedDeltaTime);
     }
@@ -986,7 +1004,15 @@ public class PlayerController : MonoBehaviour
             // haengt darum nicht mehr am Shop: ohne Startwaffe kaeme ihn keiner frei.
             "choco_chips",
             "milk_dunk",
-            "shurikookie"
+            "shurikookie",
+            // Mochi-Melodie: Mochis Startwaffe, fuer alle anderen unter 1b gesperrt.
+            // (Der Mochi-Faden "mochi_strand" war es bis 10.10.2026 - ohne Eintrag
+            // hier und ohne Shop-Eintrag bekommt ihn niemand mehr.)
+            "mochi_melody",
+            // Fuchsfeuer: Inaris Startwaffe, ebenso exklusiv.
+            "foxfire",
+            // Koenigsplumps: Startwaffe des Schleimkoenigs, ebenso exklusiv.
+            "royal_splat"
         };
 
         if (defaultUnlockedWeapons.Contains(weapon.weaponID))

@@ -67591,7 +67591,7 @@ MonoBehaviour:
   mapName: World0
   legacyMapId: 0
   planId: 
-  music: {fileID: 0}
+  music: {fileID: 8300000, guid: ef0ea7de397748989f24388becd57a46, type: 3}
   limitSpawnY: 1
   spawnMinY: -9.5
   spawnMaxY: 9

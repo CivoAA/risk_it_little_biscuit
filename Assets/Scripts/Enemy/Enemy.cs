@@ -216,6 +216,12 @@ public class Enemy : MonoBehaviour
     public static IReadOnlyList<Enemy> Alive => alive;
 
     /// <summary>
+    /// Jeder Treffer per <see cref="TakeDamage"/>: Gegner und roher Schaden
+    /// (vor Damage-Buff und Crit). Kommt auch fuer Treffer, die ihn toeten.
+    /// </summary>
+    public static event System.Action<Enemy, float> Damaged;
+
+    /// <summary>
     /// Was dieser Gegner im Druck-Budget wiegt. Setzt der Director beim
     /// Spawnen; wer anders erzeugt wird, zaehlt als 1.
     /// </summary>
@@ -267,6 +273,13 @@ public class Enemy : MonoBehaviour
 
     /// <summary>Kommt einmal, wenn ein Gegner mit <see cref="HoldDeath"/> toedlich getroffen wurde.</summary>
     public event System.Action DeathHeld;
+
+    /// <summary>
+    /// Name fuer die Boss-Leiste, falls er vom Katalognamen abweicht oder sich
+    /// mitten im Kampf aendert (das Gespenst entpuppt sich als Squiddy).
+    /// Leer = <see cref="Bestiary.NameOf"/>.
+    /// </summary>
+    [System.NonSerialized] public string DisplayName;
 
     /// <summary>Beim Tod keinen Todeseffekt des Prefabs abspielen (das Skript zeigt einen eigenen).</summary>
     [System.NonSerialized] public bool SkipDeathEffect;
@@ -910,6 +923,10 @@ public class Enemy : MonoBehaviour
             float floor = Mathf.Min(before, Mathf.Max(1f, maxHealth * MinHealthFraction));
             if (health < floor) health = floor;
         }
+
+        // Fuer Waffen, die Treffer weiterreichen (Mochi-Faden) - roher Schaden
+        // vor Multiplikatoren, weil der Empfaenger sie selbst noch einmal anwendet.
+        Damaged?.Invoke(this, damage);
 
         if (LifeSteal.Instance != null)
         {

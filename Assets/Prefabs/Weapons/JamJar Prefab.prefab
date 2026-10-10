@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9050048022382270009}
   - component: {fileID: 4062182688356679613}
+  - component: {fileID: 3225210784515952162}
   m_Layer: 0
   m_Name: JamJar Prefab
   m_TagString: Untagged
@@ -27,7 +28,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1.154, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -76,14 +77,39 @@ SpriteRenderer:
   m_SortingLayerID: 1682636205
   m_SortingLayer: 2
   m_SortingOrder: 1
-  m_Sprite: {fileID: -7237997676949662545, guid: 08369b5d3a1717f4282d5b11734b2311, type: 3}
+  m_Sprite: {fileID: 2722113690675522696, guid: 799f09f17ea44e009b24778fad95649e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.5625, y: 0.59375}
+  m_Size: {x: 0.625, y: 0.625}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &3225210784515952162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4014172737208360904}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc50626105934462ad03c4f1e8868e2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpriteFlipbook
+  frames:
+  - {fileID: 2722113690675522696, guid: 799f09f17ea44e009b24778fad95649e, type: 3}
+  - {fileID: 3843118262743112360, guid: 799f09f17ea44e009b24778fad95649e, type: 3}
+  - {fileID: 1294050825870648965, guid: 799f09f17ea44e009b24778fad95649e, type: 3}
+  - {fileID: 4195728404827797862, guid: 799f09f17ea44e009b24778fad95649e, type: 3}
+  - {fileID: 3213272475548550772, guid: 799f09f17ea44e009b24778fad95649e, type: 3}
+  - {fileID: 1583625511186327235, guid: 799f09f17ea44e009b24778fad95649e, type: 3}
+  - {fileID: 2972428998705128859, guid: 799f09f17ea44e009b24778fad95649e, type: 3}
+  - {fileID: 3842960466145144323, guid: 799f09f17ea44e009b24778fad95649e, type: 3}
+  fps: 16
+  randomStart: 1
+  fadeIn: 0
+  fadeOut: 0

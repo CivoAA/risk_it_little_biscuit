@@ -1,0 +1,367 @@
+fileFormatVersion: 2
+guid: a0070042b1c04ffbbee1f21a77d83af1
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2842423800683170142
+    second: eiskaiser_eisblock_0
+  - first:
+      213: 2814504051023643100
+    second: eiskaiser_eisblock_1
+  - first:
+      213: 1222864733952708219
+    second: eiskaiser_eisblock_2
+  - first:
+      213: 1908649418516441632
+    second: eiskaiser_eisblock_3
+  - first:
+      213: 3121195901554293838
+    second: eiskaiser_eisblock_4
+  - first:
+      213: 3417195191557723457
+    second: eiskaiser_eisblock_5
+  - first:
+      213: 1708820199289238890
+    second: eiskaiser_eisblock_6
+  - first:
+      213: 3131899820941641084
+    second: eiskaiser_eisblock_7
+  - first:
+      213: 2243526924913736910
+    second: eiskaiser_eisblock_8
+  - first:
+      213: 2580486558653376276
+    second: eiskaiser_eisblock_9
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: eiskaiser_eisblock_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 40
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.019230769230769232}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c1f670e10c77472e9d2e10c6aad4d714
+      internalID: 2842423800683170142
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eiskaiser_eisblock_1
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 0
+        width: 40
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.019230769230769232}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 20d89cb0c01f4575b15ad22d8e3fd79a
+      internalID: 2814504051023643100
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eiskaiser_eisblock_2
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 0
+        width: 40
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.019230769230769232}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f47e094fb8a3410b9e4325d99e7bcbba
+      internalID: 1222864733952708219
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eiskaiser_eisblock_3
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 0
+        width: 40
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.019230769230769232}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 73c3434ec3374e059d484af88fa661f5
+      internalID: 1908649418516441632
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eiskaiser_eisblock_4
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 0
+        width: 40
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.019230769230769232}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 95771c689e8b4cc09d1101e5c9568a92
+      internalID: 3121195901554293838
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eiskaiser_eisblock_5
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 0
+        width: 40
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.019230769230769232}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b132b6a09acd443ea196359617a6ae4c
+      internalID: 3417195191557723457
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eiskaiser_eisblock_6
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 0
+        width: 40
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.019230769230769232}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c340761eab0b461eb2b7b97ed757cdc5
+      internalID: 1708820199289238890
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eiskaiser_eisblock_7
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 0
+        width: 40
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.019230769230769232}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90d5cfba49364ef29c1359057aa2bbfd
+      internalID: 3131899820941641084
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eiskaiser_eisblock_8
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 0
+        width: 40
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.019230769230769232}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d8750b70799e433cb49cdef16ac740bb
+      internalID: 2243526924913736910
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eiskaiser_eisblock_9
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 0
+        width: 40
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.019230769230769232}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 94c1c9c5016544b39162002839d76d32
+      internalID: 2580486558653376276
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      eiskaiser_eisblock_0: 2842423800683170142
+      eiskaiser_eisblock_1: 2814504051023643100
+      eiskaiser_eisblock_2: 1222864733952708219
+      eiskaiser_eisblock_3: 1908649418516441632
+      eiskaiser_eisblock_4: 3121195901554293838
+      eiskaiser_eisblock_5: 3417195191557723457
+      eiskaiser_eisblock_6: 1708820199289238890
+      eiskaiser_eisblock_7: 3131899820941641084
+      eiskaiser_eisblock_8: 2243526924913736910
+      eiskaiser_eisblock_9: 2580486558653376276
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

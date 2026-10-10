@@ -51,6 +51,10 @@ CHARS = [
     ("Toast",   "Char_Toast.png",   (0.84, 0.36, 0.34)),
     # Ritter hat 64er-Zellen (Schwert ragt ueber 32 hinaus) - Zelle als 4. Wert
     ("OnionKnight", "Char_OnionKnight.png", (0.55, 0.62, 0.80), 64),
+    ("Mochi",   "Char_Mochi.png",   (0.95, 0.55, 0.68)),
+    ("Fuchs",   "Char_Fuchs.png",   (0.42, 0.66, 0.90)),
+    # Schleimkoenig: 8x4-Sheet, Zelle oben links ist trotzdem Idle vorn
+    ("SlimeKing", "Char_SlimeKing.png", (0.98, 0.80, 0.30)),
 ]
 
 
@@ -146,6 +150,32 @@ MOTIFS = {
             "*": STAR,
         },
         "spots": [(4, 6, "o"), (37, 7, "*"), (37, 27, "o"), (4, 26, "*"), (28, 3, "o"), (13, 3, "*")],
+    },
+    # Mochi: Herzchen, Erdbeerchen und Funkeln
+    "Mochi": {
+        "shapes": {
+            "h": (["p.p", "ppp", ".p."], {"p": (0xFF, 0xD1, 0xE0, 255)}),
+            "b": ([".g.", "rrr", ".r."], {"g": (0x5D, 0xBB, 0x5A, 255), "r": (0xFF, 0x4D, 0x6D, 255)}),
+            "*": STAR,
+        },
+        "spots": [(4, 6, "h"), (36, 8, "*"), (35, 27, "h"), (4, 26, "b"), (28, 3, "b"), (12, 3, "*")],
+    },
+    # Inari-Fuchs: Pfotenabdruecke, Reiskoerner und Funkeln
+    "Fuchs": {
+        "shapes": {
+            "p": (["p.p", ".pp", "pp."], {"p": (0xFF, 0xD9, 0xA0, 255)}),
+            "r": (["cw", "wc"], {"c": CREAM, "w": (0xDD, 0xD5, 0xC8, 255)}),
+            "*": STAR,
+        },
+        "spots": [(4, 6, "p"), (36, 8, "*"), (35, 27, "r"), (4, 26, "p"), (28, 3, "r"), (12, 3, "*")],
+    },    # Schleimkoenig: Geleetropfen, Weintrauben und Funkeln
+    "SlimeKing": {
+        "shapes": {
+            "d": ([".s.", "sls", "sss"], {"s": (0xAD, 0x78, 0xE6, 255), "l": (0xF3, 0xE2, 0xFF, 255)}),
+            "g": ([".l.", "vwv", "vvv", ".v."], {"l": (0x6C, 0xC0, 0x4A, 255), "v": (0x7D, 0x62, 0xE8, 255), "w": (0xD9, 0xC9, 0xFF, 255)}),
+            "*": STAR,
+        },
+        "spots": [(4, 6, "d"), (37, 7, "*"), (36, 27, "g"), (4, 26, "d"), (28, 3, "*"), (12, 3, "g")],
     },
 }
 
