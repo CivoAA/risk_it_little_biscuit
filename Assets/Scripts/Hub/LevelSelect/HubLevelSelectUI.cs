@@ -47,7 +47,7 @@ using UnityEngine.UI;
 ///                     (level.N.name / level.N.desc) fehlt.
 ///       Preview / Preview Wide       Bild der Station (50x50) und Panorama (82x46).
 ///       Ambience      Stimmung im Panorama. Auto = nach Plan (World1 Kueche,
-///                     World2 Wald), sonst Staub. Volcano = Glut + Asche.
+///                     World2 Wald), sonst Staub. Volcano = Glut + Asche. Snow = Flocken + Polarlicht-Schimmer.
 ///  3. Sperren ist optional: Story Unlock Id / Endless Unlock Id leer = offen.
 ///  4. Play() macht daraus denselben Ablauf wie die World Map.
 /// ---------------------------------------------------------------------------
@@ -58,7 +58,7 @@ public class HubLevelSelectUI : MonoBehaviour
     /// <summary>Steht offen? Der Hub sperrt solange seine Interaktionen.</summary>
     public static bool IsOpen { get; private set; }
 
-    public enum Ambience { Auto, None, Dust, Kitchen, Forest, Volcano }
+    public enum Ambience { Auto, None, Dust, Kitchen, Forest, Volcano, Snow }
 
     /// <summary>Ein Level in der Auswahl.</summary>
     [System.Serializable]
@@ -86,6 +86,9 @@ public class HubLevelSelectUI : MonoBehaviour
 
         [Tooltip("Wellenplan (WavePlans), z.B. World1 oder World2 - fuer Boss, Dauer und Gegner im Steckbrief.")]
         public string planId = "";
+
+        [Tooltip("Boss im Steckbrief. None = der Endboss aus dem Wellenplan (fuer Welten ohne Plan hier eintragen).")]
+        public EnemyId boss = EnemyId.None;
 
         [Tooltip("Stimmung im Panorama. Auto = nach Plan.")]
         public Ambience ambience = Ambience.Auto;
@@ -978,8 +981,9 @@ public class HubLevelSelectUI : MonoBehaviour
 
         // Boss & Co. aus dem Wellenplan
         PlanInfo plan = open ? PlanFor(e) : null;
-        bool hasBoss = plan != null && plan.Boss != EnemyId.None;
-        Sprite bossSprite = hasBoss ? Bestiary.Icon(plan.Boss) : null;
+        EnemyId boss = !open ? EnemyId.None : e.boss != EnemyId.None ? e.boss : plan != null ? plan.Boss : EnemyId.None;
+        bool hasBoss = boss != EnemyId.None;
+        Sprite bossSprite = hasBoss ? BossPortrait(boss) : null;
 
         bossTile.enabled = true;
         bossQuestion.color = bossSprite == null ? OptionsKit.WithAlpha(GameHudSkin.Cream, 0.55f) : Color.clear;
@@ -1002,7 +1006,7 @@ public class HubLevelSelectUI : MonoBehaviour
         string none = hasBoss ? "" : !open ? "???" : Loc.Get("ui.levelselect.noboss", "Noch unbekannt.");
         // Steht darunter ein Bestwert (Welt ohne Wellenplan), ist unter dem Namen
         // kein Platz - der Hinweis rueckt dann in die Namenszeile.
-        bossName.text = hasBoss ? Bestiary.NameOf(plan.Boss).ToUpperInvariant() : rec ? none : "";
+        bossName.text = hasBoss ? Bestiary.NameOf(boss).ToUpperInvariant() : rec ? none : "";
         bossName.color = hasBoss ? GameHudSkin.Cream : GameHudSkin.Stone;
         bossNone.text = rec ? "" : none;
         float best = !rec ? 0f : endlessChosen ? LevelRecords.EndlessBest(e.mapId) : LevelRecords.StoryBest(e.mapId);
@@ -1212,6 +1216,28 @@ public class HubLevelSelectUI : MonoBehaviour
                         a = Mathf.Clamp01(life * 1.8f) * Mathf.Clamp01((1f - life) * 10f) * flick;
                         Color ember = Color.Lerp(new Color(1f, 0.34f, 0.1f), new Color(1f, 0.85f, 0.38f), life);
                         SetMote(img, x, y, 1, 1, OptionsKit.WithAlpha(ember, a));
+                    }
+                    break;
+
+                case Ambience.Snow:
+                    img.sprite = GameHudSkin.White;
+                    if (i % 5 == 0)
+                    {
+                        // Polarlicht: mintgruene Funken, die oben langsam pulsieren
+                        x = Mathf.Repeat(m.Seed.x * WinW + now * 3f * m.Speed, WinW);
+                        y = WinH * 0.08f + m.Seed.y * WinH * 0.22f + Mathf.Sin(now * 0.6f + x * 0.05f) * 4f;
+                        a = 0.35f * Mathf.Clamp01(0.5f + 0.5f * Mathf.Sin(now * 1.4f * m.Speed + m.Phase));
+                        SetMote(img, x, y, 2, 1, new Color(0.55f, 0.95f, 0.78f, a));
+                    }
+                    else
+                    {
+                        // Schneeflocken: fallen, schaukeln, treiben leicht nach links
+                        float drop = Mathf.Repeat(m.Seed.y + now * 0.06f * m.Speed, 1f);
+                        x = Mathf.Repeat(m.Seed.x * WinW - now * 3f * m.Speed + Mathf.Sin(now * 1.6f + m.Phase) * 5f, WinW);
+                        y = drop * WinH;
+                        a = 0.85f * Mathf.Clamp01(drop * 8f) * Mathf.Clamp01((1f - drop) * 8f);
+                        float size = i % 3 == 0 ? 2f : 1f;
+                        SetMote(img, x, y, size, size, new Color(1f, 1f, 1f, a));
                     }
                     break;
 
@@ -1454,6 +1480,21 @@ public class HubLevelSelectUI : MonoBehaviour
         }
     }
 
+    private static readonly Dictionary<EnemyId, Sprite> bossPortraits = new Dictionary<EnemyId, Sprite>();
+
+    /// <summary>
+    /// Boss-Bild fuer die Kachel: Resources/LevelSelect/Bosses/[EnemyId] (alle
+    /// gleich gross, 48x48, aus Tools/boss_portraits.py), sonst das Bestiarium-Bild.
+    /// </summary>
+    static Sprite BossPortrait(EnemyId id)
+    {
+        if (bossPortraits.TryGetValue(id, out Sprite cached)) return cached;
+        Sprite[] all = Resources.LoadAll<Sprite>("LevelSelect/Bosses/" + id);
+        Sprite sprite = all != null && all.Length > 0 ? all[0] : Bestiary.Icon(id);
+        bossPortraits[id] = sprite;
+        return sprite;
+    }
+
     /// <summary>Boss, Dauer und Arten aus dem Wellenplan. Null ohne (bekannten) Plan.</summary>
     PlanInfo PlanFor(LevelEntry e)
     {
@@ -1475,6 +1516,7 @@ public class HubLevelSelectUI : MonoBehaviour
                 RunPlan plan = WavePlans.ForMap(id);
                 info = new PlanInfo { Duration = plan.TotalDuration };
                 var kinds = new HashSet<EnemyId>();
+                bool bossIsReal = false;
 
                 void Add(EnemyId enemy, bool isBossBeat)
                 {
@@ -1482,10 +1524,11 @@ public class HubLevelSelectUI : MonoBehaviour
                     EnemyDef def = EnemyCatalog.Get(enemy);
                     if (def != null && def.Role == EnemyRole.Blocker) return;   // Kaefig-Wand ist Kulisse
                     kinds.Add(enemy);
-                    if (isBossBeat || (def != null && def.Role == EnemyRole.Boss))
-                    {
-                        if (info.Boss == EnemyId.None) info.Boss = enemy;
-                    }
+                    // Der Endboss zaehlt: ein Zwischenboss (Schleimkoenig im Eis) kommt
+                    // zwar auch als Boss-Beat, wird aber vom echten Boss verdraengt.
+                    bool realBoss = def != null && def.Role == EnemyRole.Boss;
+                    if (realBoss && !bossIsReal) { info.Boss = enemy; bossIsReal = true; }
+                    else if (isBossBeat && info.Boss == EnemyId.None) info.Boss = enemy;
                 }
 
                 void AddPhase(Phase phase)

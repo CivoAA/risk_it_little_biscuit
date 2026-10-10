@@ -254,6 +254,7 @@ public class EnemyVerkohlter : MonoBehaviour
         {
             // Bis er den Spieler eingesaugt hat, stirbt er nicht.
             enemy.MinHealthFraction = PhaseThreeAt;
+            VerkohlterMusik.Preload();
         }
     }
 
@@ -701,6 +702,7 @@ public class EnemyVerkohlter : MonoBehaviour
         // --- 1. Luft holen
         ScreenShake.Kick(2f, 0.9f);
         VerkohlterSounds.Suck();
+        VerkohlterMusik.Inhale();
         for (int i = 0; i < VerkohlterArt.InhaleFrames; i++)
         {
             Show(self, inhale, i);
@@ -809,8 +811,9 @@ public class EnemyVerkohlter : MonoBehaviour
             yield return null;
         }
 
-        // Landung: stauchen, Staub, Wumms
+        // Landung: stauchen, Staub, Wumms - und die Musik der Kammer schlaegt ein
         Boom(4f, 0.3f);
+        VerkohlterMusik.Enter();
         chamber.Puff(landing);
         float[] squashY = { 0.6f, 0.75f, 1.12f, 0.96f, 1f };
         foreach (float sy in squashY)
@@ -874,6 +877,7 @@ public class EnemyVerkohlter : MonoBehaviour
         SetGone(true);
         velocity = Vector2.zero;
         if (chamber != null) chamber.HeartDying();
+        VerkohlterMusik.HeartDying();
 
         Sprite[] death = VerkohlterArt.Strip("verkohlter_herz_tod");
         if (body != null) body.transform.localPosition = Vector3.zero;
@@ -892,6 +896,7 @@ public class EnemyVerkohlter : MonoBehaviour
             else if (i == HeartFlashFrame)
             {
                 VerkohlterSounds.Crack();
+                VerkohlterMusik.Finale();
                 Boom(8f, 0.8f);
                 iris.Flash(FlashColor, 0.7f);
             }

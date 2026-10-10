@@ -29,8 +29,10 @@ public static class WavePlans
     /// <summary>
     /// Holt den Plan zur Karte. Unbekannt = der Plan von World1.
     ///
-    /// Gespielt werden zurzeit World1 (Kueche, Karte 1, Szene Map_World0) und
-    /// World2 (Wald, Karte 2, Szene Map_World3 - planId dort fest eingetragen).
+    /// Gespielt werden zurzeit World1 (Kueche, Karte 1, Szene Map_World0),
+    /// World2 (Wald, Karte 2, Szene Map_World3 - planId dort fest eingetragen)
+    /// und World5 (Eisgletscher, Karte 3, Szene Map_World5 - kommt ueber den
+    /// mapName der Karte, die planId dort ist leer).
     /// </summary>
     public static RunPlan For(string planId)
     {
@@ -38,6 +40,7 @@ public static class WavePlans
         {
             case "world2": return World2();
             case "world2demo": return World2Demo();
+            case "world5": return World5();
             default: return World1();
         }
     }
@@ -63,7 +66,7 @@ public static class WavePlans
     }
 
     /// <summary>Alle Plaene, die es gibt - fuer die Werkstatt und den Vergleich.</summary>
-    public static readonly string[] AllIds = { "World1", "World2", "World2Demo" };
+    public static readonly string[] AllIds = { "World1", "World2", "World2Demo", "World5" };
 
     // ================================================================
     // WERKSTATT-ANFANG - alles hier drin schreibt das Tool neu.
@@ -406,6 +409,115 @@ public static class WavePlans
             .Burst(90f, EnemyId.EliteFluegdolch, 1f, Patterns.Arc, 0f);
 
         plan.EndWith(EnemyId.VerkohlterTod);
+
+        return plan;
+    }
+
+    // ------------------------------------------------------------- World5
+
+    /// <summary>
+    /// Eisgletscher - Karte 3 in der Levelauswahl. Im Takt der Kueche (gleiche
+    /// Druckwerte, Boss bei 20:00), mit den Gegnern der Eiswelt:
+    ///
+    ///   Minzkugel    Grundgegner, schlittert auf der Schmelzpfuetze
+    ///   Raketeneis   springt auf dem Stiel, schnell und etwas zaeher
+    ///   Softi        Elite, Waffeltuete mit wirbelnder Softeis-Frisur
+    ///
+    /// Dazu ab der Mitte die Weisse Messermaus (faellt im Schnee kaum auf) und
+    /// spaeter der Milchpanzer als schwerer Brocken. Der Schleimkoenig kommt
+    /// bei 11:30 als Zwischenboss, am Ende wartet der Eiskaiser
+    /// (Bauchrutscher-Billard + Frostring, siehe EnemyEiskaiser).
+    ///
+    /// Ablauf:
+    ///
+    ///   0:00  Anlauf, ~3 Minzkugeln (5 s)
+    ///   0:05  Minzkugeln, erster Raketen-Schwall bei 1:25, Ring mit Softi
+    ///   3:00  + Raketeneis im Grundnachschub
+    ///   9:00  + Weisse Messermaus, 11:30 Schleimkoenig (Zwischenboss)
+    ///  14:00  + Milchpanzer, Minzkugeln nur noch Beimischung
+    ///  20:00  Eiskaiser
+    /// </summary>
+    public static RunPlan World5()
+    {
+        var plan = new RunPlan("World5");
+
+        plan.Phase(5f)
+            .Pool(EnemyId.Minzkugel, 100f)
+            .Pressure(3.3f, 3.3f)
+            .Base(Patterns.Scatter);
+
+        plan.Phase(175f)
+            .Pool(EnemyId.Minzkugel, 100f)
+            .Pressure(10f, 28f)
+            .Base(Patterns.Scatter)
+            .Burst(45f, EnemyId.Minzkugel, 10f, Patterns.Arc, 0f)
+            .Burst(80f, EnemyId.Raketeneis, 10f, Patterns.Column, 0f)
+            .Encircle(105f, EnemyId.Softi, EnemyId.Minzkugel, 14, 13f, false, "RING!", 0.35f, 25f, 1.5f)
+            .Burst(150f, EnemyId.Minzkugel, 12f, Patterns.Column, 0f);
+
+        plan.Phase(360f)
+            .Pool(EnemyId.Minzkugel, 60f)
+            .Pool(EnemyId.Raketeneis, 40f)
+            .Pressure(28f, 56f)
+            .Base(Patterns.Scatter)
+            .Burst(5f, EnemyId.Raketeneis, 10f, Patterns.Arc, 0f)
+            .Calm(75f, 10f, 0.15f)
+            .Burst(105f, EnemyId.Raketeneis, 16f, Patterns.Cluster, 0f)
+            .Burst(135f, EnemyId.Softi, 1f, Patterns.Ambush, 0f)
+            .Burst(150f, EnemyId.Minzkugel, 18f, Patterns.Scatter, 0f)
+            .Calm(195f, 10f, 0.15f)
+            .Burst(225f, EnemyId.Raketeneis, 18f, Patterns.Cluster, 0f)
+            .Burst(270f, EnemyId.Minzkugel, 20f, Patterns.Arc, 0f)
+            .Burst(300f, EnemyId.Softi, 1f, Patterns.Ambush, 0f)
+            .Burst(330f, EnemyId.Raketeneis, 20f, Patterns.Column, 0f);
+
+        plan.Phase(300f)
+            .Pool(EnemyId.Minzkugel, 30f)
+            .Pool(EnemyId.Raketeneis, 45f)
+            .Pool(EnemyId.WeisseMessermaus, 25f)
+            .Pressure(70f, 140f)
+            .Base(Patterns.Scatter)
+            .Burst(40f, EnemyId.WeisseMessermaus, 16f, Patterns.Ambush, 0f)
+            .Burst(60f, EnemyId.Raketeneis, 12f, Patterns.Arc, 0f)
+            .Calm(95f, 10f, 0.15f)
+            .Boss(150f, EnemyId.Schleimkoenig, "SCHLEIMKOENIG!", 0.4f)
+            .Calm(215f, 10f, 0.15f)
+            .Burst(235f, EnemyId.Softi, 1f, Patterns.Ambush, 0f)
+            .Burst(250f, EnemyId.Raketeneis, 26f, Patterns.Column, 0f);
+
+        plan.Phase(358f)
+            .Pool(EnemyId.Minzkugel, 15f)
+            .Pool(EnemyId.Raketeneis, 45f)
+            .Pool(EnemyId.WeisseMessermaus, 30f)
+            .Pool(EnemyId.Milchpanzer, 10f)
+            .Pressure(140f, 170f)
+            .Base(Patterns.Scatter)
+            .Burst(60f, EnemyId.Milchpanzer, 16f, Patterns.Ambush, 0f)
+            .Calm(120f, 10f, 0.15f)
+            .Encircle(150f, EnemyId.Softi, EnemyId.Raketeneis, 18, 15f, false, "RING!", 0.35f, 25f, 1.5f)
+            .Burst(220f, EnemyId.WeisseMessermaus, 26f, Patterns.Cluster, 0f)
+            .Burst(260f, EnemyId.Softi, 1f, Patterns.Ambush, 0f)
+            .Calm(290f, 10f, 0.15f)
+            .Burst(320f, EnemyId.Minzkugel, 24f, Patterns.Arc, 0f);
+
+        plan.Phase(600f)
+            .Pool(EnemyId.Minzkugel, 15f)
+            .Pool(EnemyId.Raketeneis, 40f)
+            .Pool(EnemyId.WeisseMessermaus, 30f)
+            .Pool(EnemyId.Milchpanzer, 15f)
+            .Pressure(280f, 420f)
+            .Base(Patterns.Scatter)
+            .Boss(2f, EnemyId.Eiskaiser, "EISKAISER!", 0.4f);
+
+        plan.EndlessPhase()
+            .Pool(EnemyId.Minzkugel, 10f)
+            .Pool(EnemyId.Raketeneis, 40f)
+            .Pool(EnemyId.WeisseMessermaus, 30f)
+            .Pool(EnemyId.Milchpanzer, 20f)
+            .Pressure(100f, 100f)
+            .Base(Patterns.Scatter)
+            .Encircle(60f, EnemyId.None, EnemyId.Raketeneis, 20, 14f, false, "RING!", 0.35f, 25f, 1.5f)
+            .Burst(90f, EnemyId.Softi, 1f, Patterns.Arc, 0f);
 
         return plan;
     }

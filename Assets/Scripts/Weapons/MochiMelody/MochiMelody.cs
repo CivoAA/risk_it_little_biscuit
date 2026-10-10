@@ -9,7 +9,16 @@ using UnityEngine;
 /// kurz bremst. Jede Note, die im Takt trifft, macht den Akkord lauter
 /// (Crescendo). Die Toene spielen dabei wirklich eine kleine Melodie.
 ///
-/// cooldown = Laenge eines Schlags in Sekunden (Cooldown-Buff = schnelleres Tempo)
+/// Mit der Level-Musik: Mochi spielt im Takt und in der Tonart des Stuecks mit
+/// (<see cref="MusicClock"/>, <see cref="SongSheet"/>). Die Toene gehen per
+/// PlayScheduled sample-genau auf die Schlaege, die Melodie denkt sich
+/// <see cref="MelodyWriter"/> zu den Akkorden des Stuecks aus. Als Notenwert
+/// nimmt sie Halbe, Viertel oder Achtel - was dem Cooldown am naechsten kommt;
+/// der Schaden wird so umgerechnet, dass Schaden pro Sekunde gleich bleibt.
+/// Ohne Notenblatt fuer die laufende Musik spielt sie frei im eigenen Tempo.
+///
+/// cooldown = Laenge eines Schlags in Sekunden (Cooldown-Buff = schnelleres Tempo,
+///            mit Musik: Wechsel auf Achtel)
 /// damage   = Treffer einer Note; der Akkord macht <see cref="ChordFactor"/> davon (+ Crescendo)
 /// range    = Zielsuche der Noten in Tiles
 /// duration = so lange bremst der Akkord (Duration-Buff zaehlt)
@@ -83,29 +92,25 @@ public class MochiMelody : Weapon
     }
 
     // ------------------------------------------------------------------
-    //  Die Melodie: 4 Takte, je drei Toene + ein Akkord (Halbtoene ueber C5)
+    //  Takt: Mochi spielt mit der Level-Musik
     // ------------------------------------------------------------------
 
-    private static readonly int[][] Tune =
-    {
-        new[] { 0, 4, 7 },
-        new[] { 9, 7, 4 },
-        new[] { 5, 4, 2 },
-        new[] { 2, 7, 11 },
-    };
+    /// <summary>
+    /// So weit im Voraus wird ein Schlag geplant: der Ton geht per
+    /// PlayScheduled sample-genau raus, die Note fliegt erst, wenn er erklingt.
+    /// </summary>
+    private const double Lookahead = 0.1;
 
-    private static readonly int[][] Chords =
-    {
-        new[] { -12, 0, 4, 7 },     // C
-        new[] { -15, -3, 0, 4 },    // a
-        new[] { -19, -7, -3, 0 },   // F
-        new[] { -17, -5, -1, 2 },   // G
-    };
+    /// <summary>Notenwerte, zwischen denen Mochi waehlt: Halbe, Viertel, Achtel.</summary>
+    private static readonly double[] StepChoices = { 2.0, 1.0, 0.5 };
 
-    private const float ToneVolume = 0.22f;
-    private const float ChordVolume = 0.13f;
-    private const float ChimeVolume = 0.2f;
-    private const int Voices = 8;
+    /// <summary>Erst wechseln, wenn der neue Notenwert so viel besser zum Cooldown passt.</summary>
+    private const float SwitchMargin = 1.15f;
+
+    private const float ToneVolume = 0.2f;
+    private const float ChordVolume = 0.11f;
+    private const float ChimeVolume = 0.16f;
+    private const int Voices = 10;
 
     [Tooltip("Mitte der Mochi relativ zum Spieler-Pivot (der liegt unter den Fuessen).")]
     [SerializeField] private Vector2 originOffset = new Vector2(0f, 0.45f);
@@ -113,12 +118,34 @@ public class MochiMelody : Weapon
     [Tooltip("Hier steigen die Noten auf - ueber dem Kopf.")]
     [SerializeField] private Vector2 singOffset = new Vector2(0f, 0.95f);
 
+    private readonly MelodyWriter writer = new MelodyWriter();
+
+    // im Takt der Musik
+    private bool synced;
+    private int syncedLock;
+    private double stepBeats = 1.0;
+    private MusicClock.Step nextStep;
+
+    // frei (Musik ohne Notenblatt): eigener Takt aus dem Cooldown
     private float beatTimer;
-    private int beat;
-    private int bar;
+    private int freeBeat;
+
+    private int motif;          // zaehlt Akkorde - waehlt die Phrase
+    private int chordCount;     // fuer den Notenregen (jeder vierte)
     private int crescendoHits;
     private bool wasActive;
 
+    /// <summary>Ein geplanter Schlag: Ton ist schon raus, Note/Akkord kommt, wenn er erklingt.</summary>
+    private struct Pending
+    {
+        public double dsp;
+        public bool chord;
+        public int color;
+        public float damageScale;
+        public bool finale;
+    }
+
+    private readonly List<Pending> pending = new List<Pending>();
     private readonly List<Enemy> targets = new List<Enemy>();
     private AudioSource[] voices;
     private int nextVoice;
@@ -141,27 +168,183 @@ public class MochiMelody : Weapon
         if (!active)
         {
             wasActive = false;
+            pending.Clear();
             return;
         }
         if (!wasActive)
         {
-            // neu im Spiel: kurz anzaehlen, dann geht es auf der Eins los
+            // neu im Spiel: kurz anzaehlen, dann geht es los
             wasActive = true;
-            beat = 0;
+            synced = false;
             beatTimer = 0.6f;
+            freeBeat = 0;
             crescendoHits = 0;
+            writer.Reset();
         }
 
+        // Pause: die Musik laeuft weiter, Mochi nicht. Danach neu einsteigen.
+        if (Time.timeScale <= 0f)
+        {
+            synced = false;
+            return;
+        }
+
+        if (MusicClock.Poll()) PlanWithMusic();
+        else PlayFree();
+
+        FireDue();
+    }
+
+    /// <summary>Plant alle Schlaege, die in den naechsten <see cref="Lookahead"/> Sekunden erklingen.</summary>
+    private void PlanWithMusic()
+    {
+        double now = MusicClock.Now;
+        if (!synced || syncedLock != MusicClock.LockId || nextStep.time < now - 0.05)
+        {
+            // (neu) einsteigen: Notenwert waehlen, ab dem naechsten Rasterpunkt
+            synced = true;
+            syncedLock = MusicClock.LockId;
+            stepBeats = ChooseStep(MusicClock.Sheet, stepBeats, true);
+            nextStep = MusicClock.NextStep(now + 0.02, stepBeats);
+        }
+
+        for (int guard = 0; guard < 8 && nextStep.time - now < Lookahead; guard++)
+        {
+            Plan(MusicClock.Sheet, nextStep, MusicClock.ToDsp(nextStep.time), StepSeconds(MusicClock.Sheet));
+
+            // Notenwert nur auf der Eins wechseln, sonst stolpert der Rhythmus
+            double after = nextStep.time + 1e-4;
+            MusicClock.Step peek = MusicClock.NextStep(after, stepBeats);
+            if (Mathf.Abs((float)(peek.beat % 4.0)) < 1e-3f)
+            {
+                double chosen = ChooseStep(MusicClock.Sheet, stepBeats, false);
+                if (chosen != stepBeats)
+                {
+                    stepBeats = chosen;
+                    peek = MusicClock.NextStep(after, stepBeats);
+                }
+            }
+            nextStep = peek;
+        }
+    }
+
+    /// <summary>Ohne Notenblatt (Hub, Test-Szene, fremde Musik): Takt aus dem Cooldown, wie frueher.</summary>
+    private void PlayFree()
+    {
+        synced = false;
         beatTimer -= Time.deltaTime;
         if (beatTimer > 0f) return;
 
-        beatTimer += Mathf.Max(MinBeat, CurrentCooldown);
+        float beatLength = Mathf.Max(MinBeat, CurrentCooldown);
+        beatTimer += beatLength;
         if (beatTimer < 0f) beatTimer = 0f;   // nach einem Haenger nicht alles nachholen
 
-        if (beat < 3) SingNote();
-        else PlayChord();
+        MusicClock.Step step = new MusicClock.Step { time = 0, beat = freeBeat };
+        freeBeat = (freeBeat + 1) % (SongSheet.Solo.bars * 4);
+        stepBeats = 1.0;
+        Plan(SongSheet.Solo, step, AudioSettings.dspTime, beatLength);
+    }
 
-        beat = (beat + 1) % 4;
+    private double StepSeconds(SongSheet sheet) => stepBeats * sheet.BeatLength;
+
+    /// <summary>
+    /// Der Notenwert, der dem Cooldown am naechsten kommt - so bleibt der
+    /// Schaden pro Sekunde wie gebaut, egal wie schnell das Stueck ist.
+    /// </summary>
+    private double ChooseStep(SongSheet sheet, double current, bool force)
+    {
+        float cooldown = Mathf.Max(MinBeat, CurrentCooldown);
+        double best = current;
+        float bestMiss = float.MaxValue;
+        float currentMiss = float.MaxValue;
+        foreach (double choice in StepChoices)
+        {
+            double seconds = choice * sheet.BeatLength;
+            if (seconds < MinBeat) continue;
+            float miss = Mathf.Abs(Mathf.Log((float)seconds / cooldown));
+            if (choice == current) currentMiss = miss;
+            if (miss < bestMiss)
+            {
+                bestMiss = miss;
+                best = choice;
+            }
+        }
+        if (!force && currentMiss < float.MaxValue && currentMiss - bestMiss < Mathf.Log(SwitchMargin)) return current;
+        return best;
+    }
+
+    /// <summary>
+    /// Ein Schlag: Akkord-Ring auf dem letzten Platz jeder Vierergruppe,
+    /// sonst Noten. Bei Vierteln liegt der Ring auf der Vier, bei Achteln auf
+    /// Zwei und Vier - dort, wo im Stueck die Snare sitzt.
+    /// </summary>
+    private void Plan(SongSheet sheet, MusicClock.Step step, double dsp, double stepSeconds)
+    {
+        long index = (long)System.Math.Round(step.beat / stepBeats);
+        int shift = stepBeats < 1.0 ? 1 : 0;
+        int slot = (int)((index + shift) % 4);
+        Chord chord = sheet.ChordAt(step.beat);
+        float damageScale = Mathf.Clamp((float)stepSeconds / Mathf.Max(MinBeat, CurrentCooldown), 0.5f, 2f);
+
+        if (slot < 3) PlanNote(sheet, chord, slot, dsp, damageScale);
+        else PlanChord(chord, dsp, damageScale);
+    }
+
+    private void PlanNote(SongSheet sheet, Chord chord, int slot, double dsp, float damageScale)
+    {
+        // Die Melodie laeuft auch ohne Gegner weiter (sie bleibt dann stumm),
+        // damit sie beim naechsten Gegner an der richtigen Stelle weitermacht.
+        int pitch = writer.Note(sheet, chord, motif, slot);
+        if (!AnyTargetNear(CurrentStats.range)) return;   // keiner da - Mochi summt still mit
+
+        ScheduleTone(pitch, ToneVolume, dsp);
+        pending.Add(new Pending { dsp = dsp, chord = false, color = slot, damageScale = damageScale });
+    }
+
+    private void PlanChord(Chord chord, double dsp, float damageScale)
+    {
+        int thisChord = chordCount;
+        chordCount++;
+        motif++;
+        int[] tones = writer.Voicing(chord);
+
+        bool finale = weaponLevel >= FinaleLevel && thisChord % 4 == 3;
+        // Ohne Gegner und ohne Treffer im Takt bleibt der Akkord stumm
+        if (crescendoHits == 0 && !AnyTargetNear(Mathf.Max(CurrentStats.range, ChordReach()))) return;
+
+        for (int i = 0; i < tones.Length; i++) ScheduleTone(tones[i], ChordVolume, dsp);
+        if (crescendoHits > 0 || finale)
+        {
+            ScheduleClip(ChimeClip, ChimeVolume, Mathf.Pow(2f, MelodyWriter.ChimeShift(chord) / 12f), dsp);
+        }
+        pending.Add(new Pending { dsp = dsp, chord = true, damageScale = damageScale, finale = finale });
+    }
+
+    /// <summary>Was geplant war und jetzt erklingt, fliegt los.</summary>
+    private void FireDue()
+    {
+        double dspNow = AudioSettings.dspTime;
+        while (pending.Count > 0 && pending[0].dsp <= dspNow)
+        {
+            Pending due = pending[0];
+            pending.RemoveAt(0);
+            if (due.chord) StrikeChord(due.damageScale, due.finale);
+            else SingNote(due.color, due.damageScale);
+        }
+    }
+
+    private bool AnyTargetNear(float radius)
+    {
+        Vector2 at = Center;
+        float maxSqr = radius * radius;
+        IReadOnlyList<Enemy> alive = Enemy.Alive;
+        for (int i = 0; i < alive.Count; i++)
+        {
+            Enemy enemy = alive[i];
+            if (enemy == null || enemy.Untouchable) continue;
+            if (((Vector2)enemy.transform.position - at).sqrMagnitude <= maxSqr) return true;
+        }
+        return false;
     }
 
     /// <summary>Eine Note hat getroffen - der naechste Akkord wird lauter.</summary>
@@ -171,26 +354,25 @@ public class MochiMelody : Weapon
     }
 
     // ------------------------------------------------------------------
-    //  Schlag 1-3: Noten
+    //  Noten
     // ------------------------------------------------------------------
 
-    private void SingNote()
+    private void SingNote(int color, float damageScale)
     {
         PlayerController player = PlayerController.Instance;
         int count = Mathf.Clamp(Mathf.RoundToInt(CurrentStats.shots + player.ExtraShots), 1, 8);
         Vector2 mouth = (Vector2)transform.position + singOffset;
         FindTargets(mouth, CurrentStats.range, count);
-        if (targets.Count == 0) return;   // keiner da - Mochi summt still mit
+        if (targets.Count == 0) return;
 
-        PlayTone(Tune[bar % Tune.Length][beat], ToneVolume);
-
+        float damage = CurrentStats.damage * damageScale;
         for (int i = 0; i < targets.Count; i++)
         {
             // Faecher nach oben, die Note schwenkt dann auf ihr Ziel ein
             float spread = targets.Count > 1 ? Mathf.Lerp(-40f, 40f, i / (float)(targets.Count - 1)) : 0f;
             Vector2 toward = ((Vector2)targets[i].transform.position - mouth).normalized;
             Vector2 dir = ((Vector2)(Quaternion.Euler(0f, 0f, spread) * Vector2.up) + toward * 0.6f).normalized;
-            MelodyNote.Launch(this, mouth, dir, targets[i], CurrentStats.damage, CurrentBounces, beat);
+            MelodyNote.Launch(this, mouth, dir, targets[i], damage, CurrentBounces, color);
         }
     }
 
@@ -232,26 +414,29 @@ public class MochiMelody : Weapon
     }
 
     // ------------------------------------------------------------------
-    //  Schlag 4: Akkord
+    //  Akkord-Ring
     // ------------------------------------------------------------------
 
     private static readonly List<Enemy> hitBuffer = new List<Enemy>();
 
-    private void PlayChord()
+    private float ChordRadiusNow()
     {
-        int thisBar = bar;
-        bar++;
+        return ChordRadius * ChordPerLevel[LevelIndex(ChordPerLevel.Length)] * AoeFactor();
+    }
+
+    private float ChordReach() => ChordRadiusNow() + 0.3f;
+
+    private void StrikeChord(float damageScale, bool finale)
+    {
         float hits = crescendoHits;
         crescendoHits = 0;
 
         Vector2 at = Center;
-        float radius = ChordRadius * ChordPerLevel[LevelIndex(ChordPerLevel.Length)] * AoeFactor();
+        float radius = ChordRadiusNow();
         float reach = radius + 0.3f;
-        bool finale = weaponLevel >= FinaleLevel && thisBar % 4 == 3;
 
         // erst sammeln, dann treffen - TakeDamage kann Gegner aus Alive nehmen
         hitBuffer.Clear();
-        bool anyNear = false;
         IReadOnlyList<Enemy> alive = Enemy.Alive;
         for (int i = 0; i < alive.Count; i++)
         {
@@ -259,19 +444,12 @@ public class MochiMelody : Weapon
             if (enemy == null || enemy.Untouchable) continue;
             float sqr = ((Vector2)enemy.transform.position - at).sqrMagnitude;
             if (sqr <= reach * reach) hitBuffer.Add(enemy);
-            else if (sqr <= CurrentStats.range * CurrentStats.range) anyNear = true;
         }
-
-        // Ohne Gegner und ohne Treffer im Takt bleibt der Akkord stumm
-        if (hitBuffer.Count == 0 && hits == 0 && !anyNear) return;
-
-        int[] chord = Chords[thisBar % Chords.Length];
-        for (int i = 0; i < chord.Length; i++) PlayTone(chord[i], ChordVolume);
-        if (hits > 0 || finale) PlayClip(ChimeClip, ChimeVolume, 1f);
 
         FoxFx.Play(ChordFor(radius), at, 20f, 3);
 
-        float damage = CurrentStats.damage * ChordFactor * (1f + Mathf.Min(CrescendoMax, hits * CrescendoStep));
+        float damage = CurrentStats.damage * damageScale * ChordFactor
+                       * (1f + Mathf.Min(CrescendoMax, hits * CrescendoStep));
         float slowTime = CurrentDuration;
         for (int i = 0; i < hitBuffer.Count; i++)
         {
@@ -286,18 +464,18 @@ public class MochiMelody : Weapon
         }
         hitBuffer.Clear();
 
-        if (finale) NoteRain(at);
+        if (finale) NoteRain(at, damageScale);
     }
 
     /// <summary>Finale: ein Kranz Noten fliegt in alle Richtungen und sucht sich dann Gegner.</summary>
-    private void NoteRain(Vector2 at)
+    private void NoteRain(Vector2 at, float damageScale)
     {
         for (int i = 0; i < FinaleNotes; i++)
         {
             float a = (i + 0.5f) * Mathf.PI * 2f / FinaleNotes;
             Vector2 dir = new Vector2(Mathf.Cos(a), Mathf.Sin(a));
             Enemy target = NearestTo(at + dir * 2.5f, CurrentStats.range);
-            MelodyNote.Launch(this, at + dir * 0.3f, dir, target, CurrentStats.damage, CurrentBounces, 3);
+            MelodyNote.Launch(this, at + dir * 0.3f, dir, target, CurrentStats.damage * damageScale, CurrentBounces, 3);
         }
     }
 
@@ -330,17 +508,19 @@ public class MochiMelody : Weapon
     //  Ton
     // ------------------------------------------------------------------
 
-    private void PlayTone(int semitones, float volume)
+    private void ScheduleTone(int semitones, float volume, double dsp)
     {
-        PlayClip(ToneClip, volume, Mathf.Pow(2f, semitones / 12f));
+        ScheduleClip(ToneClip, volume, Mathf.Pow(2f, semitones / 12f), dsp);
     }
 
     /// <summary>
     /// Eigene Stimmen statt der festen Quellen im AudioController: der spielt
     /// pro Quelle nur einen Ton gleichzeitig, ein Akkord braucht mehrere.
     /// Die Mixer-Gruppe kommt vom Wurf-Geraeusch, damit der Effekte-Regler greift.
+    /// Gespielt wird per PlayScheduled zur dspTime <paramref name="dsp"/> -
+    /// liegt die schon zurueck, klingt der Ton sofort.
     /// </summary>
-    private void PlayClip(AudioClip clip, float volume, float pitch)
+    private void ScheduleClip(AudioClip clip, float volume, float pitch, double dsp)
     {
         if (clip == null) return;
         if (voices == null)
@@ -365,7 +545,7 @@ public class MochiMelody : Weapon
         voice.clip = clip;
         voice.pitch = pitch;
         voice.volume = volume * master;
-        voice.Play();
+        voice.PlayScheduled(System.Math.Max(dsp, AudioSettings.dspTime));
     }
 
     private static AudioClip toneClip;

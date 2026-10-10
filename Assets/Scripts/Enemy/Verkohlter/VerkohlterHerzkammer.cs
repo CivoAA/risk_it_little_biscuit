@@ -333,6 +333,8 @@ public class VerkohlterHerzkammer : MonoBehaviour
     {
         if (!closed) FollowPlayer();
         clock += Time.deltaTime;
+        // Laeuft "Herz der Glut", schlaegt das Herz im Takt der Musik.
+        if (!dying && VerkohlterMusik.HeartClock(out double musicClock)) clock = (float)musicClock;
         int f = Mathf.FloorToInt(clock * VerkohlterArt.Fps) % VerkohlterArt.BeatFrames;
         if (dying) f = DeadGlutFrame;
         if (f != frame)
@@ -562,6 +564,7 @@ public class VerkohlterHerzkammer : MonoBehaviour
         CarryLoot(delta);
 
         RestoreWorld();
+        VerkohlterMusik.Leave();
         puppet.MovePlayer(returnPoint, carryCompanions: true);
         foreach (Transform child in transform) child.gameObject.SetActive(false);
 

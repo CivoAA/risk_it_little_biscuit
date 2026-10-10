@@ -43,6 +43,7 @@ public class WavePlanWorkshop : EditorWindow
             case "World1": return "Karte 1 - Kueche";
             case "World2": return "Karte 2 - Wald";
             case "World2Demo": return "Welt2 Wald Demo (Karte 2)";
+            case "World5": return "Karte 3 - Eisgletscher";
             default: return "keiner Karte zugeordnet";
         }
     }
