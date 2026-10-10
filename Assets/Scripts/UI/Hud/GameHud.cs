@@ -167,6 +167,7 @@ public class GameHud : MonoBehaviour
     private Shadowed bossName;
     private Enemy boss;
     private float nextBossSearch;
+    private string bossLabel;
     private float bossShown = 1f, bossTrail = 1f, bossTrailHold;
 
     // Slots
@@ -707,7 +708,7 @@ public class GameHud : MonoBehaviour
                     if (e == null || (e.Role != EnemyRole.Boss && e.Role != EnemyRole.MiniBoss)) continue;
                     boss = e;
                     bossShown = bossTrail = e.HealthFraction;
-                    bossName.Set(Bestiary.NameOf(e.Id).ToUpperInvariant());
+                    bossLabel = null;
                     break;
                 }
             }
@@ -716,6 +717,14 @@ public class GameHud : MonoBehaviour
         bool show = boss != null;
         if (bottom.gameObject.activeSelf != show) bottom.gameObject.SetActive(show);
         if (!show) return;
+
+        // Name kann sich mitten im Kampf aendern (Gespenst -> Squiddy)
+        string label = string.IsNullOrEmpty(boss.DisplayName) ? Bestiary.NameOf(boss.Id) : boss.DisplayName;
+        if (label != bossLabel)
+        {
+            bossLabel = label;
+            bossName.Set(label.ToUpperInvariant());
+        }
 
         float frac = Mathf.Clamp01(boss.HealthFraction);
         if (frac < bossShown - 0.0001f) bossTrailHold = now + TrailHold;

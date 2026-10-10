@@ -63,6 +63,15 @@ public class Geisterwald : MonoBehaviour
         new Color(0.45f, 1f, 0.9f), new Color(0.75f, 0.55f, 1f), new Color(1f, 0.72f, 0.35f),
     };
 
+    /// <summary>Der Geisterwald der geladenen Karte (null ausserhalb).</summary>
+    public static Geisterwald Active { get; private set; }
+
+    /// <summary>
+    /// Buehnenlicht fuer Bosse (Enthuellung des Gespensts): 0 = normale Nacht,
+    /// 1 = stockdunkel. Wirkt auf das globale Licht, das hier jedes Bild gesetzt wird.
+    /// </summary>
+    public static float BossDim;
+
     private Camera cam;
     private Light2D globalLight;
     private Color dayColor;
@@ -96,6 +105,12 @@ public class Geisterwald : MonoBehaviour
     private float batTimer;
 
     // --- Aufbau -------------------------------------------------------------------
+
+    private void Awake()
+    {
+        Active = this;
+        BossDim = 0f;
+    }
 
     private void Start()
     {
@@ -221,11 +236,13 @@ public class Geisterwald : MonoBehaviour
         nightT = Mathf.MoveTowards(nightT, 1f, dt / Mathf.Max(0.01f, fadeIn));
         float t = nightT * nightT * (3f - 2f * nightT);
         globalLight.color = Color.Lerp(dayColor, nightColor, t);
-        globalLight.intensity = Mathf.Lerp(dayIntensity, nightIntensity, t);
+        globalLight.intensity = Mathf.Lerp(dayIntensity, nightIntensity, t) * (1f - Mathf.Clamp01(BossDim));
     }
 
     private void OnDestroy()
     {
+        if (Active == this) Active = null;
+        BossDim = 0f;
         if (globalLight != null)
         {
             globalLight.color = dayColor;

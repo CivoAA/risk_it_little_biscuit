@@ -1174,6 +1174,14 @@
     { "key": "weapon.mochi_melody.lvl2", "value": "Zwei Noten pro Schlag, schnelleres Tempo" },
     { "key": "weapon.mochi_melody.lvl3", "value": "Notenkette: Jede Note springt nach dem Treffer zu einem zweiten Gegner" },
     { "key": "weapon.mochi_melody.lvl4", "value": "Schaden +1, schnelleres Tempo, größerer Akkord-Ring" },
-    { "key": "weapon.mochi_melody.lvl5", "value": "Großes Finale: drei Noten pro Schlag, jeder vierte Takt endet mit einem Notenregen" }
+    { "key": "weapon.mochi_melody.lvl5", "value": "Großes Finale: drei Noten pro Schlag, jeder vierte Takt endet mit einem Notenregen" },
+
+    { "key": "enemy.Squiddy.name", "value": "Das Gespenst" },
+    { "key": "enemy.QuallenBaby.name", "value": "Baby-Squiddy" },
+    { "key": "wave.announce.dasgespenst", "value": "DAS GESPENST!" },
+    { "key": "boss.squiddy.ghost", "value": "Das Gespenst" },
+    { "key": "boss.squiddy.name", "value": "Squiddy" },
+    { "key": "boss.squiddy.reveal", "value": "ES WAR DIE GANZE ZEIT SQUIDDY!" },
+    { "key": "boss.squiddy.rage", "value": "SQUIDDY STEHT UNTER STROM!" }
   ]
 }

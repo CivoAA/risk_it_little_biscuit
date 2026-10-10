@@ -15330,7 +15330,7 @@ MonoBehaviour:
     previewWide: {fileID: 1264252208198488579, guid: a16d99a2cc4e4aadb0a29a1dc0c122f3, type: 3}
     mapId: 6
     sceneToLoad: 
-    planId: 
+    planId: World6
     boss: 0
     ambience: 7
     storyUnlockId: 

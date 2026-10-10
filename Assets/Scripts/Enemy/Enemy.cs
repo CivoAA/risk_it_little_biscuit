@@ -274,6 +274,13 @@ public class Enemy : MonoBehaviour
     /// <summary>Kommt einmal, wenn ein Gegner mit <see cref="HoldDeath"/> toedlich getroffen wurde.</summary>
     public event System.Action DeathHeld;
 
+    /// <summary>
+    /// Name fuer die Boss-Leiste, falls er vom Katalognamen abweicht oder sich
+    /// mitten im Kampf aendert (das Gespenst entpuppt sich als Squiddy).
+    /// Leer = <see cref="Bestiary.NameOf"/>.
+    /// </summary>
+    [System.NonSerialized] public string DisplayName;
+
     /// <summary>Beim Tod keinen Todeseffekt des Prefabs abspielen (das Skript zeigt einen eigenen).</summary>
     [System.NonSerialized] public bool SkipDeathEffect;
 

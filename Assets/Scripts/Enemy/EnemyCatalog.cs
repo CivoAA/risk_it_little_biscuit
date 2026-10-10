@@ -105,6 +105,18 @@ public enum EnemyId
     /// die Horde (EiskaiserLawinenkugel). Kommt nur vom Eiskaiser, in keinem Plan.
     /// </summary>
     Lawinenkugel = 38,
+
+    // Geisterwald (Karte 4)
+
+    /// <summary>
+    /// Endboss des Geisterwalds: Phase 1 ein grosses Laken-Gespenst, darunter
+    /// steckt Squiddy, die Traubengelee-Qualle mit Heiligenschein (EnemySquiddy).
+    /// Katalogname "Das Gespenst" - die Enthuellung soll eine Ueberraschung bleiben.
+    /// </summary>
+    Squiddy = 39,
+
+    /// <summary>Baby-Squiddy aus der Quallen-Brut (SquiddyBaby). Kommt nur von Squiddy, in keinem Plan.</summary>
+    QuallenBaby = 40,
 }
 
 /// <summary>
@@ -623,6 +635,20 @@ public static class EnemyCatalog
             sheet: "Assets/Art/Gegner/new/boss/eiskaiser_kugel.png", fps: 12f,
             colliderRadius: 0.2f, colliderOffset: new Vector2(0f, 0.22f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Boss/Lawinenkugel.prefab");
+
+        Def(EnemyId.Squiddy, "Das Gespenst",
+            health: 7200f, damage: 30f, speed: 1.9f, exp: 0, pushTime: 0f,
+            role: EnemyRole.Boss, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/boss/squiddy_geist_schweben.png", fps: 12f,
+            colliderRadius: 1.2f, colliderOffset: new Vector2(0f, 2.05f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Boss/Squiddy.prefab");
+
+        Def(EnemyId.QuallenBaby, "Baby-Squiddy",
+            health: 70f, damage: 10f, speed: 2.4f, exp: 6, pushTime: 0f,
+            role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/boss/squiddy_baby.png", fps: 12f,
+            colliderRadius: 0.32f, colliderOffset: new Vector2(0f, 0.55f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Boss/QuallenBaby.prefab");
 
         // ---------------------------------------------------------- Archiv
         //

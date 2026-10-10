@@ -1174,6 +1174,14 @@
     { "key": "weapon.mochi_melody.lvl2", "value": "Two notes per beat, faster tempo" },
     { "key": "weapon.mochi_melody.lvl3", "value": "Note chain: every note jumps on to a second enemy after hitting" },
     { "key": "weapon.mochi_melody.lvl4", "value": "Damage +1, faster tempo, bigger chord ring" },
-    { "key": "weapon.mochi_melody.lvl5", "value": "Grand finale: three notes per beat, every fourth bar ends in a shower of notes" }
+    { "key": "weapon.mochi_melody.lvl5", "value": "Grand finale: three notes per beat, every fourth bar ends in a shower of notes" },
+
+    { "key": "enemy.Squiddy.name", "value": "The Phantom" },
+    { "key": "enemy.QuallenBaby.name", "value": "Baby Squiddy" },
+    { "key": "wave.announce.dasgespenst", "value": "THE PHANTOM!" },
+    { "key": "boss.squiddy.ghost", "value": "The Phantom" },
+    { "key": "boss.squiddy.name", "value": "Squiddy" },
+    { "key": "boss.squiddy.reveal", "value": "IT WAS SQUIDDY ALL ALONG!" },
+    { "key": "boss.squiddy.rage", "value": "SQUIDDY IS SUPERCHARGED!" }
   ]
 }

@@ -36,6 +36,7 @@ BOSSES = {
     "Glutwurz": None,
     "Eiskaiser": (2, 0, 66, 66),     # Krone bis Orden, Kaiser von vorn halb
     "Verkohlter": None,
+    "Squiddy": (14, 0, 81, 81),      # das Gespenst (Squiddy bleibt die Ueberraschung)
 }
 
 

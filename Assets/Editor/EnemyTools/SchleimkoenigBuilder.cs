@@ -260,7 +260,8 @@ public static class SpecialBuilders
     {
         return id == EnemyId.Glutwurz || id == EnemyId.Schleimkoenig
             || id == EnemyId.Verkohlter || id == EnemyId.VerkohlterTod
-            || id == EnemyId.Eiskaiser || id == EnemyId.Lawinenkugel;
+            || id == EnemyId.Eiskaiser || id == EnemyId.Lawinenkugel
+            || id == EnemyId.Squiddy || id == EnemyId.QuallenBaby;
     }
 
     /// <summary>Baut nur das Prefab. Eintragen in GameCore macht die Werkstatt selbst.</summary>
@@ -274,6 +275,8 @@ public static class SpecialBuilders
             case EnemyId.VerkohlterTod: return VerkohlterBuilder.Build(id);
             case EnemyId.Eiskaiser:
             case EnemyId.Lawinenkugel: return EiskaiserBuilder.Build();
+            case EnemyId.Squiddy:
+            case EnemyId.QuallenBaby: return SquiddyBuilder.Build();
             default: return id + ": kein eigener Bauer.";
         }
     }
