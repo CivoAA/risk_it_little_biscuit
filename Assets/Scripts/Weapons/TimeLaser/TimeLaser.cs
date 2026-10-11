@@ -3,10 +3,16 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Schiesst kurze Laserstrahlen auf zufaellige Gegner im Bild. Jeder Strahl
+/// steht fest in der Welt (laeuft nicht mit dem Spieler mit), trifft einmal und
+/// blendet dann aus - siehe <see cref="TimeLaserPrefab"/>.
+/// </summary>
 public class TimeLaser : Weapon
 {
     [SerializeField] private GameObject prefab; // Das Laserobjekt
     public List<Enemy> enemiesInRange = new List<Enemy>();
+    private readonly List<Enemy> targets = new List<Enemy>();
     private float spawnCounter;
     private bool shooting = false;
 
@@ -17,13 +23,17 @@ public class TimeLaser : Weapon
         spawnCounter -= Time.deltaTime;
 
         // 🔁 Warten bis Cooldown abgelaufen ist
-        if (spawnCounter <= 0 && !shooting)
+        if (spawnCounter <= 0 && !shooting && CollectTargets())
         {
-            if (enemiesInRange.Count > 0)
-            {
-                StartCoroutine(SpawnLaser());
-            }
+            StartCoroutine(SpawnLaser());
         }
+    }
+
+    // Wird die Waffe mitten in der Salve deaktiviert, endet die Coroutine
+    // ohne shooting zurueckzusetzen - dann wuerde nie wieder geschossen.
+    void OnDisable()
+    {
+        shooting = false;
     }
 
     IEnumerator SpawnLaser()
@@ -36,31 +46,11 @@ public class TimeLaser : Weapon
 
         for (int i = 0; i < shots; i++)
         {
-            if (enemiesInRange.Count > 0)
+            if (CollectTargets())
             {
                 // 🎯 Zufälligen Gegner auswählen
-                Enemy targetEnemy = enemiesInRange[Random.Range(0, enemiesInRange.Count)];
-
-                if (targetEnemy != null)
-                {
-                    AudioController.Instance.PalySound(AudioController.Instance.Laser);
-
-                    // Richtung & Rotation berechnen
-                    Vector2 direction = (targetEnemy.transform.position - transform.position).normalized;
-                    float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + 180f;
-
-                    // Laser am Spieler spawnen und korrekt drehen
-                    GameObject laser = Instantiate(prefab, transform.position, Quaternion.Euler(0f, 0f, angle));
-
-                    // Erst in die Szene verschieben
-                    Scene gameScene = RunScene.Current;
-                    if (gameScene.IsValid() && gameScene.isLoaded)
-                    {
-                        SceneManager.MoveGameObjectToScene(laser, gameScene);
-                    }
-
-                    laser.transform.SetParent(transform, worldPositionStays: true);
-                }
+                Enemy targetEnemy = targets[Random.Range(0, targets.Count)];
+                Fire(targetEnemy.transform.position);
             }
 
             // kleine Verzögerung zwischen mehreren Schüssen
@@ -68,6 +58,46 @@ public class TimeLaser : Weapon
         }
 
         shooting = false;
+    }
+
+    private void Fire(Vector3 targetPosition)
+    {
+        AudioController.Instance.PalySound(AudioController.Instance.Laser);
+
+        // Das Sprite zeigt vom Pivot aus nach links, darum +180
+        Vector2 direction = (targetPosition - transform.position).normalized;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + 180f;
+
+        // Bewusst ohne Parent: der Strahl bleibt stehen, wo er abgefeuert wurde
+        GameObject laser = Instantiate(prefab, transform.position, Quaternion.Euler(0f, 0f, angle));
+
+        Scene gameScene = RunScene.Current;
+        if (gameScene.IsValid() && gameScene.isLoaded)
+        {
+            SceneManager.MoveGameObjectToScene(laser, gameScene);
+        }
+
+        TimeLaserPrefab beam = laser.GetComponent<TimeLaserPrefab>();
+        if (beam != null) beam.weapon = this;
+    }
+
+    /// <summary>
+    /// Fuellt <see cref="targets"/> mit lebenden Gegnern, die im Bild stehen.
+    /// Der Reichweiten-Collider ist groesser als das Bild der Pixel-Perfect-
+    /// Kamera - ohne den Bildfilter schoss der Laser auf unsichtbare Gegner.
+    /// </summary>
+    private bool CollectTargets()
+    {
+        enemiesInRange.RemoveAll(e => e == null || !e.isActiveAndEnabled);
+
+        targets.Clear();
+        bool hasView = ViewBounds.TryGetWorldRect(out Rect view);
+        foreach (Enemy enemy in enemiesInRange)
+        {
+            if (!hasView || view.Contains(enemy.transform.position))
+                targets.Add(enemy);
+        }
+        return targets.Count > 0;
     }
 
     private void OnTriggerEnter2D(Collider2D collider)
