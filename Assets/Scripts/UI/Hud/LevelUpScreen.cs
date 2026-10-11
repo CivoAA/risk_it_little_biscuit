@@ -1189,6 +1189,7 @@ public partial class LevelUpScreen : MonoBehaviour
             { "buff_pickup_range", ("pickup",     "Pickup range", BuffMode.AddPct) },
             { "buff_cooldown",     ("cooldown",   "Cooldown",     BuffMode.AbsPctMinus) },
             { "buff_duration",     ("duration",   "Duration",     BuffMode.AbsPct) },
+            { "buff_curse",        ("curse",      "Curse",        BuffMode.AbsPct) },
         };
 
     private static void BuffLines(Weapon w, WeaponStats from, WeaponStats to, List<StatLine> lines)

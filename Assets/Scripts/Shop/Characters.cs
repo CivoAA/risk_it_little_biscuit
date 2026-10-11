@@ -58,17 +58,17 @@ public static class Characters
 
     /// <summary>
     /// Waffe, die NUR dieser Charakter bekommt - leer heisst: keine. Alle
-    /// anderen sehen sie weder in der Werkbank noch im Level-Up. Gedacht fuer
-    /// Startwaffen, die zur Figur gehoeren (der Keks schiesst seine eigenen
-    /// Schokostueckchen); die uebrigen Startwaffen bleiben fuer alle offen.
+    /// anderen sehen sie weder in der Werkbank noch im Level-Up (und damit auch
+    /// nicht deren Evo). Seit 11.10.2026 ist jede Startwaffe exklusiv - sie
+    /// gehoert zur Figur und hat ihren eigenen Skilltree.
     /// </summary>
     private static readonly string[] ExclusiveWeaponIdByskin =
     {
         "choco_chips",   // 0 - Keks
-        "",
-        "",
-        "",
-        "",
+        "jam_jar",       // 1 - Marmelade
+        "blade_swarm",   // 2 - Onigiri
+        "salad_fan",     // 3 - Toast
+        "sword_slash",   // 4 - Zwiebelritter
         "mochi_melody",  // 5 - Mochi
         "foxfire",       // 6 - Inari
         "royal_splat",   // 7 - Schleimkoenig
@@ -129,10 +129,10 @@ public static class Characters
         "",
         "",
         "",
-        "",
-        "",
-        "",
-        "",
+        "unlock_char_onion_knight",
+        "unlock_char_mochi",
+        "unlock_char_inari",
+        "unlock_char_slime_king",
     };
 
     public static int Count => StartWeaponByskin.Length;

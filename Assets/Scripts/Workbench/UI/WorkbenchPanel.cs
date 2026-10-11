@@ -70,7 +70,8 @@ public class WorkbenchPanel : MonoBehaviour
     // Knopfzeile
     private static readonly Vector4 BtnClear = new Vector4(9f, 150f, 34f, 14f);
     private static readonly Vector4 BtnRandom = new Vector4(47f, 150f, 34f, 14f);
-    private static readonly Vector4 BtnApply = new Vector4(84f, 150f, 90f, 14f);
+    // Preset-Knoepfe stehen, wo frueher "Build uebernehmen" stand: 4 x 21 + 3 x 2 = 90.
+    private const float PresetX = 84f, PresetY = 150f, PresetW = 21f, PresetH = 14f, PresetStep = 23f;
 
     // Rechte Spalte
     private const float TabX = 180f, TabY = 30f, TabW = 40f, TabH = 12f, TabStep = 42f;
@@ -145,9 +146,8 @@ public class WorkbenchPanel : MonoBehaviour
     private Image[] tabImages;
     private TMP_Text[] tabLabels;
     private TMP_Text countWeapons, countBuffs, evoTitle, libHead;
-    private TMP_Text infoName, infoDesc, applyLabel;
-    private Image applyImage, applyHover;
-    private Button applyButton;
+    private TMP_Text infoName, infoDesc;
+    private readonly List<PresetButton> presetButtons = new List<PresetButton>();
 
     private WeaponDef inspected;
     private HubUI hub;
@@ -172,6 +172,12 @@ public class WorkbenchPanel : MonoBehaviour
         /// sie laesst sich nicht herausnehmen.
         /// </summary>
         public bool Locked;
+
+        /// <summary>Schloss ueber einem gesperrten Platz (mehr Slots im Shop kaufen).</summary>
+        public Image Lock;
+
+        /// <summary>Gesperrt, weil der Lauf nicht genug Slots hat - siehe Loadout.Capacity.</summary>
+        public bool Closed;
     }
 
     /// <summary>Eine Kachel in der Bibliothek.</summary>
@@ -181,7 +187,17 @@ public class WorkbenchPanel : MonoBehaviour
         public Image Frame;
         public Image Icon;
         public Image Hover;
+        public Image Lock;
         public WeaponDef Def;
+    }
+
+    /// <summary>Ein Knopf fuer einen gespeicherten Build.</summary>
+    private class PresetButton
+    {
+        public Image Frame;
+        public Image Hover;
+        public Image Lock;
+        public TMP_Text Label;
     }
 
     /// <summary>Ein Evo-Chip in der Leiste: Zutat + Zutat = Ergebnis.</summary>
@@ -353,6 +369,12 @@ public class WorkbenchPanel : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) StepTab(-1);
         if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) StepTab(1);
         if (Input.GetKeyDown(KeyCode.Tab)) StepTab(1);
+
+        // 1-4 springen direkt auf einen gespeicherten Build
+        for (int i = 0; i < presetButtons.Count; i++)
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1 + i)) ClickPreset(i);
+        }
     }
 
     private void StepTab(int delta)
@@ -431,8 +453,8 @@ public class WorkbenchPanel : MonoBehaviour
         BuildGroupHead("Buffs", HeadBuffsY, RuleBuffsY, DotBuff,
                        Loc.Get("ui.workbench.group.buffs", "BUFFS"), out countBuffs);
 
-        BuildPoolGrid(weaponSlots, PoolKind.Weapon, GridWeaponsY, Loadout.WeaponSlots);
-        BuildPoolGrid(buffSlots, PoolKind.Buff, GridBuffsY, Loadout.BuffSlots);
+        BuildPoolGrid(weaponSlots, PoolKind.Weapon, GridWeaponsY, Loadout.GridSize(PoolKind.Weapon));
+        BuildPoolGrid(buffSlots, PoolKind.Buff, GridBuffsY, Loadout.GridSize(PoolKind.Buff));
     }
 
     private void BuildGroupHead(string name, float y, float ruleY, Color dot, string text,
@@ -472,10 +494,16 @@ public class WorkbenchPanel : MonoBehaviour
                              Gfx("slot_highlight"));
             slot.Hover.enabled = false;
 
+            slot.Lock = LockIcon(slot.Frame.rectTransform);
+
             Hoverable hover = slot.Frame.gameObject.AddComponent<Hoverable>();
             hover.Target = slot.Hover;
             PoolSlot captured = slot;
-            hover.Notify = on => Inspect(on ? captured.Def : null);
+            hover.Notify = on =>
+            {
+                if (captured.Closed) InspectClosed(kind);
+                else Inspect(on ? captured.Def : null);
+            };
 
             Button button = slot.Frame.gameObject.AddComponent<Button>();
             button.transition = Selectable.Transition.None;
@@ -575,23 +603,51 @@ public class WorkbenchPanel : MonoBehaviour
             Loadout.FillRandom();
         });
 
-        applyImage = Img("BtnApply", page, BtnApply, Gfx("btn_primary"));
-        applyImage.raycastTarget = true;
-
-        applyLabel = Label("Label", applyImage.rectTransform,
-                           new Vector4(2f, 2f, BtnApply.z - 4f, 10f), "",
-                           SizeText, TextOnGold, TextAlignmentOptions.Center);
-
-        applyButton = applyImage.gameObject.AddComponent<Button>();
-        applyButton.transition = Selectable.Transition.None;
-        applyButton.targetGraphic = applyImage;
-        applyButton.onClick.AddListener(() =>
+        // Gespeicherte Builds. Der zuletzt gewaehlte geht mit in den Lauf -
+        // ein "Uebernehmen" braucht es dafuer nicht.
+        for (int i = 0; i < Loadout.MaxPresets; i++)
         {
-            PlayClick();
-            Loadout.Apply();
-        });
+            Vector4 r = new Vector4(PresetX + i * PresetStep, PresetY, PresetW, PresetH);
 
-        applyHover = AddHover(applyImage, () => Loadout.IsComplete);
+            PresetButton pb = new PresetButton();
+            pb.Frame = Img($"BtnPreset_{i}", page, r, Gfx("btn_narrow"));
+            pb.Frame.type = Image.Type.Sliced;
+            pb.Frame.raycastTarget = true;
+
+            pb.Label = Label("Label", pb.Frame.rectTransform, new Vector4(2f, 2f, PresetW - 4f, 10f),
+                             (i + 1).ToString(), SizeText, TextCream, TextAlignmentOptions.Center);
+
+            pb.Lock = Img("Lock", pb.Frame.rectTransform,
+                          new Vector4((PresetW - 12f) * 0.5f, 1f, 12f, 12f), LockSprite());
+            pb.Lock.enabled = false;
+
+            int index = i;
+            Button b = pb.Frame.gameObject.AddComponent<Button>();
+            b.transition = Selectable.Transition.None;
+            b.targetGraphic = pb.Frame;
+            b.onClick.AddListener(() => ClickPreset(index));
+
+            // Der gewaehlte hebt sich schon durch sein Sprite ab.
+            pb.Hover = AddHover(pb.Frame, () => index != Loadout.ActivePreset);
+            Hoverable hover = pb.Frame.GetComponent<Hoverable>();
+            hover.Notify = on => { if (on) InspectPreset(index); };
+
+            presetButtons.Add(pb);
+        }
+    }
+
+    private void ClickPreset(int index)
+    {
+        if (!Loadout.IsPresetOpen(index))
+        {
+            InspectPreset(index);
+            return;
+        }
+
+        if (index == Loadout.ActivePreset) return;
+        PlayClick();
+        Loadout.SelectPreset(index);
+        InspectPreset(index);
     }
 
     private Image MakeButton(string name, Vector4 rect, string sprite, string text,
@@ -777,6 +833,8 @@ public class WorkbenchPanel : MonoBehaviour
                           Gfx("slot_highlight"));
             t.Hover.enabled = false;
 
+            t.Lock = LockIcon(t.Frame.rectTransform);
+
             Hoverable hover = t.Frame.gameObject.AddComponent<Hoverable>();
             hover.Target = t.Hover;
             hover.Notify = on => Inspect(on ? def : null);
@@ -790,7 +848,9 @@ public class WorkbenchPanel : MonoBehaviour
                 // Die Standardwaffe liegt fest im Verteiler: Loadout.Remove
                 // sagt ohnehin nein - dann soll es auch nicht klacken, als
                 // waere etwas passiert.
+                // Ungekauftes (Schloss) laesst sich erst nach dem Shop-Kauf waehlen.
                 if (def.Kind == PoolKind.Evo || Loadout.IsLocked(def.Id)) return;
+                if (!Loadout.IsSelectable(def.Id)) return;
                 PlayClick();
                 Loadout.Toggle(def.Id);
             });
@@ -933,7 +993,7 @@ public class WorkbenchPanel : MonoBehaviour
         RefreshLibrary();
         RefreshTabs();
         RefreshEvoBar();
-        RefreshApply();
+        RefreshPresets();
         if (overlayOpen) RefreshOverlay();
     }
 
@@ -956,10 +1016,23 @@ public class WorkbenchPanel : MonoBehaviour
     private void RefreshPool(List<PoolSlot> slots, PoolKind kind)
     {
         List<string> ids = Loadout.Get(kind);
+        int open = Loadout.Capacity(kind);
 
         for (int i = 0; i < slots.Count; i++)
         {
             PoolSlot slot = slots[i];
+            slot.Closed = i >= open;
+            if (slot.Lock != null) slot.Lock.enabled = slot.Closed;
+
+            // Gesperrt: mehr Slots im Lauf (Shop) oeffnen je drei Plaetze.
+            if (slot.Closed)
+            {
+                slot.Def = null;
+                slot.Frame.sprite = Gfx("slot_used");
+                slot.Icon.enabled = false;
+                continue;
+            }
+
             WeaponDef def = i < ids.Count ? WeaponCatalog.Find(ids[i]) : null;
             slot.Def = def;
 
@@ -1004,8 +1077,13 @@ public class WorkbenchPanel : MonoBehaviour
                 _             => inPool ? "slot_used" : "slot_weapon",
             };
 
+            // Noch nicht gekauft: sichtbar, aber mit Schloss und nicht waehlbar.
+            bool closed = t.Def.Kind != PoolKind.Evo && !Loadout.IsSelectable(t.Def.Id);
+            if (closed) sprite = "slot_used";
+            if (t.Lock != null) t.Lock.enabled = closed;
+
             t.Frame.sprite = Gfx(sprite);
-            t.Icon.color = inPool || t.Def.Kind == PoolKind.Evo ? IconUsedTint : Color.white;
+            t.Icon.color = inPool || closed || t.Def.Kind == PoolKind.Evo ? IconUsedTint : Color.white;
         }
     }
 
@@ -1110,21 +1188,51 @@ public class WorkbenchPanel : MonoBehaviour
         }
     }
 
-    private void RefreshApply()
+    /// <summary>
+    /// Gewaehlt = gold, offen = Holz, nicht gekauft = grau mit Schloss statt Zahl
+    /// (faellt das Schloss-Sprite weg, bleibt die Zahl stehen).
+    /// </summary>
+    private void RefreshPresets()
     {
-        bool complete = Loadout.IsComplete;
+        int active = Loadout.ActivePreset;
 
-        applyImage.sprite = Gfx(complete ? "btn_primary" : "btn_primary_disabled");
-        applyButton.interactable = complete;
+        for (int i = 0; i < presetButtons.Count; i++)
+        {
+            PresetButton pb = presetButtons[i];
+            bool open = Loadout.IsPresetOpen(i);
+            bool isActive = open && i == active;
 
-        applyLabel.text = Loadout.IsActive
-            ? Loc.Get("ui.workbench.btn.applied", "BUILD ÜBERNOMMEN")
-            : Loc.Get("ui.workbench.btn.apply", "BUILD ÜBERNEHMEN");
-        applyLabel.color = complete ? TextOnGold : TextMid;
+            pb.Frame.sprite = Gfx(isActive ? "btn_primary" : open ? "btn_narrow" : "btn_primary_disabled");
+            pb.Label.color = isActive ? TextOnGold : open ? TextCream : TextMid;
 
-        // Die Maus kann auf dem Knopf liegen, waehrend er grau wird - dann
-        // bleibt sonst ein goldener Rahmen um einen toten Knopf stehen.
-        if (!complete && applyHover != null) applyHover.enabled = false;
+            bool showLock = !open && pb.Lock.sprite != null;
+            pb.Lock.enabled = showLock;
+            pb.Label.enabled = !showLock;
+
+            // Wird der Knopf unter der Maus zum gewaehlten, kommt kein
+            // PointerExit - der Rahmen muss hier selbst weg.
+            if (isActive && pb.Hover != null) pb.Hover.enabled = false;
+        }
+    }
+
+    /// <summary>Info-Box fuer einen Preset-Knopf.</summary>
+    private void InspectPreset(int index)
+    {
+        inspected = null;
+
+        infoName.text = string.Format(Loc.Get("ui.workbench.preset.name", "BUILD {0}"), index + 1);
+
+        if (!Loadout.IsPresetOpen(index))
+        {
+            infoName.color = TextDim;
+            infoDesc.text = Loc.Get("ui.workbench.preset.locked",
+                "Weitere Build-Plätze gibt es im Shop.");
+            return;
+        }
+
+        infoName.color = index == Loadout.ActivePreset ? TextGold : TextCream;
+        infoDesc.text = Loc.Get("ui.workbench.preset.desc",
+            "Gespeicherter Build. Der zuletzt gewählte geht mit in den Lauf.");
     }
 
     /// <summary>
@@ -1187,9 +1295,29 @@ public class WorkbenchPanel : MonoBehaviour
                 lines.Add(Loc.Get("ui.workbench.info.locked",
                                   "Startwaffe des Charakters - fest im Build."));
             }
+            else if (!Loadout.IsSelectable(def.Id))
+            {
+                lines.Add(Loc.Get("ui.workbench.info.shop",
+                                  "Noch gesperrt - im Shop freischalten."));
+            }
         }
 
         infoDesc.text = string.Join("\n", lines);
+    }
+
+    /// <summary>Info-Box fuer einen gesperrten Platz im Verteiler.</summary>
+    private void InspectClosed(PoolKind kind)
+    {
+        inspected = null;
+        infoName.text = Loc.Get("ui.workbench.closed.title", "Gesperrter Platz");
+        infoName.color = TextDim;
+        infoDesc.text = kind == PoolKind.Buff
+            ? string.Format(Loc.Get("ui.workbench.closed.buffs",
+                  "Jeder Buff-Slot im Lauf öffnet {0} Plätze, höchstens {1}. Mehr Slots gibt es im Shop."),
+                  Loadout.PicksPerSlot, Loadout.MaxBuffs)
+            : string.Format(Loc.Get("ui.workbench.closed.weapons",
+                  "Jeder Waffen-Slot im Lauf öffnet {0} Plätze. Mehr Slots gibt es im Shop."),
+                  Loadout.PicksPerSlot);
     }
 
     private void ClearInspect()
@@ -1203,6 +1331,27 @@ public class WorkbenchPanel : MonoBehaviour
     // ==================================================================
 
     private static readonly Dictionary<string, Sprite> spriteCache = new Dictionary<string, Sprite>();
+
+    /// <summary>
+    /// Schloss (12x12, aus dem Erfolgsbuch) mittig auf einer 14er-Kachel,
+    /// zunaechst aus. Fehlt das Sprite, bleibt es bei der gedimmten Kachel.
+    /// </summary>
+    private static Image LockIcon(RectTransform parent)
+    {
+        Image img = Img("Lock", parent, new Vector4(1f, 1f, 12f, 12f), LockSprite());
+        img.raycastTarget = false;
+        img.enabled = false;
+        return lockSprite != null ? img : null;
+    }
+
+    private static Sprite LockSprite()
+    {
+        if (lockSprite == null) lockSprite = Resources.Load<Sprite>(LockSpritePath);
+        return lockSprite;
+    }
+
+    private const string LockSpritePath = "AchievementsBook/ui/icon_locked";
+    private static Sprite lockSprite;
 
     private static Sprite Gfx(string name)
     {

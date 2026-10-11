@@ -51,7 +51,7 @@ public static class HubConsoleCheats
         }, hidden: true);
 
         // ------------------------------------------------------------------
-        // Beispiel 3: gezielt eine ID.  ->  "freischalten unlock_boba_gun"
+        // Beispiel 3: gezielt eine ID.  ->  "freischalten unlock_companion"
         // ------------------------------------------------------------------
         HubConsole.Add("freischalten", "schaltet ein einzelnes Unlock frei", (args, sink) =>
         {

@@ -48,6 +48,32 @@ public class CatalogTests
     }
 
     [Test]
+    public void Jede_erreichbare_Waffe_und_jeder_Buff_hat_einen_Maximalstufen_Erfolg()
+    {
+        foreach (PoolKind kind in new[] { PoolKind.Weapon, PoolKind.Buff })
+        {
+            foreach (WeaponDef def in WeaponCatalog.OfKind(kind))
+            {
+                if (!WeaponCatalog.IsObtainable(def.Id)) continue;
+                Assert.IsNotNull(Ach.MaxLevelFor(def.Id),
+                    $"'{def.Id}' hat keinen Maximalstufen-Erfolg - Zeile in Ach.cs und in MaxLevelByWeapon fehlt.");
+            }
+        }
+    }
+
+    [Test]
+    public void Jeder_Endboss_einer_Welt_hat_einen_Erfolg()
+    {
+        foreach (EnemyId id in Bestiary.Enemies)
+        {
+            EnemyDef def = EnemyCatalog.Get(id);
+            if (def == null || def.Role != EnemyRole.Boss) continue;
+            Assert.IsNotNull(Ach.BossVictory(id.ToString()),
+                $"Boss '{id}' hat keinen Erfolg - Zeile in Ach.cs und in ByBoss fehlt.");
+        }
+    }
+
+    [Test]
     public void Achievements_Spielstand_uebersteht_neue_Eintraege()
     {
         var store = new AchievementStore(tempDir);
@@ -99,6 +125,21 @@ public class CatalogTests
                     $"Waffe '{def.UnlocksWeapon}' hängt an mehr als einem Shop-Eintrag.");
             }
         }
+    }
+
+    [Test]
+    public void Shop_Reiter_Buffs_zum_Freischalten_der_Rest_bei_den_Upgrades()
+    {
+        foreach (ShopItemDef def in Shop.All)
+        {
+            bool unlock = def.Category == ShopCategory.Buffs || def.Category == ShopCategory.Weapons;
+            Assert.AreEqual(unlock ? ShopTab.Unlocks : ShopTab.Upgrades, def.Tab,
+                $"'{def.Id}' steht unter dem falschen Reiter.");
+        }
+
+        Assert.AreEqual(ShopTab.Upgrades, Shop.LoadoutPreset.Tab);
+        Assert.AreEqual(ShopTab.Upgrades, Shop.CurrencyGain.Tab);
+        Assert.AreEqual(ShopTab.Upgrades, Shop.EvoSlot.Tab);
     }
 
     [Test]
@@ -326,14 +367,14 @@ public class CatalogTests
         var store = new UnlockStore(tempDir);
         store.Load();
 
-        store.SetUnlocked(Unlocks.BobaGun.Id, true);
+        store.SetUnlocked(Unlocks.Companion.Id, true);
         store.SetUnlocked("unlock_irgendwas_altes", true);
         store.Save();
 
         var reloaded = new UnlockStore(tempDir);
         reloaded.Load();
 
-        Assert.IsTrue(reloaded.IsUnlocked(Unlocks.BobaGun.Id));
+        Assert.IsTrue(reloaded.IsUnlocked(Unlocks.Companion.Id));
         Assert.IsTrue(reloaded.IsUnlocked("unlock_irgendwas_altes"),
             "Eine unbekannte Unlock-Id wurde weggeworfen.");
     }

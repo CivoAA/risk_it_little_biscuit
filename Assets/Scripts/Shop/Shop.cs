@@ -83,30 +83,77 @@ public static class Shop
         values: new[] { 0f, 1f, 2f, 3f },
         requiredUnlock: "unlock_weapon_slot");
 
+    /// <summary>Evo-Slots, die jeder Lauf ohne Kauf hat. Der Shop-Eintrag legt drauf.</summary>
+    public const int BaseEvoSlots = 1;
+
     public static readonly ShopItemDef EvoSlot = Def(
         "evo_slot", "Evo Slot", "Increase your Evo Slots by",
         ShopCategory.Slots,
         costs:  new[] { 100, 1000, 2000, 2000, 5000 },
-        values: new[] { 0f, 1f, 2f, 3f, 4f, 5f });
+        values: new[] { 0f, 1f, 2f, 3f, 4f, 5f },
+        requiredUnlock: "unlock_evo_slot");
+
+    /// <summary>
+    /// Weitere gespeicherte Builds an der Werkbank. Einer ist immer da, jeder
+    /// Kauf gibt einen mehr - siehe <see cref="Loadout.PresetCount"/>.
+    /// </summary>
+    public static readonly ShopItemDef LoadoutPreset = Def(
+        "loadout_preset", "Build Preset", "Increases your saved builds at the workbench by",
+        ShopCategory.Slots,
+        costs:  new[] { 500, 1500, 3000 },
+        values: new[] { 0f, 1f, 2f, 3f });
 
     // ==================================================================
     //  Waffen
     // ==================================================================
 
+    /// <summary>
+    /// SCHALTER (seit 11.10.2026 aus): Waffen werden im Shop gekauft.
+    ///
+    /// Aus heisst: jede Waffe ist von Anfang an da. Die Eintraege unten bleiben
+    /// stehen, sind aber unsichtbar und zaehlen als gekauft; ihre Unlocks
+    /// ("jetzt im Shop kaufbar") werden nicht mehr vergeben und tauchen auch im
+    /// Erfolgsbuch nicht auf. Wieder auf true - und alles ist wie vorher,
+    /// Kaeufe aus alten Spielstaenden inklusive.
+    /// </summary>
+    public static readonly bool WeaponsInShop = false;
+
+    /// <summary>Ist dieser Eintrag gerade durch <see cref="WeaponsInShop"/> abgeschaltet?</summary>
+    public static bool IsSwitchedOff(ShopItemDef def) =>
+        def != null && !WeaponsInShop && def.Category == ShopCategory.Weapons;
+
+    /// <summary>
+    /// Haengt dieser Unlock nur an abgeschalteten Shop-Eintraegen? Dann wird er
+    /// weder vergeben noch angezeigt - er wuerde "jetzt im Shop kaufbar" sagen.
+    /// </summary>
+    public static bool IsSwitchedOffUnlock(string unlockId)
+    {
+        if (WeaponsInShop || string.IsNullOrEmpty(unlockId)) return false;
+
+        bool any = false;
+        foreach (ShopItemDef def in Registry)
+        {
+            if (def.RequiredUnlock != unlockId) continue;
+            if (!IsSwitchedOff(def)) return false;
+            any = true;
+        }
+        return any;
+    }
+
     public static readonly ShopItemDef BobaGun = Def(
         "boba_gun", "Boba Gun", "Unlocks Boba Gun", ShopCategory.Weapons,
         costs: new[] { 1000 }, values: new[] { 0f, 1f },
-        requiredUnlock: "unlock_boba_gun", unlocksWeapon: "boba_gun");
+        unlocksWeapon: "boba_gun");
 
     public static readonly ShopItemDef Shurikookie = Def(
         "shurikookie", "Shurikookie", "Unlocks Shurikookie", ShopCategory.Weapons,
         costs: new[] { 1000 }, values: new[] { 0f, 1f },
-        requiredUnlock: "unlock_shurikookie", unlocksWeapon: "shurikookie");
+        unlocksWeapon: "shurikookie");
 
     public static readonly ShopItemDef Spikefork = Def(
         "spikefork", "Spikefork", "Unlocks Spikefork", ShopCategory.Weapons,
         costs: new[] { 1000 }, values: new[] { 0f, 1f },
-        requiredUnlock: "unlock_spike_fork", unlocksWeapon: "spike_fork");
+        unlocksWeapon: "spike_fork");
 
     public static readonly ShopItemDef Deathstrike = Def(
         "deathstrike", "Deathstrike", "Unlocks Deathstrike", ShopCategory.Weapons,
@@ -116,22 +163,22 @@ public static class Shop
     public static readonly ShopItemDef CelestialStar = Def(
         "celestial_star", "Celestial Star", "Unlocks Celestial Star", ShopCategory.Weapons,
         costs: new[] { 1000 }, values: new[] { 0f, 1f },
-        requiredUnlock: "unlock_celestial_star", unlocksWeapon: "celestial_star");
+        unlocksWeapon: "celestial_star");
 
     public static readonly ShopItemDef BladeSwarm = Def(
         "blade_swarm", "Blade Swarm", "Unlocks Blade Swarm", ShopCategory.Weapons,
         costs: new[] { 1000 }, values: new[] { 0f, 1f },
-        requiredUnlock: "unlock_blade_swarm", unlocksWeapon: "blade_swarm");
+        unlocksWeapon: "blade_swarm");
 
     public static readonly ShopItemDef CandyBomb = Def(
         "candy_bomb", "Candy Bomb", "Unlocks Candy Bomb", ShopCategory.Weapons,
         costs: new[] { 1000 }, values: new[] { 0f, 1f },
-        requiredUnlock: "unlock_candy_bomb", unlocksWeapon: "candy_bomb");
+        unlocksWeapon: "candy_bomb");
 
     public static readonly ShopItemDef TimeLaser = Def(
         "time_laser", "Time Laser", "Unlocks Time Laser", ShopCategory.Weapons,
         costs: new[] { 1000 }, values: new[] { 0f, 1f },
-        requiredUnlock: "unlock_time_laser", unlocksWeapon: "time_laser");
+        unlocksWeapon: "time_laser");
 
     // ==================================================================
     //  Buffs
@@ -158,7 +205,7 @@ public static class Shop
     public static readonly ShopItemDef BuffExtraShot = Def(
         "buff_extra_shot", "Extra Shot", "Unlocks Extra Shot Buff", ShopCategory.Buffs,
         costs: new[] { 800 }, values: new[] { 0f, 1f },
-        requiredUnlock: "unlock_extra_shot", unlocksWeapon: "buff_extra_shot");
+        unlocksWeapon: "buff_extra_shot");
 
     public static readonly ShopItemDef BuffAoeRange = Def(
         "buff_aoe_range", "AOE Range", "Unlocks AOE Range Buff", ShopCategory.Buffs,
@@ -176,6 +223,11 @@ public static class Shop
         "buff_crit_damage", "Crit Damage", "Unlocks Crit Damage Buff", ShopCategory.Buffs,
         costs: new[] { 800 }, values: new[] { 0f, 1f }, unlocksWeapon: "buff_crit_damage");
 
+    public static readonly ShopItemDef BuffCurse = Def(
+        "buff_curse", "Cursed Sugar", "Unlocks Cursed Sugar Buff", ShopCategory.Buffs,
+        costs: new[] { 800 }, values: new[] { 0f, 1f },
+        requiredUnlock: "unlock_cursed_sugar", unlocksWeapon: "buff_curse");
+
     // ==================================================================
     //  Begleiter
     // ==================================================================
@@ -183,7 +235,8 @@ public static class Shop
     public static readonly ShopItemDef Companion = Def(
         "companion", "Begleiter", "Unlocks Begleiter", ShopCategory.Companion,
         costs:  new[] { 4000, 4000, 4000 },
-        values: new[] { 0f, 1f, 2f, 3f });
+        values: new[] { 0f, 1f, 2f, 3f },
+        requiredUnlock: "unlock_companion");
 
     // ==================================================================
     //  Ab hier nur noch Mechanik.
@@ -333,6 +386,7 @@ public static class Shop
     public static bool IsVisible(ShopItemDef def)
     {
         if (def == null) return false;
+        if (IsSwitchedOff(def)) return false;
         if (string.IsNullOrWhiteSpace(def.RequiredUnlock)) return true;
         return Unlocks.IsUnlocked(def.RequiredUnlock);
     }
@@ -466,7 +520,16 @@ public static class Shop
     {
         if (string.IsNullOrEmpty(weaponId)) return false;
         Init();
-        return ByWeapon.TryGetValue(weaponId, out ShopItemDef def) && IsBought(def);
+        if (!ByWeapon.TryGetValue(weaponId, out ShopItemDef def)) return false;
+        return IsSwitchedOff(def) || IsBought(def);
+    }
+
+    /// <summary>Gibt es ueberhaupt einen Shop-Eintrag, der diese Waffe bzw. diesen Buff freischaltet?</summary>
+    public static bool HasWeaponUnlock(string weaponId)
+    {
+        if (string.IsNullOrEmpty(weaponId)) return false;
+        Init();
+        return ByWeapon.ContainsKey(weaponId);
     }
 
     public static string SavePath => Store.SavePath;

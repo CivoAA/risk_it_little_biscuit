@@ -15,9 +15,11 @@ using UnityEngine;
 ///   - Den Reiter im Erfolge-/Unlocks-Buch (<see cref="AchievementsBookPanel"/>)
 ///     gibt es, sobald irgendein Charakter den Knoten hat.
 ///
-/// Welche Gegner aufgelistet werden, steht nicht hier: es sind alle, die im
-/// Wellenplan von <see cref="PlanId"/> vorkommen. Aendert sich der Plan, aendert
-/// sich die Liste mit.
+/// Welche Gegner aufgelistet werden, steht nicht hier: es sind alle, die in den
+/// Wellenplaenen der Welten (<see cref="Worlds"/>) vorkommen, gruppiert nach der
+/// Welt, in der sie zuerst auftauchen. Aendert sich ein Plan, aendert sich die
+/// Liste mit. Bosse gelten als bekannt, sobald irgendein Charakter sie besiegt
+/// hat - auch ohne den Knoten (wie in der Levelauswahl).
 ///
 /// Gespeichert wird gebuendelt (bestiary.json), im selben Takt wie Achievements
 /// und Skillpunkte - siehe <see cref="AchievementRuntime"/>.
@@ -27,8 +29,18 @@ public static class Bestiary
     /// <summary>So viele Kills einer Art braucht es fuer +1 % Schaden.</summary>
     public const int KillsPerPercent = 1000;
 
-    /// <summary>Der Wellenplan, dessen Gegner im Bestiarium stehen. World2 = Wald.</summary>
-    public const string PlanId = "World2";
+    /// <summary>
+    /// Die Welten im Bestiarium, in der Reihenfolge der Levelauswahl: ihre
+    /// Wellenplaene und die Nummer fuer den Namen (level.[n].name). Neue Welt =
+    /// neue Zeile.
+    /// </summary>
+    private static readonly (string[] Plans, int Level, string Fallback)[] Worlds =
+    {
+        (new[] { "World1" },               1, "Küche"),
+        (new[] { "World2", "World2Demo" }, 2, "Wald"),
+        (new[] { "World5" },               3, "Eisgletscher"),
+        (new[] { "World6" },               4, "Geisterwald"),
+    };
 
     private const string FileName = "bestiary.json";
 
@@ -59,6 +71,7 @@ public static class Bestiary
     private static bool loaded;
     private static bool dirty;
     private static List<EnemyId> enemies;
+    private static readonly Dictionary<EnemyId, int> worldOf = new Dictionary<EnemyId, int>();
 
     public static event Action Changed;
 
@@ -68,14 +81,33 @@ public static class Bestiary
     //  Abfragen
     // ==================================================================
 
-    /// <summary>Die Gegner im Bestiarium, in der Reihenfolge ihres ersten Auftritts im Plan.</summary>
+    /// <summary>Die Gegner im Bestiarium: Welt fuer Welt, darin in der Reihenfolge ihres ersten Auftritts.</summary>
     public static IReadOnlyList<EnemyId> Enemies
     {
         get
         {
-            if (enemies == null) enemies = CollectEnemies(WavePlans.For(PlanId));
+            if (enemies == null) CollectEnemies();
             return enemies;
         }
+    }
+
+    /// <summary>Name der Welt, in der dieser Gegner zuerst auftaucht. Leer, wenn er in keinem Plan steht.</summary>
+    public static string WorldOf(EnemyId id)
+    {
+        if (enemies == null) CollectEnemies();
+        if (!worldOf.TryGetValue(id, out int w)) return "";
+        return Loc.Get($"level.{Worlds[w].Level}.name", Worlds[w].Fallback);
+    }
+
+    /// <summary>
+    /// Schon einmal besiegt? Ueber die Kills - Bosse zusaetzlich ueber die
+    /// Boss-Siege der Charaktere, die auch ohne Knoten gezaehlt werden.
+    /// </summary>
+    public static bool IsKnown(EnemyId id)
+    {
+        if (Kills(id) > 0) return true;
+        EnemyDef def = EnemyCatalog.Get(id);
+        return def != null && EnemyCatalog.IsBossRole(def.Role) && Skills.HasAnyoneBeatenBoss(id.ToString());
     }
 
     public static int Kills(EnemyId id)
@@ -217,10 +249,22 @@ public static class Bestiary
 
     // ==================================================================
 
-    private static List<EnemyId> CollectEnemies(RunPlan plan)
+    private static void CollectEnemies()
     {
-        var list = new List<EnemyId>();
-        if (plan == null) return list;
+        enemies = new List<EnemyId>();
+        worldOf.Clear();
+
+        for (int w = 0; w < Worlds.Length; w++)
+        {
+            foreach (string planId in Worlds[w].Plans)
+                CollectEnemies(WavePlans.For(planId), w);
+        }
+    }
+
+    private static void CollectEnemies(RunPlan plan, int world)
+    {
+        if (plan == null) return;
+        List<EnemyId> list = enemies;
 
         void Add(EnemyId id)
         {
@@ -231,6 +275,7 @@ public static class Bestiary
             if (def != null && def.Role == EnemyRole.Blocker) return;
 
             list.Add(id);
+            worldOf[id] = world;
         }
 
         void AddPhase(Phase phase)
@@ -246,6 +291,5 @@ public static class Bestiary
 
         foreach (Phase phase in plan.Phases) AddPhase(phase);
         AddPhase(plan.Endless);
-        return list;
     }
 }

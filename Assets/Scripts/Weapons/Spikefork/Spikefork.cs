@@ -16,7 +16,6 @@ public class Spikefork : Weapon
         if (weaponLevel == maxweaponLevel)
         {
             Achievements.Unlock(Ach.MaxSpikeFork);
-            Unlocks.Grant(Unlocks.SpikeFork);
         }
         inputDir = PlayerController.Instance.playerMoveDirection;
         // Richtung merken

@@ -22,12 +22,16 @@ public sealed class UnlockDef
     /// <summary>Position im Katalog - entspricht der Reihenfolge in Unlocks.cs.</summary>
     public int Order { get; internal set; }
 
-    public UnlockDef(string id, string nameEn, string descEn, string iconKey)
+    /// <summary>Von Anfang an offen, ohne im Spielstand zu stehen - Platzhalter, bis es eine Bedingung gibt.</summary>
+    public readonly bool ByDefault;
+
+    public UnlockDef(string id, string nameEn, string descEn, string iconKey, bool byDefault = false)
     {
-        Id      = id;
-        NameEn  = nameEn;
-        DescEn  = descEn;
-        IconKey = string.IsNullOrEmpty(iconKey) ? id : iconKey;
+        Id        = id;
+        NameEn    = nameEn;
+        DescEn    = descEn;
+        IconKey   = string.IsNullOrEmpty(iconKey) ? id : iconKey;
+        ByDefault = byDefault;
     }
 
     public bool IsUnlocked => Unlocks.IsUnlocked(this);
@@ -57,6 +61,80 @@ public static class Unlocks
     private static readonly List<UnlockDef> Registry = new List<UnlockDef>();
 
     // ==================================================================
+    //  Welten
+    // ==================================================================
+    // Story: die naechste Welt geht auf, wenn man die davor geschafft hat.
+    // Endless: geht nach dem ersten Story-Sieg in derselben Welt auf. Welche
+    // Karte was vergibt, steht in WorldChain weiter unten; die Levelauswahl
+    // fragt ueber StoryFor/EndlessFor nach.
+
+    public static readonly UnlockDef StoryForest = Def(
+        "unlock_story_forest",
+        "Forest",
+        "You beat the Kitchen - the Forest is now open!");
+
+    public static readonly UnlockDef StoryGlacier = Def(
+        "unlock_story_glacier",
+        "Ice Cream Glacier",
+        "You beat the Forest - the Ice Cream Glacier is now open!");
+
+    public static readonly UnlockDef StoryGhost = Def(
+        "unlock_story_ghost",
+        "Haunted Forest",
+        "You beat the Ice Cream Glacier - the Haunted Forest is now open!");
+
+    public static readonly UnlockDef EndlessKitchen = Def(
+        "unlock_endless_kitchen",
+        "Endless: Kitchen",
+        "Endless mode is now open in the Kitchen!");
+
+    public static readonly UnlockDef EndlessForest = Def(
+        "unlock_endless_forest",
+        "Endless: Forest",
+        "Endless mode is now open in the Forest!");
+
+    public static readonly UnlockDef EndlessGlacier = Def(
+        "unlock_endless_glacier",
+        "Endless: Ice Cream Glacier",
+        "Endless mode is now open on the Ice Cream Glacier!");
+
+    public static readonly UnlockDef EndlessGhost = Def(
+        "unlock_endless_ghost",
+        "Endless: Haunted Forest",
+        "Endless mode is now open in the Haunted Forest!");
+
+    // ==================================================================
+    //  Charaktere
+    // ==================================================================
+    // Vorerst von Anfang an offen (byDefault). Steht die Bedingung fest:
+    // byDefault weg und an der passenden Stelle Unlocks.Grant(...) aufrufen.
+    // Abgefragt in Characters.UnlockIdByskin.
+
+    public static readonly UnlockDef CharOnionKnight = Def(
+        "unlock_char_onion_knight",
+        "Onion Knight",
+        "The Onion Knight joins your team!",
+        byDefault: true);
+
+    public static readonly UnlockDef CharMochi = Def(
+        "unlock_char_mochi",
+        "Mochi",
+        "Mochi joins your team!",
+        byDefault: true);
+
+    public static readonly UnlockDef CharInari = Def(
+        "unlock_char_inari",
+        "Inari",
+        "Inari joins your team!",
+        byDefault: true);
+
+    public static readonly UnlockDef CharSlimeKing = Def(
+        "unlock_char_slime_king",
+        "Slime King",
+        "The Slime King joins your team!",
+        byDefault: true);
+
+    // ==================================================================
     //  Shop-Erweiterungen
     // ==================================================================
 
@@ -72,67 +150,39 @@ public static class Unlocks
         "You unlocked the Buff Slot upgrade in the shop!",
         icon: "buff_slot");
 
-    public static readonly UnlockDef ExtraShot = Def(
-        "unlock_extra_shot",
-        "Extra Shot",
-        "The Extra Shot upgrade is now unlocked in the shop!",
-        icon: "buff_extra_shot");
+    /// <summary>
+    /// Nach der ersten Evo. Einen Evo-Slot hat jeder von Anfang an
+    /// (<see cref="Shop.BaseEvoSlots"/>), der Unlock oeffnet nur den Kauf weiterer.
+    /// Die Id gab es frueher schon einmal - wer sie im Spielstand hat, behaelt sie.
+    /// </summary>
+    public static readonly UnlockDef EvoSlot = Def(
+        "unlock_evo_slot",
+        "Evo Slot",
+        "Your first Evo! More Evo Slots are now available in the shop!");
 
-    // ==================================================================
-    //  Waffen
-    // ==================================================================
+    /// <summary>Sobald ein Charakter <see cref="CompanionCharLevel"/> erreicht.</summary>
+    public static readonly UnlockDef Companion = Def(
+        "unlock_companion",
+        "Companion",
+        "A character reached level 10 - companions are now available in the shop!");
 
-    public static readonly UnlockDef Shurikookie = Def(
-        "unlock_shurikookie",
-        "Shurikookie",
-        "Shurikookie has been unlocked in the shop!",
-        icon: "shurikookie");
+    /// <summary>Kommt mit dem Erfolg "Death" (grantsUnlock in Ach.cs).</summary>
+    public static readonly UnlockDef CursedSugar = Def(
+        "unlock_cursed_sugar",
+        "Cursed Sugar",
+        "You were death itself - the Cursed Sugar buff is now available in the shop!");
 
-    public static readonly UnlockDef BladeSwarm = Def(
-        "unlock_blade_swarm",
-        "Blade Swarm",
-        "Blade Swarm can now be purchased in the shop!",
-        icon: "blade_swarm");
-
-    public static readonly UnlockDef SpikeFork = Def(
-        "unlock_spike_fork",
-        "Spike Fork",
-        "Spike Fork is now available to buy!",
-        icon: "spikefork");
-
-    public static readonly UnlockDef BobaGun = Def(
-        "unlock_boba_gun",
-        "Boba Gun",
-        "The Boba Gun is now available in the shop!",
-        icon: "boba_gun");
-
-    public static readonly UnlockDef CelestialStar = Def(
-        "unlock_celestial_star",
-        "Celestial Star",
-        "You unlocked the Celestial Star in the shop!",
-        icon: "celestial_star");
-
-    public static readonly UnlockDef CandyBomb = Def(
-        "unlock_candy_bomb",
-        "Candy Bomb",
-        "Candy Bomb is now unlockable in the shop!",
-        icon: "candy_bomb");
-
-    public static readonly UnlockDef TimeLaser = Def(
-        "unlock_time_laser",
-        "Time Laser",
-        "Time Laser is now available in the shop!",
-        icon: "time_laser");
-
-    // Hinweis: "unlock_evo_slot" gibt es nicht mehr - der Evo-Slot ist von Anfang
-    // an im Shop sichtbar. Ein alter Spielstand, der ihn noch enthält, behält den
-    // Eintrag unangetastet; er wird nur nirgends mehr abgefragt.
+    /// <summary>Charakter-Level, ab dem der Begleiter im Shop auftaucht.</summary>
+    public const int CompanionCharLevel = 10;
 
     // ==================================================================
     //  Ab hier nur noch Mechanik.
     // ==================================================================
 
     public static IReadOnlyList<UnlockDef> All => Registry;
+
+    /// <summary>Gehoert der Unlock gerade ins Spiel? Nein, wenn er nur an abgeschalteten Shop-Eintraegen haengt.</summary>
+    public static bool IsShown(UnlockDef def) => def != null && !Shop.IsSwitchedOffUnlock(def.Id);
 
     /// <summary>Feuert genau einmal je Unlock, wenn er aufgeht.</summary>
     public static event Action<UnlockDef> Granted;
@@ -170,6 +220,16 @@ public static class Unlocks
 
         store = new UnlockStore { ReadOnly = sandbox };
         store.Load();
+
+        // Erste Evo -> weitere Evo-Slots im Shop. Ueber die Evo-Erfolge, die
+        // feuern auf jedem Weg, auf dem eine Evo ins Spiel kommt.
+        Achievements.Unlocked -= OnAchievementUnlocked;
+        Achievements.Unlocked += OnAchievementUnlocked;
+    }
+
+    private static void OnAchievementUnlocked(AchievementDef def)
+    {
+        if (def != null && def.Category == AchievementCategory.Evolutions) Grant(EvoSlot);
     }
 
     /// <summary>
@@ -203,7 +263,7 @@ public static class Unlocks
 
     // ==================================================================
 
-    public static bool IsUnlocked(UnlockDef def) => def != null && Store.IsUnlocked(def.Id);
+    public static bool IsUnlocked(UnlockDef def) => def != null && (def.ByDefault || Store.IsUnlocked(def.Id));
 
     /// <summary>
     /// Abfrage über die Id. Eine unbekannte Id gilt als nicht freigeschaltet -
@@ -212,13 +272,20 @@ public static class Unlocks
     public static bool IsUnlocked(string id)
     {
         if (string.IsNullOrEmpty(id)) return false;
-        return Store.IsUnlocked(id);
+        UnlockDef def = Find(id);
+        return def != null ? IsUnlocked(def) : Store.IsUnlocked(id);
     }
 
     /// <summary>Schaltet frei. Ist er schon offen, passiert nichts.</summary>
     public static void Grant(UnlockDef def)
     {
         if (def == null) return;
+
+        // Waffen-Unlocks, solange die Waffen nicht im Shop liegen (Shop.WeaponsInShop):
+        // nicht vergeben - sonst kaeme "jetzt im Shop kaufbar" fuer etwas, das
+        // es dort gar nicht gibt. Wird der Schalter wieder an, kann man sie
+        // ganz normal verdienen.
+        if (!IsShown(def)) return;
 
         UnlockStore s = Store;
         if (s.IsUnlocked(def.Id)) return;
@@ -270,19 +337,140 @@ public static class Unlocks
             int n = 0;
             foreach (UnlockDef def in Registry)
             {
-                if (IsUnlocked(def)) n++;
+                if (IsShown(def) && IsUnlocked(def)) n++;
             }
             return n;
         }
     }
 
-    public static int TotalCount => Registry.Count;
+    /// <summary>Alle, die gerade im Spiel vorkommen (<see cref="IsShown"/>).</summary>
+    public static int TotalCount
+    {
+        get
+        {
+            int n = 0;
+            foreach (UnlockDef def in Registry)
+            {
+                if (IsShown(def)) n++;
+            }
+            return n;
+        }
+    }
 
     public static string SavePath => Store.SavePath;
 
-    private static UnlockDef Def(string id, string nameEn, string descEn, string icon = null)
+    // ==================================================================
+    //  Welten-Kette
+    // ==================================================================
+
+    /// <summary>
+    /// Map-ID (Levelauswahl) -> was ihre Story braucht, was ihr Endless braucht
+    /// und was ein Story-Sieg dort fuer die naechste Welt oeffnet. Reihenfolge
+    /// wie in der Levelauswahl. Neue Welt = neue Zeile (und die alte letzte
+    /// bekommt ihr Next).
+    /// </summary>
+    private static readonly (int MapId, UnlockDef Story, UnlockDef Endless, UnlockDef Next)[] WorldChain =
     {
-        UnlockDef def = new UnlockDef(id, nameEn, descEn, icon) { Order = Registry.Count };
+        (0, null,         EndlessKitchen, StoryForest),   // Kueche
+        (3, StoryForest,  EndlessForest,  StoryGlacier),  // Wald
+        (5, StoryGlacier, EndlessGlacier, StoryGhost),    // Eisgletscher
+        (6, StoryGhost,   EndlessGhost,   null),          // Geisterwald
+    };
+
+    /// <summary>Der Unlock, den die Story dieser Karte braucht. Null = immer offen.</summary>
+    public static UnlockDef StoryFor(int mapId)
+    {
+        foreach (var w in WorldChain) if (w.MapId == mapId) return w.Story;
+        return null;
+    }
+
+    /// <summary>Der Unlock, den Endless auf dieser Karte braucht. Null = immer offen.</summary>
+    public static UnlockDef EndlessFor(int mapId)
+    {
+        foreach (var w in WorldChain) if (w.MapId == mapId) return w.Endless;
+        return null;
+    }
+
+    /// <summary>
+    /// Story-Sieg auf dieser Karte (GameManager.GameOver): Endless hier und die
+    /// Story der naechsten Welt gehen auf.
+    /// </summary>
+    public static void ReportStoryWin(int mapId)
+    {
+        foreach (var w in WorldChain)
+        {
+            if (w.MapId != mapId) continue;
+            Grant(w.Endless);
+            Grant(w.Next);
+        }
+    }
+
+    /// <summary>Begleiter im Shop, sobald irgendein Charakter <see cref="CompanionCharLevel"/> hat.</summary>
+    public static void CheckCharLevels()
+    {
+        if (IsUnlocked(Companion)) return;
+        foreach (SkillTreeDef tree in SkillTrees.All)
+        {
+            if (tree != null && Skills.LevelOf(tree) >= CompanionCharLevel)
+            {
+                Grant(Companion);
+                return;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Holt Unlocks nach, die ein alter Spielstand schon verdient hat - leise,
+    /// ohne Meldung. Laeuft beim Betreten des Hubs (HubUI), nicht beim Start:
+    /// beim Zuruecksetzen des Spielstands waeren die anderen Stores sonst noch
+    /// nicht leer.
+    /// </summary>
+    public static void CatchUp()
+    {
+        UnlockStore s = Store;
+        bool changed = false;
+
+        void Give(UnlockDef def)
+        {
+            if (def == null || def.ByDefault || !IsShown(def) || s.IsUnlocked(def.Id)) return;
+            s.SetUnlocked(def.Id, true);
+            changed = true;
+        }
+
+        // Geschaffte Welten
+        foreach (var w in WorldChain)
+        {
+            if (LevelRecords.StoryBest(w.MapId) <= 0f) continue;
+            Give(w.Endless);
+            Give(w.Next);
+        }
+
+        // Erfolge mit Unlock (z.B. Death -> Cursed Sugar) und die erste Evo
+        foreach (AchievementDef def in Ach.All)
+        {
+            if (!def.IsUnlocked) continue;
+            if (!string.IsNullOrEmpty(def.GrantsUnlock)) Give(Find(def.GrantsUnlock));
+            if (def.Category == AchievementCategory.Evolutions) Give(EvoSlot);
+        }
+
+        // Schon Gekauftes bleibt sichtbar
+        foreach (ShopItemDef item in Shop.All)
+        {
+            if (!string.IsNullOrEmpty(item.RequiredUnlock) && Shop.LevelOf(item) > 0) Give(Find(item.RequiredUnlock));
+        }
+
+        // Charakter-Level
+        foreach (SkillTreeDef tree in SkillTrees.All)
+        {
+            if (tree != null && Skills.LevelOf(tree) >= CompanionCharLevel) Give(Companion);
+        }
+
+        if (changed) s.Save();
+    }
+
+    private static UnlockDef Def(string id, string nameEn, string descEn, string icon = null, bool byDefault = false)
+    {
+        UnlockDef def = new UnlockDef(id, nameEn, descEn, icon, byDefault) { Order = Registry.Count };
         Registry.Add(def);
         return def;
     }

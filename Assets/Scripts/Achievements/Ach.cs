@@ -47,6 +47,24 @@ public static class Ach
 
     public static readonly AchievementDef Death = Def(
         "Death", "Death", "Be death itself!",
+        AchievementCategory.Progression, grantsUnlock: "unlock_cursed_sugar");
+
+    // Ein Endboss je Welt. Ausgeloest in Enemy.GrantRewards ueber BossVictory().
+
+    public static readonly AchievementDef BossCookieKing = Def(
+        "Boss_Cookie_King", "Crumbled Crown", "Defeat the Cookie King in the Kitchen.",
+        AchievementCategory.Progression);
+
+    public static readonly AchievementDef BossEmberroot = Def(
+        "Boss_Emberroot", "Uprooted", "Defeat Emberroot in the Forest.",
+        AchievementCategory.Progression);
+
+    public static readonly AchievementDef BossIceEmperor = Def(
+        "Boss_Ice_Emperor", "Meltdown", "Defeat the Ice Emperor on the Ice Cream Glacier.",
+        AchievementCategory.Progression);
+
+    public static readonly AchievementDef BossPhantom = Def(
+        "Boss_Phantom", "Lights On", "Defeat the Phantom in the Haunted Forest.",
         AchievementCategory.Progression);
 
     // ==================================================================
@@ -73,6 +91,10 @@ public static class Ach
     public static readonly AchievementDef Kill100Miniboss = Def(
         "Kill_100_Miniboss", "Conqueror", "Defeat 100 <color=#FFD040>Elite</color> enemies.",
         AchievementCategory.Combat, goal: 100f);
+
+    public static readonly AchievementDef KillSlimeKing = Def(
+        "Kill_Slime_King", "Dethroned", "Defeat the Slime King.",
+        AchievementCategory.Combat);
 
     // ==================================================================
     //  Evolutionen
@@ -186,6 +208,40 @@ public static class Ach
         "Max_Level_CandyBomb", "Max Level: Candy Bomb", "Reach the maximum level of the Candy Bomb weapon.",
         AchievementCategory.Weapons);
 
+    // Ab hier ohne eigene Abfrage in der Waffe: Weapon.LevelUP fragt MaxLevelFor().
+
+    public static readonly AchievementDef MaxTimeLaser = Def(
+        "Max_Level_TimeLaser", "Max Level: Time Laser", "Reach the maximum level of the Time Laser weapon.",
+        AchievementCategory.Weapons);
+
+    public static readonly AchievementDef MaxSwordSlash = Def(
+        "Max_Level_SwordSlash", "Max Level: Sword Slash", "Reach the maximum level of the Sword Slash weapon.",
+        AchievementCategory.Weapons);
+
+    public static readonly AchievementDef MaxSaladFan = Def(
+        "Max_Level_SaladFan", "Max Level: Salad Fan", "Reach the maximum level of the Salad Fan weapon.",
+        AchievementCategory.Weapons);
+
+    public static readonly AchievementDef MaxChocoChips = Def(
+        "Max_Level_ChocoChips", "Max Level: Choco Chips", "Reach the maximum level of the Choco Chips weapon.",
+        AchievementCategory.Weapons);
+
+    public static readonly AchievementDef MaxMilkDunk = Def(
+        "Max_Level_MilkDunk", "Max Level: Milk Dunk", "Reach the maximum level of the Milk Dunk weapon.",
+        AchievementCategory.Weapons);
+
+    public static readonly AchievementDef MaxFoxfire = Def(
+        "Max_Level_Foxfire", "Max Level: Foxfire", "Reach the maximum level of the Foxfire weapon.",
+        AchievementCategory.Weapons);
+
+    public static readonly AchievementDef MaxRoyalSplat = Def(
+        "Max_Level_RoyalSplat", "Max Level: Royal Splat", "Reach the maximum level of the Royal Splat weapon.",
+        AchievementCategory.Weapons);
+
+    public static readonly AchievementDef MaxMochiMelody = Def(
+        "Max_Level_MochiMelody", "Max Level: Mochi Melody", "Reach the maximum level of the Mochi Melody weapon.",
+        AchievementCategory.Weapons);
+
     // ==================================================================
     //  Buffs auf Maximalstufe
     // ==================================================================
@@ -208,6 +264,68 @@ public static class Ach
 
     public static readonly AchievementDef MaxSecondChance = Def(
         "Max_Level_SecondChance", "Max Level: Second Chance", "Reach the maximum level of the Second Chance buff.",
+        AchievementCategory.Buffs);
+
+    // Ab hier ohne eigene Abfrage im Buff: Weapon.LevelUP fragt MaxLevelFor().
+
+    public static readonly AchievementDef MaxDamage = Def(
+        "Max_Level_Damage", "Max Level: Damage", "Reach the maximum level of the Damage buff.",
+        AchievementCategory.Buffs);
+
+    public static readonly AchievementDef MaxCritChance = Def(
+        "Max_Level_CritChance", "Max Level: Crit Chance", "Reach the maximum level of the Crit Chance buff.",
+        AchievementCategory.Buffs);
+
+    public static readonly AchievementDef MaxCritDamage = Def(
+        "Max_Level_CritDamage", "Max Level: Crit Damage", "Reach the maximum level of the Crit Damage buff.",
+        AchievementCategory.Buffs);
+
+    public static readonly AchievementDef MaxAoeRange = Def(
+        "Max_Level_AoeRange", "Max Level: AOE Range", "Reach the maximum level of the AOE Range buff.",
+        AchievementCategory.Buffs);
+
+    public static readonly AchievementDef MaxMaxHp = Def(
+        "Max_Level_MaxHp", "Max Level: Max HP", "Reach the maximum level of the Max HP buff.",
+        AchievementCategory.Buffs);
+
+    public static readonly AchievementDef MaxRegeneration = Def(
+        "Max_Level_Regeneration", "Max Level: HP Regeneration", "Reach the maximum level of the HP Regeneration buff.",
+        AchievementCategory.Buffs);
+
+    public static readonly AchievementDef MaxArmor = Def(
+        "Max_Level_Armor", "Max Level: Armor", "Reach the maximum level of the Armor buff.",
+        AchievementCategory.Buffs);
+
+    public static readonly AchievementDef MaxDodge = Def(
+        "Max_Level_Dodge", "Max Level: Dodge Chance", "Reach the maximum level of the Dodge Chance buff.",
+        AchievementCategory.Buffs);
+
+    public static readonly AchievementDef MaxLifeSteal = Def(
+        "Max_Level_LifeSteal", "Max Level: Life Steal", "Reach the maximum level of the Life Steal buff.",
+        AchievementCategory.Buffs);
+
+    public static readonly AchievementDef MaxMoveSpeed = Def(
+        "Max_Level_MoveSpeed", "Max Level: Move Speed", "Reach the maximum level of the Move Speed buff.",
+        AchievementCategory.Buffs);
+
+    public static readonly AchievementDef MaxPickupRange = Def(
+        "Max_Level_PickupRange", "Max Level: Pickup Range", "Reach the maximum level of the Pickup Range buff.",
+        AchievementCategory.Buffs);
+
+    public static readonly AchievementDef MaxXpGain = Def(
+        "Max_Level_XpGain", "Max Level: Experience Gain", "Reach the maximum level of the Experience Gain buff.",
+        AchievementCategory.Buffs);
+
+    public static readonly AchievementDef MaxCurrency = Def(
+        "Max_Level_Currency", "Max Level: Currency Gain", "Reach the maximum level of the Currency Gain buff.",
+        AchievementCategory.Buffs);
+
+    public static readonly AchievementDef MaxLuck = Def(
+        "Max_Level_Luck", "Max Level: Luck", "Reach the maximum level of the Luck buff.",
+        AchievementCategory.Buffs);
+
+    public static readonly AchievementDef MaxCursedSugar = Def(
+        "Max_Level_CursedSugar", "Max Level: Cursed Sugar", "Reach the maximum level of the Cursed Sugar buff.",
         AchievementCategory.Buffs);
 
     // ==================================================================
@@ -253,6 +371,64 @@ public static class Ach
         }
 
         return null;
+    }
+
+    /// <summary>
+    /// Weapon.weaponID -> "Maximalstufe"-Erfolg. Weapon.LevelUP schaltet darueber
+    /// frei, damit nicht jede Waffe die Abfrage selbst tragen muss. Die alten
+    /// Waffen fragen zusaetzlich noch in ihrem Update - doppelt schadet nicht.
+    /// </summary>
+    private static readonly Dictionary<string, AchievementDef> MaxLevelByWeapon =
+        new Dictionary<string, AchievementDef>
+    {
+        { "coffee_pool",    MaxCoffeePool },     { "cookie_saw",    MaxCookiesaw },
+        { "butterblast",    MaxButterblast },    { "jam_jar",       MaxThrowingJamJar },
+        { "void_spike",     MaxVoidSpike },      { "fire_ball",     MaxFireBall },
+        { "boomerang",      MaxBoomerang },      { "crumb_trail",   MaxCrumbTrail },
+        { "vortex",         MaxVortex },         { "turret",        MaxTurret },
+        { "boba_gun",       MaxBobaGun },        { "shurikookie",   MaxShurikookie },
+        { "spike_fork",     MaxSpikeFork },      { "deathstrike",   MaxDeathstrike },
+        { "celestial_star", MaxCelestialStar },  { "blade_swarm",   MaxBladeSwarm },
+        { "candy_bomb",     MaxCandyBomb },      { "time_laser",    MaxTimeLaser },
+        { "sword_slash",    MaxSwordSlash },     { "salad_fan",     MaxSaladFan },
+        { "choco_chips",    MaxChocoChips },     { "milk_dunk",     MaxMilkDunk },
+        { "foxfire",        MaxFoxfire },        { "royal_splat",   MaxRoyalSplat },
+        { "mochi_melody",   MaxMochiMelody },
+
+        { "buff_extra_shot",    MaxExtraShot },     { "buff_cooldown",     MaxCooldown },
+        { "buff_duration",      MaxDuration },      { "buff_glass_cannon", MaxGlassCannon },
+        { "buff_second_chance", MaxSecondChance },  { "buff_damage",       MaxDamage },
+        { "buff_crit_chance",   MaxCritChance },    { "buff_crit_damage",  MaxCritDamage },
+        { "buff_aoe_range",     MaxAoeRange },      { "buff_max_hp",       MaxMaxHp },
+        { "buff_regeneration",  MaxRegeneration },  { "buff_armor",        MaxArmor },
+        { "buff_dodge",         MaxDodge },         { "buff_life_steal",   MaxLifeSteal },
+        { "buff_move_speed",    MaxMoveSpeed },     { "buff_pickup_range", MaxPickupRange },
+        { "buff_xp_gain",       MaxXpGain },        { "buff_currency",     MaxCurrency },
+        { "buff_luck",          MaxLuck },          { "buff_curse",        MaxCursedSugar },
+    };
+
+    /// <summary>Der "Maximalstufe"-Erfolg zu einer Waffe/einem Buff, oder null.</summary>
+    public static AchievementDef MaxLevelFor(string weaponId)
+    {
+        if (string.IsNullOrEmpty(weaponId)) return null;
+        return MaxLevelByWeapon.TryGetValue(weaponId, out AchievementDef def) ? def : null;
+    }
+
+    /// <summary>EnemyId-Name -> Boss-Erfolg (Endbosse der Welten und der Schleimkoenig).</summary>
+    private static readonly Dictionary<string, AchievementDef> ByBoss = new Dictionary<string, AchievementDef>
+    {
+        { "KeksKoenig",    BossCookieKing },
+        { "Glutwurz",      BossEmberroot },
+        { "Eiskaiser",     BossIceEmperor },
+        { "Squiddy",       BossPhantom },
+        { "Schleimkoenig", KillSlimeKing },
+    };
+
+    /// <summary>Der Erfolg fuer einen besiegten Boss (Schluessel = EnemyId-Name), oder null.</summary>
+    public static AchievementDef BossVictory(string enemyId)
+    {
+        if (string.IsNullOrEmpty(enemyId)) return null;
+        return ByBoss.TryGetValue(enemyId, out AchievementDef def) ? def : null;
     }
 
     private static void EnsureIndex()

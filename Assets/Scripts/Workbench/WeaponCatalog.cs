@@ -180,6 +180,7 @@ public static class WeaponCatalog
     public static readonly WeaponDef BuffXpGain       = Def("buff_xp_gain", "Experience Gain", PoolKind.Buff);
     public static readonly WeaponDef BuffCurrency     = Def("buff_currency", "Currency Gain", PoolKind.Buff);
     public static readonly WeaponDef BuffLuck         = Def("buff_luck", "Luck", PoolKind.Buff);
+    public static readonly WeaponDef BuffCurse        = Def("buff_curse", "Cursed Sugar", PoolKind.Buff);
 
     // ==================================================================
     //  Evos
@@ -208,6 +209,67 @@ public static class WeaponCatalog
     public static readonly EvoDef RecipeBombSwarm     = Evo("evo_bomb_swarm", "candy_bomb", "cookie_saw");
     public static readonly EvoDef RecipeStickyShatter = Evo("evo_sticky_shatter", "jam_jar", "buff_aoe_range");
     public static readonly EvoDef RecipeTyphoonFan    = Evo("evo_typhoon_fan", "salad_fan", "buff_move_speed");
+
+    // ==================================================================
+    //  Freischaltung
+    // ==================================================================
+
+    /// <summary>
+    /// Waffen und Buffs, die ohne Shop-Kauf zur Verfuegung stehen. Alles andere
+    /// muss im Shop gekauft sein (unlocksWeapon in Shop.cs). Stand frueher als
+    /// zwei Listen im PlayerController - hier gilt sie fuer Level-Up UND Werkbank.
+    /// Was weder hier steht noch einen Shop-Eintrag hat, bekommt niemand
+    /// (z.B. der alte Mochi-Faden "mochi_strand") und taucht auch in der
+    /// Werkbank nicht auf.
+    /// </summary>
+    private static readonly HashSet<string> DefaultUnlocked = new HashSet<string>
+    {
+        // Waffen
+        "coffee_pool",
+        "cookie_saw",
+        "butterblast",
+        "jam_jar",
+        "void_spike",
+        "fire_ball",
+        "boomerang",
+        // Neue Waffen: bewusst ohne Shop-Eintrag sofort verfuegbar.
+        "crumb_trail",
+        "vortex",
+        "turret",
+        "sword_slash",
+        "salad_fan",
+        // Schoko-Salve ist die Startwaffe des Kekses. Der Shurikookie war es
+        // frueher und haengt darum nicht mehr am Shop: ohne Startwaffe kaeme
+        // ihn keiner frei.
+        "choco_chips",
+        "milk_dunk",
+        "shurikookie",
+        // Startwaffen von Mochi, Inari und Schleimkoenig. Fuer alle anderen
+        // sperrt sie Characters.IsWeaponAllowed.
+        "mochi_melody",
+        "foxfire",
+        "royal_splat",
+
+        // Buffs
+        "buff_max_hp",
+        "buff_regeneration",
+        "buff_move_speed",
+        "buff_pickup_range",
+        "buff_armor",
+        "buff_dodge",
+        "buff_cooldown",
+        "buff_duration",
+        "buff_glass_cannon",
+        "buff_second_chance",
+    };
+
+    /// <summary>Hat der Spieler diese Waffe/diesen Buff gerade zur Verfuegung (Standard oder gekauft)?</summary>
+    public static bool IsUnlocked(string id) =>
+        !string.IsNullOrEmpty(id) && (DefaultUnlocked.Contains(id) || Shop.IsWeaponUnlocked(id));
+
+    /// <summary>Kann man sie ueberhaupt bekommen - sofort oder spaeter per Shop-Kauf?</summary>
+    public static bool IsObtainable(string id) =>
+        !string.IsNullOrEmpty(id) && (DefaultUnlocked.Contains(id) || Shop.HasWeaponUnlock(id));
 
     // ==================================================================
     //  Zugriff

@@ -205,6 +205,22 @@ public static class Skills
     public static bool HasBeatenBoss(string bossKey)
         => ActiveTree != null && Store.HasBoss(ActiveTree.Id, bossKey);
 
+    /// <summary>
+    /// Hat irgendein Charakter diesen Boss schon einmal besiegt? Levelauswahl
+    /// und Bestiarium zeigen ihn bis dahin nur als Silhouette.
+    /// </summary>
+    public static bool HasAnyoneBeatenBoss(string bossKey)
+    {
+        if (string.IsNullOrEmpty(bossKey)) return false;
+        if (!initialized) Init();
+
+        foreach (SkillTreeDef tree in SkillTrees.All)
+        {
+            if (tree != null && Store.HasBoss(tree.Id, bossKey)) return true;
+        }
+        return false;
+    }
+
     /// <summary>Für Knoten ausgegebene Punkte im Baum.</summary>
     public static int SpentIn(SkillTreeDef tree)
     {

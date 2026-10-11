@@ -243,8 +243,8 @@ public class WorkbenchTests
         foreach (WeaponDef def in WeaponCatalog.OfKind(PoolKind.Weapon)) Loadout.Add(def.Id);
         foreach (WeaponDef def in WeaponCatalog.OfKind(PoolKind.Buff)) Loadout.Add(def.Id);
 
-        Assert.LessOrEqual(Loadout.Count(PoolKind.Weapon), Loadout.WeaponSlots);
-        Assert.LessOrEqual(Loadout.Count(PoolKind.Buff), Loadout.BuffSlots);
+        Assert.LessOrEqual(Loadout.Count(PoolKind.Weapon), Loadout.Capacity(PoolKind.Weapon));
+        Assert.LessOrEqual(Loadout.Count(PoolKind.Buff), Loadout.Capacity(PoolKind.Buff));
         Assert.AreEqual(Loadout.RequiredBuffs, Loadout.Count(PoolKind.Buff),
             "Bei mehr Buffs als Plaetzen muessen genau die Plaetze voll werden.");
     }
@@ -266,7 +266,7 @@ public class WorkbenchTests
     [Test]
     public void Uebernehmen_geht_erst_wenn_beide_Gruppen_voll_sind()
     {
-        Loadout.Add(WeaponCatalog.CandyBomb.Id);
+        Loadout.Add(WeaponCatalog.Vortex.Id);
         Assert.IsFalse(Loadout.IsComplete);
         Assert.IsFalse(Loadout.Apply(), "Ein halber Verteiler liess sich uebernehmen.");
         Assert.IsFalse(Loadout.IsActive);
@@ -286,7 +286,7 @@ public class WorkbenchTests
         // Die Buffs passen nicht alle in den Verteiler - die uebrigen duerfen
         // im Lauf nicht mehr auftauchen.
         var buffs = WeaponCatalog.OfKind(PoolKind.Buff);
-        Assert.Greater(buffs.Count, Loadout.BuffSlots, "Test setzt mehr Buffs als Plaetze voraus.");
+        Assert.Greater(buffs.Count, Loadout.Capacity(PoolKind.Buff), "Test setzt mehr Buffs als Plaetze voraus.");
 
         foreach (WeaponDef def in buffs)
         {
@@ -320,8 +320,10 @@ public class WorkbenchTests
     {
         // Ein Rezept, an dem die Standardwaffe nicht beteiligt ist - sonst
         // startet der Test schon bei "halb fertig".
+        // Und eines, dessen Zutaten frei sind - Ungekauftes laesst sich nicht verteilen.
         EvoDef evo = WeaponCatalog.Evos.First(
-            e => !Loadout.IsLocked(e.IngredientA) && !Loadout.IsLocked(e.IngredientB));
+            e => !Loadout.IsLocked(e.IngredientA) && !Loadout.IsLocked(e.IngredientB) &&
+                 Loadout.IsSelectable(e.IngredientA) && Loadout.IsSelectable(e.IngredientB));
 
         Assert.AreEqual(EvoState.None, Loadout.StateOf(evo));
 
@@ -339,7 +341,8 @@ public class WorkbenchTests
     public void Evo_Leiste_zeigt_das_Fortgeschrittenste_zuerst()
     {
         EvoDef target = WeaponCatalog.Evos.Last(
-            e => !Loadout.IsLocked(e.IngredientA) && !Loadout.IsLocked(e.IngredientB));
+            e => !Loadout.IsLocked(e.IngredientA) && !Loadout.IsLocked(e.IngredientB) &&
+                 Loadout.IsSelectable(e.IngredientA) && Loadout.IsSelectable(e.IngredientB));
         Loadout.Add(target.IngredientA);
         Loadout.Add(target.IngredientB);
 
@@ -431,9 +434,8 @@ public class WorkbenchTests
         Loadout.FillRandom();
         Assert.IsTrue(Loadout.IsComplete, "Zufall hat nicht bis zum Anschlag gefuellt.");
 
-        // Bei 19 Buffs auf 10 Plaetzen muessen sich zwei Wuerfe unterscheiden.
-        // Zweimal dieselbe Auswahl ist so unwahrscheinlich (1 zu ~92378), dass
-        // acht gleiche Wuerfe hintereinander ein echter Fehler sind.
+        // Bei mehr freien Buffs als offenen Plaetzen muessen sich zwei Wuerfe
+        // unterscheiden - acht gleiche hintereinander sind ein echter Fehler.
         var first = new List<string>(Loadout.Get(PoolKind.Buff));
 
         bool different = false;
@@ -444,6 +446,73 @@ public class WorkbenchTests
         }
 
         Assert.IsTrue(different, "Acht Wuerfe ergaben achtmal dieselbe Auswahl.");
+    }
+
+    // ==================================================================
+    //  Plaetze haengen an den Slots im Lauf
+    // ==================================================================
+
+    [Test]
+    public void Je_Slot_drei_Plaetze_plus_Startwaffe()
+    {
+        Assert.AreEqual(Mathf.Min(Loadout.MaxWeapons, Loadout.RunWeaponSlots * 3 + 1),
+                        Loadout.Capacity(PoolKind.Weapon),
+                        "3 Waffenslots muessen 10 Plaetze heissen (3 je Slot + Startwaffe).");
+        Assert.AreEqual(Mathf.Min(Loadout.MaxBuffs, Loadout.RunBuffSlots * 3),
+                        Loadout.Capacity(PoolKind.Buff));
+        Assert.LessOrEqual(Loadout.Capacity(PoolKind.Buff), 10, "Mehr als 10 Buffs gibt es nie.");
+    }
+
+    [Test]
+    public void Ueber_die_offenen_Plaetze_hinaus_geht_nichts_rein()
+    {
+        foreach (WeaponDef def in WeaponCatalog.OfKind(PoolKind.Weapon)) Loadout.Add(def.Id);
+        foreach (WeaponDef def in WeaponCatalog.OfKind(PoolKind.Buff)) Loadout.Add(def.Id);
+
+        Assert.AreEqual(Loadout.RequiredWeapons, Loadout.Count(PoolKind.Weapon));
+        Assert.AreEqual(Loadout.RequiredBuffs, Loadout.Count(PoolKind.Buff));
+        Assert.IsTrue(Loadout.IsComplete);
+    }
+
+    [Test]
+    public void Fremde_Startwaffen_fehlen_eigene_und_alles_Erreichbare_sind_da()
+    {
+        int me = Loadout.CurrentCharacter;
+        var shown = new HashSet<string>(Loadout.Available(PoolKind.Weapon).Select(d => d.Id));
+
+        for (int skin = 0; skin < Characters.Count; skin++)
+        {
+            string id = Characters.StartWeaponId(skin);
+            if (skin == me) Assert.IsTrue(shown.Contains(id), $"Eigene Startwaffe '{id}' fehlt.");
+            else Assert.IsFalse(shown.Contains(id), $"Startwaffe '{id}' von Charakter {skin} ist sichtbar.");
+        }
+
+        foreach (WeaponDef def in WeaponCatalog.OfKind(PoolKind.Weapon))
+        {
+            if (!Characters.IsWeaponAllowed(def.Id, me)) continue;
+            Assert.AreEqual(WeaponCatalog.IsObtainable(def.Id) || Loadout.IsLocked(def.Id), shown.Contains(def.Id),
+                $"'{def.Id}': Werkbank und Erreichbarkeit sind sich uneinig.");
+        }
+
+        Assert.IsFalse(shown.Contains(WeaponCatalog.MochiStrand.Id),
+            "Den Mochi-Faden bekommt niemand - er gehoert nicht in die Werkbank.");
+    }
+
+    [Test]
+    public void Ohne_Waffen_im_Shop_ist_jede_Waffe_von_Anfang_an_frei()
+    {
+        if (Shop.WeaponsInShop) Assert.Ignore("Shop.WeaponsInShop ist an - Waffen werden gekauft.");
+
+        foreach (WeaponDef def in Loadout.Available(PoolKind.Weapon))
+        {
+            Assert.IsTrue(Loadout.IsSelectable(def.Id), $"'{def.Id}' ist noch gesperrt.");
+        }
+
+        foreach (ShopItemDef def in Shop.All)
+        {
+            if (def.Category == ShopCategory.Weapons)
+                Assert.IsFalse(Shop.IsVisible(def), $"Shop-Eintrag '{def.Id}' ist noch sichtbar.");
+        }
     }
 
     // ==================================================================
@@ -492,12 +561,12 @@ public class WorkbenchTests
         Assert.AreNotEqual(Characters.StartWeaponId(a), Characters.StartWeaponId(b),
             "Test braucht zwei Charaktere mit verschiedenen Startwaffen.");
 
-        Loadout.Add(WeaponCatalog.CandyBomb.Id);
+        Loadout.Add(WeaponCatalog.Vortex.Id);
         Shop.SkinIndex = b;
         Shop.SkinIndex = a;
 
         CollectionAssert.AreEqual(
-            new[] { Characters.StartWeaponId(a), WeaponCatalog.CandyBomb.Id },
+            new[] { Characters.StartWeaponId(a), WeaponCatalog.Vortex.Id },
             Loadout.Get(PoolKind.Weapon),
             "Nach Hin und Her steht etwas anderes im Verteiler als vorher.");
     }
@@ -604,6 +673,74 @@ public class WorkbenchTests
         Assert.DoesNotThrow(() => store.Load());
         Assert.IsFalse(store.Active);
         Assert.IsEmpty(store.Weapons);
+    }
+
+    // ==================================================================
+    //  Presets
+    // ==================================================================
+
+    [Test]
+    public void Presets_halten_ihre_Builds_auseinander_und_merken_den_letzten()
+    {
+        var store = new LoadoutStore(tempDir);
+        store.Use(0);
+        store.Set(PoolKind.Weapon, new[] { "cookie_saw" });
+
+        store.PresetIndex = 2;
+        Assert.AreEqual(3, store.PresetCount, "Springen auf Platz 3 muss die Plaetze davor anlegen.");
+        CollectionAssert.IsEmpty(store.Weapons, "Ein neues Preset muss leer anfangen.");
+        store.Set(PoolKind.Weapon, new[] { "boba_gun" });
+        store.Save();
+
+        var reloaded = new LoadoutStore(tempDir);
+        reloaded.Load();
+        reloaded.Use(0);
+
+        Assert.AreEqual(2, reloaded.PresetIndex, "Das zuletzt gewaehlte Preset ging verloren.");
+        CollectionAssert.AreEqual(new[] { "boba_gun" }, reloaded.Weapons);
+
+        reloaded.PresetIndex = 0;
+        CollectionAssert.AreEqual(new[] { "cookie_saw" }, reloaded.Weapons);
+    }
+
+    [Test]
+    public void Spielstand_v2_wird_zu_Preset_eins()
+    {
+        File.WriteAllText(Path.Combine(tempDir, "loadout.json"),
+            "{\"version\":2,\"characters\":[" +
+            "{\"character\":1,\"active\":true,\"weapons\":[\"cookie_saw\"],\"buffs\":[\"buff_damage\"]}]}");
+
+        var store = new LoadoutStore(tempDir);
+        store.Load();
+        Assert.IsTrue(store.Migrated, "Der v2-Spielstand wurde nicht als solcher erkannt.");
+
+        store.Use(1);
+        Assert.AreEqual(0, store.PresetIndex);
+        Assert.AreEqual(1, store.PresetCount);
+        Assert.IsTrue(store.Active);
+        CollectionAssert.AreEqual(new[] { "cookie_saw" }, store.Weapons);
+        CollectionAssert.AreEqual(new[] { "buff_damage" }, store.Buffs);
+
+        store.Save();
+        var reloaded = new LoadoutStore(tempDir);
+        reloaded.Load();
+        Assert.IsFalse(reloaded.Migrated, "Die Datei steht immer noch im v2-Format da.");
+        reloaded.Use(1);
+        CollectionAssert.AreEqual(new[] { "cookie_saw" }, reloaded.Weapons);
+    }
+
+    [Test]
+    public void Ungekaufte_Presets_lassen_sich_nicht_waehlen()
+    {
+        int count = Loadout.PresetCount;
+        Assert.That(count, Is.InRange(Loadout.BasePresets, Loadout.MaxPresets));
+        Assert.AreEqual(Loadout.MaxPresets, Loadout.BasePresets + Shop.LoadoutPreset.MaxLevel,
+            "So viele Knoepfe hat die Werkbank - Shop-Stufen und MaxPresets muessen zusammenpassen.");
+
+        Assert.IsFalse(Loadout.SelectPreset(count), "Ein nicht gekauftes Preset liess sich waehlen.");
+        Assert.IsFalse(Loadout.SelectPreset(-1));
+        Assert.IsTrue(Loadout.SelectPreset(0));
+        Assert.AreEqual(0, Loadout.ActivePreset);
     }
 }
 #endif
