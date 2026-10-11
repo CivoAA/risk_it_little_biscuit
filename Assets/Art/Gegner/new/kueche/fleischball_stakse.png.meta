@@ -1,0 +1,419 @@
+fileFormatVersion: 2
+guid: cdac8baf5ecb486785c816fa55398cf1
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4058034537658174408
+    second: fleischball_stakse_0
+  - first:
+      213: 3047060929353488467
+    second: fleischball_stakse_1
+  - first:
+      213: 3667281737223913902
+    second: fleischball_stakse_2
+  - first:
+      213: 4546157156331120283
+    second: fleischball_stakse_3
+  - first:
+      213: 2001760622988600548
+    second: fleischball_stakse_4
+  - first:
+      213: 2635853154132186780
+    second: fleischball_stakse_5
+  - first:
+      213: 1718314253300561959
+    second: fleischball_stakse_6
+  - first:
+      213: 2679067506373574899
+    second: fleischball_stakse_7
+  - first:
+      213: 2654846891769608219
+    second: fleischball_stakse_8
+  - first:
+      213: 2656953575704068604
+    second: fleischball_stakse_9
+  - first:
+      213: 3950790076217128572
+    second: fleischball_stakse_10
+  - first:
+      213: 1437305328562092158
+    second: fleischball_stakse_11
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: fleischball_stakse_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 44
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07142857142857142}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da583ba6841249eaa6e7469ea03967bf
+      internalID: 4058034537658174408
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fleischball_stakse_1
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 0
+        width: 44
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07142857142857142}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7975080e23214a088e13d34c40cc3a54
+      internalID: 3047060929353488467
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fleischball_stakse_2
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 0
+        width: 44
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07142857142857142}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: afee138e572c40db8e4db00a7685233a
+      internalID: 3667281737223913902
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fleischball_stakse_3
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 0
+        width: 44
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07142857142857142}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a77ec46b6ea841cd998cf68560a9817c
+      internalID: 4546157156331120283
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fleischball_stakse_4
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 0
+        width: 44
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07142857142857142}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f23913ac31aa4c929f034a4c78707f96
+      internalID: 2001760622988600548
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fleischball_stakse_5
+      rect:
+        serializedVersion: 2
+        x: 220
+        y: 0
+        width: 44
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07142857142857142}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1cafb93e9f404750bb2d7461f6360c98
+      internalID: 2635853154132186780
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fleischball_stakse_6
+      rect:
+        serializedVersion: 2
+        x: 264
+        y: 0
+        width: 44
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07142857142857142}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 76bdf93a1b3344faae6a2318d32a58f2
+      internalID: 1718314253300561959
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fleischball_stakse_7
+      rect:
+        serializedVersion: 2
+        x: 308
+        y: 0
+        width: 44
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07142857142857142}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f494c95cab084a20ac0a52c4976c2c36
+      internalID: 2679067506373574899
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fleischball_stakse_8
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 0
+        width: 44
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07142857142857142}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 23ed864fceb14f29ae2e84e2106cb011
+      internalID: 2654846891769608219
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fleischball_stakse_9
+      rect:
+        serializedVersion: 2
+        x: 396
+        y: 0
+        width: 44
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07142857142857142}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e95baf2406fc4ea1834cbe03ceee9c57
+      internalID: 2656953575704068604
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fleischball_stakse_10
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 0
+        width: 44
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07142857142857142}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 16a232adb661429eb022cb5ac8a2ac42
+      internalID: 3950790076217128572
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fleischball_stakse_11
+      rect:
+        serializedVersion: 2
+        x: 484
+        y: 0
+        width: 44
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07142857142857142}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2b0215ca660049d4983bf4768c0a199c
+      internalID: 1437305328562092158
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      fleischball_stakse_0: 4058034537658174408
+      fleischball_stakse_1: 3047060929353488467
+      fleischball_stakse_10: 3950790076217128572
+      fleischball_stakse_11: 1437305328562092158
+      fleischball_stakse_2: 3667281737223913902
+      fleischball_stakse_3: 4546157156331120283
+      fleischball_stakse_4: 2001760622988600548
+      fleischball_stakse_5: 2635853154132186780
+      fleischball_stakse_6: 1718314253300561959
+      fleischball_stakse_7: 2679067506373574899
+      fleischball_stakse_8: 2654846891769608219
+      fleischball_stakse_9: 2656953575704068604
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

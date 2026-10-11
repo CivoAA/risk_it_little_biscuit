@@ -139,6 +139,56 @@ public enum EnemyId
 
     /// <summary>Sternplaetzchen mit Zuckerguss: rollt wie ein Rad, schnell und schwach. Schwarmgegner.</summary>
     Plaetzchen = 46,
+
+    // Kueche, neue Gegner (Welle 4)
+
+    /// <summary>Wurst-Dackel: Wiener Wuerstchen im Hotdog-Broetchen-Maentelchen, trabt flink. Schnell und schwach.</summary>
+    Wurstdackel = 47,
+
+    /// <summary>Spiegelei: kriecht wie eine Amoebe, der Dotter mit Gesicht wabbelt hinterher.</summary>
+    Spiegelei = 48,
+
+    /// <summary>Spaghetti-Monster: grimmiges Fleischbaellchen mit Tomatensosse auf fuenf Nudelbeinen. Der Brocken der Kueche.</summary>
+    Fleischball = 49,
+
+    /// <summary>Erbsenschote: kriecht wie eine Raupe, drei Erbsen-Geschwister schauen heraus.</summary>
+    Erbsenschote = 50,
+
+    /// <summary>Kaesekeil: Lochkaese auf Stummelbeinen, in einem Loch wohnt eine Maus.</summary>
+    Kaesekeil = 51,
+
+    /// <summary>Popcorn: huepft in kleinen Saetzen (HopMovement). Schwarmgegner.</summary>
+    Popcorn = 52,
+
+    // Wald, neue Gegner (Welle 4)
+
+    /// <summary>Maronen-Igel: Marone schaut aus der stacheligen Schale, trippelt.</summary>
+    Maronenigel = 53,
+
+    /// <summary>Beerenspinne: Heidelbeere auf acht Salzstangen-Beinen, schnell.</summary>
+    Beerenspinne = 54,
+
+    /// <summary>Walnuss-Krabbe: Walnusspanzer, Stielaugen, schnappende Scheren. Zaeh.</summary>
+    Walnusskrabbe = 55,
+
+    /// <summary>Radieschen-Alraune: marschiert auf Wurzelbeinen und bruellt dabei.</summary>
+    Alraune = 56,
+
+    // Eiswelt, vierte Welle Gegner
+
+    /// <summary>Eiswuerfel-Baer: Gummibaer, in einen Eiswuerfel eingefroren, stapft auf den herausschauenden Fuessen.</summary>
+    Eiswuerfelbaer = 57,
+
+    /// <summary>Pfefferminz-Schnecke: Minzgelee-Schnecke mit Pfefferminzbonbon als Haus, gleitet mit Frostspur.</summary>
+    Minzschnecke = 58,
+
+    // Zweite Elites fuer Kueche und Eiswelt
+
+    /// <summary>Elite der Kueche: wuetende Erdbeer-Sahne-Torte mit brennender Kerze, stapft auf Schoko-Stummelbeinen.</summary>
+    Kerzentorte = 59,
+
+    /// <summary>Elite der Eiswelt: Fuerst-Pueckler-Eisbombe mit Eiskristall-Krone, Monokel und Zwirbelbart.</summary>
+    FuerstPueckler = 60,
 }
 
 /// <summary>
@@ -713,6 +763,107 @@ public static class EnemyCatalog
             sheet: "Assets/Art/Gegner/new/eis/plaetzchen_roll.png", fps: 16f,
             colliderRadius: 0.36f, colliderOffset: new Vector2(0f, 0.4f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Gegner/Plaetzchen.prefab");
+
+        // ---------------------------------------------------------- Welle 4
+        // Kueche (47-52), Wald (53-56), Eiswelt (57-58).
+
+        Def(EnemyId.Wurstdackel, "Wurst-Dackel",
+            health: 10f, damage: 3f, speed: 2.6f, exp: 4, pushTime: 0.3f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/kueche/dackel_trab.png", fps: 16f,
+            colliderRadius: 0.31f, colliderOffset: new Vector2(0f, 0.31f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Wurstdackel.prefab");
+
+        Def(EnemyId.Spiegelei, "Spiegelei",
+            health: 14f, damage: 3f, speed: 1.3f, exp: 5, pushTime: 0.25f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/kueche/spiegelei_kriech.png", fps: 12f,
+            colliderRadius: 0.28f, colliderOffset: new Vector2(0f, 0.22f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Spiegelei.prefab");
+
+        Def(EnemyId.Fleischball, "Spaghetti-Monster",
+            health: 120f, damage: 8f, speed: 1.5f, exp: 45, pushTime: 0.1f,
+            role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/kueche/fleischball_stakse.png", fps: 14f,
+            colliderRadius: 0.43f, colliderOffset: new Vector2(0f, 0.45f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Fleischball.prefab");
+
+        Def(EnemyId.Erbsenschote, "Erbsenschote",
+            health: 30f, damage: 4f, speed: 1.4f, exp: 10, pushTime: 0.2f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/kueche/erbsen_kriech.png", fps: 12f,
+            colliderRadius: 0.26f, colliderOffset: new Vector2(0f, 0.27f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Erbsenschote.prefab");
+
+        Def(EnemyId.Kaesekeil, "Kaesekeil",
+            health: 60f, damage: 6f, speed: 1.2f, exp: 22, pushTime: 0.15f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/kueche/kaese_watschel.png", fps: 12f,
+            colliderRadius: 0.38f, colliderOffset: new Vector2(0f, 0.38f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Kaesekeil.prefab");
+
+        Def(EnemyId.Popcorn, "Popcorn",
+            health: 4f, damage: 2f, speed: 2.4f, exp: 2, pushTime: 0.3f,
+            role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/kueche/popcorn_hops.png", fps: 14f,
+            colliderRadius: 0.26f, colliderOffset: new Vector2(0f, 0.41f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Popcorn.prefab", hopFirst: 3, hopLast: 9);
+
+        Def(EnemyId.Maronenigel, "Maronen-Igel",
+            health: 20f, damage: 4f, speed: 1.9f, exp: 7, pushTime: 0.25f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/wald/maronenigel_tripp.png", fps: 16f,
+            colliderRadius: 0.34f, colliderOffset: new Vector2(0f, 0.34f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Maronenigel.prefab");
+
+        Def(EnemyId.Beerenspinne, "Beerenspinne",
+            health: 16f, damage: 3f, speed: 2.5f, exp: 6, pushTime: 0.3f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/wald/beerenspinne_stakse.png", fps: 14f,
+            colliderRadius: 0.36f, colliderOffset: new Vector2(0f, 0.36f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Beerenspinne.prefab");
+
+        Def(EnemyId.Walnusskrabbe, "Walnuss-Krabbe",
+            health: 70f, damage: 6f, speed: 1.4f, exp: 26, pushTime: 0.15f,
+            role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/wald/walnusskrabbe_krabbel.png", fps: 14f,
+            colliderRadius: 0.4f, colliderOffset: new Vector2(0f, 0.4f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Walnusskrabbe.prefab");
+
+        Def(EnemyId.Alraune, "Radieschen-Alraune",
+            health: 35f, damage: 5f, speed: 1.8f, exp: 12, pushTime: 0.2f,
+            role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/wald/alraune_marsch.png", fps: 14f,
+            colliderRadius: 0.31f, colliderOffset: new Vector2(0f, 0.52f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Alraune.prefab");
+
+        Def(EnemyId.Eiswuerfelbaer, "Eiswuerfel-Baer",
+            health: 45f, damage: 5f, speed: 1.4f, exp: 14, pushTime: 0.2f,
+            role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/eis/eiswuerfel_stapf.png", fps: 12f,
+            colliderRadius: 0.36f, colliderOffset: new Vector2(0f, 0.39f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Eiswuerfelbaer.prefab");
+
+        Def(EnemyId.Minzschnecke, "Pfefferminz-Schnecke",
+            health: 20f, damage: 3f, speed: 1.6f, exp: 6, pushTime: 0.25f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/eis/minzschnecke_gleit.png", fps: 12f,
+            colliderRadius: 0.35f, colliderOffset: new Vector2(0f, 0.34f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Minzschnecke.prefab");
+
+        Def(EnemyId.Kerzentorte, "Kerzentorte",
+            health: 380f, damage: 7f, speed: 1.15f, exp: 400, pushTime: 0.3f,
+            role: EnemyRole.Elite, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/kueche/kerzentorte_stapf.png", fps: 14f,
+            colliderRadius: 0.55f, colliderOffset: new Vector2(0f, 0.55f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Elite_Gegner/Kerzentorte.prefab");
+
+        Def(EnemyId.FuerstPueckler, "Fuerst Pueckler",
+            health: 450f, damage: 7f, speed: 1.1f, exp: 450, pushTime: 0.3f,
+            role: EnemyRole.Elite, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/eis/pueckler_schreit.png", fps: 14f,
+            colliderRadius: 0.56f, colliderOffset: new Vector2(0f, 0.6f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Elite_Gegner/FuerstPueckler.prefab");
 
         // ---------------------------------------------------------- Archiv
         //

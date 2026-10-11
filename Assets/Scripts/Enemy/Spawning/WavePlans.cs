@@ -82,13 +82,16 @@ public static class WavePlans
     /// 20 Minuten gestreckt, Boss bei 20:00. Nur aktive Kuechengegner:
     ///
     ///   Marshmello, Boeser Slime, Muffin, Milchpanzer,
-    ///   Elite-Marshmello (Elite, immer einzeln) und der Keks-Koenig (Boss)
+    ///   Popcorn (Schwarm, ab 0:05), Wurst-Dackel + Spiegelei (ab 3:00),
+    ///   Erbsenschote (ab 9:00), Kaesekeil + Spaghetti-Monster (ab 14:00),
+    ///   Elite-Marshmello (Elite, immer einzeln), ab 8:00 die Kerzentorte
+    ///   (zweite Elite, zaeher, "TORTENALARM!") und der Keks-Koenig (Boss)
     ///
     /// Ablauf:
     ///
     ///   0:00  Anlauf, ~3 Marshmellos (5 s)
     ///   0:05  Marshmellos, erster Ring mit Elite-Marshmello
-    ///   3:00  + Boeser Slime
+    ///   3:00  + Boeser Slime, 8:00 Ring mit der ersten Kerzentorte
     ///   9:00  + Muffin
     ///  14:00  + Milchpanzer
     ///  20:00  Keks-Koenig
@@ -103,76 +106,97 @@ public static class WavePlans
             .Base(Patterns.Scatter);
 
         plan.Phase(175f)
-            .Pool(EnemyId.Marshmello, 100f)
+            .Pool(EnemyId.Marshmello, 80f)
+            .Pool(EnemyId.Popcorn, 20f)
             .Pressure(10f, 28f)
             .Base(Patterns.Scatter)
             .Burst(45f, EnemyId.Marshmello, 10f, Patterns.Arc, 0f)
             .Burst(80f, EnemyId.EvilSlime, 10f, Patterns.Column, 0f)
             .Encircle(105f, EnemyId.EliteMarshmello, EnemyId.Marshmello, 14, 13f, false, "RING!", 0.35f, 25f, 1.5f)
+            .Burst(125f, EnemyId.Popcorn, 12f, Patterns.Cluster, 0f)
             .Burst(150f, EnemyId.Marshmello, 12f, Patterns.Column, 0f);
 
         plan.Phase(360f)
-            .Pool(EnemyId.Marshmello, 60f)
-            .Pool(EnemyId.EvilSlime, 40f)
+            .Pool(EnemyId.Marshmello, 40f)
+            .Pool(EnemyId.EvilSlime, 30f)
+            .Pool(EnemyId.Wurstdackel, 15f)
+            .Pool(EnemyId.Spiegelei, 15f)
             .Pressure(28f, 56f)
             .Base(Patterns.Scatter)
             .Burst(5f, EnemyId.EvilSlime, 10f, Patterns.Arc, 0f)
+            .Burst(45f, EnemyId.Wurstdackel, 12f, Patterns.Column, 0f)
             .Calm(75f, 10f, 0.15f)
             .Burst(105f, EnemyId.EvilSlime, 16f, Patterns.Cluster, 0f)
             .Burst(135f, EnemyId.EliteMarshmello, 1f, Patterns.Ambush, 0f)
             .Burst(150f, EnemyId.Marshmello, 18f, Patterns.Scatter, 0f)
+            .Burst(175f, EnemyId.Spiegelei, 12f, Patterns.Cluster, 0f)
             .Calm(195f, 10f, 0.15f)
             .Burst(225f, EnemyId.EvilSlime, 18f, Patterns.Cluster, 0f)
             .Burst(270f, EnemyId.Marshmello, 20f, Patterns.Arc, 0f)
-            .Burst(300f, EnemyId.EliteMarshmello, 1f, Patterns.Ambush, 0f)
+            .Encircle(300f, EnemyId.Kerzentorte, EnemyId.Wurstdackel, 16, 14f, false, "TORTENALARM!", 0.35f, 25f, 1.5f)
             .Burst(330f, EnemyId.EvilSlime, 20f, Patterns.Column, 0f);
 
         plan.Phase(300f)
-            .Pool(EnemyId.Marshmello, 25f)
-            .Pool(EnemyId.EvilSlime, 40f)
-            .Pool(EnemyId.Muffin, 35f)
+            .Pool(EnemyId.Marshmello, 10f)
+            .Pool(EnemyId.EvilSlime, 25f)
+            .Pool(EnemyId.Muffin, 25f)
+            .Pool(EnemyId.Erbsenschote, 20f)
+            .Pool(EnemyId.Wurstdackel, 10f)
+            .Pool(EnemyId.Popcorn, 10f)
             .Pressure(70f, 140f)
             .Base(Patterns.Scatter)
             .Burst(40f, EnemyId.Muffin, 16f, Patterns.Ambush, 0f)
             .Burst(60f, EnemyId.EvilSlime, 12f, Patterns.Arc, 0f)
+            .Burst(80f, EnemyId.Popcorn, 24f, Patterns.Cluster, 0f)
             .Calm(95f, 10f, 0.15f)
             .Encircle(125f, EnemyId.EliteMarshmello, EnemyId.EvilSlime, 18, 14f, false, "RING!", 0.35f, 25f, 1.5f)
+            .Burst(165f, EnemyId.Erbsenschote, 14f, Patterns.Arc, 0f)
             .Burst(195f, EnemyId.EvilSlime, 20f, Patterns.Cluster, 0f)
             .Calm(215f, 10f, 0.15f)
-            .Burst(235f, EnemyId.EliteMarshmello, 1f, Patterns.Ambush, 0f)
+            .Burst(235f, EnemyId.Kerzentorte, 1f, Patterns.Ambush, 0f)
             .Burst(250f, EnemyId.Muffin, 26f, Patterns.Column, 0f);
 
         plan.Phase(358f)
-            .Pool(EnemyId.Marshmello, 10f)
-            .Pool(EnemyId.EvilSlime, 35f)
-            .Pool(EnemyId.Muffin, 45f)
+            .Pool(EnemyId.EvilSlime, 20f)
+            .Pool(EnemyId.Muffin, 25f)
             .Pool(EnemyId.Milchpanzer, 10f)
+            .Pool(EnemyId.Kaesekeil, 20f)
+            .Pool(EnemyId.Fleischball, 15f)
+            .Pool(EnemyId.Erbsenschote, 10f)
             .Pressure(140f, 170f)
             .Base(Patterns.Scatter)
+            .Burst(30f, EnemyId.Kaesekeil, 14f, Patterns.Ambush, 0f)
             .Burst(60f, EnemyId.Milchpanzer, 16f, Patterns.Ambush, 0f)
             .Calm(120f, 10f, 0.15f)
             .Encircle(150f, EnemyId.EliteMarshmello, EnemyId.Muffin, 18, 15f, false, "RING!", 0.35f, 25f, 1.5f)
             .Burst(220f, EnemyId.Muffin, 26f, Patterns.Cluster, 0f)
-            .Burst(260f, EnemyId.EliteMarshmello, 1f, Patterns.Ambush, 0f)
+            .Burst(240f, EnemyId.Fleischball, 14f, Patterns.Cluster, 0f)
+            .Burst(260f, EnemyId.Kerzentorte, 1f, Patterns.Ambush, 0f)
             .Calm(290f, 10f, 0.15f)
             .Burst(320f, EnemyId.EvilSlime, 24f, Patterns.Arc, 0f);
 
         plan.Phase(600f)
-            .Pool(EnemyId.Marshmello, 15f)
-            .Pool(EnemyId.EvilSlime, 25f)
-            .Pool(EnemyId.Muffin, 45f)
+            .Pool(EnemyId.Marshmello, 10f)
+            .Pool(EnemyId.EvilSlime, 15f)
+            .Pool(EnemyId.Muffin, 25f)
             .Pool(EnemyId.Milchpanzer, 15f)
+            .Pool(EnemyId.Kaesekeil, 15f)
+            .Pool(EnemyId.Fleischball, 10f)
+            .Pool(EnemyId.Popcorn, 10f)
             .Pressure(280f, 420f)
             .Base(Patterns.Scatter)
             .Boss(2f, EnemyId.KeksKoenig, "KEKS-KOENIG", 0.4f);
 
         plan.EndlessPhase()
-            .Pool(EnemyId.Marshmello, 10f)
-            .Pool(EnemyId.EvilSlime, 30f)
-            .Pool(EnemyId.Muffin, 40f)
-            .Pool(EnemyId.Milchpanzer, 20f)
+            .Pool(EnemyId.EvilSlime, 20f)
+            .Pool(EnemyId.Muffin, 25f)
+            .Pool(EnemyId.Milchpanzer, 15f)
+            .Pool(EnemyId.Kaesekeil, 15f)
+            .Pool(EnemyId.Fleischball, 15f)
+            .Pool(EnemyId.Wurstdackel, 10f)
             .Pressure(100f, 100f)
             .Base(Patterns.Scatter)
+            .Burst(30f, EnemyId.Kerzentorte, 1f, Patterns.Ambush, 0f)
             .Encircle(60f, EnemyId.None, EnemyId.Muffin, 20, 14f, false, "RING!", 0.35f, 25f, 1.5f)
             .Burst(90f, EnemyId.EliteMarshmello, 1f, Patterns.Arc, 0f);
 
@@ -208,6 +232,9 @@ public static class WavePlans
     /// Der Fluegeldolch (Fledermaus) kommt nur als Beimischung - in Rudeln ist
     /// er zu viel.
     ///
+    /// Seit Welle 4 dazu: Beerenspinne (Phase 2), Maronen-Igel + Radieschen-Alraune
+    /// (Phase 3), Walnuss-Krabbe (Phase 4); dieselben auch im Demo-Plan.
+    ///
     /// Elites kommen nicht nur im Ring, sondern immer wieder zwischendurch -
     /// aber immer genau EINER pro Burst. Der Director setzt bei Elites nie
     /// mehr als einen, egal welcher Druck dasteht, und nimmt sie nie aus dem Pool.
@@ -235,23 +262,27 @@ public static class WavePlans
             .Encircle(105f, EnemyId.EliteFliegenpilz, EnemyId.Fliegenpilz, 18, 13f, false, "RING!", 0.35f, 25f, 1.5f);
 
         plan.Phase(180f)
-            .Pool(EnemyId.Fliegenpilz, 55f)
-            .Pool(EnemyId.Kirschslime, 30f)
+            .Pool(EnemyId.Fliegenpilz, 45f)
+            .Pool(EnemyId.Kirschslime, 25f)
             .Pool(EnemyId.WeisseMessermaus, 15f)
+            .Pool(EnemyId.Beerenspinne, 15f)
             .Pressure(39f, 80f)
             .Base(Patterns.Scatter)
             .Burst(5f, EnemyId.Kirschslime, 16f, Patterns.Arc, 0f)
             .Burst(60f, EnemyId.EliteFliegenpilz, 1f, Patterns.Ambush, 0f)
             .Calm(75f, 10f, 0.15f)
+            .Burst(90f, EnemyId.Beerenspinne, 16f, Patterns.Arc, 0f)
             .Burst(105f, EnemyId.WeisseMessermaus, 24f, Patterns.Cluster, 0f)
             .Burst(135f, EnemyId.EliteFluegdolch, 1f, Patterns.Ambush, 0f)
             .Burst(150f, EnemyId.Kirschslime, 30f, Patterns.Scatter, 0f);
 
         plan.Phase(300f)
-            .Pool(EnemyId.Kirschslime, 30f)
-            .Pool(EnemyId.WeisseMessermaus, 25f)
-            .Pool(EnemyId.Eichel, 30f)
-            .Pool(EnemyId.Fluegeldolch, 15f)
+            .Pool(EnemyId.Kirschslime, 20f)
+            .Pool(EnemyId.WeisseMessermaus, 20f)
+            .Pool(EnemyId.Eichel, 25f)
+            .Pool(EnemyId.Fluegeldolch, 10f)
+            .Pool(EnemyId.Maronenigel, 15f)
+            .Pool(EnemyId.Alraune, 10f)
             .Pressure(100f, 200f)
             .Base(Patterns.Scatter)
             .Burst(20f, EnemyId.EliteFluegdolch, 1f, Patterns.Ambush, 0f)
@@ -260,39 +291,48 @@ public static class WavePlans
             .Calm(95f, 10f, 0.15f)
             .Encircle(125f, EnemyId.EliteFliegenpilz, EnemyId.Kirschslime, 22, 14f, false, "PILZKOENIG!", 0.35f, 25f, 1.5f)
             .Burst(125f, EnemyId.EliteFluegdolch, 1f, Patterns.Ambush, 0f)
+            .Burst(165f, EnemyId.Maronenigel, 20f, Patterns.Column, 0f)
             .Burst(195f, EnemyId.WeisseMessermaus, 30f, Patterns.Cluster, 0f)
             .Burst(225f, EnemyId.EliteFluegdolch, 1f, Patterns.Arc, 0f)
             .Burst(250f, EnemyId.Eichel, 40f, Patterns.Column, 0f);
 
         plan.Phase(290f)
-            .Pool(EnemyId.Eichel, 40f)
-            .Pool(EnemyId.WeisseMessermaus, 20f)
-            .Pool(EnemyId.Honey, 25f)
-            .Pool(EnemyId.Fluegeldolch, 15f)
+            .Pool(EnemyId.Eichel, 30f)
+            .Pool(EnemyId.WeisseMessermaus, 15f)
+            .Pool(EnemyId.Honey, 20f)
+            .Pool(EnemyId.Fluegeldolch, 10f)
+            .Pool(EnemyId.Alraune, 15f)
+            .Pool(EnemyId.Walnusskrabbe, 10f)
             .Pressure(240f, 350f)
             .Base(Patterns.Scatter)
             .Burst(20f, EnemyId.EliteFliegenpilz, 1f, Patterns.Ambush, 0f)
             .Burst(50f, EnemyId.Honey, 40f, Patterns.Arc, 0f)
             .Burst(80f, EnemyId.EliteFluegdolch, 1f, Patterns.Arc, 0f)
+            .Burst(95f, EnemyId.Alraune, 24f, Patterns.Arc, 0f)
             .Calm(110f, 8f, 0.15f)
             .Encircle(145f, EnemyId.EliteFliegenpilz, EnemyId.Eichel, 26, 15f, false, "PILZKOENIG!", 0.35f, 25f, 1.5f)
+            .Burst(190f, EnemyId.Walnusskrabbe, 20f, Patterns.Ambush, 0f)
             .Burst(225f, EnemyId.Honey, 60f, Patterns.Cluster, 0f)
             .Burst(265f, EnemyId.EliteFliegenpilz, 1f, Patterns.Ambush, 0f);
 
         plan.Phase(600f)
-            .Pool(EnemyId.Eichel, 45f)
+            .Pool(EnemyId.Eichel, 35f)
             .Pool(EnemyId.Honey, 15f)
             .Pool(EnemyId.Milchpanzer, 10f)
-            .Pool(EnemyId.Fluegeldolch, 30f)
+            .Pool(EnemyId.Fluegeldolch, 20f)
+            .Pool(EnemyId.Walnusskrabbe, 10f)
+            .Pool(EnemyId.Maronenigel, 10f)
             .Pressure(400f, 600f)
             .Base(Patterns.Scatter)
             .Boss(2f, EnemyId.Glutwurz, "GLUTWURZ", 0.4f);
 
         plan.EndlessPhase()
-            .Pool(EnemyId.Eichel, 40f)
+            .Pool(EnemyId.Eichel, 30f)
             .Pool(EnemyId.Honey, 15f)
-            .Pool(EnemyId.Milchpanzer, 20f)
-            .Pool(EnemyId.Fluegeldolch, 25f)
+            .Pool(EnemyId.Milchpanzer, 15f)
+            .Pool(EnemyId.Fluegeldolch, 20f)
+            .Pool(EnemyId.Walnusskrabbe, 10f)
+            .Pool(EnemyId.Alraune, 10f)
             .Pressure(140f, 140f)
             .Base(Patterns.Scatter)
             .Burst(30f, EnemyId.EliteFliegenpilz, 1f, Patterns.Ambush, 0f)
@@ -353,9 +393,10 @@ public static class WavePlans
             .Encircle(105f, EnemyId.EliteFliegenpilz, EnemyId.Fliegenpilz, 14, 13f, false, "RING!", 0.35f, 25f, 1.5f);
 
         plan.Phase(300f)
-            .Pool(EnemyId.Fliegenpilz, 55f)
-            .Pool(EnemyId.Kirschslime, 30f)
+            .Pool(EnemyId.Fliegenpilz, 45f)
+            .Pool(EnemyId.Kirschslime, 25f)
             .Pool(EnemyId.WeisseMessermaus, 15f)
+            .Pool(EnemyId.Beerenspinne, 15f)
             .Pressure(28f, 56f)
             .Base(Patterns.Scatter)
             .Burst(5f, EnemyId.Kirschslime, 10f, Patterns.Arc, 0f)
@@ -363,48 +404,58 @@ public static class WavePlans
             .Burst(105f, EnemyId.WeisseMessermaus, 16f, Patterns.Cluster, 0f)
             .Burst(135f, EnemyId.EliteFliegenpilz, 1f, Patterns.Ambush, 0f)
             .Burst(150f, EnemyId.Kirschslime, 18f, Patterns.Scatter, 0f)
+            .Burst(170f, EnemyId.Beerenspinne, 10f, Patterns.Arc, 0f)
             .Calm(195f, 10f, 0.15f)
             .Burst(225f, EnemyId.WeisseMessermaus, 18f, Patterns.Cluster, 0f)
             .Burst(270f, EnemyId.Kirschslime, 20f, Patterns.Arc, 0f);
 
         plan.Phase(300f)
-            .Pool(EnemyId.Kirschslime, 30f)
-            .Pool(EnemyId.WeisseMessermaus, 25f)
-            .Pool(EnemyId.Eichel, 30f)
-            .Pool(EnemyId.Fluegeldolch, 15f)
+            .Pool(EnemyId.Kirschslime, 20f)
+            .Pool(EnemyId.WeisseMessermaus, 20f)
+            .Pool(EnemyId.Eichel, 25f)
+            .Pool(EnemyId.Fluegeldolch, 10f)
+            .Pool(EnemyId.Maronenigel, 15f)
+            .Pool(EnemyId.Alraune, 10f)
             .Pressure(70f, 140f)
             .Base(Patterns.Scatter)
             .Burst(40f, EnemyId.Eichel, 16f, Patterns.Ambush, 0f)
             .Burst(60f, EnemyId.Fluegeldolch, 12f, Patterns.Arc, 0f)
             .Calm(95f, 10f, 0.15f)
             .Encircle(125f, EnemyId.EliteFliegenpilz, EnemyId.Kirschslime, 18, 14f, false, "PILZKOENIG!", 0.35f, 25f, 1.5f)
+            .Burst(165f, EnemyId.Maronenigel, 14f, Patterns.Column, 0f)
             .Burst(195f, EnemyId.WeisseMessermaus, 20f, Patterns.Cluster, 0f)
             .Calm(215f, 10f, 0.15f)
             .Burst(235f, EnemyId.EliteFluegdolch, 1f, Patterns.Ambush, 0f)
             .Burst(250f, EnemyId.Eichel, 26f, Patterns.Column, 0f);
 
         plan.Phase(58f)
-            .Pool(EnemyId.Eichel, 40f)
-            .Pool(EnemyId.WeisseMessermaus, 25f)
-            .Pool(EnemyId.Kirschslime, 15f)
-            .Pool(EnemyId.Fluegeldolch, 20f)
+            .Pool(EnemyId.Eichel, 30f)
+            .Pool(EnemyId.WeisseMessermaus, 20f)
+            .Pool(EnemyId.Kirschslime, 10f)
+            .Pool(EnemyId.Fluegeldolch, 15f)
+            .Pool(EnemyId.Alraune, 15f)
+            .Pool(EnemyId.Walnusskrabbe, 10f)
             .Pressure(140f, 155f)
             .Base(Patterns.Scatter);
 
         plan.Phase(600f)
-            .Pool(EnemyId.Eichel, 45f)
+            .Pool(EnemyId.Eichel, 35f)
             .Pool(EnemyId.Honey, 15f)
             .Pool(EnemyId.Milchpanzer, 10f)
-            .Pool(EnemyId.Fluegeldolch, 30f)
+            .Pool(EnemyId.Fluegeldolch, 20f)
+            .Pool(EnemyId.Walnusskrabbe, 10f)
+            .Pool(EnemyId.Maronenigel, 10f)
             .Pressure(280f, 420f)
             .Base(Patterns.Scatter)
             .Boss(2f, EnemyId.Glutwurz, "GLUTWURZ", 0.4f);
 
         plan.EndlessPhase()
-            .Pool(EnemyId.Eichel, 40f)
+            .Pool(EnemyId.Eichel, 30f)
             .Pool(EnemyId.Honey, 15f)
-            .Pool(EnemyId.Milchpanzer, 20f)
-            .Pool(EnemyId.Fluegeldolch, 25f)
+            .Pool(EnemyId.Milchpanzer, 15f)
+            .Pool(EnemyId.Fluegeldolch, 20f)
+            .Pool(EnemyId.Walnusskrabbe, 10f)
+            .Pool(EnemyId.Alraune, 10f)
             .Pressure(100f, 100f)
             .Base(Patterns.Scatter)
             .Encircle(60f, EnemyId.None, EnemyId.Eichel, 20, 14f, false, "RING!", 0.35f, 25f, 1.5f)
@@ -429,7 +480,10 @@ public static class WavePlans
     ///   Sternplaetzchen  rollt wie ein Rad, schnell und schwach, kommt in Reihen
     ///   Kakaotasse       watschelt, zaeh fuer ihre Groesse
     ///   Puddingrobbe     robbt und rutscht, schneller als die Tasse
+    ///   Pfefferminz-Schnecke  gleitet mit Frostspur, ab 3:00
+    ///   Eiswuerfel-Baer  eingefrorener Gummibaer, zaeh, ab 9:00
     ///   Softi            Elite, Waffeltuete mit wirbelnder Softeis-Frisur
+    ///   Fuerst Pueckler  zweite Elite ab 8:00, Eisbombe mit Krone, zaeher ("SEINE HOHEIT!")
     ///
     /// Der Schleimkoenig kommt bei 11:30 als Zwischenboss, am Ende wartet der
     /// Eiskaiser (Kaiser-Kick + Frostring, siehe EnemyEiskaiser).
@@ -440,7 +494,7 @@ public static class WavePlans
     ///   0:05  Minzkugeln, erster Raketen-Schwall bei 1:25, Ring mit Softi,
     ///         erster Woelkchen-Schwarm bei 2:05, erste Plaetzchen-Reihe bei 2:20
     ///   3:00  + Raketeneis, Zuckerwoelkchen und Sternplaetzchen im Grundnachschub,
-    ///         erste Kakaotassen bei 7:00
+    ///         erste Kakaotassen bei 7:00, 8:00 Ring mit Fuerst Pueckler
     ///   9:00  + Eiskeks-Sandwich und Kakaotasse, 11:30 Schleimkoenig (Zwischenboss),
     ///         erste Puddingrobben bei 13:15
     ///  14:00  + Kokos-Yeti und Puddingrobbe, Minzkugeln nur noch Beimischung
@@ -467,8 +521,9 @@ public static class WavePlans
             .Burst(150f, EnemyId.Minzkugel, 12f, Patterns.Column, 0f);
 
         plan.Phase(360f)
-            .Pool(EnemyId.Minzkugel, 35f)
+            .Pool(EnemyId.Minzkugel, 25f)
             .Pool(EnemyId.Raketeneis, 30f)
+            .Pool(EnemyId.Minzschnecke, 10f)
             .Pool(EnemyId.Zuckerwolke, 15f)
             .Pool(EnemyId.Plaetzchen, 20f)
             .Pressure(28f, 56f)
@@ -484,13 +539,16 @@ public static class WavePlans
             .Burst(210f, EnemyId.Zuckerwolke, 20f, Patterns.Arc, 0f)
             .Burst(225f, EnemyId.Raketeneis, 18f, Patterns.Cluster, 0f)
             .Burst(240f, EnemyId.Kakaotasse, 8f, Patterns.Cluster, 0f)
+            .Burst(255f, EnemyId.Minzschnecke, 14f, Patterns.Column, 0f)
             .Burst(270f, EnemyId.Minzkugel, 20f, Patterns.Arc, 0f)
-            .Burst(300f, EnemyId.Softi, 1f, Patterns.Ambush, 0f)
+            .Encircle(300f, EnemyId.FuerstPueckler, EnemyId.Plaetzchen, 16, 14f, false, "SEINE HOHEIT!", 0.35f, 25f, 1.5f)
             .Burst(330f, EnemyId.Raketeneis, 20f, Patterns.Column, 0f);
 
         plan.Phase(300f)
-            .Pool(EnemyId.Minzkugel, 15f)
-            .Pool(EnemyId.Raketeneis, 25f)
+            .Pool(EnemyId.Minzkugel, 5f)
+            .Pool(EnemyId.Raketeneis, 20f)
+            .Pool(EnemyId.Minzschnecke, 10f)
+            .Pool(EnemyId.Eiswuerfelbaer, 15f)
             .Pool(EnemyId.Zuckerwolke, 10f)
             .Pool(EnemyId.EisSandwich, 20f)
             .Pool(EnemyId.Plaetzchen, 10f)
@@ -500,19 +558,22 @@ public static class WavePlans
             .Burst(40f, EnemyId.EisSandwich, 16f, Patterns.Ambush, 0f)
             .Burst(60f, EnemyId.Raketeneis, 12f, Patterns.Arc, 0f)
             .Calm(95f, 10f, 0.15f)
+            .Burst(115f, EnemyId.Eiswuerfelbaer, 10f, Patterns.Ambush, 0f)
             .Boss(150f, EnemyId.Schleimkoenig, "SCHLEIMKOENIG!", 0.4f)
             .Calm(215f, 10f, 0.15f)
-            .Burst(235f, EnemyId.Softi, 1f, Patterns.Ambush, 0f)
+            .Burst(235f, EnemyId.FuerstPueckler, 1f, Patterns.Ambush, 0f)
             .Burst(250f, EnemyId.Zuckerwolke, 26f, Patterns.Cluster, 0f)
             .Burst(255f, EnemyId.Puddingrobbe, 12f, Patterns.Ambush, 0f)
             .Burst(270f, EnemyId.EisSandwich, 20f, Patterns.Column, 0f);
 
         plan.Phase(358f)
             .Pool(EnemyId.Minzkugel, 5f)
-            .Pool(EnemyId.Raketeneis, 20f)
+            .Pool(EnemyId.Raketeneis, 15f)
             .Pool(EnemyId.Zuckerwolke, 10f)
-            .Pool(EnemyId.EisSandwich, 20f)
+            .Pool(EnemyId.EisSandwich, 15f)
             .Pool(EnemyId.KokosYeti, 10f)
+            .Pool(EnemyId.Eiswuerfelbaer, 10f)
+            .Pool(EnemyId.Minzschnecke, 5f)
             .Pool(EnemyId.Kakaotasse, 15f)
             .Pool(EnemyId.Puddingrobbe, 15f)
             .Pool(EnemyId.Plaetzchen, 5f)
@@ -524,7 +585,7 @@ public static class WavePlans
             .Encircle(150f, EnemyId.Softi, EnemyId.EisSandwich, 18, 15f, false, "RING!", 0.35f, 25f, 1.5f)
             .Burst(200f, EnemyId.Plaetzchen, 24f, Patterns.Arc, 0f)
             .Burst(220f, EnemyId.Zuckerwolke, 30f, Patterns.Cluster, 0f)
-            .Burst(260f, EnemyId.Softi, 1f, Patterns.Ambush, 0f)
+            .Burst(260f, EnemyId.FuerstPueckler, 1f, Patterns.Ambush, 0f)
             .Calm(290f, 10f, 0.15f)
             .Burst(320f, EnemyId.Minzkugel, 24f, Patterns.Arc, 0f);
 
@@ -536,6 +597,7 @@ public static class WavePlans
             .Pool(EnemyId.KokosYeti, 15f)
             .Pool(EnemyId.Kakaotasse, 10f)
             .Pool(EnemyId.Puddingrobbe, 15f)
+            .Pool(EnemyId.Eiswuerfelbaer, 10f)
             .Pressure(280f, 420f)
             .Base(Patterns.Scatter)
             .Boss(2f, EnemyId.Eiskaiser, "EISKAISER!", 0.4f);
@@ -549,8 +611,11 @@ public static class WavePlans
             .Pool(EnemyId.Kakaotasse, 10f)
             .Pool(EnemyId.Puddingrobbe, 15f)
             .Pool(EnemyId.Plaetzchen, 5f)
+            .Pool(EnemyId.Eiswuerfelbaer, 10f)
+            .Pool(EnemyId.Minzschnecke, 5f)
             .Pressure(100f, 100f)
             .Base(Patterns.Scatter)
+            .Burst(30f, EnemyId.FuerstPueckler, 1f, Patterns.Ambush, 0f)
             .Encircle(60f, EnemyId.None, EnemyId.Raketeneis, 20, 14f, false, "RING!", 0.35f, 25f, 1.5f)
             .Burst(90f, EnemyId.Softi, 1f, Patterns.Arc, 0f);
 

@@ -136,6 +136,27 @@ public class EnemyWorkshop : EditorWindow
     private bool dirty;
     private bool showArchive;
 
+    // ------------------------------------------------------- Welt-Reiter
+
+    /// <summary>
+    /// Die Reiter ueber den einfachen Gegnern: eine Welt pro Reiter, gebaut aus
+    /// den Wellenplaenen. Wald und Wald-Demo teilen sich einen Reiter.
+    /// </summary>
+    private static readonly string[] WorldTabs = { "Kueche", "Wald", "Eis", "Geisterwald", "Ohne Welt" };
+
+    private static readonly string[][] WorldTabPlans =
+    {
+        new[] { "World1" },
+        new[] { "World2", "World2Demo" },
+        new[] { "World5" },
+        new[] { "World6" },
+    };
+
+    private int worldTab;
+
+    /// <summary>Welche Reiter jeder Gegner hat - lazy, weil die Plaene erst gebaut werden muessen.</summary>
+    private Dictionary<EnemyId, HashSet<int>> worldsOf;
+
     private Vector2 listScroll;
     private Vector2 bodyScroll;
     private Vector2 legacyScroll;
@@ -254,6 +275,7 @@ public class EnemyWorkshop : EditorWindow
         dirty = false;
         framesFor = "";
         startWeapons = null;
+        worldsOf = null;
     }
 
     // ------------------------------------------------------------------- GUI
@@ -337,7 +359,13 @@ public class EnemyWorkshop : EditorWindow
         listScroll = EditorGUILayout.BeginScrollView(listScroll);
 
         // Nach Rolle gruppiert: Gegner, Elite-Gegner, Zwischenbosse, Bosse.
-        DrawListGroup("Gegner", d => !EnemyCatalog.IsBossRole(d.role) && d.role != EnemyRole.Elite);
+        // Nur die einfachen Gegner sind so viele, dass sie Welt-Reiter brauchen.
+        System.Func<Draft, bool> isPlain = d => !EnemyCatalog.IsBossRole(d.role) && d.role != EnemyRole.Elite;
+
+        EditorGUILayout.Space(4f);
+        EditorGUILayout.LabelField("Gegner", EditorStyles.boldLabel);
+        DrawWorldTabs(isPlain);
+        DrawListGroup(null, d => isPlain(d) && InWorldTab(d, worldTab));
         DrawListGroup("Elite-Gegner", d => d.role == EnemyRole.Elite);
         DrawListGroup("Zwischenbosse", d => d.role == EnemyRole.MiniBoss);
         DrawListGroup("Bosse", d => d.role == EnemyRole.Boss || d.role == EnemyRole.DeathBoss);
@@ -385,14 +413,85 @@ public class EnemyWorkshop : EditorWindow
         for (int i = 0; i < drafts.Count; i++)
         {
             if (drafts[i].archived || !belongs(drafts[i])) continue;
-            if (!any)
+            if (!any && title != null)
             {
                 EditorGUILayout.Space(4f);
                 EditorGUILayout.LabelField(title, EditorStyles.boldLabel);
-                any = true;
             }
+            any = true;
             DrawListEntry(i);
         }
+
+        if (!any && title == null)
+        {
+            EditorGUILayout.LabelField("keine Gegner in dieser Welt", EditorStyles.miniLabel);
+        }
+    }
+
+    private void DrawWorldTabs(System.Func<Draft, bool> isPlain)
+    {
+        var labels = new string[WorldTabs.Length];
+        for (int t = 0; t < WorldTabs.Length; t++)
+        {
+            int count = drafts.Count(d => !d.archived && isPlain(d) && InWorldTab(d, t));
+            labels[t] = WorldTabs[t] + " (" + count + ")";
+        }
+
+        int now = GUILayout.SelectionGrid(worldTab, labels, 2, EditorStyles.miniButton);
+        if (now != worldTab)
+        {
+            worldTab = now;
+            GUI.FocusControl(null);
+        }
+    }
+
+    /// <summary>
+    /// Steht der Gegner in einem Plan dieser Welt (Pool oder Beat)? Ein Gegner
+    /// in mehreren Welten taucht in jedem dieser Reiter auf; einer, den kein
+    /// Plan kennt (oder der erst nach dem Neukompilieren eine Id hat), unter
+    /// "Ohne Welt".
+    /// </summary>
+    private bool InWorldTab(Draft d, int t)
+    {
+        if (worldsOf == null) worldsOf = BuildWorldMap();
+
+        HashSet<int> worlds = null;
+        bool known = d.code == d.id.ToString() && worldsOf.TryGetValue(d.id, out worlds);
+        if (t == WorldTabs.Length - 1) return !known;
+        return known && worlds.Contains(t);
+    }
+
+    private static Dictionary<EnemyId, HashSet<int>> BuildWorldMap()
+    {
+        var map = new Dictionary<EnemyId, HashSet<int>>();
+
+        for (int t = 0; t < WorldTabPlans.Length; t++)
+        {
+            foreach (string planId in WorldTabPlans[t])
+            {
+                RunPlan plan = WavePlans.For(planId);
+
+                var phases = new List<Phase>(plan.Phases);
+                if (plan.Endless != null) phases.Add(plan.Endless);
+
+                foreach (Phase phase in phases)
+                {
+                    var ids = phase.Enemies.Select(e => e.Id)
+                        .Concat(phase.Beats.Select(b => b.Enemy))
+                        .Concat(phase.Beats.Select(b => b.RingEnemy));
+
+                    foreach (EnemyId id in ids)
+                    {
+                        if (id == EnemyId.None) continue;
+                        HashSet<int> set;
+                        if (!map.TryGetValue(id, out set)) map[id] = set = new HashSet<int>();
+                        set.Add(t);
+                    }
+                }
+            }
+        }
+
+        return map;
     }
 
     private void DrawListEntry(int i)
