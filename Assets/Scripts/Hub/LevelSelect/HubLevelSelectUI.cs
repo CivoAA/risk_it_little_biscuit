@@ -984,6 +984,8 @@ public class HubLevelSelectUI : MonoBehaviour
         EnemyId boss = !open ? EnemyId.None : e.boss != EnemyId.None ? e.boss : plan != null ? plan.Boss : EnemyId.None;
         bool hasBoss = boss != EnemyId.None;
         Sprite bossSprite = hasBoss ? BossPortrait(boss) : null;
+        // Bis zum ersten Sieg (egal mit welchem Charakter) nur der schwarze Umriss, ohne Namen.
+        bool bossKnown = hasBoss && Skills.HasAnyoneBeatenBoss(boss.ToString());
 
         bossTile.enabled = true;
         bossQuestion.color = bossSprite == null ? OptionsKit.WithAlpha(GameHudSkin.Cream, 0.55f) : Color.clear;
@@ -996,7 +998,7 @@ public class HubLevelSelectUI : MonoBehaviour
             // Ein Pixel hoeher als mittig: unten liegt die Farbkante der Kachel
             OptionsKit.Move(bossIcon.rectTransform, TextX + Mathf.Floor((BossTile - w) / 2f),
                             BossY + Mathf.Floor((BossTile - 3 - h) / 2f), w, h);
-            bossIcon.color = Color.white;
+            bossIcon.color = bossKnown ? Color.white : BossSilhouette;
         }
         else bossIcon.color = Color.clear;
 
@@ -1006,8 +1008,8 @@ public class HubLevelSelectUI : MonoBehaviour
         string none = hasBoss ? "" : !open ? "???" : Loc.Get("ui.levelselect.noboss", "Noch unbekannt.");
         // Steht darunter ein Bestwert (Welt ohne Wellenplan), ist unter dem Namen
         // kein Platz - der Hinweis rueckt dann in die Namenszeile.
-        bossName.text = hasBoss ? Bestiary.NameOf(boss).ToUpperInvariant() : rec ? none : "";
-        bossName.color = hasBoss ? GameHudSkin.Cream : GameHudSkin.Stone;
+        bossName.text = bossKnown ? Bestiary.NameOf(boss).ToUpperInvariant() : hasBoss ? "???" : rec ? none : "";
+        bossName.color = bossKnown ? GameHudSkin.Cream : GameHudSkin.Stone;
         bossNone.text = rec ? "" : none;
         float best = !rec ? 0f : endlessChosen ? LevelRecords.EndlessBest(e.mapId) : LevelRecords.StoryBest(e.mapId);
         recordLabel.text = !rec ? "" : endlessChosen
@@ -1510,6 +1512,9 @@ public class HubLevelSelectUI : MonoBehaviour
 
     private static readonly Dictionary<EnemyId, Sprite> bossPortraits = new Dictionary<EnemyId, Sprite>();
 
+    /// <summary>Tönung des Boss-Bilds, solange er noch nie besiegt wurde: nur der Umriss bleibt.</summary>
+    private static readonly Color BossSilhouette = new Color(0.04f, 0.03f, 0.04f, 1f);
+
     /// <summary>
     /// Boss-Bild fuer die Kachel: Resources/LevelSelect/Bosses/[EnemyId] (alle
     /// gleich gross, 48x48, aus Tools/boss_portraits.py), sonst das Bestiarium-Bild.
@@ -1657,14 +1662,24 @@ public class HubLevelSelectUI : MonoBehaviour
     bool StoryUnlocked(LevelEntry e)
     {
         if (e == null) return false;
-        if (string.IsNullOrWhiteSpace(e.storyUnlockId)) return true;
+        // Leer im Inspector = die Welten-Kette aus dem Code (Unlocks.StoryFor).
+        if (string.IsNullOrWhiteSpace(e.storyUnlockId))
+        {
+            UnlockDef chain = Unlocks.StoryFor(e.mapId);
+            return chain == null || chain.IsUnlocked;
+        }
         return Unlocks.IsUnlocked(e.storyUnlockId);
     }
 
     bool EndlessUnlocked(LevelEntry e)
     {
         if (e == null || !e.endlessAvailable) return false;
-        if (string.IsNullOrWhiteSpace(e.endlessUnlockId)) return true;
+        // Leer im Inspector = erst nach dem ersten Story-Sieg hier (Unlocks.EndlessFor).
+        if (string.IsNullOrWhiteSpace(e.endlessUnlockId))
+        {
+            UnlockDef chain = Unlocks.EndlessFor(e.mapId);
+            return chain == null || chain.IsUnlocked;
+        }
         return Unlocks.IsUnlocked(e.endlessUnlockId);
     }
 

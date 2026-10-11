@@ -78,7 +78,14 @@ public class GameManager : MonoBehaviour
         // Bestwerte fuer die Levelauswahl: Story = schnellster Sieg, Endless =
         // laengster Lauf. Nur auf echten Karten (nicht in der Test-Szene).
         if (MapDefinition.Active != null)
+        {
             LevelRecords.ReportRun(LevelRecords.CurrentMapId(), GameSession.IsEndless, bossSpawned, gameTime);
+            // Story-Sieg: Endless hier und die naechste Welt gehen auf.
+            if (bossSpawned && !GameSession.IsEndless) Unlocks.ReportStoryWin(LevelRecords.CurrentMapId());
+        }
+
+        // Charakter-Level nach dem Lauf: ab Level 10 gibt es den Begleiter im Shop.
+        Unlocks.CheckCharLevels();
 
         if (!bossSpawned)
         {

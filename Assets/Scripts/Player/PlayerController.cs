@@ -117,8 +117,9 @@ public class PlayerController : MonoBehaviour
     {
         get { return Mathf.Max(0.1f, durationMultiplier); }
     }
-    public int WeaponSlots = 5;
-    public int BuffSlots = 3;
+    // Werden in StartStats aus Loadout.RunWeaponSlots/RunBuffSlots gesetzt.
+    public int WeaponSlots = 3;
+    public int BuffSlots = 1;
     public int EvoSlots = 0;
     public int rerollAmount;
     public int banishAmount;
@@ -539,9 +540,12 @@ public class PlayerController : MonoBehaviour
         banishAmount       += Shop.GetInt(Shop.Banish);
         experience         += Shop.Get(Shop.StartXp);
         powerUpShrinkSpeed += Shop.Get(Shop.ShrinkSpeed);
-        BuffSlots          += Shop.GetInt(Shop.BuffSlot);
-        WeaponSlots        += Shop.GetInt(Shop.WeaponSlot);
-        EvoSlots           += Shop.GetInt(Shop.EvoSlot);
+        // Grundwert + Shop - dieselbe Rechnung, nach der die Werkbank ihre
+        // Plaetze oeffnet (3 je Slot). Der Wert am Prefab zaehlt nicht mehr.
+        BuffSlots           = Loadout.RunBuffSlots;
+        WeaponSlots         = Loadout.RunWeaponSlots;
+        // Einen Evo-Slot hat jeder von Anfang an, der Shop legt drauf.
+        EvoSlots           += Shop.BaseEvoSlots + Shop.GetInt(Shop.EvoSlot);
 
         if (GameManager.Instance != null)
         {
@@ -804,14 +808,6 @@ public class PlayerController : MonoBehaviour
         {
             Unlocks.Grant(Unlocks.BuffSlot);
         }
-
-        // Wer im Lauf auf zwei Schuss kommt, schaltet den Extra-Shot-Kauf frei.
-        // Die Bedingung stand frueher in UnlocksChecker, einem Skript, das an
-        // keinem Objekt haengt - der Unlock war deshalb nie erreichbar.
-        if (playerShots >= 2)
-        {
-            Unlocks.Grant(Unlocks.ExtraShot);
-        }
     }
 
     public void RandomWeapon()
@@ -983,45 +979,9 @@ public class PlayerController : MonoBehaviour
         if (!Loadout.AllowsInRun(weapon.weaponID))
             return false;
 
-        // 3. Standardwaffen → immer freigeschaltet
-        HashSet<string> defaultUnlockedWeapons = new HashSet<string>
-        {
-            "coffee_pool",
-            "cookie_saw",
-            "butterblast",
-            "jam_jar",
-            "void_spike",
-            "fire_ball",
-            "boomerang",
-            // Neue Waffen: bewusst ohne Shop-Eintrag sofort verfuegbar.
-            "crumb_trail",
-            "vortex",
-            "turret",
-            "sword_slash",
-            "salad_fan",
-            // Schoko-Salve ist die Startwaffe des Kekses (fuer alle anderen
-            // oben unter 1b gesperrt). Der Shurikookie war es frueher und
-            // haengt darum nicht mehr am Shop: ohne Startwaffe kaeme ihn keiner frei.
-            "choco_chips",
-            "milk_dunk",
-            "shurikookie",
-            // Mochi-Melodie: Mochis Startwaffe, fuer alle anderen unter 1b gesperrt.
-            // (Der Mochi-Faden "mochi_strand" war es bis 10.10.2026 - ohne Eintrag
-            // hier und ohne Shop-Eintrag bekommt ihn niemand mehr.)
-            "mochi_melody",
-            // Fuchsfeuer: Inaris Startwaffe, ebenso exklusiv.
-            "foxfire",
-            // Koenigsplumps: Startwaffe des Schleimkoenigs, ebenso exklusiv.
-            "royal_splat"
-        };
-
-        if (defaultUnlockedWeapons.Contains(weapon.weaponID))
-            return true;
-
-        // 4. Alles Weitere muss im Shop gekauft sein. Welche Waffe zu welchem
-        //    Shop-Eintrag gehört, steht am Eintrag selbst (unlocksWeapon in Shop.cs) -
-        //    hier stand früher eine zweite, handgepflegte Tabelle.
-        return Shop.IsWeaponUnlocked(weapon.weaponID);
+        // 3. Standardwaffe oder im Shop gekauft. Die Liste der Standardwaffen
+        //    steht in WeaponCatalog - die Werkbank fragt dieselbe Regel ab.
+        return WeaponCatalog.IsUnlocked(weapon.weaponID);
     }
 
     private bool IsBuffUnlocked(Weapon buff)
@@ -1032,27 +992,8 @@ public class PlayerController : MonoBehaviour
         if (!Loadout.AllowsInRun(buff.weaponID))
             return false;
 
-        // Standardmäßig immer freigeschaltete Buffs
-        HashSet<string> defaultUnlockedBuffs = new HashSet<string>
-        {
-            "buff_max_hp",
-            "buff_regeneration",
-            "buff_move_speed",
-            "buff_pickup_range",
-            "buff_armor",
-            "buff_dodge",
-            // Neue Buffs: ebenfalls sofort verfuegbar.
-            "buff_cooldown",
-            "buff_duration",
-            "buff_glass_cannon",
-            "buff_second_chance"
-        };
-
-        if (defaultUnlockedBuffs.Contains(buff.weaponID))
-            return true;
-
-        // Freischaltbare Buffs: dieselbe Regel wie bei den Waffen.
-        return Shop.IsWeaponUnlocked(buff.weaponID);
+        // Standard oder im Shop gekauft - dieselbe Regel wie bei den Waffen.
+        return WeaponCatalog.IsUnlocked(buff.weaponID);
     }
 
 

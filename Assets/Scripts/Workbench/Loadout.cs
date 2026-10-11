@@ -35,15 +35,41 @@ public enum EvoState
 /// verschiebt nichts. Der Build des anderen liegt so da, wie man ihn verlassen
 /// hat, samt seinem "uebernommen".
 ///
+/// PRESETS: Jeder Charakter hat bis zu <see cref="MaxPresets"/> gespeicherte
+/// Builds, wie viele davon offen sind, kauft man im Shop
+/// (<see cref="PresetCount"/>). Alles hier meint das gewaehlte - das zuletzt
+/// geoeffnete, und das geht mit in den Lauf.
+///
 /// Evos bleiben aussen vor: die zieht man nicht, die entstehen aus zwei
 /// ausgereizten Zutaten. Die Werkbank zeigt nur an, welche mit dem aktuellen
 /// Verteiler ueberhaupt erreichbar sind.
 /// </summary>
 public static class Loadout
 {
-    /// <summary>Plaetze im Verteiler. Das Raster im Fenster hat genauso viele Kacheln.</summary>
-    public const int WeaponSlots = 20;
-    public const int BuffSlots = 10;
+    /// <summary>
+    /// Kacheln im Raster des Fensters - die Obergrenze. Wie viele davon offen
+    /// sind, haengt an den Slots im Lauf (<see cref="Capacity"/>); der Rest
+    /// ist gesperrt. Mehr als 10 Buffs gibt es nie.
+    /// </summary>
+    public const int MaxWeapons = 20;
+    public const int MaxBuffs = 10;
+
+    /// <summary>Slots im Lauf ohne Shop-Kauf. Frueher am Player-Prefab (3 / 1).</summary>
+    public const int BaseWeaponSlots = 3;
+    public const int BaseBuffSlots = 1;
+
+    /// <summary>So viele Eintraege muss man je Slot im Lauf mitnehmen.</summary>
+    public const int PicksPerSlot = 3;
+
+    /// <summary>Waffenslots im Lauf: Grundwert + Shop. Der PlayerController setzt seine daraus.</summary>
+    public static int RunWeaponSlots => BaseWeaponSlots + Shop.GetInt(Shop.WeaponSlot);
+
+    /// <summary>Buffslots im Lauf: Grundwert + Shop.</summary>
+    public static int RunBuffSlots => BaseBuffSlots + Shop.GetInt(Shop.BuffSlot);
+
+    /// <summary>Gespeicherte Builds ohne Shop-Kauf, und hoechstens (= Knoepfe an der Werkbank).</summary>
+    public const int BasePresets = 1;
+    public const int MaxPresets = 4;
 
     private static LoadoutStore store;
     private static bool initialized;
@@ -157,37 +183,80 @@ public static class Loadout
     // ==================================================================
 
     /// <summary>
+    /// Offene Plaetze im Verteiler: <see cref="PicksPerSlot"/> je Slot im
+    /// Lauf, bei den Waffen plus die feste Startwaffe. 3 Waffenslots heissen
+    /// also 10 Waffen, jeder gekaufte Slot oeffnet drei Plaetze mehr. Gedeckelt
+    /// auf das Raster (<see cref="MaxWeapons"/> / <see cref="MaxBuffs"/>).
+    /// </summary>
+    public static int WeaponCapacity
+    {
+        get
+        {
+            int locked = string.IsNullOrEmpty(LockedWeaponId) ? 0 : 1;
+            return Mathf.Clamp(RunWeaponSlots * PicksPerSlot + locked, 0, MaxWeapons);
+        }
+    }
+
+    public static int BuffCapacity => Mathf.Clamp(RunBuffSlots * PicksPerSlot, 0, MaxBuffs);
+
+    /// <summary>
     /// Wie viele Waffen im Verteiler liegen muessen, damit der Build
     /// uebernommen werden kann.
     ///
-    /// Es sind <see cref="WeaponSlots"/> - es sei denn, das Spiel hat gar
-    /// nicht so viele. Heute gibt es 18 Waffen bei 20 Plaetzen; die Forderung
-    /// "voll" waere damit unerfuellbar, und der Knopf bliebe fuer immer grau.
-    /// Kommen Waffen dazu, zieht die Zahl von selbst nach.
+    /// Es sind alle offenen Plaetze - es sei denn, der Spieler hat gar nicht
+    /// so viele Waffen frei. Sonst waere "voll" unerfuellbar und der Knopf
+    /// bliebe fuer immer grau. Kommen Waffen dazu, zieht die Zahl von selbst nach.
     /// </summary>
-    public static int RequiredWeapons =>
-        Mathf.Min(WeaponSlots, Available(PoolKind.Weapon).Count);
+    public static int RequiredWeapons => Mathf.Min(WeaponCapacity, SelectableCount(PoolKind.Weapon));
 
-    public static int RequiredBuffs =>
-        Mathf.Min(BuffSlots, WeaponCatalog.CountOfKind(PoolKind.Buff));
+    public static int RequiredBuffs => Mathf.Min(BuffCapacity, SelectableCount(PoolKind.Buff));
 
     /// <summary>
-    /// Darf der gewaehlte Charakter das in den Verteiler legen? Nein bei einer
+    /// Darf der gewaehlte Charakter das ueberhaupt haben? Nein bei einer
     /// Waffe, die einem anderen Charakter allein gehoert
-    /// (<see cref="Characters.IsWeaponAllowed"/>, z.B. die Schoko-Salve des Kekses).
+    /// (<see cref="Characters.IsWeaponAllowed"/> - jede Startwaffe).
     /// </summary>
     public static bool IsAvailable(string id) => Characters.IsWeaponAllowed(id, CurrentCharacter);
 
-    /// <summary>Katalog einer Art ohne das, was dem gewaehlten Charakter nicht zusteht.</summary>
+    /// <summary>
+    /// Darf es jetzt in den Verteiler? Zusaetzlich zu <see cref="IsAvailable"/>
+    /// muss es freigeschaltet sein - Standard oder im Shop gekauft. Ungekauftes
+    /// zeigt die Bibliothek gesperrt an.
+    /// </summary>
+    public static bool IsSelectable(string id) =>
+        IsAvailable(id) && (IsLocked(id) || WeaponCatalog.IsUnlocked(id));
+
+    /// <summary>
+    /// Was die Bibliothek zeigt: alles, was der gewaehlte Charakter bekommen
+    /// KANN - schon frei oder spaeter per Shop. Fremde Startwaffen und Waffen,
+    /// die niemand mehr bekommt, fallen weg.
+    /// </summary>
     public static List<WeaponDef> Available(PoolKind kind)
     {
         List<WeaponDef> list = WeaponCatalog.OfKind(kind);
-        list.RemoveAll(def => !IsAvailable(def.Id));
+        if (kind == PoolKind.Evo) return list;
+
+        list.RemoveAll(def => !IsAvailable(def.Id) ||
+                              !(IsLocked(def.Id) || WeaponCatalog.IsObtainable(def.Id)));
         return list;
     }
 
-    public static int Capacity(PoolKind kind) => kind == PoolKind.Buff ? BuffSlots : WeaponSlots;
+    private static int SelectableCount(PoolKind kind)
+    {
+        int n = 0;
+        foreach (WeaponDef def in WeaponCatalog.OfKind(kind))
+        {
+            if (IsSelectable(def.Id)) n++;
+        }
+        return n;
+    }
+
+    /// <summary>Offene Plaetze einer Art - siehe <see cref="WeaponCapacity"/>.</summary>
+    public static int Capacity(PoolKind kind) => kind == PoolKind.Buff ? BuffCapacity : WeaponCapacity;
     public static int Required(PoolKind kind) => kind == PoolKind.Buff ? RequiredBuffs : RequiredWeapons;
+
+    /// <summary>Kacheln im Raster einer Art, offene und gesperrte zusammen.</summary>
+    public static int GridSize(PoolKind kind) => kind == PoolKind.Buff ? MaxBuffs : MaxWeapons;
 
     // ==================================================================
     //  Der feste erste Platz
@@ -212,26 +281,57 @@ public static class Loadout
     /// </summary>
     private static bool EnsureLocked()
     {
-        // Was dem Charakter nicht (mehr) zusteht, fliegt raus - etwa eine
-        // Schoko-Salve, die vor der Sperre im Verteiler eines anderen lag.
-        bool removed = Store.Weapons.RemoveAll(w => !IsAvailable(w)) > 0;
+        // Gewaehltes Preset nicht mehr gekauft (Shop-Reset): zurueck auf das
+        // letzte erlaubte. Der Inhalt dahinter bleibt im Spielstand liegen.
+        bool removed = false;
+        if (Store.PresetIndex >= PresetCount)
+        {
+            Store.PresetIndex = PresetCount - 1;
+            removed = true;
+        }
 
+        // Was dem Charakter nicht (mehr) zusteht, fliegt raus - etwa eine
+        // Startwaffe, die vor der Sperre im Verteiler eines anderen lag, oder
+        // etwas Ungekauftes nach einem Shop-Reset. Unbekannte Ids bleiben
+        // liegen (siehe LoadoutStore) - vielleicht kommt die Waffe ja wieder.
+        removed |= Store.Weapons.RemoveAll(NotSelectable) > 0;
+        removed |= Store.Buffs.RemoveAll(NotSelectable) > 0;
+
+        removed |= EnsureStartWeapon();
+
+        // Weniger offene Plaetze als belegt (etwa nach einem Shop-Reset):
+        // hinten abschneiden, der feste Platz vorne bleibt.
+        removed |= Trim(Store.Weapons, WeaponCapacity);
+        removed |= Trim(Store.Buffs, BuffCapacity);
+        return removed;
+    }
+
+    private static bool NotSelectable(string id) =>
+        WeaponCatalog.Find(id) != null && !IsSelectable(id);
+
+    private static bool Trim(List<string> ids, int capacity)
+    {
+        if (ids.Count <= capacity) return false;
+        ids.RemoveRange(Mathf.Max(capacity, 0), ids.Count - Mathf.Max(capacity, 0));
+        return true;
+    }
+
+    private static bool EnsureStartWeapon()
+    {
         string id = LockedWeaponId;
-        if (string.IsNullOrEmpty(id)) return removed;
+        if (string.IsNullOrEmpty(id)) return false;
         if (WeaponCatalog.Find(id) == null)
         {
             Debug.LogWarning($"[Werkbank] Startwaffe '{id}' steht nicht im Katalog - " +
                              "siehe Characters.StartWeaponIdByskin.");
-            return removed;
+            return false;
         }
 
         List<string> weapons = Store.Weapons;
         int at = weapons.IndexOf(id);
-        if (at == 0) return removed;
+        if (at == 0) return false;
 
         if (at > 0) weapons.RemoveAt(at);
-        else if (weapons.Count >= WeaponSlots) weapons.RemoveAt(weapons.Count - 1);
-
         weapons.Insert(0, id);
         return true;
     }
@@ -259,6 +359,46 @@ public static class Loadout
 
         // | statt ||: EnsureLocked muss auch dann laufen, wenn gewechselt wurde.
         if (EnsureLocked() | switched) Fire();
+    }
+
+    // ==================================================================
+    //  Presets
+    // ==================================================================
+
+    /// <summary>
+    /// Wie viele gespeicherte Builds der Spieler benutzen darf: einer immer,
+    /// jeder Shop-Kauf (<see cref="Shop.LoadoutPreset"/>) einer mehr. Gilt fuer
+    /// jeden Charakter, jeder hat aber seine eigenen Builds darin.
+    ///
+    /// Der aktuelle Shop-Stand, nicht der eingefrorene: gewaehlt wird im Hub,
+    /// und ein Kauf soll sofort an der Werkbank ankommen.
+    /// </summary>
+    public static int PresetCount =>
+        Mathf.Clamp(BasePresets + Mathf.RoundToInt(Shop.CurrentValue(Shop.LoadoutPreset)),
+                    BasePresets, MaxPresets);
+
+    /// <summary>
+    /// Das gewaehlte Preset (0-basiert). Es ist immer das zuletzt geoeffnete -
+    /// und genau das geht mit in den naechsten Lauf.
+    /// </summary>
+    public static int ActivePreset => Store.PresetIndex;
+
+    /// <summary>Darf dieses Preset gewaehlt werden? Nein, solange es nicht gekauft ist.</summary>
+    public static bool IsPresetOpen(int index) => index >= 0 && index < PresetCount;
+
+    /// <summary>
+    /// Wechselt auf ein anderes Preset. Der bisherige Build bleibt darin
+    /// liegen, wie er war. Gibt false zurueck, wenn das Preset nicht gekauft ist.
+    /// </summary>
+    public static bool SelectPreset(int index)
+    {
+        if (!IsPresetOpen(index)) return false;
+        if (index == ActivePreset) return true;
+
+        Store.PresetIndex = index;
+        EnsureLocked();
+        Fire();
+        return true;
     }
 
     // ==================================================================
@@ -291,7 +431,7 @@ public static class Loadout
     {
         WeaponDef def = WeaponCatalog.Find(id);
         if (def == null || def.Kind == PoolKind.Evo) return false;
-        if (!IsAvailable(id)) return false;
+        if (!IsSelectable(id)) return false;
         if (Contains(id) || IsFull(def.Kind)) return false;
 
         Get(def.Kind).Add(id);
@@ -342,7 +482,8 @@ public static class Loadout
     /// <summary>Stopft eine Gruppe mit zufaellig gezogenen Eintraegen bis zum Anschlag.</summary>
     private static void FillGroupRandom(PoolKind kind)
     {
-        List<WeaponDef> pool = Available(kind);
+        List<WeaponDef> pool = WeaponCatalog.OfKind(kind);
+        pool.RemoveAll(def => !IsSelectable(def.Id));
 
         // Fisher-Yates auf einer Kopie: zieht ohne Zuruecklegen und ohne
         // die Katalogreihenfolge anzufassen.
@@ -364,11 +505,10 @@ public static class Loadout
     /// der Verteiler immer, auch ohne "Build uebernehmen". Im Lauf kommt nur,
     /// was drinliegt.
     ///
-    /// Hat der Spieler eine Gruppe gar nicht angefasst - bei den Waffen liegt
-    /// nur die feste Startwaffe drin, bei den Buffs nichts -, wird genau diese
-    /// Gruppe zufaellig gefuellt. Was er selbst gewaehlt hat, bleibt stehen,
-    /// auch wenn es nicht voll ist. Das Ergebnis wird gespeichert, die
-    /// Werkbank zeigt danach also, womit gespielt wurde.
+    /// Offene Plaetze, die der Spieler nicht selbst belegt hat, werden
+    /// zufaellig aufgefuellt - was er gewaehlt hat, bleibt stehen. Das
+    /// Ergebnis wird gespeichert, die Werkbank zeigt danach also, womit
+    /// gespielt wurde.
     ///
     /// In der Test-Szene (Sandbox) passiert nichts - die hat ihre eigene Auswahl.
     /// </summary>
@@ -378,9 +518,8 @@ public static class Loadout
 
         SyncCharacter();
 
-        int locked = string.IsNullOrEmpty(LockedWeaponId) || !Store.Weapons.Contains(LockedWeaponId) ? 0 : 1;
-        if (Store.Weapons.Count <= locked) FillGroupRandom(PoolKind.Weapon);
-        if (Store.Buffs.Count == 0) FillGroupRandom(PoolKind.Buff);
+        FillGroupRandom(PoolKind.Weapon);
+        FillGroupRandom(PoolKind.Buff);
 
         Store.Active = true;
         Store.Save();
@@ -395,8 +534,11 @@ public static class Loadout
     public static bool IsActive => Store.Active;
 
     /// <summary>
-    /// "Build uebernehmen": ab jetzt zieht das Spiel nur noch aus dem
-    /// Verteiler. Erst moeglich, wenn beide Gruppen voll sind.
+    /// Ab jetzt zieht das Spiel nur noch aus dem Verteiler. Erst moeglich,
+    /// wenn beide Gruppen voll sind.
+    ///
+    /// Einen Knopf dafuer gibt es seit 11.10.2026 nicht mehr: jeder Lauf
+    /// uebernimmt das gewaehlte Preset ohnehin (<see cref="PrepareForRun"/>).
     /// </summary>
     public static bool Apply()
     {

@@ -1037,6 +1037,7 @@ public class Enemy : MonoBehaviour
                 // Die Beute ist vorerst nur die XP aus dem Katalog - die
                 // fliegen dem Spieler wie beim Boss gleich zu.
                 PlayerController.Instance.attractAllXP = true;
+                Achievements.Unlock(Ach.BossVictory(Identity.ToString()));
                 ClearCage();
                 break;
 
@@ -1045,7 +1046,9 @@ public class Enemy : MonoBehaviour
                 GameManager.Instance.bossSpawned = true;
                 // Erster Sieg ueber diesen Boss mit diesem Charakter: ein
                 // Charakter-Level geschenkt.
-                Skills.RegisterBossVictory(Identity != EnemyId.None ? Identity.ToString() : name.Replace("(Clone)", "").Trim());
+                string bossKey = Identity != EnemyId.None ? Identity.ToString() : name.Replace("(Clone)", "").Trim();
+                Skills.RegisterBossVictory(bossKey);
+                Achievements.Unlock(Ach.BossVictory(bossKey));
                 if (SpawnDeath.Instance != null)
                 {
                     Vector3 deathPos = transform.position;

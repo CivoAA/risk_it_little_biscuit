@@ -124,6 +124,7 @@ public class AchievementsBookPanel : MonoBehaviour
     {
         public int Index;
         public float Top, Height;
+        public float Lead = -1f;       // Gitter: Platz darueber, der beim Hinscrollen mit soll (-1 = Liste)
         public Image Back, Tile, Hover, Select, Icon, Lock, Check, BarBack, BarFill;
         public TextMeshProUGUI Label, Right, Badge;
     }
@@ -595,6 +596,7 @@ public class AchievementsBookPanel : MonoBehaviour
     {
         foreach (UnlockDef def in Unlocks.All)
         {
+            if (!Unlocks.IsShown(def)) continue;
             bool done = def.IsUnlocked;
             AchievementDef source = Ach.FindByUnlock(def.Id);
 
@@ -631,12 +633,22 @@ public class AchievementsBookPanel : MonoBehaviour
             int kills = Bestiary.Kills(id);
             int bonus = Bestiary.BonusPercent(id);
             int into = kills % Bestiary.KillsPerPercent;
-            bool seen = kills > 0;
+            bool seen = Bestiary.IsKnown(id);
+            string world = Bestiary.WorldOf(id);
 
             string desc = seen
                 ? string.Format(Loc.Get("ui.bestiary.next", "Nächstes +1% in {0} Kills"),
                                 (Bestiary.KillsPerPercent - into).ToString("N0"))
                 : Loc.Get("ui.bestiary.unseen", "Noch nie besiegt. Wer ist das wohl?");
+
+            // Rolle und Fundort stehen bei Bekannten obenan.
+            if (seen)
+            {
+                EnemyDef def = EnemyCatalog.Get(id);
+                string role = def != null ? Loc.Get($"ui.bestiary.role.{def.Role}", def.Role.ToString().ToUpperInvariant()) : "";
+                string where = world.Length > 0 ? string.Format(Loc.Get("ui.bestiary.from", "{0} aus: {1}"), role, world) : role;
+                desc = $"<color=#{ColorUtility.ToHtmlStringRGB(GameHudSkin.StoneLight)}>{where}</color>\n{desc}";
+            }
 
             if (!counting)
             {
@@ -659,6 +671,7 @@ public class AchievementsBookPanel : MonoBehaviour
                 RewardIcon = GameHudSkin.Crit,
                 RewardColor = bonus > 0 ? GameHudSkin.GoldLight : GameHudSkin.Stone,
                 Badge = bonus > 0 ? $"+{bonus}%" : "",
+                Group = world.Length > 0 ? world.ToUpperInvariant() : null,
             });
         }
     }
@@ -758,14 +771,43 @@ public class AchievementsBookPanel : MonoBehaviour
         int cols = Mathf.Max(1, (ViewW - 4 + TileGap) / step);
         int x0 = (ViewW - 4 - (cols * s + (cols - 1) * TileGap)) / 2;
 
+        // Mit Gruppen (Bestiarium: je Welt) beginnt jede Gruppe in einer neuen
+        // Zeile unter ihrer Zwischenueberschrift.
+        float y = 0f, lead = 1f;
+        string group = null;
+        int col = 0;
+
         for (int i = 0; i < entries.Count; i++)
         {
-            int cx = i % cols, cy = i / cols;
-            views.Add(AddTile(i, x0 + cx * step, 1 + cy * step, s));
+            Entry e = entries[i];
+            if (i == 0 || e.Group != group)
+            {
+                if (col > 0) { y += step; col = 0; }
+                if (i > 0) y += 3f;
+                group = e.Group;
+                lead = 1f;
+                if (!string.IsNullOrEmpty(group))
+                {
+                    AddHeader(group, y);
+                    y += HeadH;
+                    lead += HeadH + 3f;
+                }
+                y += 1f;
+            }
+
+            View v = AddTile(i, x0 + col * step, y, s);
+            v.Lead = lead;
+            views.Add(v);
+
+            if (++col == cols)
+            {
+                col = 0;
+                y += step;
+                lead = 1f;
+            }
         }
 
-        int lines = Mathf.CeilToInt(entries.Count / (float)cols);
-        contentHeight = lines > 0 ? 1 + lines * step - TileGap + 1 : 0;
+        contentHeight = entries.Count == 0 ? 0 : (col > 0 ? y + s : y - TileGap) + 1;
     }
 
     private View AddTile(int index, float x, float y, int s)
@@ -803,7 +845,11 @@ public class AchievementsBookPanel : MonoBehaviour
         return v;
     }
 
-    /// <summary>Setzt ein Bild in seiner echten Groesse mittig in einen Kasten - nie gestreckt.</summary>
+    /// <summary>
+    /// Setzt ein Bild in seiner echten Groesse mittig in einen Kasten - nie
+    /// gestreckt. Ist es groesser (Bosse im Bestiarium), wird es um einen
+    /// ganzzahligen Faktor verkleinert, damit die Pixel gleich gross bleiben.
+    /// </summary>
     private static void FitIcon(Image img, Sprite sprite, float x, float y, float w, float h)
     {
         img.enabled = sprite != null;
@@ -811,6 +857,9 @@ public class AchievementsBookPanel : MonoBehaviour
         img.sprite = sprite;
 
         float sw = sprite.rect.width, sh = sprite.rect.height;
+        int down = Mathf.Max(1, Mathf.CeilToInt(Mathf.Max(sw / w, sh / h)));
+        sw = Mathf.Floor(sw / down);
+        sh = Mathf.Floor(sh / down);
         OptionsKit.Move(img.rectTransform, x + Mathf.Floor((w - sw) / 2f), y + Mathf.Floor((h - sh) / 2f), sw, sh);
     }
 
@@ -838,9 +887,10 @@ public class AchievementsBookPanel : MonoBehaviour
         if (!scrollIntoView || views.Count == 0) return;
 
         View v = views[selected];
-        // In der Liste die Zwischenueberschrift mitnehmen, wenn es die erste Zeile der Gruppe ist.
-        float top = v.Top - (!GridMode && (selected == 0 || entries[selected - 1].Group != entries[selected].Group)
-                                 ? HeadH + 3 : 1);
+        // Die Zwischenueberschrift mitnehmen, wenn es die erste Zeile der Gruppe ist
+        // (im Gitter hat das LayoutGrid schon ausgerechnet).
+        float top = v.Top - (v.Lead >= 0f ? v.Lead
+                             : selected == 0 || entries[selected - 1].Group != entries[selected].Group ? HeadH + 3 : 1);
         float bottom = v.Top + v.Height + 1;
         if (top < scrollTop) SetScroll(top);
         else if (bottom > scrollTop + ViewH) SetScroll(bottom - ViewH);

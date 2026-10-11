@@ -2,8 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Gruppe eines Shop-Eintrags. Die Liste im Hub-Shop bleibt flach (Katalog-
-/// reihenfolge), die Kategorie ist für Sortierung und spätere Überschriften da.
+/// Gruppe eines Shop-Eintrags. Im Hub-Shop entscheidet sie, unter welchem
+/// Reiter der Eintrag steht (<see cref="ShopItemDef.Tab"/>); innerhalb des
+/// Reiters bleibt die Katalogreihenfolge.
 /// </summary>
 public enum ShopCategory
 {
@@ -12,6 +13,15 @@ public enum ShopCategory
     Weapons,
     Buffs,
     Companion,
+}
+
+/// <summary>Die beiden Reiter im Hub-Shop.</summary>
+public enum ShopTab
+{
+    /// <summary>Freischalten: Buffs (und Waffen, falls sie wieder in den Shop kommen).</summary>
+    Unlocks = 0,
+    /// <summary>Alles Mehrstufige: Werte, Slots, Build-Plaetze, Begleiter.</summary>
+    Upgrades = 1,
 }
 
 /// <summary>
@@ -80,6 +90,12 @@ public sealed class ShopItemDef
 
     /// <summary>Ein einzelner Kauf, der etwas freischaltet - kein mehrstufiges Upgrade.</summary>
     public bool IsSingleUnlock => Costs.Count == 1;
+
+    /// <summary>Reiter im Hub-Shop - folgt der Kategorie.</summary>
+    public ShopTab Tab =>
+        Category == ShopCategory.Buffs || Category == ShopCategory.Weapons
+            ? ShopTab.Unlocks
+            : ShopTab.Upgrades;
 
     public string Name => Loc.Get($"shop.{Id}.name", NameEn);
     public string Description => Loc.Get($"shop.{Id}.desc", DescEn);

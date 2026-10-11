@@ -136,6 +136,8 @@ public class HubUI : MonoBehaviour
     {
         if (_instance != null && _instance != this) { Destroy(gameObject); return; }
         _instance = this;
+        // Unlocks, die ein alter Spielstand schon verdient hat, leise nachholen.
+        Unlocks.CatchUp();
         EnsureSfxSource();
         Build();
     }

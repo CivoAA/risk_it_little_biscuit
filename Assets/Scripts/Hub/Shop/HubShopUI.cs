@@ -20,6 +20,10 @@ using UnityEngine.UI;
 ///
 /// Dieses Skript kennt keinen einzigen Eintrag beim Namen: neue Items tauchen
 /// hier von allein auf, sobald sie im Katalog stehen.
+///
+/// Zwei Reiter oben in der Liste (seit 11.10.2026): FREISCHALTEN (Buffs) und
+/// UPGRADES (Werte, Slots, Build-Plaetze, Begleiter). Wohin ein Eintrag
+/// gehoert, folgt seiner Kategorie - siehe <see cref="ShopItemDef.Tab"/>.
 /// </summary>
 [DisallowMultipleComponent]
 public class HubShopUI : MonoBehaviour
@@ -88,7 +92,26 @@ public class HubShopUI : MonoBehaviour
     [SerializeField] private Color resetHoverFillColor = new Color32(0xC0, 0x4A, 0x44, 0xFF);
     [SerializeField] private Color resetLabelColor   = new Color32(0xE6, 0xC4, 0x93, 0xFF);
 
+    [Header("Reiter")]
+    [Tooltip("Zwei Reiter oben im Listenfeld: Freischalten (Buffs) und Upgrades. " +
+             "Welcher Eintrag wohin gehoert, steht am Katalog (ShopItemDef.Tab).")]
+    [SerializeField] private bool showTabs = true;
+    [Tooltip("Beide Reiter zusammen. Die Zeilen der Liste rutschen um Hoehe + Abstand nach unten.")]
+    [SerializeField] private Rect tabBarArea = new Rect(18f, 38f, 133f, 14f);
+    [SerializeField] private float tabGap = 1f;
+    [SerializeField] private float tabBarSpacing = 2f;
+    [SerializeField] private string unlocksTabLabel = "UNLOCKS";
+    [SerializeField] private string upgradesTabLabel = "UPGRADES";
+    [SerializeField] private Color tabRimColor          = new Color32(0x97, 0x71, 0x5E, 0xFF);
+    [SerializeField] private Color tabFillColor         = new Color32(0xC4, 0xA5, 0x7B, 0xFF);
+    [SerializeField] private Color tabHoverFillColor    = new Color32(0xD8, 0xBC, 0x92, 0xFF);
+    [SerializeField] private Color tabActiveRimColor    = new Color32(0x63, 0x41, 0x45, 0xFF);
+    [SerializeField] private Color tabActiveFillColor   = new Color32(0xF2, 0xE2, 0xBE, 0xFF);
+    [SerializeField] private Color tabLabelColor        = new Color32(0x3B, 0x24, 0x33, 0xFF);
+
     [Header("Liste")]
+    [Tooltip("Hoechstens so viele Zeilen. Mit Reitern passen nur so viele, wie unter " +
+             "ihnen ins Listenfeld gehen - das rechnet der Shop selbst nach.")]
     [SerializeField] private int visibleRows = 6;
     [Tooltip("Fertig gekaufte Eintraege wandern ans Ende der Liste. Umsortiert wird " +
              "erst beim naechsten Oeffnen - sonst rutscht die Liste beim Kaufen weg.")]
@@ -222,7 +245,17 @@ public class HubShopUI : MonoBehaviour
     bool buyEnabled, buyHovered, backHovered;
     readonly List<Row> rows = new List<Row>();
 
-    // Nur die Eintraege, die gerade freigeschaltet sind - der Rest taucht gar nicht auf
+    // Reiter. Der zuletzt offene bleibt beim naechsten Oeffnen gewaehlt.
+    ShopTab tab = ShopTab.Unlocks;
+    Image[] tabImages;
+    TextMeshProUGUI[] tabTexts;
+    Sprite tabSprite, tabHoverSprite, tabActiveSprite;
+    int hoveredTab = -1;
+
+    /// <summary>Zeilen, die wirklich ins Listenfeld passen - siehe visibleRows.</summary>
+    int pageRows;
+
+    // Nur die Eintraege des Reiters, die gerade freigeschaltet sind - der Rest taucht gar nicht auf
     readonly List<ShopItemDef> shown = new List<ShopItemDef>();
     int selected;
     int scrollTop;
@@ -258,6 +291,9 @@ public class HubShopUI : MonoBehaviour
         }
         DestroySprite(ref resetSprite);
         DestroySprite(ref resetHoverSprite);
+        DestroySprite(ref tabSprite);
+        DestroySprite(ref tabHoverSprite);
+        DestroySprite(ref tabActiveSprite);
 
         // Szenenwechsel mit offenem Shop: die Sperre wieder abmelden,
         // sonst reagiert der Hub beim naechsten Mal auf gar nichts mehr.
@@ -331,7 +367,14 @@ public class HubShopUI : MonoBehaviour
         HubUiKit.Place((RectTransform)goldValueText.transform, goldValueArea);
 
         // ---- Liste --------------------------------------------------------
-        for (int i = 0; i < visibleRows; i++) rows.Add(BuildRow(i));
+        if (showTabs) BuildTabs();
+
+        // Die Reiter fressen oben Platz - es kommen nur so viele Zeilen, wie
+        // darunter noch ins Listenfeld passen.
+        float free = listArea.height - rowInset.y - ListTop;
+        pageRows = Mathf.Max(1, Mathf.Min(visibleRows, Mathf.FloorToInt(free / Mathf.Max(1f, rowHeight))));
+
+        for (int i = 0; i < pageRows; i++) rows.Add(BuildRow(i));
         if (showScrollbar) BuildScrollbar();
 
         // ---- Detailfeld ---------------------------------------------------
@@ -420,6 +463,93 @@ public class HubShopUI : MonoBehaviour
         buyText.text   = Loc.Get("ui.shop.buy", buyLabel);
         backText.text  = Loc.Get("ui.shop.back", backLabel);
         if (resetText != null) resetText.text = Loc.Get("ui.shop.reset", resetButtonLabel);
+
+        if (tabTexts != null)
+        {
+            tabTexts[(int)ShopTab.Unlocks].text  = Loc.Get("ui.shop.tab.unlocks", unlocksTabLabel);
+            tabTexts[(int)ShopTab.Upgrades].text = Loc.Get("ui.shop.tab.upgrades", upgradesTabLabel);
+        }
+    }
+
+    /// <summary>
+    /// Abstand der ersten Zeile unter den Reitern, gemessen ab dem bisherigen
+    /// Zeilenanfang (Listenfeld + rowInset). Ohne Reiter 0.
+    /// </summary>
+    float ListTop => showTabs
+        ? Mathf.Max(0f, tabBarArea.yMax + tabBarSpacing - (listArea.y + rowInset.y))
+        : 0f;
+
+    /// <summary>
+    /// Zwei Reiter, selbst gezeichnet wie der Reset-Knopf, nur in den Farben
+    /// des Listenfelds. Der gewaehlte ist hell wie die Auswahl in der Liste.
+    /// </summary>
+    void BuildTabs()
+    {
+        tabSprite       = ButtonSprite("HubShopTab", tabRimColor, tabFillColor);
+        tabHoverSprite  = ButtonSprite("HubShopTabHover", tabRimColor, tabHoverFillColor);
+        tabActiveSprite = ButtonSprite("HubShopTabActive", tabActiveRimColor, tabActiveFillColor);
+
+        int count = 2;
+        tabImages = new Image[count];
+        tabTexts = new TextMeshProUGUI[count];
+        float w = Mathf.Floor((tabBarArea.width - tabGap * (count - 1)) / count);
+
+        for (int i = 0; i < count; i++)
+        {
+            var r = new Rect(tabBarArea.x + i * (w + tabGap), tabBarArea.y, w, tabBarArea.height);
+
+            Image img = HubUiKit.NewImage("Tab" + i, screen, tabSprite, Color.white);
+            HubUiKit.Place((RectTransform)img.transform, r);
+            img.type = Image.Type.Sliced;
+            img.preserveAspect = false;
+            img.raycastTarget = true;
+
+            ShopTab captured = (ShopTab)i;
+            int capturedIndex = i;
+            AddClick(img.gameObject, () => SetTab(captured, true));
+            AddHover(img.gameObject, on =>
+            {
+                hoveredTab = on ? capturedIndex : (hoveredTab == capturedIndex ? -1 : hoveredTab);
+                if (on && captured != tab) PlaySfx(hoverClip);
+                RefreshTabs();
+            });
+
+            TextMeshProUGUI label = HubUiKit.NewText("Label", img.transform, font, rowFontSize,
+                                                     tabLabelColor, TextAlignmentOptions.Center);
+            HubUiKit.Stretch((RectTransform)label.transform);
+            label.raycastTarget = false;
+            FitOneLine(label, rowFontSize);
+
+            tabImages[i] = img;
+            tabTexts[i] = label;
+        }
+    }
+
+    void RefreshTabs()
+    {
+        if (tabImages == null) return;
+
+        for (int i = 0; i < tabImages.Length; i++)
+        {
+            bool active = (int)tab == i;
+            tabImages[i].sprite = active ? tabActiveSprite
+                                : hoveredTab == i ? tabHoverSprite : tabSprite;
+            tabTexts[i].color = active ? rowSelectedColor : tabLabelColor;
+        }
+    }
+
+    /// <summary>Wechselt den Reiter. Die Liste faengt dabei wieder oben an.</summary>
+    void SetTab(ShopTab next, bool withSound)
+    {
+        if (next == tab) return;
+        tab = next;
+
+        RebuildShownList();
+        selected = 0;
+        scrollTop = 0;
+
+        if (withSound) PlaySfx(moveClip);
+        Refresh();
     }
 
     string MaxLabel => Loc.Get("ui.shop.max", maxLabel);
@@ -432,7 +562,7 @@ public class HubShopUI : MonoBehaviour
     void BuildScrollbar()
     {
         scrollbarRoot = HubUiKit.NewRect("Scrollbar", screen);
-        HubUiKit.Place((RectTransform)scrollbarRoot.transform, scrollbarArea);
+        HubUiKit.Place((RectTransform)scrollbarRoot.transform, ScrollbarRect);
 
         var track = scrollbarRoot.AddComponent<Image>();
         track.color = scrollbarTrackColor;
@@ -472,11 +602,22 @@ public class HubShopUI : MonoBehaviour
 
         scrollTop = top;
         // Auswahl ins neue Fenster ziehen, sonst schiebt Refresh() gleich wieder zurueck
-        selected = Mathf.Clamp(selected, scrollTop, scrollTop + visibleRows - 1);
+        selected = Mathf.Clamp(selected, scrollTop, scrollTop + pageRows - 1);
         Refresh();
     }
 
-    int MaxScrollTop => Mathf.Max(0, shown.Count - visibleRows);
+    int MaxScrollTop => Mathf.Max(0, shown.Count - pageRows);
+
+    /// <summary>Der Balken beginnt erst unter den Reitern.</summary>
+    Rect ScrollbarRect
+    {
+        get
+        {
+            float top = ListTop;
+            return new Rect(scrollbarArea.x, scrollbarArea.y + top,
+                            scrollbarArea.width, Mathf.Max(1f, scrollbarArea.height - top));
+        }
+    }
 
     void UpdateScrollbar()
     {
@@ -492,9 +633,9 @@ public class HubShopUI : MonoBehaviour
 
         if (needed)
         {
-            float fraction = (float)visibleRows / shown.Count;
-            float minFraction = scrollbarArea.height > 0f
-                ? minThumbHeight / scrollbarArea.height : 0.1f;
+            float fraction = (float)pageRows / shown.Count;
+            float minFraction = ScrollbarRect.height > 0f
+                ? minThumbHeight / ScrollbarRect.height : 0.1f;
             scrollbar.size = Mathf.Clamp(fraction, Mathf.Min(minFraction, 1f), 1f);
             // Ein Schritt je moeglicher Fensterposition - der Griff rastet auf Zeilen ein
             scrollbar.numberOfSteps = maxTop + 1;
@@ -516,7 +657,7 @@ public class HubShopUI : MonoBehaviour
         row.Go = HubUiKit.NewRect("Row" + slot, screen);
         HubUiKit.Place((RectTransform)row.Go.transform, new Rect(
             listArea.x + rowInset.x,
-            listArea.y + rowInset.y + slot * rowHeight,
+            listArea.y + rowInset.y + ListTop + slot * rowHeight,
             rowWidth,
             rowHeight));
 
@@ -716,6 +857,7 @@ public class HubShopUI : MonoBehaviour
         openedOnFrame = Time.frameCount;
         root.SetActive(true);
 
+        hoveredTab = -1;
         RebuildShownList();
         selected = 0;
         scrollTop = 0;
@@ -758,7 +900,7 @@ public class HubShopUI : MonoBehaviour
 
         foreach (ShopItemDef def in Shop.All)
         {
-            if (!Shop.IsVisible(def)) continue;
+            if (!IsShown(def)) continue;
             if (sortBoughtToBottom && IsFullyBought(def)) continue;
             shown.Add(def);
         }
@@ -767,9 +909,12 @@ public class HubShopUI : MonoBehaviour
 
         foreach (ShopItemDef def in Shop.All)
         {
-            if (Shop.IsVisible(def) && IsFullyBought(def)) shown.Add(def);
+            if (IsShown(def) && IsFullyBought(def)) shown.Add(def);
         }
     }
+
+    /// <summary>Sichtbar und unter dem gewaehlten Reiter - ohne Reiter alles Sichtbare.</summary>
+    bool IsShown(ShopItemDef def) => Shop.IsVisible(def) && (!showTabs || def.Tab == tab);
 
     /// <summary>
     /// Alle Stufen gekauft - da ist nichts mehr zu holen. Eintraege ohne
@@ -790,6 +935,14 @@ public class HubShopUI : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.UpArrow)   || Input.GetKeyDown(KeyCode.W)) Move(-1);
         if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)) Move(+1);
+
+        if (showTabs)
+        {
+            if (Input.GetKeyDown(KeyCode.LeftArrow)  || Input.GetKeyDown(KeyCode.A)) SetTab(ShopTab.Unlocks, true);
+            if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) SetTab(ShopTab.Upgrades, true);
+            if (Input.GetKeyDown(KeyCode.Tab))
+                SetTab(tab == ShopTab.Unlocks ? ShopTab.Upgrades : ShopTab.Unlocks, true);
+        }
 
         float wheel = Input.mouseScrollDelta.y;
         if (!Mathf.Approximately(wheel, 0f)) Move(wheel > 0f ? -1 : +1);
@@ -835,8 +988,8 @@ public class HubShopUI : MonoBehaviour
     {
         // Auswahl ins sichtbare Fenster schieben
         if (selected < scrollTop) scrollTop = selected;
-        if (selected > scrollTop + visibleRows - 1) scrollTop = selected - visibleRows + 1;
-        scrollTop = Mathf.Clamp(scrollTop, 0, Mathf.Max(0, shown.Count - visibleRows));
+        if (selected > scrollTop + pageRows - 1) scrollTop = selected - pageRows + 1;
+        scrollTop = Mathf.Clamp(scrollTop, 0, Mathf.Max(0, shown.Count - pageRows));
 
         for (int slot = 0; slot < rows.Count; slot++)
         {
@@ -895,6 +1048,7 @@ public class HubShopUI : MonoBehaviour
         }
 
         RefreshDetail();
+        RefreshTabs();
         UpdateGold();
         UpdateScrollbar();
         lastCurrency = Currency;

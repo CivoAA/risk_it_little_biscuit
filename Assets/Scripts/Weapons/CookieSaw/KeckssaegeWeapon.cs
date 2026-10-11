@@ -11,8 +11,6 @@ public class KeckssaegeWeapon : Weapon
         if (weaponLevel == maxweaponLevel)
         {
             Achievements.Unlock(Ach.MaxCookiesaw);
-            Unlocks.Grant(Unlocks.BobaGun);
-            Unlocks.Grant(Unlocks.CandyBomb);
         }
         if (weaponLevel >= 0)
         {

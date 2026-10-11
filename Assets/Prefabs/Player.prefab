@@ -1036,6 +1036,7 @@ Transform:
   - {fileID: 78349759840027280}
   - {fileID: 4635069957331416151}
   - {fileID: 6888053811702305333}
+  - {fileID: 4827364019283746502}
   m_Father: {fileID: 4991830239493606234}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1621732423365041543
@@ -2146,6 +2147,7 @@ MonoBehaviour:
   - {fileID: 1253188992596307305}
   - {fileID: 8313368071689069414}
   - {fileID: 4418852152981795961}
+  - {fileID: 4827364019283746503}
   activeEvos:
   - {fileID: 8210062084427826984}
   - {fileID: 3783162681362825404}
@@ -10655,3 +10657,84 @@ MonoBehaviour:
   hasBeenRemoved: 0
   originOffset: {x: 0, y: 0.45}
   singOffset: {x: 0, y: 0.95}
+--- !u!1 &4827364019283746501
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4827364019283746502}
+  - component: {fileID: 4827364019283746503}
+  m_Layer: 0
+  m_Name: Cursed Sugar
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4827364019283746502
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4827364019283746501}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6255572960645728937}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4827364019283746503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4827364019283746501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e849bcf92b740e68409e158c1654294, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CursedSugar
+  weaponID: buff_curse
+  weaponLevel: -1
+  maxweaponLevel: 3
+  stats:
+  - cooldown: 0
+    duration: 0
+    damage: 0.15
+    range: 0
+    AttackSpeed: 0
+    shots: 0
+    description: +12% Gegner, +22% Leben, +8% Schaden, +18% Belohnung
+  - cooldown: 0
+    duration: 0
+    damage: 0.3
+    range: 0
+    AttackSpeed: 0
+    shots: 0
+    description: +24% Gegner, +44% Leben, +15% Schaden, +37% Belohnung
+  - cooldown: 0
+    duration: 0
+    damage: 0.45
+    range: 0
+    AttackSpeed: 0
+    shots: 0
+    description: +36% Gegner, +68% Leben, +23% Schaden, +56% Belohnung
+  - cooldown: 0
+    duration: 0
+    damage: 0.6
+    range: 0
+    AttackSpeed: 0
+    shots: 0
+    description: +48% Gegner, +93% Leben, +30% Schaden, +76% Belohnung
+  weaponImage: {fileID: -3627844698242013704, guid: 809b5a194789472183719b5d6f0d38fe, type: 3}
+  weaponIcon: {fileID: -3627844698242013704, guid: 809b5a194789472183719b5d6f0d38fe, type: 3}
+  weaponIconEvo: {fileID: 0}
+  posssibleEvo: 0
+  hasBeenRemoved: 0

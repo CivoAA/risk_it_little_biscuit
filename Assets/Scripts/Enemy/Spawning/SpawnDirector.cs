@@ -132,8 +132,6 @@ public class SpawnDirector : MonoBehaviour
     private Vector2 lastPlayerPos;
     private Vector2 playerDir;
 
-    private bool timeLaserUnlocked;
-
     private readonly List<Vector2> points = new List<Vector2>(64);
 
     private struct QueuedSpawn
@@ -258,7 +256,6 @@ public class SpawnDirector : MonoBehaviour
         }
 
         UpdateText();
-        CheckTimeLaser();
     }
 
     private bool RunIsActive()
@@ -804,17 +801,5 @@ public class SpawnDirector : MonoBehaviour
 
         lastShownText = text;
         phaseText.text = text;
-    }
-
-    /// <summary>
-    /// Stand aus dem alten TimeWaveManager: wer lange genug durchhaelt, schaltet
-    /// den Time Laser frei.
-    /// </summary>
-    private void CheckTimeLaser()
-    {
-        if (timeLaserUnlocked || runTime < 666f) return;
-
-        timeLaserUnlocked = true;
-        Unlocks.Grant(Unlocks.TimeLaser);
     }
 }

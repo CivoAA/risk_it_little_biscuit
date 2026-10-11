@@ -248,7 +248,10 @@ public class UnlockPanel : MonoBehaviour
         scroll.movementType = ScrollRect.MovementType.Clamped;
         scroll.scrollSensitivity = 12f;
 
-        foreach (UnlockDef def in Unlocks.All) AddTile(def);
+        foreach (UnlockDef def in Unlocks.All)
+        {
+            if (Unlocks.IsShown(def)) AddTile(def);
+        }
     }
 
     private void AddTile(UnlockDef def)
