@@ -176,8 +176,8 @@ public enum EnemyId
     /// <summary>Walnuss-Krabbe: Walnusspanzer, Stielaugen, schnappende Scheren. Zaeh.</summary>
     Walnusskrabbe = 55,
 
-    /// <summary>Radieschen-Alraune: marschiert auf Wurzelbeinen und bruellt dabei.</summary>
-    Alraune = 56,
+    /// <summary>Honigbaerchen: Honig-Quetschflasche in Baerform, der Honig schwappt im Kopf, eine Biene kreist.</summary>
+    Honigbaer = 56,
 
     // Eiswelt, vierte Welle Gegner
 
@@ -223,6 +223,38 @@ public enum EnemyId
 
     /// <summary>Flambierkirsche: Kirsche mit blauer Rumflamme auf dem Kopf, flitzt. Schneller Schwarmgegner.</summary>
     Flambierkirsche = 69,
+
+    // Vulkanwelt (Karte 5): Normalgegner
+
+    /// <summary>Feuerschote: rote Chili mit brennendem Zuendschnur-Stiel, marschiert auf Stummelbeinen.</summary>
+    Feuerschote = 70,
+
+    /// <summary>Lavakuchen: Schoko-Fondant als Mini-Vulkan mit Puderzucker-Haube, der fluessige Kern blubbert ueber.</summary>
+    Lavakuchen = 71,
+
+    /// <summary>Takoyaki: Oktopus-Baellchen trippelt auf seinen Tentakeln, Bonitoflocken tanzen in der Hitze. Flink.</summary>
+    Takoyaki = 72,
+
+    /// <summary>Kaesefondue: Caquelon mit Schweizerkreuzen stapft auf dem Rechaud-Dreibein, Kaese blubbert. Zaeh.</summary>
+    Kaesefondue = 73,
+
+    /// <summary>Schaschlik: Grillspiess, huepft auf seiner Holzspitze wie auf einem Pogo-Stick (HopMovement).</summary>
+    Schaschlik = 74,
+
+    /// <summary>Wasabi-Klecks: kriechender Wasabi mit Ingwer-Huetchen, dem selbst die Augen traenen.</summary>
+    Wasabiklecks = 75,
+
+    /// <summary>Pizzastueck: Peperoni-Pizza auf Teigbeinchen, der Kaese tropft ueber den Rand.</summary>
+    Pizzastueck = 76,
+
+    /// <summary>Drachenfrucht: kleiner Pitaya-Drache mit gruenen Schuppenblatt-Zacken, stapft.</summary>
+    Drachenfrucht = 77,
+
+    /// <summary>Ofenbrot-Golem: riesiger Brotlaib mit gluehenden Einschnitten und Baguette-Armen. Der Brocken der Vulkanwelt.</summary>
+    Brotgolem = 78,
+
+    /// <summary>Knisterbrause: Brocken Brausekristall, huepft knisternd heran. Schneller Schwarmgegner.</summary>
+    Knisterbrause = 79,
 }
 
 /// <summary>
@@ -864,12 +896,12 @@ public static class EnemyCatalog
             colliderRadius: 0.4f, colliderOffset: new Vector2(0f, 0.4f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Gegner/Walnusskrabbe.prefab");
 
-        Def(EnemyId.Alraune, "Radieschen-Alraune",
+        Def(EnemyId.Honigbaer, "Honigbaerchen",
             health: 35f, damage: 5f, speed: 1.8f, exp: 12, pushTime: 0.2f,
-            role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
-            sheet: "Assets/Art/Gegner/new/wald/alraune_marsch.png", fps: 14f,
-            colliderRadius: 0.31f, colliderOffset: new Vector2(0f, 0.52f), scale: 1f,
-            prefab: "Assets/Prefabs/Enemy/Gegner/Alraune.prefab");
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/wald/honigbaer_watschel.png", fps: 14f,
+            colliderRadius: 0.34f, colliderOffset: new Vector2(0f, 0.42f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Honigbaer.prefab");
 
         Def(EnemyId.Eiswuerfelbaer, "Eiswuerfel-Baer",
             health: 45f, damage: 5f, speed: 1.4f, exp: 14, pushTime: 0.2f,
@@ -961,6 +993,76 @@ public static class EnemyCatalog
             sheet: "Assets/Art/Gegner/new/geist/flambierkirsche_flitz.png", fps: 16f,
             colliderRadius: 0.26f, colliderOffset: new Vector2(0f, 0.32f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Gegner/Flambierkirsche.prefab");
+
+        Def(EnemyId.Feuerschote, "Feuerschote",
+            health: 40f, damage: 6f, speed: 2f, exp: 13, pushTime: 0.2f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/vulkan/feuerschote_marsch.png", fps: 14f,
+            colliderRadius: 0.3f, colliderOffset: new Vector2(0f, 0.45f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Feuerschote.prefab");
+
+        Def(EnemyId.Lavakuchen, "Lavakuchen",
+            health: 55f, damage: 6f, speed: 1.4f, exp: 16, pushTime: 0.2f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/vulkan/lavakuchen_watschel.png", fps: 12f,
+            colliderRadius: 0.36f, colliderOffset: new Vector2(0f, 0.3f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Lavakuchen.prefab");
+
+        Def(EnemyId.Takoyaki, "Takoyaki",
+            health: 30f, damage: 5f, speed: 2.4f, exp: 11, pushTime: 0.25f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/vulkan/takoyaki_trippel.png", fps: 16f,
+            colliderRadius: 0.32f, colliderOffset: new Vector2(0f, 0.45f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Takoyaki.prefab");
+
+        Def(EnemyId.Kaesefondue, "Kaesefondue",
+            health: 70f, damage: 6f, speed: 1.4f, exp: 24, pushTime: 0.15f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/vulkan/fondue_stapf.png", fps: 12f,
+            colliderRadius: 0.42f, colliderOffset: new Vector2(0f, 0.7f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Kaesefondue.prefab");
+
+        Def(EnemyId.Schaschlik, "Schaschlik",
+            health: 45f, damage: 6f, speed: 1.9f, exp: 14, pushTime: 0.25f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/vulkan/schaschlik_hops.png", fps: 14f,
+            colliderRadius: 0.3f, colliderOffset: new Vector2(0f, 0.75f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Schaschlik.prefab", hopFirst: 3, hopLast: 9);
+
+        Def(EnemyId.Wasabiklecks, "Wasabi-Klecks",
+            health: 50f, damage: 5f, speed: 1.3f, exp: 15, pushTime: 0.2f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/vulkan/wasabi_kriech.png", fps: 12f,
+            colliderRadius: 0.38f, colliderOffset: new Vector2(0f, 0.3f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Wasabiklecks.prefab");
+
+        Def(EnemyId.Pizzastueck, "Pizzastueck",
+            health: 45f, damage: 6f, speed: 1.7f, exp: 14, pushTime: 0.2f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/vulkan/pizza_stapf.png", fps: 14f,
+            colliderRadius: 0.34f, colliderOffset: new Vector2(0f, 0.5f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Pizzastueck.prefab");
+
+        Def(EnemyId.Drachenfrucht, "Drachenfrucht",
+            health: 40f, damage: 6f, speed: 2.1f, exp: 14, pushTime: 0.2f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/vulkan/drachenfrucht_stapf.png", fps: 14f,
+            colliderRadius: 0.32f, colliderOffset: new Vector2(0f, 0.48f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Drachenfrucht.prefab");
+
+        Def(EnemyId.Brotgolem, "Ofenbrot-Golem",
+            health: 160f, damage: 9f, speed: 1.1f, exp: 45, pushTime: 0.1f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/vulkan/brotgolem_stapf.png", fps: 12f,
+            colliderRadius: 0.55f, colliderOffset: new Vector2(0f, 0.75f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Brotgolem.prefab");
+
+        Def(EnemyId.Knisterbrause, "Knisterbrause",
+            health: 14f, damage: 4f, speed: 2.8f, exp: 5, pushTime: 0.3f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/vulkan/knisterbrause_huepf.png", fps: 16f,
+            colliderRadius: 0.24f, colliderOffset: new Vector2(0f, 0.25f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Knisterbrause.prefab");
 
         // ---------------------------------------------------------- Archiv
         //

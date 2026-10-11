@@ -32,8 +32,9 @@ public static class WavePlans
     /// Gespielt werden zurzeit World1 (Kueche, Karte 1, Szene Map_World0),
     /// World2 (Wald, Karte 2, Szene Map_World3 - planId dort fest eingetragen)
     /// World5 (Eisgletscher, Karte 3, Szene Map_World5 - kommt ueber den
-    /// mapName der Karte, die planId dort ist leer) und World6 (Geisterwald,
-    /// Karte 4, Szene Map_World6 - ebenso ueber den mapName).
+    /// mapName der Karte, die planId dort ist leer), World6 (Geisterwald,
+    /// Karte 4, Szene Map_World6 - ebenso ueber den mapName) und World4
+    /// (Vulkanwelt, Karte 5, Szene Map_World4 - ebenso ueber den mapName).
     /// </summary>
     public static RunPlan For(string planId)
     {
@@ -43,6 +44,7 @@ public static class WavePlans
             case "world2demo": return World2Demo();
             case "world5": return World5();
             case "world6": return World6();
+            case "world4": return World4();
             default: return World1();
         }
     }
@@ -68,7 +70,7 @@ public static class WavePlans
     }
 
     /// <summary>Alle Plaene, die es gibt - fuer die Werkstatt und den Vergleich.</summary>
-    public static readonly string[] AllIds = { "World1", "World2", "World2Demo", "World5", "World6" };
+    public static readonly string[] AllIds = { "World1", "World2", "World2Demo", "World5", "World6", "World4" };
 
     // ================================================================
     // WERKSTATT-ANFANG - alles hier drin schreibt das Tool neu.
@@ -233,7 +235,7 @@ public static class WavePlans
     /// Der Fluegeldolch (Fledermaus) ist seit Oktober 2026 in den Geisterwald
     /// (World6) umgezogen.
     ///
-    /// Seit Welle 4 dazu: Beerenspinne (Phase 2), Maronen-Igel + Radieschen-Alraune
+    /// Seit Welle 4 dazu: Beerenspinne (Phase 2), Maronen-Igel + Honigbaerchen
     /// (Phase 3), Walnuss-Krabbe (Phase 4); dieselben auch im Demo-Plan.
     ///
     /// Elites kommen nicht nur im Ring, sondern immer wieder zwischendurch -
@@ -282,7 +284,7 @@ public static class WavePlans
             .Pool(EnemyId.WeisseMessermaus, 20f)
             .Pool(EnemyId.Eichel, 25f)
             .Pool(EnemyId.Maronenigel, 15f)
-            .Pool(EnemyId.Alraune, 10f)
+            .Pool(EnemyId.Honigbaer, 10f)
             .Pressure(100f, 200f)
             .Base(Patterns.Scatter)
             .Burst(20f, EnemyId.EliteFluegdolch, 1f, Patterns.Ambush, 0f)
@@ -299,14 +301,14 @@ public static class WavePlans
             .Pool(EnemyId.Eichel, 30f)
             .Pool(EnemyId.WeisseMessermaus, 15f)
             .Pool(EnemyId.Honey, 20f)
-            .Pool(EnemyId.Alraune, 15f)
+            .Pool(EnemyId.Honigbaer, 15f)
             .Pool(EnemyId.Walnusskrabbe, 10f)
             .Pressure(240f, 350f)
             .Base(Patterns.Scatter)
             .Burst(20f, EnemyId.EliteFliegenpilz, 1f, Patterns.Ambush, 0f)
             .Burst(50f, EnemyId.Honey, 40f, Patterns.Arc, 0f)
             .Burst(80f, EnemyId.EliteFluegdolch, 1f, Patterns.Arc, 0f)
-            .Burst(95f, EnemyId.Alraune, 24f, Patterns.Arc, 0f)
+            .Burst(95f, EnemyId.Honigbaer, 24f, Patterns.Arc, 0f)
             .Calm(110f, 8f, 0.15f)
             .Encircle(145f, EnemyId.EliteFliegenpilz, EnemyId.Eichel, 26, 15f, false, "PILZKOENIG!", 0.35f, 25f, 1.5f)
             .Burst(190f, EnemyId.Walnusskrabbe, 20f, Patterns.Ambush, 0f)
@@ -328,7 +330,7 @@ public static class WavePlans
             .Pool(EnemyId.Honey, 15f)
             .Pool(EnemyId.Pancake, 15f)
             .Pool(EnemyId.Walnusskrabbe, 10f)
-            .Pool(EnemyId.Alraune, 10f)
+            .Pool(EnemyId.Honigbaer, 10f)
             .Pressure(140f, 140f)
             .Base(Patterns.Scatter)
             .Burst(30f, EnemyId.EliteFliegenpilz, 1f, Patterns.Ambush, 0f)
@@ -410,7 +412,7 @@ public static class WavePlans
             .Pool(EnemyId.WeisseMessermaus, 20f)
             .Pool(EnemyId.Eichel, 25f)
             .Pool(EnemyId.Maronenigel, 15f)
-            .Pool(EnemyId.Alraune, 10f)
+            .Pool(EnemyId.Honigbaer, 10f)
             .Pressure(70f, 140f)
             .Base(Patterns.Scatter)
             .Burst(40f, EnemyId.Eichel, 16f, Patterns.Ambush, 0f)
@@ -426,7 +428,7 @@ public static class WavePlans
             .Pool(EnemyId.Eichel, 30f)
             .Pool(EnemyId.WeisseMessermaus, 20f)
             .Pool(EnemyId.Kirschslime, 10f)
-            .Pool(EnemyId.Alraune, 15f)
+            .Pool(EnemyId.Honigbaer, 15f)
             .Pool(EnemyId.Walnusskrabbe, 10f)
             .Pressure(140f, 155f)
             .Base(Patterns.Scatter);
@@ -446,7 +448,7 @@ public static class WavePlans
             .Pool(EnemyId.Honey, 15f)
             .Pool(EnemyId.Pancake, 15f)
             .Pool(EnemyId.Walnusskrabbe, 10f)
-            .Pool(EnemyId.Alraune, 10f)
+            .Pool(EnemyId.Honigbaer, 10f)
             .Pressure(100f, 100f)
             .Base(Patterns.Scatter)
             .Encircle(60f, EnemyId.None, EnemyId.Eichel, 20, 14f, false, "RING!", 0.35f, 25f, 1.5f)
@@ -721,6 +723,121 @@ public static class WavePlans
             .Pool(EnemyId.Gluehwurm, 5f)
             .Pool(EnemyId.Fluegeldolch, 5f)
             .Pressure(100f, 100f)
+            .Base(Patterns.Scatter);
+
+        return plan;
+    }
+    // ------------------------------------------------------------- World4
+
+    /// <summary>
+    /// Vulkanwelt - Karte 5 in der Levelauswahl, die letzte Welt. Im Takt der
+    /// Kueche (gleiche Phasen), aber mit mehr Druck als der Geisterwald.
+    ///
+    /// Seit Oktober 2026 mit eigenen Gegnern (lauter heisses, scharfes und
+    /// gebackenes Essen). Jede Phase stellt neue vor, meist mit einem eigenen
+    /// Burst. Einen Boss gibt es noch nicht - nach 20:00 geht es mit voller
+    /// Mischung weiter, dann Endlos.
+    ///
+    ///   0:00  Anlauf (5 s), Knisterbrause
+    ///   0:05  + Feuerschoten, Takoyaki
+    ///   3:00  + Lavakuchen, Pizzastuecke, Schaschliks (Huepfer)
+    ///   9:00  + Kaesefondue (zaeh), Wasabi-Kleckse, Drachenfruechte
+    ///  14:00  + Ofenbrot-Golems (Brocken)
+    ///  20:00  alles, hoher Druck
+    /// </summary>
+    public static RunPlan World4()
+    {
+        var plan = new RunPlan("World4");
+
+        plan.Phase(5f)
+            .Pool(EnemyId.Knisterbrause, 100f)
+            .Pressure(3.3f, 3.3f)
+            .Base(Patterns.Scatter);
+
+        plan.Phase(175f)
+            .Pool(EnemyId.Knisterbrause, 35f)
+            .Pool(EnemyId.Feuerschote, 35f)
+            .Pool(EnemyId.Takoyaki, 30f)
+            .Pressure(12f, 32f)
+            .Base(Patterns.Scatter)
+            .Burst(60f, EnemyId.Knisterbrause, 14f, Patterns.Arc, 0f)
+            .Burst(120f, EnemyId.Feuerschote, 8f, Patterns.Cluster, 0f);
+
+        plan.Phase(360f)
+            .Pool(EnemyId.Feuerschote, 20f)
+            .Pool(EnemyId.Takoyaki, 20f)
+            .Pool(EnemyId.Lavakuchen, 20f)
+            .Pool(EnemyId.Pizzastueck, 15f)
+            .Pool(EnemyId.Schaschlik, 10f)
+            .Pool(EnemyId.Knisterbrause, 15f)
+            .Pressure(32f, 64f)
+            .Base(Patterns.Scatter)
+            .Burst(30f, EnemyId.Lavakuchen, 10f, Patterns.Column, 0f)
+            .Calm(75f, 10f, 0.15f)
+            .Burst(110f, EnemyId.Takoyaki, 12f, Patterns.Ambush, 0f)
+            .Burst(150f, EnemyId.Schaschlik, 10f, Patterns.Arc, 0f)
+            .Calm(195f, 10f, 0.15f)
+            .Burst(240f, EnemyId.Pizzastueck, 12f, Patterns.Cluster, 0f)
+            .Burst(300f, EnemyId.Knisterbrause, 24f, Patterns.Arc, 0f);
+
+        plan.Phase(300f)
+            .Pool(EnemyId.Lavakuchen, 15f)
+            .Pool(EnemyId.Pizzastueck, 15f)
+            .Pool(EnemyId.Schaschlik, 10f)
+            .Pool(EnemyId.Kaesefondue, 15f)
+            .Pool(EnemyId.Wasabiklecks, 15f)
+            .Pool(EnemyId.Drachenfrucht, 15f)
+            .Pool(EnemyId.Takoyaki, 15f)
+            .Pressure(80f, 150f)
+            .Base(Patterns.Scatter)
+            .Burst(20f, EnemyId.Kaesefondue, 10f, Patterns.Column, 0f)
+            .Burst(60f, EnemyId.Drachenfrucht, 12f, Patterns.Arc, 0f)
+            .Calm(95f, 10f, 0.15f)
+            .Burst(130f, EnemyId.Wasabiklecks, 14f, Patterns.Cluster, 0f)
+            .Burst(180f, EnemyId.Takoyaki, 16f, Patterns.Ambush, 0f)
+            .Calm(215f, 10f, 0.15f)
+            .Burst(250f, EnemyId.Knisterbrause, 30f, Patterns.Arc, 0f);
+
+        plan.Phase(358f)
+            .Pool(EnemyId.Brotgolem, 15f)
+            .Pool(EnemyId.Kaesefondue, 15f)
+            .Pool(EnemyId.Wasabiklecks, 10f)
+            .Pool(EnemyId.Drachenfrucht, 15f)
+            .Pool(EnemyId.Pizzastueck, 10f)
+            .Pool(EnemyId.Feuerschote, 15f)
+            .Pool(EnemyId.Knisterbrause, 20f)
+            .Pressure(150f, 185f)
+            .Base(Patterns.Scatter)
+            .Burst(30f, EnemyId.Brotgolem, 10f, Patterns.Ambush, 0f)
+            .Calm(120f, 10f, 0.15f)
+            .Burst(160f, EnemyId.Knisterbrause, 34f, Patterns.Arc, 0f)
+            .Burst(220f, EnemyId.Brotgolem, 14f, Patterns.Column, 0f)
+            .Calm(290f, 10f, 0.15f)
+            .Burst(320f, EnemyId.Schaschlik, 16f, Patterns.Cluster, 0f);
+
+        plan.Phase(600f)
+            .Pool(EnemyId.Brotgolem, 20f)
+            .Pool(EnemyId.Kaesefondue, 15f)
+            .Pool(EnemyId.Drachenfrucht, 15f)
+            .Pool(EnemyId.Wasabiklecks, 10f)
+            .Pool(EnemyId.Lavakuchen, 10f)
+            .Pool(EnemyId.Takoyaki, 15f)
+            .Pool(EnemyId.Knisterbrause, 15f)
+            .Pressure(300f, 450f)
+            .Base(Patterns.Scatter);
+
+        plan.EndlessPhase()
+            .Pool(EnemyId.Brotgolem, 15f)
+            .Pool(EnemyId.Kaesefondue, 10f)
+            .Pool(EnemyId.Drachenfrucht, 10f)
+            .Pool(EnemyId.Wasabiklecks, 10f)
+            .Pool(EnemyId.Lavakuchen, 10f)
+            .Pool(EnemyId.Pizzastueck, 10f)
+            .Pool(EnemyId.Schaschlik, 5f)
+            .Pool(EnemyId.Takoyaki, 10f)
+            .Pool(EnemyId.Feuerschote, 10f)
+            .Pool(EnemyId.Knisterbrause, 10f)
+            .Pressure(110f, 110f)
             .Base(Patterns.Scatter);
 
         return plan;

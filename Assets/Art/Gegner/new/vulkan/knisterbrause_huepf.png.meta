@@ -1,0 +1,419 @@
+fileFormatVersion: 2
+guid: d649e874ae3f4d5f9715e3611943d2cd
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1171847867441378446
+    second: knisterbrause_huepf_0
+  - first:
+      213: 4022153688769276740
+    second: knisterbrause_huepf_1
+  - first:
+      213: 2146012028381236453
+    second: knisterbrause_huepf_2
+  - first:
+      213: 4150726724051998765
+    second: knisterbrause_huepf_3
+  - first:
+      213: 2546846833652302306
+    second: knisterbrause_huepf_4
+  - first:
+      213: 2629859571237604803
+    second: knisterbrause_huepf_5
+  - first:
+      213: 1996144485114265422
+    second: knisterbrause_huepf_6
+  - first:
+      213: 3624781295941540116
+    second: knisterbrause_huepf_7
+  - first:
+      213: 3707902575578703154
+    second: knisterbrause_huepf_8
+  - first:
+      213: 2765989379391683082
+    second: knisterbrause_huepf_9
+  - first:
+      213: 4391540102816075876
+    second: knisterbrause_huepf_10
+  - first:
+      213: 3829685634748324266
+    second: knisterbrause_huepf_11
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: knisterbrause_huepf_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 28
+        height: 32
+      alignment: 9
+      pivot: {x: 0.4642857142857143, y: 0.09375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 79c6599b620440548e7136d6e3a10cf6
+      internalID: 1171847867441378446
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knisterbrause_huepf_1
+      rect:
+        serializedVersion: 2
+        x: 28
+        y: 0
+        width: 28
+        height: 32
+      alignment: 9
+      pivot: {x: 0.4642857142857143, y: 0.09375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d7f77d9bf6146de8f2e39b8e371ac80
+      internalID: 4022153688769276740
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knisterbrause_huepf_2
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 0
+        width: 28
+        height: 32
+      alignment: 9
+      pivot: {x: 0.4642857142857143, y: 0.09375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8524c37909494319a81d8610177b1f3d
+      internalID: 2146012028381236453
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knisterbrause_huepf_3
+      rect:
+        serializedVersion: 2
+        x: 84
+        y: 0
+        width: 28
+        height: 32
+      alignment: 9
+      pivot: {x: 0.4642857142857143, y: 0.09375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e9f5d42365804a919f0e0ed256dcb81a
+      internalID: 4150726724051998765
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knisterbrause_huepf_4
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 0
+        width: 28
+        height: 32
+      alignment: 9
+      pivot: {x: 0.4642857142857143, y: 0.09375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4d0a44d1cd474c75953abaa96de77654
+      internalID: 2546846833652302306
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knisterbrause_huepf_5
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 0
+        width: 28
+        height: 32
+      alignment: 9
+      pivot: {x: 0.4642857142857143, y: 0.09375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 99cf28eb179b4524b0625d83df442479
+      internalID: 2629859571237604803
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knisterbrause_huepf_6
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 0
+        width: 28
+        height: 32
+      alignment: 9
+      pivot: {x: 0.4642857142857143, y: 0.09375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 051fd0c437404911a45a53cd202c354e
+      internalID: 1996144485114265422
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knisterbrause_huepf_7
+      rect:
+        serializedVersion: 2
+        x: 196
+        y: 0
+        width: 28
+        height: 32
+      alignment: 9
+      pivot: {x: 0.4642857142857143, y: 0.09375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a4b375bf746044ca8ba101c43b7714d1
+      internalID: 3624781295941540116
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knisterbrause_huepf_8
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 0
+        width: 28
+        height: 32
+      alignment: 9
+      pivot: {x: 0.4642857142857143, y: 0.09375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8fe8d7d2cf2f411886274d993289ce98
+      internalID: 3707902575578703154
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knisterbrause_huepf_9
+      rect:
+        serializedVersion: 2
+        x: 252
+        y: 0
+        width: 28
+        height: 32
+      alignment: 9
+      pivot: {x: 0.4642857142857143, y: 0.09375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a0357346f3be4b58ad42bfc055a69e75
+      internalID: 2765989379391683082
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knisterbrause_huepf_10
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 0
+        width: 28
+        height: 32
+      alignment: 9
+      pivot: {x: 0.4642857142857143, y: 0.09375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9006fadddc75487a8b59c77d311aeb2a
+      internalID: 4391540102816075876
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knisterbrause_huepf_11
+      rect:
+        serializedVersion: 2
+        x: 308
+        y: 0
+        width: 28
+        height: 32
+      alignment: 9
+      pivot: {x: 0.4642857142857143, y: 0.09375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f764ff8672d3468ebb74f9d6d976a01a
+      internalID: 3829685634748324266
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      knisterbrause_huepf_0: 1171847867441378446
+      knisterbrause_huepf_1: 4022153688769276740
+      knisterbrause_huepf_10: 4391540102816075876
+      knisterbrause_huepf_11: 3829685634748324266
+      knisterbrause_huepf_2: 2146012028381236453
+      knisterbrause_huepf_3: 4150726724051998765
+      knisterbrause_huepf_4: 2546846833652302306
+      knisterbrause_huepf_5: 2629859571237604803
+      knisterbrause_huepf_6: 1996144485114265422
+      knisterbrause_huepf_7: 3624781295941540116
+      knisterbrause_huepf_8: 3707902575578703154
+      knisterbrause_huepf_9: 2765989379391683082
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

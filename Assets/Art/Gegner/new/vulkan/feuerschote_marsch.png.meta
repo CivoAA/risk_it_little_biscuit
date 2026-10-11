@@ -1,43 +1,43 @@
 fileFormatVersion: 2
-guid: 9740a3afd6e14c65802f311727c1c8c4
+guid: 5931add109c04ee5816b409b77b05d4f
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4475320117677619546
-    second: alraune_marsch_0
+      213: 1816603404204048378
+    second: feuerschote_marsch_0
   - first:
-      213: 1346447466904319548
-    second: alraune_marsch_1
+      213: 3969770458642448109
+    second: feuerschote_marsch_1
   - first:
-      213: 1345790593460040071
-    second: alraune_marsch_2
+      213: 2739027824954558741
+    second: feuerschote_marsch_2
   - first:
-      213: 3594627537488254839
-    second: alraune_marsch_3
+      213: 1656875373347610198
+    second: feuerschote_marsch_3
   - first:
-      213: 4163286942075036942
-    second: alraune_marsch_4
+      213: 4335638788524581624
+    second: feuerschote_marsch_4
   - first:
-      213: 1635999113323194113
-    second: alraune_marsch_5
+      213: 1970621888028449032
+    second: feuerschote_marsch_5
   - first:
-      213: 2660813357952926058
-    second: alraune_marsch_6
+      213: 3638843585974991351
+    second: feuerschote_marsch_6
   - first:
-      213: 3697873792725630240
-    second: alraune_marsch_7
+      213: 3921301116412258950
+    second: feuerschote_marsch_7
   - first:
-      213: 2068826727333641673
-    second: alraune_marsch_8
+      213: 3920064402210470611
+    second: feuerschote_marsch_8
   - first:
-      213: 3634006695826719515
-    second: alraune_marsch_9
+      213: 1531181734386687173
+    second: feuerschote_marsch_9
   - first:
-      213: 2151314381143562825
-    second: alraune_marsch_10
+      213: 3078495636068156656
+    second: feuerschote_marsch_10
   - first:
-      213: 1812486811280320811
-    second: alraune_marsch_11
+      213: 3552636740564979985
+    second: feuerschote_marsch_11
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -133,265 +133,265 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: alraune_marsch_0
+      name: feuerschote_marsch_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 34
-        height: 44
+        height: 52
       alignment: 9
-      pivot: {x: 0.5, y: 0.06818181818181818}
+      pivot: {x: 0.47058823529411764, y: 0.057692307692307696}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c03ae5e4fce54f559c7b6f4d834a380c
-      internalID: 4475320117677619546
+      spriteID: f184d2a941e643c08016ba8a31618e8c
+      internalID: 1816603404204048378
       vertices: []
       indices:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: alraune_marsch_1
+      name: feuerschote_marsch_1
       rect:
         serializedVersion: 2
         x: 34
         y: 0
         width: 34
-        height: 44
+        height: 52
       alignment: 9
-      pivot: {x: 0.5, y: 0.06818181818181818}
+      pivot: {x: 0.47058823529411764, y: 0.057692307692307696}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 29afc6b3b946448bbe79870d249b5c9a
-      internalID: 1346447466904319548
+      spriteID: c85a1cdb32fe4e4ca6844597572f51ac
+      internalID: 3969770458642448109
       vertices: []
       indices:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: alraune_marsch_2
+      name: feuerschote_marsch_2
       rect:
         serializedVersion: 2
         x: 68
         y: 0
         width: 34
-        height: 44
+        height: 52
       alignment: 9
-      pivot: {x: 0.5, y: 0.06818181818181818}
+      pivot: {x: 0.47058823529411764, y: 0.057692307692307696}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e9e2112779be4efca2b8b5007b79c1b2
-      internalID: 1345790593460040071
+      spriteID: bb01d892dee9487e9c208e1797f16235
+      internalID: 2739027824954558741
       vertices: []
       indices:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: alraune_marsch_3
+      name: feuerschote_marsch_3
       rect:
         serializedVersion: 2
         x: 102
         y: 0
         width: 34
-        height: 44
+        height: 52
       alignment: 9
-      pivot: {x: 0.5, y: 0.06818181818181818}
+      pivot: {x: 0.47058823529411764, y: 0.057692307692307696}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d8962aa80eb9443f86af71a0073195ab
-      internalID: 3594627537488254839
+      spriteID: 4f9d4bae84b1487c973cd47fe1be0cc0
+      internalID: 1656875373347610198
       vertices: []
       indices:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: alraune_marsch_4
+      name: feuerschote_marsch_4
       rect:
         serializedVersion: 2
         x: 136
         y: 0
         width: 34
-        height: 44
+        height: 52
       alignment: 9
-      pivot: {x: 0.5, y: 0.06818181818181818}
+      pivot: {x: 0.47058823529411764, y: 0.057692307692307696}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 7a36b479811942748cdd94674611bbbd
-      internalID: 4163286942075036942
+      spriteID: ca192b18665c4e32a7add76ec00b3128
+      internalID: 4335638788524581624
       vertices: []
       indices:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: alraune_marsch_5
+      name: feuerschote_marsch_5
       rect:
         serializedVersion: 2
         x: 170
         y: 0
         width: 34
-        height: 44
+        height: 52
       alignment: 9
-      pivot: {x: 0.5, y: 0.06818181818181818}
+      pivot: {x: 0.47058823529411764, y: 0.057692307692307696}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b375b45ea684499a89b975807f4692db
-      internalID: 1635999113323194113
+      spriteID: cf2121e3155b44e796ca3a58a2179b08
+      internalID: 1970621888028449032
       vertices: []
       indices:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: alraune_marsch_6
+      name: feuerschote_marsch_6
       rect:
         serializedVersion: 2
         x: 204
         y: 0
         width: 34
-        height: 44
+        height: 52
       alignment: 9
-      pivot: {x: 0.5, y: 0.06818181818181818}
+      pivot: {x: 0.47058823529411764, y: 0.057692307692307696}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c0d6e1dea31248bcadfc3a252f86a264
-      internalID: 2660813357952926058
+      spriteID: b0c583e28f7f4e42a9260e3c50b5f4bd
+      internalID: 3638843585974991351
       vertices: []
       indices:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: alraune_marsch_7
+      name: feuerschote_marsch_7
       rect:
         serializedVersion: 2
         x: 238
         y: 0
         width: 34
-        height: 44
+        height: 52
       alignment: 9
-      pivot: {x: 0.5, y: 0.06818181818181818}
+      pivot: {x: 0.47058823529411764, y: 0.057692307692307696}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e883faa19f054f1b9e4f03043016012d
-      internalID: 3697873792725630240
+      spriteID: c8267ac97d4740e49b0ee655382eed19
+      internalID: 3921301116412258950
       vertices: []
       indices:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: alraune_marsch_8
+      name: feuerschote_marsch_8
       rect:
         serializedVersion: 2
         x: 272
         y: 0
         width: 34
-        height: 44
+        height: 52
       alignment: 9
-      pivot: {x: 0.5, y: 0.06818181818181818}
+      pivot: {x: 0.47058823529411764, y: 0.057692307692307696}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 571e08f08d934d028149d44be4828b2b
-      internalID: 2068826727333641673
+      spriteID: 416aa63f285147d0aec12c581402fa3d
+      internalID: 3920064402210470611
       vertices: []
       indices:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: alraune_marsch_9
+      name: feuerschote_marsch_9
       rect:
         serializedVersion: 2
         x: 306
         y: 0
         width: 34
-        height: 44
+        height: 52
       alignment: 9
-      pivot: {x: 0.5, y: 0.06818181818181818}
+      pivot: {x: 0.47058823529411764, y: 0.057692307692307696}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 35f09bcb5e9f4950951af30552900466
-      internalID: 3634006695826719515
+      spriteID: 104c4f972dab4db589501b0b727d2a94
+      internalID: 1531181734386687173
       vertices: []
       indices:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: alraune_marsch_10
+      name: feuerschote_marsch_10
       rect:
         serializedVersion: 2
         x: 340
         y: 0
         width: 34
-        height: 44
+        height: 52
       alignment: 9
-      pivot: {x: 0.5, y: 0.06818181818181818}
+      pivot: {x: 0.47058823529411764, y: 0.057692307692307696}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5385602c3f3a49d1a98a774757274fad
-      internalID: 2151314381143562825
+      spriteID: 2c286a5f7ec94562865ebd381137a8c8
+      internalID: 3078495636068156656
       vertices: []
       indices:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: alraune_marsch_11
+      name: feuerschote_marsch_11
       rect:
         serializedVersion: 2
         x: 374
         y: 0
         width: 34
-        height: 44
+        height: 52
       alignment: 9
-      pivot: {x: 0.5, y: 0.06818181818181818}
+      pivot: {x: 0.47058823529411764, y: 0.057692307692307696}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: bdf17951494f4480a3394cbc5ca33126
-      internalID: 1812486811280320811
+      spriteID: 291886d1c8ea471893349218f26d983e
+      internalID: 3552636740564979985
       vertices: []
       indices:
       edges: []
@@ -400,18 +400,18 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      alraune_marsch_0: 4475320117677619546
-      alraune_marsch_1: 1346447466904319548
-      alraune_marsch_10: 2151314381143562825
-      alraune_marsch_11: 1812486811280320811
-      alraune_marsch_2: 1345790593460040071
-      alraune_marsch_3: 3594627537488254839
-      alraune_marsch_4: 4163286942075036942
-      alraune_marsch_5: 1635999113323194113
-      alraune_marsch_6: 2660813357952926058
-      alraune_marsch_7: 3697873792725630240
-      alraune_marsch_8: 2068826727333641673
-      alraune_marsch_9: 3634006695826719515
+      feuerschote_marsch_0: 1816603404204048378
+      feuerschote_marsch_1: 3969770458642448109
+      feuerschote_marsch_10: 3078495636068156656
+      feuerschote_marsch_11: 3552636740564979985
+      feuerschote_marsch_2: 2739027824954558741
+      feuerschote_marsch_3: 1656875373347610198
+      feuerschote_marsch_4: 4335638788524581624
+      feuerschote_marsch_5: 1970621888028449032
+      feuerschote_marsch_6: 3638843585974991351
+      feuerschote_marsch_7: 3921301116412258950
+      feuerschote_marsch_8: 3920064402210470611
+      feuerschote_marsch_9: 1531181734386687173
   mipmapLimitGroupName:
   pSDRemoveMatte: 0
   userData:

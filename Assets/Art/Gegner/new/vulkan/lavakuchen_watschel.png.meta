@@ -1,0 +1,419 @@
+fileFormatVersion: 2
+guid: 7428270bc37841369eff61289c3a4311
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3370912668712932987
+    second: lavakuchen_watschel_0
+  - first:
+      213: 3027678611874659805
+    second: lavakuchen_watschel_1
+  - first:
+      213: 3030407773197118295
+    second: lavakuchen_watschel_2
+  - first:
+      213: 1597724837434538011
+    second: lavakuchen_watschel_3
+  - first:
+      213: 2606118921074310911
+    second: lavakuchen_watschel_4
+  - first:
+      213: 3839228002665271947
+    second: lavakuchen_watschel_5
+  - first:
+      213: 3390556021310905651
+    second: lavakuchen_watschel_6
+  - first:
+      213: 4575125853531065690
+    second: lavakuchen_watschel_7
+  - first:
+      213: 2024936946137058889
+    second: lavakuchen_watschel_8
+  - first:
+      213: 2652592593454437230
+    second: lavakuchen_watschel_9
+  - first:
+      213: 3582027216943576675
+    second: lavakuchen_watschel_10
+  - first:
+      213: 3767436162916922756
+    second: lavakuchen_watschel_11
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: lavakuchen_watschel_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 40
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 67560d1cea20478a94f5e138c31ad7b1
+      internalID: 3370912668712932987
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lavakuchen_watschel_1
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 0
+        width: 40
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da359f599e62482f9d7e8835088fb58a
+      internalID: 3027678611874659805
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lavakuchen_watschel_2
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 0
+        width: 40
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0c54aef8b81c4420ad39968b93517183
+      internalID: 3030407773197118295
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lavakuchen_watschel_3
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 0
+        width: 40
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4b3178f6a8684e328639752008ea2f37
+      internalID: 1597724837434538011
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lavakuchen_watschel_4
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 0
+        width: 40
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c5572de9c4fe4115ac71872f19248357
+      internalID: 2606118921074310911
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lavakuchen_watschel_5
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 0
+        width: 40
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 50189038beb54aecb953beafb71524c1
+      internalID: 3839228002665271947
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lavakuchen_watschel_6
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 0
+        width: 40
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 50b0ee91db0f4338bdd8151ecc8b4977
+      internalID: 3390556021310905651
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lavakuchen_watschel_7
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 0
+        width: 40
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8db1a32c21274c51a1e47824b8c5d776
+      internalID: 4575125853531065690
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lavakuchen_watschel_8
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 0
+        width: 40
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6cde625d5f9e4207b5f76c17e5ad722a
+      internalID: 2024936946137058889
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lavakuchen_watschel_9
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 0
+        width: 40
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a1b681c4996e498fb019da3982c561b1
+      internalID: 2652592593454437230
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lavakuchen_watschel_10
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 0
+        width: 40
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d01b72dfa8a4bc4af6c81fe59d279f9
+      internalID: 3582027216943576675
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lavakuchen_watschel_11
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 0
+        width: 40
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ccf1221959cf4dd5b85660576c00bb94
+      internalID: 3767436162916922756
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      lavakuchen_watschel_0: 3370912668712932987
+      lavakuchen_watschel_1: 3027678611874659805
+      lavakuchen_watschel_10: 3582027216943576675
+      lavakuchen_watschel_11: 3767436162916922756
+      lavakuchen_watschel_2: 3030407773197118295
+      lavakuchen_watschel_3: 1597724837434538011
+      lavakuchen_watschel_4: 2606118921074310911
+      lavakuchen_watschel_5: 3839228002665271947
+      lavakuchen_watschel_6: 3390556021310905651
+      lavakuchen_watschel_7: 4575125853531065690
+      lavakuchen_watschel_8: 2024936946137058889
+      lavakuchen_watschel_9: 2652592593454437230
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

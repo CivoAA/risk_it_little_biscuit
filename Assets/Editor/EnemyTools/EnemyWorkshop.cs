@@ -142,7 +142,7 @@ public class EnemyWorkshop : EditorWindow
     /// Die Reiter ueber den einfachen Gegnern: eine Welt pro Reiter, gebaut aus
     /// den Wellenplaenen. Wald und Wald-Demo teilen sich einen Reiter.
     /// </summary>
-    private static readonly string[] WorldTabs = { "Kueche", "Wald", "Eis", "Geisterwald", "Ohne Welt" };
+    private static readonly string[] WorldTabs = { "Kueche", "Wald", "Eis", "Geisterwald", "Vulkan", "Ohne Welt" };
 
     private static readonly string[][] WorldTabPlans =
     {
@@ -150,6 +150,7 @@ public class EnemyWorkshop : EditorWindow
         new[] { "World2", "World2Demo" },
         new[] { "World5" },
         new[] { "World6" },
+        new[] { "World4" },
     };
 
     private int worldTab;

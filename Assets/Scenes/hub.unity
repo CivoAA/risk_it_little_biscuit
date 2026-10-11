@@ -15343,7 +15343,7 @@ MonoBehaviour:
     previewWide: {fileID: 3096021773689214460, guid: 940e761b26674e2dac7518fc782af19d, type: 3}
     mapId: 4
     sceneToLoad: 
-    planId: 
+    planId: World4
     boss: 32
     ambience: 5
     storyUnlockId: Level5_Story

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1841739100171421725}
   - component: {fileID: 1295165261772989782}
   m_Layer: 7
-  m_Name: Alraune
+  m_Name: Drachenfrucht
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cf2a57836f388849a7ebd06e6eea9ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 56
+  id: 77
   spriteRenderer: {fileID: 5204262005334877768}
   rb: {fileID: 1841739100171421725}
   destroyEffect: {fileID: 5385887812414731569, guid: 2b4ac13679d26284db801190abb9f4e9, type: 3}
@@ -110,7 +110,7 @@ SpriteRenderer:
   m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 4475320117677619546, guid: 9740a3afd6e14c65802f311727c1c8c4, type: 3}
+  m_Sprite: {fileID: 3826143880368830003, guid: 58ab7f0de387449e85ac2f3a7c72e07d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -130,7 +130,7 @@ Animator:
   m_GameObject: {fileID: 1656260216413292769}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 48763155984544bb87af594a68754e6d, type: 2}
+  m_Controller: {fileID: 9100000, guid: 9dbdf5160e654b66a3ba04413cf00416, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -203,5 +203,5 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.52}
-  m_Radius: 0.31
+  m_Offset: {x: 0, y: 0.48}
+  m_Radius: 0.32
