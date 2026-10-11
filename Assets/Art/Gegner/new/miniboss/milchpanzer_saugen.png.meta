@@ -1,0 +1,315 @@
+fileFormatVersion: 2
+guid: 3a29435a866c49a79da796d800c00ad5
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2975238820921709605
+    second: milchpanzer_saugen_0
+  - first:
+      213: 3949322378409456942
+    second: milchpanzer_saugen_1
+  - first:
+      213: 4184223412152056827
+    second: milchpanzer_saugen_2
+  - first:
+      213: 1544438766062374637
+    second: milchpanzer_saugen_3
+  - first:
+      213: 1451435404074718714
+    second: milchpanzer_saugen_4
+  - first:
+      213: 2200120801678622376
+    second: milchpanzer_saugen_5
+  - first:
+      213: 2135273903440496264
+    second: milchpanzer_saugen_6
+  - first:
+      213: 3218144086475609633
+    second: milchpanzer_saugen_7
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: milchpanzer_saugen_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 112
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0390625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 11b73747da3b4cd8aa2a25a6bce0abc8
+      internalID: 2975238820921709605
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: milchpanzer_saugen_1
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 0
+        width: 112
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0390625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5390e779400547acb4017ce9815c1c05
+      internalID: 3949322378409456942
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: milchpanzer_saugen_2
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 0
+        width: 112
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0390625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6420ff0e8ea34b5182663a0f0b5f84ad
+      internalID: 4184223412152056827
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: milchpanzer_saugen_3
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 0
+        width: 112
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0390625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 791b64af34b44d34afcfb874b4675232
+      internalID: 1544438766062374637
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: milchpanzer_saugen_4
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 0
+        width: 112
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0390625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4bc7d6c48c3741789bedb8a13d0ac2e5
+      internalID: 1451435404074718714
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: milchpanzer_saugen_5
+      rect:
+        serializedVersion: 2
+        x: 560
+        y: 0
+        width: 112
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0390625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d7d044ad221d49a4b4597e2cc7f09418
+      internalID: 2200120801678622376
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: milchpanzer_saugen_6
+      rect:
+        serializedVersion: 2
+        x: 672
+        y: 0
+        width: 112
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0390625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 071cf265d373436e8716b0d6953435cb
+      internalID: 2135273903440496264
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: milchpanzer_saugen_7
+      rect:
+        serializedVersion: 2
+        x: 784
+        y: 0
+        width: 112
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0390625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5680ec28efbf4387b93f56ea70170391
+      internalID: 3218144086475609633
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      milchpanzer_saugen_0: 2975238820921709605
+      milchpanzer_saugen_1: 3949322378409456942
+      milchpanzer_saugen_2: 4184223412152056827
+      milchpanzer_saugen_3: 1544438766062374637
+      milchpanzer_saugen_4: 1451435404074718714
+      milchpanzer_saugen_5: 2200120801678622376
+      milchpanzer_saugen_6: 2135273903440496264
+      milchpanzer_saugen_7: 3218144086475609633
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

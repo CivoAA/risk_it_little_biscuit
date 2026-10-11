@@ -257,7 +257,7 @@ public static class SpecialBuilders
 {
     public static bool Handles(EnemyId id)
     {
-        return id == EnemyId.Glutwurz || id == EnemyId.Schleimkoenig
+        return id == EnemyId.Glutwurz || id == EnemyId.Schleimkoenig || id == EnemyId.Milchpanzer
             || id == EnemyId.Verkohlter || id == EnemyId.VerkohlterTod
             || id == EnemyId.Eiskaiser || id == EnemyId.Lawinenkugel
             || id == EnemyId.Squiddy || id == EnemyId.QuallenBaby;
@@ -270,6 +270,7 @@ public static class SpecialBuilders
         {
             case EnemyId.Glutwurz: return GlutwurzBuilder.Build();
             case EnemyId.Schleimkoenig: return SchleimkoenigBuilder.Build();
+            case EnemyId.Milchpanzer: return MilchpanzerBuilder.Build();
             case EnemyId.Verkohlter:
             case EnemyId.VerkohlterTod: return VerkohlterBuilder.Build(id);
             case EnemyId.Eiskaiser:

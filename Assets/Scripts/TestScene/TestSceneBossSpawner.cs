@@ -28,6 +28,7 @@ public class TestSceneBossSpawner : MonoBehaviour
     private EnemyKeckKönig currentKing;
     private EnemyGlutwurz currentGlutwurz;
     private EnemySchleimkoenig currentSchleimkoenig;
+    private EnemyMilchpanzer currentMilchpanzer;
     private EnemyVerkohlter currentVerkohlter;
     private EnemySquiddy currentSquiddy;
 
@@ -51,6 +52,7 @@ public class TestSceneBossSpawner : MonoBehaviour
             if (currentKing != null) return currentKing.IsPhaseTwo;
             if (currentGlutwurz != null) return currentGlutwurz.IsPhaseTwo;
             if (currentSchleimkoenig != null) return currentSchleimkoenig.IsPhaseTwo;
+            if (currentMilchpanzer != null) return currentMilchpanzer.IsPhaseTwo;
             if (currentVerkohlter != null) return currentVerkohlter.IsPhaseTwo;
             if (currentSquiddy != null) return currentSquiddy.IsPhaseTwo;
             return false;
@@ -109,6 +111,7 @@ public class TestSceneBossSpawner : MonoBehaviour
         currentKing = current.GetComponent<EnemyKeckKönig>();
         currentGlutwurz = current.GetComponent<EnemyGlutwurz>();
         currentSchleimkoenig = current.GetComponent<EnemySchleimkoenig>();
+        currentMilchpanzer = current.GetComponent<EnemyMilchpanzer>();
         currentVerkohlter = current.GetComponent<EnemyVerkohlter>();
         currentSquiddy = current.GetComponent<EnemySquiddy>();
 
@@ -156,6 +159,7 @@ public class TestSceneBossSpawner : MonoBehaviour
         currentKing = null;
         currentGlutwurz = null;
         currentSchleimkoenig = null;
+        currentMilchpanzer = null;
         currentVerkohlter = null;
         currentSquiddy = null;
         return true;

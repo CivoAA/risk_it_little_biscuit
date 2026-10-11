@@ -48,6 +48,11 @@ public enum EnemyId
     Fliegenpilz = 18,
     Fluegeldolch = 19,
     Kirschslime = 20,
+
+    /// <summary>
+    /// Zwischenboss der Kueche: Milchkarton auf Panzerketten mit Strohhalm-Sog
+    /// und Ruelpser (EnemyMilchpanzer). War bis Oktober 2026 ein normaler Brocken.
+    /// </summary>
     Milchpanzer = 21,
     WeisseMessermaus = 22,
 
@@ -611,11 +616,11 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Gegner/Kirschslime.prefab", hopFirst: 4, hopLast: 6);
 
         Def(EnemyId.Milchpanzer, "Milchpanzer",
-            health: 900f, damage: 14f, speed: 1.5f, exp: 650, pushTime: 0f,
-            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesRight,
-            sheet: "Assets/Art/Gegner/new/wirklich_saure_milch_1.png", fps: 8f,
-            colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
-            prefab: "Assets/Prefabs/Enemy/Gegner/Milchpanzer.prefab");
+            health: 3000f, damage: 14f, speed: 1.4f, exp: 700, pushTime: 0f,
+            role: EnemyRole.MiniBoss, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/miniboss/milchpanzer_fahrt.png", fps: 12f,
+            colliderRadius: 1.2f, colliderOffset: new Vector2(0f, 1.25f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Mini_Boss/Milchpanzer.prefab");
 
         Def(EnemyId.Honey, "Honey",
             health: 450f, damage: 10f, speed: 1.4f, exp: 350, pushTime: 0f,

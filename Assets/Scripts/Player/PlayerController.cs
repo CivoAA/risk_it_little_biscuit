@@ -156,6 +156,15 @@ public class PlayerController : MonoBehaviour
 
     public bool IsFrozen => Time.time < FrozenUntil;
 
+    /// <summary>
+    /// Fremder Zug in Einheiten/s (der Strohhalm-Sog des Milchpanzers). Kommt
+    /// zur eigenen Bewegung dazu und wird nach jedem Physikschritt verbraucht -
+    /// wer ziehen will, setzt ihn jeden FixedUpdate neu (<see cref="AddDrift"/>).
+    /// </summary>
+    private Vector2 externalDrift;
+
+    public void AddDrift(Vector2 velocity) => externalDrift += velocity;
+
     private int hitsoundinterval = 10;
     private PlayerHitFeedback hitFeedback;
     private static readonly System.Random rng = new System.Random();
@@ -285,11 +294,12 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         // In der Zwischensequenz bewegt ihn jemand anderes.
-        if (Captured) return;
+        if (Captured) { externalDrift = Vector2.zero; return; }
 
         // Im Eisblock: kein Schritt, auch kein Weiterrutschen auf Glatteis.
         if (IsFrozen)
         {
+            externalDrift = Vector2.zero;
             rb.linearVelocity = Vector2.zero;
             DecayShield(Time.fixedDeltaTime);
             return;
@@ -303,7 +313,8 @@ public class PlayerController : MonoBehaviour
         if (TyphoonFan.HasTailwind) speed *= 1f + TyphoonFan.TailwindBonus;
         Vector2 wanted = new Vector2(playerMoveDirection.x * speed, playerMoveDirection.y * speed);
         // Eiswelt: auf Glatteis rutscht man (sonst kommt wanted unveraendert zurueck).
-        rb.linearVelocity = Glatteis.Steer(rb.position, rb.linearVelocity, wanted, Time.fixedDeltaTime);
+        rb.linearVelocity = Glatteis.Steer(rb.position, rb.linearVelocity, wanted, Time.fixedDeltaTime) + externalDrift;
+        externalDrift = Vector2.zero;
 
         DecayShield(Time.fixedDeltaTime);
     }

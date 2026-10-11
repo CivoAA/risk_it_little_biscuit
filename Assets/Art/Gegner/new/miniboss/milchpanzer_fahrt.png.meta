@@ -1,0 +1,731 @@
+fileFormatVersion: 2
+guid: e44f3b5c8f164787846bdd673f16b801
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4212329561024990217
+    second: milchpanzer_fahrt_0
+  - first:
+      213: 1845954689162077409
+    second: milchpanzer_fahrt_1
+  - first:
+      213: 4416634582350713036
+    second: milchpanzer_fahrt_2
+  - first:
+      213: 3610884076610642618
+    second: milchpanzer_fahrt_3
+  - first:
+      213: 3886680091174525088
+    second: milchpanzer_fahrt_4
+  - first:
+      213: 1502431727835481170
+    second: milchpanzer_fahrt_5
+  - first:
+      213: 2696042686803464563
+    second: milchpanzer_fahrt_6
+  - first:
+      213: 3712018921601402971
+    second: milchpanzer_fahrt_7
+  - first:
+      213: 4349686364642929140
+    second: milchpanzer_fahrt_8
+  - first:
+      213: 2626149085915531004
+    second: milchpanzer_fahrt_9
+  - first:
+      213: 4403304130750240664
+    second: milchpanzer_fahrt_10
+  - first:
+      213: 4331370063009769605
+    second: milchpanzer_fahrt_11
+  - first:
+      213: 4478736829930668423
+    second: milchpanzer_fahrt_12
+  - first:
+      213: 3461227789237481079
+    second: milchpanzer_fahrt_13
+  - first:
+      213: 3871963002363382250
+    second: milchpanzer_fahrt_14
+  - first:
+      213: 4510310094933971924
+    second: milchpanzer_fahrt_15
+  - first:
+      213: 3145093777396001696
+    second: milchpanzer_fahrt_16
+  - first:
+      213: 1781861847706141387
+    second: milchpanzer_fahrt_17
+  - first:
+      213: 3836569423476086318
+    second: milchpanzer_fahrt_18
+  - first:
+      213: 2351706047617966471
+    second: milchpanzer_fahrt_19
+  - first:
+      213: 4029552465257827495
+    second: milchpanzer_fahrt_20
+  - first:
+      213: 3773079827972311497
+    second: milchpanzer_fahrt_21
+  - first:
+      213: 2565751458778795245
+    second: milchpanzer_fahrt_22
+  - first:
+      213: 2596098422741391777
+    second: milchpanzer_fahrt_23
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 8192
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 8192
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 8192
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: milchpanzer_fahrt_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 112
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0390625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5ed964816c774e80913d3567b2b23716
+      internalID: 4212329561024990217
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: milchpanzer_fahrt_1
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 0
+        width: 112
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0390625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eee8e1c31b4a48b5960b94483823e8af
+      internalID: 1845954689162077409
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: milchpanzer_fahrt_2
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 0
+        width: 112
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0390625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 09e00ed45a234d9e83e840ad698bf7d6
+      internalID: 4416634582350713036
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: milchpanzer_fahrt_3
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 0
+        width: 112
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0390625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 962c52b3eeeb4d62ac866b545f004bbf
+      internalID: 3610884076610642618
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: milchpanzer_fahrt_4
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 0
+        width: 112
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0390625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7146252e99294abd8d43dc963a01f0cc
+      internalID: 3886680091174525088
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: milchpanzer_fahrt_5
+      rect:
+        serializedVersion: 2
+        x: 560
+        y: 0
+        width: 112
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0390625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 54aef36582af4f58934e4f3d4b0cb36a
+      internalID: 1502431727835481170
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: milchpanzer_fahrt_6
+      rect:
+        serializedVersion: 2
+        x: 672
+        y: 0
+        width: 112
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0390625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 135a0efcf0154732a67c7a6ecf72a84f
+      internalID: 2696042686803464563
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: milchpanzer_fahrt_7
+      rect:
+        serializedVersion: 2
+        x: 784
+        y: 0
+        width: 112
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0390625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 974c8cb912404da79323b019bcac3053
+      internalID: 3712018921601402971
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: milchpanzer_fahrt_8
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 0
+        width: 112
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0390625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 241b8fc10ab84649b61d01f415c6dc61
+      internalID: 4349686364642929140
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: milchpanzer_fahrt_9
+      rect:
+        serializedVersion: 2
+        x: 1008
+        y: 0
+        width: 112
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0390625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 79bbb6871d9c4d78acdedb403dedba59
+      internalID: 2626149085915531004
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: milchpanzer_fahrt_10
+      rect:
+        serializedVersion: 2
+        x: 1120
+        y: 0
+        width: 112
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0390625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 46f80ed17f6e4907822c78193e7837d9
+      internalID: 4403304130750240664
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: milchpanzer_fahrt_11
+      rect:
+        serializedVersion: 2
+        x: 1232
+        y: 0
+        width: 112
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0390625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 40fed150e8854ccbad72ac3b4b5079da
+      internalID: 4331370063009769605
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: milchpanzer_fahrt_12
+      rect:
+        serializedVersion: 2
+        x: 1344
+        y: 0
+        width: 112
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0390625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b5934f2ce164abe85d515a5b2216474
+      internalID: 4478736829930668423
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: milchpanzer_fahrt_13
+      rect:
+        serializedVersion: 2
+        x: 1456
+        y: 0
+        width: 112
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0390625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4f8a01c764724fc99449f316b6ece7f7
+      internalID: 3461227789237481079
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: milchpanzer_fahrt_14
+      rect:
+        serializedVersion: 2
+        x: 1568
+        y: 0
+        width: 112
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0390625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 779b7bfa75004cadbb09e54e3b81efd5
+      internalID: 3871963002363382250
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: milchpanzer_fahrt_15
+      rect:
+        serializedVersion: 2
+        x: 1680
+        y: 0
+        width: 112
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0390625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1a0904a732c047b19c2f467629936599
+      internalID: 4510310094933971924
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: milchpanzer_fahrt_16
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 0
+        width: 112
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0390625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3340eac091ef493bb780d6c9744ee42a
+      internalID: 3145093777396001696
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: milchpanzer_fahrt_17
+      rect:
+        serializedVersion: 2
+        x: 1904
+        y: 0
+        width: 112
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0390625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9bba597121ec4648b5e6bb156f4d6cb0
+      internalID: 1781861847706141387
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: milchpanzer_fahrt_18
+      rect:
+        serializedVersion: 2
+        x: 2016
+        y: 0
+        width: 112
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0390625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 363b0902ce6940be8d1be7249d782a6b
+      internalID: 3836569423476086318
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: milchpanzer_fahrt_19
+      rect:
+        serializedVersion: 2
+        x: 2128
+        y: 0
+        width: 112
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0390625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 26727f79093b484d982534650459a9de
+      internalID: 2351706047617966471
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: milchpanzer_fahrt_20
+      rect:
+        serializedVersion: 2
+        x: 2240
+        y: 0
+        width: 112
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0390625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 20615ad3eba54dc48ca4495def68c0a7
+      internalID: 4029552465257827495
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: milchpanzer_fahrt_21
+      rect:
+        serializedVersion: 2
+        x: 2352
+        y: 0
+        width: 112
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0390625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dcd320197cf64416bde58743b8dd0fc0
+      internalID: 3773079827972311497
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: milchpanzer_fahrt_22
+      rect:
+        serializedVersion: 2
+        x: 2464
+        y: 0
+        width: 112
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0390625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ce1b278e710e4aad90ed251a10acc498
+      internalID: 2565751458778795245
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: milchpanzer_fahrt_23
+      rect:
+        serializedVersion: 2
+        x: 2576
+        y: 0
+        width: 112
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.0390625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0cf0f794ec28426dba18dce1cd691766
+      internalID: 2596098422741391777
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      milchpanzer_fahrt_0: 4212329561024990217
+      milchpanzer_fahrt_1: 1845954689162077409
+      milchpanzer_fahrt_10: 4403304130750240664
+      milchpanzer_fahrt_11: 4331370063009769605
+      milchpanzer_fahrt_12: 4478736829930668423
+      milchpanzer_fahrt_13: 3461227789237481079
+      milchpanzer_fahrt_14: 3871963002363382250
+      milchpanzer_fahrt_15: 4510310094933971924
+      milchpanzer_fahrt_16: 3145093777396001696
+      milchpanzer_fahrt_17: 1781861847706141387
+      milchpanzer_fahrt_18: 3836569423476086318
+      milchpanzer_fahrt_19: 2351706047617966471
+      milchpanzer_fahrt_2: 4416634582350713036
+      milchpanzer_fahrt_20: 4029552465257827495
+      milchpanzer_fahrt_21: 3773079827972311497
+      milchpanzer_fahrt_22: 2565751458778795245
+      milchpanzer_fahrt_23: 2596098422741391777
+      milchpanzer_fahrt_3: 3610884076610642618
+      milchpanzer_fahrt_4: 3886680091174525088
+      milchpanzer_fahrt_5: 1502431727835481170
+      milchpanzer_fahrt_6: 2696042686803464563
+      milchpanzer_fahrt_7: 3712018921601402971
+      milchpanzer_fahrt_8: 4349686364642929140
+      milchpanzer_fahrt_9: 2626149085915531004
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

@@ -81,11 +81,12 @@ public static class WavePlans
     /// der Skalierung der Wald-Demo (World2Demo): dieselben Druckwerte, nur auf
     /// 20 Minuten gestreckt, Boss bei 20:00. Nur aktive Kuechengegner:
     ///
-    ///   Marshmello, Boeser Slime, Muffin, Milchpanzer,
+    ///   Marshmello, Boeser Slime, Muffin, Pfannkuchen,
     ///   Popcorn (Schwarm, ab 0:05), Wurst-Dackel + Spiegelei (ab 3:00),
     ///   Erbsenschote (ab 9:00), Kaesekeil + Spaghetti-Monster (ab 14:00),
     ///   Elite-Marshmello (Elite, immer einzeln), ab 8:00 die Kerzentorte
-    ///   (zweite Elite, zaeher, "TORTENALARM!") und der Keks-Koenig (Boss)
+    ///   (zweite Elite, zaeher, "TORTENALARM!"), ab 15:00 der Milchpanzer
+    ///   (Zwischenboss) und der Keks-Koenig (Boss)
     ///
     /// Ablauf:
     ///
@@ -93,7 +94,7 @@ public static class WavePlans
     ///   0:05  Marshmellos, erster Ring mit Elite-Marshmello
     ///   3:00  + Boeser Slime, 8:00 Ring mit der ersten Kerzentorte
     ///   9:00  + Muffin
-    ///  14:00  + Milchpanzer
+    ///  14:00  + Pfannkuchen, 15:00 Milchpanzer (Zwischenboss)
     ///  20:00  Keks-Koenig
     /// </summary>
     public static RunPlan World1()
@@ -159,14 +160,14 @@ public static class WavePlans
         plan.Phase(358f)
             .Pool(EnemyId.EvilSlime, 20f)
             .Pool(EnemyId.Muffin, 25f)
-            .Pool(EnemyId.Milchpanzer, 10f)
+            .Pool(EnemyId.Pancake, 10f)
             .Pool(EnemyId.Kaesekeil, 20f)
             .Pool(EnemyId.Fleischball, 15f)
             .Pool(EnemyId.Erbsenschote, 10f)
             .Pressure(140f, 170f)
             .Base(Patterns.Scatter)
             .Burst(30f, EnemyId.Kaesekeil, 14f, Patterns.Ambush, 0f)
-            .Burst(60f, EnemyId.Milchpanzer, 16f, Patterns.Ambush, 0f)
+            .Boss(60f, EnemyId.Milchpanzer, "MILCHPANZER!", 0.4f)
             .Calm(120f, 10f, 0.15f)
             .Encircle(150f, EnemyId.EliteMarshmello, EnemyId.Muffin, 18, 15f, false, "RING!", 0.35f, 25f, 1.5f)
             .Burst(220f, EnemyId.Muffin, 26f, Patterns.Cluster, 0f)
@@ -179,7 +180,7 @@ public static class WavePlans
             .Pool(EnemyId.Marshmello, 10f)
             .Pool(EnemyId.EvilSlime, 15f)
             .Pool(EnemyId.Muffin, 25f)
-            .Pool(EnemyId.Milchpanzer, 15f)
+            .Pool(EnemyId.Pancake, 15f)
             .Pool(EnemyId.Kaesekeil, 15f)
             .Pool(EnemyId.Fleischball, 10f)
             .Pool(EnemyId.Popcorn, 10f)
@@ -190,7 +191,7 @@ public static class WavePlans
         plan.EndlessPhase()
             .Pool(EnemyId.EvilSlime, 20f)
             .Pool(EnemyId.Muffin, 25f)
-            .Pool(EnemyId.Milchpanzer, 15f)
+            .Pool(EnemyId.Pancake, 15f)
             .Pool(EnemyId.Kaesekeil, 15f)
             .Pool(EnemyId.Fleischball, 15f)
             .Pool(EnemyId.Wurstdackel, 10f)
@@ -216,21 +217,21 @@ public static class WavePlans
     ///   Elite-Marshmello -> Eichel        (stand frueher im Pool der Kueche)
     ///   Messermaus       -> Elite-Fliegenpilz (Elite im Ring, ohne Kaefig -
     ///                                     die Kaefig-Wand ist archiviert)
-    ///   Muffin & Co.     -> Honey (und spaeter der verstaerkte Milchpanzer)
+    ///   Muffin & Co.     -> Honey (und spaeter der Pfannkuchen)
     ///
     /// Die Gegner kommen von leicht nach schwer dazu, jede Phase bringt einen
     /// neuen mit:
     ///
     ///   Phase 1  Fliegenpilz (am Ende ein erster Kirschslime-Schwall)
     ///   Phase 2  + Kirschslime, + Weisse Messermaus
-    ///   Phase 3  Fliegenpilz raus, + Eichel, + Fluegeldolch
+    ///   Phase 3  Fliegenpilz raus, + Eichel
     ///   Phase 4  Kirschslime raus, + Honey
-    ///   Boss     Eichel, Honey, Fluegeldolch, + Milchpanzer - und die Glutwurz,
+    ///   Boss     Eichel, Honey, + Pfannkuchen - und die Glutwurz,
     ///            der Baumriese des Waldes (speit Feuer, siehe EnemyGlutwurz)
-    ///   Endlos   Eichel, Honey, Milchpanzer, Fluegeldolch
+    ///   Endlos   Eichel, Honey, Pfannkuchen
     ///
-    /// Der Fluegeldolch (Fledermaus) kommt nur als Beimischung - in Rudeln ist
-    /// er zu viel.
+    /// Der Fluegeldolch (Fledermaus) ist seit Oktober 2026 in den Geisterwald
+    /// (World6) umgezogen.
     ///
     /// Seit Welle 4 dazu: Beerenspinne (Phase 2), Maronen-Igel + Radieschen-Alraune
     /// (Phase 3), Walnuss-Krabbe (Phase 4); dieselben auch im Demo-Plan.
@@ -280,14 +281,12 @@ public static class WavePlans
             .Pool(EnemyId.Kirschslime, 20f)
             .Pool(EnemyId.WeisseMessermaus, 20f)
             .Pool(EnemyId.Eichel, 25f)
-            .Pool(EnemyId.Fluegeldolch, 10f)
             .Pool(EnemyId.Maronenigel, 15f)
             .Pool(EnemyId.Alraune, 10f)
             .Pressure(100f, 200f)
             .Base(Patterns.Scatter)
             .Burst(20f, EnemyId.EliteFluegdolch, 1f, Patterns.Ambush, 0f)
             .Burst(40f, EnemyId.Eichel, 25f, Patterns.Ambush, 0f)
-            .Burst(60f, EnemyId.Fluegeldolch, 20f, Patterns.Arc, 0f)
             .Calm(95f, 10f, 0.15f)
             .Encircle(125f, EnemyId.EliteFliegenpilz, EnemyId.Kirschslime, 22, 14f, false, "PILZKOENIG!", 0.35f, 25f, 1.5f)
             .Burst(125f, EnemyId.EliteFluegdolch, 1f, Patterns.Ambush, 0f)
@@ -300,7 +299,6 @@ public static class WavePlans
             .Pool(EnemyId.Eichel, 30f)
             .Pool(EnemyId.WeisseMessermaus, 15f)
             .Pool(EnemyId.Honey, 20f)
-            .Pool(EnemyId.Fluegeldolch, 10f)
             .Pool(EnemyId.Alraune, 15f)
             .Pool(EnemyId.Walnusskrabbe, 10f)
             .Pressure(240f, 350f)
@@ -318,8 +316,7 @@ public static class WavePlans
         plan.Phase(600f)
             .Pool(EnemyId.Eichel, 35f)
             .Pool(EnemyId.Honey, 15f)
-            .Pool(EnemyId.Milchpanzer, 10f)
-            .Pool(EnemyId.Fluegeldolch, 20f)
+            .Pool(EnemyId.Pancake, 10f)
             .Pool(EnemyId.Walnusskrabbe, 10f)
             .Pool(EnemyId.Maronenigel, 10f)
             .Pressure(400f, 600f)
@@ -329,8 +326,7 @@ public static class WavePlans
         plan.EndlessPhase()
             .Pool(EnemyId.Eichel, 30f)
             .Pool(EnemyId.Honey, 15f)
-            .Pool(EnemyId.Milchpanzer, 15f)
-            .Pool(EnemyId.Fluegeldolch, 20f)
+            .Pool(EnemyId.Pancake, 15f)
             .Pool(EnemyId.Walnusskrabbe, 10f)
             .Pool(EnemyId.Alraune, 10f)
             .Pressure(140f, 140f)
@@ -365,9 +361,9 @@ public static class WavePlans
     ///   0:00  Anlauf, ~3 Fliegenpilze (5 s)
     ///   0:05  Fliegenpilze
     ///   2:00  + Kirschslime, + Weisse Messermaus - 5 statt 3 min lang, damit
-    ///         die erste harte Stelle (Eichel, Fluegeldolch) erst bei ~8:00
+    ///         die erste harte Stelle (Eichel) erst bei ~8:00
     ///         kommt statt bei ~6:00
-    ///   7:00  Eichel, Fluegeldolch
+    ///   7:00  Eichel
     ///  12:00  kurzer Uebergang ohne neuen Druck-Sprung - der Sprung von
     ///         ~11:00 (Honey) faellt damit auf 13:00 und geht im Boss auf
     ///  13:00  Glutwurz
@@ -413,13 +409,11 @@ public static class WavePlans
             .Pool(EnemyId.Kirschslime, 20f)
             .Pool(EnemyId.WeisseMessermaus, 20f)
             .Pool(EnemyId.Eichel, 25f)
-            .Pool(EnemyId.Fluegeldolch, 10f)
             .Pool(EnemyId.Maronenigel, 15f)
             .Pool(EnemyId.Alraune, 10f)
             .Pressure(70f, 140f)
             .Base(Patterns.Scatter)
             .Burst(40f, EnemyId.Eichel, 16f, Patterns.Ambush, 0f)
-            .Burst(60f, EnemyId.Fluegeldolch, 12f, Patterns.Arc, 0f)
             .Calm(95f, 10f, 0.15f)
             .Encircle(125f, EnemyId.EliteFliegenpilz, EnemyId.Kirschslime, 18, 14f, false, "PILZKOENIG!", 0.35f, 25f, 1.5f)
             .Burst(165f, EnemyId.Maronenigel, 14f, Patterns.Column, 0f)
@@ -432,7 +426,6 @@ public static class WavePlans
             .Pool(EnemyId.Eichel, 30f)
             .Pool(EnemyId.WeisseMessermaus, 20f)
             .Pool(EnemyId.Kirschslime, 10f)
-            .Pool(EnemyId.Fluegeldolch, 15f)
             .Pool(EnemyId.Alraune, 15f)
             .Pool(EnemyId.Walnusskrabbe, 10f)
             .Pressure(140f, 155f)
@@ -441,8 +434,7 @@ public static class WavePlans
         plan.Phase(600f)
             .Pool(EnemyId.Eichel, 35f)
             .Pool(EnemyId.Honey, 15f)
-            .Pool(EnemyId.Milchpanzer, 10f)
-            .Pool(EnemyId.Fluegeldolch, 20f)
+            .Pool(EnemyId.Pancake, 10f)
             .Pool(EnemyId.Walnusskrabbe, 10f)
             .Pool(EnemyId.Maronenigel, 10f)
             .Pressure(280f, 420f)
@@ -452,8 +444,7 @@ public static class WavePlans
         plan.EndlessPhase()
             .Pool(EnemyId.Eichel, 30f)
             .Pool(EnemyId.Honey, 15f)
-            .Pool(EnemyId.Milchpanzer, 15f)
-            .Pool(EnemyId.Fluegeldolch, 20f)
+            .Pool(EnemyId.Pancake, 15f)
             .Pool(EnemyId.Walnusskrabbe, 10f)
             .Pool(EnemyId.Alraune, 10f)
             .Pressure(100f, 100f)
@@ -625,24 +616,17 @@ public static class WavePlans
 
     /// <summary>
     /// Lebkuchen-Geisterwald - Karte 4 in der Levelauswahl. Im Takt der Kueche
-    /// (gleiche Druckwerte, Boss bei 20:00). Eigene Gegner hat der Wald noch
-    /// nicht, also die, die nachts am besten passen:
+    /// (gleiche Phasen und Druckwerte, Boss bei 20:00).
     ///
-    ///   Marshmello         Grundgegner (Zuckerwesen wie die Zuckergeister)
-    ///   Boeser Slime       ab 3:00
-    ///   Fluegeldolch       Fledermaus, nur Beimischung
-    ///   Elite-Fluegeldolch Elite (Fledermaus mit Schwertfluegeln)
-    ///   Weisse Messermaus  ab 9:00 - leuchtet im Dunkeln fast wie ein Geist
-    ///   Milchpanzer        ab 14:00
+    /// Bewusst fast leer: die alten Platzhalter (Marshmello, Boeser Slime,
+    /// Weisse Messermaus, Pfannkuchen, Elite-Fluegeldolch, Schleimkoenig als
+    /// Zwischenboss) sind raus. Eigene Gegner hat der Geisterwald noch nicht -
+    /// bis dahin kommt nur der Fluegeldolch (Fledermaus, aus dem Wald
+    /// umgezogen), am Ende das Gespenst - und was unter dem Laken steckt
+    /// (siehe EnemySquiddy).
     ///
-    /// Der Schleimkoenig kommt bei 11:30 als Zwischenboss, am Ende das
-    /// Gespenst - und was unter dem Laken steckt (siehe EnemySquiddy).
-    ///
-    ///   0:00  Anlauf, ~3 Marshmellos (5 s)
-    ///   0:05  Marshmellos, Ring mit Elite-Fluegeldolch
-    ///   3:00  + Boeser Slime, + Fluegeldolch
-    ///   9:00  + Weisse Messermaus, 11:30 Schleimkoenig (Zwischenboss)
-    ///  14:00  + Milchpanzer
+    ///   0:00  Anlauf (5 s)
+    ///   0:05  Fluegeldolche
     ///  20:00  Das Gespenst
     /// </summary>
     public static RunPlan World6()
@@ -650,87 +634,48 @@ public static class WavePlans
         var plan = new RunPlan("World6");
 
         plan.Phase(5f)
-            .Pool(EnemyId.Marshmello, 100f)
+            .Pool(EnemyId.Fluegeldolch, 100f)
             .Pressure(3.3f, 3.3f)
             .Base(Patterns.Scatter);
 
         plan.Phase(175f)
-            .Pool(EnemyId.Marshmello, 100f)
+            .Pool(EnemyId.Fluegeldolch, 100f)
             .Pressure(10f, 28f)
-            .Base(Patterns.Scatter)
-            .Burst(45f, EnemyId.Marshmello, 10f, Patterns.Arc, 0f)
-            .Burst(80f, EnemyId.EvilSlime, 10f, Patterns.Column, 0f)
-            .Encircle(105f, EnemyId.EliteFluegdolch, EnemyId.Marshmello, 14, 13f, false, "RING!", 0.35f, 25f, 1.5f)
-            .Burst(150f, EnemyId.Marshmello, 12f, Patterns.Column, 0f);
+            .Base(Patterns.Scatter);
 
         plan.Phase(360f)
-            .Pool(EnemyId.Marshmello, 55f)
-            .Pool(EnemyId.EvilSlime, 35f)
-            .Pool(EnemyId.Fluegeldolch, 10f)
+            .Pool(EnemyId.Fluegeldolch, 100f)
             .Pressure(28f, 56f)
             .Base(Patterns.Scatter)
-            .Burst(5f, EnemyId.EvilSlime, 10f, Patterns.Arc, 0f)
             .Calm(75f, 10f, 0.15f)
-            .Burst(105f, EnemyId.EvilSlime, 16f, Patterns.Cluster, 0f)
-            .Burst(135f, EnemyId.EliteFluegdolch, 1f, Patterns.Ambush, 0f)
             .Burst(150f, EnemyId.Fluegeldolch, 12f, Patterns.Arc, 0f)
-            .Calm(195f, 10f, 0.15f)
-            .Burst(225f, EnemyId.EvilSlime, 18f, Patterns.Cluster, 0f)
-            .Burst(270f, EnemyId.Marshmello, 20f, Patterns.Arc, 0f)
-            .Burst(300f, EnemyId.EliteFluegdolch, 1f, Patterns.Ambush, 0f)
-            .Burst(330f, EnemyId.EvilSlime, 20f, Patterns.Column, 0f);
+            .Calm(195f, 10f, 0.15f);
 
         plan.Phase(300f)
-            .Pool(EnemyId.Marshmello, 25f)
-            .Pool(EnemyId.EvilSlime, 40f)
-            .Pool(EnemyId.WeisseMessermaus, 25f)
-            .Pool(EnemyId.Fluegeldolch, 10f)
+            .Pool(EnemyId.Fluegeldolch, 100f)
             .Pressure(70f, 140f)
             .Base(Patterns.Scatter)
-            .Burst(40f, EnemyId.WeisseMessermaus, 16f, Patterns.Ambush, 0f)
             .Burst(60f, EnemyId.Fluegeldolch, 12f, Patterns.Arc, 0f)
             .Calm(95f, 10f, 0.15f)
-            .Boss(150f, EnemyId.Schleimkoenig, "SCHLEIMKOENIG!", 0.4f)
-            .Calm(215f, 10f, 0.15f)
-            .Burst(235f, EnemyId.EliteFluegdolch, 1f, Patterns.Ambush, 0f)
-            .Burst(250f, EnemyId.EvilSlime, 26f, Patterns.Column, 0f);
+            .Calm(215f, 10f, 0.15f);
 
         plan.Phase(358f)
-            .Pool(EnemyId.Marshmello, 15f)
-            .Pool(EnemyId.EvilSlime, 35f)
-            .Pool(EnemyId.WeisseMessermaus, 30f)
-            .Pool(EnemyId.Fluegeldolch, 10f)
-            .Pool(EnemyId.Milchpanzer, 10f)
+            .Pool(EnemyId.Fluegeldolch, 100f)
             .Pressure(140f, 170f)
             .Base(Patterns.Scatter)
-            .Burst(60f, EnemyId.Milchpanzer, 16f, Patterns.Ambush, 0f)
             .Calm(120f, 10f, 0.15f)
-            .Encircle(150f, EnemyId.EliteFluegdolch, EnemyId.EvilSlime, 18, 15f, false, "RING!", 0.35f, 25f, 1.5f)
-            .Burst(220f, EnemyId.WeisseMessermaus, 26f, Patterns.Cluster, 0f)
-            .Burst(260f, EnemyId.EliteFluegdolch, 1f, Patterns.Ambush, 0f)
-            .Calm(290f, 10f, 0.15f)
-            .Burst(320f, EnemyId.Marshmello, 24f, Patterns.Arc, 0f);
+            .Calm(290f, 10f, 0.15f);
 
         plan.Phase(600f)
-            .Pool(EnemyId.Marshmello, 15f)
-            .Pool(EnemyId.EvilSlime, 30f)
-            .Pool(EnemyId.WeisseMessermaus, 30f)
-            .Pool(EnemyId.Fluegeldolch, 10f)
-            .Pool(EnemyId.Milchpanzer, 15f)
+            .Pool(EnemyId.Fluegeldolch, 100f)
             .Pressure(280f, 420f)
             .Base(Patterns.Scatter)
             .Boss(2f, EnemyId.Squiddy, "DAS GESPENST!", 0.4f);
 
         plan.EndlessPhase()
-            .Pool(EnemyId.Marshmello, 10f)
-            .Pool(EnemyId.EvilSlime, 30f)
-            .Pool(EnemyId.WeisseMessermaus, 30f)
-            .Pool(EnemyId.Milchpanzer, 20f)
-            .Pool(EnemyId.Fluegeldolch, 10f)
+            .Pool(EnemyId.Fluegeldolch, 100f)
             .Pressure(100f, 100f)
-            .Base(Patterns.Scatter)
-            .Encircle(60f, EnemyId.None, EnemyId.EvilSlime, 20, 14f, false, "RING!", 0.35f, 25f, 1.5f)
-            .Burst(90f, EnemyId.EliteFluegdolch, 1f, Patterns.Arc, 0f);
+            .Base(Patterns.Scatter);
 
         return plan;
     }
