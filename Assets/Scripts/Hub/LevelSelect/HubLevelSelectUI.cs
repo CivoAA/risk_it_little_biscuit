@@ -1517,7 +1517,7 @@ public class HubLevelSelectUI : MonoBehaviour
 
     /// <summary>
     /// Boss-Bild fuer die Kachel: Resources/LevelSelect/Bosses/[EnemyId] (alle
-    /// gleich gross, 48x48, aus Tools/boss_portraits.py), sonst das Bestiarium-Bild.
+    /// gleich gross, 48x48), sonst das Bestiarium-Bild.
     /// </summary>
     static Sprite BossPortrait(EnemyId id)
     {

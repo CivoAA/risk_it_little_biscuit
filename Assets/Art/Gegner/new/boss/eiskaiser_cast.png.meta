@@ -3,47 +3,53 @@ guid: c3f0aeadc33d46ada1571a01516d7bdd
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4280758333954587046
+      213: 2699105063438936323
     second: eiskaiser_cast_0
   - first:
-      213: 4164981285325673142
+      213: 1433239644229899602
     second: eiskaiser_cast_1
   - first:
-      213: 3545700209032785726
+      213: 1377879579060640411
     second: eiskaiser_cast_2
   - first:
-      213: 1276715162054927354
+      213: 1618139509014578046
     second: eiskaiser_cast_3
   - first:
-      213: 3418221014839204418
+      213: 2171930258741073910
     second: eiskaiser_cast_4
   - first:
-      213: 1613841044249059533
+      213: 2453696953437008096
     second: eiskaiser_cast_5
   - first:
-      213: 4233599942532766921
+      213: 3601064968311956406
     second: eiskaiser_cast_6
   - first:
-      213: 2918636834914784306
+      213: 4273338450596447745
     second: eiskaiser_cast_7
   - first:
-      213: 3789940130126297639
+      213: 2084288121951515290
     second: eiskaiser_cast_8
   - first:
-      213: 4062541496714540399
+      213: 4206829926920945371
     second: eiskaiser_cast_9
   - first:
-      213: 3616733390494121994
+      213: 1877186779143791214
     second: eiskaiser_cast_10
   - first:
-      213: 3508245176993686559
+      213: 4157256741890922488
     second: eiskaiser_cast_11
   - first:
-      213: 3507981091419713798
+      213: 1229587410361681022
     second: eiskaiser_cast_12
   - first:
-      213: 3387899531284491407
+      213: 1882408398557485290
     second: eiskaiser_cast_13
+  - first:
+      213: 1430020173282740200
+    second: eiskaiser_cast_14
+  - first:
+      213: 4228395659568022751
+    second: eiskaiser_cast_15
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -73,7 +79,7 @@ TextureImporter:
   cubemapConvolution: 0
   seamlessCubemap: 0
   textureFormat: 1
-  maxTextureSize: 2048
+  maxTextureSize: 4096
   textureSettings:
     serializedVersion: 2
     filterMode: 0
@@ -111,7 +117,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -124,7 +130,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
     buildTarget: Standalone
-    maxTextureSize: 2048
+    maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -144,18 +150,18 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 128
-        height: 128
+        width: 144
+        height: 144
       alignment: 9
-      pivot: {x: 0.5, y: 0.03125}
+      pivot: {x: 0.5, y: 0.05555555555555555}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d770369bb7d04a0e9c9539fd8a3f93bf
-      internalID: 4280758333954587046
+      spriteID: d9805477f0874efabb20a5eb8075b0b6
+      internalID: 2699105063438936323
       vertices: []
       indices:
       edges: []
@@ -164,20 +170,20 @@ TextureImporter:
       name: eiskaiser_cast_1
       rect:
         serializedVersion: 2
-        x: 128
+        x: 144
         y: 0
-        width: 128
-        height: 128
+        width: 144
+        height: 144
       alignment: 9
-      pivot: {x: 0.5, y: 0.03125}
+      pivot: {x: 0.5, y: 0.05555555555555555}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4306f39c8ccd4b60993a51eb842f43b2
-      internalID: 4164981285325673142
+      spriteID: 5c94e6c19c63412ab5357b8d9b5716a4
+      internalID: 1433239644229899602
       vertices: []
       indices:
       edges: []
@@ -186,20 +192,20 @@ TextureImporter:
       name: eiskaiser_cast_2
       rect:
         serializedVersion: 2
-        x: 256
+        x: 288
         y: 0
-        width: 128
-        height: 128
+        width: 144
+        height: 144
       alignment: 9
-      pivot: {x: 0.5, y: 0.03125}
+      pivot: {x: 0.5, y: 0.05555555555555555}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f40f7427abd94aed8070b754ce307d1a
-      internalID: 3545700209032785726
+      spriteID: 888502ae30bf4a598e8a8f41e967c81e
+      internalID: 1377879579060640411
       vertices: []
       indices:
       edges: []
@@ -208,20 +214,20 @@ TextureImporter:
       name: eiskaiser_cast_3
       rect:
         serializedVersion: 2
-        x: 384
+        x: 432
         y: 0
-        width: 128
-        height: 128
+        width: 144
+        height: 144
       alignment: 9
-      pivot: {x: 0.5, y: 0.03125}
+      pivot: {x: 0.5, y: 0.05555555555555555}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f17420a0ef4540cda2e399cf665125b6
-      internalID: 1276715162054927354
+      spriteID: 843bd406f5cf4e8f91f74291259d6632
+      internalID: 1618139509014578046
       vertices: []
       indices:
       edges: []
@@ -230,20 +236,20 @@ TextureImporter:
       name: eiskaiser_cast_4
       rect:
         serializedVersion: 2
-        x: 512
+        x: 576
         y: 0
-        width: 128
-        height: 128
+        width: 144
+        height: 144
       alignment: 9
-      pivot: {x: 0.5, y: 0.03125}
+      pivot: {x: 0.5, y: 0.05555555555555555}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: efdbcf1dcd454d4288f3e8963002e758
-      internalID: 3418221014839204418
+      spriteID: e9cfd2186ea2463f8d59d10bd65d1713
+      internalID: 2171930258741073910
       vertices: []
       indices:
       edges: []
@@ -252,20 +258,20 @@ TextureImporter:
       name: eiskaiser_cast_5
       rect:
         serializedVersion: 2
-        x: 640
+        x: 720
         y: 0
-        width: 128
-        height: 128
+        width: 144
+        height: 144
       alignment: 9
-      pivot: {x: 0.5, y: 0.03125}
+      pivot: {x: 0.5, y: 0.05555555555555555}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 41c2cc60174a43b8b7db1b24e857c3db
-      internalID: 1613841044249059533
+      spriteID: 90ab97260b7e4d59b9e77f3afa2102eb
+      internalID: 2453696953437008096
       vertices: []
       indices:
       edges: []
@@ -274,20 +280,20 @@ TextureImporter:
       name: eiskaiser_cast_6
       rect:
         serializedVersion: 2
-        x: 768
+        x: 864
         y: 0
-        width: 128
-        height: 128
+        width: 144
+        height: 144
       alignment: 9
-      pivot: {x: 0.5, y: 0.03125}
+      pivot: {x: 0.5, y: 0.05555555555555555}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c855810f70054766a83c98d3edb82a8b
-      internalID: 4233599942532766921
+      spriteID: 915f86941ead4959814414bf06640a0c
+      internalID: 3601064968311956406
       vertices: []
       indices:
       edges: []
@@ -296,20 +302,20 @@ TextureImporter:
       name: eiskaiser_cast_7
       rect:
         serializedVersion: 2
-        x: 896
+        x: 1008
         y: 0
-        width: 128
-        height: 128
+        width: 144
+        height: 144
       alignment: 9
-      pivot: {x: 0.5, y: 0.03125}
+      pivot: {x: 0.5, y: 0.05555555555555555}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: fe91bfaea5c44c4c9aa39c360b9100bd
-      internalID: 2918636834914784306
+      spriteID: db1c9c7715f74c12bb1e35f6175c2358
+      internalID: 4273338450596447745
       vertices: []
       indices:
       edges: []
@@ -318,20 +324,20 @@ TextureImporter:
       name: eiskaiser_cast_8
       rect:
         serializedVersion: 2
-        x: 1024
+        x: 1152
         y: 0
-        width: 128
-        height: 128
+        width: 144
+        height: 144
       alignment: 9
-      pivot: {x: 0.5, y: 0.03125}
+      pivot: {x: 0.5, y: 0.05555555555555555}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 021787a3ba6743ffb5bd18643e7bcfc5
-      internalID: 3789940130126297639
+      spriteID: 2505047051d04246bc98941555a696da
+      internalID: 2084288121951515290
       vertices: []
       indices:
       edges: []
@@ -340,20 +346,20 @@ TextureImporter:
       name: eiskaiser_cast_9
       rect:
         serializedVersion: 2
-        x: 1152
+        x: 1296
         y: 0
-        width: 128
-        height: 128
+        width: 144
+        height: 144
       alignment: 9
-      pivot: {x: 0.5, y: 0.03125}
+      pivot: {x: 0.5, y: 0.05555555555555555}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2f71778a54ee400da61e02d71483bd85
-      internalID: 4062541496714540399
+      spriteID: 7dfd3f6d3b42416fbe478df59c37298b
+      internalID: 4206829926920945371
       vertices: []
       indices:
       edges: []
@@ -362,20 +368,20 @@ TextureImporter:
       name: eiskaiser_cast_10
       rect:
         serializedVersion: 2
-        x: 1280
+        x: 1440
         y: 0
-        width: 128
-        height: 128
+        width: 144
+        height: 144
       alignment: 9
-      pivot: {x: 0.5, y: 0.03125}
+      pivot: {x: 0.5, y: 0.05555555555555555}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ecf6e3de41b246fea02f8ed5d52f81b3
-      internalID: 3616733390494121994
+      spriteID: e1c946a876d54180ae6118f206577f8f
+      internalID: 1877186779143791214
       vertices: []
       indices:
       edges: []
@@ -384,20 +390,20 @@ TextureImporter:
       name: eiskaiser_cast_11
       rect:
         serializedVersion: 2
-        x: 1408
+        x: 1584
         y: 0
-        width: 128
-        height: 128
+        width: 144
+        height: 144
       alignment: 9
-      pivot: {x: 0.5, y: 0.03125}
+      pivot: {x: 0.5, y: 0.05555555555555555}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d9e091ddf0954aa4a8dada19d5892e3f
-      internalID: 3508245176993686559
+      spriteID: 0c204dd76cf749738864ffdd5b3c432f
+      internalID: 4157256741890922488
       vertices: []
       indices:
       edges: []
@@ -406,20 +412,20 @@ TextureImporter:
       name: eiskaiser_cast_12
       rect:
         serializedVersion: 2
-        x: 1536
+        x: 1728
         y: 0
-        width: 128
-        height: 128
+        width: 144
+        height: 144
       alignment: 9
-      pivot: {x: 0.5, y: 0.03125}
+      pivot: {x: 0.5, y: 0.05555555555555555}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4b2f41def5d24dc98bfe9b198e71ba14
-      internalID: 3507981091419713798
+      spriteID: 83a5661fb29641c5b5f99470ae8a50aa
+      internalID: 1229587410361681022
       vertices: []
       indices:
       edges: []
@@ -428,20 +434,64 @@ TextureImporter:
       name: eiskaiser_cast_13
       rect:
         serializedVersion: 2
-        x: 1664
+        x: 1872
         y: 0
-        width: 128
-        height: 128
+        width: 144
+        height: 144
       alignment: 9
-      pivot: {x: 0.5, y: 0.03125}
+      pivot: {x: 0.5, y: 0.05555555555555555}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1cf1426cdf674429908c4142721d2552
-      internalID: 3387899531284491407
+      spriteID: 0e827358a29f4ee49d999bca28efafc6
+      internalID: 1882408398557485290
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eiskaiser_cast_14
+      rect:
+        serializedVersion: 2
+        x: 2016
+        y: 0
+        width: 144
+        height: 144
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05555555555555555}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: db38bbed708d40ee9f1360ffd920053b
+      internalID: 1430020173282740200
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eiskaiser_cast_15
+      rect:
+        serializedVersion: 2
+        x: 2160
+        y: 0
+        width: 144
+        height: 144
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05555555555555555}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae043453ba7f42ee8785f8aa1703d386
+      internalID: 4228395659568022751
       vertices: []
       indices:
       edges: []
@@ -450,20 +500,22 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      eiskaiser_cast_0: 4280758333954587046
-      eiskaiser_cast_1: 4164981285325673142
-      eiskaiser_cast_10: 3616733390494121994
-      eiskaiser_cast_11: 3508245176993686559
-      eiskaiser_cast_12: 3507981091419713798
-      eiskaiser_cast_13: 3387899531284491407
-      eiskaiser_cast_2: 3545700209032785726
-      eiskaiser_cast_3: 1276715162054927354
-      eiskaiser_cast_4: 3418221014839204418
-      eiskaiser_cast_5: 1613841044249059533
-      eiskaiser_cast_6: 4233599942532766921
-      eiskaiser_cast_7: 2918636834914784306
-      eiskaiser_cast_8: 3789940130126297639
-      eiskaiser_cast_9: 4062541496714540399
+      eiskaiser_cast_0: 2699105063438936323
+      eiskaiser_cast_1: 1433239644229899602
+      eiskaiser_cast_10: 1877186779143791214
+      eiskaiser_cast_11: 4157256741890922488
+      eiskaiser_cast_12: 1229587410361681022
+      eiskaiser_cast_13: 1882408398557485290
+      eiskaiser_cast_14: 1430020173282740200
+      eiskaiser_cast_15: 4228395659568022751
+      eiskaiser_cast_2: 1377879579060640411
+      eiskaiser_cast_3: 1618139509014578046
+      eiskaiser_cast_4: 2171930258741073910
+      eiskaiser_cast_5: 2453696953437008096
+      eiskaiser_cast_6: 3601064968311956406
+      eiskaiser_cast_7: 4273338450596447745
+      eiskaiser_cast_8: 2084288121951515290
+      eiskaiser_cast_9: 4206829926920945371
   mipmapLimitGroupName:
   pSDRemoveMatte: 0
   userData:

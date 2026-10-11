@@ -3,8 +3,8 @@ using UnityEngine;
 
 /// <summary>
 /// Der Schleimkoenig - Zwischenboss (Rolle Zwischenboss = EnemyRole.MiniBoss).
-/// Ein grosser lila Schleim mit Krone und Zepter. Bilder aus
-/// Tools/schleimkoenig.py, das Prefab baut Tools -> Gegner -> Schleimkoenig
+/// Ein grosser lila Schleim mit Krone und Zepter.
+/// Das Prefab baut Tools -> Gegner -> Schleimkoenig
 /// bauen (SchleimkoenigBuilder).
 ///
 ///   Hopsen     wie der Kirschslime: ducken, abspringen, landen. Nur in der

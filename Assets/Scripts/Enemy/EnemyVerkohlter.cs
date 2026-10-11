@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Der Verkohlte - ein im Ofen vergessener Keks. Bilder aus
-/// Tools/verkohlter.py, die Prefabs baut Tools -> Gegner -> Verkohlter bauen
+/// Der Verkohlte - ein im Ofen vergessener Keks.
+/// Die Prefabs baut Tools -> Gegner -> Verkohlter bauen
 /// (VerkohlterBuilder). Ein Skript, zwei Gegner:
 ///
 /// <b>Als Boss</b> (EnemyId.Verkohlter, Rolle Boss - vorerst nur in der Test-Szene)

@@ -21,8 +21,8 @@ public class PickUps : MonoBehaviour
     private float idleTime;
 
     /// <summary>
-    /// Idle-Schleife je Pickup-Art aus Resources/PickUps (gezeichnet von
-    /// Tools/pickups.py). Null, wenn es keine gibt - dann bleibt das Sprite
+    /// Idle-Schleife je Pickup-Art aus Resources/PickUps.
+    /// Null, wenn es keine gibt - dann bleibt das Sprite
     /// aus dem Prefab stehen.
     /// </summary>
     public static Sprite[] LoadIdleFrames(int pickUpId)

@@ -12,7 +12,6 @@ using UnityEngine.Rendering;
 /// die Id.
 ///
 /// Wiederholbar: vorhandene Prefabs werden aktualisiert, nicht ersetzt.
-/// Die Bilder kommen aus Tools/verkohlter.py.
 /// </summary>
 public static class VerkohlterBuilder
 {
@@ -65,7 +64,7 @@ public static class VerkohlterBuilder
         Sprite[] shadowAshIn = Load("verkohlter_schatten_asche_da");
         Sprite[] crumb = Load("verkohlter_kruemel");
         Sprite[] patch = Load("verkohlter_glutfleck");
-        if (idle.Length == 0) return "Keine Bilder unter " + ArtFolder + " - erst Tools/verkohlter.py laufen lassen.";
+        if (idle.Length == 0) return "Keine Bilder unter " + ArtFolder + ".";
 
         EnsureFolder(System.IO.Path.GetDirectoryName(def.Prefab).Replace('\\', '/'));
         GameObject effect = BuildEffect();

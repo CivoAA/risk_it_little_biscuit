@@ -8,7 +8,7 @@ using UnityEngine;
 /// Taste kratzt am Eis: die Zeit wird kuerzer und der Block wackelt. Wer
 /// haemmert, ist schneller frei.
 ///
-/// Bilder aus Tools/eiskaiser.py (eiskaiser_eisblock): 0-2 zufrieren,
+/// Bilder eiskaiser_eisblock: 0-2 zufrieren,
 /// 3-6 halten (Schleife), 7 Riss, 8-9 zerspringen.
 /// </summary>
 public class PlayerIceBlock : MonoBehaviour

@@ -1,0 +1,939 @@
+fileFormatVersion: 2
+guid: 152fa21428a4475393dd7513fec81330
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1886802630474755962
+    second: zuckerwolke_schweben_0
+  - first:
+      213: 1268838877082675033
+    second: zuckerwolke_schweben_1
+  - first:
+      213: 2008167183153515647
+    second: zuckerwolke_schweben_2
+  - first:
+      213: 4010559402729446751
+    second: zuckerwolke_schweben_3
+  - first:
+      213: 4273763707129447349
+    second: zuckerwolke_schweben_4
+  - first:
+      213: 2921040326512485894
+    second: zuckerwolke_schweben_5
+  - first:
+      213: 4363631779206162332
+    second: zuckerwolke_schweben_6
+  - first:
+      213: 3915455625305261168
+    second: zuckerwolke_schweben_7
+  - first:
+      213: 1994006491882803064
+    second: zuckerwolke_schweben_8
+  - first:
+      213: 1468323477065593865
+    second: zuckerwolke_schweben_9
+  - first:
+      213: 2862042496736042390
+    second: zuckerwolke_schweben_10
+  - first:
+      213: 2925561117971785170
+    second: zuckerwolke_schweben_11
+  - first:
+      213: 2916678211284136156
+    second: zuckerwolke_schweben_12
+  - first:
+      213: 3520499286281525879
+    second: zuckerwolke_schweben_13
+  - first:
+      213: 2236898685619415052
+    second: zuckerwolke_schweben_14
+  - first:
+      213: 1253903630146462639
+    second: zuckerwolke_schweben_15
+  - first:
+      213: 1540151558799432547
+    second: zuckerwolke_schweben_16
+  - first:
+      213: 3732980168701743920
+    second: zuckerwolke_schweben_17
+  - first:
+      213: 2297534218444466615
+    second: zuckerwolke_schweben_18
+  - first:
+      213: 3208557337729026888
+    second: zuckerwolke_schweben_19
+  - first:
+      213: 3325639567744904606
+    second: zuckerwolke_schweben_20
+  - first:
+      213: 3859565180102615814
+    second: zuckerwolke_schweben_21
+  - first:
+      213: 2199945579870971177
+    second: zuckerwolke_schweben_22
+  - first:
+      213: 3889153986432518278
+    second: zuckerwolke_schweben_23
+  - first:
+      213: 1393873732548190822
+    second: zuckerwolke_schweben_24
+  - first:
+      213: 1242475084180599961
+    second: zuckerwolke_schweben_25
+  - first:
+      213: 3378801883087207558
+    second: zuckerwolke_schweben_26
+  - first:
+      213: 4114141396503076619
+    second: zuckerwolke_schweben_27
+  - first:
+      213: 2825466878539038948
+    second: zuckerwolke_schweben_28
+  - first:
+      213: 4000605458928094581
+    second: zuckerwolke_schweben_29
+  - first:
+      213: 4366952028741724443
+    second: zuckerwolke_schweben_30
+  - first:
+      213: 1949534018446640811
+    second: zuckerwolke_schweben_31
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: zuckerwolke_schweben_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 44
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 549619510d594b5a8d6108838e2547eb
+      internalID: 1886802630474755962
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: zuckerwolke_schweben_1
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 0
+        width: 44
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a1e9fc9c18664efaa2ec84c7ab17027d
+      internalID: 1268838877082675033
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: zuckerwolke_schweben_2
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 0
+        width: 44
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fe9ba0fc5a6c47c98362ac62ac14e5f0
+      internalID: 2008167183153515647
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: zuckerwolke_schweben_3
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 0
+        width: 44
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b2a6d2fcf34044018d218aa7ceb24c51
+      internalID: 4010559402729446751
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: zuckerwolke_schweben_4
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 0
+        width: 44
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b2573955dbc54dc99b32b268401df3cc
+      internalID: 4273763707129447349
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: zuckerwolke_schweben_5
+      rect:
+        serializedVersion: 2
+        x: 220
+        y: 0
+        width: 44
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 190897f3e09e4030bf12409ee76f73a7
+      internalID: 2921040326512485894
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: zuckerwolke_schweben_6
+      rect:
+        serializedVersion: 2
+        x: 264
+        y: 0
+        width: 44
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 708aca0a24d04c548b7229612a74d813
+      internalID: 4363631779206162332
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: zuckerwolke_schweben_7
+      rect:
+        serializedVersion: 2
+        x: 308
+        y: 0
+        width: 44
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6430a3560b114e1fb512af0f1785eca2
+      internalID: 3915455625305261168
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: zuckerwolke_schweben_8
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 0
+        width: 44
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f3c5b98341b24edc9633ca5d34c58b00
+      internalID: 1994006491882803064
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: zuckerwolke_schweben_9
+      rect:
+        serializedVersion: 2
+        x: 396
+        y: 0
+        width: 44
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 94485aaf98a044bd9a59a20cd33d1a30
+      internalID: 1468323477065593865
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: zuckerwolke_schweben_10
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 0
+        width: 44
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ccc4f537547748e08ba9e986850969bb
+      internalID: 2862042496736042390
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: zuckerwolke_schweben_11
+      rect:
+        serializedVersion: 2
+        x: 484
+        y: 0
+        width: 44
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c1ff853074f4cc79fb3b1e64a009314
+      internalID: 2925561117971785170
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: zuckerwolke_schweben_12
+      rect:
+        serializedVersion: 2
+        x: 528
+        y: 0
+        width: 44
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3677682bfe084225838a23629e84beb2
+      internalID: 2916678211284136156
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: zuckerwolke_schweben_13
+      rect:
+        serializedVersion: 2
+        x: 572
+        y: 0
+        width: 44
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ac37ba804b5f4e88ba9f93da10c18eab
+      internalID: 3520499286281525879
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: zuckerwolke_schweben_14
+      rect:
+        serializedVersion: 2
+        x: 616
+        y: 0
+        width: 44
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0fd0a4a28d5540dc97730c98669ca2f1
+      internalID: 2236898685619415052
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: zuckerwolke_schweben_15
+      rect:
+        serializedVersion: 2
+        x: 660
+        y: 0
+        width: 44
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 933f7745ba5e42b3af1abf677d55365d
+      internalID: 1253903630146462639
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: zuckerwolke_schweben_16
+      rect:
+        serializedVersion: 2
+        x: 704
+        y: 0
+        width: 44
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: af3b2dca6805471ca40258de4c7bc911
+      internalID: 1540151558799432547
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: zuckerwolke_schweben_17
+      rect:
+        serializedVersion: 2
+        x: 748
+        y: 0
+        width: 44
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0b7fc48327a545b4a727509d9661f2a4
+      internalID: 3732980168701743920
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: zuckerwolke_schweben_18
+      rect:
+        serializedVersion: 2
+        x: 792
+        y: 0
+        width: 44
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d48b8f2fda9040cca57eed698c8df9c0
+      internalID: 2297534218444466615
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: zuckerwolke_schweben_19
+      rect:
+        serializedVersion: 2
+        x: 836
+        y: 0
+        width: 44
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 35d842b1ae9e49e094a4c73221d889b4
+      internalID: 3208557337729026888
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: zuckerwolke_schweben_20
+      rect:
+        serializedVersion: 2
+        x: 880
+        y: 0
+        width: 44
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9117f4977eed4ee2b130eb5f414f2275
+      internalID: 3325639567744904606
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: zuckerwolke_schweben_21
+      rect:
+        serializedVersion: 2
+        x: 924
+        y: 0
+        width: 44
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6df75926e5e74bab91337429fec79fb4
+      internalID: 3859565180102615814
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: zuckerwolke_schweben_22
+      rect:
+        serializedVersion: 2
+        x: 968
+        y: 0
+        width: 44
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75cd1f0a0c874d03a0edc4314d9abd0e
+      internalID: 2199945579870971177
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: zuckerwolke_schweben_23
+      rect:
+        serializedVersion: 2
+        x: 1012
+        y: 0
+        width: 44
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eab97fb911d04827a093a4fec9ceba32
+      internalID: 3889153986432518278
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: zuckerwolke_schweben_24
+      rect:
+        serializedVersion: 2
+        x: 1056
+        y: 0
+        width: 44
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 63f7338d73a44044970d90a34bfac3d4
+      internalID: 1393873732548190822
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: zuckerwolke_schweben_25
+      rect:
+        serializedVersion: 2
+        x: 1100
+        y: 0
+        width: 44
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0306f836b9bd4c7d8cc04b728401d762
+      internalID: 1242475084180599961
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: zuckerwolke_schweben_26
+      rect:
+        serializedVersion: 2
+        x: 1144
+        y: 0
+        width: 44
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f64286f524e47e597d40a09a69722ca
+      internalID: 3378801883087207558
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: zuckerwolke_schweben_27
+      rect:
+        serializedVersion: 2
+        x: 1188
+        y: 0
+        width: 44
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 541fb9b44eb349edbb894b4079bf44af
+      internalID: 4114141396503076619
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: zuckerwolke_schweben_28
+      rect:
+        serializedVersion: 2
+        x: 1232
+        y: 0
+        width: 44
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 36ef2945ddcb427696baeb24f7d61bc5
+      internalID: 2825466878539038948
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: zuckerwolke_schweben_29
+      rect:
+        serializedVersion: 2
+        x: 1276
+        y: 0
+        width: 44
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6dd7ed7a94cd43ad91bcbdf692628bc2
+      internalID: 4000605458928094581
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: zuckerwolke_schweben_30
+      rect:
+        serializedVersion: 2
+        x: 1320
+        y: 0
+        width: 44
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: db7a3a4a31de451ab0164f48d75f8d04
+      internalID: 4366952028741724443
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: zuckerwolke_schweben_31
+      rect:
+        serializedVersion: 2
+        x: 1364
+        y: 0
+        width: 44
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b60ac077085c459894e898681fe1dcf2
+      internalID: 1949534018446640811
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      zuckerwolke_schweben_0: 1886802630474755962
+      zuckerwolke_schweben_1: 1268838877082675033
+      zuckerwolke_schweben_10: 2862042496736042390
+      zuckerwolke_schweben_11: 2925561117971785170
+      zuckerwolke_schweben_12: 2916678211284136156
+      zuckerwolke_schweben_13: 3520499286281525879
+      zuckerwolke_schweben_14: 2236898685619415052
+      zuckerwolke_schweben_15: 1253903630146462639
+      zuckerwolke_schweben_16: 1540151558799432547
+      zuckerwolke_schweben_17: 3732980168701743920
+      zuckerwolke_schweben_18: 2297534218444466615
+      zuckerwolke_schweben_19: 3208557337729026888
+      zuckerwolke_schweben_2: 2008167183153515647
+      zuckerwolke_schweben_20: 3325639567744904606
+      zuckerwolke_schweben_21: 3859565180102615814
+      zuckerwolke_schweben_22: 2199945579870971177
+      zuckerwolke_schweben_23: 3889153986432518278
+      zuckerwolke_schweben_24: 1393873732548190822
+      zuckerwolke_schweben_25: 1242475084180599961
+      zuckerwolke_schweben_26: 3378801883087207558
+      zuckerwolke_schweben_27: 4114141396503076619
+      zuckerwolke_schweben_28: 2825466878539038948
+      zuckerwolke_schweben_29: 4000605458928094581
+      zuckerwolke_schweben_3: 4010559402729446751
+      zuckerwolke_schweben_30: 4366952028741724443
+      zuckerwolke_schweben_31: 1949534018446640811
+      zuckerwolke_schweben_4: 4273763707129447349
+      zuckerwolke_schweben_5: 2921040326512485894
+      zuckerwolke_schweben_6: 4363631779206162332
+      zuckerwolke_schweben_7: 3915455625305261168
+      zuckerwolke_schweben_8: 1994006491882803064
+      zuckerwolke_schweben_9: 1468323477065593865
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

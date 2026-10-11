@@ -7,7 +7,7 @@ using UnityEngine;
 ///
 /// Groesse = range x AOE. Frueher wurde dafuer ein Bild per localScale
 /// aufgezogen (Mixels) - jetzt waehlt <see cref="PixelPool"/> die passende
-/// Groessenstufe aus Tools/kaffeepool.py, und der Kollider wird auf genau
+/// Groessenstufe, und der Kollider wird auf genau
 /// diese Groesse gesetzt.
 /// </summary>
 public class AreaWeaponPrefab : MonoBehaviour

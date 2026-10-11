@@ -12,7 +12,7 @@ public class CrumbTrailPrefab : MonoBehaviour
     public List<Enemy> enemiesInRange = new List<Enemy>();
 
     private float lifeTimer;
-    private SpriteFlipbook look;   // Grafik + Ausblenden, siehe Tools/waffen_modelle.py
+    private SpriteFlipbook look;
     private float tickCounter;
 
     void Start()

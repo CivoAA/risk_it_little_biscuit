@@ -3,7 +3,7 @@ using UnityEngine;
 
 /// <summary>
 /// Bilder und Masse fuer Phase 3 des Verkohlten (Einsaugen + Herzkammer).
-/// Die Bilder zeichnet Tools/verkohlter_herz.py nach Resources/Verkohlter -
+/// Die Bilder liegen in Resources/Verkohlter -
 /// deshalb laedt der Code sie selbst und es muss kein Prefab neu gebaut werden.
 ///
 /// Die Masse unten muessen zum Skript passen (dort stehen sie in Pixeln, hier
@@ -18,7 +18,7 @@ public static class VerkohlterArt
     public const float Fps = 12f;
     public const int BeatFrames = 16;
 
-    /// <summary>Bild 2 = BUM, Bild 5 = bumm (Tools/verkohlter_herz.py, beat_curve).</summary>
+    /// <summary>Bild 2 = BUM, Bild 5 = bumm.</summary>
     public const int BeatLub = 2;
     public const int BeatDub = 5;
 
@@ -50,7 +50,7 @@ public static class VerkohlterArt
 
     public static readonly Color Void = new Color32(10, 6, 8, 255);
 
-    /// <summary>Glut-Palette (wie FIRE in Tools/verkohlter.py), 0 = erkaltet, 6 = weiss.</summary>
+    /// <summary>Glut-Palette 0 = erkaltet, 6 = weiss.</summary>
     public static readonly Color32[] Fire =
     {
         new Color32(0x3d, 0x09, 0x07, 255), new Color32(0x7e, 0x16, 0x08, 255),
@@ -73,7 +73,7 @@ public static class VerkohlterArt
         if (frames == null || frames.Length == 0)
         {
             Debug.LogWarning("[Verkohlter] Bilder fehlen: Resources/Verkohlter/" + name +
-                             " - Tools/verkohlter_herz.py laufen lassen.");
+                             ".");
             frames = new Sprite[0];
         }
         else

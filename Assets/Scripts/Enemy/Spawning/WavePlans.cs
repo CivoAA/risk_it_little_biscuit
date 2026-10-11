@@ -419,24 +419,31 @@ public static class WavePlans
 
     /// <summary>
     /// Eisgletscher - Karte 3 in der Levelauswahl. Im Takt der Kueche (gleiche
-    /// Druckwerte, Boss bei 20:00), mit den Gegnern der Eiswelt:
+    /// Druckwerte, Boss bei 20:00), nur mit Gegnern der Eiswelt:
     ///
-    ///   Minzkugel    Grundgegner, schlittert auf der Schmelzpfuetze
-    ///   Raketeneis   springt auf dem Stiel, schnell und etwas zaeher
-    ///   Softi        Elite, Waffeltuete mit wirbelnder Softeis-Frisur
+    ///   Minzkugel        Grundgegner, schlittert auf der Schmelzpfuetze
+    ///   Raketeneis       springt auf dem Stiel, schnell und etwas zaeher
+    ///   Zuckerwoelkchen  schwebt schnell heran, kommt gern im Schwarm
+    ///   Eiskeks-Sandwich huepft und schnappt zu, zaeher als das Raketeneis
+    ///   Kokos-Yeti       der schwere Brocken (Werte wie der Milchpanzer)
+    ///   Sternplaetzchen  rollt wie ein Rad, schnell und schwach, kommt in Reihen
+    ///   Kakaotasse       watschelt, zaeh fuer ihre Groesse
+    ///   Puddingrobbe     robbt und rutscht, schneller als die Tasse
+    ///   Softi            Elite, Waffeltuete mit wirbelnder Softeis-Frisur
     ///
-    /// Dazu ab der Mitte die Weisse Messermaus (faellt im Schnee kaum auf) und
-    /// spaeter der Milchpanzer als schwerer Brocken. Der Schleimkoenig kommt
-    /// bei 11:30 als Zwischenboss, am Ende wartet der Eiskaiser
-    /// (Bauchrutscher-Billard + Frostring, siehe EnemyEiskaiser).
+    /// Der Schleimkoenig kommt bei 11:30 als Zwischenboss, am Ende wartet der
+    /// Eiskaiser (Kaiser-Kick + Frostring, siehe EnemyEiskaiser).
     ///
     /// Ablauf:
     ///
     ///   0:00  Anlauf, ~3 Minzkugeln (5 s)
-    ///   0:05  Minzkugeln, erster Raketen-Schwall bei 1:25, Ring mit Softi
-    ///   3:00  + Raketeneis im Grundnachschub
-    ///   9:00  + Weisse Messermaus, 11:30 Schleimkoenig (Zwischenboss)
-    ///  14:00  + Milchpanzer, Minzkugeln nur noch Beimischung
+    ///   0:05  Minzkugeln, erster Raketen-Schwall bei 1:25, Ring mit Softi,
+    ///         erster Woelkchen-Schwarm bei 2:05, erste Plaetzchen-Reihe bei 2:20
+    ///   3:00  + Raketeneis, Zuckerwoelkchen und Sternplaetzchen im Grundnachschub,
+    ///         erste Kakaotassen bei 7:00
+    ///   9:00  + Eiskeks-Sandwich und Kakaotasse, 11:30 Schleimkoenig (Zwischenboss),
+    ///         erste Puddingrobben bei 13:15
+    ///  14:00  + Kokos-Yeti und Puddingrobbe, Minzkugeln nur noch Beimischung
     ///  20:00  Eiskaiser
     /// </summary>
     public static RunPlan World5()
@@ -455,67 +462,93 @@ public static class WavePlans
             .Burst(45f, EnemyId.Minzkugel, 10f, Patterns.Arc, 0f)
             .Burst(80f, EnemyId.Raketeneis, 10f, Patterns.Column, 0f)
             .Encircle(105f, EnemyId.Softi, EnemyId.Minzkugel, 14, 13f, false, "RING!", 0.35f, 25f, 1.5f)
+            .Burst(120f, EnemyId.Zuckerwolke, 12f, Patterns.Cluster, 0f)
+            .Burst(135f, EnemyId.Plaetzchen, 10f, Patterns.Arc, 0f)
             .Burst(150f, EnemyId.Minzkugel, 12f, Patterns.Column, 0f);
 
         plan.Phase(360f)
-            .Pool(EnemyId.Minzkugel, 60f)
-            .Pool(EnemyId.Raketeneis, 40f)
+            .Pool(EnemyId.Minzkugel, 35f)
+            .Pool(EnemyId.Raketeneis, 30f)
+            .Pool(EnemyId.Zuckerwolke, 15f)
+            .Pool(EnemyId.Plaetzchen, 20f)
             .Pressure(28f, 56f)
             .Base(Patterns.Scatter)
             .Burst(5f, EnemyId.Raketeneis, 10f, Patterns.Arc, 0f)
+            .Burst(50f, EnemyId.Zuckerwolke, 16f, Patterns.Cluster, 0f)
             .Calm(75f, 10f, 0.15f)
             .Burst(105f, EnemyId.Raketeneis, 16f, Patterns.Cluster, 0f)
             .Burst(135f, EnemyId.Softi, 1f, Patterns.Ambush, 0f)
             .Burst(150f, EnemyId.Minzkugel, 18f, Patterns.Scatter, 0f)
+            .Burst(170f, EnemyId.Plaetzchen, 16f, Patterns.Column, 0f)
             .Calm(195f, 10f, 0.15f)
+            .Burst(210f, EnemyId.Zuckerwolke, 20f, Patterns.Arc, 0f)
             .Burst(225f, EnemyId.Raketeneis, 18f, Patterns.Cluster, 0f)
+            .Burst(240f, EnemyId.Kakaotasse, 8f, Patterns.Cluster, 0f)
             .Burst(270f, EnemyId.Minzkugel, 20f, Patterns.Arc, 0f)
             .Burst(300f, EnemyId.Softi, 1f, Patterns.Ambush, 0f)
             .Burst(330f, EnemyId.Raketeneis, 20f, Patterns.Column, 0f);
 
         plan.Phase(300f)
-            .Pool(EnemyId.Minzkugel, 30f)
-            .Pool(EnemyId.Raketeneis, 45f)
-            .Pool(EnemyId.WeisseMessermaus, 25f)
+            .Pool(EnemyId.Minzkugel, 15f)
+            .Pool(EnemyId.Raketeneis, 25f)
+            .Pool(EnemyId.Zuckerwolke, 10f)
+            .Pool(EnemyId.EisSandwich, 20f)
+            .Pool(EnemyId.Plaetzchen, 10f)
+            .Pool(EnemyId.Kakaotasse, 20f)
             .Pressure(70f, 140f)
             .Base(Patterns.Scatter)
-            .Burst(40f, EnemyId.WeisseMessermaus, 16f, Patterns.Ambush, 0f)
+            .Burst(40f, EnemyId.EisSandwich, 16f, Patterns.Ambush, 0f)
             .Burst(60f, EnemyId.Raketeneis, 12f, Patterns.Arc, 0f)
             .Calm(95f, 10f, 0.15f)
             .Boss(150f, EnemyId.Schleimkoenig, "SCHLEIMKOENIG!", 0.4f)
             .Calm(215f, 10f, 0.15f)
             .Burst(235f, EnemyId.Softi, 1f, Patterns.Ambush, 0f)
-            .Burst(250f, EnemyId.Raketeneis, 26f, Patterns.Column, 0f);
+            .Burst(250f, EnemyId.Zuckerwolke, 26f, Patterns.Cluster, 0f)
+            .Burst(255f, EnemyId.Puddingrobbe, 12f, Patterns.Ambush, 0f)
+            .Burst(270f, EnemyId.EisSandwich, 20f, Patterns.Column, 0f);
 
         plan.Phase(358f)
-            .Pool(EnemyId.Minzkugel, 15f)
-            .Pool(EnemyId.Raketeneis, 45f)
-            .Pool(EnemyId.WeisseMessermaus, 30f)
-            .Pool(EnemyId.Milchpanzer, 10f)
+            .Pool(EnemyId.Minzkugel, 5f)
+            .Pool(EnemyId.Raketeneis, 20f)
+            .Pool(EnemyId.Zuckerwolke, 10f)
+            .Pool(EnemyId.EisSandwich, 20f)
+            .Pool(EnemyId.KokosYeti, 10f)
+            .Pool(EnemyId.Kakaotasse, 15f)
+            .Pool(EnemyId.Puddingrobbe, 15f)
+            .Pool(EnemyId.Plaetzchen, 5f)
             .Pressure(140f, 170f)
             .Base(Patterns.Scatter)
-            .Burst(60f, EnemyId.Milchpanzer, 16f, Patterns.Ambush, 0f)
+            .Burst(60f, EnemyId.KokosYeti, 16f, Patterns.Ambush, 0f)
+            .Burst(90f, EnemyId.Puddingrobbe, 18f, Patterns.Column, 0f)
             .Calm(120f, 10f, 0.15f)
-            .Encircle(150f, EnemyId.Softi, EnemyId.Raketeneis, 18, 15f, false, "RING!", 0.35f, 25f, 1.5f)
-            .Burst(220f, EnemyId.WeisseMessermaus, 26f, Patterns.Cluster, 0f)
+            .Encircle(150f, EnemyId.Softi, EnemyId.EisSandwich, 18, 15f, false, "RING!", 0.35f, 25f, 1.5f)
+            .Burst(200f, EnemyId.Plaetzchen, 24f, Patterns.Arc, 0f)
+            .Burst(220f, EnemyId.Zuckerwolke, 30f, Patterns.Cluster, 0f)
             .Burst(260f, EnemyId.Softi, 1f, Patterns.Ambush, 0f)
             .Calm(290f, 10f, 0.15f)
             .Burst(320f, EnemyId.Minzkugel, 24f, Patterns.Arc, 0f);
 
         plan.Phase(600f)
-            .Pool(EnemyId.Minzkugel, 15f)
-            .Pool(EnemyId.Raketeneis, 40f)
-            .Pool(EnemyId.WeisseMessermaus, 30f)
-            .Pool(EnemyId.Milchpanzer, 15f)
+            .Pool(EnemyId.Minzkugel, 5f)
+            .Pool(EnemyId.Raketeneis, 25f)
+            .Pool(EnemyId.Zuckerwolke, 10f)
+            .Pool(EnemyId.EisSandwich, 20f)
+            .Pool(EnemyId.KokosYeti, 15f)
+            .Pool(EnemyId.Kakaotasse, 10f)
+            .Pool(EnemyId.Puddingrobbe, 15f)
             .Pressure(280f, 420f)
             .Base(Patterns.Scatter)
             .Boss(2f, EnemyId.Eiskaiser, "EISKAISER!", 0.4f);
 
         plan.EndlessPhase()
-            .Pool(EnemyId.Minzkugel, 10f)
-            .Pool(EnemyId.Raketeneis, 40f)
-            .Pool(EnemyId.WeisseMessermaus, 30f)
-            .Pool(EnemyId.Milchpanzer, 20f)
+            .Pool(EnemyId.Minzkugel, 5f)
+            .Pool(EnemyId.Raketeneis, 20f)
+            .Pool(EnemyId.Zuckerwolke, 10f)
+            .Pool(EnemyId.EisSandwich, 20f)
+            .Pool(EnemyId.KokosYeti, 15f)
+            .Pool(EnemyId.Kakaotasse, 10f)
+            .Pool(EnemyId.Puddingrobbe, 15f)
+            .Pool(EnemyId.Plaetzchen, 5f)
             .Pressure(100f, 100f)
             .Base(Patterns.Scatter)
             .Encircle(60f, EnemyId.None, EnemyId.Raketeneis, 20, 14f, false, "RING!", 0.35f, 25f, 1.5f)

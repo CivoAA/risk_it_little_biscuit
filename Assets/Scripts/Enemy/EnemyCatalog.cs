@@ -117,6 +117,28 @@ public enum EnemyId
 
     /// <summary>Baby-Squiddy aus der Quallen-Brut (SquiddyBaby). Kommt nur von Squiddy, in keinem Plan.</summary>
     QuallenBaby = 40,
+
+    // Eiswelt, zweite Welle Gegner
+
+    /// <summary>Eiskeks-Sandwich: das Vanilleeis ist ein Maul. Huepft und schnappt bei jeder Landung zu (HopMovement).</summary>
+    EisSandwich = 41,
+
+    /// <summary>Zuckerwatte-Woelkchen am Papierstiel, schwebt schnell heran und laesst es schneien. Schwarmgegner.</summary>
+    Zuckerwolke = 42,
+
+    /// <summary>Kokos-Yeti: schokogetunkte Kokosmakrone mit Kirsche, stapft schwer. Der Brocken der Eiswelt.</summary>
+    KokosYeti = 43,
+
+    // Eiswelt, dritte Welle Gegner
+
+    /// <summary>Kakaotasse: rote Emaille-Tasse mit heissem Kakao und Marshmallows, watschelt auf Stummelfuesschen.</summary>
+    Kakaotasse = 44,
+
+    /// <summary>Puddingrobbe: Panna-Cotta-Robbe mit Himbeersosse, robbt und rutscht auf dem Bauch, jongliert ihre Himbeere.</summary>
+    Puddingrobbe = 45,
+
+    /// <summary>Sternplaetzchen mit Zuckerguss: rollt wie ein Rad, schnell und schwach. Schwarmgegner.</summary>
+    Plaetzchen = 46,
 }
 
 /// <summary>
@@ -625,7 +647,7 @@ public static class EnemyCatalog
         Def(EnemyId.Eiskaiser, "Eiskaiser",
             health: 7000f, damage: 30f, speed: 1.7f, exp: 0, pushTime: 0f,
             role: EnemyRole.Boss, facing: EnemyFacing.Neutral,
-            sheet: "Assets/Art/Gegner/new/boss/eiskaiser_walk.png", fps: 12f,
+            sheet: "Assets/Art/Gegner/new/boss/eiskaiser_walk_s.png", fps: 12f,
             colliderRadius: 1.0f, colliderOffset: new Vector2(0f, 1.15f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Boss/Eiskaiser.prefab");
 
@@ -649,6 +671,48 @@ public static class EnemyCatalog
             sheet: "Assets/Art/Gegner/new/boss/squiddy_baby.png", fps: 12f,
             colliderRadius: 0.32f, colliderOffset: new Vector2(0f, 0.55f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Boss/QuallenBaby.prefab");
+
+        Def(EnemyId.EisSandwich, "Eiskeks-Sandwich",
+            health: 18f, damage: 4f, speed: 2.2f, exp: 6, pushTime: 0.25f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/eis/sandwich_schnapp.png", fps: 14f,
+            colliderRadius: 0.36f, colliderOffset: new Vector2(0f, 0.36f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/EisSandwich.prefab", hopFirst: 3, hopLast: 9);
+
+        Def(EnemyId.Zuckerwolke, "Zuckerwoelkchen",
+            health: 7f, damage: 3f, speed: 2.6f, exp: 3, pushTime: 0.3f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/eis/zuckerwolke_schweben.png", fps: 12f,
+            colliderRadius: 0.36f, colliderOffset: new Vector2(0f, 0.66f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Zuckerwolke.prefab");
+
+        Def(EnemyId.KokosYeti, "Kokos-Yeti",
+            health: 900f, damage: 14f, speed: 1.3f, exp: 650, pushTime: 0.05f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/eis/kokosyeti_stapf.png", fps: 12f,
+            colliderRadius: 0.5f, colliderOffset: new Vector2(0f, 0.62f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/KokosYeti.prefab");
+
+        Def(EnemyId.Kakaotasse, "Kakaotasse",
+            health: 30f, damage: 5f, speed: 1.7f, exp: 8, pushTime: 0.25f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/eis/kakaotasse_watschel.png", fps: 12f,
+            colliderRadius: 0.36f, colliderOffset: new Vector2(0f, 0.42f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Kakaotasse.prefab");
+
+        Def(EnemyId.Puddingrobbe, "Puddingrobbe",
+            health: 24f, damage: 4f, speed: 2.3f, exp: 6, pushTime: 0.25f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/eis/puddingrobbe_rutsch.png", fps: 12f,
+            colliderRadius: 0.4f, colliderOffset: new Vector2(0f, 0.3f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Puddingrobbe.prefab");
+
+        Def(EnemyId.Plaetzchen, "Sternplaetzchen",
+            health: 8f, damage: 3f, speed: 2.8f, exp: 3, pushTime: 0.3f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/eis/plaetzchen_roll.png", fps: 16f,
+            colliderRadius: 0.36f, colliderOffset: new Vector2(0f, 0.4f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Plaetzchen.prefab");
 
         // ---------------------------------------------------------- Archiv
         //

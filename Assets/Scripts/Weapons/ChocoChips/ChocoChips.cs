@@ -16,8 +16,8 @@ using UnityEngine.SceneManagement;
 /// Durchschlag je Stufe steht in <see cref="PiercePerLevel"/>.
 ///
 /// Die Werte stehen im Code (<see cref="LevelStats"/>), nicht am Prefab - sie
-/// ueberschreiben beim Start, was im Inspector steht. Bild aus
-/// Tools/schoko_milch.py (Resources/Weapons/choco_chip).
+/// ueberschreiben beim Start, was im Inspector steht. Bild in
+/// Resources/Weapons/choco_chip.
 /// </summary>
 public class ChocoChips : Weapon
 {

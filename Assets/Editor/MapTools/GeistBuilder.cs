@@ -11,7 +11,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 /// <summary>
-/// Baut den Lebkuchen-Geisterwald (Level 4, Szene Map_World6) aus den Python-Bildern:
+/// Baut den Lebkuchen-Geisterwald (Level 4, Szene Map_World6) aus den Bildern:
 ///  1. ein Tile je Sprite aus geist_boden.png (Kakao-Erde + Lebkuchen-Pflaster),
 ///  2. ein Prefab je Prop: Grundbild (beleuchtet), bei Leuchtprops ein Kind
 ///     "Glow" mit Sprite-Unlit-Default (Flammen, Kuerbisgesichter, Pilzhuete,
@@ -31,7 +31,6 @@ using UnityEngine.Tilemaps;
 ///
 /// Wiederholbar: Tiles und Prefabs werden aktualisiert, die Welt (Grid) wird
 /// neu gebaut, das Map-Objekt bleibt stehen (Musik/Wellenplan bleiben).
-/// Bilder: Tools/geist_props.py, dann geist_boden.py, geist_atmo.py, geist_vorschau.py;
 /// Musik: Tools/geist_musik.py (Notenblatt in SongSheet.cs, Eintrag "geist").
 /// </summary>
 public static class GeistBuilder
@@ -61,7 +60,7 @@ public static class GeistBuilder
     private const int FloorOrder = 5;              // wie Wald-, Vulkan- und Eisboden
     private const int FlatOrder = 10;              // flach im Boden, unter Gegnern/XP
     private const int PropLayer = 3;               // "Baundaries": haelt den Spieler, Gegner laufen drueber
-    private const float Gap = 1.2f;                // wie GAP in Tools/geist_boden.py
+    private const float Gap = 1.2f;
 
     private class Prop
     {
@@ -91,7 +90,7 @@ public static class GeistBuilder
     {
         AssetDatabase.Refresh();
         if (!File.Exists(LayoutPath) || !File.Exists(InfoPath))
-            return "geist_layout.json oder geist_props.json fehlt - erst Tools/geist_props.py und Tools/geist_boden.py laufen lassen.";
+            return "geist_layout.json oder geist_props.json fehlt.";
 
         // Szene zuerst oeffnen bzw. anlegen: OpenScene entlaedt unbenutzte Assets,
         // vorher geladene Tiles waeren danach kaputt (siehe KuecheBuilder).
@@ -385,7 +384,7 @@ public static class GeistBuilder
     private static void SetSprites(SerializedProperty list, Sprite[] sprites)
     {
         sprites = sprites.Where(s => s != null).ToArray();
-        if (sprites.Length == 0) Debug.LogWarning("[Geist] Bilder fehlen fuer " + list.name + " - Tools/geist_atmo.py laufen lassen.");
+        if (sprites.Length == 0) Debug.LogWarning("[Geist] Bilder fehlen fuer " + list.name + ".");
         list.arraySize = sprites.Length;
         for (int i = 0; i < sprites.Length; i++) list.GetArrayElementAtIndex(i).objectReferenceValue = sprites[i];
     }

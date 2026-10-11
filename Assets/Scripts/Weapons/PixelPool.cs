@@ -6,8 +6,7 @@ using UnityEngine;
 /// werden: die Lauf-Kamera ist pixelgenau (32 PPU), jede localScale != 1
 /// macht ungleich grosse Pixel. Stattdessen liegt jede Groesse als eigenes
 /// Bild in Resources (&lt;prefix&gt;&lt;Pixel&gt;), und <see cref="Begin"/> nimmt die
-/// naechstpassende Stufe. Gezeichnet von Tools/kaffeepool.py und
-/// Tools/marmelade.py.
+/// naechstpassende Stufe.
 ///
 /// Jeder Streifen hat drei Abschnitte: Auftauchen (einmal), Schleife,
 /// Verschwinden (laeuft zum Lebensende, siehe <see cref="SetLifeLeft"/>).

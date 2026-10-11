@@ -15,8 +15,7 @@ using UnityEngine.Tilemaps;
 ///  4. haengt an World0 einen zweiten RandomObjectSpawner, der die Objekte verteilt.
 ///
 /// Wiederholbar: vorhandene Tiles und Prefabs werden aktualisiert, der
-/// Prop-Spawner wird wiederverwendet. Die Bilder kommen aus
-/// Tools/kueche_boden.py und Tools/kueche_props.py.
+/// Prop-Spawner wird wiederverwendet.
 /// </summary>
 public static class KuecheBuilder
 {
@@ -30,7 +29,7 @@ public static class KuecheBuilder
     private const int PropLayer = 3; // "Baundaries" - wie die Baeume im Wald
     private const float Ppu = 32f;
 
-    // Aufbau des Streifens, siehe Tools/kueche_boden.py
+
     private const int Variants = 10;
     private const int WallIndex = 20;
     private const int SkirtingTopIndex = 21;
@@ -74,7 +73,7 @@ public static class KuecheBuilder
         var scene = EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
 
         Tile[] tiles = BuildTiles();
-        if (tiles == null) return "Keine Sprites in " + TileSheet + " - erst Tools/kueche_boden.py laufen lassen.";
+        if (tiles == null) return "Keine Sprites in " + TileSheet + ".";
 
         List<GameObject> prefabs = BuildPrefabs();
         AssetDatabase.SaveAssets();

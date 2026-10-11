@@ -4,8 +4,7 @@ using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
 /// <summary>
-/// Das Gespenst / Squiddy - Endboss des Lebkuchen-Geisterwalds. Bilder aus
-/// Tools/squiddy.py + Tools/squiddy_fx.py, das Prefab baut
+/// Das Gespenst / Squiddy - Endboss des Lebkuchen-Geisterwalds. Das Prefab baut
 /// Tools -> Gegner -> Squiddy bauen.
 ///
 /// PHASE 1 - DAS GESPENST: ein grosses Laken-Gespenst, das im dunklen Wald
@@ -88,7 +87,7 @@ public class EnemySquiddy : MonoBehaviour
 
     /// <summary>Boss-Mitte ueber dem Pivot (Bildhoehe 160 px, Glocke/Kopf um 2.3 Einheiten).</summary>
     private static readonly Vector2 BodyCenter = new Vector2(0f, 2.2f);
-    /// <summary>Wo das geraffte Laken in Bild 29 der Enthuellung sitzt (aus Tools/squiddy.py).</summary>
+    /// <summary>Wo das geraffte Laken in Bild 29 der Enthuellung sitzt.</summary>
     private static readonly Vector2 BundleOffset = new Vector2(-0.3f, 4.05f);
 
     private static readonly Color GhostLight = new Color(0.78f, 0.76f, 1f);

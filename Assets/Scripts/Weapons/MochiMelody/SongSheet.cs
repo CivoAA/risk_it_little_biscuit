@@ -12,7 +12,7 @@ using UnityEngine;
 /// heisst: Mochi spielt frei in ihrem eigenen Tempo (<see cref="Solo"/>).
 ///
 /// Die Werte stammen aus Tools/eis_musik.py, kueche_musik.py, vulkan_musik.py,
-/// herz_musik.py, geist_musik.py, squiddy_musik.py (komponiert) bzw. aus einer
+/// herz_musik.py, geist_musik.py (komponiert) bzw. aus einer
 /// Beat-/Akkord-Analyse der fertigen Dateien (Wald, Off to Osaka) - siehe
 /// Tools/musik_analyse.py. Neues Stueck: dort analysieren, hier eintragen.
 /// </summary>
@@ -189,8 +189,7 @@ public class SongSheet
         },
 
         // "Squiddys Gelee-Gloria" (Phase 2 des Geisterwald-Bosses): E-Dur, 132 BPM,
-        // gerade Achtel, 40 Takte, beginnt genau auf der Eins. Akkorde 1:1 aus
-        // Tools/squiddy_musik.py (SECTIONS/PROG_*), "B" = H-Dur.
+        // gerade Achtel, 40 Takte, beginnt genau auf der Eins, "B" = H-Dur.
         ["squiddy"] = new SongSheet
         {
             clipName = "squiddy",

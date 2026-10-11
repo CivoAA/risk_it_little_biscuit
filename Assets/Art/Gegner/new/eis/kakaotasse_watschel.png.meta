@@ -1,0 +1,939 @@
+fileFormatVersion: 2
+guid: 179abc307c564847bf9e9b10d7c496a9
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1792950459707316294
+    second: kakaotasse_watschel_0
+  - first:
+      213: 1211828683968635469
+    second: kakaotasse_watschel_1
+  - first:
+      213: 4004997001389601613
+    second: kakaotasse_watschel_2
+  - first:
+      213: 1404488264161502118
+    second: kakaotasse_watschel_3
+  - first:
+      213: 3654677113067947154
+    second: kakaotasse_watschel_4
+  - first:
+      213: 1683673879518359176
+    second: kakaotasse_watschel_5
+  - first:
+      213: 1511218923503161948
+    second: kakaotasse_watschel_6
+  - first:
+      213: 1930597208217943278
+    second: kakaotasse_watschel_7
+  - first:
+      213: 2150232501161539795
+    second: kakaotasse_watschel_8
+  - first:
+      213: 3586871417906603103
+    second: kakaotasse_watschel_9
+  - first:
+      213: 2505437879918017112
+    second: kakaotasse_watschel_10
+  - first:
+      213: 1237080350954634217
+    second: kakaotasse_watschel_11
+  - first:
+      213: 2646946109787793224
+    second: kakaotasse_watschel_12
+  - first:
+      213: 3091460232021491745
+    second: kakaotasse_watschel_13
+  - first:
+      213: 1697476316093849762
+    second: kakaotasse_watschel_14
+  - first:
+      213: 2826148038361616936
+    second: kakaotasse_watschel_15
+  - first:
+      213: 4396668293855437542
+    second: kakaotasse_watschel_16
+  - first:
+      213: 1474596528260520972
+    second: kakaotasse_watschel_17
+  - first:
+      213: 4391371837797045436
+    second: kakaotasse_watschel_18
+  - first:
+      213: 3954688977566653431
+    second: kakaotasse_watschel_19
+  - first:
+      213: 3388907474521294689
+    second: kakaotasse_watschel_20
+  - first:
+      213: 3633556295811256462
+    second: kakaotasse_watschel_21
+  - first:
+      213: 3467330993721278721
+    second: kakaotasse_watschel_22
+  - first:
+      213: 3154506741949397896
+    second: kakaotasse_watschel_23
+  - first:
+      213: 1559292115749519885
+    second: kakaotasse_watschel_24
+  - first:
+      213: 1597354696416013095
+    second: kakaotasse_watschel_25
+  - first:
+      213: 3607053980151155969
+    second: kakaotasse_watschel_26
+  - first:
+      213: 3043467588321557439
+    second: kakaotasse_watschel_27
+  - first:
+      213: 3259741470561466963
+    second: kakaotasse_watschel_28
+  - first:
+      213: 1167233056776366701
+    second: kakaotasse_watschel_29
+  - first:
+      213: 4557189713934938523
+    second: kakaotasse_watschel_30
+  - first:
+      213: 4335377944468058382
+    second: kakaotasse_watschel_31
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: kakaotasse_watschel_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.45, y: 0.06521739130434782}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 80ec05e61d824befa6282ce4fef32c5e
+      internalID: 1792950459707316294
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kakaotasse_watschel_1
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.45, y: 0.06521739130434782}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8ca35ac3092f42eda37933bdd76960d4
+      internalID: 1211828683968635469
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kakaotasse_watschel_2
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.45, y: 0.06521739130434782}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1e2c23905b1c460fb5317c84ac7ebdbf
+      internalID: 4004997001389601613
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kakaotasse_watschel_3
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.45, y: 0.06521739130434782}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 457b0ed33bbf490d9a9f6fb3a55fd49c
+      internalID: 1404488264161502118
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kakaotasse_watschel_4
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.45, y: 0.06521739130434782}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 87f830ccdd2f457a9ef0b5c60583fc96
+      internalID: 3654677113067947154
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kakaotasse_watschel_5
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.45, y: 0.06521739130434782}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e5c3fbcb27644c6081775865ff21a93d
+      internalID: 1683673879518359176
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kakaotasse_watschel_6
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.45, y: 0.06521739130434782}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 61827c9c23414d07b2122a920af8ae4a
+      internalID: 1511218923503161948
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kakaotasse_watschel_7
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.45, y: 0.06521739130434782}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aa30ced15d764ec981d6b0625a36a89f
+      internalID: 1930597208217943278
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kakaotasse_watschel_8
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.45, y: 0.06521739130434782}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ca0543c3592842ef88e9e01e0beb3b62
+      internalID: 2150232501161539795
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kakaotasse_watschel_9
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.45, y: 0.06521739130434782}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: def9222be4bc4d38bce47e62b8bf73e2
+      internalID: 3586871417906603103
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kakaotasse_watschel_10
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.45, y: 0.06521739130434782}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 32debc56a81146a9b8aad4d797289014
+      internalID: 2505437879918017112
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kakaotasse_watschel_11
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.45, y: 0.06521739130434782}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e1a403faa3d84275b1bc87bdfe14ca84
+      internalID: 1237080350954634217
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kakaotasse_watschel_12
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.45, y: 0.06521739130434782}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1083465cbe4c449689fed92064f55ec7
+      internalID: 2646946109787793224
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kakaotasse_watschel_13
+      rect:
+        serializedVersion: 2
+        x: 520
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.45, y: 0.06521739130434782}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 65d3e46711394bfaa0422b4903d3425d
+      internalID: 3091460232021491745
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kakaotasse_watschel_14
+      rect:
+        serializedVersion: 2
+        x: 560
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.45, y: 0.06521739130434782}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c2eb047ed5f84e18a5ac48eb97d2fa40
+      internalID: 1697476316093849762
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kakaotasse_watschel_15
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.45, y: 0.06521739130434782}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc78f02d8d2a4a2a842f61e58786358b
+      internalID: 2826148038361616936
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kakaotasse_watschel_16
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.45, y: 0.06521739130434782}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a70a991455744ea68f512eef42875cbb
+      internalID: 4396668293855437542
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kakaotasse_watschel_17
+      rect:
+        serializedVersion: 2
+        x: 680
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.45, y: 0.06521739130434782}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 721fbe87780844e0aba3b3d813fd595d
+      internalID: 1474596528260520972
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kakaotasse_watschel_18
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.45, y: 0.06521739130434782}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 26a5ddb484984611844383658b861636
+      internalID: 4391371837797045436
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kakaotasse_watschel_19
+      rect:
+        serializedVersion: 2
+        x: 760
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.45, y: 0.06521739130434782}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0de16686144245adb9ffc53c57ef07cc
+      internalID: 3954688977566653431
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kakaotasse_watschel_20
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.45, y: 0.06521739130434782}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6f46700e722841398db715df56736521
+      internalID: 3388907474521294689
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kakaotasse_watschel_21
+      rect:
+        serializedVersion: 2
+        x: 840
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.45, y: 0.06521739130434782}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e1fff9cd92754f958ba625f9f33321da
+      internalID: 3633556295811256462
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kakaotasse_watschel_22
+      rect:
+        serializedVersion: 2
+        x: 880
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.45, y: 0.06521739130434782}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d642163048c8425bb1706f7b10dd5290
+      internalID: 3467330993721278721
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kakaotasse_watschel_23
+      rect:
+        serializedVersion: 2
+        x: 920
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.45, y: 0.06521739130434782}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed9a49975d2e441c8d0aa7a233a8b071
+      internalID: 3154506741949397896
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kakaotasse_watschel_24
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.45, y: 0.06521739130434782}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8fdff7db7b9b4bc48b1ebfa0d6aa1a47
+      internalID: 1559292115749519885
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kakaotasse_watschel_25
+      rect:
+        serializedVersion: 2
+        x: 1000
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.45, y: 0.06521739130434782}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ebf899d3a7074168a459d516745e1d16
+      internalID: 1597354696416013095
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kakaotasse_watschel_26
+      rect:
+        serializedVersion: 2
+        x: 1040
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.45, y: 0.06521739130434782}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e5a33147d2ec462faf7b8ace04df748a
+      internalID: 3607053980151155969
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kakaotasse_watschel_27
+      rect:
+        serializedVersion: 2
+        x: 1080
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.45, y: 0.06521739130434782}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c4c64d74bf84db88d4b8742ad2f2657
+      internalID: 3043467588321557439
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kakaotasse_watschel_28
+      rect:
+        serializedVersion: 2
+        x: 1120
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.45, y: 0.06521739130434782}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f8cffae4b6844565b1e0bb7b0eaba5d9
+      internalID: 3259741470561466963
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kakaotasse_watschel_29
+      rect:
+        serializedVersion: 2
+        x: 1160
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.45, y: 0.06521739130434782}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c5508471c75440dc8cc411296bda5168
+      internalID: 1167233056776366701
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kakaotasse_watschel_30
+      rect:
+        serializedVersion: 2
+        x: 1200
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.45, y: 0.06521739130434782}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aa5f302d81b84fd6bf88a97f66cffc0c
+      internalID: 4557189713934938523
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kakaotasse_watschel_31
+      rect:
+        serializedVersion: 2
+        x: 1240
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.45, y: 0.06521739130434782}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a5ea1dd8c6a94a10942c9b5b163450c8
+      internalID: 4335377944468058382
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      kakaotasse_watschel_0: 1792950459707316294
+      kakaotasse_watschel_1: 1211828683968635469
+      kakaotasse_watschel_10: 2505437879918017112
+      kakaotasse_watschel_11: 1237080350954634217
+      kakaotasse_watschel_12: 2646946109787793224
+      kakaotasse_watschel_13: 3091460232021491745
+      kakaotasse_watschel_14: 1697476316093849762
+      kakaotasse_watschel_15: 2826148038361616936
+      kakaotasse_watschel_16: 4396668293855437542
+      kakaotasse_watschel_17: 1474596528260520972
+      kakaotasse_watschel_18: 4391371837797045436
+      kakaotasse_watschel_19: 3954688977566653431
+      kakaotasse_watschel_2: 4004997001389601613
+      kakaotasse_watschel_20: 3388907474521294689
+      kakaotasse_watschel_21: 3633556295811256462
+      kakaotasse_watschel_22: 3467330993721278721
+      kakaotasse_watschel_23: 3154506741949397896
+      kakaotasse_watschel_24: 1559292115749519885
+      kakaotasse_watschel_25: 1597354696416013095
+      kakaotasse_watschel_26: 3607053980151155969
+      kakaotasse_watschel_27: 3043467588321557439
+      kakaotasse_watschel_28: 3259741470561466963
+      kakaotasse_watschel_29: 1167233056776366701
+      kakaotasse_watschel_3: 1404488264161502118
+      kakaotasse_watschel_30: 4557189713934938523
+      kakaotasse_watschel_31: 4335377944468058382
+      kakaotasse_watschel_4: 3654677113067947154
+      kakaotasse_watschel_5: 1683673879518359176
+      kakaotasse_watschel_6: 1511218923503161948
+      kakaotasse_watschel_7: 1930597208217943278
+      kakaotasse_watschel_8: 2150232501161539795
+      kakaotasse_watschel_9: 3586871417906603103
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 /// <summary>
-/// Baut die Eiswelt (Level 3, Szene Map_World5) aus den Python-Bildern:
+/// Baut die Eiswelt (Level 3, Szene Map_World5) aus den Bildern:
 ///  1. ein Tile je Sprite aus eis_boden.png (Vanilleschnee + Waffel),
 ///  2. ein Prefab je stehendem Prop (Waffeltanne, Eiskugeln, ... - Sprite,
 ///     Fuss-Kollision, MixerBlocker) und je Glatteis-Pfuetze (Flipbook +
@@ -23,7 +23,6 @@ using UnityEngine.Tilemaps;
 ///
 /// Wiederholbar: Tiles und Prefabs werden aktualisiert, die Welt (Grid) wird
 /// neu gebaut, das Map-Objekt bleibt stehen (Musik/Wellenplan bleiben).
-/// Bilder: Tools/eis_props.py, dann Tools/eis_boden.py, Vorschau Tools/eis_vorschau.py.
 /// </summary>
 public static class EisBuilder
 {
@@ -50,7 +49,7 @@ public static class EisBuilder
     private const int FloorOrder = 5;              // wie Wald- und Vulkanboden
     private const int IceOrder = 10;               // flach im Boden, unter Gegnern/XP
     private const int PropLayer = 3;               // "Baundaries": haelt den Spieler, Gegner laufen drueber
-    private const float Gap = 1.4f;                // wie GAP in Tools/eis_boden.py
+    private const float Gap = 1.4f;
 
     private const string PondPrefix = "glatteis_";
 
@@ -85,7 +84,7 @@ public static class EisBuilder
     {
         AssetDatabase.Refresh();
         if (!File.Exists(LayoutPath) || !File.Exists(InfoPath))
-            return "eis_layout.json oder eis_props.json fehlt - erst Tools/eis_props.py und Tools/eis_boden.py laufen lassen.";
+            return "eis_layout.json oder eis_props.json fehlt.";
 
         // Szene zuerst oeffnen bzw. anlegen: OpenScene entlaedt unbenutzte Assets,
         // vorher geladene Tiles waeren danach kaputt (siehe KuecheBuilder).

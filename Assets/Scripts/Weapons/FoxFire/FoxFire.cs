@@ -18,8 +18,8 @@ using UnityEngine;
 /// shots    = Irrlichter (+ Extra-Schuss 1:1)
 ///
 /// Die Werte stehen im Code (<see cref="LevelStats"/>), nicht am Prefab - sie
-/// ueberschreiben beim Start, was im Inspector steht. Bilder aus
-/// Tools/fuchsfeuer.py (Resources/Weapons/foxfire_*).
+/// ueberschreiben beim Start, was im Inspector steht. Bilder in
+/// Resources/Weapons/foxfire_*.
 /// </summary>
 public class FoxFire : Weapon
 {
@@ -319,8 +319,8 @@ public class FoxFire : Weapon
     // ------------------------------------------------------------------
 
     /// <summary>
-    /// Ringradien der gemalten Flammenringe in Pixeln (Tools/fuchsfeuer.py,
-    /// BURST_RADII). Die Lauf-Kamera ist pixelgenau - skaliert wird darum
+    /// Ringradien der gemalten Flammenringe in Pixeln.
+    /// Die Lauf-Kamera ist pixelgenau - skaliert wird darum
     /// nie, sondern der naechstpassende Ring genommen.
     /// </summary>
     private static readonly int[] BurstRadii = { 24, 40, 54, 70 };

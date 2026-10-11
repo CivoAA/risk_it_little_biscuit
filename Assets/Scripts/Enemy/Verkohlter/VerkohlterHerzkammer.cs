@@ -29,7 +29,7 @@ using UnityEngine.Rendering.Universal;
 ///     zurueck, wo der Verkohlte stand, und raeumt alles wieder auf.
 /// Verschwindet der Boss anders (Test-Szene: Boss weg), gilt der zweite Weg.
 ///
-/// Bilder: Tools/verkohlter_herz.py (herzkammer_hinten / _glut / _vorne).
+/// Bilder: herzkammer_hinten / _glut / _vorne.
 /// </summary>
 public class VerkohlterHerzkammer : MonoBehaviour
 {

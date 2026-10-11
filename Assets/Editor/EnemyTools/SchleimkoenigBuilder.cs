@@ -15,7 +15,6 @@ using UnityEngine.Rendering;
 /// aendert man dort trotzdem ganz normal.
 ///
 /// Wiederholbar: ein vorhandenes Prefab wird aktualisiert, nicht ersetzt.
-/// Die Bilder kommen aus Tools/schleimkoenig.py.
 /// </summary>
 public static class SchleimkoenigBuilder
 {
@@ -54,7 +53,7 @@ public static class SchleimkoenigBuilder
         Sprite[] land = Load("schleimkoenig_landung");
         Sprite[] splash = Load("schleimkoenig_platsch");
         Sprite[] shadow = Load("schleimkoenig_schatten");
-        if (hop.Length == 0) return "Keine Bilder unter " + ArtFolder + " - erst Tools/schleimkoenig.py laufen lassen.";
+        if (hop.Length == 0) return "Keine Bilder unter " + ArtFolder + ".";
 
         EnsureFolder(System.IO.Path.GetDirectoryName(def.Prefab).Replace('\\', '/'));
 

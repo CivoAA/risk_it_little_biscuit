@@ -52,10 +52,10 @@ public class SwordSlash : Weapon
     /// </summary>
     private const float SlashArcRadius = 2.5f;
 
-    /// <summary>Hieb-Animation aus Tools/karottenhieb.py (Resources).</summary>
+    /// <summary>Hieb-Animation (Resources).</summary>
     private const string SlashFramesPath = "Weapons/carrot_slash";
 
-    /// <summary>Goldener Abschlusshieb, ebenfalls aus Tools/karottenhieb.py.</summary>
+    /// <summary>Goldener Abschlusshieb (Resources).</summary>
     private const string FinisherFramesPath = "Weapons/carrot_slash_finisher";
 
     private static readonly WeaponStats[] LevelStats =

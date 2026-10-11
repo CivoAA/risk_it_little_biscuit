@@ -19,8 +19,8 @@ using UnityEngine.SceneManagement;
 /// Kettenlaenge, geteilter Schaden und Bremse je Stufe stehen in den Tabellen unten.
 ///
 /// Die Werte stehen im Code (<see cref="LevelStats"/>), nicht am Prefab - sie
-/// ueberschreiben beim Start, was im Inspector steht. Bilder aus
-/// Tools/mochi_faden.py (Resources/Weapons/mochi_*).
+/// ueberschreiben beim Start, was im Inspector steht. Bilder in
+/// Resources/Weapons/mochi_*.
 /// </summary>
 public class MochiStrand : Weapon
 {

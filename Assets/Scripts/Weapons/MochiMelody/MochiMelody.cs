@@ -25,8 +25,8 @@ using UnityEngine;
 /// shots    = Noten pro Schlag (+ Extra-Schuss 1:1)
 ///
 /// Die Werte stehen im Code (<see cref="LevelStats"/>), nicht am Prefab - sie
-/// ueberschreiben beim Start, was im Inspector steht. Bilder und Toene aus
-/// Tools/mochi_melodie.py (Resources/Weapons/melody_*, Resources/Sounds/melody_*).
+/// ueberschreiben beim Start, was im Inspector steht. Bilder und Toene in
+/// Resources/Weapons/melody_*, Resources/Sounds/melody_*.
 /// </summary>
 public class MochiMelody : Weapon
 {
@@ -574,8 +574,8 @@ public class MochiMelody : Weapon
     // ------------------------------------------------------------------
 
     /// <summary>
-    /// Radien der gemalten Akkord-Ringe in Pixeln (Tools/mochi_melodie.py,
-    /// CHORD_RADII). Die Lauf-Kamera ist pixelgenau - skaliert wird nie,
+    /// Radien der gemalten Akkord-Ringe in Pixeln.
+    /// Die Lauf-Kamera ist pixelgenau - skaliert wird nie,
     /// sondern der naechstpassende Ring genommen.
     /// </summary>
     private static readonly int[] ChordRadii = { 40, 52, 64, 80 };

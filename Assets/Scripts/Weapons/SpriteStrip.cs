@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// Laedt einen Sprite-Streifen aus Resources in der richtigen Reihenfolge.
 /// Resources.LoadAll garantiert keine Reihenfolge - die Bilder heissen aber
-/// &lt;name&gt;_0, &lt;name&gt;_1, ... (Tools/unity_meta.py), danach wird sortiert.
+/// &lt;name&gt;_0, &lt;name&gt;_1, ..., danach wird sortiert.
 /// </summary>
 public static class SpriteStrip
 {

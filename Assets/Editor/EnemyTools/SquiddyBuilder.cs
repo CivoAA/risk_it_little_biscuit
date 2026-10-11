@@ -8,7 +8,7 @@ using UnityEngine.Rendering;
 /// <summary>
 /// Baut die Prefabs des Gespensts / Squiddys (Endboss des Geisterwalds) und
 /// der Baby-Squiddies und traegt beide im SpawnCatalog von GameCore ein.
-/// Bilder aus Tools/squiddy.py + Tools/squiddy_fx.py.
+/// Bilder: Art/Gegner/new/boss/squiddy_*.png.
 ///
 /// Wie beim Eiskaiser: das Bild sitzt auf einem Kind, gesteuert wird ohne
 /// Animator (<see cref="EnemySquiddy"/>), alle Streifen haengen am Skript.
@@ -22,7 +22,7 @@ public static class SquiddyBuilder
     private const string CoreScenePath = "Assets/Scenes/Core/GameCore.unity";
     private const string TemplatePrefab = "Assets/Prefabs/Enemy/Archiv/Vorlagen/fin_marshmallow_0.prefab";
     private const string SortingLayerName = "Objects";
-    /// <summary>Phase-2-Musik aus Tools/squiddy_musik.py (setzt beim PLING ein).</summary>
+    /// <summary>Phase-2-Musik (setzt beim PLING ein).</summary>
     private const string MusicPath = "Assets/music/squiddy.wav";
     private static readonly string[] LayerCandidates = { "Enemys ", "Enemys", "Enemy" };
 
@@ -67,7 +67,7 @@ public static class SquiddyBuilder
             if (s[name].Length == 0) missing.Add(name);
         }
         if (missing.Count > 0)
-            return "Bilder fehlen (" + string.Join(", ", missing) + ") - erst Tools/squiddy.py und Tools/squiddy_fx.py laufen lassen.";
+            return "Bilder fehlen (" + string.Join(", ", missing) + ").";
 
         Material unlit = FindUnlitMaterial();
         string babyResult = BuildBaby(s["baby"], unlit, out GameObject babyPrefab);

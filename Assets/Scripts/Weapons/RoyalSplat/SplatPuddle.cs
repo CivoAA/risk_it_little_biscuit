@@ -59,7 +59,7 @@ public class SplatPuddle : MonoBehaviour
         if (age < nextTick) return;
         nextTick = age + TickTime;
 
-        // Die Pfuetze ist flach gemalt (Hoehe = Breite / 1.25, Tools/koenigsplumps.py) -
+        // Die Pfuetze ist flach gemalt (Hoehe = Breite / 1.25) -
         // gebremst wird in genau dieser Ellipse, gemessen an den Fuessen.
         Vector2 at = transform.position;
         float reach = radius + 0.1f;
