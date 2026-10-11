@@ -478,7 +478,7 @@ public static class WavePlans
     ///   Softi            Elite, Waffeltuete mit wirbelnder Softeis-Frisur
     ///   Fuerst Pueckler  zweite Elite ab 8:00, Eisbombe mit Krone, zaeher ("SEINE HOHEIT!")
     ///
-    /// Der Schleimkoenig kommt bei 11:30 als Zwischenboss, am Ende wartet der
+    /// Stracciatella kommt bei 11:30 als Zwischenboss, am Ende wartet der
     /// Eiskaiser (Kaiser-Kick + Frostring, siehe EnemyEiskaiser).
     ///
     /// Ablauf:
@@ -488,7 +488,7 @@ public static class WavePlans
     ///         erster Woelkchen-Schwarm bei 2:05, erste Plaetzchen-Reihe bei 2:20
     ///   3:00  + Raketeneis, Zuckerwoelkchen und Sternplaetzchen im Grundnachschub,
     ///         erste Kakaotassen bei 7:00, 8:00 Ring mit Fuerst Pueckler
-    ///   9:00  + Eiskeks-Sandwich und Kakaotasse, 11:30 Schleimkoenig (Zwischenboss),
+    ///   9:00  + Eiskeks-Sandwich und Kakaotasse, 11:30 Stracciatella (Zwischenboss),
     ///         erste Puddingrobben bei 13:15
     ///  14:00  + Kokos-Yeti und Puddingrobbe, Minzkugeln nur noch Beimischung
     ///  20:00  Eiskaiser
@@ -552,7 +552,7 @@ public static class WavePlans
             .Burst(60f, EnemyId.Raketeneis, 12f, Patterns.Arc, 0f)
             .Calm(95f, 10f, 0.15f)
             .Burst(115f, EnemyId.Eiswuerfelbaer, 10f, Patterns.Ambush, 0f)
-            .Boss(150f, EnemyId.Schleimkoenig, "SCHLEIMKOENIG!", 0.4f)
+            .Boss(150f, EnemyId.Stracciatella, "STRACCIATELLA!", 0.4f)
             .Calm(215f, 10f, 0.15f)
             .Burst(235f, EnemyId.FuerstPueckler, 1f, Patterns.Ambush, 0f)
             .Burst(250f, EnemyId.Zuckerwolke, 26f, Patterns.Cluster, 0f)
@@ -628,7 +628,7 @@ public static class WavePlans
     ///   0:00  Anlauf (5 s), saure Gluehwuermer
     ///   0:05  + Flambierkirschen (Schwarm), Fluegeldolche, erste Kuerbiswichte
     ///   3:00  + Gluehbirnen, Lakritzkater, Baisergeister
-    ///   9:00  + Leuchtpilze, Windbeutel-Eulen
+    ///   9:00  + Leuchtpilze, Windbeutel-Eulen, 11:30 Knusperhaus (Zwischenboss)
     ///  14:00  + Lebkuchen-Zombies (Brocken)
     ///  20:00  Das Gespenst
     /// </summary>
@@ -679,6 +679,7 @@ public static class WavePlans
             .Burst(60f, EnemyId.Fluegeldolch, 12f, Patterns.Arc, 0f)
             .Calm(95f, 10f, 0.15f)
             .Burst(130f, EnemyId.Lakritzkater, 16f, Patterns.Ambush, 0f)
+            .Boss(150f, EnemyId.Knusperhaus, "KNUSPERHAUS!", 0.4f)
             .Burst(180f, EnemyId.Windbeuteleule, 8f, Patterns.Cluster, 0f)
             .Calm(215f, 10f, 0.15f)
             .Burst(250f, EnemyId.Baisergeist, 20f, Patterns.Arc, 0f);
@@ -741,7 +742,7 @@ public static class WavePlans
     ///   0:00  Anlauf (5 s), Knisterbrause
     ///   0:05  + Feuerschoten, Takoyaki
     ///   3:00  + Lavakuchen, Pizzastuecke, Schaschliks (Huepfer)
-    ///   9:00  + Kaesefondue (zaeh), Wasabi-Kleckse, Drachenfruechte
+    ///   9:00  + Kaesefondue (zaeh), Wasabi-Kleckse, Drachenfruechte, 11:30 Ofenkartoffel (Zwischenboss)
     ///  14:00  + Ofenbrot-Golems (Brocken)
     ///  20:00  alles, hoher Druck
     /// </summary>
@@ -794,6 +795,7 @@ public static class WavePlans
             .Burst(60f, EnemyId.Drachenfrucht, 12f, Patterns.Arc, 0f)
             .Calm(95f, 10f, 0.15f)
             .Burst(130f, EnemyId.Wasabiklecks, 14f, Patterns.Cluster, 0f)
+            .Boss(150f, EnemyId.Ofenkartoffel, "OFENKARTOFFEL!", 0.4f)
             .Burst(180f, EnemyId.Takoyaki, 16f, Patterns.Ambush, 0f)
             .Calm(215f, 10f, 0.15f)
             .Burst(250f, EnemyId.Knisterbrause, 30f, Patterns.Arc, 0f);

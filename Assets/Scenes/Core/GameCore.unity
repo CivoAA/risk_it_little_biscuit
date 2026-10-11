@@ -3354,6 +3354,12 @@ MonoBehaviour:
     prefab: {fileID: 1656260216413292769, guid: 937eb0308ccd4df1917f7afb8ce52dd5, type: 3}
   - id: 79
     prefab: {fileID: 1656260216413292769, guid: b3ac44bff2634ad4b947a902ed347ed3, type: 3}
+  - id: 80
+    prefab: {fileID: 5194612886848433397, guid: a4a078e627a5580448a10babee7e2204, type: 3}
+  - id: 81
+    prefab: {fileID: 5434795865358758440, guid: afb3a1d25faac3b439c2a53f1ba4dcd1, type: 3}
+  - id: 82
+    prefab: {fileID: 664438425593237214, guid: cc6e651981d7d0f4e9692ca2075692c9, type: 3}
   slimeVariants:
   - {fileID: 606865734669720050, guid: add6d643a19561648bbc903ec25242f6, type: 3}
   - {fileID: 514329318404290448, guid: d736393565fd85b42be26fb5c2b12e64, type: 3}

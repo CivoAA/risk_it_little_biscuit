@@ -1,0 +1,419 @@
+fileFormatVersion: 2
+guid: 1a5d14ac767a4a42b4fcdd33f4514d1f
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1629970048847273344
+    second: knusperhaus_ruf_0
+  - first:
+      213: 3237414447826730146
+    second: knusperhaus_ruf_1
+  - first:
+      213: 1165239500127128243
+    second: knusperhaus_ruf_2
+  - first:
+      213: 4360474306192218033
+    second: knusperhaus_ruf_3
+  - first:
+      213: 3846458257382827371
+    second: knusperhaus_ruf_4
+  - first:
+      213: 3437867873098382628
+    second: knusperhaus_ruf_5
+  - first:
+      213: 4463638203920931606
+    second: knusperhaus_ruf_6
+  - first:
+      213: 2738074069640733832
+    second: knusperhaus_ruf_7
+  - first:
+      213: 4312310334851779011
+    second: knusperhaus_ruf_8
+  - first:
+      213: 1269711489662879177
+    second: knusperhaus_ruf_9
+  - first:
+      213: 1519498712025381655
+    second: knusperhaus_ruf_10
+  - first:
+      213: 4178298422052964982
+    second: knusperhaus_ruf_11
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: knusperhaus_ruf_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 15e1a9b6a46b445b945d3898e09f6951
+      internalID: 1629970048847273344
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_ruf_1
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a986a5d2ea7e43df80bd6fc5ce6a24ba
+      internalID: 3237414447826730146
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_ruf_2
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7b7e0461185d479599907a92f8d0f13d
+      internalID: 1165239500127128243
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_ruf_3
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6478b1591a7d48c494a75c80d714167e
+      internalID: 4360474306192218033
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_ruf_4
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e9679e1c86ea4d4e9072e951a75ccfac
+      internalID: 3846458257382827371
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_ruf_5
+      rect:
+        serializedVersion: 2
+        x: 560
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 22bab6daca0a4c3c9fa91d5bdc563f31
+      internalID: 3437867873098382628
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_ruf_6
+      rect:
+        serializedVersion: 2
+        x: 672
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4e0d277992074fe08c67ae140a36f704
+      internalID: 4463638203920931606
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_ruf_7
+      rect:
+        serializedVersion: 2
+        x: 784
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ff5443c472c849c983ce2ab246d14e66
+      internalID: 2738074069640733832
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_ruf_8
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e6cb47150e44a1c8d768bbe4e30086a
+      internalID: 4312310334851779011
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_ruf_9
+      rect:
+        serializedVersion: 2
+        x: 1008
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 743d7b2aa88c43bc97b51dfefb00e0db
+      internalID: 1269711489662879177
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_ruf_10
+      rect:
+        serializedVersion: 2
+        x: 1120
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b183ec013d42458395797c9b36d987ba
+      internalID: 1519498712025381655
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_ruf_11
+      rect:
+        serializedVersion: 2
+        x: 1232
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 422d9caaf54e46c2bf5d91964b8de534
+      internalID: 4178298422052964982
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      knusperhaus_ruf_0: 1629970048847273344
+      knusperhaus_ruf_1: 3237414447826730146
+      knusperhaus_ruf_10: 1519498712025381655
+      knusperhaus_ruf_11: 4178298422052964982
+      knusperhaus_ruf_2: 1165239500127128243
+      knusperhaus_ruf_3: 4360474306192218033
+      knusperhaus_ruf_4: 3846458257382827371
+      knusperhaus_ruf_5: 3437867873098382628
+      knusperhaus_ruf_6: 4463638203920931606
+      knusperhaus_ruf_7: 2738074069640733832
+      knusperhaus_ruf_8: 4312310334851779011
+      knusperhaus_ruf_9: 1269711489662879177
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

@@ -255,6 +255,26 @@ public enum EnemyId
 
     /// <summary>Knisterbrause: Brocken Brausekristall, huepft knisternd heran. Schneller Schwarmgegner.</summary>
     Knisterbrause = 79,
+
+    // Zwischenbosse von Eiswelt, Geisterwald und Vulkanwelt
+
+    /// <summary>
+    /// Zwischenboss der Eiswelt: Schneemann aus drei Eiskugeln. Frostblick =
+    /// "Ochs am Berg" - wer sich bewegt, waehrend er starrt, friert fest (EnemyStracciatella).
+    /// </summary>
+    Stracciatella = 80,
+
+    /// <summary>
+    /// Zwischenboss des Geisterwalds: Lebkuchenhaus auf Haehnchenkeulen. Spukspur =
+    /// ruft den Geist des Spielers, der dessen Weg versetzt nachlaeuft (EnemyKnusperhaus).
+    /// </summary>
+    Knusperhaus = 81,
+
+    /// <summary>
+    /// Zwischenboss der Vulkanwelt: Riesen-Folienkartoffel. Heisse Kartoffel = tickende
+    /// Bombe am Spieler, weitergeben durch Beruehren (EnemyOfenkartoffel).
+    /// </summary>
+    Ofenkartoffel = 82,
 }
 
 /// <summary>
@@ -1063,6 +1083,29 @@ public static class EnemyCatalog
             sheet: "Assets/Art/Gegner/new/vulkan/knisterbrause_huepf.png", fps: 16f,
             colliderRadius: 0.24f, colliderOffset: new Vector2(0f, 0.25f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Gegner/Knisterbrause.prefab");
+
+        // ------------------------------------------------- Zwischenbosse (Welten 3-5)
+
+        Def(EnemyId.Stracciatella, "Stracciatella",
+            health: 3200f, damage: 14f, speed: 1.5f, exp: 750, pushTime: 0f,
+            role: EnemyRole.MiniBoss, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/miniboss/stracciatella_gleit.png", fps: 12f,
+            colliderRadius: 1.0f, colliderOffset: new Vector2(0f, 1.15f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Mini_Boss/Stracciatella.prefab");
+
+        Def(EnemyId.Knusperhaus, "Knusperhaus",
+            health: 3600f, damage: 16f, speed: 1.7f, exp: 800, pushTime: 0f,
+            role: EnemyRole.MiniBoss, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/miniboss/knusperhaus_lauf.png", fps: 12f,
+            colliderRadius: 1.05f, colliderOffset: new Vector2(0f, 1.45f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Mini_Boss/Knusperhaus.prefab");
+
+        Def(EnemyId.Ofenkartoffel, "Ofenkartoffel",
+            health: 4200f, damage: 18f, speed: 1.45f, exp: 900, pushTime: 0f,
+            role: EnemyRole.MiniBoss, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/miniboss/ofenkartoffel_lauf.png", fps: 12f,
+            colliderRadius: 1.0f, colliderOffset: new Vector2(0f, 1.0f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Mini_Boss/Ofenkartoffel.prefab");
 
         // ---------------------------------------------------------- Archiv
         //

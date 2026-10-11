@@ -1,0 +1,523 @@
+fileFormatVersion: 2
+guid: c3d4ea293fce451daf362a7e1eb41f73
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3479364633730515557
+    second: knusperhaus_lauf_0
+  - first:
+      213: 4348177090678585906
+    second: knusperhaus_lauf_1
+  - first:
+      213: 3648707372941463649
+    second: knusperhaus_lauf_2
+  - first:
+      213: 3259440559542528185
+    second: knusperhaus_lauf_3
+  - first:
+      213: 2384907817836781593
+    second: knusperhaus_lauf_4
+  - first:
+      213: 1604338366584285155
+    second: knusperhaus_lauf_5
+  - first:
+      213: 4448916577250166868
+    second: knusperhaus_lauf_6
+  - first:
+      213: 2845863831490129288
+    second: knusperhaus_lauf_7
+  - first:
+      213: 4463813134508771606
+    second: knusperhaus_lauf_8
+  - first:
+      213: 1464763233854351526
+    second: knusperhaus_lauf_9
+  - first:
+      213: 4416096277328874931
+    second: knusperhaus_lauf_10
+  - first:
+      213: 4022723936001504299
+    second: knusperhaus_lauf_11
+  - first:
+      213: 4225722179805623540
+    second: knusperhaus_lauf_12
+  - first:
+      213: 4403428784828964406
+    second: knusperhaus_lauf_13
+  - first:
+      213: 2511291806424569718
+    second: knusperhaus_lauf_14
+  - first:
+      213: 4459389589362184952
+    second: knusperhaus_lauf_15
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: knusperhaus_lauf_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 00666557f33a4edeb957eddf72d90f13
+      internalID: 3479364633730515557
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_lauf_1
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3731575cbc77447b9cf6b84ec0b4fe19
+      internalID: 4348177090678585906
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_lauf_2
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29275f6b71ff4f7bb4b1279e16aa795b
+      internalID: 3648707372941463649
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_lauf_3
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 189db1f95f0d4b4295ec53fb799e24ea
+      internalID: 3259440559542528185
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_lauf_4
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b451daeab4414663b488afd079e67646
+      internalID: 2384907817836781593
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_lauf_5
+      rect:
+        serializedVersion: 2
+        x: 560
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 03d34b48f88f424db5480f883f47db25
+      internalID: 1604338366584285155
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_lauf_6
+      rect:
+        serializedVersion: 2
+        x: 672
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 77bc1247af9e45c6bd650faedd4095d7
+      internalID: 4448916577250166868
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_lauf_7
+      rect:
+        serializedVersion: 2
+        x: 784
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a95b6f24238b4c499742de725b0a8606
+      internalID: 2845863831490129288
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_lauf_8
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b8fdad2364754de5a7b089520fe85007
+      internalID: 4463813134508771606
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_lauf_9
+      rect:
+        serializedVersion: 2
+        x: 1008
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2b34c0c11ea14da3a5e19383dbde2178
+      internalID: 1464763233854351526
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_lauf_10
+      rect:
+        serializedVersion: 2
+        x: 1120
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 95129220aec34254899d6331b3ca58ca
+      internalID: 4416096277328874931
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_lauf_11
+      rect:
+        serializedVersion: 2
+        x: 1232
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 15cfe91371514086b49015010597e4ca
+      internalID: 4022723936001504299
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_lauf_12
+      rect:
+        serializedVersion: 2
+        x: 1344
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 15ffae52d6284b91bd50f640a3b986ca
+      internalID: 4225722179805623540
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_lauf_13
+      rect:
+        serializedVersion: 2
+        x: 1456
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fc85b1918b9e4da78357c7d185081083
+      internalID: 4403428784828964406
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_lauf_14
+      rect:
+        serializedVersion: 2
+        x: 1568
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a4a81a7f1dff46b1b8c4df4f6906e1f3
+      internalID: 2511291806424569718
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_lauf_15
+      rect:
+        serializedVersion: 2
+        x: 1680
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f8d4828f6a84bf29864b2e0bc6c1eb0
+      internalID: 4459389589362184952
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      knusperhaus_lauf_0: 3479364633730515557
+      knusperhaus_lauf_1: 4348177090678585906
+      knusperhaus_lauf_10: 4416096277328874931
+      knusperhaus_lauf_11: 4022723936001504299
+      knusperhaus_lauf_12: 4225722179805623540
+      knusperhaus_lauf_13: 4403428784828964406
+      knusperhaus_lauf_14: 2511291806424569718
+      knusperhaus_lauf_15: 4459389589362184952
+      knusperhaus_lauf_2: 3648707372941463649
+      knusperhaus_lauf_3: 3259440559542528185
+      knusperhaus_lauf_4: 2384907817836781593
+      knusperhaus_lauf_5: 1604338366584285155
+      knusperhaus_lauf_6: 4448916577250166868
+      knusperhaus_lauf_7: 2845863831490129288
+      knusperhaus_lauf_8: 4463813134508771606
+      knusperhaus_lauf_9: 1464763233854351526
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:
