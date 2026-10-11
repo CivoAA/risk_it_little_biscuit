@@ -1,0 +1,523 @@
+fileFormatVersion: 2
+guid: f5cbf433a53c4f4fa826edb19350e6e2
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1999432176060428464
+    second: lebkuchenzombie_schlurf_glow_0
+  - first:
+      213: 4269887586935661678
+    second: lebkuchenzombie_schlurf_glow_1
+  - first:
+      213: 3337162634883409736
+    second: lebkuchenzombie_schlurf_glow_2
+  - first:
+      213: 4451858170546674865
+    second: lebkuchenzombie_schlurf_glow_3
+  - first:
+      213: 3242775626790312523
+    second: lebkuchenzombie_schlurf_glow_4
+  - first:
+      213: 1860320534051815639
+    second: lebkuchenzombie_schlurf_glow_5
+  - first:
+      213: 2189403088001731710
+    second: lebkuchenzombie_schlurf_glow_6
+  - first:
+      213: 1870970323531407920
+    second: lebkuchenzombie_schlurf_glow_7
+  - first:
+      213: 2974629665106894336
+    second: lebkuchenzombie_schlurf_glow_8
+  - first:
+      213: 3654118076356303016
+    second: lebkuchenzombie_schlurf_glow_9
+  - first:
+      213: 3532689821568811800
+    second: lebkuchenzombie_schlurf_glow_10
+  - first:
+      213: 2211057705391574706
+    second: lebkuchenzombie_schlurf_glow_11
+  - first:
+      213: 2588726983534992671
+    second: lebkuchenzombie_schlurf_glow_12
+  - first:
+      213: 3341456432909937137
+    second: lebkuchenzombie_schlurf_glow_13
+  - first:
+      213: 2834269454584785082
+    second: lebkuchenzombie_schlurf_glow_14
+  - first:
+      213: 3792783020518488692
+    second: lebkuchenzombie_schlurf_glow_15
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: lebkuchenzombie_schlurf_glow_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 02255556010a402bbf5739c3caa149a6
+      internalID: 1999432176060428464
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lebkuchenzombie_schlurf_glow_1
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 44ceac2c74fa484a80768c76e3d7d2fa
+      internalID: 4269887586935661678
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lebkuchenzombie_schlurf_glow_2
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 936fbd6aaacf401aa7208a871803a46a
+      internalID: 3337162634883409736
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lebkuchenzombie_schlurf_glow_3
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: adef19ebee9f48de85309061d9fe2c13
+      internalID: 4451858170546674865
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lebkuchenzombie_schlurf_glow_4
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3bc40b8c272f49c3b55936c550e01e7d
+      internalID: 3242775626790312523
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lebkuchenzombie_schlurf_glow_5
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d9eef92714744c059016d4d5eb900bcd
+      internalID: 1860320534051815639
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lebkuchenzombie_schlurf_glow_6
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5e8bc1f3f6b74b73a5926c18a551c7fe
+      internalID: 2189403088001731710
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lebkuchenzombie_schlurf_glow_7
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e8ad840d6379484688ee27fa3095cc27
+      internalID: 1870970323531407920
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lebkuchenzombie_schlurf_glow_8
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4fe22e6485874945919368c882a6605c
+      internalID: 2974629665106894336
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lebkuchenzombie_schlurf_glow_9
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f718d78692043038f7d12994bd5fec2
+      internalID: 3654118076356303016
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lebkuchenzombie_schlurf_glow_10
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74f4b95a0b744c64a2d76ad04d3b09dc
+      internalID: 3532689821568811800
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lebkuchenzombie_schlurf_glow_11
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 867229b3fecb4fcfbb2f57cad700609f
+      internalID: 2211057705391574706
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lebkuchenzombie_schlurf_glow_12
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2661732e116549829e648adf78c4dc4b
+      internalID: 2588726983534992671
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lebkuchenzombie_schlurf_glow_13
+      rect:
+        serializedVersion: 2
+        x: 520
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c6a8dbc115bd46f1a50b6fc2d3699ac7
+      internalID: 3341456432909937137
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lebkuchenzombie_schlurf_glow_14
+      rect:
+        serializedVersion: 2
+        x: 560
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f1ab19dd28384caa9c186ddbe94f104c
+      internalID: 2834269454584785082
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lebkuchenzombie_schlurf_glow_15
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 0
+        width: 40
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 94d5e2112254486a80ae9cb01454dbad
+      internalID: 3792783020518488692
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      lebkuchenzombie_schlurf_glow_0: 1999432176060428464
+      lebkuchenzombie_schlurf_glow_1: 4269887586935661678
+      lebkuchenzombie_schlurf_glow_10: 3532689821568811800
+      lebkuchenzombie_schlurf_glow_11: 2211057705391574706
+      lebkuchenzombie_schlurf_glow_12: 2588726983534992671
+      lebkuchenzombie_schlurf_glow_13: 3341456432909937137
+      lebkuchenzombie_schlurf_glow_14: 2834269454584785082
+      lebkuchenzombie_schlurf_glow_15: 3792783020518488692
+      lebkuchenzombie_schlurf_glow_2: 3337162634883409736
+      lebkuchenzombie_schlurf_glow_3: 4451858170546674865
+      lebkuchenzombie_schlurf_glow_4: 3242775626790312523
+      lebkuchenzombie_schlurf_glow_5: 1860320534051815639
+      lebkuchenzombie_schlurf_glow_6: 2189403088001731710
+      lebkuchenzombie_schlurf_glow_7: 1870970323531407920
+      lebkuchenzombie_schlurf_glow_8: 2974629665106894336
+      lebkuchenzombie_schlurf_glow_9: 3654118076356303016
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

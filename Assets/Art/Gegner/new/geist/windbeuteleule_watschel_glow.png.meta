@@ -1,0 +1,419 @@
+fileFormatVersion: 2
+guid: cc233569878e4901bf3ac884d395c339
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3833825186484776561
+    second: windbeuteleule_watschel_glow_0
+  - first:
+      213: 1706465387337106252
+    second: windbeuteleule_watschel_glow_1
+  - first:
+      213: 2835758986064691065
+    second: windbeuteleule_watschel_glow_2
+  - first:
+      213: 3945938931321737497
+    second: windbeuteleule_watschel_glow_3
+  - first:
+      213: 1545113483083489403
+    second: windbeuteleule_watschel_glow_4
+  - first:
+      213: 3927418483278024440
+    second: windbeuteleule_watschel_glow_5
+  - first:
+      213: 3969464239489869645
+    second: windbeuteleule_watschel_glow_6
+  - first:
+      213: 3756938462513364665
+    second: windbeuteleule_watschel_glow_7
+  - first:
+      213: 3496887461178767907
+    second: windbeuteleule_watschel_glow_8
+  - first:
+      213: 4164861440080302380
+    second: windbeuteleule_watschel_glow_9
+  - first:
+      213: 2997065484331517945
+    second: windbeuteleule_watschel_glow_10
+  - first:
+      213: 1567544546369832979
+    second: windbeuteleule_watschel_glow_11
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: windbeuteleule_watschel_glow_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 40
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.09523809523809523}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 455f07d704ae43e1989ad698b597f2a9
+      internalID: 3833825186484776561
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: windbeuteleule_watschel_glow_1
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 0
+        width: 40
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.09523809523809523}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 94d87fa4f8c24acd89933a680ef73df5
+      internalID: 1706465387337106252
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: windbeuteleule_watschel_glow_2
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 0
+        width: 40
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.09523809523809523}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1d1ffdff78f147f4a03cd9ef43990fc2
+      internalID: 2835758986064691065
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: windbeuteleule_watschel_glow_3
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 0
+        width: 40
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.09523809523809523}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e17531aba5aa4ef098c1197ef7ad7d74
+      internalID: 3945938931321737497
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: windbeuteleule_watschel_glow_4
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 0
+        width: 40
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.09523809523809523}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3aacd9c0b5164e3b919203d9d66ef380
+      internalID: 1545113483083489403
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: windbeuteleule_watschel_glow_5
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 0
+        width: 40
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.09523809523809523}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 88fb8f66b61a439ca80442125b0bc684
+      internalID: 3927418483278024440
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: windbeuteleule_watschel_glow_6
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 0
+        width: 40
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.09523809523809523}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ef3cc06199a74104a7ad87bdcfecf49f
+      internalID: 3969464239489869645
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: windbeuteleule_watschel_glow_7
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 0
+        width: 40
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.09523809523809523}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 65135d26eafe40d8aa8a40f0cc580c38
+      internalID: 3756938462513364665
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: windbeuteleule_watschel_glow_8
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 0
+        width: 40
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.09523809523809523}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 439646b2e4b04d5ab15720b668c18c5a
+      internalID: 3496887461178767907
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: windbeuteleule_watschel_glow_9
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 0
+        width: 40
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.09523809523809523}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dd1f9226e5c34a08b4458378edc66999
+      internalID: 4164861440080302380
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: windbeuteleule_watschel_glow_10
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 0
+        width: 40
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.09523809523809523}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 93c65cc195204f11a24aab7ddd9e1ecd
+      internalID: 2997065484331517945
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: windbeuteleule_watschel_glow_11
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 0
+        width: 40
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.09523809523809523}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 57fa7092505b4971b3fad7be1d4a2ef8
+      internalID: 1567544546369832979
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      windbeuteleule_watschel_glow_0: 3833825186484776561
+      windbeuteleule_watschel_glow_1: 1706465387337106252
+      windbeuteleule_watschel_glow_10: 2997065484331517945
+      windbeuteleule_watschel_glow_11: 1567544546369832979
+      windbeuteleule_watschel_glow_2: 2835758986064691065
+      windbeuteleule_watschel_glow_3: 3945938931321737497
+      windbeuteleule_watschel_glow_4: 1545113483083489403
+      windbeuteleule_watschel_glow_5: 3927418483278024440
+      windbeuteleule_watschel_glow_6: 3969464239489869645
+      windbeuteleule_watschel_glow_7: 3756938462513364665
+      windbeuteleule_watschel_glow_8: 3496887461178767907
+      windbeuteleule_watschel_glow_9: 4164861440080302380
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

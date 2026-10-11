@@ -1,0 +1,523 @@
+fileFormatVersion: 2
+guid: 20724df27e5d486fad51aff9b447be73
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2803468930444720564
+    second: baisergeist_schweb_glow_0
+  - first:
+      213: 1255854643409538506
+    second: baisergeist_schweb_glow_1
+  - first:
+      213: 4476670742926314911
+    second: baisergeist_schweb_glow_2
+  - first:
+      213: 1241349276496802168
+    second: baisergeist_schweb_glow_3
+  - first:
+      213: 3493566927551009532
+    second: baisergeist_schweb_glow_4
+  - first:
+      213: 1461515003841788815
+    second: baisergeist_schweb_glow_5
+  - first:
+      213: 3892475815243719975
+    second: baisergeist_schweb_glow_6
+  - first:
+      213: 3475303748297952720
+    second: baisergeist_schweb_glow_7
+  - first:
+      213: 4608344216319135167
+    second: baisergeist_schweb_glow_8
+  - first:
+      213: 3017732270292964450
+    second: baisergeist_schweb_glow_9
+  - first:
+      213: 1526860017084625722
+    second: baisergeist_schweb_glow_10
+  - first:
+      213: 3149662059582403474
+    second: baisergeist_schweb_glow_11
+  - first:
+      213: 4151748695612844584
+    second: baisergeist_schweb_glow_12
+  - first:
+      213: 3646092134037647229
+    second: baisergeist_schweb_glow_13
+  - first:
+      213: 2794859375903642337
+    second: baisergeist_schweb_glow_14
+  - first:
+      213: 4211191128670021899
+    second: baisergeist_schweb_glow_15
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: baisergeist_schweb_glow_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 40
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee23ed081c8e4269acc31a10ed20bcf0
+      internalID: 2803468930444720564
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baisergeist_schweb_glow_1
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 0
+        width: 40
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8ba94075e5c54e8b8cab31c72328d755
+      internalID: 1255854643409538506
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baisergeist_schweb_glow_2
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 0
+        width: 40
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 348a5ee063e0485ca8afa4e6a8c1ac02
+      internalID: 4476670742926314911
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baisergeist_schweb_glow_3
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 0
+        width: 40
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75434eb253464d959e96162ff0b840f4
+      internalID: 1241349276496802168
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baisergeist_schweb_glow_4
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 0
+        width: 40
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a13bc588e56a437e8b0b9ab624d3242e
+      internalID: 3493566927551009532
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baisergeist_schweb_glow_5
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 0
+        width: 40
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 54023f11ce7241af9fff87cf5d1dd3ec
+      internalID: 1461515003841788815
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baisergeist_schweb_glow_6
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 0
+        width: 40
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e3a1a371b6745d6a30fc24ff2b516ff
+      internalID: 3892475815243719975
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baisergeist_schweb_glow_7
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 0
+        width: 40
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f6d438a393834990816f78b53f76a95e
+      internalID: 3475303748297952720
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baisergeist_schweb_glow_8
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 0
+        width: 40
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab9e923d3aec4268aae8995eaba3d127
+      internalID: 4608344216319135167
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baisergeist_schweb_glow_9
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 0
+        width: 40
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1ad9512a598346f5a857910f64f91048
+      internalID: 3017732270292964450
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baisergeist_schweb_glow_10
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 0
+        width: 40
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d7d2a1970752464a9a4930f2027640b3
+      internalID: 1526860017084625722
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baisergeist_schweb_glow_11
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 0
+        width: 40
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e841164a827647508aca4aa1cf65d772
+      internalID: 3149662059582403474
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baisergeist_schweb_glow_12
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 0
+        width: 40
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 219499c10d674d3a97a139d817917c34
+      internalID: 4151748695612844584
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baisergeist_schweb_glow_13
+      rect:
+        serializedVersion: 2
+        x: 520
+        y: 0
+        width: 40
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 779f7c17ad964ba394b28130a288b5dd
+      internalID: 3646092134037647229
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baisergeist_schweb_glow_14
+      rect:
+        serializedVersion: 2
+        x: 560
+        y: 0
+        width: 40
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c6627889dbc744b69bd130eb5a8c5a44
+      internalID: 2794859375903642337
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baisergeist_schweb_glow_15
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 0
+        width: 40
+        height: 48
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b8a1490eae0e4b6fa853e59d3edcf8b2
+      internalID: 4211191128670021899
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      baisergeist_schweb_glow_0: 2803468930444720564
+      baisergeist_schweb_glow_1: 1255854643409538506
+      baisergeist_schweb_glow_10: 1526860017084625722
+      baisergeist_schweb_glow_11: 3149662059582403474
+      baisergeist_schweb_glow_12: 4151748695612844584
+      baisergeist_schweb_glow_13: 3646092134037647229
+      baisergeist_schweb_glow_14: 2794859375903642337
+      baisergeist_schweb_glow_15: 4211191128670021899
+      baisergeist_schweb_glow_2: 4476670742926314911
+      baisergeist_schweb_glow_3: 1241349276496802168
+      baisergeist_schweb_glow_4: 3493566927551009532
+      baisergeist_schweb_glow_5: 1461515003841788815
+      baisergeist_schweb_glow_6: 3892475815243719975
+      baisergeist_schweb_glow_7: 3475303748297952720
+      baisergeist_schweb_glow_8: 4608344216319135167
+      baisergeist_schweb_glow_9: 3017732270292964450
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

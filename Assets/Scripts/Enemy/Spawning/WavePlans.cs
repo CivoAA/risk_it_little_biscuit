@@ -618,15 +618,16 @@ public static class WavePlans
     /// Lebkuchen-Geisterwald - Karte 4 in der Levelauswahl. Im Takt der Kueche
     /// (gleiche Phasen und Druckwerte, Boss bei 20:00).
     ///
-    /// Bewusst fast leer: die alten Platzhalter (Marshmello, Boeser Slime,
-    /// Weisse Messermaus, Pfannkuchen, Elite-Fluegeldolch, Schleimkoenig als
-    /// Zwischenboss) sind raus. Eigene Gegner hat der Geisterwald noch nicht -
-    /// bis dahin kommt nur der Fluegeldolch (Fledermaus, aus dem Wald
-    /// umgezogen), am Ende das Gespenst - und was unter dem Laken steckt
-    /// (siehe EnemySquiddy).
+    /// Seit Oktober 2026 mit eigenen Gegnern, die alle selbst leuchten (Leuchtebene
+    /// EnemyGlowLayer, im dunklen Wald sieht man vor allem ihr Licht). Jede Phase
+    /// stellt neue vor, meist mit einem eigenen Burst. Dazu weiter der
+    /// Fluegeldolch (Fledermaus) und am Ende das Gespenst (siehe EnemySquiddy).
     ///
-    ///   0:00  Anlauf (5 s)
-    ///   0:05  Fluegeldolche
+    ///   0:00  Anlauf (5 s), saure Gluehwuermer
+    ///   0:05  + Flambierkirschen (Schwarm), Fluegeldolche, erste Kuerbiswichte
+    ///   3:00  + Gluehbirnen, Lakritzkater, Baisergeister
+    ///   9:00  + Leuchtpilze, Windbeutel-Eulen
+    ///  14:00  + Lebkuchen-Zombies (Brocken)
     ///  20:00  Das Gespenst
     /// </summary>
     public static RunPlan World6()
@@ -634,46 +635,91 @@ public static class WavePlans
         var plan = new RunPlan("World6");
 
         plan.Phase(5f)
-            .Pool(EnemyId.Fluegeldolch, 100f)
+            .Pool(EnemyId.Gluehwurm, 100f)
             .Pressure(3.3f, 3.3f)
             .Base(Patterns.Scatter);
 
         plan.Phase(175f)
-            .Pool(EnemyId.Fluegeldolch, 100f)
+            .Pool(EnemyId.Gluehwurm, 40f)
+            .Pool(EnemyId.Flambierkirsche, 30f)
+            .Pool(EnemyId.Fluegeldolch, 30f)
             .Pressure(10f, 28f)
-            .Base(Patterns.Scatter);
+            .Base(Patterns.Scatter)
+            .Burst(60f, EnemyId.Flambierkirsche, 12f, Patterns.Arc, 0f)
+            .Burst(120f, EnemyId.Kuerbiswicht, 8f, Patterns.Cluster, 0f);
 
         plan.Phase(360f)
-            .Pool(EnemyId.Fluegeldolch, 100f)
+            .Pool(EnemyId.Kuerbiswicht, 25f)
+            .Pool(EnemyId.Gluehbirne, 20f)
+            .Pool(EnemyId.Flambierkirsche, 20f)
+            .Pool(EnemyId.Gluehwurm, 15f)
+            .Pool(EnemyId.Fluegeldolch, 20f)
             .Pressure(28f, 56f)
             .Base(Patterns.Scatter)
+            .Burst(30f, EnemyId.Gluehbirne, 12f, Patterns.Column, 0f)
             .Calm(75f, 10f, 0.15f)
+            .Burst(110f, EnemyId.Lakritzkater, 10f, Patterns.Ambush, 0f)
             .Burst(150f, EnemyId.Fluegeldolch, 12f, Patterns.Arc, 0f)
-            .Calm(195f, 10f, 0.15f);
+            .Calm(195f, 10f, 0.15f)
+            .Burst(240f, EnemyId.Baisergeist, 14f, Patterns.Cluster, 0f)
+            .Burst(300f, EnemyId.Flambierkirsche, 20f, Patterns.Arc, 0f);
 
         plan.Phase(300f)
-            .Pool(EnemyId.Fluegeldolch, 100f)
+            .Pool(EnemyId.Kuerbiswicht, 15f)
+            .Pool(EnemyId.Gluehbirne, 15f)
+            .Pool(EnemyId.Lakritzkater, 20f)
+            .Pool(EnemyId.Baisergeist, 20f)
+            .Pool(EnemyId.Leuchtpilz, 15f)
+            .Pool(EnemyId.Fluegeldolch, 15f)
             .Pressure(70f, 140f)
             .Base(Patterns.Scatter)
+            .Burst(20f, EnemyId.Leuchtpilz, 10f, Patterns.Column, 0f)
             .Burst(60f, EnemyId.Fluegeldolch, 12f, Patterns.Arc, 0f)
             .Calm(95f, 10f, 0.15f)
-            .Calm(215f, 10f, 0.15f);
+            .Burst(130f, EnemyId.Lakritzkater, 16f, Patterns.Ambush, 0f)
+            .Burst(180f, EnemyId.Windbeuteleule, 8f, Patterns.Cluster, 0f)
+            .Calm(215f, 10f, 0.15f)
+            .Burst(250f, EnemyId.Baisergeist, 20f, Patterns.Arc, 0f);
 
         plan.Phase(358f)
-            .Pool(EnemyId.Fluegeldolch, 100f)
+            .Pool(EnemyId.Lakritzkater, 15f)
+            .Pool(EnemyId.Baisergeist, 15f)
+            .Pool(EnemyId.Leuchtpilz, 15f)
+            .Pool(EnemyId.Windbeuteleule, 15f)
+            .Pool(EnemyId.Lebkuchenzombie, 15f)
+            .Pool(EnemyId.Gluehbirne, 10f)
+            .Pool(EnemyId.Flambierkirsche, 15f)
             .Pressure(140f, 170f)
             .Base(Patterns.Scatter)
+            .Burst(30f, EnemyId.Lebkuchenzombie, 14f, Patterns.Ambush, 0f)
             .Calm(120f, 10f, 0.15f)
-            .Calm(290f, 10f, 0.15f);
+            .Burst(160f, EnemyId.Flambierkirsche, 30f, Patterns.Arc, 0f)
+            .Burst(220f, EnemyId.Lebkuchenzombie, 20f, Patterns.Column, 0f)
+            .Calm(290f, 10f, 0.15f)
+            .Burst(320f, EnemyId.Windbeuteleule, 16f, Patterns.Cluster, 0f);
 
         plan.Phase(600f)
-            .Pool(EnemyId.Fluegeldolch, 100f)
+            .Pool(EnemyId.Lebkuchenzombie, 20f)
+            .Pool(EnemyId.Windbeuteleule, 15f)
+            .Pool(EnemyId.Leuchtpilz, 15f)
+            .Pool(EnemyId.Lakritzkater, 20f)
+            .Pool(EnemyId.Baisergeist, 15f)
+            .Pool(EnemyId.Flambierkirsche, 15f)
             .Pressure(280f, 420f)
             .Base(Patterns.Scatter)
             .Boss(2f, EnemyId.Squiddy, "DAS GESPENST!", 0.4f);
 
         plan.EndlessPhase()
-            .Pool(EnemyId.Fluegeldolch, 100f)
+            .Pool(EnemyId.Lebkuchenzombie, 15f)
+            .Pool(EnemyId.Windbeuteleule, 10f)
+            .Pool(EnemyId.Leuchtpilz, 10f)
+            .Pool(EnemyId.Lakritzkater, 15f)
+            .Pool(EnemyId.Baisergeist, 10f)
+            .Pool(EnemyId.Kuerbiswicht, 10f)
+            .Pool(EnemyId.Gluehbirne, 10f)
+            .Pool(EnemyId.Flambierkirsche, 10f)
+            .Pool(EnemyId.Gluehwurm, 5f)
+            .Pool(EnemyId.Fluegeldolch, 5f)
             .Pressure(100f, 100f)
             .Base(Patterns.Scatter);
 

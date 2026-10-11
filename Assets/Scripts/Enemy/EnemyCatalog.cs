@@ -194,6 +194,35 @@ public enum EnemyId
 
     /// <summary>Elite der Eiswelt: Fuerst-Pueckler-Eisbombe mit Eiskristall-Krone, Monokel und Zwirbelbart.</summary>
     FuerstPueckler = 60,
+
+    // Geisterwald (Karte 4): leuchtende Normalgegner
+
+    /// <summary>Kuerbiswicht: Kuerbis mit geschnitztem Gesicht, die Kerze drin flackert. Watschelt auf Rankenbeinchen.</summary>
+    Kuerbiswicht = 61,
+
+    /// <summary>Gluehbirne: Glasbirne mit Gluehwendel und Messingsockel, stakst auf Drahtbeinen, Wackelkontakt.</summary>
+    Gluehbirne = 62,
+
+    /// <summary>Leuchtpilz: Nachtpilz mit cyan gluehenden Tupfen und Lamellen, der Hut federt nach.</summary>
+    Leuchtpilz = 63,
+
+    /// <summary>Baisergeist: schwebendes Baiser-Gespenst mit hohlen, fliederfarben gluehenden Augen.</summary>
+    Baisergeist = 64,
+
+    /// <summary>Lakritzkater: schwarzer Lakritz-Kater mit gluehenden Schlitzaugen und Bonbon-Gloeckchen, trabt flink.</summary>
+    Lakritzkater = 65,
+
+    /// <summary>Lebkuchen-Zombie: angebissener Lebkuchenmann mit giftgruen leuchtendem Zuckerguss. Der Brocken des Geisterwalds.</summary>
+    Lebkuchenzombie = 66,
+
+    /// <summary>Saurer Gluehwurm: Neon-Fruchtgummiwurm, buckelt sich wie eine Spannerraupe voran.</summary>
+    Gluehwurm = 67,
+
+    /// <summary>Windbeutel-Eule: aufgeschnittener Windbeutel mit Sahne, der Deckel ist der Eulenkopf mit Bernsteinaugen.</summary>
+    Windbeuteleule = 68,
+
+    /// <summary>Flambierkirsche: Kirsche mit blauer Rumflamme auf dem Kopf, flitzt. Schneller Schwarmgegner.</summary>
+    Flambierkirsche = 69,
 }
 
 /// <summary>
@@ -869,6 +898,69 @@ public static class EnemyCatalog
             sheet: "Assets/Art/Gegner/new/eis/pueckler_schreit.png", fps: 14f,
             colliderRadius: 0.56f, colliderOffset: new Vector2(0f, 0.6f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Elite_Gegner/FuerstPueckler.prefab");
+
+        Def(EnemyId.Kuerbiswicht, "Kuerbiswicht",
+            health: 40f, damage: 5f, speed: 1.6f, exp: 12, pushTime: 0.2f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/geist/kuerbiswicht_watschel.png", fps: 14f,
+            colliderRadius: 0.36f, colliderOffset: new Vector2(0f, 0.36f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Kuerbiswicht.prefab");
+
+        Def(EnemyId.Gluehbirne, "Gluehbirne",
+            health: 30f, damage: 5f, speed: 1.9f, exp: 10, pushTime: 0.25f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/geist/gluehbirne_stakse.png", fps: 14f,
+            colliderRadius: 0.3f, colliderOffset: new Vector2(0f, 0.45f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Gluehbirne.prefab");
+
+        Def(EnemyId.Leuchtpilz, "Leuchtpilz",
+            health: 55f, damage: 6f, speed: 1.4f, exp: 16, pushTime: 0.2f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/geist/leuchtpilz_tapp.png", fps: 12f,
+            colliderRadius: 0.38f, colliderOffset: new Vector2(0f, 0.4f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Leuchtpilz.prefab");
+
+        Def(EnemyId.Baisergeist, "Baisergeist",
+            health: 28f, damage: 5f, speed: 2f, exp: 10, pushTime: 0.25f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/geist/baisergeist_schweb.png", fps: 12f,
+            colliderRadius: 0.32f, colliderOffset: new Vector2(0f, 0.55f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Baisergeist.prefab");
+
+        Def(EnemyId.Lakritzkater, "Lakritzkater",
+            health: 35f, damage: 6f, speed: 2.3f, exp: 12, pushTime: 0.25f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/geist/lakritzkater_trab.png", fps: 14f,
+            colliderRadius: 0.36f, colliderOffset: new Vector2(0f, 0.35f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Lakritzkater.prefab");
+
+        Def(EnemyId.Lebkuchenzombie, "Lebkuchen-Zombie",
+            health: 110f, damage: 8f, speed: 1.2f, exp: 34, pushTime: 0.15f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/geist/lebkuchenzombie_schlurf.png", fps: 12f,
+            colliderRadius: 0.36f, colliderOffset: new Vector2(0f, 0.45f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Lebkuchenzombie.prefab");
+
+        Def(EnemyId.Gluehwurm, "Saurer Gluehwurm",
+            health: 22f, damage: 4f, speed: 1.7f, exp: 7, pushTime: 0.25f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/geist/gluehwurm_spann.png", fps: 12f,
+            colliderRadius: 0.32f, colliderOffset: new Vector2(0f, 0.22f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Gluehwurm.prefab");
+
+        Def(EnemyId.Windbeuteleule, "Windbeutel-Eule",
+            health: 60f, damage: 6f, speed: 1.4f, exp: 18, pushTime: 0.2f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/geist/windbeuteleule_watschel.png", fps: 14f,
+            colliderRadius: 0.36f, colliderOffset: new Vector2(0f, 0.42f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Windbeuteleule.prefab");
+
+        Def(EnemyId.Flambierkirsche, "Flambierkirsche",
+            health: 14f, damage: 4f, speed: 2.7f, exp: 5, pushTime: 0.3f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/geist/flambierkirsche_flitz.png", fps: 16f,
+            colliderRadius: 0.26f, colliderOffset: new Vector2(0f, 0.32f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Flambierkirsche.prefab");
 
         // ---------------------------------------------------------- Archiv
         //

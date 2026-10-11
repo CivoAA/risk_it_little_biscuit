@@ -1,0 +1,419 @@
+fileFormatVersion: 2
+guid: 8095d906c0e9469ab4c1fa793f5e4b1d
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2656892557780709907
+    second: gluehbirne_stakse_0
+  - first:
+      213: 3459400161131079063
+    second: gluehbirne_stakse_1
+  - first:
+      213: 4029577462876153729
+    second: gluehbirne_stakse_2
+  - first:
+      213: 2981391962385724088
+    second: gluehbirne_stakse_3
+  - first:
+      213: 2642833724243137383
+    second: gluehbirne_stakse_4
+  - first:
+      213: 1755280145311964177
+    second: gluehbirne_stakse_5
+  - first:
+      213: 3095304124873199587
+    second: gluehbirne_stakse_6
+  - first:
+      213: 1488987162803086849
+    second: gluehbirne_stakse_7
+  - first:
+      213: 1998744129330108335
+    second: gluehbirne_stakse_8
+  - first:
+      213: 1964802889489552859
+    second: gluehbirne_stakse_9
+  - first:
+      213: 2616232625734257511
+    second: gluehbirne_stakse_10
+  - first:
+      213: 3137530484503177726
+    second: gluehbirne_stakse_11
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: gluehbirne_stakse_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 36
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5b0a74e0c12f43308f3e7e23810a7586
+      internalID: 2656892557780709907
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gluehbirne_stakse_1
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 0
+        width: 36
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5a8f103606b84355a298a13dbeffafbe
+      internalID: 3459400161131079063
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gluehbirne_stakse_2
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 0
+        width: 36
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d59daec69f824d7683bd6ba7b2a330eb
+      internalID: 4029577462876153729
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gluehbirne_stakse_3
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 0
+        width: 36
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d2ed7f5b98114b01b125311ece297a67
+      internalID: 2981391962385724088
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gluehbirne_stakse_4
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 0
+        width: 36
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f10fc99896142f584450c708d1cc060
+      internalID: 2642833724243137383
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gluehbirne_stakse_5
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 0
+        width: 36
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab560b487f58425c8ac3eb1f36ded612
+      internalID: 1755280145311964177
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gluehbirne_stakse_6
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 0
+        width: 36
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 43953b5e9dd5474aa55572050e984634
+      internalID: 3095304124873199587
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gluehbirne_stakse_7
+      rect:
+        serializedVersion: 2
+        x: 252
+        y: 0
+        width: 36
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4f277348e37e49a6a99d0b555ea7b8b1
+      internalID: 1488987162803086849
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gluehbirne_stakse_8
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 0
+        width: 36
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d33c2bbcd7244ca9b649904251ff6939
+      internalID: 1998744129330108335
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gluehbirne_stakse_9
+      rect:
+        serializedVersion: 2
+        x: 324
+        y: 0
+        width: 36
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b91ee7e55adb428bb7b07b14c52730cf
+      internalID: 1964802889489552859
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gluehbirne_stakse_10
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 0
+        width: 36
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 43e9ce244b4342768dff5d9bd11d7bce
+      internalID: 2616232625734257511
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gluehbirne_stakse_11
+      rect:
+        serializedVersion: 2
+        x: 396
+        y: 0
+        width: 36
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fde19b51acaa4d31842b554efc91777e
+      internalID: 3137530484503177726
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      gluehbirne_stakse_0: 2656892557780709907
+      gluehbirne_stakse_1: 3459400161131079063
+      gluehbirne_stakse_10: 2616232625734257511
+      gluehbirne_stakse_11: 3137530484503177726
+      gluehbirne_stakse_2: 4029577462876153729
+      gluehbirne_stakse_3: 2981391962385724088
+      gluehbirne_stakse_4: 2642833724243137383
+      gluehbirne_stakse_5: 1755280145311964177
+      gluehbirne_stakse_6: 3095304124873199587
+      gluehbirne_stakse_7: 1488987162803086849
+      gluehbirne_stakse_8: 1998744129330108335
+      gluehbirne_stakse_9: 1964802889489552859
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

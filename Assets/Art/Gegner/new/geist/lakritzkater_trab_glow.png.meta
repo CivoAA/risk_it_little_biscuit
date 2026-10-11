@@ -1,0 +1,419 @@
+fileFormatVersion: 2
+guid: 7b0c2cc1ae2d42e48cc829a431e4229f
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1925680776636566550
+    second: lakritzkater_trab_glow_0
+  - first:
+      213: 2063909472468438682
+    second: lakritzkater_trab_glow_1
+  - first:
+      213: 3319122527457541477
+    second: lakritzkater_trab_glow_2
+  - first:
+      213: 4108227045097988381
+    second: lakritzkater_trab_glow_3
+  - first:
+      213: 4019181467776054968
+    second: lakritzkater_trab_glow_4
+  - first:
+      213: 3278767608648178817
+    second: lakritzkater_trab_glow_5
+  - first:
+      213: 2670831191986038622
+    second: lakritzkater_trab_glow_6
+  - first:
+      213: 3766891937990039809
+    second: lakritzkater_trab_glow_7
+  - first:
+      213: 1282721594217516169
+    second: lakritzkater_trab_glow_8
+  - first:
+      213: 3575538675313421930
+    second: lakritzkater_trab_glow_9
+  - first:
+      213: 2310771854125631253
+    second: lakritzkater_trab_glow_10
+  - first:
+      213: 4144506181257582940
+    second: lakritzkater_trab_glow_11
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: lakritzkater_trab_glow_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 50
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.10526315789473684}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 78ae75ebc7cf4ac9a71a6ac0a8dbaf5d
+      internalID: 1925680776636566550
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lakritzkater_trab_glow_1
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 0
+        width: 50
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.10526315789473684}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0a0e53c4d5914a94804b0f55948878e8
+      internalID: 2063909472468438682
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lakritzkater_trab_glow_2
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 0
+        width: 50
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.10526315789473684}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0030bc9c92ea42f1bd13bce2faae6d5a
+      internalID: 3319122527457541477
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lakritzkater_trab_glow_3
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 0
+        width: 50
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.10526315789473684}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 00b2d5c5deea4e5fb1335524c66be658
+      internalID: 4108227045097988381
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lakritzkater_trab_glow_4
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 0
+        width: 50
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.10526315789473684}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf75cf70d5264decb7165e93957f71f3
+      internalID: 4019181467776054968
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lakritzkater_trab_glow_5
+      rect:
+        serializedVersion: 2
+        x: 250
+        y: 0
+        width: 50
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.10526315789473684}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c3569d1ab83a4bbbaddefb2bf05f2848
+      internalID: 3278767608648178817
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lakritzkater_trab_glow_6
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 0
+        width: 50
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.10526315789473684}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bef0621e09024cd5b710e3a69d67e27d
+      internalID: 2670831191986038622
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lakritzkater_trab_glow_7
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 0
+        width: 50
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.10526315789473684}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 94d4abdc7bdc4caab449e2e405906985
+      internalID: 3766891937990039809
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lakritzkater_trab_glow_8
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 0
+        width: 50
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.10526315789473684}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0ee3a3f0eadd40828dbbcfe46fe023e6
+      internalID: 1282721594217516169
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lakritzkater_trab_glow_9
+      rect:
+        serializedVersion: 2
+        x: 450
+        y: 0
+        width: 50
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.10526315789473684}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e9fc22c2e83640dfa4a30ecb666353c5
+      internalID: 3575538675313421930
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lakritzkater_trab_glow_10
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 0
+        width: 50
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.10526315789473684}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c21a60cce7ad4ec882662998868f226a
+      internalID: 2310771854125631253
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lakritzkater_trab_glow_11
+      rect:
+        serializedVersion: 2
+        x: 550
+        y: 0
+        width: 50
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.10526315789473684}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 13b9319020fc4708bac0a9196990729b
+      internalID: 4144506181257582940
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      lakritzkater_trab_glow_0: 1925680776636566550
+      lakritzkater_trab_glow_1: 2063909472468438682
+      lakritzkater_trab_glow_10: 2310771854125631253
+      lakritzkater_trab_glow_11: 4144506181257582940
+      lakritzkater_trab_glow_2: 3319122527457541477
+      lakritzkater_trab_glow_3: 4108227045097988381
+      lakritzkater_trab_glow_4: 4019181467776054968
+      lakritzkater_trab_glow_5: 3278767608648178817
+      lakritzkater_trab_glow_6: 2670831191986038622
+      lakritzkater_trab_glow_7: 3766891937990039809
+      lakritzkater_trab_glow_8: 1282721594217516169
+      lakritzkater_trab_glow_9: 3575538675313421930
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:
