@@ -275,6 +275,20 @@ public enum EnemyId
     /// Bombe am Spieler, weitergeben durch Beruehren (EnemyOfenkartoffel).
     /// </summary>
     Ofenkartoffel = 82,
+
+    // Elites von Geisterwald und Vulkanwelt (je zwei, Ring-Debuet wie in Kueche/Eiswelt)
+
+    /// <summary>Elite des Geisterwalds: Hexenkessel voll leuchtender Minzsuppe, Augen und Mund gluehen von innen. Kocht ueber.</summary>
+    Spuksuppe = 83,
+
+    /// <summary>Elite des Geisterwalds: leuchtende Himbeer-Goetterspeise mit Sahnehaube, wackelt heran und macht BUH.</summary>
+    Wackelgeist = 84,
+
+    /// <summary>Elite der Vulkanwelt: Mais-Taco in Cowboystiefeln, die Fuellung brennt - und bricht aus, wenn es zu scharf wird.</summary>
+    Feuertaco = 85,
+
+    /// <summary>Elite der Vulkanwelt: Creme Brulee im Porzellanfoermchen, flambiert sich mit dem Kuechenbrenner selbst.</summary>
+    CremeBrulee = 86,
 }
 
 /// <summary>
@@ -1106,6 +1120,34 @@ public static class EnemyCatalog
             sheet: "Assets/Art/Gegner/new/miniboss/ofenkartoffel_lauf.png", fps: 12f,
             colliderRadius: 1.0f, colliderOffset: new Vector2(0f, 1.0f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Mini_Boss/Ofenkartoffel.prefab");
+
+        Def(EnemyId.Spuksuppe, "Spuksuppe",
+            health: 480f, damage: 8f, speed: 1.1f, exp: 480, pushTime: 0.3f,
+            role: EnemyRole.Elite, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/geist/spuksuppe_watschel.png", fps: 14f,
+            colliderRadius: 0.52f, colliderOffset: new Vector2(0f, 0.5f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Elite_Gegner/Spuksuppe.prefab");
+
+        Def(EnemyId.Wackelgeist, "Wackelgeist",
+            health: 520f, damage: 8f, speed: 1.15f, exp: 520, pushTime: 0.3f,
+            role: EnemyRole.Elite, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/geist/wackelgeist_boing.png", fps: 14f,
+            colliderRadius: 0.48f, colliderOffset: new Vector2(0f, 0.42f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Elite_Gegner/Wackelgeist.prefab");
+
+        Def(EnemyId.Feuertaco, "Feuertaco",
+            health: 560f, damage: 9f, speed: 1.25f, exp: 560, pushTime: 0.3f,
+            role: EnemyRole.Elite, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/vulkan/feuertaco_marsch.png", fps: 14f,
+            colliderRadius: 0.5f, colliderOffset: new Vector2(0f, 0.48f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Elite_Gegner/Feuertaco.prefab");
+
+        Def(EnemyId.CremeBrulee, "Creme Brulee",
+            health: 620f, damage: 9f, speed: 1.15f, exp: 620, pushTime: 0.3f,
+            role: EnemyRole.Elite, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/vulkan/cremebrulee_trippel.png", fps: 14f,
+            colliderRadius: 0.44f, colliderOffset: new Vector2(0f, 0.38f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Elite_Gegner/CremeBrulee.prefab");
 
         // ---------------------------------------------------------- Archiv
         //

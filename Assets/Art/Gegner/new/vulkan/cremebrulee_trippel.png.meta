@@ -1,0 +1,939 @@
+fileFormatVersion: 2
+guid: ab6390a2bed04ca98b8631554ae60dca
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3177398232643910412
+    second: cremebrulee_trippel_0
+  - first:
+      213: 4473024260693573769
+    second: cremebrulee_trippel_1
+  - first:
+      213: 4367222396283647146
+    second: cremebrulee_trippel_2
+  - first:
+      213: 4389559624533613917
+    second: cremebrulee_trippel_3
+  - first:
+      213: 2353138785003867364
+    second: cremebrulee_trippel_4
+  - first:
+      213: 3806594509256753733
+    second: cremebrulee_trippel_5
+  - first:
+      213: 1493242131387157496
+    second: cremebrulee_trippel_6
+  - first:
+      213: 1217519007882474370
+    second: cremebrulee_trippel_7
+  - first:
+      213: 1435201698050074045
+    second: cremebrulee_trippel_8
+  - first:
+      213: 3261480928496296462
+    second: cremebrulee_trippel_9
+  - first:
+      213: 3406001967873085406
+    second: cremebrulee_trippel_10
+  - first:
+      213: 3950117761545265299
+    second: cremebrulee_trippel_11
+  - first:
+      213: 3378441359428342186
+    second: cremebrulee_trippel_12
+  - first:
+      213: 3164820777967041227
+    second: cremebrulee_trippel_13
+  - first:
+      213: 2461469629666326529
+    second: cremebrulee_trippel_14
+  - first:
+      213: 2672325713618471726
+    second: cremebrulee_trippel_15
+  - first:
+      213: 3411093873238357806
+    second: cremebrulee_trippel_16
+  - first:
+      213: 3952645798189469139
+    second: cremebrulee_trippel_17
+  - first:
+      213: 3850198891612771571
+    second: cremebrulee_trippel_18
+  - first:
+      213: 1405487547692041503
+    second: cremebrulee_trippel_19
+  - first:
+      213: 2531694912251835514
+    second: cremebrulee_trippel_20
+  - first:
+      213: 2531481098760055103
+    second: cremebrulee_trippel_21
+  - first:
+      213: 2047416688740380999
+    second: cremebrulee_trippel_22
+  - first:
+      213: 2403267060334372867
+    second: cremebrulee_trippel_23
+  - first:
+      213: 2590425677036966891
+    second: cremebrulee_trippel_24
+  - first:
+      213: 4035184491191147412
+    second: cremebrulee_trippel_25
+  - first:
+      213: 3779293723277314071
+    second: cremebrulee_trippel_26
+  - first:
+      213: 1154598242392218375
+    second: cremebrulee_trippel_27
+  - first:
+      213: 3144451949675277437
+    second: cremebrulee_trippel_28
+  - first:
+      213: 3233149667676503098
+    second: cremebrulee_trippel_29
+  - first:
+      213: 1742813787091822356
+    second: cremebrulee_trippel_30
+  - first:
+      213: 1520731603037749607
+    second: cremebrulee_trippel_31
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: cremebrulee_trippel_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 56
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.02857142857142857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b11024876594d2287a8dd66c6c85229
+      internalID: 3177398232643910412
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cremebrulee_trippel_1
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 0
+        width: 56
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.02857142857142857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 00c92ac2e30140eb85ad6fe3801f26c0
+      internalID: 4473024260693573769
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cremebrulee_trippel_2
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 0
+        width: 56
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.02857142857142857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5b136678342840209e4140f09bc0a01b
+      internalID: 4367222396283647146
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cremebrulee_trippel_3
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 0
+        width: 56
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.02857142857142857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f0d6f739c43d45f79ff4c6871d4d0584
+      internalID: 4389559624533613917
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cremebrulee_trippel_4
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 0
+        width: 56
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.02857142857142857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cd0fc3b0f54047d3a0403a58430f1840
+      internalID: 2353138785003867364
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cremebrulee_trippel_5
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 0
+        width: 56
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.02857142857142857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ef8de6435970400b9c21df53802018dd
+      internalID: 3806594509256753733
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cremebrulee_trippel_6
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 0
+        width: 56
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.02857142857142857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f12f1e4f075a4c2baeee5443439edb29
+      internalID: 1493242131387157496
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cremebrulee_trippel_7
+      rect:
+        serializedVersion: 2
+        x: 392
+        y: 0
+        width: 56
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.02857142857142857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f2a3942cb5d4fa385945462d65e84a0
+      internalID: 1217519007882474370
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cremebrulee_trippel_8
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 0
+        width: 56
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.02857142857142857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6ce093dfdc68445fbd67312303ee30f2
+      internalID: 1435201698050074045
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cremebrulee_trippel_9
+      rect:
+        serializedVersion: 2
+        x: 504
+        y: 0
+        width: 56
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.02857142857142857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1f8752c559af43b98bd12e950e7be210
+      internalID: 3261480928496296462
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cremebrulee_trippel_10
+      rect:
+        serializedVersion: 2
+        x: 560
+        y: 0
+        width: 56
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.02857142857142857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 20cedd113bc14939b248d8aeea178f27
+      internalID: 3406001967873085406
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cremebrulee_trippel_11
+      rect:
+        serializedVersion: 2
+        x: 616
+        y: 0
+        width: 56
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.02857142857142857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1cdd3a2031fe49c98b02ff1a903340af
+      internalID: 3950117761545265299
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cremebrulee_trippel_12
+      rect:
+        serializedVersion: 2
+        x: 672
+        y: 0
+        width: 56
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.02857142857142857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5d6dae81b448452db24624e34bab3812
+      internalID: 3378441359428342186
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cremebrulee_trippel_13
+      rect:
+        serializedVersion: 2
+        x: 728
+        y: 0
+        width: 56
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.02857142857142857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f916a197239404e96c42ef287eacc8e
+      internalID: 3164820777967041227
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cremebrulee_trippel_14
+      rect:
+        serializedVersion: 2
+        x: 784
+        y: 0
+        width: 56
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.02857142857142857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 05c4cfe494ec456f90aa61946b9b83e9
+      internalID: 2461469629666326529
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cremebrulee_trippel_15
+      rect:
+        serializedVersion: 2
+        x: 840
+        y: 0
+        width: 56
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.02857142857142857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 28ce6057c8f44013bdf1a5a69d19f229
+      internalID: 2672325713618471726
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cremebrulee_trippel_16
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 0
+        width: 56
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.02857142857142857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 64a40874ad514348861f32049df90d42
+      internalID: 3411093873238357806
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cremebrulee_trippel_17
+      rect:
+        serializedVersion: 2
+        x: 952
+        y: 0
+        width: 56
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.02857142857142857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dd91e86c7b0746dea4590781bd146156
+      internalID: 3952645798189469139
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cremebrulee_trippel_18
+      rect:
+        serializedVersion: 2
+        x: 1008
+        y: 0
+        width: 56
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.02857142857142857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1c13ccb16d374975b80b69091c580975
+      internalID: 3850198891612771571
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cremebrulee_trippel_19
+      rect:
+        serializedVersion: 2
+        x: 1064
+        y: 0
+        width: 56
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.02857142857142857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f48355bdbf94aaaa7a5340fdd06611b
+      internalID: 1405487547692041503
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cremebrulee_trippel_20
+      rect:
+        serializedVersion: 2
+        x: 1120
+        y: 0
+        width: 56
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.02857142857142857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 30d9c712f1144a8aa76ab4cfdbfd8425
+      internalID: 2531694912251835514
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cremebrulee_trippel_21
+      rect:
+        serializedVersion: 2
+        x: 1176
+        y: 0
+        width: 56
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.02857142857142857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0c86e01c74fa423bb65006653cc1405e
+      internalID: 2531481098760055103
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cremebrulee_trippel_22
+      rect:
+        serializedVersion: 2
+        x: 1232
+        y: 0
+        width: 56
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.02857142857142857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a56b0198b30040c6b1dbf6b881787728
+      internalID: 2047416688740380999
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cremebrulee_trippel_23
+      rect:
+        serializedVersion: 2
+        x: 1288
+        y: 0
+        width: 56
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.02857142857142857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6fae114b6f00408fbb23eee8d2094a96
+      internalID: 2403267060334372867
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cremebrulee_trippel_24
+      rect:
+        serializedVersion: 2
+        x: 1344
+        y: 0
+        width: 56
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.02857142857142857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dcd05fd4eea241e2b0ec8271f1058dd3
+      internalID: 2590425677036966891
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cremebrulee_trippel_25
+      rect:
+        serializedVersion: 2
+        x: 1400
+        y: 0
+        width: 56
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.02857142857142857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 19c31ded441147798610cb42384ca5a1
+      internalID: 4035184491191147412
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cremebrulee_trippel_26
+      rect:
+        serializedVersion: 2
+        x: 1456
+        y: 0
+        width: 56
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.02857142857142857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5f6e7399a9274ddeb610a1715962d48b
+      internalID: 3779293723277314071
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cremebrulee_trippel_27
+      rect:
+        serializedVersion: 2
+        x: 1512
+        y: 0
+        width: 56
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.02857142857142857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 338d1f60bd0e4ad3af52755c4f4b9791
+      internalID: 1154598242392218375
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cremebrulee_trippel_28
+      rect:
+        serializedVersion: 2
+        x: 1568
+        y: 0
+        width: 56
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.02857142857142857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 09003fd65380420d85ba0c26b71c0ca7
+      internalID: 3144451949675277437
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cremebrulee_trippel_29
+      rect:
+        serializedVersion: 2
+        x: 1624
+        y: 0
+        width: 56
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.02857142857142857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 60f2c9c9a7a6474983aedc76a4952c50
+      internalID: 3233149667676503098
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cremebrulee_trippel_30
+      rect:
+        serializedVersion: 2
+        x: 1680
+        y: 0
+        width: 56
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.02857142857142857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 57977c6cd51949389988f3421301689b
+      internalID: 1742813787091822356
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cremebrulee_trippel_31
+      rect:
+        serializedVersion: 2
+        x: 1736
+        y: 0
+        width: 56
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5, y: 0.02857142857142857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b646401661b44f69bf4f30eba7a6afa7
+      internalID: 1520731603037749607
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      cremebrulee_trippel_0: 3177398232643910412
+      cremebrulee_trippel_1: 4473024260693573769
+      cremebrulee_trippel_10: 3406001967873085406
+      cremebrulee_trippel_11: 3950117761545265299
+      cremebrulee_trippel_12: 3378441359428342186
+      cremebrulee_trippel_13: 3164820777967041227
+      cremebrulee_trippel_14: 2461469629666326529
+      cremebrulee_trippel_15: 2672325713618471726
+      cremebrulee_trippel_16: 3411093873238357806
+      cremebrulee_trippel_17: 3952645798189469139
+      cremebrulee_trippel_18: 3850198891612771571
+      cremebrulee_trippel_19: 1405487547692041503
+      cremebrulee_trippel_2: 4367222396283647146
+      cremebrulee_trippel_20: 2531694912251835514
+      cremebrulee_trippel_21: 2531481098760055103
+      cremebrulee_trippel_22: 2047416688740380999
+      cremebrulee_trippel_23: 2403267060334372867
+      cremebrulee_trippel_24: 2590425677036966891
+      cremebrulee_trippel_25: 4035184491191147412
+      cremebrulee_trippel_26: 3779293723277314071
+      cremebrulee_trippel_27: 1154598242392218375
+      cremebrulee_trippel_28: 3144451949675277437
+      cremebrulee_trippel_29: 3233149667676503098
+      cremebrulee_trippel_3: 4389559624533613917
+      cremebrulee_trippel_30: 1742813787091822356
+      cremebrulee_trippel_31: 1520731603037749607
+      cremebrulee_trippel_4: 2353138785003867364
+      cremebrulee_trippel_5: 3806594509256753733
+      cremebrulee_trippel_6: 1493242131387157496
+      cremebrulee_trippel_7: 1217519007882474370
+      cremebrulee_trippel_8: 1435201698050074045
+      cremebrulee_trippel_9: 3261480928496296462
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

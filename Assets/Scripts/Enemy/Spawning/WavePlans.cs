@@ -624,10 +624,12 @@ public static class WavePlans
     /// EnemyGlowLayer, im dunklen Wald sieht man vor allem ihr Licht). Jede Phase
     /// stellt neue vor, meist mit einem eigenen Burst. Dazu weiter der
     /// Fluegeldolch (Fledermaus) und am Ende das Gespenst (siehe EnemySquiddy).
+    /// Elites wie in der Kueche: die Spuksuppe (Hexenkessel) ab 1:45 im Ring,
+    /// der Wackelgeist (Goetterspeise, zaeher) ab 8:00 mit "BUH!".
     ///
     ///   0:00  Anlauf (5 s), saure Gluehwuermer
-    ///   0:05  + Flambierkirschen (Schwarm), Fluegeldolche, erste Kuerbiswichte
-    ///   3:00  + Gluehbirnen, Lakritzkater, Baisergeister
+    ///   0:05  + Flambierkirschen (Schwarm), Fluegeldolche, erste Kuerbiswichte, 1:45 Spuksuppe-Ring
+    ///   3:00  + Gluehbirnen, Lakritzkater, Baisergeister, 8:00 Ring mit dem ersten Wackelgeist
     ///   9:00  + Leuchtpilze, Windbeutel-Eulen, 11:30 Knusperhaus (Zwischenboss)
     ///  14:00  + Lebkuchen-Zombies (Brocken)
     ///  20:00  Das Gespenst
@@ -648,7 +650,8 @@ public static class WavePlans
             .Pressure(10f, 28f)
             .Base(Patterns.Scatter)
             .Burst(60f, EnemyId.Flambierkirsche, 12f, Patterns.Arc, 0f)
-            .Burst(120f, EnemyId.Kuerbiswicht, 8f, Patterns.Cluster, 0f);
+            .Encircle(105f, EnemyId.Spuksuppe, EnemyId.Gluehwurm, 14, 13f, false, "ES BRODELT!", 0.35f, 25f, 1.5f)
+            .Burst(130f, EnemyId.Kuerbiswicht, 8f, Patterns.Cluster, 0f);
 
         plan.Phase(360f)
             .Pool(EnemyId.Kuerbiswicht, 25f)
@@ -661,10 +664,12 @@ public static class WavePlans
             .Burst(30f, EnemyId.Gluehbirne, 12f, Patterns.Column, 0f)
             .Calm(75f, 10f, 0.15f)
             .Burst(110f, EnemyId.Lakritzkater, 10f, Patterns.Ambush, 0f)
+            .Burst(135f, EnemyId.Spuksuppe, 1f, Patterns.Ambush, 0f)
             .Burst(150f, EnemyId.Fluegeldolch, 12f, Patterns.Arc, 0f)
             .Calm(195f, 10f, 0.15f)
             .Burst(240f, EnemyId.Baisergeist, 14f, Patterns.Cluster, 0f)
-            .Burst(300f, EnemyId.Flambierkirsche, 20f, Patterns.Arc, 0f);
+            .Encircle(300f, EnemyId.Wackelgeist, EnemyId.Flambierkirsche, 16, 14f, false, "BUH!", 0.35f, 25f, 1.5f)
+            .Burst(330f, EnemyId.Lakritzkater, 12f, Patterns.Column, 0f);
 
         plan.Phase(300f)
             .Pool(EnemyId.Kuerbiswicht, 15f)
@@ -678,10 +683,12 @@ public static class WavePlans
             .Burst(20f, EnemyId.Leuchtpilz, 10f, Patterns.Column, 0f)
             .Burst(60f, EnemyId.Fluegeldolch, 12f, Patterns.Arc, 0f)
             .Calm(95f, 10f, 0.15f)
+            .Burst(110f, EnemyId.Spuksuppe, 1f, Patterns.Ambush, 0f)
             .Burst(130f, EnemyId.Lakritzkater, 16f, Patterns.Ambush, 0f)
             .Boss(150f, EnemyId.Knusperhaus, "KNUSPERHAUS!", 0.4f)
             .Burst(180f, EnemyId.Windbeuteleule, 8f, Patterns.Cluster, 0f)
             .Calm(215f, 10f, 0.15f)
+            .Burst(235f, EnemyId.Wackelgeist, 1f, Patterns.Ambush, 0f)
             .Burst(250f, EnemyId.Baisergeist, 20f, Patterns.Arc, 0f);
 
         plan.Phase(358f)
@@ -696,8 +703,10 @@ public static class WavePlans
             .Base(Patterns.Scatter)
             .Burst(30f, EnemyId.Lebkuchenzombie, 14f, Patterns.Ambush, 0f)
             .Calm(120f, 10f, 0.15f)
-            .Burst(160f, EnemyId.Flambierkirsche, 30f, Patterns.Arc, 0f)
+            .Encircle(150f, EnemyId.Spuksuppe, EnemyId.Baisergeist, 18, 15f, false, "RING!", 0.35f, 25f, 1.5f)
+            .Burst(180f, EnemyId.Flambierkirsche, 30f, Patterns.Arc, 0f)
             .Burst(220f, EnemyId.Lebkuchenzombie, 20f, Patterns.Column, 0f)
+            .Burst(260f, EnemyId.Wackelgeist, 1f, Patterns.Ambush, 0f)
             .Calm(290f, 10f, 0.15f)
             .Burst(320f, EnemyId.Windbeuteleule, 16f, Patterns.Cluster, 0f);
 
@@ -724,7 +733,10 @@ public static class WavePlans
             .Pool(EnemyId.Gluehwurm, 5f)
             .Pool(EnemyId.Fluegeldolch, 5f)
             .Pressure(100f, 100f)
-            .Base(Patterns.Scatter);
+            .Base(Patterns.Scatter)
+            .Burst(30f, EnemyId.Wackelgeist, 1f, Patterns.Ambush, 0f)
+            .Encircle(60f, EnemyId.None, EnemyId.Lakritzkater, 20, 14f, false, "RING!", 0.35f, 25f, 1.5f)
+            .Burst(90f, EnemyId.Spuksuppe, 1f, Patterns.Arc, 0f);
 
         return plan;
     }
@@ -737,11 +749,12 @@ public static class WavePlans
     /// Seit Oktober 2026 mit eigenen Gegnern (lauter heisses, scharfes und
     /// gebackenes Essen). Jede Phase stellt neue vor, meist mit einem eigenen
     /// Burst. Einen Boss gibt es noch nicht - nach 20:00 geht es mit voller
-    /// Mischung weiter, dann Endlos.
+    /// Mischung weiter, dann Endlos. Elites: der Feuertaco ab 1:45 im Ring,
+    /// die Creme Brulee (zaeher) ab 8:00 mit "FLAMBIERT!".
     ///
     ///   0:00  Anlauf (5 s), Knisterbrause
-    ///   0:05  + Feuerschoten, Takoyaki
-    ///   3:00  + Lavakuchen, Pizzastuecke, Schaschliks (Huepfer)
+    ///   0:05  + Feuerschoten, Takoyaki, 1:45 Feuertaco-Ring
+    ///   3:00  + Lavakuchen, Pizzastuecke, Schaschliks (Huepfer), 8:00 Ring mit der ersten Creme Brulee
     ///   9:00  + Kaesefondue (zaeh), Wasabi-Kleckse, Drachenfruechte, 11:30 Ofenkartoffel (Zwischenboss)
     ///  14:00  + Ofenbrot-Golems (Brocken)
     ///  20:00  alles, hoher Druck
@@ -762,7 +775,8 @@ public static class WavePlans
             .Pressure(12f, 32f)
             .Base(Patterns.Scatter)
             .Burst(60f, EnemyId.Knisterbrause, 14f, Patterns.Arc, 0f)
-            .Burst(120f, EnemyId.Feuerschote, 8f, Patterns.Cluster, 0f);
+            .Encircle(105f, EnemyId.Feuertaco, EnemyId.Knisterbrause, 14, 13f, false, "ZU SCHARF!", 0.35f, 25f, 1.5f)
+            .Burst(130f, EnemyId.Feuerschote, 8f, Patterns.Cluster, 0f);
 
         plan.Phase(360f)
             .Pool(EnemyId.Feuerschote, 20f)
@@ -776,10 +790,12 @@ public static class WavePlans
             .Burst(30f, EnemyId.Lavakuchen, 10f, Patterns.Column, 0f)
             .Calm(75f, 10f, 0.15f)
             .Burst(110f, EnemyId.Takoyaki, 12f, Patterns.Ambush, 0f)
+            .Burst(135f, EnemyId.Feuertaco, 1f, Patterns.Ambush, 0f)
             .Burst(150f, EnemyId.Schaschlik, 10f, Patterns.Arc, 0f)
             .Calm(195f, 10f, 0.15f)
             .Burst(240f, EnemyId.Pizzastueck, 12f, Patterns.Cluster, 0f)
-            .Burst(300f, EnemyId.Knisterbrause, 24f, Patterns.Arc, 0f);
+            .Encircle(300f, EnemyId.CremeBrulee, EnemyId.Takoyaki, 16, 14f, false, "FLAMBIERT!", 0.35f, 25f, 1.5f)
+            .Burst(330f, EnemyId.Knisterbrause, 24f, Patterns.Arc, 0f);
 
         plan.Phase(300f)
             .Pool(EnemyId.Lavakuchen, 15f)
@@ -794,10 +810,12 @@ public static class WavePlans
             .Burst(20f, EnemyId.Kaesefondue, 10f, Patterns.Column, 0f)
             .Burst(60f, EnemyId.Drachenfrucht, 12f, Patterns.Arc, 0f)
             .Calm(95f, 10f, 0.15f)
+            .Burst(110f, EnemyId.Feuertaco, 1f, Patterns.Ambush, 0f)
             .Burst(130f, EnemyId.Wasabiklecks, 14f, Patterns.Cluster, 0f)
             .Boss(150f, EnemyId.Ofenkartoffel, "OFENKARTOFFEL!", 0.4f)
             .Burst(180f, EnemyId.Takoyaki, 16f, Patterns.Ambush, 0f)
             .Calm(215f, 10f, 0.15f)
+            .Burst(235f, EnemyId.CremeBrulee, 1f, Patterns.Ambush, 0f)
             .Burst(250f, EnemyId.Knisterbrause, 30f, Patterns.Arc, 0f);
 
         plan.Phase(358f)
@@ -812,8 +830,10 @@ public static class WavePlans
             .Base(Patterns.Scatter)
             .Burst(30f, EnemyId.Brotgolem, 10f, Patterns.Ambush, 0f)
             .Calm(120f, 10f, 0.15f)
-            .Burst(160f, EnemyId.Knisterbrause, 34f, Patterns.Arc, 0f)
+            .Encircle(150f, EnemyId.Feuertaco, EnemyId.Pizzastueck, 18, 15f, false, "RING!", 0.35f, 25f, 1.5f)
+            .Burst(180f, EnemyId.Knisterbrause, 34f, Patterns.Arc, 0f)
             .Burst(220f, EnemyId.Brotgolem, 14f, Patterns.Column, 0f)
+            .Burst(260f, EnemyId.CremeBrulee, 1f, Patterns.Ambush, 0f)
             .Calm(290f, 10f, 0.15f)
             .Burst(320f, EnemyId.Schaschlik, 16f, Patterns.Cluster, 0f);
 
@@ -826,7 +846,10 @@ public static class WavePlans
             .Pool(EnemyId.Takoyaki, 15f)
             .Pool(EnemyId.Knisterbrause, 15f)
             .Pressure(300f, 450f)
-            .Base(Patterns.Scatter);
+            .Base(Patterns.Scatter)
+            .Burst(60f, EnemyId.Feuertaco, 1f, Patterns.Ambush, 0f)
+            .Burst(240f, EnemyId.CremeBrulee, 1f, Patterns.Ambush, 0f)
+            .Burst(420f, EnemyId.Feuertaco, 1f, Patterns.Arc, 0f);
 
         plan.EndlessPhase()
             .Pool(EnemyId.Brotgolem, 15f)
@@ -840,7 +863,10 @@ public static class WavePlans
             .Pool(EnemyId.Feuerschote, 10f)
             .Pool(EnemyId.Knisterbrause, 10f)
             .Pressure(110f, 110f)
-            .Base(Patterns.Scatter);
+            .Base(Patterns.Scatter)
+            .Burst(30f, EnemyId.CremeBrulee, 1f, Patterns.Ambush, 0f)
+            .Encircle(60f, EnemyId.None, EnemyId.Takoyaki, 20, 14f, false, "RING!", 0.35f, 25f, 1.5f)
+            .Burst(90f, EnemyId.Feuertaco, 1f, Patterns.Arc, 0f);
 
         return plan;
     }
