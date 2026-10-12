@@ -385,6 +385,50 @@ public class Enemy : MonoBehaviour
 
         // Elites erkennt man am Leuchten.
         if (role == EnemyRole.Elite && spriteRenderer != null) EliteGlow.Attach(spriteRenderer);
+
+        EnableSmoothMotion();
+    }
+
+    // ------------------------------------------------------ Weiche Bewegung
+
+    /// <summary>Gegner mit Rigidbody-Interpolation (siehe <see cref="EnableSmoothMotion"/>).</summary>
+    private bool smoothMotion;
+    private bool restoreInterpolation;
+
+    /// <summary>
+    /// Die Physik rechnet mit 50 Hz, der Bildschirm zeigt 60-240 Bilder. Ohne
+    /// Interpolation springt ein Gegner nur jedes 2.-5. Bild weiter, waehrend
+    /// Boden und Spieler (der interpoliert) fluessig laufen - die Gegner
+    /// zittern dann sichtbar gegen den Hintergrund.
+    ///
+    /// Nur fuer Normalgegner und Elites, die allein ueber die Geschwindigkeit
+    /// laufen. Bosse und Teleporter setzen ihre Position selbst per Transform -
+    /// das wuerde die Interpolation jedes Bild wieder ueberschreiben.
+    /// </summary>
+    private void EnableSmoothMotion()
+    {
+        if (rb == null || rb.bodyType != RigidbodyType2D.Dynamic) return;
+        if (role != EnemyRole.Normal && role != EnemyRole.Elite) return;
+        if (GetComponent<EnemyTeleport>() != null) return;
+
+        rb.interpolation = RigidbodyInterpolation2D.Interpolate;
+        smoothMotion = true;
+    }
+
+    /// <summary>
+    /// Versetzt den Gegner sofort. Mit Interpolation wuerde ein blosses
+    /// transform.position den Sprung verschlucken oder ihn ueber den
+    /// Bildschirm ziehen - darum fuer einen Physikschritt ohne.
+    /// </summary>
+    public void Teleport(Vector2 position)
+    {
+        if (smoothMotion)
+        {
+            rb.interpolation = RigidbodyInterpolation2D.None;
+            restoreInterpolation = true;
+        }
+        if (rb != null) rb.position = position;
+        transform.position = new Vector3(position.x, position.y, transform.position.z);
     }
 
     /// <summary>Altbestand: der Schalter "MiniBoss" am Prefab meint heute Elite.</summary>
@@ -450,6 +494,13 @@ public class Enemy : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
+        // Nach einem Teleport ist ein Physikschritt vergangen: wieder weich.
+        if (restoreInterpolation && rb != null && rb.simulated)
+        {
+            rb.interpolation = RigidbodyInterpolation2D.Interpolate;
+            restoreInterpolation = false;
+        }
+
         PlayerController player = PlayerController.Instance;
         if (player == null || !player.gameObject.activeSelf)
         {

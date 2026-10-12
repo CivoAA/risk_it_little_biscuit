@@ -49,6 +49,8 @@ public class FoxBurn : MonoBehaviour
         }
         else
         {
+            // Erloschen und neu angezuendet: darf beim naechsten Tod wieder weiterspringen
+            if (Time.time >= burn.until) burn.spent = false;
             burn.hit.tickDamage = Mathf.Max(burn.hit.tickDamage, hit.tickDamage);
             burn.hit.leaps = Mathf.Max(burn.hit.leaps, hit.leaps);
             burn.hit.damage = Mathf.Max(burn.hit.damage, hit.damage);
@@ -60,15 +62,22 @@ public class FoxBurn : MonoBehaviour
         burn.ShowMark(true);
     }
 
+    /// <summary>
+    /// Ein Gegner ist gestorben, waehrend er brannte (egal woran). Die Evo
+    /// (Kyuubi) sammelt daraus Seelen.
+    /// </summary>
+    public static event System.Action<Enemy> DiedBurning;
+
     private static void OnEnemyDamaged(Enemy enemy, float damage)
     {
         if (enemy == null || enemy.HealthFraction > 0f) return;
 
         FoxBurn burn = enemy.GetComponent<FoxBurn>();
-        if (burn == null || burn.spent || Time.time >= burn.until || burn.hit.leaps <= 0) return;
+        if (burn == null || burn.spent || Time.time >= burn.until) return;
 
         burn.spent = true;
-        FoxFire.Leap(enemy, burn.hit);
+        DiedBurning?.Invoke(enemy);
+        if (burn.hit.leaps > 0) FoxFire.Leap(enemy, burn.hit);
     }
 
     void Update()

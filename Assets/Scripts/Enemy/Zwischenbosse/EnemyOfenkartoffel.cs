@@ -11,7 +11,8 @@ using UnityEngine;
 ///   Heisse Kartoffel  holt aus und wirft dem Spieler eine kleine, gluehende
 ///             Kartoffel zu. Die bleibt an ihm kleben und tickt - die rote Zone
 ///             um sie herum zeigt Reichweite und Restzeit. Weitergeben geht nur
-///             durch Beruehren: an irgendeinen Gegner (dann fliegt der mitsamt
+///             im Vorbeilaufen (knapp vor dem Beruehren, danach kurz
+///             unverwundbar): an irgendeinen Gegner (dann fliegt der mitsamt
 ///             seinen Nachbarn in die Luft) - oder zurueck an die Ofenkartoffel
 ///             selbst, die dann erschrocken stehen bleibt und sich einen
 ///             ordentlichen Brocken ihrer Leben wegsprengt.
@@ -40,9 +41,16 @@ public class EnemyOfenkartoffel : SelfAnimatedBoss
     private const float FlightTime = 0.65f;
     private const float HopTime = 0.22f;
 
-    /// <summary>Weitergeben: Beruehrungsabstand Spieler - Gegnermitte bzw. Bossmitte.</summary>
-    private const float PassRadius = 0.75f;
-    private const float PassRadiusBoss = 1.7f;
+    /// <summary>
+    /// Weitergeben: Abstand Spieler - Gegnermitte bzw. Bossmitte. Bewusst etwas
+    /// groesser als die Collider - die Kartoffel springt im Vorbeilaufen rueber,
+    /// bevor man den Gegner wirklich beruehrt und Kontaktschaden kassiert.
+    /// </summary>
+    private const float PassRadius = 1.4f;
+    private const float PassRadiusBoss = 2.5f;
+
+    /// <summary>Nach dem Weitergeben kurz unverwundbar - fuer den Fall, dass man im Pulk doch jemanden streift.</summary>
+    private const float PassImmunity = 0.6f;
 
     /// <summary>Nach dem Fangen erst kurz nicht weitergeben (sonst springt sie sofort zum Naechstbesten).</summary>
     private const float CatchCooldown = 0.35f;
@@ -286,6 +294,7 @@ public class EnemyOfenkartoffel : SelfAnimatedBoss
     private void Hop(Holder target, Enemy e)
     {
         SquiddySounds.Spit();
+        if (holder == Holder.Player && Player != null) Player.GrantImmunity(PassImmunity);
         flyFrom = HolderPos(holder);
         holderEnemy = e;
         holder = Holder.Flying;

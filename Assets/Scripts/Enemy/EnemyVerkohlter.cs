@@ -973,7 +973,12 @@ public class EnemyVerkohlter : MonoBehaviour
             if (e == null || e == enemy) continue;
             if (Vector2.Distance(e.transform.position, maw) > SuckEnemyRange) continue;
             Rigidbody2D erb = e.GetComponent<Rigidbody2D>();
-            if (erb != null) erb.simulated = false;
+            if (erb != null)
+            {
+                erb.simulated = false;
+                // Ab hier zieht der Sog per Transform - Interpolation wuerde das zuruecksetzen.
+                erb.interpolation = RigidbodyInterpolation2D.None;
+            }
             swallowed.Add(e);
         }
     }

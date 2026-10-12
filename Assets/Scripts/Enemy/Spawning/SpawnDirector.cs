@@ -704,7 +704,7 @@ public class SpawnDirector : MonoBehaviour
             phase.BasePattern.Fill(points, ctx, 1, 0f);
             if (points.Count == 0) continue;
 
-            enemy.transform.position = SpawnPoint(points[0]);
+            enemy.Teleport(SpawnPoint(points[0]));
             enemy.ResetBlocked();
         }
     }

@@ -169,7 +169,7 @@ public static class Ach
     // sobald die Evo ein Rezept hat, laeuft das von allein.
 
     public static readonly AchievementDef ChocoChipsEvo = Def(
-        "Choco_Chips_Evo", "Choco Chips Evo", "Obtained the Choco Chips Evo for the first time!",
+        "Choco_Chips_Evo", "Milk Crown Evo", "Obtained the Milk Crown Evo for the first time!",
         AchievementCategory.Evolutions);
 
     public static readonly AchievementDef SwordSlashEvo = Def(

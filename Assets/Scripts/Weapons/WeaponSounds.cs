@@ -87,12 +87,19 @@ public static class WeaponSounds
     public static readonly Sfx CoffeePool     = new Sfx("coffee_pool",     0.20f, 0.2f,   0.05f);
     public static readonly Sfx JamSplat       = new Sfx("jam_splat",       0.17f, 0.09f,  0.07f);
     public static readonly Sfx MilkWave       = new Sfx("milk_wave",       0.22f, 0.15f,  0.04f);
+    public static readonly Sfx MilkCrown      = new Sfx("milk_crown",      0.24f, 0.3f,   0.04f);
     public static readonly Sfx SawSpawn       = new Sfx("saw_spawn",       0.15f, 0.3f,   0.04f);
     public static readonly Sfx VortexSpawn    = new Sfx("vortex_spawn",    0.20f, 0.2f,   0.05f);
     public static readonly Sfx VoidSpike      = new Sfx("void_spike",      0.18f, 0.08f,  0.06f);
     public static readonly Sfx Deathstrike    = new Sfx("deathstrike",     0.19f, 0.07f,  0.08f);
     public static readonly Sfx FoxfireBurst   = new Sfx("foxfire_burst",   0.15f, 0.08f,  0.07f);
     public static readonly Sfx SplatLand      = new Sfx("splat_land",      0.20f, 0.08f,  0.07f);
+
+    // Kyuubi (Fuchsfeuer-Evo): Seelen leise, das Erwachen gross
+    public static readonly Sfx KyubiSoul      = new Sfx("kyubi_soul",      0.10f, 0.06f,  0.03f);
+    public static readonly Sfx KyubiRise      = new Sfx("kyubi_rise",      0.30f, 1.0f,   0.02f);
+    public static readonly Sfx KyubiSlam      = new Sfx("kyubi_slam",      0.34f, 1.0f,   0.03f);
+    public static readonly Sfx KyubiHowl      = new Sfx("kyubi_howl",      0.24f, 1.0f,   0.02f);
 
     // ------------------------------------------------------------ Abspielen
 

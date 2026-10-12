@@ -19,6 +19,8 @@ using UnityEngine;
 ///   F8          Milch-Tunker geben bzw. eine Stufe hoeher
 ///   F6          Mochi-Melodie geben bzw. eine Stufe hoeher
 ///   F5          Fuchsfeuer geben bzw. eine Stufe hoeher
+///   Strg + F5   Kyubi (Fuchsfeuer-Evo) statt des Fuchsfeuers, gleich mit
+///               neun Schwaenzen - erwacht, sobald Gegner in Reichweite sind
 ///   F4          Koenigsplumps geben bzw. eine Stufe hoeher
 ///   Shift + F4-F8  nur noch diese Waffe: alle anderen Waffen und Evos weg,
 ///               sie selbst auf Stufe 1 - zum Vergleichen als Startwaffe.
@@ -80,7 +82,8 @@ public class RunDebugKeys : MonoBehaviour
 
         if (Input.GetKeyDown(FoxFireKey))
         {
-            GiveWeapon<FoxFire>("Fuchsfeuer");
+            if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)) GiveKyubi();
+            else GiveWeapon<FoxFire>("Fuchsfeuer");
             return;
         }
 
@@ -124,6 +127,31 @@ public class RunDebugKeys : MonoBehaviour
         }
 
         Debug.Log("[RunDebugKeys] Keks-Koenig gespawnt" + (phaseTwo ? " (Phase 2)." : "."));
+    }
+
+    /// <summary>
+    /// Kyubi zum Anschauen: Fuchsfeuer weg, Evo dran, Seelen voll.
+    /// </summary>
+    private void GiveKyubi()
+    {
+        PlayerController player = PlayerController.Instance;
+        if (player == null) return;
+
+        FoxFireEvo evo = player.GetComponentInChildren<FoxFireEvo>(true);
+        if (evo == null)
+        {
+            Debug.LogWarning("[RunDebugKeys] Kyubi haengt nicht am Player-Prefab.");
+            return;
+        }
+        foreach (FoxFire fox in player.GetComponentsInChildren<FoxFire>(true))
+            if (fox != null && !(fox is FoxFireEvo) && !fox.IsCopy) TestSceneLoadout.Remove(fox);
+
+        if (evo.weaponLevel < 0) TestSceneLoadout.StepUp(player, evo);
+        evo.DebugFillSouls();
+
+        Debug.Log("[RunDebugKeys] Kyubi - neun Schwaenze");
+        if (DamageNumberController.Instance != null)
+            DamageNumberController.Instance.CreateText("Kyubi", player.transform.position + Vector3.up * 1.2f);
     }
 
     /// <summary>

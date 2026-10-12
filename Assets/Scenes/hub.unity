@@ -877,7 +877,7 @@ MonoBehaviour:
   m_RefResolutionX: 320
   m_RefResolutionY: 180
   m_CropFrame: 0
-  m_GridSnapping: 1
+  m_GridSnapping: 0
   m_FilterMode: 0
   m_UpscaleRT: 0
   m_PixelSnapping: 0
@@ -15355,7 +15355,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shape: 1
   interactRadius: 1.5
-  interactSize: {x: 2, y: 2.5}
+  interactSize: {x: 3, y: 3}
   interactOffset: {x: 0, y: -1.2}
   interactKey: 101
   showPrompt: 1
@@ -15516,7 +15516,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1990002001
 Transform:
   m_ObjectHideFlags: 0

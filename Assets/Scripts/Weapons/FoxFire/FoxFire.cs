@@ -91,7 +91,7 @@ public class FoxFire : Weapon
     /// <summary>Mindestabstand zwischen zwei Abschuessen, damit sie nacheinander losziehen.</summary>
     private const float LaunchGap = 0.12f;
 
-    private readonly List<FoxWisp> wisps = new List<FoxWisp>();
+    protected readonly List<FoxWisp> wisps = new List<FoxWisp>();
     private Vector2 facing = Vector2.right;
     private Vector2 lastPos;
     private float nextLaunch;
@@ -106,7 +106,9 @@ public class FoxFire : Weapon
         maxweaponLevel = LevelStats.Length - 1;
     }
 
-    void OnDisable() { ClearWisps(); }
+    protected virtual void OnEnable() { }
+
+    protected virtual void OnDisable() { ClearWisps(); }
 
     void Update()
     {
@@ -125,21 +127,6 @@ public class FoxFire : Weapon
             return;
         }
 
-        int want = Mathf.Clamp(Mathf.RoundToInt(CurrentStats.shots + player.ExtraShots), 1, 9);
-        while (wisps.Count < want)
-        {
-            FoxWisp wisp = FoxWisp.Create(Center);
-            // die ersten Angriffe gestaffelt, nicht alle im selben Frame
-            wisp.ReadyAt = Time.time + 0.4f + wisps.Count * 0.25f;
-            wisps.Add(wisp);
-        }
-        while (wisps.Count > want)
-        {
-            FoxWisp last = wisps[wisps.Count - 1];
-            wisps.RemoveAt(wisps.Count - 1);
-            if (last != null) last.Vanish();
-        }
-
         // Blickrichtung aus der Bewegung - die Irrlichter haengen hinter ihm
         Vector2 pos = transform.position;
         Vector2 delta = pos - lastPos;
@@ -152,11 +139,29 @@ public class FoxFire : Weapon
             facing.Normalize();
         }
 
+        // Die Evo setzt hier aus, solange der Neunschwanz unterwegs ist.
+        if (!BeforeWisps(player)) return;
+
+        int want = WantedWisps(player);
+        while (wisps.Count < want)
+        {
+            FoxWisp wisp = NewWisp(Center);
+            // die ersten Angriffe gestaffelt, nicht alle im selben Frame
+            wisp.ReadyAt = Time.time + 0.4f + wisps.Count * 0.25f;
+            wisps.Add(wisp);
+        }
+        while (wisps.Count > want)
+        {
+            FoxWisp last = wisps[wisps.Count - 1];
+            wisps.RemoveAt(wisps.Count - 1);
+            if (last != null) last.Vanish();
+        }
+
         for (int i = 0; i < wisps.Count; i++)
         {
             if (wisps[i] == null)
             {
-                wisps[i] = FoxWisp.Create(Center);
+                wisps[i] = NewWisp(Center);
                 wisps[i].ReadyAt = Time.time + CurrentCooldown;
             }
             wisps[i].Slot = SlotPosition(i, wisps.Count);
@@ -179,7 +184,29 @@ public class FoxFire : Weapon
         }
     }
 
-    private Hit CurrentHit()
+    // ------------------------------------------------------------------
+    //  Haken fuer die Evo (FoxFireEvo / Kyuubi)
+    // ------------------------------------------------------------------
+
+    /// <summary>False = in diesem Bild keine Irrlichter verwalten und nichts abschiessen.</summary>
+    protected virtual bool BeforeWisps(PlayerController player) { return true; }
+
+    /// <summary>So viele Irrlichter sollen hinter dem Fuchs schweben.</summary>
+    protected virtual int WantedWisps(PlayerController player)
+    {
+        return Mathf.Clamp(Mathf.RoundToInt(CurrentStats.shots + player.ExtraShots), 1, 9);
+    }
+
+    /// <summary>Neues Irrlicht an <paramref name="at"/> (die Evo malt es anders).</summary>
+    protected virtual FoxWisp NewWisp(Vector2 at) { return FoxWisp.Create(at); }
+
+    /// <summary>Abstand der Irrlichter zur Mitte - die Evo faechert neun weiter auf.</summary>
+    protected virtual float SlotRadiusFor(int count) { return SlotRadius; }
+
+    /// <summary>Winkel zwischen zwei Irrlichtern im Faecher.</summary>
+    protected virtual float SlotSpreadFor(int count) { return SlotSpread; }
+
+    protected Hit CurrentHit()
     {
         return new Hit
         {
@@ -197,11 +224,11 @@ public class FoxFire : Weapon
     private Vector2 SlotPosition(int index, int count)
     {
         Vector2 back = -facing;
-        float angle = (index - (count - 1) * 0.5f) * SlotSpread;
+        float angle = (index - (count - 1) * 0.5f) * SlotSpreadFor(count);
         Vector2 dir = (Vector2)(Quaternion.Euler(0f, 0f, angle) * back);
         dir = (dir + Vector2.up * 0.7f).normalized;
         float bob = Mathf.Sin(Time.time * 3f + index * 1.7f) * 0.08f;
-        return Center + dir * SlotRadius + new Vector2(0f, bob);
+        return Center + dir * SlotRadiusFor(count) + new Vector2(0f, bob);
     }
 
     private void RestWisps()
@@ -214,7 +241,7 @@ public class FoxFire : Weapon
         }
     }
 
-    private void ClearWisps()
+    protected void ClearWisps()
     {
         for (int i = 0; i < wisps.Count; i++)
         {
@@ -223,7 +250,7 @@ public class FoxFire : Weapon
         wisps.Clear();
     }
 
-    private static float AoeFactor()
+    protected static float AoeFactor()
     {
         PlayerController player = PlayerController.Instance;
         return player != null ? Mathf.Max(0.5f, player.AOERange) : 1f;

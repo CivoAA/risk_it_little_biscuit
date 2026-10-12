@@ -13,7 +13,11 @@ public class BossPointer : MonoBehaviour
     private const float HeadGap = 0.3f;      // Kopfpunkt so weit ueber der Figur
     private const float Bob = 0.08f;         // Wippen in Pfeilrichtung
     private const float FadeSpeed = 6f;
-    private const float ScreenMargin = 0.04f; // Boss gilt erst etwas innerhalb des Rands als sichtbar
+    // Puffer, damit der Pfeil am Bildschirmrand nicht flackert (Anteil der Bildbreite/-hoehe):
+    // erst wenn der Boss ein Stueck AUSSERHALB des Bilds ist, kommt der Pfeil;
+    // erst wenn er ein Stueck INNERHALB ist, verschwindet er wieder.
+    private const float ShowOutside = 0.08f;
+    private const float HideInside = 0.06f;
 
     private static readonly Color Fill = new Color32(0xF2, 0x4E, 0x4E, 0xFF);
     private static readonly Color Light = new Color32(0xFF, 0xA8, 0x8A, 0xFF);
@@ -23,6 +27,7 @@ public class BossPointer : MonoBehaviour
     private Enemy boss;
     private float nextSearch;
     private float alpha;
+    private bool showing;
     private PlayerController headOf;
     private float headHeight;
 
@@ -55,7 +60,10 @@ public class BossPointer : MonoBehaviour
 
         FindBoss();
         Camera cam = Camera.main;
-        bool want = boss != null && cam != null && !OnScreen(cam, boss.transform.position);
+        if (boss == null || cam == null) showing = false;
+        else if (showing) showing = !InView(cam, boss.transform.position, HideInside);
+        else showing = !InView(cam, boss.transform.position, -ShowOutside);
+        bool want = showing;
 
         alpha = Mathf.MoveTowards(alpha, want ? 1f : 0f, FadeSpeed * Time.unscaledDeltaTime);
         if (alpha <= 0f || boss == null)
@@ -71,10 +79,8 @@ public class BossPointer : MonoBehaviour
 
         float bob = (Mathf.Sin(Time.unscaledTime * 8f) * 0.5f + 0.5f) * Bob;
         Vector2 pos = head + dir * (Radius + bob);
-        // Auf ganze Pixel setzen, sonst flimmert der Pfeil an der Pixel-Kamera
-        pos.x = Mathf.Round(pos.x * PPU) / PPU;
-        pos.y = Mathf.Round(pos.y * PPU) / PPU;
-
+        // Nicht auf Grafikpixel runden: die Kamera scrollt glatt (Grid Snapping None),
+        // gerundet wuerde der Pfeil gegen die Figur zittern.
         transform.position = new Vector3(pos.x, pos.y, 0f);
         transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg);
 
@@ -107,11 +113,12 @@ public class BossPointer : MonoBehaviour
         }
     }
 
-    private static bool OnScreen(Camera cam, Vector3 world)
+    /// <summary>Liegt der Punkt im Bild? margin &gt; 0 = so weit innen, &lt; 0 = auch so weit ausserhalb.</summary>
+    private static bool InView(Camera cam, Vector3 world, float margin)
     {
         Vector3 v = cam.WorldToViewportPoint(world);
-        return v.x > ScreenMargin && v.x < 1f - ScreenMargin
-            && v.y > ScreenMargin && v.y < 1f - ScreenMargin;
+        return v.x > margin && v.x < 1f - margin
+            && v.y > margin && v.y < 1f - margin;
     }
 
     /// <summary>Punkt ueber dem Kopf; die Hoehe wird einmal pro Figur gemessen,
