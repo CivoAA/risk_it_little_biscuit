@@ -59,6 +59,35 @@ public static class Aim
     }
 
     /// <summary>
+    /// Die bis zu <paramref name="count"/> naechsten Gegner im Radius, der
+    /// naechste zuerst. Fuellt <paramref name="results"/> (wird vorher geleert).
+    /// </summary>
+    public static void FindClosestEnemies(Vector2 origin, float radius, int count, List<Enemy> results)
+    {
+        results.Clear();
+        if (count <= 0) return;
+
+        overlapBuffer.Clear();
+        Physics2D.OverlapCircle(origin, radius, Filter, overlapBuffer);
+
+        foreach (Collider2D hit in overlapBuffer)
+        {
+            if (hit == null || !hit.CompareTag("Enemy")) continue;
+
+            Enemy enemy = hit.GetComponent<Enemy>();
+            if (enemy == null || results.Contains(enemy)) continue;
+
+            results.Add(enemy);
+        }
+
+        results.Sort((a, b) =>
+            ((Vector2)a.transform.position - origin).sqrMagnitude
+                .CompareTo(((Vector2)b.transform.position - origin).sqrMagnitude));
+
+        if (results.Count > count) results.RemoveRange(count, results.Count - count);
+    }
+
+    /// <summary>
     /// Richtung, in die geschossen werden muss, damit ein Projektil mit
     /// <paramref name="projectileSpeed"/> den weiterlaufenden Gegner trifft.
     ///

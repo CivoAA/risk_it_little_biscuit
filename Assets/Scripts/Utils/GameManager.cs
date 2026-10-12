@@ -22,6 +22,13 @@ public class GameManager : MonoBehaviour
     /// <summary>Besiegte Gegner in diesem Lauf - fuer die Bilanz im Death-Screen.</summary>
     public int kills;
 
+    /// <summary>
+    /// Endless: Waehrungswert (vor der Obergrenze) beim Beginn des Endlos-Teils.
+    /// Was danach dazukommt, zaehlt nur zu <see cref="RunDifficulty.EndlessRewardShare"/>.
+    /// Negativ = der Endlos-Teil hat noch nicht begonnen.
+    /// </summary>
+    private float endlessCurrencyStart = -1f;
+
     private int lastTimerSecond = -1;
 
     void Awake()
@@ -65,6 +72,10 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
+        // Ein Endless-Lauf endet immer mit dem Tod - auch wenn der Boss vorher
+        // gefallen ist (der setzt bossSpawned), gibt es keinen Sieg-Bildschirm.
+        bool won = bossSpawned && !GameSession.IsEndless;
+
         Achievements.Unlock(Ach.FirstDeath);
         currency = EstimateCurrency();
         Shop.AddCurrency(currency);
@@ -79,15 +90,15 @@ public class GameManager : MonoBehaviour
         // laengster Lauf. Nur auf echten Karten (nicht in der Test-Szene).
         if (MapDefinition.Active != null)
         {
-            LevelRecords.ReportRun(LevelRecords.CurrentMapId(), GameSession.IsEndless, bossSpawned, gameTime);
+            LevelRecords.ReportRun(LevelRecords.CurrentMapId(), GameSession.IsEndless, won, gameTime);
             // Story-Sieg: Endless hier und die naechste Welt gehen auf.
-            if (bossSpawned && !GameSession.IsEndless) Unlocks.ReportStoryWin(LevelRecords.CurrentMapId());
+            if (won) Unlocks.ReportStoryWin(LevelRecords.CurrentMapId());
         }
 
         // Charakter-Level nach dem Lauf: ab Level 10 gibt es den Begleiter im Shop.
         Unlocks.CheckCharLevels();
 
-        if (!bossSpawned)
+        if (!won)
         {
             SessionProgressTracker.Instance.EvaluateAfterGame();
             StartCoroutine(ShowGameOverScreen());
@@ -115,16 +126,41 @@ public class GameManager : MonoBehaviour
         PlayerController player = PlayerController.Instance;
         if (player == null) return currency;
 
+        float raw = RawCurrency(player);
+
+        // Endless: was nach dem Story-Teil dazukommt, zaehlt nur zu einem Bruchteil.
+        if (endlessCurrencyStart >= 0f)
+        {
+            raw = endlessCurrencyStart + Mathf.Max(0f, raw - endlessCurrencyStart) * RunDifficulty.EndlessRewardShare;
+        }
+
+        int value = (int)raw;
+
+        // Ueber 2500 zaehlt nur noch ein Zehntel weiter.
+        if (value > 2500) value = (int)(2500 + ((value - 2500) * 0.1f));
+        return Mathf.Max(0, value);
+    }
+
+    /// <summary>
+    /// Endless: der Story-Teil ist vorbei. Merkt sich den Waehrungsstand -
+    /// alles darueber zaehlt ab jetzt nur noch anteilig (siehe <see cref="EstimateCurrency"/>).
+    /// </summary>
+    public void BeginEndlessRewards()
+    {
+        PlayerController player = PlayerController.Instance;
+        if (endlessCurrencyStart >= 0f || player == null) return;
+        endlessCurrencyStart = RawCurrency(player);
+    }
+
+    /// <summary>Die Waehrungsformel ohne Endless-Anteil und ohne Obergrenze.</summary>
+    private float RawCurrency(PlayerController player)
+    {
         int level = player.currentLevel;
         float fromLevels = player.playerLevels != null
             ? player.playerLevels.Take(Mathf.Max(0, level - 2)).Sum() / 100f
             : 0f;
 
-        int value = (int)(((fromLevels + (10 * (level - 1)) + gameTime) / 2f) * currencyGainMultiplire);
-
-        // Ueber 2500 zaehlt nur noch ein Zehntel weiter.
-        if (value > 2500) value = (int)(2500 + ((value - 2500) * 0.1f));
-        return Mathf.Max(0, value);
+        return ((fromLevels + (10 * (level - 1)) + gameTime) / 2f) * currencyGainMultiplire;
     }
 
     IEnumerator ShowGameOverScreen()

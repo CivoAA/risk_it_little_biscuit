@@ -90,7 +90,7 @@ public static class SkillDefaults
             case SkillType.IncreaseArmor:       return 0.25f;
             case SkillType.IncreaseAOERange:    return 0.1f;
             case SkillType.IncreaseLifeSteal:   return 0.2f;
-            case SkillType.IncreaseDamage:      return 0.1f;
+            case SkillType.IncreaseDamage:      return 0.05f;
             case SkillType.IncreaseCritDamage:  return 0.25f;
             case SkillType.IncreaseCritChance:  return 0.05f;
             case SkillType.IncreaseDodgeChance: return 0.03f;

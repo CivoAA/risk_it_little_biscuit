@@ -173,11 +173,14 @@ public static class Unlocks
         "Companion",
         "A character reached level 10 - companions are now available in the shop!");
 
-    /// <summary>Kommt mit dem Erfolg "Death" (grantsUnlock in Ach.cs).</summary>
+    /// <summary>
+    /// Kommt mit dem ersten besiegten Boss (Enemy.GrantRewards, Rolle Boss).
+    /// Frueher am Erfolg "Death" - den Tod gibt es nicht mehr.
+    /// </summary>
     public static readonly UnlockDef CursedSugar = Def(
         "unlock_cursed_sugar",
         "Cursed Sugar",
-        "You were death itself - the Cursed Sugar buff is now available in the shop!");
+        "You defeated your first boss - the Cursed Sugar buff is now available in the shop!");
 
     /// <summary>Charakter-Level, ab dem der Begleiter im Shop auftaucht.</summary>
     public const int CompanionCharLevel = 10;
@@ -468,12 +471,19 @@ public static class Unlocks
             Give(w.Next);
         }
 
-        // Erfolge mit Unlock (z.B. Death -> Cursed Sugar) und die erste Evo
+        // Erfolge mit Unlock (z.B. Eiskaiser -> Inari) und die erste Evo
         foreach (AchievementDef def in Ach.All)
         {
             if (!def.IsUnlocked) continue;
             if (!string.IsNullOrEmpty(def.GrantsUnlock)) Give(Find(def.GrantsUnlock));
             if (def.Category == AchievementCategory.Evolutions) Give(EvoSlot);
+        }
+
+        // Schon einmal einen Boss besiegt -> Cursed Sugar
+        if (Ach.Bosses5.Value >= 1f || Ach.BossCookieKing.IsUnlocked || Ach.BossEmberroot.IsUnlocked
+            || Ach.BossIceEmperor.IsUnlocked || Ach.BossPhantom.IsUnlocked)
+        {
+            Give(CursedSugar);
         }
 
         // Schon Gekauftes bleibt sichtbar

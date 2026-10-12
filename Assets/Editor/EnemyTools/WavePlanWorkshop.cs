@@ -3,7 +3,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 
@@ -42,7 +41,6 @@ public class WavePlanWorkshop : EditorWindow
         {
             case "World1": return "Karte 1 - Kueche";
             case "World2": return "Karte 2 - Wald";
-            case "World2Demo": return "Welt2 Wald Demo (Karte 2)";
             case "World5": return "Karte 3 - Eisgletscher";
             case "World6": return "Karte 4 - Geisterwald";
             case "World4": return "Karte 5 - Vulkanwelt";
@@ -284,7 +282,7 @@ public class WavePlanWorkshop : EditorWindow
         for (int i = 0; i < plans.Count; i++)
         {
             bool on = i == selected;
-            string label = plans[i].id + (plans[i].id == WavePlans.WaldPlan ? "   (laeuft im Wald)" : "");
+            string label = plans[i].id;
             bool now = GUILayout.Toggle(on, label + "\n" + MapOf(plans[i].id),
                                         "Button", GUILayout.Height(38f));
             if (now && !on)
@@ -295,8 +293,6 @@ public class WavePlanWorkshop : EditorWindow
         }
 
         EditorGUILayout.EndScrollView();
-
-        DrawWaldSwitch();
 
         EditorGUILayout.LabelField("Vergleichskurve", EditorStyles.miniBoldLabel);
         string[] names = plans.Select(p => p.id).Prepend("keine").ToArray();
@@ -354,55 +350,6 @@ public class WavePlanWorkshop : EditorWindow
 
         EditorGUILayout.EndScrollView();
         EditorGUILayout.EndVertical();
-    }
-
-    // ---------------------------------------------------------- Wald-Schalter
-
-    /// <summary>Die Plaene, zwischen denen der Wald (Karte 2) umschalten kann.</summary>
-    private static readonly string[] WaldPlans = { "World2", "World2Demo" };
-
-    /// <summary>
-    /// Welcher Plan im Wald laeuft - voller Wald oder Demo. Die Karte bleibt
-    /// auf planId "World2"; umgelenkt wird ueber WavePlans.WaldPlan, und genau
-    /// diese eine Zeile schreibt der Schalter neu.
-    /// </summary>
-    private void DrawWaldSwitch()
-    {
-        EditorGUILayout.LabelField("Im Wald laeuft", EditorStyles.miniBoldLabel);
-
-        int current = System.Array.IndexOf(WaldPlans, WavePlans.WaldPlan);
-        int picked = GUILayout.Toolbar(current, new[] { "Voll", "Demo" });
-        if (picked == current || picked < 0) return;
-
-        if (dirty && !EditorUtility.DisplayDialog("Wald umschalten",
-                "Beim Umschalten wird neu kompiliert - die offenen Aenderungen werden "
-              + "dafuer vorher gespeichert.", "Speichern und umschalten", "Abbrechen"))
-        {
-            return;
-        }
-
-        if (dirty) Save();
-        WriteWaldPlan(WaldPlans[picked]);
-    }
-
-    private static void WriteWaldPlan(string id)
-    {
-        string full = Path.GetFullPath(PlansPath);
-        string text = File.ReadAllText(full);
-
-        var line = new Regex("(public const string WaldPlan = \")[^\"]*(\";)");
-        if (!line.IsMatch(text))
-        {
-            EditorUtility.DisplayDialog("Wellenplaene",
-                "Die Zeile 'public const string WaldPlan = ...' fehlt in WavePlans.cs.", "Ok");
-            return;
-        }
-
-        text = line.Replace(text, "${1}" + id + "${2}", 1);
-        File.WriteAllText(full, text, new UTF8Encoding(false));
-        AssetDatabase.ImportAsset(PlansPath);
-
-        Debug.Log("[Wellenplaene] Im Wald laeuft jetzt " + id + ".");
     }
 
     // -------------------------------------------------------- Ueberschneidung

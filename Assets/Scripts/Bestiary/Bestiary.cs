@@ -5,15 +5,18 @@ using UnityEngine;
 
 /// <summary>
 /// DAS BESTIARIUM: Kills je Gegnerart, dauerhaft ueber alle Laeufe und
-/// Charaktere gezaehlt. Je <see cref="KillsPerPercent"/> Kills einer Art gibt es
-/// +1 % Schaden gegen genau diese Art.
+/// Charaktere gezaehlt. Bei jeder Kill-Stufe (<see cref="StepsFor"/>) gibt es
+/// +2 % Schaden gegen genau diese Art, zehn Stufen = hoechstens +20 %:
+/// normale Gegner alle 150 Kills (bis 1500), Elites alle 15 (bis 150),
+/// Mini-Bosse und Bosse abwechselnd nach 1 und 2 Kills (bis 15).
 ///
 /// Freigeschaltet wird es im Skilltree (Schalter <see cref="SkillGrants.Bestiarium"/>,
 /// Knoten "wissen_bestiarium" in jedem Baum):
 ///   - Gezaehlt wird nur, wenn der gerade gespielte Charakter den Knoten hat.
 ///   - Den Schaden gibt es ebenfalls nur mit diesem Charakter.
 ///   - Den Reiter im Erfolge-/Unlocks-Buch (<see cref="AchievementsBookPanel"/>)
-///     gibt es, sobald irgendein Charakter den Knoten hat.
+///     gibt es, sobald irgendein Charakter den Knoten hat. Fehlt er dem
+///     gerade gewaehlten, ist der Reiter gesperrt (Schloss + Hinweis).
 ///
 /// Welche Gegner aufgelistet werden, steht nicht hier: es sind alle, die in den
 /// Wellenplaenen der Welten (<see cref="Worlds"/>) vorkommen, gruppiert nach der
@@ -26,20 +29,57 @@ using UnityEngine;
 /// </summary>
 public static class Bestiary
 {
-    /// <summary>So viele Kills einer Art braucht es fuer +1 % Schaden.</summary>
-    public const int KillsPerPercent = 1000;
+    /// <summary>Schaden je erreichter Stufe.</summary>
+    public const int PercentPerStep = 2;
+
+    /// <summary>
+    /// Kill-Stufen je Rolle: bei jeder gibt es +<see cref="PercentPerStep"/> %.
+    /// Zehn Stufen = hoechstens +20 %, danach wird nur noch gezaehlt.
+    /// </summary>
+    private static readonly int[] NormalSteps = Every(150);   // 150, 300 ... 1500
+    private static readonly int[] EliteSteps  = Every(15);    // 15, 30 ... 150
+    private static readonly int[] BossSteps   = { 1, 3, 4, 6, 7, 9, 10, 12, 13, 15 };   // abwechselnd 1 und 2 Kills
+
+    /// <summary>Die Kill-Stufen fuer diese Art - je nach Rolle im Katalog (Mini-Bosse wie Bosse).</summary>
+    public static int[] StepsFor(EnemyId id)
+    {
+        EnemyDef def = EnemyCatalog.Get(id);
+        if (def == null) return NormalSteps;
+        if (def.Role == EnemyRole.Elite) return EliteSteps;
+        if (EnemyCatalog.IsBossRole(def.Role)) return BossSteps;
+        return NormalSteps;
+    }
+
+    /// <summary>Wie viele Stufen die Kills dieser Art schon erreicht haben.</summary>
+    public static int StepsReached(EnemyId id) => StepsReached(StepsFor(id), Kills(id));
+
+    private static int StepsReached(int[] steps, int killCount)
+    {
+        int reached = 0;
+        while (reached < steps.Length && killCount >= steps[reached]) reached++;
+        return reached;
+    }
+
+    private static int[] Every(int kills)
+    {
+        var steps = new int[10];
+        for (int i = 0; i < steps.Length; i++) steps[i] = kills * (i + 1);
+        return steps;
+    }
 
     /// <summary>
     /// Die Welten im Bestiarium, in der Reihenfolge der Levelauswahl: ihre
     /// Wellenplaene und die Nummer fuer den Namen (level.[n].name). Neue Welt =
-    /// neue Zeile.
+    /// neue Zeile. Skip: Gegner, die hier zwar mitlaufen, aber zu einer
+    /// spaeteren Welt gehoeren (der Pfannkuchen ist ein Kuechengegner).
     /// </summary>
-    private static readonly (string[] Plans, int Level, string Fallback)[] Worlds =
+    private static readonly (string[] Plans, int Level, string Fallback, EnemyId[] Skip)[] Worlds =
     {
-        (new[] { "World1" },               1, "Küche"),
-        (new[] { "World2", "World2Demo" }, 2, "Wald"),
-        (new[] { "World5" },               3, "Eisgletscher"),
-        (new[] { "World6" },               4, "Geisterwald"),
+        (new[] { "World2" },               1, "Wald",         new[] { EnemyId.Pancake }),
+        (new[] { "World1" },               2, "Küche",        null),
+        (new[] { "World5" },               3, "Eisgletscher", null),
+        (new[] { "World6" },               4, "Geisterwald",  null),
+        (new[] { "World4" },               5, "Vulkan",       null),
     };
 
     private const string FileName = "bestiary.json";
@@ -117,7 +157,7 @@ public static class Bestiary
     }
 
     /// <summary>Schadensbonus in Prozent, den die Kills ergeben - unabhaengig von der Freischaltung.</summary>
-    public static int BonusPercent(EnemyId id) => Kills(id) / KillsPerPercent;
+    public static int BonusPercent(EnemyId id) => StepsReached(id) * PercentPerStep;
 
     /// <summary>
     /// Faktor auf den Schaden gegen diese Art (1 = kein Bonus). Nur mit dem
@@ -178,7 +218,8 @@ public static class Bestiary
         dirty = true;
 
         // Nur bei einer neuen Stufe Bescheid geben - sonst liefe das bei jedem Kill.
-        if ((n + 1) % KillsPerPercent == 0) Changed?.Invoke();
+        int[] steps = StepsFor(id);
+        if (StepsReached(steps, n + 1) > StepsReached(steps, n)) Changed?.Invoke();
     }
 
     public static void Flush()
@@ -257,11 +298,11 @@ public static class Bestiary
         for (int w = 0; w < Worlds.Length; w++)
         {
             foreach (string planId in Worlds[w].Plans)
-                CollectEnemies(WavePlans.For(planId), w);
+                CollectEnemies(WavePlans.For(planId), w, Worlds[w].Skip);
         }
     }
 
-    private static void CollectEnemies(RunPlan plan, int world)
+    private static void CollectEnemies(RunPlan plan, int world, EnemyId[] skip)
     {
         if (plan == null) return;
         List<EnemyId> list = enemies;
@@ -269,6 +310,7 @@ public static class Bestiary
         void Add(EnemyId id)
         {
             if (id == EnemyId.None || list.Contains(id)) return;
+            if (skip != null && Array.IndexOf(skip, id) >= 0) return;
 
             // Die Kaefig-Wand ist Kulisse, kein Gegner.
             EnemyDef def = EnemyCatalog.Get(id);

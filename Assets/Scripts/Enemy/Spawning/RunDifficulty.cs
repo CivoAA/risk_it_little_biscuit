@@ -18,6 +18,22 @@ public static class RunDifficulty
     /// <summary>Wie schnell Chaos im Endless-Modus pro Minute steigt.</summary>
     public const float EndlessRampPerMinute = 0.08f;
 
+    /// <summary>
+    /// Endless: Anteil an Gold und Charakter-XP, der im Endlos-Teil (nach dem
+    /// Story-Teil) noch zaehlt. 0.1 = ein Zehntel - sonst waere Endless die
+    /// beste Farm im Spiel. Die XP im Lauf (Level-Ups) bleiben voll.
+    /// </summary>
+    public const float EndlessRewardShare = 0.1f;
+
+    /// <summary>
+    /// Endless: der Story-Teil ist vorbei (Boss der Welt gefallen oder Plan
+    /// durch). Setzt der <see cref="SpawnDirector"/>.
+    /// </summary>
+    public static bool InEndlessPart { get; private set; }
+
+    /// <summary>Anteil, mit dem Charakter-XP gerade zaehlen.</summary>
+    public static float CharXpShare => InEndlessPart ? EndlessRewardShare : 1f;
+
     private static float chaos = 1f;
 
     /// <summary>1 = normal. Wird beim Start eines Laufs gesetzt.</summary>
@@ -47,10 +63,38 @@ public static class RunDifficulty
     public static float CountFactor => 1f + (Effective - 1f) * 0.8f;
 
     /// <summary>Zaeher. Waechst leicht ueberproportional, damit hohes Chaos beisst.</summary>
-    public static float HealthFactor => Mathf.Pow(Effective, 1.4f);
+    public static float HealthFactor => Mathf.Pow(Effective, 1.4f) * WorldHealth;
 
     /// <summary>Mehr Schaden - vorsichtiger als Leben, sonst wird es unfair statt schwer.</summary>
-    public static float DamageFactor => 1f + (Effective - 1f) * 0.5f;
+    public static float DamageFactor => (1f + (Effective - 1f) * 0.5f) * WorldDamage;
+
+    // ------------------------------------------------------------ Weltstufe
+
+    /// <summary>
+    /// Wie viel zaeher und haerter die Gegner einer Welt sind - auf alles, auch
+    /// Elites und Bosse, unabhaengig von Chaos. Jede Welt der Route liegt ueber
+    /// der davor, weil der Spieler ueber Skilltree und Shop mitwaechst. Den Druck
+    /// (wie viele) regeln die Plaene selbst (siehe Kopf von <see cref="WavePlans"/>).
+    /// Unbekannte Plan-Id = 1.
+    /// </summary>
+    private static (float Health, float Damage) WorldTier(string planId)
+    {
+        switch ((planId ?? "").Trim().ToLowerInvariant())
+        {
+            case "world2": return (1.0f, 1.0f);    // Welt 1 Wald - Massstab
+            case "world1": return (1.2f, 1.1f);    // Welt 2 Kueche
+            case "world5": return (1.45f, 1.2f);   // Welt 3 Eisgletscher
+            case "world6": return (1.8f, 1.35f);   // Welt 4 Geisterwald
+            case "world4": return (2.3f, 1.5f);    // Welt 5 Vulkan
+            default: return (1f, 1f);
+        }
+    }
+
+    /// <summary>Leben-Faktor der laufenden Welt (<see cref="WorldTier"/>).</summary>
+    public static float WorldHealth { get; private set; } = 1f;
+
+    /// <summary>Schaden-Faktor der laufenden Welt (<see cref="WorldTier"/>).</summary>
+    public static float WorldDamage { get; private set; } = 1f;
 
     /// <summary>Erfahrung und Waehrung. Muss ueber 1 bleiben, sonst lohnt Chaos nicht.</summary>
     public static float RewardFactor => Mathf.Pow(Effective, 1.2f);
@@ -59,11 +103,13 @@ public static class RunDifficulty
     /// Setzt den Regler auf den Stand, mit dem der Lauf startet. Ruft der
     /// <see cref="SpawnDirector"/> beim Betreten einer Map auf.
     /// </summary>
-    public static void BeginRun()
+    public static void BeginRun(string planId)
     {
         Chaos = GameSession.Chaos;
         Curse = 0f;
-        Debug.Log($"[RunDifficulty] Lauf startet mit Chaos {Chaos:0.00} " +
+        InEndlessPart = false;
+        (WorldHealth, WorldDamage) = WorldTier(planId);
+        Debug.Log($"[RunDifficulty] Lauf ({planId}) startet mit Chaos {Chaos:0.00} " +
                   $"(Gegner x{CountFactor:0.00}, Leben x{HealthFactor:0.00}, Belohnung x{RewardFactor:0.00}).");
     }
 
@@ -76,6 +122,12 @@ public static class RunDifficulty
         if (!GameSession.IsEndless) return;
 
         Chaos = GameSession.Chaos + (runTime / 60f) * EndlessRampPerMinute;
+    }
+
+    /// <summary>Endless: ab hier zaehlen Gold und Charakter-XP nur noch anteilig.</summary>
+    public static void BeginEndlessPart()
+    {
+        InEndlessPart = true;
     }
 
     /// <summary>Haengt die aktuellen Faktoren an einen frisch erzeugten Gegner.</summary>

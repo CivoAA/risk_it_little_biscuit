@@ -1479,7 +1479,7 @@ public partial class LevelUpScreen : MonoBehaviour
         private readonly Image pipStar;
         private readonly PixText[] labels = new PixText[3];
         private readonly PixText[] values = new PixText[3];
-        private readonly Image footA, footPlus, footB, footArrow;
+        private readonly Image footSelf, footA, footPlus, footB, footArrow;
         private readonly Image[] sparkles = new Image[2];
 
         private Weapon weapon;
@@ -1556,11 +1556,12 @@ public partial class LevelUpScreen : MonoBehaviour
             well = s.Img("Well", body, new RectInt(4, WellY, CardW - 8, WellH), GameHudSkin.Well, Color.white, true);
             footLabel = s.Text("FootLabel", body, new RectInt(0, WellY + 1, 40, 16), SizeText, GameHudSkin.JamLight,
                                TextAlignmentOptions.Left, TextStyle.Shadow);
+            footSelf = s.Img("FootSelf", body, new RectInt(0, WellY + 1, 16, 16), null, Color.white);
             footA = s.Img("FootA", body, new RectInt(0, WellY + 1, 16, 16), null, Color.white);
             footPlus = s.Img("FootPlus", body, new RectInt(0, WellY + 5, 7, 7), GameHudSkin.Plus, Color.white);
             footB = s.Img("FootB", body, new RectInt(0, WellY + 1, 16, 16), null, Color.white);
             footArrow = s.Img("FootArrow", body, new RectInt(0, WellY + 5, 9, 7), GameHudSkin.Arrow, Color.white);
-            footA.preserveAspect = footB.preserveAspect = true;
+            footSelf.preserveAspect = footA.preserveAspect = footB.preserveAspect = true;
 
             // Gesperrt (Banish): deckend bleiben, nur abdunkeln - sonst scheint das Spielfeld durch.
             shade = s.Img("Shade", body, new RectInt(1, 1, CardW - 2, CardH - 2), GameHudSkin.White, Color.clear);
@@ -1733,6 +1734,7 @@ public partial class LevelUpScreen : MonoBehaviour
                 footB.sprite = second != null ? second.weaponIcon : null;
                 footA.color = footB.color = Color.white;
                 SetActive(footArrow, false);
+                SetActive(footSelf, false);
                 LayoutFooter(new Component[] { footLabel.Holder, footA, footPlus, footB });
                 return;
             }
@@ -1743,20 +1745,24 @@ public partial class LevelUpScreen : MonoBehaviour
             bool willMax = weapon.weaponLevel + 1 >= weapon.maxweaponLevel;
             evoReady = willMax && (partner == weapon || (Owned(partner) && Maxed(partner)));
 
-            footLabel.Set(evoReady ? Loc.Get("ui.levelup.evo_ready", "EVO!") : Loc.Get("ui.levelup.evo", "EVO"));
-            footLabel.SetColor(evoReady ? GameHudSkin.GoldLight : GameHudSkin.JamLight);
+            // Waffe + Partner -> Evo. Statt des Worts "EVO" steht vorne die Waffe
+            // selbst; ob die Evo gleich kommt, zeigt das Leuchten der Karte.
+            footLabel.SetActive(false);
+            footSelf.sprite = weapon.weaponIcon;
+            footSelf.color = Color.white;
             footA.sprite = partner != null ? partner.weaponIcon : null;
             footA.color = Owned(partner) ? Color.white : new Color(1f, 1f, 1f, 0.4f);
             footB.sprite = r.EvoWeapon.weaponIcon;
             footB.color = Color.white;
             SetActive(footB, true);
-            LayoutFooter(new Component[] { footLabel.Holder, footPlus, footA, footArrow, footB });
+            LayoutFooter(new Component[] { footSelf, footPlus, footA, footArrow, footB });
         }
 
         private void SetFooter(bool on)
         {
             SetActive(well, on);
             footLabel.SetActive(on);
+            SetActive(footSelf, on);
             SetActive(footA, on);
             SetActive(footPlus, on);
             SetActive(footB, on);

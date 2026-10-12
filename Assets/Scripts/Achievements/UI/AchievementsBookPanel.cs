@@ -83,6 +83,10 @@ public class AchievementsBookPanel : MonoBehaviour
     private int openedFrame;
 
     private int tab, tabCount = 2;
+
+    // Ein anderer Charakter hat das Bestiarium, dieser nicht: der Reiter
+    // bleibt sichtbar, ist aber gesperrt.
+    private bool bestiaryLocked;
     private SkinButton[] tabs;
     private TextMeshProUGUI counter;
     private Image totalFill;
@@ -311,6 +315,7 @@ public class AchievementsBookPanel : MonoBehaviour
         ribbonHolder = OptionsKit.Rect("RibbonHolder", page, 0, 0, OptionsKit.RefW, OptionsKit.RefH);
 
         tabCount = Bestiary.IsVisible ? 3 : 2;
+        bestiaryLocked = tabCount == 3 && !Skills.HasGrant(SkillGrants.Bestiarium);
         BuildTabs();
         BuildList();
         BuildDetail();
@@ -333,13 +338,13 @@ public class AchievementsBookPanel : MonoBehaviour
         }
     }
 
-    private static Sprite TabIcon(int i)
+    private Sprite TabIcon(int i)
     {
         switch (i)
         {
             case TabAchievements: return GameHudSkin.Star;
             case TabUnlocks:      return GameHudSkin.Key;
-            default:              return GameHudSkin.Skull;
+            default:              return bestiaryLocked ? GameHudSkin.Lock : GameHudSkin.Skull;
         }
     }
 
@@ -626,20 +631,29 @@ public class AchievementsBookPanel : MonoBehaviour
 
     private void CollectBestiary()
     {
-        bool counting = Skills.HasGrant(SkillGrants.Bestiarium);
+        if (bestiaryLocked) return;
 
         foreach (EnemyId id in Bestiary.Enemies)
         {
             int kills = Bestiary.Kills(id);
             int bonus = Bestiary.BonusPercent(id);
-            int into = kills % Bestiary.KillsPerPercent;
             bool seen = Bestiary.IsKnown(id);
             string world = Bestiary.WorldOf(id);
 
-            string desc = seen
-                ? string.Format(Loc.Get("ui.bestiary.next", "Nächstes +1% in {0} Kills"),
-                                (Bestiary.KillsPerPercent - into).ToString("N0"))
-                : Loc.Get("ui.bestiary.unseen", "Noch nie besiegt. Wer ist das wohl?");
+            // Fortschritt zur naechsten Kill-Stufe - nach der letzten ist der Balken voll.
+            int[] steps = Bestiary.StepsFor(id);
+            int reached = Bestiary.StepsReached(id);
+            bool maxed = reached >= steps.Length;
+            int prev = reached > 0 ? steps[reached - 1] : 0;
+            int next = maxed ? prev : steps[reached];
+            float progress = maxed ? 1f : (kills - prev) / (float)(next - prev);
+
+            string desc = !seen
+                ? Loc.Get("ui.bestiary.unseen", "Noch nie besiegt. Wer ist das wohl?")
+                : maxed
+                    ? Loc.Get("ui.bestiary.max", "Maximaler Bonus erreicht.")
+                    : string.Format(Loc.Get("ui.bestiary.next", "Nächste +{1}% in {0} Kills"),
+                                    (next - kills).ToString("N0"), Bestiary.PercentPerStep);
 
             // Rolle und Fundort stehen bei Bekannten obenan.
             if (seen)
@@ -648,12 +662,6 @@ public class AchievementsBookPanel : MonoBehaviour
                 string role = def != null ? Loc.Get($"ui.bestiary.role.{def.Role}", def.Role.ToString().ToUpperInvariant()) : "";
                 string where = world.Length > 0 ? string.Format(Loc.Get("ui.bestiary.from", "{0} aus: {1}"), role, world) : role;
                 desc = $"<color=#{ColorUtility.ToHtmlStringRGB(GameHudSkin.StoneLight)}>{where}</color>\n{desc}";
-            }
-
-            if (!counting)
-            {
-                string warn = Loc.Get("ui.bestiary.inactive", "Dieser Charakter zählt nicht mit.");
-                desc += $"\n<color=#{ColorUtility.ToHtmlStringRGB(GameHudSkin.JamLight)}>{warn}</color>";
             }
 
             entries.Add(new Entry
@@ -665,8 +673,8 @@ public class AchievementsBookPanel : MonoBehaviour
                 Icon = Bestiary.Icon(id),
                 Done = seen,
                 Shadow = !seen,
-                Progress = into / (float)Bestiary.KillsPerPercent,
-                ProgressText = $"{into}/{Bestiary.KillsPerPercent}",
+                Progress = progress,
+                ProgressText = maxed ? "MAX" : $"{kills}/{next}",
                 Reward = string.Format(Loc.Get("ui.bestiary.bonus", "+{0}% Schaden"), bonus),
                 RewardIcon = GameHudSkin.Crit,
                 RewardColor = bonus > 0 ? GameHudSkin.GoldLight : GameHudSkin.Stone,
@@ -962,6 +970,20 @@ public class AchievementsBookPanel : MonoBehaviour
         detailProgress.text = "";
         rewardBox.enabled = rewardIcon.enabled = false;
         detailReward.text = "";
+
+        if (!has && tab == TabBestiary && bestiaryLocked)
+        {
+            winBack.enabled = winFrame.enabled = true;
+            winFrame.sprite = GameHudSkin.SlotFrame(GameHudSkin.SlotLook.Wood);
+            winBack.color = new Color(0.72f, 0.66f, 0.66f, 1f);
+            FitIcon(detailIcon, GameHudSkin.Lock, DetX + 9, DetY + 9, WinS - 6, WinS - 6);
+            detailIcon.color = Color.white;
+            detailName.text = Loc.Get("ui.bestiary.locked", "Gesperrt").ToUpperInvariant();
+            detailName.color = GameHudSkin.Cream;
+            detailSub.text = "";
+            detailDesc.text = Loc.Get("ui.bestiary.lockedDesc", "Auf diesem Charakter nicht freigeschaltet.");
+            return;
+        }
 
         if (!has)
         {

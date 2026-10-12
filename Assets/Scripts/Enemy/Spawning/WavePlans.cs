@@ -23,6 +23,21 @@ using UnityEngine;
 ///   - zu voll/zu leer auf dem Bild   -> Pressure
 ///   - langweilig                     -> Beats: mehr Burst/Encircle, mehr Calm
 ///   - falsche Gegner                 -> Pool(...)
+///
+/// Jede Welt der Route ist schwerer als die davor - der Spieler wird ja ueber
+/// Skilltree und Shop staerker. Alle Plaene haben dieselben Phasenlaengen
+/// (Miniboss um 10:00, Boss um 20:00), der Druck ist die Wald-Kurve mal
+/// einem Faktor:
+///
+///   Welt 1  Wald         World2   x 1.0   (Massstab)
+///   Welt 2  Kueche       World1   x 1.25
+///   Welt 3  Eisgletscher World5   x 1.55
+///   Welt 4  Geisterwald  World6   x 1.9
+///   Welt 5  Vulkan       World4   x 2.3
+///
+/// Dazu werden die Gegner selbst zaeher und schlagen haerter
+/// (<see cref="RunDifficulty.WorldHealth"/> / <see cref="RunDifficulty.WorldDamage"/>).
+/// Welt 4 und 5 sollen ohne Skilltree und Shop nicht zu schaffen sein.
 /// </summary>
 public static class WavePlans
 {
@@ -41,7 +56,6 @@ public static class WavePlans
         switch ((planId ?? "").Trim().ToLowerInvariant())
         {
             case "world2": return World2();
-            case "world2demo": return World2Demo();
             case "world5": return World5();
             case "world6": return World6();
             case "world4": return World4();
@@ -49,28 +63,8 @@ public static class WavePlans
         }
     }
 
-    /// <summary>
-    /// Welcher Plan im Wald wirklich laeuft: "World2" (voller Wald) oder
-    /// "World2Demo" (leichter, fuer die Demo). Die Karte selbst traegt weiter
-    /// "World2" als planId - umgeschaltet wird nur hier. Die Wellenplan-Werkstatt
-    /// schreibt diese Zeile beim Umschalten neu.
-    /// </summary>
-    public const string WaldPlan = "World2Demo";
-
-    /// <summary>
-    /// Wie <see cref="For"/>, aber mit dem Wald-Schalter: die planId einer
-    /// Karte ("World2") wird auf den gerade aktiven Waldplan umgelenkt. Das
-    /// nimmt der Director beim Laufstart.
-    /// </summary>
-    public static RunPlan ForMap(string planId)
-    {
-        string id = (planId ?? "").Trim();
-        if (string.Equals(id, "World2", System.StringComparison.OrdinalIgnoreCase)) id = WaldPlan;
-        return For(id);
-    }
-
     /// <summary>Alle Plaene, die es gibt - fuer die Werkstatt und den Vergleich.</summary>
-    public static readonly string[] AllIds = { "World1", "World2", "World2Demo", "World5", "World6", "World4" };
+    public static readonly string[] AllIds = { "World1", "World2", "World5", "World6", "World4" };
 
     // ================================================================
     // WERKSTATT-ANFANG - alles hier drin schreibt das Tool neu.
@@ -79,15 +73,14 @@ public static class WavePlans
     // ------------------------------------------------------------- World1
 
     /// <summary>
-    /// Kueche - die Einstiegskarte (Karte 1 in der Levelauswahl). Laeuft mit
-    /// der Skalierung der Wald-Demo (World2Demo): dieselben Druckwerte, nur auf
-    /// 20 Minuten gestreckt, Boss bei 20:00. Nur aktive Kuechengegner:
+    /// Kueche - Welt 2 der Route (nach dem Wald). 20 Minuten, Boss bei 20:00,
+    /// Druck = Wald x 1.25 (siehe Kopf von WavePlans). Nur aktive Kuechengegner:
     ///
     ///   Marshmello, Boeser Slime, Muffin, Pfannkuchen,
     ///   Popcorn (Schwarm, ab 0:05), Wurst-Dackel + Spiegelei (ab 3:00),
     ///   Erbsenschote (ab 9:00), Kaesekeil + Spaghetti-Monster (ab 14:00),
     ///   Elite-Marshmello (Elite, immer einzeln), ab 8:00 die Kerzentorte
-    ///   (zweite Elite, zaeher, "TORTENALARM!"), ab 15:00 der Milchpanzer
+    ///   (zweite Elite, zaeher, "TORTENALARM!"), um 10:00 der Milchpanzer
     ///   (Zwischenboss) und der Keks-Koenig (Boss)
     ///
     /// Ablauf:
@@ -95,8 +88,8 @@ public static class WavePlans
     ///   0:00  Anlauf, ~3 Marshmellos (5 s)
     ///   0:05  Marshmellos, erster Ring mit Elite-Marshmello
     ///   3:00  + Boeser Slime, 8:00 Ring mit der ersten Kerzentorte
-    ///   9:00  + Muffin
-    ///  14:00  + Pfannkuchen, 15:00 Milchpanzer (Zwischenboss)
+    ///   9:00  + Muffin, 10:00 Milchpanzer (Zwischenboss)
+    ///  14:00  + Pfannkuchen
     ///  20:00  Keks-Koenig
     /// </summary>
     public static RunPlan World1()
@@ -111,7 +104,7 @@ public static class WavePlans
         plan.Phase(175f)
             .Pool(EnemyId.Marshmello, 80f)
             .Pool(EnemyId.Popcorn, 20f)
-            .Pressure(10f, 28f)
+            .Pressure(15f, 49f)
             .Base(Patterns.Scatter)
             .Burst(45f, EnemyId.Marshmello, 10f, Patterns.Arc, 0f)
             .Burst(80f, EnemyId.EvilSlime, 10f, Patterns.Column, 0f)
@@ -124,7 +117,7 @@ public static class WavePlans
             .Pool(EnemyId.EvilSlime, 30f)
             .Pool(EnemyId.Wurstdackel, 15f)
             .Pool(EnemyId.Spiegelei, 15f)
-            .Pressure(28f, 56f)
+            .Pressure(49f, 100f)
             .Base(Patterns.Scatter)
             .Burst(5f, EnemyId.EvilSlime, 10f, Patterns.Arc, 0f)
             .Burst(45f, EnemyId.Wurstdackel, 12f, Patterns.Column, 0f)
@@ -146,10 +139,10 @@ public static class WavePlans
             .Pool(EnemyId.Erbsenschote, 20f)
             .Pool(EnemyId.Wurstdackel, 10f)
             .Pool(EnemyId.Popcorn, 10f)
-            .Pressure(70f, 140f)
+            .Pressure(125f, 250f)
             .Base(Patterns.Scatter)
             .Burst(40f, EnemyId.Muffin, 16f, Patterns.Ambush, 0f)
-            .Burst(60f, EnemyId.EvilSlime, 12f, Patterns.Arc, 0f)
+            .Boss(60f, EnemyId.Milchpanzer, "MILCHPANZER!", 0.4f)
             .Burst(80f, EnemyId.Popcorn, 24f, Patterns.Cluster, 0f)
             .Calm(95f, 10f, 0.15f)
             .Encircle(125f, EnemyId.EliteMarshmello, EnemyId.EvilSlime, 18, 14f, false, "RING!", 0.35f, 25f, 1.5f)
@@ -166,10 +159,10 @@ public static class WavePlans
             .Pool(EnemyId.Kaesekeil, 20f)
             .Pool(EnemyId.Fleischball, 15f)
             .Pool(EnemyId.Erbsenschote, 10f)
-            .Pressure(140f, 170f)
+            .Pressure(300f, 440f)
             .Base(Patterns.Scatter)
             .Burst(30f, EnemyId.Kaesekeil, 14f, Patterns.Ambush, 0f)
-            .Boss(60f, EnemyId.Milchpanzer, "MILCHPANZER!", 0.4f)
+            .Burst(60f, EnemyId.EvilSlime, 12f, Patterns.Arc, 0f)
             .Calm(120f, 10f, 0.15f)
             .Encircle(150f, EnemyId.EliteMarshmello, EnemyId.Muffin, 18, 15f, false, "RING!", 0.35f, 25f, 1.5f)
             .Burst(220f, EnemyId.Muffin, 26f, Patterns.Cluster, 0f)
@@ -186,7 +179,7 @@ public static class WavePlans
             .Pool(EnemyId.Kaesekeil, 15f)
             .Pool(EnemyId.Fleischball, 10f)
             .Pool(EnemyId.Popcorn, 10f)
-            .Pressure(280f, 420f)
+            .Pressure(500f, 750f)
             .Base(Patterns.Scatter)
             .Boss(2f, EnemyId.KeksKoenig, "KEKS-KOENIG", 0.4f);
 
@@ -197,7 +190,7 @@ public static class WavePlans
             .Pool(EnemyId.Kaesekeil, 15f)
             .Pool(EnemyId.Fleischball, 15f)
             .Pool(EnemyId.Wurstdackel, 10f)
-            .Pressure(100f, 100f)
+            .Pressure(175f, 175f)
             .Base(Patterns.Scatter)
             .Burst(30f, EnemyId.Kerzentorte, 1f, Patterns.Ambush, 0f)
             .Encircle(60f, EnemyId.None, EnemyId.Muffin, 20, 14f, false, "RING!", 0.35f, 25f, 1.5f)
@@ -209,8 +202,8 @@ public static class WavePlans
     // ------------------------------------------------------------- World2
 
     /// <summary>
-    /// Wald - Karte 2 in der Levelauswahl. Laeuft im Takt der Kueche: dieselben
-    /// Druckwerte, dieselben Zeitpunkte fuer Ring und Atempausen - nur mit
+    /// Wald - Welt 1 der Route und der Massstab fuer den Druck aller Welten.
+    /// Urspruenglich im Takt der Kueche (Zeitpunkte fuer Ring und Atempausen) - nur mit
     /// Waldgegnern. Die Kueche war gut balanciert, also wird hier nicht neu
     /// erfunden, sondern uebersetzt:
     ///
@@ -231,6 +224,15 @@ public static class WavePlans
     ///   Boss     Eichel, Honey, + Pfannkuchen - und die Glutwurz,
     ///            der Baumriese des Waldes (speit Feuer, siehe EnemyGlutwurz)
     ///   Endlos   Eichel, Honey, Pfannkuchen
+    ///
+    /// Seit Oktober 2026 im 20-Minuten-Takt der Kueche (gleiche Phasenlaengen):
+    ///
+    ///   0:00  Anlauf, ~3 Fliegenpilze (5 s)
+    ///   0:05  Fliegenpilze, 1:50 Ring mit Elite-Fliegenpilz
+    ///   3:00  + Kirschslime, Messermaus, Beerenspinne, 8:00 Ring "PILZKOENIG!"
+    ///   9:00  + Eichel, Maronen-Igel, Honigbaerchen, 10:00 Schleimkoenig (Zwischenboss)
+    ///  14:00  + Honey, Walnuss-Krabbe
+    ///  20:00  Glutwurz
     ///
     /// Der Fluegeldolch (Fledermaus) ist seit Oktober 2026 in den Geisterwald
     /// (World6) umgezogen.
@@ -256,15 +258,17 @@ public static class WavePlans
             .Pressure(3.3f, 3.3f)
             .Base(Patterns.Scatter);
 
-        plan.Phase(115f)
+        plan.Phase(175f)
             .Pool(EnemyId.Fliegenpilz, 100f)
             .Pressure(12f, 39f)
             .Base(Patterns.Scatter)
             .Burst(45f, EnemyId.Fliegenpilz, 14f, Patterns.Arc, 0f)
             .Burst(80f, EnemyId.Kirschslime, 16f, Patterns.Column, 0f)
-            .Encircle(105f, EnemyId.EliteFliegenpilz, EnemyId.Fliegenpilz, 18, 13f, false, "RING!", 0.35f, 25f, 1.5f);
+            .Encircle(105f, EnemyId.EliteFliegenpilz, EnemyId.Fliegenpilz, 18, 13f, false, "RING!", 0.35f, 25f, 1.5f)
+            .Burst(130f, EnemyId.Fliegenpilz, 16f, Patterns.Cluster, 0f)
+            .Burst(155f, EnemyId.Kirschslime, 16f, Patterns.Arc, 0f);
 
-        plan.Phase(180f)
+        plan.Phase(360f)
             .Pool(EnemyId.Fliegenpilz, 45f)
             .Pool(EnemyId.Kirschslime, 25f)
             .Pool(EnemyId.WeisseMessermaus, 15f)
@@ -277,7 +281,12 @@ public static class WavePlans
             .Burst(90f, EnemyId.Beerenspinne, 16f, Patterns.Arc, 0f)
             .Burst(105f, EnemyId.WeisseMessermaus, 24f, Patterns.Cluster, 0f)
             .Burst(135f, EnemyId.EliteFluegdolch, 1f, Patterns.Ambush, 0f)
-            .Burst(150f, EnemyId.Kirschslime, 30f, Patterns.Scatter, 0f);
+            .Burst(150f, EnemyId.Kirschslime, 30f, Patterns.Scatter, 0f)
+            .Calm(195f, 10f, 0.15f)
+            .Burst(225f, EnemyId.Beerenspinne, 20f, Patterns.Cluster, 0f)
+            .Burst(270f, EnemyId.Kirschslime, 30f, Patterns.Arc, 0f)
+            .Encircle(300f, EnemyId.EliteFliegenpilz, EnemyId.WeisseMessermaus, 20, 14f, false, "PILZKOENIG!", 0.35f, 25f, 1.5f)
+            .Burst(330f, EnemyId.WeisseMessermaus, 24f, Patterns.Column, 0f);
 
         plan.Phase(300f)
             .Pool(EnemyId.Kirschslime, 20f)
@@ -289,6 +298,7 @@ public static class WavePlans
             .Base(Patterns.Scatter)
             .Burst(20f, EnemyId.EliteFluegdolch, 1f, Patterns.Ambush, 0f)
             .Burst(40f, EnemyId.Eichel, 25f, Patterns.Ambush, 0f)
+            .Boss(60f, EnemyId.Schleimkoenig, "SCHLEIMKOENIG!", 0.4f)
             .Calm(95f, 10f, 0.15f)
             .Encircle(125f, EnemyId.EliteFliegenpilz, EnemyId.Kirschslime, 22, 14f, false, "PILZKOENIG!", 0.35f, 25f, 1.5f)
             .Burst(125f, EnemyId.EliteFluegdolch, 1f, Patterns.Ambush, 0f)
@@ -297,7 +307,7 @@ public static class WavePlans
             .Burst(225f, EnemyId.EliteFluegdolch, 1f, Patterns.Arc, 0f)
             .Burst(250f, EnemyId.Eichel, 40f, Patterns.Column, 0f);
 
-        plan.Phase(290f)
+        plan.Phase(358f)
             .Pool(EnemyId.Eichel, 30f)
             .Pool(EnemyId.WeisseMessermaus, 15f)
             .Pool(EnemyId.Honey, 20f)
@@ -313,7 +323,9 @@ public static class WavePlans
             .Encircle(145f, EnemyId.EliteFliegenpilz, EnemyId.Eichel, 26, 15f, false, "PILZKOENIG!", 0.35f, 25f, 1.5f)
             .Burst(190f, EnemyId.Walnusskrabbe, 20f, Patterns.Ambush, 0f)
             .Burst(225f, EnemyId.Honey, 60f, Patterns.Cluster, 0f)
-            .Burst(265f, EnemyId.EliteFliegenpilz, 1f, Patterns.Ambush, 0f);
+            .Burst(265f, EnemyId.EliteFliegenpilz, 1f, Patterns.Ambush, 0f)
+            .Calm(290f, 10f, 0.15f)
+            .Burst(320f, EnemyId.Honey, 40f, Patterns.Arc, 0f);
 
         plan.Phase(600f)
             .Pool(EnemyId.Eichel, 35f)
@@ -340,130 +352,11 @@ public static class WavePlans
         return plan;
     }
 
-    // ------------------------------------------------------------- World2Demo
-
-    /// <summary>
-    /// Welt2 Wald Demo - der Wald fuer die Demo. Dieselbe Karte, dieselben
-    /// Gegner in derselben Reihenfolge, derselbe Boss wie World2 - nur leichter,
-    /// weil in der Demo nicht alle Chars, Skills und Features offen sind.
-    ///
-    /// Gegenueber World2:
-    ///
-    ///   Druck            etwa 70 % in jeder Phase
-    ///   Schwalle         kleiner (etwa zwei Drittel)
-    ///   Elites           eine pro Phase statt zwei bis drei
-    ///   Ringe            weniger Gegner im Ring
-    ///   Atempausen       je eine zusaetzliche in Phase 3 und 4
-    ///   Zeitplan         die harten Stellen 2 min spaeter, Boss schon bei 13:00
-    ///   Ende             Boss tot -> der Todes-Ramen kommt und beendet den
-    ///                    Lauf (zaehlt als Sieg)
-    ///
-    /// Ablauf:
-    ///
-    ///   0:00  Anlauf, ~3 Fliegenpilze (5 s)
-    ///   0:05  Fliegenpilze
-    ///   2:00  + Kirschslime, + Weisse Messermaus - 5 statt 3 min lang, damit
-    ///         die erste harte Stelle (Eichel) erst bei ~8:00
-    ///         kommt statt bei ~6:00
-    ///   7:00  Eichel
-    ///  12:00  kurzer Uebergang ohne neuen Druck-Sprung - der Sprung von
-    ///         ~11:00 (Honey) faellt damit auf 13:00 und geht im Boss auf
-    ///  13:00  Glutwurz
-    ///
-    /// Anlauf (5 s, ~3 Fliegenpilze) wie im vollen Wald. Welcher der beiden
-    /// Plaene laeuft, steht in WavePlans.WaldPlan (Umschalter in der Werkstatt).
-    /// </summary>
-    public static RunPlan World2Demo()
-    {
-        var plan = new RunPlan("World2Demo");
-
-        plan.Phase(5f)
-            .Pool(EnemyId.Fliegenpilz, 100f)
-            .Pressure(3.3f, 3.3f)
-            .Base(Patterns.Scatter);
-
-        plan.Phase(115f)
-            .Pool(EnemyId.Fliegenpilz, 100f)
-            .Pressure(10f, 28f)
-            .Base(Patterns.Scatter)
-            .Burst(45f, EnemyId.Fliegenpilz, 10f, Patterns.Arc, 0f)
-            .Burst(80f, EnemyId.Kirschslime, 10f, Patterns.Column, 0f)
-            .Encircle(105f, EnemyId.EliteFliegenpilz, EnemyId.Fliegenpilz, 14, 13f, false, "RING!", 0.35f, 25f, 1.5f);
-
-        plan.Phase(300f)
-            .Pool(EnemyId.Fliegenpilz, 45f)
-            .Pool(EnemyId.Kirschslime, 25f)
-            .Pool(EnemyId.WeisseMessermaus, 15f)
-            .Pool(EnemyId.Beerenspinne, 15f)
-            .Pressure(28f, 56f)
-            .Base(Patterns.Scatter)
-            .Burst(5f, EnemyId.Kirschslime, 10f, Patterns.Arc, 0f)
-            .Calm(75f, 10f, 0.15f)
-            .Burst(105f, EnemyId.WeisseMessermaus, 16f, Patterns.Cluster, 0f)
-            .Burst(135f, EnemyId.EliteFliegenpilz, 1f, Patterns.Ambush, 0f)
-            .Burst(150f, EnemyId.Kirschslime, 18f, Patterns.Scatter, 0f)
-            .Burst(170f, EnemyId.Beerenspinne, 10f, Patterns.Arc, 0f)
-            .Calm(195f, 10f, 0.15f)
-            .Burst(225f, EnemyId.WeisseMessermaus, 18f, Patterns.Cluster, 0f)
-            .Burst(270f, EnemyId.Kirschslime, 20f, Patterns.Arc, 0f);
-
-        plan.Phase(300f)
-            .Pool(EnemyId.Kirschslime, 20f)
-            .Pool(EnemyId.WeisseMessermaus, 20f)
-            .Pool(EnemyId.Eichel, 25f)
-            .Pool(EnemyId.Maronenigel, 15f)
-            .Pool(EnemyId.Honigbaer, 10f)
-            .Pressure(70f, 140f)
-            .Base(Patterns.Scatter)
-            .Burst(40f, EnemyId.Eichel, 16f, Patterns.Ambush, 0f)
-            .Calm(95f, 10f, 0.15f)
-            .Encircle(125f, EnemyId.EliteFliegenpilz, EnemyId.Kirschslime, 18, 14f, false, "PILZKOENIG!", 0.35f, 25f, 1.5f)
-            .Burst(165f, EnemyId.Maronenigel, 14f, Patterns.Column, 0f)
-            .Burst(195f, EnemyId.WeisseMessermaus, 20f, Patterns.Cluster, 0f)
-            .Calm(215f, 10f, 0.15f)
-            .Burst(235f, EnemyId.EliteFluegdolch, 1f, Patterns.Ambush, 0f)
-            .Burst(250f, EnemyId.Eichel, 26f, Patterns.Column, 0f);
-
-        plan.Phase(58f)
-            .Pool(EnemyId.Eichel, 30f)
-            .Pool(EnemyId.WeisseMessermaus, 20f)
-            .Pool(EnemyId.Kirschslime, 10f)
-            .Pool(EnemyId.Honigbaer, 15f)
-            .Pool(EnemyId.Walnusskrabbe, 10f)
-            .Pressure(140f, 155f)
-            .Base(Patterns.Scatter);
-
-        plan.Phase(600f)
-            .Pool(EnemyId.Eichel, 35f)
-            .Pool(EnemyId.Honey, 15f)
-            .Pool(EnemyId.Pancake, 10f)
-            .Pool(EnemyId.Walnusskrabbe, 10f)
-            .Pool(EnemyId.Maronenigel, 10f)
-            .Pressure(280f, 420f)
-            .Base(Patterns.Scatter)
-            .Boss(2f, EnemyId.Glutwurz, "GLUTWURZ", 0.4f);
-
-        plan.EndlessPhase()
-            .Pool(EnemyId.Eichel, 30f)
-            .Pool(EnemyId.Honey, 15f)
-            .Pool(EnemyId.Pancake, 15f)
-            .Pool(EnemyId.Walnusskrabbe, 10f)
-            .Pool(EnemyId.Honigbaer, 10f)
-            .Pressure(100f, 100f)
-            .Base(Patterns.Scatter)
-            .Encircle(60f, EnemyId.None, EnemyId.Eichel, 20, 14f, false, "RING!", 0.35f, 25f, 1.5f)
-            .Burst(90f, EnemyId.EliteFluegdolch, 1f, Patterns.Arc, 0f);
-
-        plan.EndWith(EnemyId.VerkohlterTod);
-
-        return plan;
-    }
-
     // ------------------------------------------------------------- World5
 
     /// <summary>
     /// Eisgletscher - Karte 3 in der Levelauswahl. Im Takt der Kueche (gleiche
-    /// Druckwerte, Boss bei 20:00), nur mit Gegnern der Eiswelt:
+    /// Phasen, Boss bei 20:00, Druck = Wald x 1.55), nur mit Gegnern der Eiswelt:
     ///
     ///   Minzkugel        Grundgegner, schlittert auf der Schmelzpfuetze
     ///   Raketeneis       springt auf dem Stiel, schnell und etwas zaeher
@@ -478,7 +371,7 @@ public static class WavePlans
     ///   Softi            Elite, Waffeltuete mit wirbelnder Softeis-Frisur
     ///   Fuerst Pueckler  zweite Elite ab 8:00, Eisbombe mit Krone, zaeher ("SEINE HOHEIT!")
     ///
-    /// Stracciatella kommt bei 11:30 als Zwischenboss, am Ende wartet der
+    /// Stracciatella kommt bei 10:00 als Zwischenboss, am Ende wartet der
     /// Eiskaiser (Kaiser-Kick + Frostring, siehe EnemyEiskaiser).
     ///
     /// Ablauf:
@@ -488,7 +381,7 @@ public static class WavePlans
     ///         erster Woelkchen-Schwarm bei 2:05, erste Plaetzchen-Reihe bei 2:20
     ///   3:00  + Raketeneis, Zuckerwoelkchen und Sternplaetzchen im Grundnachschub,
     ///         erste Kakaotassen bei 7:00, 8:00 Ring mit Fuerst Pueckler
-    ///   9:00  + Eiskeks-Sandwich und Kakaotasse, 11:30 Stracciatella (Zwischenboss),
+    ///   9:00  + Eiskeks-Sandwich und Kakaotasse, 10:00 Stracciatella (Zwischenboss),
     ///         erste Puddingrobben bei 13:15
     ///  14:00  + Kokos-Yeti und Puddingrobbe, Minzkugeln nur noch Beimischung
     ///  20:00  Eiskaiser
@@ -504,7 +397,7 @@ public static class WavePlans
 
         plan.Phase(175f)
             .Pool(EnemyId.Minzkugel, 100f)
-            .Pressure(10f, 28f)
+            .Pressure(19f, 60f)
             .Base(Patterns.Scatter)
             .Burst(45f, EnemyId.Minzkugel, 10f, Patterns.Arc, 0f)
             .Burst(80f, EnemyId.Raketeneis, 10f, Patterns.Column, 0f)
@@ -519,7 +412,7 @@ public static class WavePlans
             .Pool(EnemyId.Minzschnecke, 10f)
             .Pool(EnemyId.Zuckerwolke, 15f)
             .Pool(EnemyId.Plaetzchen, 20f)
-            .Pressure(28f, 56f)
+            .Pressure(60f, 124f)
             .Base(Patterns.Scatter)
             .Burst(5f, EnemyId.Raketeneis, 10f, Patterns.Arc, 0f)
             .Burst(50f, EnemyId.Zuckerwolke, 16f, Patterns.Cluster, 0f)
@@ -546,13 +439,13 @@ public static class WavePlans
             .Pool(EnemyId.EisSandwich, 20f)
             .Pool(EnemyId.Plaetzchen, 10f)
             .Pool(EnemyId.Kakaotasse, 20f)
-            .Pressure(70f, 140f)
+            .Pressure(155f, 310f)
             .Base(Patterns.Scatter)
             .Burst(40f, EnemyId.EisSandwich, 16f, Patterns.Ambush, 0f)
-            .Burst(60f, EnemyId.Raketeneis, 12f, Patterns.Arc, 0f)
+            .Boss(60f, EnemyId.Stracciatella, "STRACCIATELLA!", 0.4f)
             .Calm(95f, 10f, 0.15f)
             .Burst(115f, EnemyId.Eiswuerfelbaer, 10f, Patterns.Ambush, 0f)
-            .Boss(150f, EnemyId.Stracciatella, "STRACCIATELLA!", 0.4f)
+            .Burst(150f, EnemyId.Raketeneis, 12f, Patterns.Arc, 0f)
             .Calm(215f, 10f, 0.15f)
             .Burst(235f, EnemyId.FuerstPueckler, 1f, Patterns.Ambush, 0f)
             .Burst(250f, EnemyId.Zuckerwolke, 26f, Patterns.Cluster, 0f)
@@ -570,7 +463,7 @@ public static class WavePlans
             .Pool(EnemyId.Kakaotasse, 15f)
             .Pool(EnemyId.Puddingrobbe, 15f)
             .Pool(EnemyId.Plaetzchen, 5f)
-            .Pressure(140f, 170f)
+            .Pressure(370f, 545f)
             .Base(Patterns.Scatter)
             .Burst(60f, EnemyId.KokosYeti, 16f, Patterns.Ambush, 0f)
             .Burst(90f, EnemyId.Puddingrobbe, 18f, Patterns.Column, 0f)
@@ -591,7 +484,7 @@ public static class WavePlans
             .Pool(EnemyId.Kakaotasse, 10f)
             .Pool(EnemyId.Puddingrobbe, 15f)
             .Pool(EnemyId.Eiswuerfelbaer, 10f)
-            .Pressure(280f, 420f)
+            .Pressure(620f, 930f)
             .Base(Patterns.Scatter)
             .Boss(2f, EnemyId.Eiskaiser, "EISKAISER!", 0.4f);
 
@@ -606,7 +499,7 @@ public static class WavePlans
             .Pool(EnemyId.Plaetzchen, 5f)
             .Pool(EnemyId.Eiswuerfelbaer, 10f)
             .Pool(EnemyId.Minzschnecke, 5f)
-            .Pressure(100f, 100f)
+            .Pressure(215f, 215f)
             .Base(Patterns.Scatter)
             .Burst(30f, EnemyId.FuerstPueckler, 1f, Patterns.Ambush, 0f)
             .Encircle(60f, EnemyId.None, EnemyId.Raketeneis, 20, 14f, false, "RING!", 0.35f, 25f, 1.5f)
@@ -618,7 +511,7 @@ public static class WavePlans
 
     /// <summary>
     /// Lebkuchen-Geisterwald - Karte 4 in der Levelauswahl. Im Takt der Kueche
-    /// (gleiche Phasen und Druckwerte, Boss bei 20:00).
+    /// (gleiche Phasen, Boss bei 20:00, Druck = Wald x 1.9).
     ///
     /// Seit Oktober 2026 mit eigenen Gegnern, die alle selbst leuchten (Leuchtebene
     /// EnemyGlowLayer, im dunklen Wald sieht man vor allem ihr Licht). Jede Phase
@@ -630,7 +523,7 @@ public static class WavePlans
     ///   0:00  Anlauf (5 s), saure Gluehwuermer
     ///   0:05  + Flambierkirschen (Schwarm), Fluegeldolche, erste Kuerbiswichte, 1:45 Spuksuppe-Ring
     ///   3:00  + Gluehbirnen, Lakritzkater, Baisergeister, 8:00 Ring mit dem ersten Wackelgeist
-    ///   9:00  + Leuchtpilze, Windbeutel-Eulen, 11:30 Knusperhaus (Zwischenboss)
+    ///   9:00  + Leuchtpilze, Windbeutel-Eulen, 10:00 Knusperhaus (Zwischenboss)
     ///  14:00  + Lebkuchen-Zombies (Brocken)
     ///  20:00  Das Gespenst
     /// </summary>
@@ -647,7 +540,7 @@ public static class WavePlans
             .Pool(EnemyId.Gluehwurm, 40f)
             .Pool(EnemyId.Flambierkirsche, 30f)
             .Pool(EnemyId.Fluegeldolch, 30f)
-            .Pressure(10f, 28f)
+            .Pressure(23f, 74f)
             .Base(Patterns.Scatter)
             .Burst(60f, EnemyId.Flambierkirsche, 12f, Patterns.Arc, 0f)
             .Encircle(105f, EnemyId.Spuksuppe, EnemyId.Gluehwurm, 14, 13f, false, "ES BRODELT!", 0.35f, 25f, 1.5f)
@@ -659,7 +552,7 @@ public static class WavePlans
             .Pool(EnemyId.Flambierkirsche, 20f)
             .Pool(EnemyId.Gluehwurm, 15f)
             .Pool(EnemyId.Fluegeldolch, 20f)
-            .Pressure(28f, 56f)
+            .Pressure(74f, 152f)
             .Base(Patterns.Scatter)
             .Burst(30f, EnemyId.Gluehbirne, 12f, Patterns.Column, 0f)
             .Calm(75f, 10f, 0.15f)
@@ -678,14 +571,14 @@ public static class WavePlans
             .Pool(EnemyId.Baisergeist, 20f)
             .Pool(EnemyId.Leuchtpilz, 15f)
             .Pool(EnemyId.Fluegeldolch, 15f)
-            .Pressure(70f, 140f)
+            .Pressure(190f, 380f)
             .Base(Patterns.Scatter)
             .Burst(20f, EnemyId.Leuchtpilz, 10f, Patterns.Column, 0f)
-            .Burst(60f, EnemyId.Fluegeldolch, 12f, Patterns.Arc, 0f)
+            .Boss(60f, EnemyId.Knusperhaus, "KNUSPERHAUS!", 0.4f)
             .Calm(95f, 10f, 0.15f)
             .Burst(110f, EnemyId.Spuksuppe, 1f, Patterns.Ambush, 0f)
             .Burst(130f, EnemyId.Lakritzkater, 16f, Patterns.Ambush, 0f)
-            .Boss(150f, EnemyId.Knusperhaus, "KNUSPERHAUS!", 0.4f)
+            .Burst(150f, EnemyId.Fluegeldolch, 12f, Patterns.Arc, 0f)
             .Burst(180f, EnemyId.Windbeuteleule, 8f, Patterns.Cluster, 0f)
             .Calm(215f, 10f, 0.15f)
             .Burst(235f, EnemyId.Wackelgeist, 1f, Patterns.Ambush, 0f)
@@ -699,7 +592,7 @@ public static class WavePlans
             .Pool(EnemyId.Lebkuchenzombie, 15f)
             .Pool(EnemyId.Gluehbirne, 10f)
             .Pool(EnemyId.Flambierkirsche, 15f)
-            .Pressure(140f, 170f)
+            .Pressure(455f, 665f)
             .Base(Patterns.Scatter)
             .Burst(30f, EnemyId.Lebkuchenzombie, 14f, Patterns.Ambush, 0f)
             .Calm(120f, 10f, 0.15f)
@@ -717,7 +610,7 @@ public static class WavePlans
             .Pool(EnemyId.Lakritzkater, 20f)
             .Pool(EnemyId.Baisergeist, 15f)
             .Pool(EnemyId.Flambierkirsche, 15f)
-            .Pressure(280f, 420f)
+            .Pressure(760f, 1140f)
             .Base(Patterns.Scatter)
             .Boss(2f, EnemyId.Squiddy, "DAS GESPENST!", 0.4f);
 
@@ -732,7 +625,7 @@ public static class WavePlans
             .Pool(EnemyId.Flambierkirsche, 10f)
             .Pool(EnemyId.Gluehwurm, 5f)
             .Pool(EnemyId.Fluegeldolch, 5f)
-            .Pressure(100f, 100f)
+            .Pressure(265f, 265f)
             .Base(Patterns.Scatter)
             .Burst(30f, EnemyId.Wackelgeist, 1f, Patterns.Ambush, 0f)
             .Encircle(60f, EnemyId.None, EnemyId.Lakritzkater, 20, 14f, false, "RING!", 0.35f, 25f, 1.5f)
@@ -744,7 +637,7 @@ public static class WavePlans
 
     /// <summary>
     /// Vulkanwelt - Karte 5 in der Levelauswahl, die letzte Welt. Im Takt der
-    /// Kueche (gleiche Phasen), aber mit mehr Druck als der Geisterwald.
+    /// Kueche (gleiche Phasen), Druck = Wald x 2.3 - die schwerste Welt.
     ///
     /// Seit Oktober 2026 mit eigenen Gegnern (lauter heisses, scharfes und
     /// gebackenes Essen). Jede Phase stellt neue vor, meist mit einem eigenen
@@ -755,7 +648,7 @@ public static class WavePlans
     ///   0:00  Anlauf (5 s), Knisterbrause
     ///   0:05  + Feuerschoten, Takoyaki, 1:45 Feuertaco-Ring
     ///   3:00  + Lavakuchen, Pizzastuecke, Schaschliks (Huepfer), 8:00 Ring mit der ersten Creme Brulee
-    ///   9:00  + Kaesefondue (zaeh), Wasabi-Kleckse, Drachenfruechte, 11:30 Ofenkartoffel (Zwischenboss)
+    ///   9:00  + Kaesefondue (zaeh), Wasabi-Kleckse, Drachenfruechte, 10:00 Ofenkartoffel (Zwischenboss)
     ///  14:00  + Ofenbrot-Golems (Brocken)
     ///  20:00  alles, hoher Druck - und der Verkohlte
     /// </summary>
@@ -772,7 +665,7 @@ public static class WavePlans
             .Pool(EnemyId.Knisterbrause, 35f)
             .Pool(EnemyId.Feuerschote, 35f)
             .Pool(EnemyId.Takoyaki, 30f)
-            .Pressure(12f, 32f)
+            .Pressure(28f, 90f)
             .Base(Patterns.Scatter)
             .Burst(60f, EnemyId.Knisterbrause, 14f, Patterns.Arc, 0f)
             .Encircle(105f, EnemyId.Feuertaco, EnemyId.Knisterbrause, 14, 13f, false, "ZU SCHARF!", 0.35f, 25f, 1.5f)
@@ -785,7 +678,7 @@ public static class WavePlans
             .Pool(EnemyId.Pizzastueck, 15f)
             .Pool(EnemyId.Schaschlik, 10f)
             .Pool(EnemyId.Knisterbrause, 15f)
-            .Pressure(32f, 64f)
+            .Pressure(90f, 185f)
             .Base(Patterns.Scatter)
             .Burst(30f, EnemyId.Lavakuchen, 10f, Patterns.Column, 0f)
             .Calm(75f, 10f, 0.15f)
@@ -805,14 +698,14 @@ public static class WavePlans
             .Pool(EnemyId.Wasabiklecks, 15f)
             .Pool(EnemyId.Drachenfrucht, 15f)
             .Pool(EnemyId.Takoyaki, 15f)
-            .Pressure(80f, 150f)
+            .Pressure(230f, 460f)
             .Base(Patterns.Scatter)
             .Burst(20f, EnemyId.Kaesefondue, 10f, Patterns.Column, 0f)
-            .Burst(60f, EnemyId.Drachenfrucht, 12f, Patterns.Arc, 0f)
+            .Boss(60f, EnemyId.Ofenkartoffel, "OFENKARTOFFEL!", 0.4f)
             .Calm(95f, 10f, 0.15f)
             .Burst(110f, EnemyId.Feuertaco, 1f, Patterns.Ambush, 0f)
             .Burst(130f, EnemyId.Wasabiklecks, 14f, Patterns.Cluster, 0f)
-            .Boss(150f, EnemyId.Ofenkartoffel, "OFENKARTOFFEL!", 0.4f)
+            .Burst(150f, EnemyId.Drachenfrucht, 12f, Patterns.Arc, 0f)
             .Burst(180f, EnemyId.Takoyaki, 16f, Patterns.Ambush, 0f)
             .Calm(215f, 10f, 0.15f)
             .Burst(235f, EnemyId.CremeBrulee, 1f, Patterns.Ambush, 0f)
@@ -826,7 +719,7 @@ public static class WavePlans
             .Pool(EnemyId.Pizzastueck, 10f)
             .Pool(EnemyId.Feuerschote, 15f)
             .Pool(EnemyId.Knisterbrause, 20f)
-            .Pressure(150f, 185f)
+            .Pressure(550f, 805f)
             .Base(Patterns.Scatter)
             .Burst(30f, EnemyId.Brotgolem, 10f, Patterns.Ambush, 0f)
             .Calm(120f, 10f, 0.15f)
@@ -845,7 +738,7 @@ public static class WavePlans
             .Pool(EnemyId.Lavakuchen, 10f)
             .Pool(EnemyId.Takoyaki, 15f)
             .Pool(EnemyId.Knisterbrause, 15f)
-            .Pressure(300f, 450f)
+            .Pressure(920f, 1380f)
             .Base(Patterns.Scatter)
             .Boss(2f, EnemyId.Verkohlter, "DER VERKOHLTE!", 0.4f)
             .Burst(60f, EnemyId.Feuertaco, 1f, Patterns.Ambush, 0f)
@@ -863,7 +756,7 @@ public static class WavePlans
             .Pool(EnemyId.Takoyaki, 10f)
             .Pool(EnemyId.Feuerschote, 10f)
             .Pool(EnemyId.Knisterbrause, 10f)
-            .Pressure(110f, 110f)
+            .Pressure(320f, 320f)
             .Base(Patterns.Scatter)
             .Burst(30f, EnemyId.CremeBrulee, 1f, Patterns.Ambush, 0f)
             .Encircle(60f, EnemyId.None, EnemyId.Takoyaki, 20, 14f, false, "RING!", 0.35f, 25f, 1.5f)

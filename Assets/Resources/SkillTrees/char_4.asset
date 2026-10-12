@@ -57,7 +57,7 @@ MonoBehaviour:
     rewards:
     - kind: 0
       stat: 9
-      value: 0.1
+      value: 0.05
       grantId: 
       descriptionOverride: 
     requires:
@@ -91,7 +91,7 @@ MonoBehaviour:
     rewards:
     - kind: 0
       stat: 9
-      value: 0.1
+      value: 0.05
       grantId: 
       descriptionOverride: 
     requires:

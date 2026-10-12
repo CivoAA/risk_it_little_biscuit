@@ -1558,7 +1558,7 @@ public class HubLevelSelectUI : MonoBehaviour
         {
             try
             {
-                RunPlan plan = WavePlans.ForMap(id);
+                RunPlan plan = WavePlans.For(id);
                 info = new PlanInfo { Duration = plan.TotalDuration };
                 var kinds = new HashSet<EnemyId>();
                 bool bossIsReal = false;
