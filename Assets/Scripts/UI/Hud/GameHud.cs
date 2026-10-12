@@ -477,6 +477,7 @@ public class GameHud : MonoBehaviour
             // Der Koerper sitzt mittig im Medaillon, Ueberstehendes schneidet das Fenster ab.
             float dx = Mathf.Round((s.rect.width / 2f - body.center.x) * k);
             float dy = Mathf.Round((s.rect.height / 2f - body.center.y) * k);
+            dy += PortraitLift(s, k, 1f + dy - h / 2f);
             portraitRect.anchorMin = portraitRect.anchorMax = new Vector2(0.5f, 0.5f);
             portraitRect.sizeDelta = new Vector2(w, h);
             portraitRect.anchoredPosition = new Vector2(dx, 1f + dy);
@@ -485,6 +486,65 @@ public class GameHud : MonoBehaviour
         bool alive = player.gameObject.activeInHierarchy;
         Color c = playerSprite.color;
         portrait.color = alive ? c : new Color(0.45f, 0.4f, 0.42f, 1f);
+    }
+
+    // Hub nach oben je Charakter-Textur - einmal gemessen, damit das Atmen
+    // die Figur nicht im Medaillon springen laesst.
+    private readonly Dictionary<Texture, float> portraitLift = new Dictionary<Texture, float>();
+
+    /// <summary>
+    /// Kleine Figuren (Tofu) stehen unten in ihrem Frame und landeten mit dem
+    /// Kopf in der Medaillon-Mitte, die Fuesse hinter dem Level-Schild. Hebt
+    /// sie so weit, dass die gemalte Figur mittig im freien Fenster ueber dem
+    /// Schild sitzt; groessere bis der Kopf oben anliegt. Nie nach unten -
+    /// normal grosse Figuren bleiben, wo sie sind.
+    /// </summary>
+    private float PortraitLift(Sprite s, float k, float frameBottom)
+    {
+        if (portraitLift.TryGetValue(s.texture, out float lift)) return lift;
+
+        lift = 0f;
+        Vector2 rows = DrawnRows(s);
+        if (rows.y > rows.x)
+        {
+            float half = PortraitR.height / 2f;
+            float badgeTop = half - (BadgeR.y - PortraitR.y);       // Schild-Oberkante, ab Fenstermitte
+            float free = half - badgeTop;                           // freie Hoehe ueber dem Schild
+            float top = frameBottom + rows.y * k;
+            float drawn = (rows.y - rows.x) * k;
+            float target = drawn <= free ? (half + badgeTop) / 2f + drawn / 2f : half;
+            lift = Mathf.Max(0f, Mathf.Round(target - top));
+        }
+        portraitLift[s.texture] = lift;
+        return lift;
+    }
+
+    /// <summary>
+    /// Unterste und oberste gemalte Zeile im Frame (Texturpixel, von unten,
+    /// oben exklusiv). Die Charakter-Texturen sind nicht lesbar und haben teils
+    /// kein enges Mesh - darum einmal ueber eine RenderTexture zurueckgelesen.
+    /// </summary>
+    private static Vector2 DrawnRows(Sprite s)
+    {
+        Texture2D tex = s.texture;
+        Rect r = s.rect;
+        int w = Mathf.RoundToInt(r.width), h = Mathf.RoundToInt(r.height);
+        RenderTexture rt = RenderTexture.GetTemporary(tex.width, tex.height, 0, RenderTextureFormat.ARGB32);
+        RenderTexture prev = RenderTexture.active;
+        Graphics.Blit(tex, rt);
+        RenderTexture.active = rt;
+        var read = new Texture2D(w, h, TextureFormat.RGBA32, false);
+        read.ReadPixels(new Rect(r.x, r.y, w, h), 0, 0, false);
+        RenderTexture.active = prev;
+        RenderTexture.ReleaseTemporary(rt);
+        Color32[] px = read.GetPixels32();
+        Destroy(read);
+
+        int min = h, max = -1;
+        for (int y = 0; y < h; y++)
+            for (int x = 0; x < w; x++)
+                if (px[y * w + x].a > 127) { min = Mathf.Min(min, y); max = y; break; }
+        return max < 0 ? Vector2.zero : new Vector2(min, max + 1);
     }
 
     /// <summary>

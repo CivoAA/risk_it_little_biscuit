@@ -11,6 +11,7 @@ using UnityEngine;
 ///   F10         Der Verkohlte mit 10 Leben: er laeuft an und saugt den
 ///               Spieler sofort ein (Phase 3, Herzkammer). Geht auch in der
 ///               Test-Szene, dort ueber den TestSceneBossSpawner.
+///               In der Herzkammer: naechste Phase des Endkampfs.
 ///   F3          Das Gespenst / Squiddy (Endboss Geisterwald) wie ein Boss-Beat,
 ///               auch in der Test-Szene
 ///   Shift + F3  dasselbe auf halbem Leben - die Enthuellung startet sofort
@@ -206,7 +207,9 @@ public class RunDebugKeys : MonoBehaviour
     {
         if (VerkohlterHerzkammer.Active != null)
         {
-            Debug.LogWarning("[RunDebugKeys] Die Herzkammer ist noch offen - erst das Herz erledigen.");
+            // Im Endkampf: naechste Phase des Herzens
+            if (VerkohlterHerzFinale.Active != null) VerkohlterHerzFinale.Active.DebugNext();
+            else Debug.LogWarning("[RunDebugKeys] Die Herzkammer ist noch offen - erst das Herz erledigen.");
             return;
         }
 

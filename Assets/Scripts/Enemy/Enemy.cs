@@ -203,6 +203,31 @@ public class Enemy : MonoBehaviour
         health = Mathf.Max(1f, maxHealth * Mathf.Clamp01(fraction));
     }
 
+    /// <summary>Heilt, hoechstens bis <paramref name="capFraction"/> des vollen Lebens (Schlagadern des Herzens).</summary>
+    public void Heal(float amount, float capFraction = 1f)
+    {
+        if (amount <= 0f || health <= 0f) return;
+        float cap = MaxHealth * Mathf.Clamp01(capFraction);
+        if (health >= cap) return;
+        health = Mathf.Min(cap, health + amount);
+    }
+
+    /// <summary>
+    /// Werte fuer einen Gegner, der zur Laufzeit ohne Prefab und ohne Katalog-Id
+    /// entsteht (Schlagadern und Glutlinge im Herzen des Verkohlten). Nur
+    /// wirksam, solange Awake noch nicht lief - also am noch inaktiven Objekt
+    /// aufrufen und es erst danach einschalten.
+    /// </summary>
+    public void ConfigureRuntime(float hp, float contactDamage, float speed, int exp)
+    {
+        id = EnemyId.None;
+        health = hp;
+        damage = contactDamage;
+        moveSpeed = speed;
+        experienceToGive = exp;
+        rightlooking = false;
+    }
+
     // ---------------------------------------------------------------- Register
 
     private static readonly List<Enemy> alive = new List<Enemy>();
@@ -290,6 +315,12 @@ public class Enemy : MonoBehaviour
 
     /// <summary>Beim Tod keinen Todeseffekt des Prefabs abspielen (das Skript zeigt einen eigenen).</summary>
     [System.NonSerialized] public bool SkipDeathEffect;
+
+    /// <summary>
+    /// Faktor auf jeden Treffer, 1 = normal. Das Herz des Verkohlten liegt nach
+    /// dem Panzerbruch kurz offen und nimmt dann mehr Schaden.
+    /// </summary>
+    [System.NonSerialized] public float DamageTakenFactor = 1f;
 
     private bool deathHeld;
 
@@ -937,7 +968,7 @@ public class Enemy : MonoBehaviour
     {
         if (Untouchable) return;
 
-        float finalDamage = damage * PlayerController.Instance.damageMultiplier * Bestiary.DamageFactor(id);
+        float finalDamage = damage * PlayerController.Instance.damageMultiplier * Bestiary.DamageFactor(id) * DamageTakenFactor;
         float critChance = PlayerController.Instance.critChance;
         float critDamage = PlayerController.Instance.critDamage;
 

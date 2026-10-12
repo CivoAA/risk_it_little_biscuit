@@ -173,7 +173,7 @@ public class FoxFire : Weapon
             if (target == null) return;   // nichts in Reichweite - geladen warten
 
             wisp.Launch(target, CurrentHit(), CurrentCooldown);
-            AudioController.Instance.PalySound(AudioController.Instance.Werfen, 0.05f);
+            WeaponSounds.Play(WeaponSounds.FoxfireLaunch);
             nextLaunch = Time.time + LaunchGap;
             return;
         }
@@ -271,6 +271,7 @@ public class FoxFire : Weapon
     public static void Explode(Vector2 at, Hit hit)
     {
         FoxFx.Play(BurstFor(hit.radius), at, 18f, 3);
+        WeaponSounds.Play(WeaponSounds.FoxfireBurst);
 
         // erst sammeln, dann treffen - TakeDamage kann Gegner aus Alive nehmen
         hitBuffer.Clear();

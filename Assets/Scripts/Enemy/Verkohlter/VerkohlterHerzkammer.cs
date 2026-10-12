@@ -104,6 +104,27 @@ public class VerkohlterHerzkammer : MonoBehaviour
     public int Frame => Mathf.Max(0, frame);
 
     /// <summary>
+    /// Der Herzschlag als Takt fuer den Endkampf (<see cref="VerkohlterHerzFinale"/>):
+    /// BUM (auf 1 und 3 der Musik) und das leisere bumm danach.
+    /// </summary>
+    public event System.Action Lub, Dub;
+
+    /// <summary>Mitte und Radien der Bodenellipse in Weltkoordinaten.</summary>
+    public Vector2 FloorMid => Anchor + VerkohlterArt.FloorCenter;
+    public Vector2 PoolMid => Anchor + VerkohlterArt.PoolCenter;
+
+    /// <summary>Liegt ein Punkt auf dem Boden (Anteil <paramref name="scale"/> der Ellipse) und nicht im Becken?</summary>
+    public bool OnFloor(Vector2 p, float scale = 1f)
+    {
+        Vector2 f = (p - FloorMid);
+        Vector2 r = VerkohlterArt.FloorRadius * scale;
+        if ((f.x * f.x) / (r.x * r.x) + (f.y * f.y) / (r.y * r.y) > 1f) return false;
+        Vector2 q = p - PoolMid;
+        Vector2 pr = VerkohlterArt.PoolRadius + new Vector2(0.5f, 0.4f);
+        return (q.x * q.x) / (pr.x * pr.x) + (q.y * q.y) / (pr.y * pr.y) > 1f;
+    }
+
+    /// <summary>
     /// Baut die Kammer auf und schaltet die Welt weg. Aufrufen, waehrend das
     /// Bild schwarz ist - die Kamera springt dabei.
     /// </summary>
@@ -347,10 +368,12 @@ public class VerkohlterHerzkammer : MonoBehaviour
                 {
                     VerkohlterSounds.Lub();
                     ScreenShake.Kick(1f, 0.15f);
+                    Lub?.Invoke();
                 }
                 else if (f == VerkohlterArt.BeatDub)
                 {
                     VerkohlterSounds.Dub();
+                    Dub?.Invoke();
                 }
             }
         }

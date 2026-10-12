@@ -37,7 +37,7 @@ public class FireBall : Weapon
         {
             if (target == Vector2.zero) yield break;
 
-            AudioController.Instance.PalySound(AudioController.Instance.BOBA);
+            WeaponSounds.Play(WeaponSounds.FireballShot);
 
             GameObject fireBall = Instantiate(prefab, transform.position, transform.rotation);
             Scene gameScene = RunScene.Current;

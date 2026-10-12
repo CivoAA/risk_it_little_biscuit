@@ -36,6 +36,7 @@ public class ExplosiveStarEvo : Weapon
         for (int i = 0; i < count; i++)
         {
             GameObject star = Instantiate(prefab, transform.position, Quaternion.identity);
+            WeaponSounds.Play(WeaponSounds.StarLaunch, 1f, 0.9f);
 
             Scene gameScene = RunScene.Current;
             if (gameScene.IsValid() && gameScene.isLoaded)

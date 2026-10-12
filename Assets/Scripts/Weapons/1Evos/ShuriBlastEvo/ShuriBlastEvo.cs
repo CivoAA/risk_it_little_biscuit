@@ -36,7 +36,7 @@ public class ShuriBlastEvo : Weapon
         {
             if (target == Vector2.zero) break;
 
-            AudioController.Instance.PalySound(AudioController.Instance.BOBA);
+            WeaponSounds.Play(WeaponSounds.ShuriBlast);
 
             foreach (Vector2 dir in ThrowDirections(target)) SpawnOne(dir);
 

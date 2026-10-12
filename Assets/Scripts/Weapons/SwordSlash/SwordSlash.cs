@@ -214,7 +214,7 @@ public class SwordSlash : Weapon
 
     protected void Swing(Vector2 dir, bool backhand, SwingKind kind)
     {
-        AudioController.Instance.PalySound(AudioController.Instance.Werfen, 0.1f);
+        WeaponSounds.Play(finisher ? WeaponSounds.SlashFinisher : WeaponSounds.SlashSwing);
 
         bool counter = TakeCounter();
         float aoe = PlayerController.Instance.AOERange * (counter ? CounterScale : 1f);

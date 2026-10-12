@@ -110,7 +110,7 @@ public class ChocoChips : Weapon
             // Kommt aus dem Bauch, nicht exakt aus einem Punkt.
             origin += Random.insideUnitCircle * 0.12f;
 
-            AudioController.Instance.PalySound(AudioController.Instance.Werfen, 0.06f);
+            WeaponSounds.Play(WeaponSounds.ChocoShot);
             Spawn(origin, dir, range);
 
             if (i < chips - 1) yield return new WaitForSeconds(ChipInterval);

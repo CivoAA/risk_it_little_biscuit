@@ -91,10 +91,7 @@ public class AreaWeaponPrefabJamJar : MonoBehaviour
             transform.localScale = look != null ? fullSize : Vector3.zero;
         }
 
-        if (AudioController.Instance != null)
-        {
-            AudioController.Instance.PalySound(AudioController.Instance.areaWeaponSpawn, 0.5f);
-        }
+        WeaponSounds.Play(WeaponSounds.JamSplat);
     }
 
     protected virtual void OnEnable() => active.Add(this);

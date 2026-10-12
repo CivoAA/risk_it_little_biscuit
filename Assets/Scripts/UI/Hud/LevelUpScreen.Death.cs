@@ -181,11 +181,11 @@ public partial class LevelUpScreen
             ? Loc.Get("ui.win.subtitle", "The boss is crumbs - your cookie wins!")
             : Loc.Get("ui.death.subtitle", "Your cookie crumbled - but your progress stays!"));
 
-        // ---- Portraet: Todesbild aus dem alten Panel, beim Sieg die lebende Figur ----
+        // ---- Portraet: Todesbild des Charakters (DeathArt), beim Sieg die lebende Figur ----
         // Das alte WinPanel traegt ebenfalls das Todesbild - nur abschalten.
         HideLegacySprites(ui.WinPanel);
         if (deadSprite == null) deadSprite = FindDeadSprite();
-        Sprite portrait = deathWon ? null : deadSprite;
+        Sprite portrait = deathWon ? null : DeathArtFor(Shop.RunSkinIndex) ?? deadSprite;
         if (!deathWon && portrait == null && p != null)
         {
             SpriteRenderer sr = p.GetComponentInChildren<SpriteRenderer>(true);
@@ -312,7 +312,27 @@ public partial class LevelUpScreen
         pr.anchoredPosition = new Vector2(4 + (inner - dw) / 2, -(4 + (inner - dh) / 2));
     }
 
-    /// <summary>Das gemalte Todesbild haengt als SpriteRenderer im alten Panel - Bild merken, Renderer aus.</summary>
+    /// <summary>Todesbilder je Charakter: Resources/DeathArt/tod_figuren, Sprite tod_figuren_N = Charakter N.</summary>
+    private const string DeathArtPath = "DeathArt/tod_figuren";
+    private static Sprite[] deathArt;
+
+    private static Sprite DeathArtFor(int character)
+    {
+        if (deathArt == null)
+        {
+            Sprite[] all = Resources.LoadAll<Sprite>(DeathArtPath);
+            deathArt = new Sprite[all.Length];
+            foreach (Sprite s in all)
+            {
+                int us = s.name.LastIndexOf('_');
+                if (us >= 0 && int.TryParse(s.name.Substring(us + 1), out int i) && i >= 0 && i < deathArt.Length)
+                    deathArt[i] = s;
+            }
+        }
+        return character >= 0 && character < deathArt.Length ? deathArt[character] : null;
+    }
+
+    /// <summary>Das alte gemalte Todesbild haengt als SpriteRenderer im alten Panel - Bild merken (Rueckfall), Renderer aus.</summary>
     private Sprite FindDeadSprite()
     {
         Sprite found = null;

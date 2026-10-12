@@ -125,6 +125,7 @@ public class TurretPrefab : MonoBehaviour
         muzzle += (Vector3)(direction.normalized * muzzleDistance);
 
         GameObject shot = Instantiate(projectilePrefab, muzzle, Quaternion.Euler(0f, 0f, angle));
+        WeaponSounds.Play(WeaponSounds.TurretShot);
 
         Scene gameScene = RunScene.Current;
         if (gameScene.IsValid() && gameScene.isLoaded)

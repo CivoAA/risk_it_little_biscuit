@@ -116,7 +116,8 @@ public class MilkDunk : Weapon
             if (!IsActive || PlayerController.Instance == null) break;
 
             float damage = CurrentStats.damage * (i == 0 ? 1f : EchoDamage);
-            AudioController.Instance.PalySound(AudioController.Instance.areaWeaponSpawn, i == 0 ? 0.25f : 0.15f);
+            // Echos leiser und etwas heller
+            WeaponSounds.Play(WeaponSounds.MilkWave, i == 0 ? 1f : 0.6f, 1f + 0.06f * i);
             Spawn(damage);
 
             if (i < waves - 1) yield return new WaitForSeconds(WaveInterval);

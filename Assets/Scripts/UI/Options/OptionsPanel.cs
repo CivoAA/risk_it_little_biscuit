@@ -342,7 +342,7 @@ public class OptionsPanel : MonoBehaviour
     {
         // Nicht merken, sondern bei jedem Zugriff frisch holen: der Manager
         // liegt in der Szene nur im Hauptmenue, und ein einmal gemerktes null
-        // haette alle drei Leisten fuer immer taub gemacht.
+        // haette alle Leisten fuer immer taub gemacht.
         BarRow(Loc.Get("ui.options.audio.master", "Gesamtlautstärke"),
                () => Audio != null ? Audio.currentSettings.masterVolume : GameSettings.DefaultVolume,
                v => { if (Audio != null) Audio.SetMasterVolume(v); },
@@ -360,6 +360,12 @@ public class OptionsPanel : MonoBehaviour
                v => { if (Audio != null) Audio.SetEffectsVolume(v); },
                () => Audio != null && Audio.currentSettings.effectsMuted,
                m => { if (Audio != null) Audio.SetEffectsMuted(m); });
+
+        BarRow(Loc.Get("ui.options.audio.weapons", "Waffen"),
+               () => Audio != null ? Audio.currentSettings.weaponsVolume : GameSettings.DefaultVolume,
+               v => { if (Audio != null) Audio.SetWeaponsVolume(v); },
+               () => Audio != null && Audio.currentSettings.weaponsMuted,
+               m => { if (Audio != null) Audio.SetWeaponsMuted(m); });
     }
 
     private static AudioSettingsManager Audio => AudioSettingsManager.Instance;

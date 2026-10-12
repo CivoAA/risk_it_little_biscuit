@@ -35,7 +35,7 @@ public class Boomerang : Weapon
 
         for (int i = 0; i < shots; i++)
         {
-            AudioController.Instance.PalySound(AudioController.Instance.Werfen);
+            WeaponSounds.Play(WeaponSounds.BoomerangThrow);
 
             GameObject boomerang = Instantiate(prefab, transform.position, transform.rotation);
             boomerang.transform.localScale *= (PlayerController.Instance.AOERange * 0.7f);

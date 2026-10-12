@@ -85,6 +85,7 @@ public class BladeSwarm : Weapon
             Vector3 spawnPos = transform.position;
             GameObject blade = Instantiate(prefab, spawnPos, transform.rotation);
             blade.transform.SetParent(transform);
+            WeaponSounds.Play(WeaponSounds.KunaiSpawn);
 
             BladeSwarmPrefab kunai = blade.GetComponent<BladeSwarmPrefab>();
             if (kunai != null) kunai.weapon = this;
@@ -212,6 +213,7 @@ public class BladeSwarm : Weapon
             GameObject blade = bladesToFire[i];
             if (blade == null) continue;
             blade.transform.SetParent(null);
+            WeaponSounds.Play(WeaponSounds.KunaiThrow);
 
             BladeSwarmPrefab kunai = swarm ? blade.GetComponent<BladeSwarmPrefab>() : null;
             if (kunai != null)

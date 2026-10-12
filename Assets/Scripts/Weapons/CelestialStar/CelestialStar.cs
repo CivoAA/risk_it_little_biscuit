@@ -38,6 +38,7 @@ public class CelestialStar : Weapon
         for (int i = 0; i < count; i++)
         {
             GameObject star = Instantiate(prefab, transform.position, Quaternion.identity);
+            WeaponSounds.Play(WeaponSounds.StarLaunch);
             star.transform.localScale *= PlayerController.Instance.AOERange;
 
             Scene gameScene = RunScene.Current;

@@ -34,7 +34,7 @@ public class BobaGun : Weapon
 
         for (int i = 0; i < shots; i++)
         {
-            AudioController.Instance.PalyModifiedSound(AudioController.Instance.NewBoba);
+            WeaponSounds.Play(WeaponSounds.BobaShot);
             Vector3 topLeft = new Vector3(-5, 5, 0);
             Vector3 topRight = new Vector3(5, 5, 0);
             Vector3 bottomLeft = new Vector3(-5, -5, 0);

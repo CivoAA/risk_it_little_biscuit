@@ -99,14 +99,16 @@ public class BouncingStar : MonoBehaviour
         }
 
         offset += velocity * Time.deltaTime;
-        Bounce();
+        if (Bounce()) WeaponSounds.Play(WeaponSounds.StarBounce);
         Place();
     }
 
     // Prallt an den Bildraendern ab: was ueber den Rand hinausgeht, wird
     // zurueckgespiegelt, und die Richtung zeigt danach nach innen.
-    private void Bounce()
+    // True, wenn der Stern in diesem Schritt an einem Rand abgeprallt ist.
+    private bool Bounce()
     {
+        Vector2 before = velocity;
         float maxX = Mathf.Max(0f, cam.orthographicSize * cam.aspect - halfSize.x);
         float maxY = Mathf.Max(0f, cam.orthographicSize - halfSize.y);
 
@@ -115,6 +117,8 @@ public class BouncingStar : MonoBehaviour
 
         if (offset.y > maxY)       { offset.y = Mathf.Max(-maxY,  2f * maxY - offset.y); velocity.y = -Mathf.Abs(velocity.y); }
         else if (offset.y < -maxY) { offset.y = Mathf.Min( maxY, -2f * maxY - offset.y); velocity.y =  Mathf.Abs(velocity.y); }
+
+        return velocity != before;
     }
 
     // Bildposition -> Welt: an die Kamera haengen, Z vom Stern behalten.

@@ -30,7 +30,7 @@ public class BloodyFork : Weapon
 
         for (int i = 0; i < shots; i++)
         {
-            AudioController.Instance.PalySound(AudioController.Instance.ForkHit, 0.1f);
+            WeaponSounds.Play(WeaponSounds.BloodyFork);
 
             // alle 8 Gabeln gleichzeitig spawnen
             SpawnAllForks();

@@ -18,6 +18,7 @@ public class KeckssaegeWeapon : Weapon
             if (spawnCounter <= 0)
             {
                 spawnCounter = CurrentCooldown;
+                WeaponSounds.Play(WeaponSounds.SawSpawn);
 
                 // Orbit-Pivot erstellen
                 GameObject orbit = new GameObject("OrbitPivot");

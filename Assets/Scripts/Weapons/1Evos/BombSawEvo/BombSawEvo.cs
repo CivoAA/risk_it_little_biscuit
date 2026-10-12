@@ -18,6 +18,7 @@ public class BombSawEvo : Weapon
                 Achievements.Unlock(Ach.BombSawEvo);
 
                 spawnCounter = CurrentCooldown;
+                WeaponSounds.Play(WeaponSounds.SawSpawn, 1f, 0.85f);
 
                 // Orbit-Pivot erstellen
                 GameObject orbit = new GameObject("OrbitPivotEvo");
@@ -51,7 +52,10 @@ public class BombSawEvo : Weapon
                 {
                     GameObject obj = Instantiate(prefab, transform.position + offsets[i], Quaternion.identity);
                     obj.transform.SetParent(orbit.transform, true);
-                    obj.transform.localScale *= PlayerController.Instance.AOERange;
+                    // AOE vergroessert nur die Trefferflaeche - das Bild bleibt pixelgenau.
+                    CircleCollider2D hitArea = obj.GetComponent<CircleCollider2D>();
+                    if (hitArea != null) hitArea.radius *= PlayerController.Instance.AOERange;
+                    else obj.transform.localScale *= PlayerController.Instance.AOERange;
                 }
 
                 // Orbit-Rotation aktivieren

@@ -30,7 +30,9 @@ using UnityEngine;
 ///                 Mitte - mit eigener, voller Lebensleiste (35 % seines
 ///                 Lebens, fuellt sich bei der Landung auf). Bis dahin kann er
 ///                 nicht sterben (<see cref="Enemy.MinHealthFraction"/>).
-///                 Das Herz greift noch nicht an - das kommt spaeter.
+///                 Dort beginnt der Endkampf (<see cref="VerkohlterHerzFinale"/>):
+///                 Funkenringe im Herzschlag, Glutsalven, Lavaregen, Panzer mit
+///                 Schlagadern, Glutstrahl, Glutlinge, Feuerwand, Herzinfarkt.
 ///   Herz-Tod      der toedliche Treffer wird angehalten (Enemy.HoldDeath):
 ///                 das Herz ueberhitzt, ein Blitz, die Kruste bricht, Brocken
 ///                 fallen ins Becken, der Kern verglueht; die Kammer wird
@@ -75,7 +77,7 @@ public class EnemyVerkohlter : MonoBehaviour
     private const float HeartHitRadius = 1.15f;
 
     /// <summary>Das Herz hat so viel Leben wie dieser Anteil des ganzen Verkohlten.</summary>
-    private const float HeartHealthShare = 0.35f;
+    private const float HeartHealthShare = 0.5f;
     /// <summary>So lange fuellt sich die Lebensleiste des Herzens bei der Landung.</summary>
     private const float HeartBarFill = 1.1f;
 
@@ -211,6 +213,22 @@ public class EnemyVerkohlter : MonoBehaviour
     private ScreenIris iris;
     private SpriteRenderer sog;
     private Sprite[] heartFrames;
+    private VerkohlterHerzFinale finale;
+
+    /// <summary>Gesetzt = dieses Bild statt des Herzschlags (Panzer waechst zu, Panzer platzt).</summary>
+    internal Sprite HeartOverride;
+
+    /// <summary>Welche Herzschlag-Bilder das Herz spielt (normal, gepanzert, rasend).</summary>
+    internal void SetHeartStrip(Sprite[] strip)
+    {
+        if (strip != null && strip.Length > 0) heartFrames = strip;
+    }
+
+    /// <summary>Panzer: Schuesse prallen ab (Trefferflaeche bleibt, damit man es sieht).</summary>
+    internal void ShieldHeart(bool on)
+    {
+        enemy.Untouchable = on;
+    }
     private readonly List<Enemy> swallowed = new List<Enemy>();
 
     public bool IsPhaseTwo => enemy != null && enemy.HealthFraction <= PhaseTwoAt;
@@ -853,6 +871,9 @@ public class EnemyVerkohlter : MonoBehaviour
         enemy.SkipDeathEffect = true;
         enemy.DeathHeld += OnHeartKilled;
         SetGone(false);
+
+        // --- 7. Der Endkampf
+        finale = VerkohlterHerzFinale.Begin(this, enemy, chamber, patch, heartFrames);
     }
 
     /// <summary>Die Leiste des Herzens laeuft von leer auf voll (es ist dabei noch nicht zu treffen).</summary>
@@ -874,6 +895,8 @@ public class EnemyVerkohlter : MonoBehaviour
     private void OnHeartKilled()
     {
         if (heartDying) return;
+        if (finale != null) finale.End();
+        HeartOverride = null;
         StopAllCoroutines();
         StartCoroutine(HeartDeath());
     }
@@ -1020,7 +1043,7 @@ public class EnemyVerkohlter : MonoBehaviour
     {
         if (body == null || heartFrames == null || heartFrames.Length == 0) return;
         int f = chamber != null ? chamber.Frame : 0;
-        body.sprite = heartFrames[f % heartFrames.Length];
+        body.sprite = HeartOverride != null ? HeartOverride : heartFrames[f % heartFrames.Length];
         // Schwebt: zwei Pixel auf und ab, ganzzahlig
         float bob = Mathf.Round(Mathf.Sin(Time.time * 1.7f) * 2f) / VerkohlterArt.PixelsPerUnit;
         body.transform.localPosition = new Vector3(0f, bob, 0f);

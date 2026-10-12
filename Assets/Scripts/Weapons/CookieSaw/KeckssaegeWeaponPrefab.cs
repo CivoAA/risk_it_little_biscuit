@@ -28,13 +28,16 @@ public class KeckssaegeWeaponPrefab : MonoBehaviour
             counter = weapon.CurrentStats.AttackSpeed;
 
             // Alle Gegner in Reichweite Schaden zufügen
+            bool hit = false;
             for (int i = 0; i < enemiesInRange.Count; i++)
             {
                 if (enemiesInRange[i] != null)
                 {
                     enemiesInRange[i].TakeDamage(weapon.CurrentStats.damage);
+                    hit = true;
                 }
             }
+            if (hit) WeaponSounds.Play(WeaponSounds.SawCrunch);
         }
     }
 

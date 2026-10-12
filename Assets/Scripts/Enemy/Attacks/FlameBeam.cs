@@ -42,7 +42,8 @@ public class FlameBeam : MonoBehaviour
     /// die Zungen am Rand zaehlen nicht). Trifft lieber etwas zu knapp als zu
     /// grosszuegig: wer sichtbar daneben steht, darf nicht brennen.
     /// </summary>
-    private const float CorePx = 8f;
+    private const float DefaultCorePx = 8f;
+    private float corePx = DefaultCorePx;
 
     private SpriteRenderer start, end;
     private readonly List<SpriteRenderer> mids = new List<SpriteRenderer>();
@@ -68,7 +69,7 @@ public class FlameBeam : MonoBehaviour
     }
 
     /// <summary>Halbe Dicke des brennenden Kerns in Welt-Einheiten.</summary>
-    public float HalfWidth => CorePx / Ppu * Scale;
+    public float HalfWidth => corePx / Ppu * Scale;
 
     /// <summary>Die Spitze des Strahls - der Feuerkreis (<see cref="FireArena"/>) stellt sie hochkant.</summary>
     public Sprite[] EndFrames => endFrames;
@@ -195,6 +196,18 @@ public class FlameBeam : MonoBehaviour
         if (frames == null || frames.Length == 0) return null;
         int n = frames.Length;
         return frames[((frame % n) + n) % n];
+    }
+
+    /// <summary>
+    /// Zur Laufzeit gebauter Strahl (Glutstrahl des Herzens): Bilder und halbe
+    /// Kerndicke in Bildpixeln eintragen.
+    /// </summary>
+    public void Bind(Sprite[] startSprites, Sprite[] midSprites, Sprite[] endSprites, float coreHalfPx)
+    {
+        startFrames = startSprites;
+        midFrames = midSprites;
+        endFrames = endSprites;
+        corePx = coreHalfPx;
     }
 
 #if UNITY_EDITOR

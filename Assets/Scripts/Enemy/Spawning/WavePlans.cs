@@ -212,7 +212,7 @@ public static class WavePlans
     ///   Elite-Marshmello -> Eichel        (stand frueher im Pool der Kueche)
     ///   Messermaus       -> Elite-Fliegenpilz (Elite im Ring, ohne Kaefig -
     ///                                     die Kaefig-Wand ist archiviert)
-    ///   Muffin & Co.     -> Honey (und spaeter der Pfannkuchen)
+    ///   Muffin & Co.     -> Honey (und spaeter der Baumkuchen-Stumpf)
     ///
     /// Die Gegner kommen von leicht nach schwer dazu, jede Phase bringt einen
     /// neuen mit:
@@ -221,9 +221,9 @@ public static class WavePlans
     ///   Phase 2  + Kirschslime, + Weisse Messermaus
     ///   Phase 3  Fliegenpilz raus, + Eichel
     ///   Phase 4  Kirschslime raus, + Honey
-    ///   Boss     Eichel, Honey, + Pfannkuchen - und die Glutwurz,
+    ///   Boss     Eichel, Honey, + Baumkuchen-Stumpf - und die Glutwurz,
     ///            der Baumriese des Waldes (speit Feuer, siehe EnemyGlutwurz)
-    ///   Endlos   Eichel, Honey, Pfannkuchen
+    ///   Endlos   Eichel, Honey, Baumkuchen-Stumpf
     ///
     /// Seit Oktober 2026 im 20-Minuten-Takt der Kueche (gleiche Phasenlaengen):
     ///
@@ -330,7 +330,7 @@ public static class WavePlans
         plan.Phase(600f)
             .Pool(EnemyId.Eichel, 35f)
             .Pool(EnemyId.Honey, 15f)
-            .Pool(EnemyId.Pancake, 10f)
+            .Pool(EnemyId.Baumkuchen, 10f)
             .Pool(EnemyId.Walnusskrabbe, 10f)
             .Pool(EnemyId.Maronenigel, 10f)
             .Pressure(400f, 600f)
@@ -340,7 +340,7 @@ public static class WavePlans
         plan.EndlessPhase()
             .Pool(EnemyId.Eichel, 30f)
             .Pool(EnemyId.Honey, 15f)
-            .Pool(EnemyId.Pancake, 15f)
+            .Pool(EnemyId.Baumkuchen, 15f)
             .Pool(EnemyId.Walnusskrabbe, 10f)
             .Pool(EnemyId.Honigbaer, 10f)
             .Pressure(140f, 140f)

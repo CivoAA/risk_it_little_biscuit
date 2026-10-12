@@ -10242,8 +10242,8 @@ MonoBehaviour:
   weaponLevel: -1
   maxweaponLevel: 5
   stats: []
-  weaponImage: {fileID: 712035800519618848, guid: ac08ff516ef6d8c4c9e0b982de30b3fc, type: 3}
-  weaponIcon: {fileID: 712035800519618848, guid: ac08ff516ef6d8c4c9e0b982de30b3fc, type: 3}
+  weaponImage: {fileID: 2095794922842456303, guid: 6036ba35178747af8c3ca9a729a7d918, type: 3}
+  weaponIcon: {fileID: 2095794922842456303, guid: 6036ba35178747af8c3ca9a729a7d918, type: 3}
   weaponIconEvo: {fileID: 0}
   posssibleEvo: 0
   hasBeenRemoved: 0
@@ -10760,8 +10760,8 @@ MonoBehaviour:
     AttackSpeed: 0
     shots: 0
     description: +48% Gegner, +93% Leben, +30% Schaden, +76% Belohnung
-  weaponImage: {fileID: -3627844698242013704, guid: 809b5a194789472183719b5d6f0d38fe, type: 3}
-  weaponIcon: {fileID: -3627844698242013704, guid: 809b5a194789472183719b5d6f0d38fe, type: 3}
+  weaponImage: {fileID: 3139910639884746714, guid: 1313ab27cf0249809b609d32317cb04f, type: 3}
+  weaponIcon: {fileID: 3139910639884746714, guid: 1313ab27cf0249809b609d32317cb04f, type: 3}
   weaponIconEvo: {fileID: 0}
   posssibleEvo: 0
   hasBeenRemoved: 0

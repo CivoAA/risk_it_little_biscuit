@@ -3368,6 +3368,8 @@ MonoBehaviour:
     prefab: {fileID: 6164591338409503788, guid: 00627c6559ca4f3791dcca88123d9b9d, type: 3}
   - id: 86
     prefab: {fileID: 6164591338409503788, guid: bbca3a9053524fe28b16d6a484e748f8, type: 3}
+  - id: 87
+    prefab: {fileID: 1656260216413292769, guid: 0743b3e601a64ce99d285f0ba3d9d00c, type: 3}
   slimeVariants:
   - {fileID: 606865734669720050, guid: add6d643a19561648bbc903ec25242f6, type: 3}
   - {fileID: 514329318404290448, guid: d736393565fd85b42be26fb5c2b12e64, type: 3}

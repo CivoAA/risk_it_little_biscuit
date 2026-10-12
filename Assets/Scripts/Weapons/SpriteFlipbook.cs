@@ -47,6 +47,22 @@ public class SpriteFlipbook : MonoBehaviour
         Apply();
     }
 
+    /// <summary>Bilder nachtraeglich setzen - fuer Objekte, die per Code entstehen.</summary>
+    public void SetFrames(Sprite[] newFrames, float newFps, bool startAtZero = false)
+    {
+        frames = newFrames;
+        fps = newFps;
+        if (startAtZero) time = 0f;
+        Apply();
+    }
+
+    /// <summary>Ohne Einblenden sofort voll da - fuer sehr kurze Effekte.</summary>
+    public void ShowInstantly()
+    {
+        fadeIn = 0f;
+        Apply();
+    }
+
     /// <summary>Restlebenszeit in Sekunden - ab <see cref="fadeOut"/> wird ausgeblendet.</summary>
     public void SetLifeLeft(float seconds) => lifeLeft = seconds;
 
