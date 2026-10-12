@@ -12,10 +12,19 @@ using UnityEngine;
 /// Ab drei Hieben (Stufe 5+) ist der letzte ein Finisher: dieselbe Flaeche,
 /// aber goldene Sichel mit Funkeln (carrot_slash_finisher).
 ///
+/// Skilltree (Zwiebelritter) - gilt auch fuer die Evo <see cref="ShellBlade"/>:
+///   Zwiebelring  - jede 3. Serie endet mit einer Drehung: der letzte Hieb
+///                  trifft im Kreis um den Ritter (zwei goldene Sicheln).
+///   Gegenschlag  - wird der Ritter getroffen (auch wenn eine Schale den
+///                  Treffer abfaengt), ist sein naechster Hieb doppelt so stark
+///                  und <see cref="CounterScale"/> mal so gross
+///                  (carrot_slash_big / carrot_slash_finisher_big).
+///
 /// cooldown = Pause zwischen zwei Hiebserien
 /// damage   = Schaden pro Hieb
 /// range    = Tiefe des Bereichs in Tiles (Breite steht in <see cref="Width"/>)
-/// shots    = Hiebe pro Serie (+ playerShots)
+/// shots    = Hiebe pro Serie. Extra-Schuss zaehlt bewusst nicht - schneller
+///            wird der Ritter nur ueber Cooldown (auch zwischen den Hieben).
 ///
 /// Die Werte stehen im Code (<see cref="LevelStats"/>), nicht am Prefab - sie
 /// ueberschreiben beim Start, was im Inspector steht.
@@ -52,11 +61,34 @@ public class SwordSlash : Weapon
     /// </summary>
     private const float SlashArcRadius = 2.5f;
 
+    /// <summary>Bogenradius der grossen Frames (112 px) - passt zu <see cref="CounterScale"/>.</summary>
+    private const float BigArcRadius = 3.5f;
+
     /// <summary>Hieb-Animation (Resources).</summary>
     private const string SlashFramesPath = "Weapons/carrot_slash";
 
     /// <summary>Goldener Abschlusshieb (Resources).</summary>
     private const string FinisherFramesPath = "Weapons/carrot_slash_finisher";
+
+    /// <summary>Beide in gross fuer den Gegenschlag (Bogen 1 Tile weiter aussen, gleiche Pixelgroesse).</summary>
+    private const string BigSlashFramesPath = "Weapons/carrot_slash_big";
+    private const string BigFinisherFramesPath = "Weapons/carrot_slash_finisher_big";
+
+    // ------------------------------------------------------- Skilltree
+
+    /// <summary>Zwiebelring: jede so-vielte Serie (Evo: jeder so-vielte Hieb) wird zur Drehung.</summary>
+    public const int CircleEvery = 3;
+
+    /// <summary>So lange dauert eine ganze Drehung (beide Haelften nacheinander).</summary>
+    private const float CircleVisibleTime = 0.28f;
+
+    /// <summary>Gegenschlag: Schaden des naechsten Hiebs nach einem Treffer.</summary>
+    public const float CounterDamage = 2f;
+
+    /// <summary>Gegenschlag: Tiefe und Breite des naechsten Hiebs (= BigArcRadius / SlashArcRadius).</summary>
+    public const float CounterScale = 1.4f;
+
+    protected enum SwingKind { Normal, Finisher, Circle }
 
     private static readonly WeaponStats[] LevelStats =
     {
@@ -92,6 +124,11 @@ public class SwordSlash : Weapon
     private Vector2 moveDir = Vector2.right;
     private float spawnCounter;
     private bool swinging;
+    private int seriesCount;
+    private float counterUsedAt = -1f;
+
+    /// <summary>Letzte Laufrichtung - auch im Stehen die, in die zuletzt gelaufen wurde.</summary>
+    protected Vector2 MoveDir => moveDir;
 
     protected virtual void Awake()
     {
@@ -99,7 +136,7 @@ public class SwordSlash : Weapon
         maxweaponLevel = LevelStats.Length - 1;
     }
 
-    void Update()
+    protected virtual void Update()
     {
         if (PlayerController.Instance == null) return;
 
@@ -112,79 +149,178 @@ public class SwordSlash : Weapon
         if (spawnCounter <= 0f && !swinging)
         {
             swinging = true;
-            StartCoroutine(SwingSeries());
+            StartCoroutine(RunAttack());
         }
     }
 
-    private IEnumerator SwingSeries()
+    private IEnumerator RunAttack()
     {
-        int swings = Mathf.Max(1, Mathf.RoundToInt(CurrentStats.shots + PlayerController.Instance.ExtraShots));
-
-        for (int i = 0; i < swings && IsActive; i++)
-        {
-            bool finisher = swings >= FinisherFromSwings && i == swings - 1;
-            Swing(moveDir, i % 2 == 1, finisher);
-            if (i < swings - 1) yield return new WaitForSeconds(SwingGap);
-        }
-
-        spawnCounter = CurrentCooldown;
+        yield return Attack();
+        spawnCounter = NextAttackDelay();
         swinging = false;
     }
 
-    private void Swing(Vector2 dir, bool backhand, bool finisher)
+    /// <summary>Ein Angriff - beim Schwerthieb eine ganze Serie. Danach wartet die Waffe <see cref="NextAttackDelay"/>.</summary>
+    protected virtual IEnumerator Attack()
+    {
+        int swings = Mathf.Max(1, Mathf.RoundToInt(CurrentStats.shots));
+
+        seriesCount++;
+        bool circleSeries = Skills.HasGrant(SkillGrants.Zwiebelring) && seriesCount % CircleEvery == 0;
+
+        for (int i = 0; i < swings && IsActive; i++)
+        {
+            bool last = i == swings - 1;
+            SwingKind kind = SwingKind.Normal;
+            if (last && circleSeries) kind = SwingKind.Circle;
+            else if (last && swings >= FinisherFromSwings) kind = SwingKind.Finisher;
+
+            Swing(moveDir, i % 2 == 1, kind);
+            if (!last) yield return new WaitForSeconds(CurrentSwingGap);
+        }
+    }
+
+    protected virtual float NextAttackDelay() => CurrentCooldown;
+
+    /// <summary>
+    /// Abstand zwischen zwei Hieben einer Serie. Cooldown (Buff, Skilltree)
+    /// verkuerzt ihn mit - der Ritter schlaegt also auch innerhalb der Serie
+    /// schneller, nicht nur die Pause danach wird kuerzer.
+    /// </summary>
+    private float CurrentSwingGap
+    {
+        get
+        {
+            float mult = PlayerController.Instance != null ? PlayerController.Instance.CooldownMultiplier : 1f;
+            return SwingGap * mult;
+        }
+    }
+
+    /// <summary>Zeit bis zum naechsten normalen Hieb - so lange darf einer hoechstens stehen.</summary>
+    protected virtual float SwingInterval => CurrentSwingGap;
+
+    /// <summary>
+    /// Gegenschlag: ist der Ritter seit dem letzten Gegenschlag getroffen
+    /// worden, verbraucht dieser Hieb ihn.
+    /// </summary>
+    private bool TakeCounter()
+    {
+        if (!Skills.HasGrant(SkillGrants.Gegenschlag)) return false;
+        if (PlayerController.Instance.LastStruckTime <= counterUsedAt) return false;
+
+        counterUsedAt = Time.time;
+        return true;
+    }
+
+    protected void Swing(Vector2 dir, bool backhand, SwingKind kind)
     {
         AudioController.Instance.PalySound(AudioController.Instance.Werfen, 0.1f);
 
-        float aoe = PlayerController.Instance.AOERange;
+        bool counter = TakeCounter();
+        float aoe = PlayerController.Instance.AOERange * (counter ? CounterScale : 1f);
         float depth = CurrentStats.range * aoe;
         float width = Width * aoe;
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
         Vector2 origin = (Vector2)transform.position + originOffset;
-        Vector2 center = origin + dir * (depth * 0.5f);
 
-        OverlapDamage.FindEnemies(center, new Vector2(depth, width), angle, hitBuffer);
-        float damage = CurrentStats.damage;
+        if (kind == SwingKind.Circle)
+        {
+            OverlapDamage.FindEnemies(origin, depth, hitBuffer);
+        }
+        else
+        {
+            Vector2 center = origin + dir * (depth * 0.5f);
+            OverlapDamage.FindEnemies(center, new Vector2(depth, width), angle, hitBuffer);
+        }
+
+        float damage = CurrentStats.damage * (counter ? CounterDamage : 1f);
         for (int i = 0; i < hitBuffer.Count; i++)
         {
             if (hitBuffer[i] != null) hitBuffer[i].TakeDamage(damage);
         }
 
-        StartCoroutine(ShowSlash(origin, angle, depth, width, backhand, finisher));
+        if (kind == SwingKind.Circle)
+        {
+            StartCoroutine(ShowCircle(origin, angle, depth, backhand, counter));
+        }
+        else
+        {
+            StartCoroutine(ShowSlash(origin, angle, depth, width, backhand, kind == SwingKind.Finisher, counter));
+        }
     }
 
     // ------------------------------------------------------------------
     //  Anzeige
     // ------------------------------------------------------------------
 
-    private IEnumerator ShowSlash(Vector2 origin, float angle, float depth, float width, bool backhand, bool finisher)
+    private IEnumerator ShowSlash(Vector2 origin, float angle, float depth, float width, bool backhand, bool finisher, bool big)
     {
-        GameObject go = new GameObject("SwordSlashFx");
-        go.transform.SetParent(transform, false);
-        go.transform.position = origin;
-        go.transform.rotation = Quaternion.Euler(0f, 0f, angle);
-
-        SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
-        sr.flipY = backhand;
-        CopySorting(sr);
-
         Sprite[] frames = SlashFrames;
         float visible = SlashVisibleTime;
+        if (!finisher) visible = Mathf.Min(visible, SwingInterval + 0.02f);
         if (finisher && FinisherFrames.Length > 0)
         {
             frames = FinisherFrames;
             visible = FinisherVisibleTime;
         }
+
         if (frames.Length == 0)
         {
-            yield return ShowGeneratedSlash(go, sr, angle, depth, width, backhand);
+            GameObject go = NewFx(origin, angle, backhand);
+            yield return ShowGeneratedSlash(go, go.GetComponent<SpriteRenderer>(), angle, depth, width, backhand);
             yield break;
         }
 
-        // Bogenradius = Tiefe, Bogendurchmesser = Breite der Trefferflaeche.
-        go.transform.localScale = new Vector3(depth / SlashArcRadius, width * 0.5f / SlashArcRadius, 1f);
+        float arcRadius = SlashArcRadius;
+        if (big)
+        {
+            Sprite[] bigFrames = finisher ? BigFinisherFrames : BigSlashFrames;
+            if (bigFrames.Length > 0)
+            {
+                frames = bigFrames;
+                arcRadius = BigArcRadius;
+            }
+        }
 
-        // Die Frames fegen selbst durch den Bogen und blenden aus.
+        // Bogenradius = Tiefe, Bogendurchmesser = Breite der Trefferflaeche.
+        Vector2 scale = new Vector2(depth / arcRadius, width * 0.5f / arcRadius);
+        yield return PlayFrames(origin, angle, scale, backhand, frames, visible);
+    }
+
+    /// <summary>
+    /// Zwiebelring: zwei goldene Sicheln nacheinander - erst vorne, dann
+    /// hinten. Die hintere ist um 180 Grad gedreht und laeuft damit in
+    /// derselben Drehrichtung weiter, zusammen also einmal rundherum.
+    /// </summary>
+    private IEnumerator ShowCircle(Vector2 origin, float angle, float radius, bool backhand, bool big)
+    {
+        Sprite[] frames = FinisherFrames;
+        float arcRadius = SlashArcRadius;
+        if (big && BigFinisherFrames.Length > 0)
+        {
+            frames = BigFinisherFrames;
+            arcRadius = BigArcRadius;
+        }
+        if (frames.Length == 0) yield break;
+
+        Vector2 scale = new Vector2(radius / arcRadius, radius / arcRadius);
+        float half = CircleVisibleTime * 0.5f;
+
+        // Die vordere Haelfte darf etwas laenger stehen, damit sich beide
+        // fuer ein, zwei Bilder ueberlappen und keine Luecke blitzt.
+        StartCoroutine(PlayFrames(origin, angle, scale, backhand, frames, half + 0.04f));
+        yield return new WaitForSeconds(half);
+        yield return PlayFrames(origin, angle + 180f, scale, backhand, frames, half);
+    }
+
+    /// <summary>Spielt einen Hieb-Streifen einmal ab; die Frames fegen selbst durch den Bogen und blenden aus.</summary>
+    private IEnumerator PlayFrames(Vector2 origin, float angle, Vector2 scale, bool flip, Sprite[] frames, float visible)
+    {
+        GameObject go = NewFx(origin, angle, flip);
+        SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
+        go.transform.localScale = new Vector3(scale.x, scale.y, 1f);
+
         for (float t = 0f; t < visible; t += Time.deltaTime)
         {
             if (go == null) yield break;
@@ -196,32 +332,33 @@ public class SwordSlash : Weapon
         if (go != null) Destroy(go);
     }
 
-    private Sprite[] loadedFrames, loadedFinisher;
+    private GameObject NewFx(Vector2 origin, float angle, bool flip)
+    {
+        GameObject go = new GameObject("SwordSlashFx");
+        go.transform.SetParent(transform, false);
+        go.transform.position = origin;
+        go.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+
+        SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
+        sr.flipY = flip;
+        CopySorting(sr);
+        return go;
+    }
+
+    private Sprite[] loadedFrames, loadedFinisher, loadedBig, loadedBigFinisher;
 
     private Sprite[] SlashFrames
     {
         get
         {
             if (slashFrames != null && slashFrames.Length > 0) return slashFrames;
-            return loadedFrames ??= LoadFrames(SlashFramesPath);
+            return loadedFrames ??= SpriteStrip.Load(SlashFramesPath);
         }
     }
 
-    private Sprite[] FinisherFrames => loadedFinisher ??= LoadFrames(FinisherFramesPath);
-
-    private static Sprite[] LoadFrames(string path)
-    {
-        // LoadAll liefert die Teilbilder ohne feste Reihenfolge.
-        Sprite[] frames = Resources.LoadAll<Sprite>(path);
-        System.Array.Sort(frames, (a, b) => FrameIndex(a).CompareTo(FrameIndex(b)));
-        return frames;
-    }
-
-    private static int FrameIndex(Sprite s)
-    {
-        int cut = s.name.LastIndexOf('_');
-        return cut >= 0 && int.TryParse(s.name.Substring(cut + 1), out int i) ? i : 0;
-    }
+    private Sprite[] FinisherFrames => loadedFinisher ??= SpriteStrip.Load(FinisherFramesPath);
+    private Sprite[] BigSlashFrames => loadedBig ??= SpriteStrip.Load(BigSlashFramesPath);
+    private Sprite[] BigFinisherFrames => loadedBigFinisher ??= SpriteStrip.Load(BigFinisherFramesPath);
 
     /// <summary>Alter Platzhalter, falls die Frames fehlen.</summary>
     private IEnumerator ShowGeneratedSlash(GameObject go, SpriteRenderer sr, float angle, float depth, float width, bool backhand)

@@ -177,7 +177,7 @@ public static class Ach
         AchievementCategory.Evolutions);
 
     public static readonly AchievementDef MochiMelodyEvo = Def(
-        "Mochi_Melody_Evo", "Mochi Melody Evo", "Obtained the Mochi Melody Evo for the first time!",
+        "Mochi_Melody_Evo", "Music Box Quartet", "Obtained the Music Box Quartet for the first time!",
         AchievementCategory.Evolutions);
 
     public static readonly AchievementDef FoxfireEvo = Def(

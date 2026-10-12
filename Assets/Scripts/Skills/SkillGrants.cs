@@ -54,6 +54,18 @@ public static class SkillGrants
     /// <summary>Jam Jar / Sticky Shatter: jedes 3. Glas fliegt in die dichteste Gegnergruppe (siehe <see cref="AreaWeaponJamJar"/>).</summary>
     public const string Zielwurf = "marmelade_zielwurf";
 
+    /// <summary>Schwerthieb / Schalenklinge: jede 3. Serie (Evo: jeder 3. Hieb) endet mit einer Drehung rundherum (siehe <see cref="SwordSlash"/>).</summary>
+    public const string Zwiebelring = "ritter_zwiebelring";
+
+    /// <summary>Schwerthieb / Schalenklinge: nach einem Treffer ist der naechste Hieb doppelt so stark und groesser (siehe <see cref="SwordSlash"/>).</summary>
+    public const string Gegenschlag = "ritter_gegenschlag";
+
+    /// <summary>Mochi-Melodie: das Crescendo geht doppelt so hoch, voll aufgedreht wird der Akkord-Ring doppelt so gross (siehe <see cref="MochiMelody"/>).</summary>
+    public const string Fortissimo = "mochi_fortissimo";
+
+    /// <summary>Evo der Mochi-Melodie: 20 % je Box-Treffer, dass der Gegner 3 s auf diese Box zulaeuft (siehe <see cref="BassSog"/>).</summary>
+    public const string BassSog = "mochi_bass_sog";
+
     // ------------------------------------------------------------ Wissen
 
     /// <summary>Bestiarium: +1 % Schaden je 1000 Kills einer Gegnerart (siehe <see cref="Bestiary"/>).</summary>
@@ -81,6 +93,12 @@ public static class SkillGrants
 
     /// <summary>Marmeladenbad: 1 s still in der eigenen Marmelade, dann 1 Leben alle 0.25 s (siehe <see cref="JamBath"/>).</summary>
     public const string Marmeladenbad = "marmeladenbad";
+
+    /// <summary>Paukenschlag: unter 35 % Leben auf der naechsten Eins alle Gegner um Mochi wegschleudern und betaeuben (alle 35 s, siehe <see cref="Paukenschlag"/>).</summary>
+    public const string Paukenschlag = "mochi_paukenschlag";
+
+    /// <summary>Zwiebelhaut: die Schalenklinge haelt bis zu 3 Schalen statt einer (siehe <see cref="OnionShell"/>).</summary>
+    public const string Zwiebelhaut = "ritter_zwiebelhaut";
 
     // ==================================================================
     //  Der Katalog - was hier steht, steht im Editor zur Auswahl.
@@ -123,6 +141,18 @@ public static class SkillGrants
         new Def(Sturmboe, "Sturmboe",
                 "Jeder 5. Schlag des Salatfaechers geht einmal im Kreis um dich herum - mit doppelt so vielen Wellen."),
 
+        new Def(Fortissimo, "Fortissimo",
+                "Das Crescendo der Mochi-Melodie geht doppelt so hoch. Ist es ganz aufgedreht, wird der Akkord-Ring doppelt so gross."),
+
+        new Def(BassSog, "Bass-Sog",
+                "Nur Evo: Trifft eine Musikbox einen Gegner, laeuft er mit 20% Chance 3 Sekunden lang auf diese Box zu statt auf dich. Bosse nicht."),
+
+        new Def(Zwiebelring, "Zwiebelring",
+                "Jede 3. Hiebserie endet mit einer Drehung, die rundherum trifft. Bei der Schalenklinge ist jeder 3. Hieb eine Drehung."),
+
+        new Def(Gegenschlag, "Gegenschlag",
+                "Wirst du getroffen (auch wenn eine Schale den Treffer abfaengt), ist dein naechster Hieb doppelt so stark und groesser. Gilt auch fuer die Schalenklinge."),
+
         new Def(Bestiarium, "Bestiarium",
                 "Zaehlt deine Kills je Gegnerart: +1% Schaden je 1000 Kills. Neuer Reiter im Erfolge-Buch."),
 
@@ -146,6 +176,12 @@ public static class SkillGrants
 
         new Def(Marmeladenbad, "Marmeladenbad",
                 "Stehst du 1 Sekunde still in deiner Marmelade, heilst du 1 Leben alle 0,25 Sekunden."),
+
+        new Def(Paukenschlag, "Paukenschlag",
+                "Faellt dein Leben unter 35%, schleudert ein Paukenschlag auf der naechsten Eins alle Gegner um dich weit weg und betaeubt sie 1,5 Sekunden (alle 35 Sekunden). Bosse nicht."),
+
+        new Def(Zwiebelhaut, "Zwiebelhaut",
+                "Mit der Schalenklinge haeltst du bis zu 3 Zwiebelschalen statt einer."),
     };
 
     /// <summary>Eintrag zu einer Id. Null, wenn die Id nicht (mehr) im Katalog steht.</summary>

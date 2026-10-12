@@ -564,9 +564,37 @@ public class Enemy : MonoBehaviour
     /// </summary>
     private Vector3 PursuitDirection(PlayerController player)
     {
-        Vector2 toPlayer = (Vector2)(player.transform.position - transform.position);
+        Vector2 toPlayer = ChaseTarget(player) - (Vector2)transform.position;
         if (toPlayer.sqrMagnitude < 0.0001f) return Vector3.zero;
         return toPlayer.normalized;
+    }
+
+    // ------------------------------------------------------------ Gelockt
+
+    private Transform lureTarget;
+    private float lureUntil;
+
+    /// <summary>Laeuft gerade auf etwas anderes als den Spieler zu (z.B. Bass-Sog der Musikbox).</summary>
+    public bool IsLured => lureTarget != null && Time.time < lureUntil;
+
+    /// <summary>
+    /// Lockt den Gegner <paramref name="seconds"/> Sekunden lang zu
+    /// <paramref name="target"/> statt zum Spieler. Ein neuer Aufruf ersetzt
+    /// den alten - es gilt immer der letzte. Verschwindet das Ziel, geht es
+    /// sofort zurueck zum Spieler. Bosse und Minibosse lassen sich nicht locken.
+    /// </summary>
+    public void Lure(Transform target, float seconds)
+    {
+        if (IsBoss || target == null) return;
+
+        lureTarget = target;
+        lureUntil = Time.time + seconds;
+    }
+
+    /// <summary>Wohin der Gegner gerade will: zum Lockziel, sonst zum Spieler.</summary>
+    private Vector2 ChaseTarget(PlayerController player)
+    {
+        return IsLured ? (Vector2)lureTarget.position : (Vector2)player.transform.position;
     }
 
     // ------------------------------------------------------------- Stau
@@ -876,7 +904,7 @@ public class Enemy : MonoBehaviour
     {
         if (facing == EnemyFacing.Neutral || spriteRenderer == null) return;
 
-        float xDiff = player.transform.position.x - transform.position.x;
+        float xDiff = ChaseTarget(player).x - transform.position.x;
         if (Mathf.Abs(xDiff) <= 0.2f) return;
 
         bool playerIsRight = xDiff > 0f;

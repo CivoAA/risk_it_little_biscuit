@@ -61,7 +61,7 @@ public static class Characters
     /// Die Evo der Startwaffe als <c>Weapon.weaponID</c>. Das Kruemelchaos des
     /// Tofus kopiert nach seiner eigenen Evo diese hier (<see cref="CrumbMayhemEvo"/>).
     ///
-    /// Fuer Keks, Ritter, Mochi, Inari und Schleimkoenig sind es Platzhalter
+    /// Fuer Keks, Ritter, Inari und Schleimkoenig sind es Platzhalter
     /// (Stand 12.10.2026): eine Stufe ueber der Hoechststufe der Startwaffe,
     /// ohne Rezept - die richtigen Evos kommen noch. Bekommt eine davon ein
     /// Rezept, bleibt die Id hier einfach stehen.
@@ -72,8 +72,8 @@ public static class Characters
         "evo_sticky_shatter",  // 1 - Marmelade
         "evo_blade_storm",     // 2 - Onigiri
         "evo_typhoon_fan",     // 3 - Toast
-        "evo_sword_slash",     // 4 - Zwiebelritter (Platzhalter)
-        "evo_mochi_melody",    // 5 - Mochi (Platzhalter)
+        "evo_sword_slash",     // 4 - Zwiebelritter (Schalenklinge)
+        "evo_mochi_melody",    // 5 - Mochi (Spieluhr-Quartett)
         "evo_foxfire",         // 6 - Inari (Platzhalter)
         "evo_royal_splat",     // 7 - Schleimkoenig (Platzhalter)
         "evo_crumb_mayhem",    // 8 - Tofu

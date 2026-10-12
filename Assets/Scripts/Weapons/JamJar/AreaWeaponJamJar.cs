@@ -12,7 +12,8 @@ using UnityEngine.Serialization;
 /// verletzt. Extra-Schuss wirkt bewusst NICHT - es bleibt ein Glas pro Wurf.
 ///
 /// Die Evo <see cref="StickyShatterEvo"/> erbt von hier, damit Zielwurf und
-/// Einkochen fuer beide gelten. Sie ueberschreibt nur, was beim Aufprall passiert.
+/// Einkochen fuer beide gelten. Sie ueberschreibt nur die Flugbahn (huepfen)
+/// und was beim Aufprall passiert.
 ///
 /// cooldown    = Pause zwischen zwei Wuerfen
 /// duration    = Lebensdauer einer Lache
@@ -87,8 +88,14 @@ public class AreaWeaponJamJar : Weapon
     {
         GameObject jar = Instantiate(jarPrefab, transform.position, Quaternion.identity);
         MoveToRunScene(jar);
-        JamJarFlight.Launch(jar, target, FlightSpeed, OnJarLanded);
+        JamJarFlight.Launch(jar, FlightPath(target), FlightSpeed, OnJarLanded);
     }
+
+    /// <summary>
+    /// Alle Aufschlagpunkte eines Wurfs. Hier nur das Ziel; die Evo huepft von
+    /// dort weiter. <see cref="Landed"/> kommt an jedem Punkt.
+    /// </summary>
+    protected virtual IReadOnlyList<Vector2> FlightPath(Vector2 target) => new[] { target };
 
     private void OnJarLanded(Vector2 position)
     {
@@ -121,7 +128,7 @@ public class AreaWeaponJamJar : Weapon
         if (script != null) script.weapon = this;
     }
 
-    private static void MoveToRunScene(GameObject go)
+    protected static void MoveToRunScene(GameObject go)
     {
         Scene run = RunScene.Current;
         if (run.IsValid() && run.isLoaded) SceneManager.MoveGameObjectToScene(go, run);

@@ -39,6 +39,12 @@ public class MochiMelody : Weapon
     /// <summary>... hoechstens bis zu diesem Aufschlag.</summary>
     public const float CrescendoMax = 1.2f;
 
+    /// <summary>Skilltree "Fortissimo": so hoch geht das Crescendo dann.</summary>
+    public const float FortissimoMax = 2.4f;
+
+    /// <summary>Skilltree "Fortissimo": Faktor auf den Akkord-Ring, wenn das Crescendo ganz oben ist.</summary>
+    public const float FortissimoRing = 2f;
+
     /// <summary>Radius des Akkord-Rings in Tiles (vor AOE-Buff und Stufen-Faktor).</summary>
     public const float ChordRadius = 1.6f;
 
@@ -167,6 +173,7 @@ public class MochiMelody : Weapon
         bool active = player != null && CanAttack;
         if (!active)
         {
+            if (wasActive) OnStopped();
             wasActive = false;
             pending.Clear();
             return;
@@ -180,6 +187,7 @@ public class MochiMelody : Weapon
             freeBeat = 0;
             crescendoHits = 0;
             writer.Reset();
+            OnStarted();
         }
 
         // Pause: die Musik laeuft weiter, Mochi nicht. Danach neu einsteigen.
@@ -283,6 +291,7 @@ public class MochiMelody : Weapon
         long index = (long)System.Math.Round(step.beat / stepBeats);
         int shift = stepBeats < 1.0 ? 1 : 0;
         int slot = (int)((index + shift) % 4);
+        OnStep(step.beat, dsp);
         Chord chord = sheet.ChordAt(step.beat);
         float damageScale = Mathf.Clamp((float)stepSeconds / Mathf.Max(MinBeat, CurrentCooldown), 0.5f, 2f);
 
@@ -324,6 +333,7 @@ public class MochiMelody : Weapon
     private void FireDue()
     {
         double dspNow = AudioSettings.dspTime;
+        BeforeFire(dspNow);
         while (pending.Count > 0 && pending[0].dsp <= dspNow)
         {
             Pending due = pending[0];
@@ -335,17 +345,63 @@ public class MochiMelody : Weapon
 
     private bool AnyTargetNear(float radius)
     {
-        Vector2 at = Center;
+        List<Source> from = Sources();
         float maxSqr = radius * radius;
         IReadOnlyList<Enemy> alive = Enemy.Alive;
-        for (int i = 0; i < alive.Count; i++)
+        for (int s = 0; s < from.Count; s++)
         {
-            Enemy enemy = alive[i];
-            if (enemy == null || enemy.Untouchable) continue;
-            if (((Vector2)enemy.transform.position - at).sqrMagnitude <= maxSqr) return true;
+            Vector2 at = from[s].center;
+            for (int i = 0; i < alive.Count; i++)
+            {
+                Enemy enemy = alive[i];
+                if (enemy == null || enemy.Untouchable) continue;
+                if (((Vector2)enemy.transform.position - at).sqrMagnitude <= maxSqr) return true;
+            }
         }
         return false;
     }
+
+    // ------------------------------------------------------------------
+    //  Quellen und Haken fuer die Evo
+    // ------------------------------------------------------------------
+
+    /// <summary>
+    /// Eine Stelle, an der die Melodie erklingt: Mitte (Akkord-Ring), Mund
+    /// (hier steigen die Noten auf) und - bei der Evo - die Musikbox dazu.
+    /// </summary>
+    protected struct Source
+    {
+        public Vector2 center;
+        public Vector2 mouth;
+        public MusicBox box;
+    }
+
+    private readonly List<Source> sources = new List<Source>();
+
+    private List<Source> Sources()
+    {
+        sources.Clear();
+        CollectSources(sources);
+        return sources;
+    }
+
+    /// <summary>Wo die Melodie gerade erklingt. Normal nur Mochi; die Evo nimmt ihre Musikboxen.</summary>
+    protected virtual void CollectSources(List<Source> into)
+    {
+        into.Add(new Source { center = Center, mouth = (Vector2)transform.position + singOffset });
+    }
+
+    /// <summary>Die Waffe legt los (neu im Spiel oder nach einer Pause der Kopie).</summary>
+    protected virtual void OnStarted() { }
+
+    /// <summary>Die Waffe hoert auf (abgegeben, Kopie ruht).</summary>
+    protected virtual void OnStopped() { }
+
+    /// <summary>Ein Schlag ist geplant und erklingt zur dspTime <paramref name="dsp"/>. <paramref name="beat"/> % 4 == 0 ist die Eins.</summary>
+    protected virtual void OnStep(double beat, double dsp) { }
+
+    /// <summary>Jeden Frame, bevor faellige Noten und Akkorde losgehen.</summary>
+    protected virtual void BeforeFire(double dspNow) { }
 
     /// <summary>Eine Note hat getroffen - der naechste Akkord wird lauter.</summary>
     public void NoteLanded()
@@ -361,18 +417,25 @@ public class MochiMelody : Weapon
     {
         PlayerController player = PlayerController.Instance;
         int count = Mathf.Clamp(Mathf.RoundToInt(CurrentStats.shots + player.ExtraShots), 1, 8);
-        Vector2 mouth = (Vector2)transform.position + singOffset;
-        FindTargets(mouth, CurrentStats.range, count);
-        if (targets.Count == 0) return;
-
         float damage = CurrentStats.damage * damageScale;
-        for (int i = 0; i < targets.Count; i++)
+
+        List<Source> from = Sources();
+        for (int s = 0; s < from.Count; s++)
         {
-            // Faecher nach oben, die Note schwenkt dann auf ihr Ziel ein
-            float spread = targets.Count > 1 ? Mathf.Lerp(-40f, 40f, i / (float)(targets.Count - 1)) : 0f;
-            Vector2 toward = ((Vector2)targets[i].transform.position - mouth).normalized;
-            Vector2 dir = ((Vector2)(Quaternion.Euler(0f, 0f, spread) * Vector2.up) + toward * 0.6f).normalized;
-            MelodyNote.Launch(this, mouth, dir, targets[i], damage, CurrentBounces, color);
+            Vector2 mouth = from[s].mouth;
+            FindTargets(mouth, CurrentStats.range, count);
+            if (targets.Count == 0) continue;
+
+            if (from[s].box != null) from[s].box.Pulse();
+            Transform box = from[s].box != null ? from[s].box.transform : null;
+            for (int i = 0; i < targets.Count; i++)
+            {
+                // Faecher nach oben, die Note schwenkt dann auf ihr Ziel ein
+                float spread = targets.Count > 1 ? Mathf.Lerp(-40f, 40f, i / (float)(targets.Count - 1)) : 0f;
+                Vector2 toward = ((Vector2)targets[i].transform.position - mouth).normalized;
+                Vector2 dir = ((Vector2)(Quaternion.Euler(0f, 0f, spread) * Vector2.up) + toward * 0.6f).normalized;
+                MelodyNote.Launch(this, mouth, dir, targets[i], damage, CurrentBounces, color, box);
+            }
         }
     }
 
@@ -426,56 +489,83 @@ public class MochiMelody : Weapon
 
     private float ChordReach() => ChordRadiusNow() + 0.3f;
 
+    /// <summary>
+    /// Aufschlag auf den Akkord fuer <paramref name="hits"/> Treffer im Takt.
+    /// Mit "Fortissimo" geht er bis <see cref="FortissimoMax"/> statt <see cref="CrescendoMax"/>.
+    /// </summary>
+    protected static float CrescendoBonus(float hits)
+    {
+        float max = Skills.HasGrant(SkillGrants.Fortissimo) ? FortissimoMax : CrescendoMax;
+        return Mathf.Min(max, hits * CrescendoStep);
+    }
+
+    /// <summary>"Fortissimo" ist an und das Crescendo ganz oben - der Ring wird doppelt so gross.</summary>
+    protected static bool IsFortissimo(float hits)
+    {
+        return Skills.HasGrant(SkillGrants.Fortissimo) && hits * CrescendoStep >= FortissimoMax;
+    }
+
     private void StrikeChord(float damageScale, bool finale)
     {
+        // Ein Crescendo fuer alle Quellen - bei der Evo werden mit Fortissimo
+        // alle Boxen auf einmal gross.
         float hits = crescendoHits;
         crescendoHits = 0;
 
-        Vector2 at = Center;
         float radius = ChordRadiusNow();
+        if (IsFortissimo(hits)) radius *= FortissimoRing;
         float reach = radius + 0.3f;
-
-        // erst sammeln, dann treffen - TakeDamage kann Gegner aus Alive nehmen
-        hitBuffer.Clear();
-        IReadOnlyList<Enemy> alive = Enemy.Alive;
-        for (int i = 0; i < alive.Count; i++)
-        {
-            Enemy enemy = alive[i];
-            if (enemy == null || enemy.Untouchable) continue;
-            float sqr = ((Vector2)enemy.transform.position - at).sqrMagnitude;
-            if (sqr <= reach * reach) hitBuffer.Add(enemy);
-        }
-
-        FoxFx.Play(ChordFor(radius), at, 20f, 3);
-
         float damage = CurrentStats.damage * damageScale * ChordFactor
-                       * (1f + Mathf.Min(CrescendoMax, hits * CrescendoStep));
+                       * (1f + CrescendoBonus(hits));
         float slowTime = CurrentDuration;
-        for (int i = 0; i < hitBuffer.Count; i++)
-        {
-            Enemy enemy = hitBuffer[i];
-            if (enemy == null) continue;
-            Vector2 away = (Vector2)enemy.transform.position - at;
-            away = away.sqrMagnitude > 1e-4f ? away.normalized : Random.insideUnitCircle.normalized;
-            enemy.TakeDamage(damage, null, 0f);
-            if (enemy == null || !enemy.isActiveAndEnabled) continue;
-            enemy.ApplyPull(away * ChordShove, 0.12f);
-            enemy.ApplySlow(ChordSlow, slowTime);
-        }
-        hitBuffer.Clear();
 
-        if (finale) NoteRain(at, damageScale);
+        List<Source> from = Sources();
+        for (int s = 0; s < from.Count; s++)
+        {
+            Vector2 at = from[s].center;
+            MusicBox box = from[s].box;
+            if (box != null) box.Pulse();
+
+            // erst sammeln, dann treffen - TakeDamage kann Gegner aus Alive nehmen
+            hitBuffer.Clear();
+            IReadOnlyList<Enemy> alive = Enemy.Alive;
+            for (int i = 0; i < alive.Count; i++)
+            {
+                Enemy enemy = alive[i];
+                if (enemy == null || enemy.Untouchable) continue;
+                float sqr = ((Vector2)enemy.transform.position - at).sqrMagnitude;
+                if (sqr <= reach * reach) hitBuffer.Add(enemy);
+            }
+
+            FoxFx.Play(ChordFor(radius), at, 20f, 3);
+
+            for (int i = 0; i < hitBuffer.Count; i++)
+            {
+                Enemy enemy = hitBuffer[i];
+                if (enemy == null) continue;
+                Vector2 away = (Vector2)enemy.transform.position - at;
+                away = away.sqrMagnitude > 1e-4f ? away.normalized : Random.insideUnitCircle.normalized;
+                enemy.TakeDamage(damage, null, 0f);
+                if (enemy == null || !enemy.isActiveAndEnabled) continue;
+                enemy.ApplyPull(away * ChordShove, 0.12f);
+                enemy.ApplySlow(ChordSlow, slowTime);
+                if (box != null) BassSog.OnBoxHit(enemy, box.transform);
+            }
+            hitBuffer.Clear();
+
+            if (finale) NoteRain(at, damageScale, box != null ? box.transform : null);
+        }
     }
 
     /// <summary>Finale: ein Kranz Noten fliegt in alle Richtungen und sucht sich dann Gegner.</summary>
-    private void NoteRain(Vector2 at, float damageScale)
+    private void NoteRain(Vector2 at, float damageScale, Transform box)
     {
         for (int i = 0; i < FinaleNotes; i++)
         {
             float a = (i + 0.5f) * Mathf.PI * 2f / FinaleNotes;
             Vector2 dir = new Vector2(Mathf.Cos(a), Mathf.Sin(a));
             Enemy target = NearestTo(at + dir * 2.5f, CurrentStats.range);
-            MelodyNote.Launch(this, at + dir * 0.3f, dir, target, CurrentStats.damage * damageScale, CurrentBounces, 3);
+            MelodyNote.Launch(this, at + dir * 0.3f, dir, target, CurrentStats.damage * damageScale, CurrentBounces, 3, box);
         }
     }
 
@@ -551,7 +641,7 @@ public class MochiMelody : Weapon
     private static AudioClip toneClip;
     private static AudioClip chimeClip;
 
-    private static AudioClip ToneClip
+    public static AudioClip ToneClip
     {
         get
         {
@@ -560,7 +650,7 @@ public class MochiMelody : Weapon
         }
     }
 
-    private static AudioClip ChimeClip
+    public static AudioClip ChimeClip
     {
         get
         {
@@ -578,7 +668,7 @@ public class MochiMelody : Weapon
     /// Die Lauf-Kamera ist pixelgenau - skaliert wird nie,
     /// sondern der naechstpassende Ring genommen.
     /// </summary>
-    private static readonly int[] ChordRadii = { 40, 52, 64, 80 };
+    private static readonly int[] ChordRadii = { 40, 52, 64, 80, 104, 128, 160 };
 
     private static readonly Sprite[][] chordFrames = new Sprite[ChordRadii.Length][];
     private static readonly Sprite[][] noteFrames = new Sprite[4][];

@@ -64,6 +64,20 @@ public sealed class SkillReward
             : SkillGrants.NameOf(GrantId);
     }
 
+    /// <summary>
+    /// Wie <see cref="Describe"/>, aber eine Freischaltung (Stern) wird erklaert
+    /// statt nur benannt - ihr Text aus <see cref="SkillGrants.DescriptionOf"/>
+    /// (uebersetzt ueber skill.grant.[id].desc). Fuer die Beschreibungskarte.
+    /// </summary>
+    public string Explain()
+    {
+        if (!string.IsNullOrWhiteSpace(descriptionOverride)) return descriptionOverride;
+        if (IsStat) return SkillText.Describe(Stat, Value);
+
+        string text = SkillGrants.DescriptionOf(GrantId);
+        return string.IsNullOrWhiteSpace(text) ? SkillGrants.NameOf(GrantId) : text;
+    }
+
     public override string ToString() =>
         IsStat ? $"{Stat} {Value}" : $"grant:{GrantId}";
 }
