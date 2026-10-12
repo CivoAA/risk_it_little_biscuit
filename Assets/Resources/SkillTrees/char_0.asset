@@ -685,14 +685,14 @@ MonoBehaviour:
     step: 5
     shape: 3
     price: 2
-    displayName: Vier Richtungen
+    displayName: Erster Bissen
     description: 
     icon: {fileID: 0}
     rewards:
     - kind: 1
       stat: 1
       value: 10
-      grantId: shurikookie_vier_richtungen
+      grantId: keks_erster_bissen
       descriptionOverride: 
     requires:
     - kampf_mitte_4
@@ -709,7 +709,7 @@ MonoBehaviour:
     - kind: 1
       stat: 1
       value: 10
-      grantId: shurikookie_abpraller
+      grantId: keks_abpraller
       descriptionOverride: 
     requires:
     - kampf_mitte_4

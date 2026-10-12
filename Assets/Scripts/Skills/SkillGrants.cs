@@ -35,6 +35,12 @@ public static class SkillGrants
     /// <summary>Shurikookie prallt von einem getroffenen Gegner zum naechsten ab (siehe <see cref="Ricochet"/>).</summary>
     public const string ShurikookieAbpraller = "shurikookie_abpraller";
 
+    /// <summary>Schoko-Salve / Milchkrone: ein Stueck mit verbrauchtem Durchschlag prallt noch zum naechsten Gegner ab (siehe <see cref="ChocoChipShot"/>).</summary>
+    public const string SchokoAbpraller = "keks_abpraller";
+
+    /// <summary>Schoko-Salve / Milchkrone: das erste Stueck jeder Salve trifft immer kritisch (siehe <see cref="ChocoChips"/>).</summary>
+    public const string ErsterBissen = "keks_erster_bissen";
+
     /// <summary>
     /// Blade Swarm / Blade Storm: jeder Kunai sucht sich ein eigenes Ziel und
     /// fliegt so lange hindurch und wieder hinein, bis es tot ist (siehe
@@ -125,6 +131,12 @@ public static class SkillGrants
 
         new Def(ShurikookieAbpraller, "Shurikookie: Abpraller",
                 "Shurikookie zerbricht nicht am ersten Gegner, sondern prallt bis zu zweimal zum naechsten ab. Gilt auch fuer Shuri Blast."),
+
+        new Def(SchokoAbpraller, "Abpraller",
+                "Hat ein Schokostueck seinen Durchschlag verbraucht, prallt es noch bis zu zweimal zum naechsten Gegner ab. Gilt auch fuer die Milchkrone."),
+
+        new Def(ErsterBissen, "Erster Bissen",
+                "Das erste Schokostueck jeder Salve trifft immer kritisch. Gilt auch fuer die Milchkrone."),
 
         new Def(Schattenschwarm, "Schattenschwarm",
                 "Jeder Kunai sucht sich ein eigenes Ziel und fliegt immer wieder hindurch, bis es tot ist. Gilt auch fuer Blade Storm."),

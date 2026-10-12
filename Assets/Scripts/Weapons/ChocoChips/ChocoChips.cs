@@ -66,6 +66,9 @@ public class ChocoChips : Weapon
     protected bool firing;
     protected Vector2 lastMoveDir = Vector2.right;
 
+    /// <summary>Gilt fuer das Stueck, das gerade gespawnt wird: erstes der Salve mit "Erster Bissen".</summary>
+    protected bool firstBite;
+
     public int CurrentPierce
     {
         get { return PiercePerLevel[Mathf.Clamp(TableLevel, 0, PiercePerLevel.Length - 1)]; }
@@ -112,7 +115,9 @@ public class ChocoChips : Weapon
             origin += Random.insideUnitCircle * 0.12f;
 
             WeaponSounds.Play(WeaponSounds.ChocoShot);
+            firstBite = i == 0 && Skills.HasGrant(SkillGrants.ErsterBissen);
             Spawn(origin, dir, range);
+            firstBite = false;
 
             if (i < chips - 1) yield return new WaitForSeconds(ChipInterval);
         }
@@ -135,8 +140,19 @@ public class ChocoChips : Weapon
         SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
         SaladFan.CopySorting(sr, 2);
 
-        go.AddComponent<ChocoChipShot>().Launch(dir, ChipSpeed, range, ChipRadius,
-                                               CurrentStats.damage, CurrentPierce, Frames);
+        ChocoChipShot shot = go.AddComponent<ChocoChipShot>();
+        shot.Launch(dir, ChipSpeed, range, ChipRadius, CurrentStats.damage, CurrentPierce, Frames);
+        ApplySkills(shot);
+    }
+
+    /// <summary>
+    /// Skilltree des Kekses aufs Stueck: "Abpraller" (alle Stuecke) und
+    /// "Erster Bissen" (nur das Stueck, fuer das <see cref="firstBite"/> gerade steht).
+    /// </summary>
+    protected void ApplySkills(ChocoChipShot shot)
+    {
+        shot.Bounces = Skills.HasGrant(SkillGrants.SchokoAbpraller) ? Ricochet.Bounces : 0;
+        shot.AlwaysCrit = firstBite;
     }
 
     /// <summary>Naechster lebender Gegner im Radius, oder null.</summary>

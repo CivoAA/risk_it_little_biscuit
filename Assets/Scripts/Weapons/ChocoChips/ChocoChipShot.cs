@@ -34,6 +34,16 @@ public class ChocoChipShot : MonoBehaviour
     /// </summary>
     public System.Action<Vector2> Spent;
 
+    /// <summary>
+    /// Skilltree "Abpraller": so oft springt das Stueck noch zum naechsten
+    /// Gegner, wenn sein Durchschlag verbraucht ist. Jeder Sprung trifft einen
+    /// weiteren Gegner; <see cref="Spent"/> kommt erst nach dem letzten.
+    /// </summary>
+    public int Bounces;
+
+    /// <summary>Skilltree "Erster Bissen": jeder Treffer dieses Stuecks ist ein Crit.</summary>
+    public bool AlwaysCrit;
+
     private SpriteRenderer sr;
     private readonly List<Enemy> hitBuffer = new List<Enemy>();
     private readonly HashSet<Enemy> alreadyHit = new HashSet<Enemy>();
@@ -71,8 +81,16 @@ public class ChocoChipShot : MonoBehaviour
             Enemy enemy = hitBuffer[i];
             if (enemy == null || !alreadyHit.Add(enemy)) continue;
 
+            Enemy.ForceCrit = AlwaysCrit;
             enemy.TakeDamage(damage);
+            Enemy.ForceCrit = false;
             hitsLeft--;
+
+            if (hitsLeft <= 0 && Bounces > 0 && BounceFrom(from))
+            {
+                UpdateLook();
+                return;
+            }
 
             if (hitsLeft <= 0)
             {
@@ -88,6 +106,25 @@ public class ChocoChipShot : MonoBehaviour
         UpdateLook();
 
         if (travelled >= maxDistance - 0.0001f) Destroy(gameObject);
+    }
+
+    /// <summary>
+    /// Dreht das Stueck auf den naechsten noch nicht getroffenen Gegner und gibt
+    /// ihm Flugweite fuer einen Treffer. False, wenn keiner in Reichweite ist.
+    /// </summary>
+    private bool BounceFrom(Vector2 at)
+    {
+        Enemy next = Ricochet.Nearest(at, alreadyHit);
+        if (next == null) return false;
+
+        Bounces--;
+        hitsLeft = 1;
+        Vector2 aim = Aim.PredictDirection(at, next, speed);
+        if (aim.sqrMagnitude > 0.0001f) dir = aim.normalized;
+        transform.position = at;
+        travelled = 0f;
+        maxDistance = Ricochet.Range;
+        return true;
     }
 
     private void UpdateLook()

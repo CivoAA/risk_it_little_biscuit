@@ -66,6 +66,19 @@ public static class HubConsole
 
     static bool defaultsReady;
 
+    /// <summary>
+    /// Passwort fuer den Admin-Modus. Erst danach laufen die versteckten Befehle
+    /// (Cheats); vorher bleibt das Terminal bei allem Unbekannten stumm.
+    /// </summary>
+    const string AdminPassword = "ichbineincheater187#";
+
+    /// <summary>Gilt bis zum Neustart des Spiels.</summary>
+    public static bool AdminMode { get; private set; }
+
+    /// <summary>Ist die Zeile das Admin-Passwort? Die UI zeigt es dann nicht im Klartext.</summary>
+    public static bool IsAdminPassword(string line) =>
+        string.Equals(Sanitize(line).Trim(), AdminPassword, StringComparison.Ordinal);
+
     // ------------------------------------------------------------ Eintragen
 
     /// <summary>
@@ -180,6 +193,13 @@ public static class HubConsole
         string line = Sanitize(rawLine).Trim();
         if (line.Length == 0) return;
 
+        if (!AdminMode && line == AdminPassword)
+        {
+            AdminMode = true;
+            sink.Print(T("admin.on", "Admin-Modus an."));
+            return;
+        }
+
         string[] parts = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
         string name = parts[0];
 
@@ -187,7 +207,12 @@ public static class HubConsole
         string[] args = new string[argCount];
         Array.Copy(parts, 1, args, 0, argCount);
 
-        if (!lookup.TryGetValue(name, out Command cmd))
+        bool known = lookup.TryGetValue(name, out Command cmd);
+
+        // Ohne Admin-Modus: Cheats und Unbekanntes bekommen keine Antwort.
+        if (!AdminMode && (!known || cmd.Hidden)) return;
+
+        if (!known)
         {
             sink.PrintError(string.Format(T("unknown", "'{0}' kennt das Terminal nicht."), name));
             sink.Print(T("unknown.tip", "Tipp: 'hilfe' zeigt, was geht."));
