@@ -218,7 +218,21 @@ public class EnemyVerkohlter : MonoBehaviour
     /// <summary>Phase 3 laeuft (Einsaugen oder schon im Herzen).</summary>
     public bool IsPhaseThree => phaseThree;
 
-    private bool PhaseThreeDue => !IsDeath && enemy != null && enemy.HealthFraction <= PhaseThreeAt;
+    private bool PhaseThreeDue => !IsDeath && !skipHeart && enemy != null && enemy.HealthFraction <= PhaseThreeAt;
+
+    /// <summary>Ohne Phase 3: stirbt wie ein normaler Boss, ohne Einsaugen und Herzkammer.</summary>
+    private bool skipHeart;
+
+    /// <summary>
+    /// Endless-Boss-Wellen: der Herzkampf gehoert zum ersten Sieg um 20:00,
+    /// nicht zu jeder Wiederholung. Direkt nach dem Spawnen aufrufen.
+    /// </summary>
+    public void SkipHeartFight()
+    {
+        if (IsDeath) return;
+        skipHeart = true;
+        enemy.MinHealthFraction = 0f;
+    }
 
     /// <summary>Der Finisher der Demo statt des Bosskampfs.</summary>
     private bool IsDeath => enemy != null && enemy.Id == EnemyId.VerkohlterTod;

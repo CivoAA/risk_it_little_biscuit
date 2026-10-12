@@ -159,9 +159,30 @@ public static class Skills
     //  steht in CharLevel. Dazu ein Level je Boss, den der Charakter zum ersten
     //  Mal besiegt. Gespeichert werden XP und Boss-Siege; die freien Punkte sind
     //  Level minus die Preise der offenen Knoten.
+    //
+    //  Ein Drittel der XP aller anderen Charaktere zaehlt mit (CharLevel.
+    //  SharedXpFactor). Gespeichert werden nur die EIGENEN XP, der geteilte Teil
+    //  wird jedes Mal aus den eigenen XP der anderen gerechnet - so kann er
+    //  nicht noch einmal weitergereicht werden.
 
-    /// <summary>Gesammelte Charakter-XP des Baums.</summary>
-    public static double XpOf(SkillTreeDef tree) => tree != null ? Store.XpOf(tree.Id) : 0;
+    /// <summary>Selbst gesammelte Charakter-XP des Baums - nur die werden geteilt.</summary>
+    public static double OwnXpOf(SkillTreeDef tree) => tree != null ? Store.XpOf(tree.Id) : 0;
+
+    /// <summary>Der Anteil an den eigenen XP aller anderen Charaktere.</summary>
+    public static double SharedXpOf(SkillTreeDef tree)
+    {
+        if (tree == null) return 0;
+
+        double others = 0;
+        foreach (SkillTreeDef other in SkillTrees.All)
+        {
+            if (other != null && other.Id != tree.Id) others += Store.XpOf(other.Id);
+        }
+        return others * CharLevel.SharedXpFactor;
+    }
+
+    /// <summary>Charakter-XP des Baums: eigene plus geteilte.</summary>
+    public static double XpOf(SkillTreeDef tree) => OwnXpOf(tree) + SharedXpOf(tree);
 
     /// <summary>
     /// Charakter-Level = Level aus den XP plus eins je erstmals besiegtem Boss.
@@ -256,18 +277,23 @@ public static class Skills
         SkillTreeDef tree = ActiveTree;
         if (tree == null || amount <= 0) return;
 
-        double before = Store.XpOf(tree.Id);
-        Store.SetXp(tree.Id, before + amount);
+        double own = Store.XpOf(tree.Id);
+        double shared = SharedXpOf(tree);
+        Store.SetXp(tree.Id, own + amount);
         Store.MarkDirty();
 
-        if (CharLevel.LevelFor(before) != CharLevel.LevelFor(before + amount)) RaiseChanged();
+        if (CharLevel.LevelFor(own + shared) != CharLevel.LevelFor(own + shared + amount)) RaiseChanged();
     }
 
-    /// <summary>Setzt die XP eines Baums direkt (Konsole).</summary>
+    /// <summary>
+    /// Setzt die XP eines Baums direkt (Konsole), gemeint sind die gesamten XP
+    /// wie in <see cref="XpOf"/>. Geaendert werden nur die eigenen; weniger als
+    /// den geteilten Anteil kann der Baum darum nicht haben.
+    /// </summary>
     public static void SetXp(SkillTreeDef tree, double xp)
     {
         if (tree == null) return;
-        Store.SetXp(tree.Id, xp);
+        Store.SetXp(tree.Id, xp - SharedXpOf(tree));
         Store.Save();
         RaiseChanged();
     }

@@ -555,7 +555,6 @@ public class PlayerController : MonoBehaviour
 
         rerollAmount       += Shop.GetInt(Shop.Rerolls);
         banishAmount       += Shop.GetInt(Shop.Banish);
-        experience         += Shop.Get(Shop.StartXp);
         powerUpShrinkSpeed += Shop.Get(Shop.ShrinkSpeed);
         // Grundwert + Shop - dieselbe Rechnung, nach der die Werkbank ihre
         // Plaetze oeffnet (3 je Slot). Der Wert am Prefab zaehlt nicht mehr.
@@ -780,7 +779,8 @@ public class PlayerController : MonoBehaviour
 
         // Dieselben XP gehen auch auf das Konto des Charakters (Charakter-Level
         // -> Skillpunkte). Der Skill "Charakter-XP" legt noch Prozente drauf.
-        float charXp = gained * (1f + charXpBonusPercent / 100f);
+        // Im Endlos-Teil eines Endless-Laufs zaehlt davon nur ein Zehntel.
+        float charXp = gained * (1f + charXpBonusPercent / 100f) * RunDifficulty.CharXpShare;
         Skills.AddXp(charXp);
         if (GameManager.Instance != null) GameManager.Instance.charXpGained += charXp;
 

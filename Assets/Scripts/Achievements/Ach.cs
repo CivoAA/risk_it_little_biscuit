@@ -45,10 +45,6 @@ public static class Ach
         "First_Death", "DIE!!!!!!", "Die for the first time.",
         AchievementCategory.Progression);
 
-    public static readonly AchievementDef Death = Def(
-        "Death", "Death", "Be death itself!",
-        AchievementCategory.Progression, grantsUnlock: "unlock_cursed_sugar");
-
     // Ein Endboss je Welt. Ausgeloest in Enemy.GrantRewards ueber BossVictory().
 
     public static readonly AchievementDef BossCookieKing = Def(

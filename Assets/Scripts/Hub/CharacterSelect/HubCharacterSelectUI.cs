@@ -898,7 +898,6 @@ public class HubCharacterSelectUI : MonoBehaviour
 
         skillLabel.enabled = open;
         skillNone.enabled = open && !ownTree;
-        int sumDone = 0, sumAll = 0;
         for (int i = 0; i < skillRows.Count; i++)
         {
             SkillRow row = skillRows[i];
@@ -913,8 +912,6 @@ public class HubCharacterSelectUI : MonoBehaviour
                 all++;
                 if (Skills.IsUnlocked(node)) done++;
             }
-            sumDone += done;
-            sumAll += all;
 
             row.Icon.sprite = branch.Icon;
             row.Icon.enabled = branch.Icon != null;
@@ -929,8 +926,9 @@ public class HubCharacterSelectUI : MonoBehaviour
             row.Count.text = done + "/" + all;
             row.Count.color = all > 0 && done == all ? GameHudSkin.Gold : GameHudSkin.Parchment;
         }
-        skillTotal.enabled = ownTree && sumAll > 0;
-        skillTotal.text = sumDone + "/" + sumAll;
+        // Rechts oben das Charakter-Level statt der gesetzten Punkte insgesamt.
+        skillTotal.enabled = ownTree;
+        skillTotal.text = ownTree ? string.Format(Loc.Get("ui.charselect.level", "Level: {0}"), Skills.LevelOf(tree)) : "";
 
         // Buehne: Nummer und Schild
         int key = c - pageIndex * PerPage + 1;

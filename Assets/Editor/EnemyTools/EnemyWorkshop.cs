@@ -147,7 +147,7 @@ public class EnemyWorkshop : EditorWindow
     private static readonly string[][] WorldTabPlans =
     {
         new[] { "World1" },
-        new[] { "World2", "World2Demo" },
+        new[] { "World2" },
         new[] { "World5" },
         new[] { "World6" },
         new[] { "World4" },

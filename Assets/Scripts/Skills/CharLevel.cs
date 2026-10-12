@@ -21,6 +21,13 @@ public static class CharLevel
     public const double Level2Xp   = 16200;
     public const double StepGrowth = 0.15;
 
+    /// <summary>
+    /// So viel von den XP der ANDEREN Charaktere zaehlt bei jedem Charakter mit.
+    /// Geteilt wird nur, was ein Charakter selbst gesammelt hat - die geteilten
+    /// XP werden nicht noch einmal weitergereicht.
+    /// </summary>
+    public const double SharedXpFactor = 1.0 / 3.0;
+
     /// <summary>Obergrenze, nur damit keine Schleife endlos laeuft.</summary>
     public const int MaxLevel = 200;
 

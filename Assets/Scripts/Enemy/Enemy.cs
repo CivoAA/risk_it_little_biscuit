@@ -1029,7 +1029,6 @@ public class Enemy : MonoBehaviour
         {
             case EnemyRole.DeathBoss:
                 PlayerController.Instance.attractAllXP = true;
-                Achievements.Unlock(Ach.Death);
                 break;
 
             case EnemyRole.Elite:
@@ -1063,10 +1062,13 @@ public class Enemy : MonoBehaviour
                 Achievements.Unlock(Ach.BossVictory(bossKey));
                 Achievements.Progress(Ach.Bosses5, 1f);
                 Achievements.Progress(Ach.Bosses20, 1f);
+                // Der erste Boss-Sieg ueberhaupt schaltet Cursed Sugar im Shop frei.
+                Unlocks.Grant(Unlocks.CursedSugar);
                 Achievements.Progress(Ach.Bosses45, 1f);
                 BossDefeated?.Invoke(this);
-                // Uebernimmt die Story das Ende, kommt kein Tod hinterher.
-                if (SpawnDeath.Instance != null && !StoryDirector.ClaimsWin)
+                // Uebernimmt die Story das Ende, kommt kein Tod hinterher -
+                // im Endless-Modus vorerst auch nicht.
+                if (SpawnDeath.Instance != null && !StoryDirector.ClaimsWin && !GameSession.IsEndless)
                 {
                     Vector3 deathPos = transform.position;
                     deathPos.x += 50f;

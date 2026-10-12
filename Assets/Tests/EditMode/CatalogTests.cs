@@ -462,37 +462,57 @@ public class CatalogTests
         AssertNoArchived(WavePlans.World2());
     }
 
+    /// <summary>Jede Welt: genau ein Miniboss um 10:00 und der Endboss um 20:00.</summary>
     [Test]
-    public void World2Demo_benutzt_keine_archivierten_Gegner()
+    public void Jede_Welt_Miniboss_bei_10_und_Boss_bei_20_Minuten()
     {
-        AssertNoArchived(WavePlans.World2Demo());
-    }
-
-    /// <summary>Demo: Boss bei 13:00, danach beendet der Verkohlte als Tod den Lauf.</summary>
-    [Test]
-    public void World2Demo_Boss_bei_13_Minuten_und_Verkohlter_Tod_danach()
-    {
-        RunPlan plan = WavePlans.World2Demo();
-
-        float start = 0f;
-        float bossAt = -1f;
-        foreach (Phase phase in plan.Phases)
+        foreach (string id in WavePlans.AllIds)
         {
-            foreach (Beat beat in phase.Beats)
-                if (beat.Kind == BeatKind.Boss) bossAt = start + beat.Time;
-            start += phase.Duration;
-        }
+            RunPlan plan = WavePlans.For(id);
 
-        Assert.AreEqual(780f, bossAt, 0.01f, "Boss soll bei 13:00 kommen.");
-        Assert.AreEqual(EnemyId.VerkohlterTod, plan.Finisher);
-        Assert.AreEqual(EnemyRole.DeathBoss, EnemyCatalog.Get(EnemyId.VerkohlterTod).Role);
+            float start = 0f;
+            var miniAt = new List<float>();
+            var bossAt = new List<float>();
+            foreach (Phase phase in plan.Phases)
+            {
+                foreach (Beat beat in phase.Beats)
+                {
+                    if (beat.Kind != BeatKind.Boss) continue;
+                    EnemyRole role = EnemyCatalog.Get(beat.Enemy).Role;
+                    if (role == EnemyRole.MiniBoss) miniAt.Add(start + beat.Time);
+                    if (role == EnemyRole.Boss) bossAt.Add(start + beat.Time);
+                }
+                start += phase.Duration;
+            }
+
+            Assert.AreEqual(1, miniAt.Count, $"{id}: genau ein Miniboss.");
+            Assert.AreEqual(600f, miniAt[0], 0.01f, $"{id}: Miniboss soll bei 10:00 kommen.");
+            Assert.AreEqual(1, bossAt.Count, $"{id}: genau ein Endboss.");
+            Assert.AreEqual(1200f, bossAt[0], 0.01f, $"{id}: Boss soll bei 20:00 kommen.");
+        }
     }
 
+    /// <summary>
+    /// Die Route wird immer schwerer: Wald, Kueche, Eisgletscher, Geisterwald,
+    /// Vulkan - in jeder Phase mindestens so viel Druck wie die Welt davor.
+    /// </summary>
     [Test]
-    public void Wald_Schalter_zeigt_auf_einen_Waldplan()
+    public void Jede_Welt_der_Route_hat_mehr_Druck_als_die_davor()
     {
-        Assert.That(WavePlans.WaldPlan, Is.EqualTo("World2").Or.EqualTo("World2Demo"));
-        Assert.AreEqual(WavePlans.WaldPlan, WavePlans.ForMap("World2").Id);
+        string[] route = { "World2", "World1", "World5", "World6", "World4" };
+
+        for (int w = 1; w < route.Length; w++)
+        {
+            RunPlan before = WavePlans.For(route[w - 1]);
+            RunPlan now = WavePlans.For(route[w]);
+            Assert.AreEqual(before.Phases.Count, now.Phases.Count, $"{route[w]}: gleiche Phasen wie {route[w - 1]}.");
+
+            for (int p = 0; p < now.Phases.Count; p++)
+            {
+                Assert.GreaterOrEqual(now.Phases[p].PressureEnd, before.Phases[p].PressureEnd,
+                    $"{route[w]} Phase {p + 1}: weniger Druck als {route[w - 1]}.");
+            }
+        }
     }
 
     private static void AssertNoArchived(RunPlan plan)

@@ -6,8 +6,8 @@ public class SpawnExp : MonoBehaviour
 
     [Header("Prefabs je nach XP-Wert")]
     [SerializeField] private GameObject smallPrefab;  // Standard XP
-    [SerializeField] private GameObject mediumPrefab; // ab 50+
-    [SerializeField] private GameObject bigPrefab;    // ab 400+
+    [SerializeField] private GameObject mediumPrefab; // ab 10+ (ExpPickup.MediumFrom)
+    [SerializeField] private GameObject bigPrefab;    // ab 100+ (ExpPickup.BigFrom)
 
     [Header("Doppelte XP (Skill LuckyXpChance)")]
     [Tooltip("Eigenes Prefab fuer den Glueckstreffer. Leer = normales Prefab, golden eingefaerbt.")]

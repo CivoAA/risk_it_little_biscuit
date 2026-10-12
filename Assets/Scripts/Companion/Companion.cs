@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -5,10 +6,10 @@ using UnityEngine.SceneManagement;
 /// Begleiter, der in der Overworld im Shop gekauft und in den Run mitgenommen
 /// wird. Bewusst KEINE <see cref="Weapon"/>: er belegt keinen Waffen-Slot,
 /// taucht nicht im Level-Up auf und wird nicht gelevelt - seine Staerke haengt
-/// allein an der Shop-Stufe.
+/// allein an der Shop-Stufe (siehe DamagePerTier / TargetsPerTier).
 ///
 /// Er laeuft dem Spieler hinterher, sucht sich selbst Ziele in Reichweite und
-/// schiesst im eigenen Takt. Der Schaden geht durch
+/// schiesst im eigenen Takt - je Stufe auf einen Gegner mehr gleichzeitig. Der Schaden geht durch
 /// <see cref="Enemy.TakeDamage"/> und profitiert damit automatisch von
 /// damageMultiplier, Crit und Lifesteal.
 /// </summary>
@@ -29,36 +30,28 @@ public class Companion : MonoBehaviour
     [Header("Kampf")]
     [SerializeField] private GameObject projectilePrefab;
     [SerializeField] private float attackRange = 5f;
+    [Tooltip("Schusstakt - gleich auf jeder Shop-Stufe.")]
     [SerializeField] private float attackInterval = 1.2f;
-    [SerializeField] private float damage = 4f;
-
-    [Header("Shop-Stufe")]
-    [Tooltip("Schadensbonus pro Stufe ueber der ersten (0.5 = +50% je Stufe).")]
-    [SerializeField] private float damagePerTier = 0.5f;
-
-    [Tooltip("Verkuerzung des Schusstakts pro Stufe ueber der ersten.")]
-    [SerializeField] private float intervalReductionPerTier = 0.15f;
 
     [SerializeField] private SpriteRenderer spriteRenderer;
 
+    // Shop-Stufe 1, 2, 3: Schaden je Schuss und wie viele Gegner pro Salve
+    // beschossen werden. Neue Stufe = neue Zeile (und im Shop eine Stufe mehr).
+    private static readonly float[] DamagePerTier  = { 5f, 10f, 15f };
+    private static readonly int[]   TargetsPerTier = { 1, 2, 3 };
+
+    private readonly List<Enemy> targets = new List<Enemy>();
     private int tier = 1;
     private float attackCounter;
     private float orbitAngle;
 
-    /// <summary>Schaden auf der aktuellen Shop-Stufe.</summary>
-    public float Damage
-    {
-        get { return damage * (1f + Mathf.Max(0, tier - 1) * damagePerTier); }
-    }
+    private int TierIndex => Mathf.Clamp(tier - 1, 0, DamagePerTier.Length - 1);
 
-    private float AttackInterval
-    {
-        get
-        {
-            float reduction = 1f - Mathf.Max(0, tier - 1) * intervalReductionPerTier;
-            return Mathf.Max(0.1f, attackInterval * reduction);
-        }
-    }
+    /// <summary>Schaden auf der aktuellen Shop-Stufe.</summary>
+    public float Damage => DamagePerTier[TierIndex];
+
+    /// <summary>So viele Gegner beschiesst er pro Salve gleichzeitig.</summary>
+    public int Targets => TargetsPerTier[TierIndex];
 
     /// <summary>Wird vom <see cref="CompanionSpawner"/> direkt nach dem Spawn gesetzt.</summary>
     public void SetTier(int shopTier)
@@ -105,11 +98,11 @@ public class Companion : MonoBehaviour
         attackCounter -= Time.deltaTime;
         if (attackCounter > 0f) return;
 
-        Enemy target = Aim.FindClosestEnemy(transform.position, attackRange);
-        if (target == null) return;
+        Aim.FindClosestEnemies(transform.position, attackRange, Targets, targets);
+        if (targets.Count == 0) return;
 
-        Shoot(target);
-        attackCounter = AttackInterval;
+        foreach (Enemy target in targets) Shoot(target);
+        attackCounter = attackInterval;
     }
 
     private void Shoot(Enemy target)

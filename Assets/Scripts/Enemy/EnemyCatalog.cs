@@ -641,7 +641,7 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Gegner/Marshmello.prefab");
 
         Def(EnemyId.EliteMarshmello, "Elite-Marshmello",
-            health: 50f, damage: 6f, speed: 1.2f, exp: 20, pushTime: 0.25f,
+            health: 50f, damage: 6f, speed: 1.2f, exp: 120, pushTime: 0.25f,
             role: EnemyRole.Elite, facing: EnemyFacing.ArtFacesRight,
             sheet: "Assets/Art/Gegner/new/marshmallow_elite_lauf.png", fps: 16f,
             colliderRadius: 0.5f, colliderOffset: new Vector2(0f, 0.69f), scale: 1f,
@@ -655,7 +655,7 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Gegner/Evil_Slim.prefab");
 
         Def(EnemyId.EliteFluegdolch, "Elite-Fluegdolch",
-            health: 400f, damage: 7f, speed: 1.25f, exp: 450, pushTime: 0.3f,
+            health: 400f, damage: 7f, speed: 1.25f, exp: 330, pushTime: 0.3f,
             role: EnemyRole.Elite, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/boss/fledermaus_flug.png", fps: 12f,
             colliderRadius: 0.55f, colliderOffset: new Vector2(0f, -0.12f), scale: 1f,
@@ -690,7 +690,7 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Gegner/Fliegenpilz.prefab");
 
         Def(EnemyId.EliteFliegenpilz, "Elite-Fliegenpilz",
-            health: 200f, damage: 5f, speed: 1.25f, exp: 300, pushTime: 0.3f,
+            health: 200f, damage: 5f, speed: 1.25f, exp: 220, pushTime: 0.3f,
             role: EnemyRole.Elite, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/elite/fliegenpilz_elite_hop.png", fps: 12f,
             colliderRadius: 0.45f, colliderOffset: new Vector2(0f, -0.12f), scale: 1f,
@@ -718,7 +718,7 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Mini_Boss/Milchpanzer.prefab");
 
         Def(EnemyId.Honey, "Honey",
-            health: 450f, damage: 10f, speed: 1.4f, exp: 350, pushTime: 0f,
+            health: 450f, damage: 10f, speed: 1.4f, exp: 120, pushTime: 0f,
             role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/new/honey.png", fps: 8f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
@@ -767,7 +767,7 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Boss/VerkohlterTod.prefab");
 
         Def(EnemyId.Pancake, "Pfannkuchen",
-            health: 600f, damage: 18f, speed: 1.75f, exp: 300, pushTime: 0.05f,
+            health: 600f, damage: 18f, speed: 1.75f, exp: 100, pushTime: 0.05f,
             role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/pfannkuchen_hop.png", fps: 16f,
             colliderRadius: 0.72f, colliderOffset: new Vector2(0f, 0.72f), scale: 1f,
@@ -788,7 +788,7 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Gegner/Raketeneis.prefab", hopFirst: 3, hopLast: 9);
 
         Def(EnemyId.Softi, "Softi",
-            health: 280f, damage: 6f, speed: 1.2f, exp: 350, pushTime: 0.3f,
+            health: 280f, damage: 6f, speed: 1.2f, exp: 260, pushTime: 0.3f,
             role: EnemyRole.Elite, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/eis/softi_wirbel.png", fps: 16f,
             colliderRadius: 0.5f, colliderOffset: new Vector2(0f, 0.95f), scale: 1f,
@@ -837,7 +837,7 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Gegner/Zuckerwolke.prefab");
 
         Def(EnemyId.KokosYeti, "Kokos-Yeti",
-            health: 900f, damage: 14f, speed: 1.3f, exp: 650, pushTime: 0.05f,
+            health: 900f, damage: 14f, speed: 1.3f, exp: 200, pushTime: 0.05f,
             role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/new/eis/kokosyeti_stapf.png", fps: 12f,
             colliderRadius: 0.5f, colliderOffset: new Vector2(0f, 0.62f), scale: 1f,
@@ -952,14 +952,14 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Gegner/Minzschnecke.prefab");
 
         Def(EnemyId.Kerzentorte, "Kerzentorte",
-            health: 380f, damage: 7f, speed: 1.15f, exp: 400, pushTime: 0.3f,
+            health: 380f, damage: 7f, speed: 1.15f, exp: 300, pushTime: 0.3f,
             role: EnemyRole.Elite, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/kueche/kerzentorte_stapf.png", fps: 14f,
             colliderRadius: 0.55f, colliderOffset: new Vector2(0f, 0.55f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Elite_Gegner/Kerzentorte.prefab");
 
         Def(EnemyId.FuerstPueckler, "Fuerst Pueckler",
-            health: 450f, damage: 7f, speed: 1.1f, exp: 450, pushTime: 0.3f,
+            health: 450f, damage: 7f, speed: 1.1f, exp: 330, pushTime: 0.3f,
             role: EnemyRole.Elite, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/eis/pueckler_schreit.png", fps: 14f,
             colliderRadius: 0.56f, colliderOffset: new Vector2(0f, 0.6f), scale: 1f,
@@ -1122,28 +1122,28 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Mini_Boss/Ofenkartoffel.prefab");
 
         Def(EnemyId.Spuksuppe, "Spuksuppe",
-            health: 480f, damage: 8f, speed: 1.1f, exp: 480, pushTime: 0.3f,
+            health: 480f, damage: 8f, speed: 1.1f, exp: 360, pushTime: 0.3f,
             role: EnemyRole.Elite, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/geist/spuksuppe_watschel.png", fps: 14f,
             colliderRadius: 0.52f, colliderOffset: new Vector2(0f, 0.5f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Elite_Gegner/Spuksuppe.prefab");
 
         Def(EnemyId.Wackelgeist, "Wackelgeist",
-            health: 520f, damage: 8f, speed: 1.15f, exp: 520, pushTime: 0.3f,
+            health: 520f, damage: 8f, speed: 1.15f, exp: 390, pushTime: 0.3f,
             role: EnemyRole.Elite, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/geist/wackelgeist_boing.png", fps: 14f,
             colliderRadius: 0.48f, colliderOffset: new Vector2(0f, 0.42f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Elite_Gegner/Wackelgeist.prefab");
 
         Def(EnemyId.Feuertaco, "Feuertaco",
-            health: 560f, damage: 9f, speed: 1.25f, exp: 560, pushTime: 0.3f,
+            health: 560f, damage: 9f, speed: 1.25f, exp: 420, pushTime: 0.3f,
             role: EnemyRole.Elite, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/vulkan/feuertaco_marsch.png", fps: 14f,
             colliderRadius: 0.5f, colliderOffset: new Vector2(0f, 0.48f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Elite_Gegner/Feuertaco.prefab");
 
         Def(EnemyId.CremeBrulee, "Creme Brulee",
-            health: 620f, damage: 9f, speed: 1.15f, exp: 620, pushTime: 0.3f,
+            health: 620f, damage: 9f, speed: 1.15f, exp: 460, pushTime: 0.3f,
             role: EnemyRole.Elite, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/vulkan/cremebrulee_trippel.png", fps: 14f,
             colliderRadius: 0.44f, colliderOffset: new Vector2(0f, 0.38f), scale: 1f,

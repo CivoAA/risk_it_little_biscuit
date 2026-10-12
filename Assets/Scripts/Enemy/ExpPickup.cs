@@ -12,8 +12,12 @@ public class ExpPickup : MonoBehaviour
     [Tooltip("Bilder pro Sekunde der Idle-Schleife.")]
     public float idleFps = 8f;
 
-    /// <summary>Ab so viel XP wird das Bonbon mittel bzw. gross (gleich wie SpawnExp).</summary>
-    public const int MediumFrom = 50, BigFrom = 300;
+    /// <summary>
+    /// Ab so viel XP wird das Bonbon mittel bzw. gross (gleich wie SpawnExp).
+    /// Passend zu den Gegnern: Grundgegner (1-9 XP) klein, zaehe Brocken
+    /// (Eichel, Golem ...) mittel, Elites, Minibosse und Honey/Pfannkuchen gross.
+    /// </summary>
+    public const int MediumFrom = 10, BigFrom = 100;
 
     private bool movingToPlayer = false;
     private Transform playerTransform;

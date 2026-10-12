@@ -106,18 +106,9 @@ public class StoryDirector : MonoBehaviour
     /// <summary>
     /// Wellenplan des laufenden Laufs, so wie die Levelauswahl ihn nennt
     /// (World1 ...), leer ohne Lauf. Gefragt wird der SpawnDirector: die
-    /// Kuechen-Karte heisst "World0" und laeuft mit Plan World1, der Wald
-    /// laeuft mit World2Demo und heisst in der Story World2.
+    /// Kuechen-Karte heisst "World0" und laeuft mit Plan World1.
     /// </summary>
-    private static string RunPlan
-    {
-        get
-        {
-            string id = SpawnDirector.Active != null ? SpawnDirector.Active.PlanId : "";
-            if (id.EndsWith("Demo", StringComparison.OrdinalIgnoreCase)) id = id.Substring(0, id.Length - 4);
-            return id;
-        }
-    }
+    private static string RunPlan => SpawnDirector.Active != null ? SpawnDirector.Active.PlanId : "";
 
     private static bool InRun => GameManager.Instance != null && SpawnDirector.Active != null;
 

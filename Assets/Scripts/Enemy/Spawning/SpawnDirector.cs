@@ -33,7 +33,7 @@ public class SpawnDirector : MonoBehaviour
 {
     public static SpawnDirector Active { get; private set; }
 
-    /// <summary>Id des laufenden Wellenplans (z.B. World1, World2Demo) - leer vor dem Start.</summary>
+    /// <summary>Id des laufenden Wellenplans (z.B. World1, World2) - leer vor dem Start.</summary>
     public string PlanId => plan != null ? plan.Id : "";
 
     /// <summary>Ein Boss oder Zwischenboss wurde gesetzt (Boss-Beat oder Testtaste).</summary>
@@ -131,6 +131,12 @@ public class SpawnDirector : MonoBehaviour
     private Enemy activeBoss;
     private bool finisherSpawned;
 
+    /// <summary>
+    /// Endless: der Story-Teil ist vorbei, ab hier eskaliert es (siehe
+    /// <see cref="EndlessEscalation"/>). Null = noch im Story-Teil oder Story-Modus.
+    /// </summary>
+    private EndlessEscalation escalation;
+
     private string announce;
     private float announceUntil;
     private string lastShownText;
@@ -157,10 +163,13 @@ public class SpawnDirector : MonoBehaviour
         Active = this;
 
         if (catalog == null) catalog = GetComponent<SpawnCatalog>();
+
+        Enemy.BossDefeated += OnBossDefeated;
     }
 
     void OnDestroy()
     {
+        Enemy.BossDefeated -= OnBossDefeated;
         if (Active == this) Active = null;
     }
 
@@ -169,13 +178,14 @@ public class SpawnDirector : MonoBehaviour
         // Zum Ausprobieren, solange es im Hub noch keine Schwierigkeitswahl gibt.
         if (chaosOverride > 0f) GameSession.Chaos = chaosOverride;
 
-        RunDifficulty.BeginRun();
-
         string planId = !string.IsNullOrWhiteSpace(planOverride)
             ? planOverride
             : (MapDefinition.Active != null ? MapDefinition.Active.PlanId : "");
 
-        plan = WavePlans.ForMap(planId);
+        plan = WavePlans.For(planId);
+
+        // Mit der Id des Plans, der wirklich laeuft (leer = World1, die Kueche).
+        RunDifficulty.BeginRun(plan.Id);
 
         foreach (Phase p in plan.Phases) p.Beats.Sort((a, b) => a.Time.CompareTo(b.Time));
         if (plan.Endless != null) plan.Endless.Beats.Sort((a, b) => a.Time.CompareTo(b.Time));
@@ -243,6 +253,7 @@ public class SpawnDirector : MonoBehaviour
 
         AdvancePhase();
         FireDueBeats();
+        if (escalation != null) escalation.Tick(dt, this);
         DrainSpawnQueue();
         CheckFinisher();
 
@@ -287,12 +298,90 @@ public class SpawnDirector : MonoBehaviour
 
         // Alles durch: die Endlos-Phase uebernimmt und wiederholt sich. Im
         // Story-Modus ist das der Nachschub nach dem Boss, im Endless-Modus
-        // der Rest des Laufs.
+        // der Rest des Laufs - spaetestens hier beginnt dort der Endlos-Teil.
+        if (GameSession.IsEndless && escalation == null) BeginEndlessPart();
+        else EnterEndlessPhase();
+    }
+
+    private void EnterEndlessPhase()
+    {
         phase = plan.Endless ?? phase;
         phaseIndex = plan.Phases.Count;
         phaseTime = 0f;
         nextBeat = 0;
         pendingEnemy = EnemyId.None;
+    }
+
+    // ------------------------------------------------------------ Endlos-Teil
+
+    /// <summary>
+    /// Endless: der Boss der Welt ist gefallen - der Story-Teil ist vorbei.
+    /// Faellt er nie, beginnt der Endlos-Teil, wenn der Plan durch ist
+    /// (<see cref="AdvancePhase"/>).
+    /// </summary>
+    private void OnBossDefeated(Enemy boss)
+    {
+        if (!GameSession.IsEndless || escalation != null || plan == null) return;
+        if (boss == null || boss.Role != EnemyRole.Boss) return;
+        BeginEndlessPart();
+    }
+
+    /// <summary>
+    /// Ab hier: Endlos-Phase des Plans, Elite- und Boss-Wellen, und Gold und
+    /// Charakter-XP zaehlen nur noch anteilig.
+    /// </summary>
+    private void BeginEndlessPart()
+    {
+        RunDifficulty.BeginEndlessPart();
+        if (GameManager.Instance != null) GameManager.Instance.BeginEndlessRewards();
+
+        escalation = new EndlessEscalation(plan);
+        EnterEndlessPhase();
+
+        // Der Boss-Beat hat den Nachschub gedaempft - der Boss liegt.
+        activeBoss = null;
+        ReleasePressure();
+
+        Announce(PlanText("ENDLOS!"));
+        Debug.Log($"[SpawnDirector] Endlos-Teil beginnt bei {runTime:0}s.");
+    }
+
+    /// <summary>Ansage aus dem Endlos-Teil - uebersetzt wie die Ansagen im Plan.</summary>
+    internal void SayPlan(string text)
+    {
+        Announce(PlanText(text));
+    }
+
+    /// <summary>Ein Elite aus einer Elite-Welle: wie ein Elite-Burst im Plan.</summary>
+    internal void SpawnEndlessElite(EnemyId id)
+    {
+        SpawnThreat(id, 1f, Patterns.Scatter, 0f, true);
+    }
+
+    /// <summary>Boss oder Miniboss aus einer Boss-Welle: wie ein Boss-Beat (Boss-Leiste inklusive).</summary>
+    internal Enemy SpawnEndlessBoss(EnemyId id)
+    {
+        GameObject spawned = SpawnBoss(id);
+        Enemy enemy = spawned != null ? spawned.GetComponent<Enemy>() : null;
+
+        // Der Verkohlte holt den Spieler nur beim ersten Mal (20:00) in sein Herz.
+        EnemyVerkohlter charred = spawned != null ? spawned.GetComponent<EnemyVerkohlter>() : null;
+        if (charred != null) charred.SkipHeartFight();
+
+        if (enemy != null) BossSpawned?.Invoke(enemy);
+        return enemy;
+    }
+
+    /// <summary>Grunddruck gedaempft, bis <see cref="ReleasePressure"/> kommt.</summary>
+    internal void DampenForBossWave(float scale)
+    {
+        DampenPressure(scale, 999f);
+    }
+
+    /// <summary>Daempfung sofort beenden.</summary>
+    internal void ReleasePressure()
+    {
+        pressureScaleUntil = runTime;
     }
 
     private void EnterPhase(int index)

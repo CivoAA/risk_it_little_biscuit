@@ -361,7 +361,8 @@ public class VerkohlterHerzkammer : MonoBehaviour
         if (!exiting && heart == null)
         {
             exiting = true;
-            if (dying && IsRealRun) StartCoroutine(Win());
+            // Endless: kein Sieg - raus aus der Kammer, der Lauf geht weiter.
+            if (dying && IsRealRun && !GameSession.IsEndless) StartCoroutine(Win());
             else StartCoroutine(Exit());
         }
     }

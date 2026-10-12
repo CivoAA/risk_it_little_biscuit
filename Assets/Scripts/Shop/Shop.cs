@@ -38,31 +38,25 @@ public static class Shop
     public static readonly ShopItemDef CurrencyGain = Def(
         "currency_gain", "Currency Gain", "Increase your Currency gain by",
         ShopCategory.Upgrades,
-        costs:  new[] { 50, 100, 200, 500 },
+        costs:  new[] { 300, 600, 1000, 1500 },
         values: new[] { 0f, 0.1f, 0.2f, 0.35f, 0.5f });
 
     public static readonly ShopItemDef Rerolls = Def(
         "rerolls", "Rerolls", "Increase your Rerolls by",
         ShopCategory.Upgrades,
-        costs:  new[] { 10, 50, 100, 250, 500 },
+        costs:  new[] { 200, 400, 600, 800, 1000 },
         values: new[] { 0f, 1f, 2f, 3f, 4f, 5f });
 
     public static readonly ShopItemDef Banish = Def(
         "banish", "Banish", "Increase your Banishs by",
         ShopCategory.Upgrades,
-        costs:  new[] { 10, 50, 100, 250, 500 },
-        values: new[] { 0f, 1f, 2f, 3f, 4f, 5f });
-
-    public static readonly ShopItemDef StartXp = Def(
-        "start_xp", "Start XP", "Increase your Start XP by",
-        ShopCategory.Upgrades,
-        costs:  new[] { 500, 750, 1000, 1000 },
-        values: new[] { 0f, 3f, 13f, 33f, 63f });
+        costs:  new[] { 500, 1200 },
+        values: new[] { 0f, 1f, 2f });
 
     public static readonly ShopItemDef ShrinkSpeed = Def(
         "shrink_speed", "Shrink Speed", "Increase your Shrink Speed by",
         ShopCategory.Upgrades,
-        costs:  new[] { 150, 250, 500, 600 },
+        costs:  new[] { 400, 700, 1000, 1400 },
         values: new[] { 0f, 0.1f, 0.2f, 0.3f, 0.4f });
 
     // ==================================================================
@@ -72,14 +66,14 @@ public static class Shop
     public static readonly ShopItemDef BuffSlot = Def(
         "buff_slot", "Buff Slot", "Increases your Buff Slots by",
         ShopCategory.Slots,
-        costs:  new[] { 800, 1000, 2000 },
+        costs:  new[] { 1200, 2000, 3500 },
         values: new[] { 0f, 1f, 2f, 3f },
         requiredUnlock: "unlock_buff_slot");
 
     public static readonly ShopItemDef WeaponSlot = Def(
         "weapon_slot", "Weapon Slot", "Increases your Weapon Slots by",
         ShopCategory.Slots,
-        costs:  new[] { 1000, 1500, 2000 },
+        costs:  new[] { 1500, 2500, 4000 },
         values: new[] { 0f, 1f, 2f, 3f },
         requiredUnlock: "unlock_weapon_slot");
 
@@ -89,7 +83,7 @@ public static class Shop
     public static readonly ShopItemDef EvoSlot = Def(
         "evo_slot", "Evo Slot", "Increase your Evo Slots by",
         ShopCategory.Slots,
-        costs:  new[] { 100, 1000, 2000, 2000, 5000 },
+        costs:  new[] { 500, 1500, 2500, 3000, 4000 },
         values: new[] { 0f, 1f, 2f, 3f, 4f, 5f },
         requiredUnlock: "unlock_evo_slot");
 
@@ -100,7 +94,7 @@ public static class Shop
     public static readonly ShopItemDef LoadoutPreset = Def(
         "loadout_preset", "Build Preset", "Increases your saved builds at the workbench by",
         ShopCategory.Slots,
-        costs:  new[] { 500, 1500, 3000 },
+        costs:  new[] { 750, 1500, 2500 },
         values: new[] { 0f, 1f, 2f, 3f });
 
     // ==================================================================
@@ -186,46 +180,46 @@ public static class Shop
 
     public static readonly ShopItemDef BuffXpGain = Def(
         "buff_xp_gain", "XP Gain Buff", "Unlocks XP Gain Buff", ShopCategory.Buffs,
-        costs: new[] { 800 }, values: new[] { 0f, 1f }, unlocksWeapon: "buff_xp_gain");
+        costs: new[] { 750 }, values: new[] { 0f, 1f }, unlocksWeapon: "buff_xp_gain");
 
     public static readonly ShopItemDef BuffCurrency = Def(
         "buff_currency", "Currency Buff", "Unlocks Currency Gain Buff", ShopCategory.Buffs,
-        costs: new[] { 800 }, values: new[] { 0f, 1f },
+        costs: new[] { 750 }, values: new[] { 0f, 1f },
         icon: "currency_gain", // teilt sich die Grafik mit dem Waehrungs-Upgrade
         unlocksWeapon: "buff_currency");
 
     public static readonly ShopItemDef BuffLifeSteal = Def(
         "buff_life_steal", "Life Steal", "Unlocks Life Steal Buff", ShopCategory.Buffs,
-        costs: new[] { 800 }, values: new[] { 0f, 1f }, unlocksWeapon: "buff_life_steal");
+        costs: new[] { 750 }, values: new[] { 0f, 1f }, unlocksWeapon: "buff_life_steal");
 
     public static readonly ShopItemDef BuffLuck = Def(
         "buff_luck", "Luck", "Unlocks Luck Buff", ShopCategory.Buffs,
-        costs: new[] { 800 }, values: new[] { 0f, 1f }, unlocksWeapon: "buff_luck");
+        costs: new[] { 750 }, values: new[] { 0f, 1f }, unlocksWeapon: "buff_luck");
 
     public static readonly ShopItemDef BuffExtraShot = Def(
         "buff_extra_shot", "Extra Shot", "Unlocks Extra Shot Buff", ShopCategory.Buffs,
-        costs: new[] { 800 }, values: new[] { 0f, 1f },
+        costs: new[] { 750 }, values: new[] { 0f, 1f },
         unlocksWeapon: "buff_extra_shot");
 
     public static readonly ShopItemDef BuffAoeRange = Def(
         "buff_aoe_range", "AOE Range", "Unlocks AOE Range Buff", ShopCategory.Buffs,
-        costs: new[] { 800 }, values: new[] { 0f, 1f }, unlocksWeapon: "buff_aoe_range");
+        costs: new[] { 750 }, values: new[] { 0f, 1f }, unlocksWeapon: "buff_aoe_range");
 
     public static readonly ShopItemDef BuffDamage = Def(
         "buff_damage", "Damage", "Unlocks Damage Buff", ShopCategory.Buffs,
-        costs: new[] { 800 }, values: new[] { 0f, 1f }, unlocksWeapon: "buff_damage");
+        costs: new[] { 750 }, values: new[] { 0f, 1f }, unlocksWeapon: "buff_damage");
 
     public static readonly ShopItemDef BuffCritChance = Def(
         "buff_crit_chance", "Crit Chance", "Unlocks Crit Chance Buff", ShopCategory.Buffs,
-        costs: new[] { 800 }, values: new[] { 0f, 1f }, unlocksWeapon: "buff_crit_chance");
+        costs: new[] { 750 }, values: new[] { 0f, 1f }, unlocksWeapon: "buff_crit_chance");
 
     public static readonly ShopItemDef BuffCritDamage = Def(
         "buff_crit_damage", "Crit Damage", "Unlocks Crit Damage Buff", ShopCategory.Buffs,
-        costs: new[] { 800 }, values: new[] { 0f, 1f }, unlocksWeapon: "buff_crit_damage");
+        costs: new[] { 750 }, values: new[] { 0f, 1f }, unlocksWeapon: "buff_crit_damage");
 
     public static readonly ShopItemDef BuffCurse = Def(
         "buff_curse", "Cursed Sugar", "Unlocks Cursed Sugar Buff", ShopCategory.Buffs,
-        costs: new[] { 800 }, values: new[] { 0f, 1f },
+        costs: new[] { 750 }, values: new[] { 0f, 1f },
         requiredUnlock: "unlock_cursed_sugar", unlocksWeapon: "buff_curse");
 
     // ==================================================================
@@ -233,8 +227,8 @@ public static class Shop
     // ==================================================================
 
     public static readonly ShopItemDef Companion = Def(
-        "companion", "Begleiter", "Unlocks Begleiter", ShopCategory.Companion,
-        costs:  new[] { 4000, 4000, 4000 },
+        "companion", "Begleiter", "Companion: one more target and +5 damage per level (5 / 10 / 15)", ShopCategory.Companion,
+        costs:  new[] { 2500, 4000, 5500 },
         values: new[] { 0f, 1f, 2f, 3f },
         requiredUnlock: "unlock_companion");
 
