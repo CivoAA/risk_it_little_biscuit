@@ -165,13 +165,15 @@ public static class Unlocks
     public static readonly UnlockDef EvoSlot = Def(
         "unlock_evo_slot",
         "Evo Slot",
-        "Your first Evo! More Evo Slots are now available in the shop!");
+        "Your first Evo! More Evo Slots are now available in the shop!",
+        icon: "evo_slot");
 
     /// <summary>Sobald ein Charakter <see cref="CompanionCharLevel"/> erreicht.</summary>
     public static readonly UnlockDef Companion = Def(
         "unlock_companion",
         "Companion",
-        "A character reached level 10 - companions are now available in the shop!");
+        "A character reached level 10 - companions are now available in the shop!",
+        icon: "companion");
 
     /// <summary>
     /// Kommt mit dem ersten besiegten Boss (Enemy.GrantRewards, Rolle Boss).
@@ -180,7 +182,8 @@ public static class Unlocks
     public static readonly UnlockDef CursedSugar = Def(
         "unlock_cursed_sugar",
         "Cursed Sugar",
-        "You defeated your first boss - the Cursed Sugar buff is now available in the shop!");
+        "You defeated your first boss - the Cursed Sugar buff is now available in the shop!",
+        icon: "buff_curse");
 
     /// <summary>Charakter-Level, ab dem der Begleiter im Shop auftaucht.</summary>
     public const int CompanionCharLevel = 10;

@@ -1036,7 +1036,17 @@ public class EnemyVerkohlter : MonoBehaviour
             circle.offset = Vector2.zero;
             circle.radius = HeartHitRadius;
         }
+        // Der Kreis ragt hinter dem Herzen auf den Boden - brennen soll nur das Lavabecken darunter.
+        enemy.ContactAllowed = PlayerInPool;
         AnimateHeart();
+    }
+
+    private bool PlayerInPool()
+    {
+        if (!PlayerAlive || chamber == null) return false;
+        Vector2 d = PlayerPos - chamber.PoolMid;
+        Vector2 r = VerkohlterArt.PoolRadius;
+        return (d.x * d.x) / (r.x * r.x) + (d.y * d.y) / (r.y * r.y) <= 1f;
     }
 
     private void AnimateHeart()

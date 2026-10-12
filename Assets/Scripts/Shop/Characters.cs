@@ -150,9 +150,9 @@ public static class Characters
         "Direkt aus dem Toaster und noch warm. Das Stirnband sitzt, die Kruste auch - wer ihn anfasst, verbrennt sich die Finger.",
         "Schicht für Schicht Rüstung. Zieht er blank, weinen die Gegner - und manchmal er selbst ein bisschen mit.",
         "Ein Erdbeer-Mochi mit Schleife und dem süßesten Blick der Küche. Wer sie unterschätzt, wird plattgehüpft.",
-        "Ein kleiner Fuchs aus Inari-Sushi: außen goldene Tofutasche, innen Reis. Das blaue Halstuch hat er sich selbst gebunden - schief, aber mit Stolz.",
-        "Ein Wackelpudding aus Traubengelee, der sich selbst zum König gekrönt hat. Die Krone ist eine Nummer zu klein, das Zepter eine Nummer zu groß - aber wer ihm im Weg steht, wird eingeschleimt.",
-        "Ein Block Seidentofu, der alles mit derselben Miene hinnimmt. Kein Gewürz, keine Soße, keine Gefühle - aber wenn er losplumpst, fliegen die Krümel.",
+        "Ein kleiner Fuchs aus Inari-Sushi. Das Halstuch hat er selbst gebunden - schief, aber mit Stolz.",
+        "Wackelpudding mit selbstgebastelter Krone. Wer ihm im Weg steht, wird eingeschleimt.",
+        "Seidentofu ohne Miene. Kein Gewürz, keine Soße, keine Gefühle - aber wenn er plumpst, fliegen Krümel.",
     };
 
     /// <summary>

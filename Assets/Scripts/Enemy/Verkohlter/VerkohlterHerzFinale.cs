@@ -20,7 +20,7 @@ using UnityEngine;
 ///             Wer sie zerstoert, sprengt den Panzer - dabei dreht sich eine
 ///             Glutspirale. Danach liegt das Herz ein paar Sekunden offen
 ///             (mehr Schaden).
-///   Phase II  (70 % - 36 %): dichtere Ringe; dazu Glutstrahl (ein Strahl
+///   Phase II  (70 % - 36 %): etwas dichtere Ringe; dazu Glutstrahl (ein Strahl
 ///             dreht sich durch die Kammer, man muss mitlaufen oder einmal
 ///             durch), Glutlinge (fangen Schuesse ab) und mehr Lavaregen.
 ///   Panzer 2  bei 36 %: vier Schlagadern, dreiarmige Spirale.
@@ -55,7 +55,7 @@ public class VerkohlterHerzFinale : MonoBehaviour
     private const float LingContactFactor = 0.25f;
 
     // --- Ringe (Anzahl, Tempo) je Phase
-    private const int RingOne = 16, RingTwo = 20, RingThree = 22, RingThreeDub = 12, RingArmor = 12;
+    private const int RingOne = 16, RingTwo = 18, RingThree = 22, RingThreeDub = 12, RingArmor = 12;
     private const float RingSpeedOne = 3.0f, RingSpeedTwo = 3.3f, RingSpeedThree = 3.6f, RingSpeedArmor = 2.7f;
     private const float RingStart = 1.0f;     // Abstand zur Herzmitte, wo die Geschosse entstehen
 
@@ -266,7 +266,7 @@ public class VerkohlterHerzFinale : MonoBehaviour
                     case 0: attack = Beam(1, BeamSweepTwo, BeamTurnTwo); break;
                     case 1: attack = Salvo(3, 5, 12f); break;
                     case 2: attack = Lings(3, LingSpeed); break;
-                    default: attack = LavaRain(8); break;
+                    default: attack = LavaRain(7); break;
                 }
                 break;
             default:

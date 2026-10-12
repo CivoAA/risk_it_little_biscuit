@@ -322,6 +322,13 @@ public class Enemy : MonoBehaviour
     /// </summary>
     [System.NonSerialized] public float DamageTakenFactor = 1f;
 
+    /// <summary>
+    /// Gesetzt = Beruehrungsschaden nur, wenn das hier ja sagt. Das Herz des
+    /// Verkohlten braucht seinen Trefferkreis fuer Schuesse, soll aber nur im
+    /// Lavabecken unter ihm brennen - nicht hinter ihm auf dem Boden.
+    /// </summary>
+    [System.NonSerialized] public System.Func<bool> ContactAllowed;
+
     private bool deathHeld;
 
     /// <summary>Wer der Gegner ist: Katalog-Id, sonst wie der Director ihn gesetzt hat.</summary>
@@ -948,7 +955,7 @@ public class Enemy : MonoBehaviour
 
     protected virtual void OnCollisionStay2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player") && (ContactAllowed == null || ContactAllowed()))
         {
             PlayerController.Instance.TakeDamage(damage);
         }
@@ -956,7 +963,7 @@ public class Enemy : MonoBehaviour
 
     protected virtual void OnTriggerStay2D(Collider2D other)
     {
-        if (other.CompareTag("PlayerHitbox"))
+        if (other.CompareTag("PlayerHitbox") && (ContactAllowed == null || ContactAllowed()))
         {
             PlayerController.Instance.TakeDamage(damage);
         }
