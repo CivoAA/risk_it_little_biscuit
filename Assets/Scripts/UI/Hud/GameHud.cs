@@ -175,6 +175,7 @@ public class GameHud : MonoBehaviour
     private readonly List<SlotView> buffViews = new List<SlotView>();
     private ItemMenu itemMenu;
     private ItemMenuBuffs itemMenuBuffs;
+    private CopyView copyView;
 
     // ==================================================================
     //  Aufbau
@@ -824,10 +825,45 @@ public class GameHud : MonoBehaviour
                 ? GameManager.Instance.itemMenuBuffs
                 : FindAnyObjectByType<ItemMenuBuffs>();
 
+        int weaponCount = Mathf.Clamp(p.WeaponSlots, 0, MaxSlots);
         SyncRow(weaponViews, itemMenu != null ? itemMenu.CurrentSlots : null,
-                Mathf.Clamp(p.WeaponSlots, 0, MaxSlots), p.EvoSlots, WeaponY, GameHudSkin.TileKind.Weapon, now);
+                weaponCount, p.EvoSlots, WeaponY, GameHudSkin.TileKind.Weapon, now);
+        UpdateCopy(p, weaponCount, now);
         SyncRow(buffViews, itemMenuBuffs != null ? itemMenuBuffs.CurrentSlots : null,
                 Mathf.Clamp(p.BuffSlots, 0, MaxSlots), 0, BuffY, GameHudSkin.TileKind.Buff, now);
+    }
+
+    /// <summary>
+    /// Kruemelchaos des Tofus: rechts neben den Waffenslots die Waffe, die es
+    /// gerade kopiert, und darunter die Zeit bis zum Wechsel - so laesst sich
+    /// z.B. der Schwerthieb abpassen.
+    /// </summary>
+    private void UpdateCopy(PlayerController p, int weaponCount, float now)
+    {
+        CrumbMayhem mayhem = FindMayhem(p.activeEvos) ?? FindMayhem(p.activeWeapon);
+        Weapon copy = mayhem != null ? mayhem.CurrentCopy : null;
+
+        if (copy == null)
+        {
+            if (copyView != null && copyView.Root.gameObject.activeSelf) copyView.Root.gameObject.SetActive(false);
+            return;
+        }
+
+        if (copyView == null) copyView = new CopyView(this, left);
+        if (!copyView.Root.gameObject.activeSelf) copyView.Root.gameObject.SetActive(true);
+
+        SetPos(copyView.Root, Margin + weaponCount * SlotStep, -WeaponY);
+        copyView.Apply(copy, mayhem is CrumbMayhemEvo, mayhem.SwapTimeLeft, CrumbMayhem.SwapInterval, now);
+    }
+
+    private static CrumbMayhem FindMayhem(Weapon[] list)
+    {
+        if (list == null) return null;
+        foreach (Weapon w in list)
+        {
+            if (w is CrumbMayhem m && m.IsActive) return m;
+        }
+        return null;
     }
 
     private void SyncRow(List<SlotView> views, List<ItemSlotInfo> items, int count, int evoSlots,
@@ -1088,6 +1124,86 @@ public class GameHud : MonoBehaviour
             if (main.color != c) main.color = c;
             if (hi.color != cHi) hi.color = cHi;
             if (lo != null && lo.color != cLo) lo.color = cLo;
+        }
+    }
+
+    /// <summary>
+    /// Die Waffe, die das Kruemelchaos gerade kopiert: eine Kachel wie ein
+    /// Slot, rechts unten die Sekunden bis zum Wechsel, darunter eine Leiste,
+    /// die ablaeuft. In der letzten Sekunde blinkt beides gold.
+    /// </summary>
+    private sealed class CopyView
+    {
+        public readonly RectTransform Root;
+        private readonly Image frame, icon, flash, barFill;
+        private readonly Shadowed seconds;
+
+        private Sprite lastIcon;
+        private bool lastEvo;
+        private float popUntil, flashUntil;
+
+        private const int Size = SlotSize, IconSize = 16, BarW = SlotSize - 2, BarH = 2;
+        private const float PopTime = 0.25f;
+
+        public CopyView(GameHud hud, Transform parent)
+        {
+            Root = NewRect("TofuCopy", parent);
+            Place(Root, new RectInt(0, WeaponY, Size, Size + BarH + 2));
+
+            frame = hud.Img("Tile", Root, new RectInt(0, 0, Size, Size),
+                            GameHudSkin.Tile(Size, GameHudSkin.TileKind.Weapon), Color.white);
+
+            var iconR = new RectInt((Size - IconSize) / 2, (Size - 3 - IconSize) / 2 + 1, IconSize, IconSize);
+            icon = hud.Img("Icon", Root, iconR, null, Color.white);
+            icon.preserveAspect = true;
+            SetPivotCenter(icon.rectTransform);
+
+            flash = hud.Img("Flash", Root, new RectInt(2, 2, Size - 4, Size - 4), GameHudSkin.White,
+                            new Color(1f, 1f, 1f, 0f));
+
+            seconds = hud.Text("Seconds", Root, new RectInt(0, Size - 8, Size + 2, 10), SizeValue,
+                               GameHudSkin.Cream, TextAlignmentOptions.Right, TextStyle.Shadow);
+
+            hud.Img("BarBack", Root, new RectInt(1, Size + 1, BarW, BarH), GameHudSkin.White, GameHudSkin.Ink);
+            barFill = hud.Img("BarFill", Root, new RectInt(1, Size + 1, BarW, BarH), GameHudSkin.White,
+                              GameHudSkin.Gold);
+        }
+
+        public void Apply(Weapon copy, bool evo, float left, float total, float now)
+        {
+            if (evo != lastEvo)
+            {
+                lastEvo = evo;
+                frame.sprite = GameHudSkin.Tile(Size, evo ? GameHudSkin.TileKind.Evo : GameHudSkin.TileKind.Weapon);
+            }
+
+            Sprite s = copy.weaponIcon != null ? copy.weaponIcon : copy.weaponImage;
+            if (s != lastIcon)
+            {
+                // Wechsel: das neue Symbol springt auf, die Kachel blitzt.
+                lastIcon = s;
+                icon.sprite = s;
+                icon.enabled = s != null;
+                popUntil = now + PopTime;
+                flashUntil = now + 0.3f;
+            }
+
+            float pop = popUntil > now ? (popUntil - now) / PopTime : 0f;
+            float scale = pop > 0.5f ? 1.4f : pop > 0f ? 1.2f : 1f;
+            SetScale(icon.rectTransform, scale, scale);
+
+            float f = flashUntil > now ? (flashUntil - now) / 0.3f : 0f;
+            flash.color = new Color(1f, 1f, 1f, Mathf.Round(f * 3f) / 3f * 0.8f);
+
+            // Letzte Sekunde: gold blinken, damit man den Wechsel abpassen kann.
+            bool last = left <= 1f;
+            bool blink = last && Mathf.Repeat(now * 6f, 1f) < 0.5f;
+            seconds.Set(Mathf.CeilToInt(left).ToString());
+            seconds.SetColor(blink ? Color.white : last ? (Color)GameHudSkin.GoldLight : (Color)GameHudSkin.Cream);
+
+            int w = Mathf.Clamp(Mathf.CeilToInt(BarW * (total > 0f ? left / total : 0f)), 0, BarW);
+            SetSize(barFill.rectTransform, w, BarH);
+            barFill.color = blink ? (Color)GameHudSkin.Cream : (Color)GameHudSkin.Gold;
         }
     }
 

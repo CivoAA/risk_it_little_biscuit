@@ -68,10 +68,10 @@ public class ChocoChips : Weapon
 
     public int CurrentPierce
     {
-        get { return PiercePerLevel[Mathf.Clamp(weaponLevel, 0, PiercePerLevel.Length - 1)]; }
+        get { return PiercePerLevel[Mathf.Clamp(TableLevel, 0, PiercePerLevel.Length - 1)]; }
     }
 
-    void Awake()
+    protected virtual void Awake()
     {
         stats = new List<WeaponStats>(LevelStats);
         maxweaponLevel = LevelStats.Length - 1;
@@ -84,7 +84,7 @@ public class ChocoChips : Weapon
         Vector2 move = PlayerController.Instance.playerMoveDirection;
         if (move.sqrMagnitude > 0.0001f) lastMoveDir = move.normalized;
 
-        if (!IsActive || firing) return;
+        if (!CanAttack || firing) return;
 
         spawnCounter -= Time.deltaTime;
         if (spawnCounter <= 0f) StartCoroutine(Volley());

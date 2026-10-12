@@ -1155,14 +1155,24 @@ public class WorkbenchPanel : MonoBehaviour
 
             string a = def.A != null ? def.A.Name : def.IngredientA;
             string b = def.B != null ? def.B.Name : def.IngredientB;
-            row.Sub.text = $"{a} + {b}";
+            row.Sub.text = def.IngredientCount == 1 ? a : $"{a} + {b}";
 
-            row.State.text = state switch
+            if (def.IngredientCount == 1)
             {
-                EvoState.Ready   => Loc.Get("ui.workbench.evo.ready", "2/2"),
-                EvoState.Partial => Loc.Get("ui.workbench.evo.partial", "1/2"),
-                _                => Loc.Get("ui.workbench.evo.none", "0/2"),
-            };
+                // Evo ohne zweite Zutat (Tofu): nur 1/1 oder 0/1.
+                row.State.text = state == EvoState.Ready
+                    ? Loc.Get("ui.workbench.evo.solo_ready", "1/1")
+                    : Loc.Get("ui.workbench.evo.solo_none", "0/1");
+            }
+            else
+            {
+                row.State.text = state switch
+                {
+                    EvoState.Ready   => Loc.Get("ui.workbench.evo.ready", "2/2"),
+                    EvoState.Partial => Loc.Get("ui.workbench.evo.partial", "1/2"),
+                    _                => Loc.Get("ui.workbench.evo.none", "0/2"),
+                };
+            }
             row.State.color = state == EvoState.Ready ? TextGreen : TextDim;
         }
     }
@@ -1276,7 +1286,9 @@ public class WorkbenchPanel : MonoBehaviour
             {
                 string a = recipe.A != null ? recipe.A.Name : recipe.IngredientA;
                 string b = recipe.B != null ? recipe.B.Name : recipe.IngredientB;
-                lines.Add(string.Format(Loc.Get("ui.workbench.info.recipe", "Braucht {0} + {1}"), a, b));
+                lines.Add(recipe.IngredientCount == 1
+                    ? string.Format(Loc.Get("ui.workbench.info.recipe_solo", "Braucht {0} auf Maximalstufe"), a)
+                    : string.Format(Loc.Get("ui.workbench.info.recipe", "Braucht {0} + {1}"), a, b));
             }
         }
         else

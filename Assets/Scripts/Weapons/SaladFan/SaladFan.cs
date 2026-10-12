@@ -181,7 +181,7 @@ public class SaladFan : Weapon
 
     void Update()
     {
-        if (!IsActive || PlayerController.Instance == null) return;
+        if (!CanAttack || PlayerController.Instance == null) return;
         if (storming) return;
 
         spawnCounter -= Time.deltaTime;

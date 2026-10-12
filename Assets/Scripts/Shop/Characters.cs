@@ -54,8 +54,39 @@ public static class Characters
         "mochi_melody",  // 5 - Mochi (Mochi-Melodie seit 10.10.2026; davor Mochi-Faden "mochi_strand")
         "foxfire",       // 6 - Inari (Fuchsfeuer; vorher vorlaeufig "shurikookie")
         "royal_splat",   // 7 - Schleimkoenig (Koenigsplumps)
-        "crumb_mayhem",  // 8 - Tofu (Kruemelchaos, noch ohne Wirkung)
+        "crumb_mayhem",  // 8 - Tofu (Kruemelchaos: kopiert reihum die Startwaffen der anderen)
     };
+
+    /// <summary>
+    /// Die Evo der Startwaffe als <c>Weapon.weaponID</c>. Das Kruemelchaos des
+    /// Tofus kopiert nach seiner eigenen Evo diese hier (<see cref="CrumbMayhemEvo"/>).
+    ///
+    /// Fuer Keks, Ritter, Mochi, Inari und Schleimkoenig sind es Platzhalter
+    /// (Stand 12.10.2026): eine Stufe ueber der Hoechststufe der Startwaffe,
+    /// ohne Rezept - die richtigen Evos kommen noch. Bekommt eine davon ein
+    /// Rezept, bleibt die Id hier einfach stehen.
+    /// </summary>
+    private static readonly string[] StartEvoIdByskin =
+    {
+        "evo_choco_chips",     // 0 - Keks (Platzhalter)
+        "evo_sticky_shatter",  // 1 - Marmelade
+        "evo_blade_storm",     // 2 - Onigiri
+        "evo_typhoon_fan",     // 3 - Toast
+        "evo_sword_slash",     // 4 - Zwiebelritter (Platzhalter)
+        "evo_mochi_melody",    // 5 - Mochi (Platzhalter)
+        "evo_foxfire",         // 6 - Inari (Platzhalter)
+        "evo_royal_splat",     // 7 - Schleimkoenig (Platzhalter)
+        "evo_crumb_mayhem",    // 8 - Tofu
+    };
+
+    /// <summary>
+    /// Der Tofu: nur seine eine Waffe (auch gekaufte Waffenslots zaehlen fuer
+    /// ihn nicht), dafuer <see cref="TofuExtraBuffSlots"/> Buffslots mehr.
+    /// </summary>
+    public const int Tofu = 8;
+
+    /// <summary>So viele Buffslots hat der Tofu mehr als alle anderen.</summary>
+    public const int TofuExtraBuffSlots = 2;
 
     /// <summary>
     /// Waffe, die NUR dieser Charakter bekommt - leer heisst: keine. Alle
@@ -138,7 +169,7 @@ public static class Characters
         "unlock_char_mochi",
         "unlock_char_inari",
         "unlock_char_slime_king",
-        "",
+        "unlock_char_tofu",
     };
 
     public static int Count => StartWeaponByskin.Length;
@@ -158,6 +189,18 @@ public static class Characters
         if (StartWeaponIdByskin.Length == 0) return "";
         return StartWeaponIdByskin[Mathf.Clamp(skinIndex, 0, StartWeaponIdByskin.Length - 1)];
     }
+
+    /// <summary>Evo der Startwaffe als weaponID (siehe <see cref="StartEvoIdByskin"/>). Leer = keine.</summary>
+    public static string StartEvoId(int skinIndex) => Pick(StartEvoIdByskin, skinIndex);
+
+    /// <summary>
+    /// Hat der Charakter nur seine Startwaffe? Dann gibt es genau einen
+    /// Waffenslot, und in der Werkbank liegt nur sie.
+    /// </summary>
+    public static bool OnlyStartWeapon(int skinIndex) => skinIndex == Tofu;
+
+    /// <summary>Buffslots, die der Charakter zusaetzlich zum Grundwert hat.</summary>
+    public static int ExtraBuffSlots(int skinIndex) => skinIndex == Tofu ? TofuExtraBuffSlots : 0;
 
     /// <summary>
     /// Darf dieser Charakter die Waffe bekommen? Nein nur dann, wenn sie einem

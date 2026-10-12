@@ -98,6 +98,8 @@ public class GameManager : MonoBehaviour
             // der den Sieg in einen zweiten Abschluss verwandelt.
             if (PlayerController.Instance != null) PlayerController.Instance.Untouchable = true;
             Achievements.Unlock(Ach.FirstWin);
+            // Sieg mit diesem Charakter - zaehlt auf den Tofu (Ach.AllCharacters).
+            Achievements.Unlock(Ach.CharacterWin(Shop.RunSkinIndex));
             SessionProgressTracker.Instance.EvaluateAfterGame();
             StartCoroutine(ShowWinScreen());
         }
@@ -191,6 +193,11 @@ public class GameManager : MonoBehaviour
 
         Scene target = string.IsNullOrEmpty(back) ? default : SceneManager.GetSceneByName(back);
         bool targetLoaded = target.IsValid() && target.isLoaded && target.name != here;
+
+        // Zurueck in Hub/World Map: der Lauf ist vorbei, ab jetzt gilt wieder
+        // der gewaehlte Charakter. Ohne Ziel (Szene direkt aus dem Editor)
+        // startet der Lauf neu und behaelt seinen Stand.
+        if (!string.IsNullOrEmpty(back)) Shop.ReleaseRun();
 
         if (MenuManager.Instance != null && targetLoaded)
         {

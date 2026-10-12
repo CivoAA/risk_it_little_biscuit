@@ -96,11 +96,11 @@ public class FoxFire : Weapon
     private Vector2 lastPos;
     private float nextLaunch;
 
-    private int LevelIndex(int length) { return Mathf.Clamp(weaponLevel, 0, length - 1); }
+    private int LevelIndex(int length) { return Mathf.Clamp(TableLevel, 0, length - 1); }
 
     public Vector2 Center => (Vector2)transform.position + originOffset;
 
-    void Awake()
+    protected virtual void Awake()
     {
         stats = new List<WeaponStats>(LevelStats);
         maxweaponLevel = LevelStats.Length - 1;
@@ -114,6 +114,14 @@ public class FoxFire : Weapon
         if (player == null || !IsActive)
         {
             ClearWisps();
+            return;
+        }
+
+        // Kopie des Tofus, die gerade nicht dran ist: wartende Irrlichter
+        // verpuffen, fliegende treffen noch und gehen danach.
+        if (Resting)
+        {
+            RestWisps();
             return;
         }
 
@@ -194,6 +202,16 @@ public class FoxFire : Weapon
         dir = (dir + Vector2.up * 0.7f).normalized;
         float bob = Mathf.Sin(Time.time * 3f + index * 1.7f) * 0.08f;
         return Center + dir * SlotRadius + new Vector2(0f, bob);
+    }
+
+    private void RestWisps()
+    {
+        for (int i = wisps.Count - 1; i >= 0; i--)
+        {
+            if (wisps[i] != null && !wisps[i].IsIdle) continue;
+            if (wisps[i] != null) wisps[i].Vanish();
+            wisps.RemoveAt(i);
+        }
     }
 
     private void ClearWisps()

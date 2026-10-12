@@ -61,11 +61,16 @@ public static class Loadout
     /// <summary>So viele Eintraege muss man je Slot im Lauf mitnehmen.</summary>
     public const int PicksPerSlot = 3;
 
-    /// <summary>Waffenslots im Lauf: Grundwert + Shop. Der PlayerController setzt seine daraus.</summary>
-    public static int RunWeaponSlots => BaseWeaponSlots + Shop.GetInt(Shop.WeaponSlot);
+    /// <summary>
+    /// Waffenslots im Lauf: Grundwert + Shop. Der PlayerController setzt seine daraus.
+    /// Der Tofu hat immer genau einen - seine eigene Waffe (<see cref="Characters.OnlyStartWeapon"/>).
+    /// </summary>
+    public static int RunWeaponSlots =>
+        Characters.OnlyStartWeapon(CurrentCharacter) ? 1 : BaseWeaponSlots + Shop.GetInt(Shop.WeaponSlot);
 
-    /// <summary>Buffslots im Lauf: Grundwert + Shop.</summary>
-    public static int RunBuffSlots => BaseBuffSlots + Shop.GetInt(Shop.BuffSlot);
+    /// <summary>Buffslots im Lauf: Grundwert + Shop, beim Tofu zwei mehr.</summary>
+    public static int RunBuffSlots =>
+        BaseBuffSlots + Shop.GetInt(Shop.BuffSlot) + Characters.ExtraBuffSlots(CurrentCharacter);
 
     /// <summary>Gespeicherte Builds ohne Shop-Kauf, und hoechstens (= Knoepfe an der Werkbank).</summary>
     public const int BasePresets = 1;
@@ -193,6 +198,8 @@ public static class Loadout
         get
         {
             int locked = string.IsNullOrEmpty(LockedWeaponId) ? 0 : 1;
+            // Nur die Startwaffe (Tofu): kein Platz neben ihr.
+            if (Characters.OnlyStartWeapon(CurrentCharacter)) return locked;
             return Mathf.Clamp(RunWeaponSlots * PicksPerSlot + locked, 0, MaxWeapons);
         }
     }
@@ -597,7 +604,7 @@ public static class Loadout
         if (Contains(evo.IngredientA)) have++;
         if (Contains(evo.IngredientB)) have++;
 
-        if (have >= 2) return EvoState.Ready;
+        if (have >= evo.IngredientCount) return EvoState.Ready;
         return have == 1 ? EvoState.Partial : EvoState.None;
     }
 

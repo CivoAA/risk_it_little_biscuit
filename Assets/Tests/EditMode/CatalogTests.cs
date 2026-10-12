@@ -362,6 +362,23 @@ public class CatalogTests
     }
 
     [Test]
+    public void Jeder_Charakter_hat_Sieg_und_Evo_Erfolg_fuer_den_Tofu()
+    {
+        for (int skin = 0; skin < Characters.Count; skin++)
+        {
+            Assert.IsNotNull(Ach.CharacterWin(skin), $"Charakter {skin} hat keinen Sieg-Erfolg (Ach.WinBySkin).");
+            Assert.AreSame(Ach.StartEvo(skin), Ach.EvoFor(Characters.StartEvoId(skin)),
+                $"Evo '{Characters.StartEvoId(skin)}' von Charakter {skin} hat keinen Erfolg (Ach.StartEvoBySkin).");
+        }
+
+        Assert.AreEqual(2 * (Characters.Count - 1), (int)Ach.AllCharacters.Goal,
+            "Ziel von All_Characters passt nicht mehr zur Zahl der Charaktere.");
+        Assert.IsNotNull(Unlocks.Find(Ach.AllCharacters.GrantsUnlock));
+        Assert.IsNotNull(Unlocks.Find(Ach.KillSlimeKing10.GrantsUnlock));
+        Assert.IsNotNull(Unlocks.Find(Ach.BossIceEmperor.GrantsUnlock));
+    }
+
+    [Test]
     public void Unlocks_Spielstand_uebersteht_eine_Runde()
     {
         var store = new UnlockStore(tempDir);

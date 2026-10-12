@@ -36,7 +36,20 @@ public class BladeSwarm : Weapon
             return; // nichts mehr machen
         }
 
-        if (weaponLevel == maxweaponLevel)
+        // Kopie des Tofus, die gerade nicht dran ist: die Kunai im Ring
+        // verschwinden, geworfene fliegen zu Ende (die Coroutine laeuft weiter).
+        if (Resting)
+        {
+            for (int i = activeBlades.Count - 1; i >= 0; i--)
+            {
+                if (activeBlades[i].transform.parent != transform) continue;
+                Destroy(activeBlades[i]);
+                activeBlades.RemoveAt(i);
+            }
+            return;
+        }
+
+        if (weaponLevel == maxweaponLevel && !IsCopy)
         {
             Achievements.Unlock(Ach.MaxBladeSwarm);
         }
@@ -72,6 +85,9 @@ public class BladeSwarm : Weapon
             Vector3 spawnPos = transform.position;
             GameObject blade = Instantiate(prefab, spawnPos, transform.rotation);
             blade.transform.SetParent(transform);
+
+            BladeSwarmPrefab kunai = blade.GetComponent<BladeSwarmPrefab>();
+            if (kunai != null) kunai.weapon = this;
 
             activeBlades.Add(blade);
             PositionBlades();

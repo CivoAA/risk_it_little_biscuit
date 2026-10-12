@@ -42,6 +42,11 @@ public class WorkbenchTests
         // Erst stummschalten, dann leeren - sonst schriebe das Leeren in die
         // echte loadout.json.
         Loadout.SandboxMode = true;
+
+        // Der Tofu hat nur seine eine Waffe - die Tests rechnen mit normalen
+        // Plaetzen. Ihn prueft ein eigener Test.
+        if (Characters.OnlyStartWeapon(Shop.SkinIndex)) Shop.SkinIndex = 0;
+
         Loadout.ResetAll();
     }
 
@@ -104,11 +109,15 @@ public class WorkbenchTests
             Assert.AreEqual(PoolKind.Evo, evo.Result.Kind, $"'{evo.Id}' ist keine Evo.");
 
             Assert.IsNotNull(evo.A, $"Rezept '{evo.Id}': Zutat '{evo.IngredientA}' unbekannt.");
-            Assert.IsNotNull(evo.B, $"Rezept '{evo.Id}': Zutat '{evo.IngredientB}' unbekannt.");
 
             // Eine Evo als Zutat einer Evo gaebe es im Spiel nicht - sie
             // entsteht erst im Lauf und liegt nie im Verteiler.
             Assert.AreNotEqual(PoolKind.Evo, evo.A.Kind, $"Rezept '{evo.Id}': Zutat ist eine Evo.");
+
+            // Ohne zweite Zutat (Evo des Tofus) gibt es nichts weiter zu pruefen.
+            if (evo.IngredientCount == 1) continue;
+
+            Assert.IsNotNull(evo.B, $"Rezept '{evo.Id}': Zutat '{evo.IngredientB}' unbekannt.");
             Assert.AreNotEqual(PoolKind.Evo, evo.B.Kind, $"Rezept '{evo.Id}': Zutat ist eine Evo.");
 
             Assert.AreNotEqual(evo.IngredientA, evo.IngredientB,
@@ -176,8 +185,9 @@ public class WorkbenchTests
             if (r == null || r.EvoWeapon == null) continue;
 
             string id = r.EvoWeapon.weaponID;
-            string a = r.RequiredWeapon1 != null ? r.RequiredWeapon1.weaponID : null;
-            string b = r.RequiredWeapon2 != null ? r.RequiredWeapon2.weaponID : null;
+            // Leere Zutat (Evo des Tofus) steht im Katalog als "".
+            string a = r.RequiredWeapon1 != null ? r.RequiredWeapon1.weaponID : "";
+            string b = r.RequiredWeapon2 != null ? r.RequiredWeapon2.weaponID : "";
             seen.Add(id);
 
             EvoDef def = WeaponCatalog.Evos.FirstOrDefault(e => e.Id == id);
@@ -461,6 +471,43 @@ public class WorkbenchTests
         Assert.AreEqual(Mathf.Min(Loadout.MaxBuffs, Loadout.RunBuffSlots * 3),
                         Loadout.Capacity(PoolKind.Buff));
         Assert.LessOrEqual(Loadout.Capacity(PoolKind.Buff), 10, "Mehr als 10 Buffs gibt es nie.");
+    }
+
+    [Test]
+    public void Tofu_hat_nur_seine_Waffe_und_zwei_Buffslots_mehr()
+    {
+        int buffSlots = Loadout.RunBuffSlots;
+
+        Shop.SkinIndex = Characters.Tofu;
+
+        Assert.AreEqual(1, Loadout.RunWeaponSlots, "Der Tofu hat genau einen Waffenslot.");
+        Assert.AreEqual(1, Loadout.Capacity(PoolKind.Weapon), "Neben seiner Waffe ist kein Platz.");
+        Assert.AreEqual(Characters.StartWeaponId(Characters.Tofu), Loadout.Get(PoolKind.Weapon)[0]);
+        Assert.AreEqual(buffSlots + Characters.TofuExtraBuffSlots, Loadout.RunBuffSlots);
+    }
+
+    [Test]
+    public void Jede_Startwaffe_hat_eine_Evo_am_Player_Prefab()
+    {
+        GameObject player = AssetDatabase.LoadAssetAtPath<GameObject>(PlayerPrefab);
+        Assert.IsNotNull(player, $"{PlayerPrefab} nicht gefunden.");
+
+        var ids = new HashSet<string>();
+        foreach (Weapon w in player.GetComponentsInChildren<Weapon>(true)) ids.Add(w.weaponID);
+
+        // Die Evo des Tofus kopiert genau diese Evos.
+        var problems = new List<string>();
+        for (int skin = 0; skin < Characters.Count; skin++)
+        {
+            string id = Characters.StartEvoId(skin);
+            WeaponDef def = WeaponCatalog.Find(id);
+            if (def == null || def.Kind != PoolKind.Evo)
+                problems.Add($"{Characters.NameOf(skin)}: '{id}' ist keine Evo im Katalog.");
+            else if (!ids.Contains(id))
+                problems.Add($"{Characters.NameOf(skin)}: '{id}' haengt nicht am Player-Prefab.");
+        }
+
+        Assert.IsEmpty(problems, "Startwaffen ohne Evo:\n  " + string.Join("\n  ", problems));
     }
 
     [Test]

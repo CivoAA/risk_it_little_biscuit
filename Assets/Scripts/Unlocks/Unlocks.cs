@@ -106,8 +106,9 @@ public static class Unlocks
     // ==================================================================
     //  Charaktere
     // ==================================================================
-    // Vorerst von Anfang an offen (byDefault). Steht die Bedingung fest:
-    // byDefault weg und an der passenden Stelle Unlocks.Grant(...) aufrufen.
+    // Ritter und Mochi vorerst von Anfang an offen (byDefault). Steht die
+    // Bedingung fest: byDefault weg und einen Erfolg mit grantsUnlock dafuer
+    // anlegen (Ach.cs) - dann nennt die Unlock-Anzeige auch die Bedingung.
     // Abgefragt in Characters.UnlockIdByskin.
 
     public static readonly UnlockDef CharOnionKnight = Def(
@@ -122,17 +123,23 @@ public static class Unlocks
         "Mochi joins your team!",
         byDefault: true);
 
+    /// <summary>Kommt mit "Meltdown" (Eiskaiser besiegt = Eisgletscher geschafft).</summary>
     public static readonly UnlockDef CharInari = Def(
         "unlock_char_inari",
         "Inari",
-        "Inari joins your team!",
-        byDefault: true);
+        "Inari joins your team!");
 
+    /// <summary>Kommt mit "Long Live the King" (Schleimkoenig 10-mal besiegt).</summary>
     public static readonly UnlockDef CharSlimeKing = Def(
         "unlock_char_slime_king",
         "Slime King",
-        "The Slime King joins your team!",
-        byDefault: true);
+        "The Slime King joins your team!");
+
+    /// <summary>Kommt mit "Full Bento" (mit jedem Charakter ein Sieg und seine Evo).</summary>
+    public static readonly UnlockDef CharTofu = Def(
+        "unlock_char_tofu",
+        "Tofu",
+        "Tofu joins your team!");
 
     // ==================================================================
     //  Shop-Erweiterungen
@@ -229,7 +236,23 @@ public static class Unlocks
 
     private static void OnAchievementUnlocked(AchievementDef def)
     {
-        if (def != null && def.Category == AchievementCategory.Evolutions) Grant(EvoSlot);
+        if (def == null) return;
+        if (def.Category == AchievementCategory.Evolutions) Grant(EvoSlot);
+        if (def.Category == AchievementCategory.Evolutions || def.Category == AchievementCategory.Characters)
+            CheckAllCharacters();
+    }
+
+    /// <summary>
+    /// Zieht <see cref="Ach.AllCharacters"/> (Tofu) auf den Stand aus Siegen und
+    /// Startwaffen-Evos nach. Ist alles da, schaltet der Erfolg den Tofu frei.
+    /// </summary>
+    public static void CheckAllCharacters()
+    {
+        AchievementDef all = Ach.AllCharacters;
+        if (all.IsUnlocked) return;
+
+        float missing = Ach.AllCharactersDone() - all.Value;
+        if (missing > 0f) Achievements.Progress(all, missing);
     }
 
     /// <summary>
@@ -466,6 +489,9 @@ public static class Unlocks
         }
 
         if (changed) s.Save();
+
+        // Tofu-Zaehler aus schon vorhandenen Evo-Erfolgen
+        CheckAllCharacters();
     }
 
     private static UnlockDef Def(string id, string nameEn, string descEn, string icon = null, bool byDefault = false)

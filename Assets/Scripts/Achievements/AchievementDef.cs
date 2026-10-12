@@ -11,6 +11,7 @@ public enum AchievementCategory
     Weapons,
     Buffs,
     Evolutions,
+    Characters,
     Secrets,
 }
 

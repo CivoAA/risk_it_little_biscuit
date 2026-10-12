@@ -20,6 +20,30 @@ public class Weapon : MonoBehaviour
     public bool hasBeenRemoved = false;
 
     /// <summary>
+    /// Eine Kopie, die das Kruemelchaos des Tofus angelegt hat
+    /// (<see cref="CrumbMayhem"/>). Sie steht in keiner Liste des Spielers,
+    /// zaehlt fuer keinen Erfolg und wird nie aufgelevelt.
+    /// </summary>
+    [System.NonSerialized] public bool IsCopy;
+
+    /// <summary>
+    /// Kopie, die gerade nicht dran ist: greift nicht neu an, laesst aber
+    /// alles auslaufen, was schon unterwegs ist oder liegt (Marmeladenlachen,
+    /// fliegende Klingen, ...). Deshalb bleibt <see cref="IsActive"/> dabei true.
+    /// </summary>
+    [System.NonSerialized] public bool Resting;
+
+    /// <summary>Darf die Waffe gerade neu angreifen? Waffen fragen das statt <see cref="IsActive"/>.</summary>
+    public bool CanAttack => IsActive && !Resting;
+
+    /// <summary>
+    /// Stufe fuer die Tabellen neben <see cref="stats"/> (Durchschlag,
+    /// Spruenge, Ringgroesse ...). Normal die Waffenstufe; eine Evo mit nur
+    /// einer Stufe stellt das auf die hoechste ihrer Basiswaffe.
+    /// </summary>
+    protected virtual int TableLevel => weaponLevel;
+
+    /// <summary>
     /// True, wenn die Waffe aktiv ist und <see cref="stats"/> mit
     /// <see cref="weaponLevel"/> indiziert werden darf. Nicht erhaltene Waffen
     /// stehen auf -1, durch eine Evo ersetzte auf <see cref="RemovedLevel"/>.
@@ -103,4 +127,7 @@ public class WeaponStats
     public float AttackSpeed;
     public float shots;
     public string description;
+
+    /// <summary>Eigene Kopie - die Stufen der Waffen liegen oft als statische Tabelle vor.</summary>
+    public WeaponStats Clone() => (WeaponStats)MemberwiseClone();
 }

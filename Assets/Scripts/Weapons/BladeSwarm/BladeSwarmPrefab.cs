@@ -14,7 +14,9 @@ public class BladeSwarmPrefab : MonoBehaviour
 
     void Start()
     {
-        weapon = WeaponFinder.Find<BladeSwarm>("Blade Swarm");
+        // Die Waffe setzt das beim Spawn direkt (auch fuer die Kopien des
+        // Tofus); der Find ist nur der Fallback.
+        if (weapon == null) weapon = WeaponFinder.Find<BladeSwarm>("Blade Swarm");
     }
 
     // Im Ring setzt BladeSwarm.PositionBlades Position und Rotation (Spitze
