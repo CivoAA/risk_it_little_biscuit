@@ -19,11 +19,6 @@ gelassenen Flächen stehen unten in der Textzonen-Tabelle.
 ## 1. Dateien
 
 ```
-Tools/
-  erfolgsbuch_ui.py               **Quelle der 26 Sprites** - zeichnet sie,
-                                  packt den Atlas, ruft die Vorschau auf
-  erfolgsbuch_vorschau.py         baut preview_filled*.png aus den Sprites
-
 Assets/Art/UI_Objects/AchievementsBook/
   achievements_book.aseprite      erster Entwurf von Hand, 13 Layer, 2 Frames,
                                   34 Slices - **nicht** mehr der aktuelle Stand
@@ -52,21 +47,9 @@ Assets/Scripts/Achievements/
 > `AchievementPanel` und `UnlockPanel` komplett per Code aufbaut und deshalb
 > nichts über den Inspector verdrahtet bekommt. Palette, Vorschauen und Atlas
 > bleiben im Art-Ordner.
-
-> **Ändern geht über das Skript, nicht über die PNGs.** Ein Lauf von
 >
-> ```
-> python Tools/erfolgsbuch_ui.py
-> ```
->
-> schreibt alle 26 PNGs neu, packt sie in genau die Rechtecke, die schon im
-> Atlas-JSON stehen, und baut die beiden Vorschauen daraus. Die `.meta`-Dateien
-> fasst es nicht an - GUIDs, 9-Slice-Ränder und Importeinstellungen bleiben, und
-> `AchievementsBookPanel.cs` braucht keine Zeile Änderung.
->
-> `achievements_book.aseprite` ist der erste, von Hand gezeichnete Entwurf. Die
-> ausgelieferten Sprites stammen seit der Überarbeitung aus dem Skript; wer die
-> Datei in Aseprite öffnet, sieht also den alten Stand.
+> `achievements_book.aseprite` ist der erste Entwurf; wer die Datei in Aseprite
+> öffnet, sieht also den alten Stand.
 
 ### Sprite-Liste
 
@@ -204,8 +187,7 @@ sind sie `(25, 2, 94, 10)` und `(25, 11, 94, 9)`; die globale y ergibt sich aus
 Die ganze **Detailspalte hängt an `DetailLeft = 182` und `DetailW = 117`** in
 `AchievementsBookPanel.cs`. Sie begann früher bei 168 und damit mitten im
 Falzschatten der rechten Seite: die ersten Zeichen jeder Zeile standen sichtbar
-auf dunklerem Papier. Der Falz endet jetzt bei x=179 (`GUTTER = 15` in
-`Tools/erfolgsbuch_ui.py`), der Text setzt 3px danach an. Titel, Beschreibung,
+auf dunklerem Papier. Der Falz endet jetzt bei x=179 (`GUTTER = 15`), der Text setzt 3px danach an. Titel, Beschreibung,
 Fortschritt, Trennlinie und Belohnungsbox stehen alle auf dieser Kante, und der
 große Icon-Rahmen sitzt mit x=224 genau in der Mitte der Spalte.
 
@@ -304,8 +286,8 @@ dunkelsten Streifen.
 
 Der **Schlagschatten des Icon-Rahmens** darf fest ins Papier, weil der Rahmen
 bei (224,32,32,32) immer steht: `AchievementsBookPanel` blendet nur das Icon
-darin aus, nie den Rahmen selbst. Im Skript hängt er an `SLOT_X/SLOT_Y/SLOT_S`,
-die Zierlinien ebenfalls — wird der Rahmen verschoben, wandert beides mit.
+darin aus, nie den Rahmen selbst — wird der Rahmen verschoben, müssen Schatten
+und Zierlinien mit.
 
 Die **Zierlinien** füllen die einzige wirklich freie Fläche der rechten Seite —
 neben dem Icon-Rahmen, oberhalb von y=44, wo der Titel anfängt. Sie liegen
@@ -770,8 +752,7 @@ und mit der Benutzung beantwortet.
    Bänder werden beim Dehnen unterschiedlich dick; ein gedithertes Gefälle nicht.
 8. **Die Slot-Öffnungen sind gefüllt statt transparent** (5.6) — sonst sitzt
    jedes Icon auf einem anderen Untergrund.
-9. **Die Sprites kommen aus `Tools/erfolgsbuch_ui.py`, nicht mehr aus der
-   .aseprite-Datei.** Bis auf `tab_active` sind Maße, Dateinamen, 9-Slice-Ränder
+9. Bis auf `tab_active` sind Maße, Dateinamen, 9-Slice-Ränder
    und GUIDs identisch geblieben, damit weder Unity noch
    `AchievementsBookPanel.cs` etwas merkt.
 10. **`tab_active` ist von 60x14 auf 60x16 gewachsen** und `Rebuild()` setzt die

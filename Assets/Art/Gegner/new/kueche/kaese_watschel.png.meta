@@ -1,0 +1,419 @@
+fileFormatVersion: 2
+guid: 6fae26fadea342cc9529450cc2c2b843
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1176344877107208998
+    second: kaese_watschel_0
+  - first:
+      213: 4118369008949950339
+    second: kaese_watschel_1
+  - first:
+      213: 2345124243700356842
+    second: kaese_watschel_2
+  - first:
+      213: 1363801168805811934
+    second: kaese_watschel_3
+  - first:
+      213: 1659688189195132210
+    second: kaese_watschel_4
+  - first:
+      213: 1839514288384482476
+    second: kaese_watschel_5
+  - first:
+      213: 2261286141016710690
+    second: kaese_watschel_6
+  - first:
+      213: 1955684907947905185
+    second: kaese_watschel_7
+  - first:
+      213: 3973032857013550016
+    second: kaese_watschel_8
+  - first:
+      213: 2982672054418133010
+    second: kaese_watschel_9
+  - first:
+      213: 3922041024618255578
+    second: kaese_watschel_10
+  - first:
+      213: 2316922454586705039
+    second: kaese_watschel_11
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: kaese_watschel_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 40
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9898fbacbdb541f9a1e82beae822df83
+      internalID: 1176344877107208998
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kaese_watschel_1
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 0
+        width: 40
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ad4e8e20e8824a51b508f46f146041cf
+      internalID: 4118369008949950339
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kaese_watschel_2
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 0
+        width: 40
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c23135532daf4d4e9b059d626136b925
+      internalID: 2345124243700356842
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kaese_watschel_3
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 0
+        width: 40
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8c9be4969d1b430d9c3851d1553be41e
+      internalID: 1363801168805811934
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kaese_watschel_4
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 0
+        width: 40
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 16bbfe0d8eb940efac5cf8a3e9363826
+      internalID: 1659688189195132210
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kaese_watschel_5
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 0
+        width: 40
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 562a0cf5433546e28341fd5c5181bda0
+      internalID: 1839514288384482476
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kaese_watschel_6
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 0
+        width: 40
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 81e7cda8774346bb89e9d16dcc9ede74
+      internalID: 2261286141016710690
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kaese_watschel_7
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 0
+        width: 40
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2692a6bb818246d8912b5becd76b8e40
+      internalID: 1955684907947905185
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kaese_watschel_8
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 0
+        width: 40
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f62d073f3ca4eb0a6bbe019231d4245
+      internalID: 3973032857013550016
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kaese_watschel_9
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 0
+        width: 40
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a8c48e8c21284f5fb8015c1ed2b46a2b
+      internalID: 2982672054418133010
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kaese_watschel_10
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 0
+        width: 40
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6e4bea46c7434605a467684f2bcce3b6
+      internalID: 3922041024618255578
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kaese_watschel_11
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 0
+        width: 40
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 387fcb6059dc4352b58663696e60f432
+      internalID: 2316922454586705039
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      kaese_watschel_0: 1176344877107208998
+      kaese_watschel_1: 4118369008949950339
+      kaese_watschel_10: 3922041024618255578
+      kaese_watschel_11: 2316922454586705039
+      kaese_watschel_2: 2345124243700356842
+      kaese_watschel_3: 1363801168805811934
+      kaese_watschel_4: 1659688189195132210
+      kaese_watschel_5: 1839514288384482476
+      kaese_watschel_6: 2261286141016710690
+      kaese_watschel_7: 1955684907947905185
+      kaese_watschel_8: 3973032857013550016
+      kaese_watschel_9: 2982672054418133010
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

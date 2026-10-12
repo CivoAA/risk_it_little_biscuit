@@ -1,0 +1,419 @@
+fileFormatVersion: 2
+guid: 722e3e5a2ca6421ea49235523eed517a
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1673362946162489665
+    second: gluehbirne_stakse_glow_0
+  - first:
+      213: 3848246415981687228
+    second: gluehbirne_stakse_glow_1
+  - first:
+      213: 3318685483714388199
+    second: gluehbirne_stakse_glow_2
+  - first:
+      213: 2658767300388688711
+    second: gluehbirne_stakse_glow_3
+  - first:
+      213: 4069542925897111612
+    second: gluehbirne_stakse_glow_4
+  - first:
+      213: 4102200135262246096
+    second: gluehbirne_stakse_glow_5
+  - first:
+      213: 3824454040400765029
+    second: gluehbirne_stakse_glow_6
+  - first:
+      213: 2848053356759642017
+    second: gluehbirne_stakse_glow_7
+  - first:
+      213: 1557015752231038944
+    second: gluehbirne_stakse_glow_8
+  - first:
+      213: 3951734095332647532
+    second: gluehbirne_stakse_glow_9
+  - first:
+      213: 1166755189927266953
+    second: gluehbirne_stakse_glow_10
+  - first:
+      213: 4188778680484558005
+    second: gluehbirne_stakse_glow_11
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: gluehbirne_stakse_glow_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 36
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e861506d747f4bc384e2b7b4e293f205
+      internalID: 1673362946162489665
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gluehbirne_stakse_glow_1
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 0
+        width: 36
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c767c9ab9352406ea44140aaa6977f9b
+      internalID: 3848246415981687228
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gluehbirne_stakse_glow_2
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 0
+        width: 36
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 636b8d0ad8374a76a48e90aafb861658
+      internalID: 3318685483714388199
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gluehbirne_stakse_glow_3
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 0
+        width: 36
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 518a3e66defe4e10a9872a87e8a12445
+      internalID: 2658767300388688711
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gluehbirne_stakse_glow_4
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 0
+        width: 36
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 793488e671a84631a72c82cfabe949da
+      internalID: 4069542925897111612
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gluehbirne_stakse_glow_5
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 0
+        width: 36
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9d64bcb3d9e04c6487949388bd3a890d
+      internalID: 4102200135262246096
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gluehbirne_stakse_glow_6
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 0
+        width: 36
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 234cc776805440519f644f6a4f28e4d9
+      internalID: 3824454040400765029
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gluehbirne_stakse_glow_7
+      rect:
+        serializedVersion: 2
+        x: 252
+        y: 0
+        width: 36
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 20fa235360c34c06ba2dd14ffe28bfc1
+      internalID: 2848053356759642017
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gluehbirne_stakse_glow_8
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 0
+        width: 36
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 225089c6e3d6452ba307bf3fc2fcc2ad
+      internalID: 1557015752231038944
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gluehbirne_stakse_glow_9
+      rect:
+        serializedVersion: 2
+        x: 324
+        y: 0
+        width: 36
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 61190dcc1485460593fb5ab4691ac15e
+      internalID: 3951734095332647532
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gluehbirne_stakse_glow_10
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 0
+        width: 36
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 00177523a79941cbaecd4fc558bccd8e
+      internalID: 1166755189927266953
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gluehbirne_stakse_glow_11
+      rect:
+        serializedVersion: 2
+        x: 396
+        y: 0
+        width: 36
+        height: 46
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08695652173913043}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1e3fce67eeda419aa992132ef5e1ebfc
+      internalID: 4188778680484558005
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      gluehbirne_stakse_glow_0: 1673362946162489665
+      gluehbirne_stakse_glow_1: 3848246415981687228
+      gluehbirne_stakse_glow_10: 1166755189927266953
+      gluehbirne_stakse_glow_11: 4188778680484558005
+      gluehbirne_stakse_glow_2: 3318685483714388199
+      gluehbirne_stakse_glow_3: 2658767300388688711
+      gluehbirne_stakse_glow_4: 4069542925897111612
+      gluehbirne_stakse_glow_5: 4102200135262246096
+      gluehbirne_stakse_glow_6: 3824454040400765029
+      gluehbirne_stakse_glow_7: 2848053356759642017
+      gluehbirne_stakse_glow_8: 1557015752231038944
+      gluehbirne_stakse_glow_9: 3951734095332647532
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

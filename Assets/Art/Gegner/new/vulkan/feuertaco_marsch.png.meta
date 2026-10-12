@@ -1,0 +1,939 @@
+fileFormatVersion: 2
+guid: 23820fe4a9974c98b967d82673e4c463
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2744204970097620782
+    second: feuertaco_marsch_0
+  - first:
+      213: 2111798078460174585
+    second: feuertaco_marsch_1
+  - first:
+      213: 2922429811434250278
+    second: feuertaco_marsch_2
+  - first:
+      213: 2866350272798979415
+    second: feuertaco_marsch_3
+  - first:
+      213: 1693484750370047161
+    second: feuertaco_marsch_4
+  - first:
+      213: 2089691206605086973
+    second: feuertaco_marsch_5
+  - first:
+      213: 1498481139356650496
+    second: feuertaco_marsch_6
+  - first:
+      213: 3759977151785402230
+    second: feuertaco_marsch_7
+  - first:
+      213: 4223349736157755091
+    second: feuertaco_marsch_8
+  - first:
+      213: 1734540505739816543
+    second: feuertaco_marsch_9
+  - first:
+      213: 2890095731130529434
+    second: feuertaco_marsch_10
+  - first:
+      213: 2511027111499454087
+    second: feuertaco_marsch_11
+  - first:
+      213: 1434287310472171447
+    second: feuertaco_marsch_12
+  - first:
+      213: 3439919455620149371
+    second: feuertaco_marsch_13
+  - first:
+      213: 4564595817910105714
+    second: feuertaco_marsch_14
+  - first:
+      213: 3624365175183383048
+    second: feuertaco_marsch_15
+  - first:
+      213: 3441665919524083635
+    second: feuertaco_marsch_16
+  - first:
+      213: 3401713677850809105
+    second: feuertaco_marsch_17
+  - first:
+      213: 3067084289909902095
+    second: feuertaco_marsch_18
+  - first:
+      213: 3526546148768383145
+    second: feuertaco_marsch_19
+  - first:
+      213: 2759122844956003976
+    second: feuertaco_marsch_20
+  - first:
+      213: 2008638063799239735
+    second: feuertaco_marsch_21
+  - first:
+      213: 2092084119151046605
+    second: feuertaco_marsch_22
+  - first:
+      213: 1997890363557217201
+    second: feuertaco_marsch_23
+  - first:
+      213: 3868547149100930219
+    second: feuertaco_marsch_24
+  - first:
+      213: 4298665157885686049
+    second: feuertaco_marsch_25
+  - first:
+      213: 1171824619601251219
+    second: feuertaco_marsch_26
+  - first:
+      213: 2821147142727201000
+    second: feuertaco_marsch_27
+  - first:
+      213: 4304726619849188340
+    second: feuertaco_marsch_28
+  - first:
+      213: 1595316906360933019
+    second: feuertaco_marsch_29
+  - first:
+      213: 4297901529596975219
+    second: feuertaco_marsch_30
+  - first:
+      213: 1860787897291785179
+    second: feuertaco_marsch_31
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: feuertaco_marsch_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 56
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 41b82e2cb50d4e7cb6106d9fe3be2001
+      internalID: 2744204970097620782
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: feuertaco_marsch_1
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 0
+        width: 56
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 57084995f4d4416689b0abb9cc75a8c7
+      internalID: 2111798078460174585
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: feuertaco_marsch_2
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 0
+        width: 56
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fef682f1a9874198845fcc62d44167e0
+      internalID: 2922429811434250278
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: feuertaco_marsch_3
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 0
+        width: 56
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 378dacffbbda44c29aab6aec62faffa4
+      internalID: 2866350272798979415
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: feuertaco_marsch_4
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 0
+        width: 56
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 93b497fcd520499b916cecf3ac9fc408
+      internalID: 1693484750370047161
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: feuertaco_marsch_5
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 0
+        width: 56
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed8591b8e9304131998434e54af85c3c
+      internalID: 2089691206605086973
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: feuertaco_marsch_6
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 0
+        width: 56
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 42dfab2597d8410b869196e20014bb4d
+      internalID: 1498481139356650496
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: feuertaco_marsch_7
+      rect:
+        serializedVersion: 2
+        x: 392
+        y: 0
+        width: 56
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cf408428e24d436ab17be6dd5228c7c9
+      internalID: 3759977151785402230
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: feuertaco_marsch_8
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 0
+        width: 56
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 41f56b97794447a6a5121649823f6c25
+      internalID: 4223349736157755091
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: feuertaco_marsch_9
+      rect:
+        serializedVersion: 2
+        x: 504
+        y: 0
+        width: 56
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a5746550b76347e596c47eba10374f85
+      internalID: 1734540505739816543
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: feuertaco_marsch_10
+      rect:
+        serializedVersion: 2
+        x: 560
+        y: 0
+        width: 56
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f5e925b709c49be938ab228f157b9e0
+      internalID: 2890095731130529434
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: feuertaco_marsch_11
+      rect:
+        serializedVersion: 2
+        x: 616
+        y: 0
+        width: 56
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 86b10066873146e0ace8e146b4e04fe4
+      internalID: 2511027111499454087
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: feuertaco_marsch_12
+      rect:
+        serializedVersion: 2
+        x: 672
+        y: 0
+        width: 56
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f55a89dd2254977b835e17ac3c63c7e
+      internalID: 1434287310472171447
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: feuertaco_marsch_13
+      rect:
+        serializedVersion: 2
+        x: 728
+        y: 0
+        width: 56
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d41b495e5a70405ba27cd62b865111e8
+      internalID: 3439919455620149371
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: feuertaco_marsch_14
+      rect:
+        serializedVersion: 2
+        x: 784
+        y: 0
+        width: 56
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9d18ed55c37f4eb284cd8e8d8bfe1ed0
+      internalID: 4564595817910105714
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: feuertaco_marsch_15
+      rect:
+        serializedVersion: 2
+        x: 840
+        y: 0
+        width: 56
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9563f5a369e8409391209a8619910ce8
+      internalID: 3624365175183383048
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: feuertaco_marsch_16
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 0
+        width: 56
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 27760d2deb5b4f5691681fda87421371
+      internalID: 3441665919524083635
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: feuertaco_marsch_17
+      rect:
+        serializedVersion: 2
+        x: 952
+        y: 0
+        width: 56
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e6cb7e44b1e84de582d0642bfaf3af38
+      internalID: 3401713677850809105
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: feuertaco_marsch_18
+      rect:
+        serializedVersion: 2
+        x: 1008
+        y: 0
+        width: 56
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9789f68aa13840fca832a50054acf27c
+      internalID: 3067084289909902095
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: feuertaco_marsch_19
+      rect:
+        serializedVersion: 2
+        x: 1064
+        y: 0
+        width: 56
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 613c24abff7c4fdebae57dbee668769c
+      internalID: 3526546148768383145
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: feuertaco_marsch_20
+      rect:
+        serializedVersion: 2
+        x: 1120
+        y: 0
+        width: 56
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab83025024014bb38245f3e73aad8299
+      internalID: 2759122844956003976
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: feuertaco_marsch_21
+      rect:
+        serializedVersion: 2
+        x: 1176
+        y: 0
+        width: 56
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c89e72d4c504534afa0163abe4a02ff
+      internalID: 2008638063799239735
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: feuertaco_marsch_22
+      rect:
+        serializedVersion: 2
+        x: 1232
+        y: 0
+        width: 56
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d24b8d0b0bfa48499a09278b7c3f04d8
+      internalID: 2092084119151046605
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: feuertaco_marsch_23
+      rect:
+        serializedVersion: 2
+        x: 1288
+        y: 0
+        width: 56
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 400c6a3ce2424d6cacc99a10c5589b14
+      internalID: 1997890363557217201
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: feuertaco_marsch_24
+      rect:
+        serializedVersion: 2
+        x: 1344
+        y: 0
+        width: 56
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a25eda020b6d46fe9d22a4d3bdc0f746
+      internalID: 3868547149100930219
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: feuertaco_marsch_25
+      rect:
+        serializedVersion: 2
+        x: 1400
+        y: 0
+        width: 56
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 06f828e5633f4d1bbc0fd1e32303ba76
+      internalID: 4298665157885686049
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: feuertaco_marsch_26
+      rect:
+        serializedVersion: 2
+        x: 1456
+        y: 0
+        width: 56
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b16c4d59253f49e5b75a2912db245f93
+      internalID: 1171824619601251219
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: feuertaco_marsch_27
+      rect:
+        serializedVersion: 2
+        x: 1512
+        y: 0
+        width: 56
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6d7e4661f3e943659f04b3dbe55a83fc
+      internalID: 2821147142727201000
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: feuertaco_marsch_28
+      rect:
+        serializedVersion: 2
+        x: 1568
+        y: 0
+        width: 56
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f210bdb111b4352be0bfaf438e63e0d
+      internalID: 4304726619849188340
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: feuertaco_marsch_29
+      rect:
+        serializedVersion: 2
+        x: 1624
+        y: 0
+        width: 56
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7da560c211b04bcf831ec14a01a1e5fa
+      internalID: 1595316906360933019
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: feuertaco_marsch_30
+      rect:
+        serializedVersion: 2
+        x: 1680
+        y: 0
+        width: 56
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 55aef4684c9248b48b21feb2dddcc527
+      internalID: 4297901529596975219
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: feuertaco_marsch_31
+      rect:
+        serializedVersion: 2
+        x: 1736
+        y: 0
+        width: 56
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5a8ad8bf61934d9ab071bb5db5ff1aa0
+      internalID: 1860787897291785179
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      feuertaco_marsch_0: 2744204970097620782
+      feuertaco_marsch_1: 2111798078460174585
+      feuertaco_marsch_10: 2890095731130529434
+      feuertaco_marsch_11: 2511027111499454087
+      feuertaco_marsch_12: 1434287310472171447
+      feuertaco_marsch_13: 3439919455620149371
+      feuertaco_marsch_14: 4564595817910105714
+      feuertaco_marsch_15: 3624365175183383048
+      feuertaco_marsch_16: 3441665919524083635
+      feuertaco_marsch_17: 3401713677850809105
+      feuertaco_marsch_18: 3067084289909902095
+      feuertaco_marsch_19: 3526546148768383145
+      feuertaco_marsch_2: 2922429811434250278
+      feuertaco_marsch_20: 2759122844956003976
+      feuertaco_marsch_21: 2008638063799239735
+      feuertaco_marsch_22: 2092084119151046605
+      feuertaco_marsch_23: 1997890363557217201
+      feuertaco_marsch_24: 3868547149100930219
+      feuertaco_marsch_25: 4298665157885686049
+      feuertaco_marsch_26: 1171824619601251219
+      feuertaco_marsch_27: 2821147142727201000
+      feuertaco_marsch_28: 4304726619849188340
+      feuertaco_marsch_29: 1595316906360933019
+      feuertaco_marsch_3: 2866350272798979415
+      feuertaco_marsch_30: 4297901529596975219
+      feuertaco_marsch_31: 1860787897291785179
+      feuertaco_marsch_4: 1693484750370047161
+      feuertaco_marsch_5: 2089691206605086973
+      feuertaco_marsch_6: 1498481139356650496
+      feuertaco_marsch_7: 3759977151785402230
+      feuertaco_marsch_8: 4223349736157755091
+      feuertaco_marsch_9: 1734540505739816543
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

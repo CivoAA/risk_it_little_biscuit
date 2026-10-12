@@ -16,7 +16,7 @@ using UnityEngine;
 /// desto mehr Schaden. Gegen Hindernisse oder nach <see cref="Lifetime"/>
 /// zerfaellt sie ohne Wirkung.
 ///
-/// Bilder aus Tools/eiskaiser.py: eiskaiser_kugel (6 Groessen x 4 Rollbilder),
+/// Bilder: eiskaiser_kugel (6 Groessen x 4 Rollbilder),
 /// eiskaiser_platzt (8 Bilder).
 /// </summary>
 [RequireComponent(typeof(Enemy), typeof(Rigidbody2D))]
@@ -42,7 +42,7 @@ public class EiskaiserLawinenkugel : MonoBehaviour
     private const float AvalancheBase = 1.6f, AvalanchePerSize = 0.45f;
     private const float AvalancheEliteFraction = 0.25f;        // Elites verlieren so viel ihres Lebens
 
-    /// <summary>Radius je Groesse in Pixeln (muss zu Tools/eiskaiser.py passen).</summary>
+    /// <summary>Radius je Groesse in Pixeln (muss zu den Bildern passen).</summary>
     private static readonly int[] RadiusPx = { 8, 11, 14, 18, 22, 27, 32 };
     private const int RollFrames = 4;
     private const float PixelsPerUnit = 32f;

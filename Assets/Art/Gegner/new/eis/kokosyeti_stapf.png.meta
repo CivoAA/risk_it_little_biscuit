@@ -1,0 +1,939 @@
+fileFormatVersion: 2
+guid: 994ab857207345baa661676dadc89549
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2626154768143717744
+    second: kokosyeti_stapf_0
+  - first:
+      213: 2883433473355717172
+    second: kokosyeti_stapf_1
+  - first:
+      213: 1190851009697984826
+    second: kokosyeti_stapf_2
+  - first:
+      213: 3306282670050975371
+    second: kokosyeti_stapf_3
+  - first:
+      213: 3293975329351953828
+    second: kokosyeti_stapf_4
+  - first:
+      213: 1590406532579190982
+    second: kokosyeti_stapf_5
+  - first:
+      213: 3813208203391425725
+    second: kokosyeti_stapf_6
+  - first:
+      213: 3276754291915480389
+    second: kokosyeti_stapf_7
+  - first:
+      213: 1478745971586205761
+    second: kokosyeti_stapf_8
+  - first:
+      213: 2755687246049937534
+    second: kokosyeti_stapf_9
+  - first:
+      213: 3708949111116623339
+    second: kokosyeti_stapf_10
+  - first:
+      213: 1957965793918069861
+    second: kokosyeti_stapf_11
+  - first:
+      213: 4471280033979935775
+    second: kokosyeti_stapf_12
+  - first:
+      213: 2197974434278452781
+    second: kokosyeti_stapf_13
+  - first:
+      213: 3056117337008248075
+    second: kokosyeti_stapf_14
+  - first:
+      213: 2431417766744827562
+    second: kokosyeti_stapf_15
+  - first:
+      213: 3845268236524509819
+    second: kokosyeti_stapf_16
+  - first:
+      213: 2414991222331199385
+    second: kokosyeti_stapf_17
+  - first:
+      213: 3076610273440906605
+    second: kokosyeti_stapf_18
+  - first:
+      213: 3301781450381379787
+    second: kokosyeti_stapf_19
+  - first:
+      213: 4171446475972170595
+    second: kokosyeti_stapf_20
+  - first:
+      213: 2329240699112115681
+    second: kokosyeti_stapf_21
+  - first:
+      213: 3660859087979643211
+    second: kokosyeti_stapf_22
+  - first:
+      213: 2831146248394096206
+    second: kokosyeti_stapf_23
+  - first:
+      213: 4231908932530595287
+    second: kokosyeti_stapf_24
+  - first:
+      213: 4100946512690506503
+    second: kokosyeti_stapf_25
+  - first:
+      213: 4567443137501733273
+    second: kokosyeti_stapf_26
+  - first:
+      213: 3802381288211564036
+    second: kokosyeti_stapf_27
+  - first:
+      213: 3549417422450103299
+    second: kokosyeti_stapf_28
+  - first:
+      213: 2926894243744319835
+    second: kokosyeti_stapf_29
+  - first:
+      213: 1165591493048719900
+    second: kokosyeti_stapf_30
+  - first:
+      213: 3135348682213953428
+    second: kokosyeti_stapf_31
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: kokosyeti_stapf_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.058823529411764705}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75d5421b4bca4a00afa866aae4a20468
+      internalID: 2626154768143717744
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kokosyeti_stapf_1
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.058823529411764705}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 35c12cdde09d40378fd2894f83e0a535
+      internalID: 2883433473355717172
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kokosyeti_stapf_2
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.058823529411764705}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 43d6dcb75fe5440db2c4e1e744f2dc38
+      internalID: 1190851009697984826
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kokosyeti_stapf_3
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.058823529411764705}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0659e95492254b238ce9138619f4898c
+      internalID: 3306282670050975371
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kokosyeti_stapf_4
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.058823529411764705}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c707ffed05144dfcb22e66577a5f83d7
+      internalID: 3293975329351953828
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kokosyeti_stapf_5
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.058823529411764705}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2e1a81987df0452b8818fab4a8b24e14
+      internalID: 1590406532579190982
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kokosyeti_stapf_6
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.058823529411764705}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d787804446ad4676bcb17f37e93d40cb
+      internalID: 3813208203391425725
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kokosyeti_stapf_7
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.058823529411764705}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c3c2fcd2d12462bbbdd3a3fcc823b74
+      internalID: 3276754291915480389
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kokosyeti_stapf_8
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.058823529411764705}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0a76bb10a864470ba0430e595272df1c
+      internalID: 1478745971586205761
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kokosyeti_stapf_9
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.058823529411764705}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3cf4bf244b204f9f9910b8743f209a06
+      internalID: 2755687246049937534
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kokosyeti_stapf_10
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.058823529411764705}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a5ede065c16444f18b23123e6db98b83
+      internalID: 3708949111116623339
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kokosyeti_stapf_11
+      rect:
+        serializedVersion: 2
+        x: 704
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.058823529411764705}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1195256725a640789efb3b716d88b4d1
+      internalID: 1957965793918069861
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kokosyeti_stapf_12
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.058823529411764705}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee8e8505f6de40698acd20c3524c16e4
+      internalID: 4471280033979935775
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kokosyeti_stapf_13
+      rect:
+        serializedVersion: 2
+        x: 832
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.058823529411764705}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f16c053206048f9b4c0a3044b6ea37e
+      internalID: 2197974434278452781
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kokosyeti_stapf_14
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.058823529411764705}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 053f747373e2426597a7f54be6485262
+      internalID: 3056117337008248075
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kokosyeti_stapf_15
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.058823529411764705}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 767482c9aeaa48dbb59d2c3a7f1a7f35
+      internalID: 2431417766744827562
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kokosyeti_stapf_16
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.058823529411764705}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 03c4f410f8204852ae93be2a5d108ce2
+      internalID: 3845268236524509819
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kokosyeti_stapf_17
+      rect:
+        serializedVersion: 2
+        x: 1088
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.058823529411764705}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7e3ecf4868f34afca35e057edb3c7ad0
+      internalID: 2414991222331199385
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kokosyeti_stapf_18
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.058823529411764705}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4487eb24585f407aba6c963e588008a6
+      internalID: 3076610273440906605
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kokosyeti_stapf_19
+      rect:
+        serializedVersion: 2
+        x: 1216
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.058823529411764705}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1df449fe052d49c1b4d657bff507a99f
+      internalID: 3301781450381379787
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kokosyeti_stapf_20
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.058823529411764705}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1621a6d77dbd4576b94d598a38128861
+      internalID: 4171446475972170595
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kokosyeti_stapf_21
+      rect:
+        serializedVersion: 2
+        x: 1344
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.058823529411764705}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 77c08867136c4461a3d345ded9b4a31f
+      internalID: 2329240699112115681
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kokosyeti_stapf_22
+      rect:
+        serializedVersion: 2
+        x: 1408
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.058823529411764705}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 556241f4510c4249886201265cc3dd4a
+      internalID: 3660859087979643211
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kokosyeti_stapf_23
+      rect:
+        serializedVersion: 2
+        x: 1472
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.058823529411764705}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fcd01f35ab824ff2b3378fc46a0d995b
+      internalID: 2831146248394096206
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kokosyeti_stapf_24
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.058823529411764705}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bb8b95ea9c904ad4bf2b69a7f9480415
+      internalID: 4231908932530595287
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kokosyeti_stapf_25
+      rect:
+        serializedVersion: 2
+        x: 1600
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.058823529411764705}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 69ca4833c0f6450ba41a30a06b73d479
+      internalID: 4100946512690506503
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kokosyeti_stapf_26
+      rect:
+        serializedVersion: 2
+        x: 1664
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.058823529411764705}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1c3fbf42329e4fb6b06af2c2d3ff69bd
+      internalID: 4567443137501733273
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kokosyeti_stapf_27
+      rect:
+        serializedVersion: 2
+        x: 1728
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.058823529411764705}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 190f9c5a783f4f4e90fae9f457ce7aec
+      internalID: 3802381288211564036
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kokosyeti_stapf_28
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.058823529411764705}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2d71ae82f28425f854f3873346cf6d6
+      internalID: 3549417422450103299
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kokosyeti_stapf_29
+      rect:
+        serializedVersion: 2
+        x: 1856
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.058823529411764705}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fdbc6a3bd18647d282650e67222ea724
+      internalID: 2926894243744319835
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kokosyeti_stapf_30
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.058823529411764705}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 45d029bec9d044eda5a6d8bcf024ee26
+      internalID: 1165591493048719900
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kokosyeti_stapf_31
+      rect:
+        serializedVersion: 2
+        x: 1984
+        y: 0
+        width: 64
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.058823529411764705}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f90b566bfe2e4b238c4fc0032da12865
+      internalID: 3135348682213953428
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      kokosyeti_stapf_0: 2626154768143717744
+      kokosyeti_stapf_1: 2883433473355717172
+      kokosyeti_stapf_10: 3708949111116623339
+      kokosyeti_stapf_11: 1957965793918069861
+      kokosyeti_stapf_12: 4471280033979935775
+      kokosyeti_stapf_13: 2197974434278452781
+      kokosyeti_stapf_14: 3056117337008248075
+      kokosyeti_stapf_15: 2431417766744827562
+      kokosyeti_stapf_16: 3845268236524509819
+      kokosyeti_stapf_17: 2414991222331199385
+      kokosyeti_stapf_18: 3076610273440906605
+      kokosyeti_stapf_19: 3301781450381379787
+      kokosyeti_stapf_2: 1190851009697984826
+      kokosyeti_stapf_20: 4171446475972170595
+      kokosyeti_stapf_21: 2329240699112115681
+      kokosyeti_stapf_22: 3660859087979643211
+      kokosyeti_stapf_23: 2831146248394096206
+      kokosyeti_stapf_24: 4231908932530595287
+      kokosyeti_stapf_25: 4100946512690506503
+      kokosyeti_stapf_26: 4567443137501733273
+      kokosyeti_stapf_27: 3802381288211564036
+      kokosyeti_stapf_28: 3549417422450103299
+      kokosyeti_stapf_29: 2926894243744319835
+      kokosyeti_stapf_3: 3306282670050975371
+      kokosyeti_stapf_30: 1165591493048719900
+      kokosyeti_stapf_31: 3135348682213953428
+      kokosyeti_stapf_4: 3293975329351953828
+      kokosyeti_stapf_5: 1590406532579190982
+      kokosyeti_stapf_6: 3813208203391425725
+      kokosyeti_stapf_7: 3276754291915480389
+      kokosyeti_stapf_8: 1478745971586205761
+      kokosyeti_stapf_9: 2755687246049937534
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

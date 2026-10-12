@@ -70,6 +70,14 @@ public class HubUI : MonoBehaviour
     [SerializeField] private Color textColor   = new Color32(0xF7, 0xEC, 0xD6, 0xFF);
     [SerializeField] private Color hintColor   = new Color32(0xD9, 0xA4, 0x41, 0xFF);
 
+    [Header("[E]-Hinweis")]
+    [SerializeField] private float promptFontSize    = 9f;
+    [SerializeField] private float promptKeyFontSize = 8f;
+    [Tooltip("Abstand der Hinweis-Tafel zum unteren Bildschirmrand.")]
+    [SerializeField] private float promptY = 14f;
+    [SerializeField] private Color promptOutlineColor = new Color32(0x14, 0x0C, 0x08, 0xFF);
+    [SerializeField] private Color keyShadowColor     = new Color32(0x8A, 0x5A, 0x1E, 0xFF);
+
     [Header("Dialog-Extras")]
     [Tooltip("Kantenlaenge des Portraits links in der Box (nur wenn ein Portrait mitkommt).")]
     [SerializeField] private float portraitSize = 32f;
@@ -114,6 +122,13 @@ public class HubUI : MonoBehaviour
 
     GameObject dialogueRoot, promptRoot, coinRoot;
     TextMeshProUGUI bodyText, hintText, promptLabel, coinValueText;
+
+    // [E]-Hinweis: Tafel, Tastenkappe, Aktion
+    RectTransform promptRect, keyCapRect, keyFaceRect, promptLabelRect;
+    TextMeshProUGUI keyText;
+    string promptShownText;
+    bool promptDirty;
+    float promptShownAt;
 
     // Dialog-Extras: getippter Text, Weiter-Pfeil, Namensschild, Portrait
     DialogueText typer;
@@ -290,22 +305,117 @@ public class HubUI : MonoBehaviour
         dialogueRoot.SetActive(false);
 
         // ---- [E]-Hinweis -------------------------------------------------
-        promptRoot = NewRect("Prompt", canvasGO.transform);
-        var pRect = (RectTransform)promptRoot.transform;
-        pRect.anchorMin = new Vector2(0.5f, 0f);
-        pRect.anchorMax = new Vector2(0.5f, 0f);
-        pRect.pivot     = new Vector2(0.5f, 0f);
-        pRect.sizeDelta = new Vector2(referenceResolution.x, 14f);
-        pRect.anchoredPosition = new Vector2(0f, boxMarginY + 4f);
-
-        promptLabel = NewText("Label", promptRoot.transform, hintFontSize + 1f, borderColor);
-        Stretch((RectTransform)promptLabel.transform, 0f);
-        promptLabel.alignment = TextAlignmentOptions.Center;
-
-        promptRoot.SetActive(false);
+        BuildPrompt(canvasGO.transform);
 
         // ---- Muenzanzeige ------------------------------------------------
         BuildCoins(canvasGO.transform);
+    }
+
+    /// <summary>
+    /// Das Schild fuer den [E]-Hinweis: dunkle Tafel mit hellem Rand wie die
+    /// Textbox, links eine Tastenkappe mit der Taste, rechts die Aktion. Die
+    /// Breite richtet sich nach dem Text (siehe <see cref="LayoutPrompt"/>).
+    /// </summary>
+    void BuildPrompt(Transform parent)
+    {
+        promptRoot = NewRect("Prompt", parent);
+        promptRect = (RectTransform)promptRoot.transform;
+        promptRect.anchorMin = promptRect.anchorMax = promptRect.pivot = new Vector2(0.5f, 0f);
+
+        // Aussen 1 px dunkel, dann 1 px heller Rand: steht so auf hellem
+        // Boden genauso wie auf dunklem.
+        promptRoot.AddComponent<Image>().color = promptOutlineColor;
+        var rim = NewRect("Rim", promptRoot.transform);
+        Stretch((RectTransform)rim.transform, 1f);
+        rim.AddComponent<Image>().color = borderColor;
+        var panel = NewRect("Panel", rim.transform);
+        Stretch((RectTransform)panel.transform, 1f);
+        panel.AddComponent<Image>().color = panelColor;
+
+        // Tastenkappe: dunkler Sockel, darauf die goldene Flaeche. Beim
+        // "Druecken" rutscht die Flaeche 1 px auf den Sockel.
+        var cap = NewRect("Key", panel.transform);
+        keyCapRect = (RectTransform)cap.transform;
+        keyCapRect.anchorMin = keyCapRect.anchorMax = keyCapRect.pivot = new Vector2(0f, 0.5f);
+        cap.AddComponent<Image>().color = keyShadowColor;
+
+        var face = NewRect("Face", cap.transform);
+        keyFaceRect = (RectTransform)face.transform;
+        keyFaceRect.anchorMin = new Vector2(0f, 1f);
+        keyFaceRect.anchorMax = new Vector2(1f, 1f);
+        keyFaceRect.pivot     = new Vector2(0.5f, 1f);
+        face.AddComponent<Image>().color = hintColor;
+
+        keyText = NewText("Label", face.transform, promptKeyFontSize, panelColor);
+        Stretch((RectTransform)keyText.transform, 0f);
+        keyText.alignment = TextAlignmentOptions.Center;
+        keyText.textWrappingMode = TextWrappingModes.NoWrap;
+
+        promptLabel = NewText("Label", panel.transform, promptFontSize, textColor);
+        promptLabelRect = (RectTransform)promptLabel.transform;
+        promptLabelRect.anchorMin = promptLabelRect.anchorMax = promptLabelRect.pivot = new Vector2(0f, 0.5f);
+        promptLabel.alignment = TextAlignmentOptions.MidlineLeft;
+        promptLabel.textWrappingMode = TextWrappingModes.NoWrap;
+
+        promptRoot.SetActive(false);
+    }
+
+    /// <summary>
+    /// Zerlegt "[E] Lesen" in Taste und Aktion und passt das Schild an. Ohne
+    /// [..] vorne bleibt die Kappe weg und nur der Text steht auf der Tafel.
+    /// </summary>
+    void LayoutPrompt(string text)
+    {
+        string key = null, action = text ?? "";
+        string trimmed = action.TrimStart();
+        if (trimmed.StartsWith("["))
+        {
+            int close = trimmed.IndexOf(']');
+            if (close > 1)
+            {
+                key = trimmed.Substring(1, close - 1).Trim();
+                action = trimmed.Substring(close + 1).Trim();
+            }
+        }
+
+        const float frame = 2f;      // 1 px dunkel + 1 px Rand
+        const float padX = 4f, gap = 4f, keyH = 11f;
+
+        bool hasKey = !string.IsNullOrEmpty(key);
+        keyCapRect.gameObject.SetActive(hasKey);
+        float x = padX;
+        if (hasKey)
+        {
+            keyText.text = key;
+            float keyW = Mathf.Max(keyH, Mathf.Ceil(keyText.GetPreferredValues(key).x) + 4f);
+            keyCapRect.sizeDelta = new Vector2(keyW, keyH);
+            keyCapRect.anchoredPosition = new Vector2(x, 0f);
+            keyFaceRect.sizeDelta = new Vector2(0f, keyH - 2f);
+            x += keyW + gap;
+        }
+
+        promptLabel.text = action;
+        float labelW = Mathf.Ceil(promptLabel.GetPreferredValues(action).x);
+        promptLabelRect.sizeDelta = new Vector2(labelW + 2f, keyH + 4f);
+        promptLabelRect.anchoredPosition = new Vector2(x, 0f);
+
+        // Gerade Breite: das Schild steht mittig, sonst saesse es auf halben Pixeln.
+        float w = 2f * frame + x + labelW + padX;
+        w = Mathf.Ceil(w / 2f) * 2f;
+        promptRect.sizeDelta = new Vector2(w, 2f * frame + keyH + 6f);
+    }
+
+    /// <summary>Kurz hochploppen beim Erscheinen, danach drueckt die Kappe ab und zu.</summary>
+    void AnimatePrompt()
+    {
+        float t = Time.unscaledTime - promptShownAt;
+        float rise = Mathf.Clamp01(t / 0.14f);
+        rise = 1f - (1f - rise) * (1f - rise);
+        float y = promptY - Mathf.Round((1f - rise) * 6f);
+        promptRect.anchoredPosition = new Vector2(0f, y);
+
+        bool pressed = t > 0.3f && Mathf.Repeat(t - 0.3f, 1.4f) < 0.16f;
+        keyFaceRect.anchoredPosition = new Vector2(0f, pressed ? -1f : 0f);
     }
 
     /// <summary>
@@ -407,7 +517,9 @@ public class HubUI : MonoBehaviour
     public void RequestPrompt(string text)
     {
         promptRequestedThisFrame = true;
-        if (promptLabel != null && promptLabel.text != text) promptLabel.text = text;
+        if (text == promptShownText) return;
+        promptShownText = text;
+        promptDirty = true;
     }
 
     /// <summary>
@@ -553,7 +665,16 @@ public class HubUI : MonoBehaviour
         // "Tipps" in den Optionen schaltet ihn ganz ab.
         bool promptWanted = promptRequestedThisFrame && GameSettings.Tips;
         if (promptRoot != null && promptRoot.activeSelf != promptWanted)
+        {
             promptRoot.SetActive(promptWanted);
+            if (promptWanted) promptShownAt = Time.unscaledTime;
+        }
+        if (promptWanted)
+        {
+            // Erst messen, wenn das Schild aktiv ist - TMP rechnet sonst u.U. mit 0.
+            if (promptDirty) { promptDirty = false; LayoutPrompt(promptShownText); }
+            AnimatePrompt();
+        }
         promptRequestedThisFrame = false;
 
         // Shop, Skilltree, Konsole und die Textbox bringen ihre eigene Anzeige

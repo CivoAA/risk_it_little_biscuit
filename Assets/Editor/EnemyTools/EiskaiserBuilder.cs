@@ -6,9 +6,10 @@ using UnityEngine.Rendering;
 
 /// <summary>
 /// Baut das Prefab des Eiskaisers (Endboss der Eiswelt) und traegt es im
-/// SpawnCatalog von GameCore ein. Bilder aus Tools/eiskaiser.py.
+/// SpawnCatalog von GameCore ein.
 ///
-/// Eigener Bauer wie beim Schleimkoenig: neun Bildstreifen (Boss + Effekte),
+/// Eigener Bauer wie beim Schleimkoenig: Laufen + Kick in fuenf Ansichten,
+/// Zauber, Bruellen, Tod (von vorn) und vier Effekt-Streifen,
 /// das Bild sitzt auf einem Kind, gesteuert wird ohne Animator
 /// (<see cref="EnemyEiskaiser"/>). Wiederholbar: ein vorhandenes Prefab wird
 /// aktualisiert.
@@ -47,14 +48,21 @@ public static class EiskaiserBuilder
         EnemyDef def = EnemyCatalog.Get(EnemyId.Eiskaiser);
         if (def == null || string.IsNullOrEmpty(def.Prefab)) return "Kein Katalogeintrag fuer den Eiskaiser.";
 
-        Sprite[] walk = Load("eiskaiser_walk");
-        Sprite[] kick = Load("eiskaiser_kick");
+        EnemyEiskaiser.Views walk = LoadViews("eiskaiser_walk");
+        EnemyEiskaiser.Views kick = LoadViews("eiskaiser_kick");
         Sprite[] cast = Load("eiskaiser_cast");
+        Sprite[] roar = Load("eiskaiser_roar");
+        Sprite[] death = Load("eiskaiser_death");
         Sprite[] crystal = Load("eiskaiser_kristall");
         Sprite[] block = Load("eiskaiser_eisblock");
         Sprite[] ball = Load("eiskaiser_kugel");
         Sprite[] burst = Load("eiskaiser_platzt");
-        if (walk.Length == 0) return "Keine Bilder unter " + ArtFolder + " - erst Tools/eiskaiser.py laufen lassen.";
+        string missing = Missing(walk, "eiskaiser_walk") + Missing(kick, "eiskaiser_kick");
+        if (cast.Length == 0) missing += " eiskaiser_cast";
+        if (roar.Length == 0) missing += " eiskaiser_roar";
+        if (death.Length == 0) missing += " eiskaiser_death";
+        if (missing.Length > 0)
+            return "Bilder fehlen unter " + ArtFolder + ":" + missing + ".";
 
         string ballResult = BuildSnowball(ball, burst, out GameObject ballPrefab);
 
@@ -90,7 +98,7 @@ public static class EiskaiserBuilder
             SpriteRenderer bodyR = GetOrAdd<SpriteRenderer>(t.gameObject);
             bodyR.sortingLayerName = SortingLayerName;
             bodyR.sortingOrder = 1;
-            bodyR.sprite = walk[0];
+            bodyR.sprite = walk.s[0];
             Material material = TemplateMaterial();
             if (material != null) bodyR.sharedMaterial = material;
 
@@ -112,7 +120,7 @@ public static class EiskaiserBuilder
                                           : DefaultDestroyEffect());
 
             EnemyEiskaiser boss = GetOrAdd<EnemyEiskaiser>(root);
-            boss.EditorBind(bodyR, collider, walk, kick, cast, crystal, block, ballPrefab);
+            boss.EditorBind(bodyR, collider, walk, kick, cast, roar, death, crystal, block, ballPrefab);
 
             EditorUtility.SetDirty(root);
             PrefabUtility.SaveAsPrefabAsset(root, def.Prefab);
@@ -124,9 +132,9 @@ public static class EiskaiserBuilder
         }
 
         AssetDatabase.SaveAssets();
-        return string.Format("Prefab {0}: {1} (Laufen {2}, Kick {3}, Zauber {4}, Kristall {5}, Eisblock {6}). {7}",
-            existed ? "aktualisiert" : "angelegt", def.Prefab, walk.Length, kick.Length, cast.Length,
-            crystal.Length, block.Length, ballResult);
+        return string.Format("Prefab {0}: {1} (Laufen 5x{2}, Kick 5x{3}, Zauber {4}, Bruellen {5}, Tod {6}, Kristall {7}, Eisblock {8}). {9}",
+            existed ? "aktualisiert" : "angelegt", def.Prefab, walk.s.Length, kick.s.Length, cast.Length,
+            roar.Length, death.Length, crystal.Length, block.Length, ballResult);
     }
 
     /// <summary>Die Lawinenkugel: eigener Gegner (Id 38) mit Rollbildern und Platz-Effekt.</summary>
@@ -223,6 +231,30 @@ public static class EiskaiserBuilder
                             .OfType<Sprite>()
                             .OrderBy(s => TrailingNumber(s.name))
                             .ToArray();
+    }
+
+    /// <summary>Fuenf Ansichten: [sheet]_s, _se, _e, _ne, _n.</summary>
+    private static EnemyEiskaiser.Views LoadViews(string sheet)
+    {
+        return new EnemyEiskaiser.Views
+        {
+            s = Load(sheet + "_s"),
+            se = Load(sheet + "_se"),
+            e = Load(sheet + "_e"),
+            ne = Load(sheet + "_ne"),
+            n = Load(sheet + "_n"),
+        };
+    }
+
+    private static string Missing(EnemyEiskaiser.Views v, string sheet)
+    {
+        string m = "";
+        if (v.s.Length == 0) m += " " + sheet + "_s";
+        if (v.se.Length == 0) m += " " + sheet + "_se";
+        if (v.e.Length == 0) m += " " + sheet + "_e";
+        if (v.ne.Length == 0) m += " " + sheet + "_ne";
+        if (v.n.Length == 0) m += " " + sheet + "_n";
+        return m;
     }
 
     private static int TrailingNumber(string name)

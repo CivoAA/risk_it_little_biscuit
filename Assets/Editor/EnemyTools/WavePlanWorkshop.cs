@@ -45,6 +45,7 @@ public class WavePlanWorkshop : EditorWindow
             case "World2Demo": return "Welt2 Wald Demo (Karte 2)";
             case "World5": return "Karte 3 - Eisgletscher";
             case "World6": return "Karte 4 - Geisterwald";
+            case "World4": return "Karte 5 - Vulkanwelt";
             default: return "keiner Karte zugeordnet";
         }
     }

@@ -33,6 +33,12 @@ public class SpawnDirector : MonoBehaviour
 {
     public static SpawnDirector Active { get; private set; }
 
+    /// <summary>Id des laufenden Wellenplans (z.B. World1, World2Demo) - leer vor dem Start.</summary>
+    public string PlanId => plan != null ? plan.Id : "";
+
+    /// <summary>Ein Boss oder Zwischenboss wurde gesetzt (Boss-Beat oder Testtaste).</summary>
+    public static event System.Action<Enemy> BossSpawned;
+
     [Header("Bausteine")]
     [Tooltip("Prefabs je Gegnerart. Fuellt die Gegner-Werkstatt.")]
     [SerializeField] private SpawnCatalog catalog;
@@ -340,6 +346,7 @@ public class SpawnDirector : MonoBehaviour
                 Enemy bossEnemy = boss != null ? boss.GetComponent<Enemy>() : null;
                 if (bossEnemy != null && bossEnemy.Role == EnemyRole.MiniBoss) activeMiniBoss = bossEnemy;
                 if (bossEnemy != null && bossEnemy.Role == EnemyRole.Boss) activeBoss = bossEnemy;
+                if (bossEnemy != null) BossSpawned?.Invoke(bossEnemy);
                 break;
         }
     }
@@ -405,6 +412,8 @@ public class SpawnDirector : MonoBehaviour
     private void CheckFinisher()
     {
         if (finisherSpawned || plan.Finisher == EnemyId.None || GameSession.IsEndless) return;
+        // Die Story beendet diesen Lauf selbst (Splitter, Gespraech, Sieg).
+        if (StoryDirector.ClaimsWin) return;
 
         // Unity-Vergleich: ein zerstoerter Boss ist hier == null.
         if (ReferenceEquals(activeBoss, null) || activeBoss != null) return;
@@ -430,6 +439,7 @@ public class SpawnDirector : MonoBehaviour
         Enemy bossEnemy = boss != null ? boss.GetComponent<Enemy>() : null;
         if (bossEnemy != null && bossEnemy.Role == EnemyRole.MiniBoss) activeMiniBoss = bossEnemy;
         if (bossEnemy != null && bossEnemy.Role == EnemyRole.Boss) activeBoss = bossEnemy;
+        if (bossEnemy != null) BossSpawned?.Invoke(bossEnemy);
         return boss;
     }
 

@@ -15,7 +15,6 @@ using UnityEngine;
 /// (den Animator, den sie dazuhaengt, schaltet EnemyGlutwurz selbst ab).
 ///
 /// Wiederholbar: ein vorhandenes Prefab wird aktualisiert, nicht ersetzt.
-/// Die Bilder kommen aus Tools/baumboss.py und Tools/baumboss_feuer.py.
 /// </summary>
 public static class GlutwurzBuilder
 {
@@ -64,7 +63,7 @@ public static class GlutwurzBuilder
         Sprite[] fireStart = Load("baumboss_fire_start");
         Sprite[] fireMid = Load("baumboss_fire_mid");
         Sprite[] fireEnd = Load("baumboss_fire_end");
-        if (front.Length == 0) return "Keine Bilder unter " + ArtFolder + " - erst Tools/baumboss.py laufen lassen.";
+        if (front.Length == 0) return "Keine Bilder unter " + ArtFolder + ".";
 
         EnsureFolder(System.IO.Path.GetDirectoryName(def.Prefab).Replace('\\', '/'));
 

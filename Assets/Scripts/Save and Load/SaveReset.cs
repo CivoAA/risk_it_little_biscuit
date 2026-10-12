@@ -30,6 +30,7 @@ public static class SaveReset
         Loadout.ResetProgress();
         Bestiary.ResetAll();
         LevelRecords.ResetAll();
+        StoryProgress.ResetAll();
 
         Debug.Log("[SaveReset] Spielstand zurueckgesetzt.");
 

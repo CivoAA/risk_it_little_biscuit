@@ -28,7 +28,7 @@ public class VortexPrefab : MonoBehaviour
     [SerializeField] private float spinSpeed = 180f;
 
     private float lifeTimer;
-    private SpriteFlipbook look;   // Grafik + Ausblenden, siehe Tools/waffen_modelle.py
+    private SpriteFlipbook look;
     private float tickCounter;
 
     void Start()

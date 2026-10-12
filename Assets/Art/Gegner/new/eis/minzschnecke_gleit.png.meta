@@ -1,0 +1,419 @@
+fileFormatVersion: 2
+guid: f23173f7b1f34492af40a39f864600e7
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2064567921833108064
+    second: minzschnecke_gleit_0
+  - first:
+      213: 3918664674079200330
+    second: minzschnecke_gleit_1
+  - first:
+      213: 3496967011946724277
+    second: minzschnecke_gleit_2
+  - first:
+      213: 2363737211193819940
+    second: minzschnecke_gleit_3
+  - first:
+      213: 1583774478434869476
+    second: minzschnecke_gleit_4
+  - first:
+      213: 2202175664060146289
+    second: minzschnecke_gleit_5
+  - first:
+      213: 4190743963295901362
+    second: minzschnecke_gleit_6
+  - first:
+      213: 4304634397103271483
+    second: minzschnecke_gleit_7
+  - first:
+      213: 2072285655150012010
+    second: minzschnecke_gleit_8
+  - first:
+      213: 3298397085103009796
+    second: minzschnecke_gleit_9
+  - first:
+      213: 1684769988060117040
+    second: minzschnecke_gleit_10
+  - first:
+      213: 3056021770190795425
+    second: minzschnecke_gleit_11
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: minzschnecke_gleit_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 46
+        height: 36
+      alignment: 9
+      pivot: {x: 0.4782608695652174, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4144ce407be14d748312fc03e19e9e31
+      internalID: 2064567921833108064
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: minzschnecke_gleit_1
+      rect:
+        serializedVersion: 2
+        x: 46
+        y: 0
+        width: 46
+        height: 36
+      alignment: 9
+      pivot: {x: 0.4782608695652174, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a4d0996cbdf2470e86e03f3266a22a35
+      internalID: 3918664674079200330
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: minzschnecke_gleit_2
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 0
+        width: 46
+        height: 36
+      alignment: 9
+      pivot: {x: 0.4782608695652174, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 70735d11209c4623991f2562f46a0c10
+      internalID: 3496967011946724277
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: minzschnecke_gleit_3
+      rect:
+        serializedVersion: 2
+        x: 138
+        y: 0
+        width: 46
+        height: 36
+      alignment: 9
+      pivot: {x: 0.4782608695652174, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1617ec1911374e89b87e9228640e37e3
+      internalID: 2363737211193819940
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: minzschnecke_gleit_4
+      rect:
+        serializedVersion: 2
+        x: 184
+        y: 0
+        width: 46
+        height: 36
+      alignment: 9
+      pivot: {x: 0.4782608695652174, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e6d5d851cbdc4f2fbc602a10618e0b2c
+      internalID: 1583774478434869476
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: minzschnecke_gleit_5
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 0
+        width: 46
+        height: 36
+      alignment: 9
+      pivot: {x: 0.4782608695652174, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 071bc0f449924ba1830928572e90a375
+      internalID: 2202175664060146289
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: minzschnecke_gleit_6
+      rect:
+        serializedVersion: 2
+        x: 276
+        y: 0
+        width: 46
+        height: 36
+      alignment: 9
+      pivot: {x: 0.4782608695652174, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 18adcba5e393409395c1467b09571b6b
+      internalID: 4190743963295901362
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: minzschnecke_gleit_7
+      rect:
+        serializedVersion: 2
+        x: 322
+        y: 0
+        width: 46
+        height: 36
+      alignment: 9
+      pivot: {x: 0.4782608695652174, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c2cc000d6b6412693bf117b303a2d8e
+      internalID: 4304634397103271483
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: minzschnecke_gleit_8
+      rect:
+        serializedVersion: 2
+        x: 368
+        y: 0
+        width: 46
+        height: 36
+      alignment: 9
+      pivot: {x: 0.4782608695652174, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 02dbf3c8d19849549970f8995dd299d3
+      internalID: 2072285655150012010
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: minzschnecke_gleit_9
+      rect:
+        serializedVersion: 2
+        x: 414
+        y: 0
+        width: 46
+        height: 36
+      alignment: 9
+      pivot: {x: 0.4782608695652174, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eb5fbeb2cd4b497b955e1cc84225420b
+      internalID: 3298397085103009796
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: minzschnecke_gleit_10
+      rect:
+        serializedVersion: 2
+        x: 460
+        y: 0
+        width: 46
+        height: 36
+      alignment: 9
+      pivot: {x: 0.4782608695652174, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 27946d2ea98c4a5b961512f7e36aa421
+      internalID: 1684769988060117040
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: minzschnecke_gleit_11
+      rect:
+        serializedVersion: 2
+        x: 506
+        y: 0
+        width: 46
+        height: 36
+      alignment: 9
+      pivot: {x: 0.4782608695652174, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2719b5d3127b41f28444b7df6687245b
+      internalID: 3056021770190795425
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      minzschnecke_gleit_0: 2064567921833108064
+      minzschnecke_gleit_1: 3918664674079200330
+      minzschnecke_gleit_10: 1684769988060117040
+      minzschnecke_gleit_11: 3056021770190795425
+      minzschnecke_gleit_2: 3496967011946724277
+      minzschnecke_gleit_3: 2363737211193819940
+      minzschnecke_gleit_4: 1583774478434869476
+      minzschnecke_gleit_5: 2202175664060146289
+      minzschnecke_gleit_6: 4190743963295901362
+      minzschnecke_gleit_7: 4304634397103271483
+      minzschnecke_gleit_8: 2072285655150012010
+      minzschnecke_gleit_9: 3298397085103009796
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

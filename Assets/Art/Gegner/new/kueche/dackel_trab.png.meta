@@ -1,0 +1,419 @@
+fileFormatVersion: 2
+guid: 82c3d0311272488c9d6ba87cddb32a36
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4062954244008443187
+    second: dackel_trab_0
+  - first:
+      213: 2147894545936147294
+    second: dackel_trab_1
+  - first:
+      213: 3125942584189801024
+    second: dackel_trab_2
+  - first:
+      213: 4161152198454767459
+    second: dackel_trab_3
+  - first:
+      213: 1406584719011663200
+    second: dackel_trab_4
+  - first:
+      213: 4302281757372946563
+    second: dackel_trab_5
+  - first:
+      213: 2049764937147903802
+    second: dackel_trab_6
+  - first:
+      213: 2169792333773413215
+    second: dackel_trab_7
+  - first:
+      213: 4220045517704298981
+    second: dackel_trab_8
+  - first:
+      213: 1596585960374237519
+    second: dackel_trab_9
+  - first:
+      213: 3021366251831327687
+    second: dackel_trab_10
+  - first:
+      213: 4456901226572966945
+    second: dackel_trab_11
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: dackel_trab_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 52
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5192307692307693, y: 0.09375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eea7124835314be8a4eb493b1b6f9391
+      internalID: 4062954244008443187
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dackel_trab_1
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 0
+        width: 52
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5192307692307693, y: 0.09375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3737a111b2ac4b9cad3115080b6bc319
+      internalID: 2147894545936147294
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dackel_trab_2
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 0
+        width: 52
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5192307692307693, y: 0.09375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9cae3862262427c975f2ec9e9330a02
+      internalID: 3125942584189801024
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dackel_trab_3
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 0
+        width: 52
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5192307692307693, y: 0.09375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 018918f48b9446f4aefd588b2090cb26
+      internalID: 4161152198454767459
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dackel_trab_4
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 0
+        width: 52
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5192307692307693, y: 0.09375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae72c81ec3b84f618fed9063d5501ae9
+      internalID: 1406584719011663200
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dackel_trab_5
+      rect:
+        serializedVersion: 2
+        x: 260
+        y: 0
+        width: 52
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5192307692307693, y: 0.09375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 28879c51f45b4ccd8dba03c8b62cb704
+      internalID: 4302281757372946563
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dackel_trab_6
+      rect:
+        serializedVersion: 2
+        x: 312
+        y: 0
+        width: 52
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5192307692307693, y: 0.09375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f107dddd20a643be86be8fb0ed36d4c6
+      internalID: 2049764937147903802
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dackel_trab_7
+      rect:
+        serializedVersion: 2
+        x: 364
+        y: 0
+        width: 52
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5192307692307693, y: 0.09375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 94ae5938caa547679e4757c8ae8dbabd
+      internalID: 2169792333773413215
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dackel_trab_8
+      rect:
+        serializedVersion: 2
+        x: 416
+        y: 0
+        width: 52
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5192307692307693, y: 0.09375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c01e433d70a5462ab57701c84170fdd6
+      internalID: 4220045517704298981
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dackel_trab_9
+      rect:
+        serializedVersion: 2
+        x: 468
+        y: 0
+        width: 52
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5192307692307693, y: 0.09375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3afa6243a8304f988224ba3b231bb503
+      internalID: 1596585960374237519
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dackel_trab_10
+      rect:
+        serializedVersion: 2
+        x: 520
+        y: 0
+        width: 52
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5192307692307693, y: 0.09375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 98d8b89217cd469c8758a541511caf29
+      internalID: 3021366251831327687
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dackel_trab_11
+      rect:
+        serializedVersion: 2
+        x: 572
+        y: 0
+        width: 52
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5192307692307693, y: 0.09375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 390f8be07b8b44c0803739718898b10c
+      internalID: 4456901226572966945
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      dackel_trab_0: 4062954244008443187
+      dackel_trab_1: 2147894545936147294
+      dackel_trab_10: 3021366251831327687
+      dackel_trab_11: 4456901226572966945
+      dackel_trab_2: 3125942584189801024
+      dackel_trab_3: 4161152198454767459
+      dackel_trab_4: 1406584719011663200
+      dackel_trab_5: 4302281757372946563
+      dackel_trab_6: 2049764937147903802
+      dackel_trab_7: 2169792333773413215
+      dackel_trab_8: 4220045517704298981
+      dackel_trab_9: 1596585960374237519
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

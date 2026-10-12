@@ -1,0 +1,419 @@
+fileFormatVersion: 2
+guid: 971306ebfc094338b1d415b6f666be31
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2304755460465581177
+    second: wasabi_kriech_0
+  - first:
+      213: 4258856413850873644
+    second: wasabi_kriech_1
+  - first:
+      213: 2659107956033776530
+    second: wasabi_kriech_2
+  - first:
+      213: 4458714732977274404
+    second: wasabi_kriech_3
+  - first:
+      213: 2109873388751372017
+    second: wasabi_kriech_4
+  - first:
+      213: 2705513364268314173
+    second: wasabi_kriech_5
+  - first:
+      213: 4559151531974066482
+    second: wasabi_kriech_6
+  - first:
+      213: 2527064748818910855
+    second: wasabi_kriech_7
+  - first:
+      213: 2760782594495268562
+    second: wasabi_kriech_8
+  - first:
+      213: 2090992463263191521
+    second: wasabi_kriech_9
+  - first:
+      213: 3773302933792976269
+    second: wasabi_kriech_10
+  - first:
+      213: 3016956678768654076
+    second: wasabi_kriech_11
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: wasabi_kriech_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 40
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b13d476e1dc24328b086dce4d830f6f5
+      internalID: 2304755460465581177
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wasabi_kriech_1
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 0
+        width: 40
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bcf66f9ff43942fc84f0e5e2bd5c053d
+      internalID: 4258856413850873644
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wasabi_kriech_2
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 0
+        width: 40
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 243797225d2344cd90bc740f4dcc369c
+      internalID: 2659107956033776530
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wasabi_kriech_3
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 0
+        width: 40
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cc7a8e67b3cd43b7932d8877c8281896
+      internalID: 4458714732977274404
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wasabi_kriech_4
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 0
+        width: 40
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e93204bf5bc64a328afb79b12fb32cfc
+      internalID: 2109873388751372017
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wasabi_kriech_5
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 0
+        width: 40
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e427be32db6b4d2698d6ea0ae0986625
+      internalID: 2705513364268314173
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wasabi_kriech_6
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 0
+        width: 40
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dd58dffc4cee4181b30d0b9f5228bf39
+      internalID: 4559151531974066482
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wasabi_kriech_7
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 0
+        width: 40
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cd634ed794e64eedb4e63dd014b85114
+      internalID: 2527064748818910855
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wasabi_kriech_8
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 0
+        width: 40
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e4aac2fdd3114964bf04d9c05b2d778c
+      internalID: 2760782594495268562
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wasabi_kriech_9
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 0
+        width: 40
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 68090e6b0b28419eba1fa6cd90ca2e5f
+      internalID: 2090992463263191521
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wasabi_kriech_10
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 0
+        width: 40
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c28720be209649369c8b39f83e9ce1d3
+      internalID: 3773302933792976269
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wasabi_kriech_11
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 0
+        width: 40
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 446bf31c0ec348b3b06c402646bee2f0
+      internalID: 3016956678768654076
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      wasabi_kriech_0: 2304755460465581177
+      wasabi_kriech_1: 4258856413850873644
+      wasabi_kriech_10: 3773302933792976269
+      wasabi_kriech_11: 3016956678768654076
+      wasabi_kriech_2: 2659107956033776530
+      wasabi_kriech_3: 4458714732977274404
+      wasabi_kriech_4: 2109873388751372017
+      wasabi_kriech_5: 2705513364268314173
+      wasabi_kriech_6: 4559151531974066482
+      wasabi_kriech_7: 2527064748818910855
+      wasabi_kriech_8: 2760782594495268562
+      wasabi_kriech_9: 2090992463263191521
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

@@ -9,7 +9,7 @@ public class ExpPickup : MonoBehaviour
     public float collectDistance = 0.5f;
     public float maxChaseTime = 5f;   // nach so vielen Sekunden auto-einsammeln
 
-    [Tooltip("Bilder pro Sekunde der Idle-Schleife (Tools/bonbons.py).")]
+    [Tooltip("Bilder pro Sekunde der Idle-Schleife.")]
     public float idleFps = 8f;
 
     /// <summary>Ab so viel XP wird das Bonbon mittel bzw. gross (gleich wie SpawnExp).</summary>

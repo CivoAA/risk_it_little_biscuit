@@ -1,0 +1,731 @@
+fileFormatVersion: 2
+guid: de08f20aec644d0984e345d6cfb76354
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4461709210866978469
+    second: eiskaiser_walk_ne_0
+  - first:
+      213: 3934269381320147886
+    second: eiskaiser_walk_ne_1
+  - first:
+      213: 2817994709750541210
+    second: eiskaiser_walk_ne_2
+  - first:
+      213: 1817578965289202781
+    second: eiskaiser_walk_ne_3
+  - first:
+      213: 1990546199202043374
+    second: eiskaiser_walk_ne_4
+  - first:
+      213: 1355828646346014040
+    second: eiskaiser_walk_ne_5
+  - first:
+      213: 4270859326798604524
+    second: eiskaiser_walk_ne_6
+  - first:
+      213: 2098332159055255600
+    second: eiskaiser_walk_ne_7
+  - first:
+      213: 2172592587357966346
+    second: eiskaiser_walk_ne_8
+  - first:
+      213: 3544445192238242254
+    second: eiskaiser_walk_ne_9
+  - first:
+      213: 3960224266454101227
+    second: eiskaiser_walk_ne_10
+  - first:
+      213: 1623944407528987192
+    second: eiskaiser_walk_ne_11
+  - first:
+      213: 2641437336474494391
+    second: eiskaiser_walk_ne_12
+  - first:
+      213: 3296874276031337957
+    second: eiskaiser_walk_ne_13
+  - first:
+      213: 4565804511881577447
+    second: eiskaiser_walk_ne_14
+  - first:
+      213: 2510450401279045978
+    second: eiskaiser_walk_ne_15
+  - first:
+      213: 2975429183522117835
+    second: eiskaiser_walk_ne_16
+  - first:
+      213: 1416434292629169718
+    second: eiskaiser_walk_ne_17
+  - first:
+      213: 3235027727431140434
+    second: eiskaiser_walk_ne_18
+  - first:
+      213: 3867783724079934526
+    second: eiskaiser_walk_ne_19
+  - first:
+      213: 2677607850930458158
+    second: eiskaiser_walk_ne_20
+  - first:
+      213: 3504381215171438655
+    second: eiskaiser_walk_ne_21
+  - first:
+      213: 1202827175496391625
+    second: eiskaiser_walk_ne_22
+  - first:
+      213: 2478177218761307800
+    second: eiskaiser_walk_ne_23
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 4096
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: eiskaiser_walk_ne_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 144
+        height: 144
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05555555555555555}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7f98c6e5170b488c98b6f88d8f0c2cfd
+      internalID: 4461709210866978469
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eiskaiser_walk_ne_1
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 0
+        width: 144
+        height: 144
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05555555555555555}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2d27fa8e464d4eb888b15d6c3d7dffe1
+      internalID: 3934269381320147886
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eiskaiser_walk_ne_2
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 0
+        width: 144
+        height: 144
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05555555555555555}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5d3f2ea645954372b5396a49a46f3e75
+      internalID: 2817994709750541210
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eiskaiser_walk_ne_3
+      rect:
+        serializedVersion: 2
+        x: 432
+        y: 0
+        width: 144
+        height: 144
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05555555555555555}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8598959782bb4439963417ea8c3f804e
+      internalID: 1817578965289202781
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eiskaiser_walk_ne_4
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 0
+        width: 144
+        height: 144
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05555555555555555}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8204c53f4efe4e559ba51d2d33507553
+      internalID: 1990546199202043374
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eiskaiser_walk_ne_5
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 0
+        width: 144
+        height: 144
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05555555555555555}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 94def35241944f989f09c7014136f7dd
+      internalID: 1355828646346014040
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eiskaiser_walk_ne_6
+      rect:
+        serializedVersion: 2
+        x: 864
+        y: 0
+        width: 144
+        height: 144
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05555555555555555}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2b5e3f85e1c144528c9ae8344cefa2e0
+      internalID: 4270859326798604524
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eiskaiser_walk_ne_7
+      rect:
+        serializedVersion: 2
+        x: 1008
+        y: 0
+        width: 144
+        height: 144
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05555555555555555}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 15a7c6c7dfc54ef08d9abe99f37e3f1d
+      internalID: 2098332159055255600
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eiskaiser_walk_ne_8
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 0
+        width: 144
+        height: 144
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05555555555555555}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7286c6a4efd1411ea93d0081f8c2f283
+      internalID: 2172592587357966346
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eiskaiser_walk_ne_9
+      rect:
+        serializedVersion: 2
+        x: 1296
+        y: 0
+        width: 144
+        height: 144
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05555555555555555}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5924d46a5056411f8e01c9abf00ee7d1
+      internalID: 3544445192238242254
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eiskaiser_walk_ne_10
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 0
+        width: 144
+        height: 144
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05555555555555555}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b61ad911c04b4749a2ffe58b119814dc
+      internalID: 3960224266454101227
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eiskaiser_walk_ne_11
+      rect:
+        serializedVersion: 2
+        x: 1584
+        y: 0
+        width: 144
+        height: 144
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05555555555555555}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e51daaf9363f41e899e400962bf99c3d
+      internalID: 1623944407528987192
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eiskaiser_walk_ne_12
+      rect:
+        serializedVersion: 2
+        x: 1728
+        y: 0
+        width: 144
+        height: 144
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05555555555555555}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 19fb765f24ec421baa73d01cd69ec908
+      internalID: 2641437336474494391
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eiskaiser_walk_ne_13
+      rect:
+        serializedVersion: 2
+        x: 1872
+        y: 0
+        width: 144
+        height: 144
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05555555555555555}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 916ea74401e3404ca91ed24d9f391686
+      internalID: 3296874276031337957
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eiskaiser_walk_ne_14
+      rect:
+        serializedVersion: 2
+        x: 2016
+        y: 0
+        width: 144
+        height: 144
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05555555555555555}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cb52e1437957499baa8e88b75ab3793d
+      internalID: 4565804511881577447
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eiskaiser_walk_ne_15
+      rect:
+        serializedVersion: 2
+        x: 2160
+        y: 0
+        width: 144
+        height: 144
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05555555555555555}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e0cc87670583419ead24b081cb042898
+      internalID: 2510450401279045978
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eiskaiser_walk_ne_16
+      rect:
+        serializedVersion: 2
+        x: 2304
+        y: 0
+        width: 144
+        height: 144
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05555555555555555}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a78bcdd0dceb47159382b2e60cf56e88
+      internalID: 2975429183522117835
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eiskaiser_walk_ne_17
+      rect:
+        serializedVersion: 2
+        x: 2448
+        y: 0
+        width: 144
+        height: 144
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05555555555555555}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 49cdf1e2a06e48bcb98f39b30518792a
+      internalID: 1416434292629169718
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eiskaiser_walk_ne_18
+      rect:
+        serializedVersion: 2
+        x: 2592
+        y: 0
+        width: 144
+        height: 144
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05555555555555555}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 24371e2aaf9d49dab458f7a1a283c376
+      internalID: 3235027727431140434
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eiskaiser_walk_ne_19
+      rect:
+        serializedVersion: 2
+        x: 2736
+        y: 0
+        width: 144
+        height: 144
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05555555555555555}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7dbe77ce34364cc2b11e7f86a222b492
+      internalID: 3867783724079934526
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eiskaiser_walk_ne_20
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 0
+        width: 144
+        height: 144
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05555555555555555}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2cd7385cd48f412796d98926a08f327e
+      internalID: 2677607850930458158
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eiskaiser_walk_ne_21
+      rect:
+        serializedVersion: 2
+        x: 3024
+        y: 0
+        width: 144
+        height: 144
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05555555555555555}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 818a65d9ea504eb88284a880be096e09
+      internalID: 3504381215171438655
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eiskaiser_walk_ne_22
+      rect:
+        serializedVersion: 2
+        x: 3168
+        y: 0
+        width: 144
+        height: 144
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05555555555555555}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b41a44360a234f8c95d11e17778c81a4
+      internalID: 1202827175496391625
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: eiskaiser_walk_ne_23
+      rect:
+        serializedVersion: 2
+        x: 3312
+        y: 0
+        width: 144
+        height: 144
+      alignment: 9
+      pivot: {x: 0.5, y: 0.05555555555555555}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 739fe9c4010342159f3de5f8a989f79c
+      internalID: 2478177218761307800
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      eiskaiser_walk_ne_0: 4461709210866978469
+      eiskaiser_walk_ne_1: 3934269381320147886
+      eiskaiser_walk_ne_10: 3960224266454101227
+      eiskaiser_walk_ne_11: 1623944407528987192
+      eiskaiser_walk_ne_12: 2641437336474494391
+      eiskaiser_walk_ne_13: 3296874276031337957
+      eiskaiser_walk_ne_14: 4565804511881577447
+      eiskaiser_walk_ne_15: 2510450401279045978
+      eiskaiser_walk_ne_16: 2975429183522117835
+      eiskaiser_walk_ne_17: 1416434292629169718
+      eiskaiser_walk_ne_18: 3235027727431140434
+      eiskaiser_walk_ne_19: 3867783724079934526
+      eiskaiser_walk_ne_2: 2817994709750541210
+      eiskaiser_walk_ne_20: 2677607850930458158
+      eiskaiser_walk_ne_21: 3504381215171438655
+      eiskaiser_walk_ne_22: 1202827175496391625
+      eiskaiser_walk_ne_23: 2478177218761307800
+      eiskaiser_walk_ne_3: 1817578965289202781
+      eiskaiser_walk_ne_4: 1990546199202043374
+      eiskaiser_walk_ne_5: 1355828646346014040
+      eiskaiser_walk_ne_6: 4270859326798604524
+      eiskaiser_walk_ne_7: 2098332159055255600
+      eiskaiser_walk_ne_8: 2172592587357966346
+      eiskaiser_walk_ne_9: 3544445192238242254
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

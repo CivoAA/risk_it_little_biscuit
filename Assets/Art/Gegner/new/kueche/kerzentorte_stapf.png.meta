@@ -1,0 +1,939 @@
+fileFormatVersion: 2
+guid: 6d3cfaf1331c4b409f646cb6cb9bc66c
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2693254392373475675
+    second: kerzentorte_stapf_0
+  - first:
+      213: 4487080746531111986
+    second: kerzentorte_stapf_1
+  - first:
+      213: 2185936696349566058
+    second: kerzentorte_stapf_2
+  - first:
+      213: 1210672190358181921
+    second: kerzentorte_stapf_3
+  - first:
+      213: 2294094590608377648
+    second: kerzentorte_stapf_4
+  - first:
+      213: 2622319132285259296
+    second: kerzentorte_stapf_5
+  - first:
+      213: 3164819679701406873
+    second: kerzentorte_stapf_6
+  - first:
+      213: 4495132753539533413
+    second: kerzentorte_stapf_7
+  - first:
+      213: 2388430428332997545
+    second: kerzentorte_stapf_8
+  - first:
+      213: 3003157022674602029
+    second: kerzentorte_stapf_9
+  - first:
+      213: 2456160575815802089
+    second: kerzentorte_stapf_10
+  - first:
+      213: 4361802603510327655
+    second: kerzentorte_stapf_11
+  - first:
+      213: 4553640834570012755
+    second: kerzentorte_stapf_12
+  - first:
+      213: 4270852569665731266
+    second: kerzentorte_stapf_13
+  - first:
+      213: 2445448996940482178
+    second: kerzentorte_stapf_14
+  - first:
+      213: 2854532359850441847
+    second: kerzentorte_stapf_15
+  - first:
+      213: 1469673147773141458
+    second: kerzentorte_stapf_16
+  - first:
+      213: 4515372614473190998
+    second: kerzentorte_stapf_17
+  - first:
+      213: 3644460482891345566
+    second: kerzentorte_stapf_18
+  - first:
+      213: 1740010330841335718
+    second: kerzentorte_stapf_19
+  - first:
+      213: 4054150200800134518
+    second: kerzentorte_stapf_20
+  - first:
+      213: 3641309632936665939
+    second: kerzentorte_stapf_21
+  - first:
+      213: 1214750304002243126
+    second: kerzentorte_stapf_22
+  - first:
+      213: 1514260650298734751
+    second: kerzentorte_stapf_23
+  - first:
+      213: 1765805521343295929
+    second: kerzentorte_stapf_24
+  - first:
+      213: 2924166201116037754
+    second: kerzentorte_stapf_25
+  - first:
+      213: 1562055467292546628
+    second: kerzentorte_stapf_26
+  - first:
+      213: 3471857972034856454
+    second: kerzentorte_stapf_27
+  - first:
+      213: 1893262872648978449
+    second: kerzentorte_stapf_28
+  - first:
+      213: 3913972434486148088
+    second: kerzentorte_stapf_29
+  - first:
+      213: 2090277993237778065
+    second: kerzentorte_stapf_30
+  - first:
+      213: 2282489691233908295
+    second: kerzentorte_stapf_31
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: kerzentorte_stapf_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 52
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6275d2485a4e43cf9975082c71424f0d
+      internalID: 2693254392373475675
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kerzentorte_stapf_1
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 0
+        width: 52
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 54ab8d6db1d74f2ab0af83250ff0f188
+      internalID: 4487080746531111986
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kerzentorte_stapf_2
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 0
+        width: 52
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a498c2235e554107a97dcb4a177b0b02
+      internalID: 2185936696349566058
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kerzentorte_stapf_3
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 0
+        width: 52
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e5f96a5eca50497496a73417cfc02bcc
+      internalID: 1210672190358181921
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kerzentorte_stapf_4
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 0
+        width: 52
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e297ff91cb046d5b72d5aae38d2da4c
+      internalID: 2294094590608377648
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kerzentorte_stapf_5
+      rect:
+        serializedVersion: 2
+        x: 260
+        y: 0
+        width: 52
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bdde5e685bad4d61a92ed9044043b9ad
+      internalID: 2622319132285259296
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kerzentorte_stapf_6
+      rect:
+        serializedVersion: 2
+        x: 312
+        y: 0
+        width: 52
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6923ca42857c43b98b148904f2d17d58
+      internalID: 3164819679701406873
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kerzentorte_stapf_7
+      rect:
+        serializedVersion: 2
+        x: 364
+        y: 0
+        width: 52
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1cfdfeab6c1f4b959ec5f871edffb7cf
+      internalID: 4495132753539533413
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kerzentorte_stapf_8
+      rect:
+        serializedVersion: 2
+        x: 416
+        y: 0
+        width: 52
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8c926ca70f6e4dc19fad45b462794b62
+      internalID: 2388430428332997545
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kerzentorte_stapf_9
+      rect:
+        serializedVersion: 2
+        x: 468
+        y: 0
+        width: 52
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 590216d17505490fa5e038b1dfc1b89c
+      internalID: 3003157022674602029
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kerzentorte_stapf_10
+      rect:
+        serializedVersion: 2
+        x: 520
+        y: 0
+        width: 52
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8bc0b95580954bb29e4841dc8b49a626
+      internalID: 2456160575815802089
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kerzentorte_stapf_11
+      rect:
+        serializedVersion: 2
+        x: 572
+        y: 0
+        width: 52
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 00814b8042914d4abf71c699e76ca573
+      internalID: 4361802603510327655
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kerzentorte_stapf_12
+      rect:
+        serializedVersion: 2
+        x: 624
+        y: 0
+        width: 52
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fff98909c60c4394b1ccee33a2dfa82b
+      internalID: 4553640834570012755
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kerzentorte_stapf_13
+      rect:
+        serializedVersion: 2
+        x: 676
+        y: 0
+        width: 52
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7ea6b8f23f6f4a11aa8ae028634bffcc
+      internalID: 4270852569665731266
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kerzentorte_stapf_14
+      rect:
+        serializedVersion: 2
+        x: 728
+        y: 0
+        width: 52
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90c088f7fc9f443fb28972299f0961a2
+      internalID: 2445448996940482178
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kerzentorte_stapf_15
+      rect:
+        serializedVersion: 2
+        x: 780
+        y: 0
+        width: 52
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b0d43b9a6954704b5b70d44da6d3f18
+      internalID: 2854532359850441847
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kerzentorte_stapf_16
+      rect:
+        serializedVersion: 2
+        x: 832
+        y: 0
+        width: 52
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 93108434c5f3439f8e0e6a7c96b7ed98
+      internalID: 1469673147773141458
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kerzentorte_stapf_17
+      rect:
+        serializedVersion: 2
+        x: 884
+        y: 0
+        width: 52
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c6b0e938f04e44a1893cf107c3e7703f
+      internalID: 4515372614473190998
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kerzentorte_stapf_18
+      rect:
+        serializedVersion: 2
+        x: 936
+        y: 0
+        width: 52
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a08fb3b635234a788a78dc4580679813
+      internalID: 3644460482891345566
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kerzentorte_stapf_19
+      rect:
+        serializedVersion: 2
+        x: 988
+        y: 0
+        width: 52
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b819062781dc457dabd7ffaf2df9d496
+      internalID: 1740010330841335718
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kerzentorte_stapf_20
+      rect:
+        serializedVersion: 2
+        x: 1040
+        y: 0
+        width: 52
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6d96a87aa1d24df78dfe567e9a9cbb01
+      internalID: 4054150200800134518
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kerzentorte_stapf_21
+      rect:
+        serializedVersion: 2
+        x: 1092
+        y: 0
+        width: 52
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f26e3ee21ec94a49a4be6113f834cfae
+      internalID: 3641309632936665939
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kerzentorte_stapf_22
+      rect:
+        serializedVersion: 2
+        x: 1144
+        y: 0
+        width: 52
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 03e326f565fe4130b2cbe05b50340e55
+      internalID: 1214750304002243126
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kerzentorte_stapf_23
+      rect:
+        serializedVersion: 2
+        x: 1196
+        y: 0
+        width: 52
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 84693ea33ee04d0c971d92f332495c60
+      internalID: 1514260650298734751
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kerzentorte_stapf_24
+      rect:
+        serializedVersion: 2
+        x: 1248
+        y: 0
+        width: 52
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 79c86c49a8164440927a163170f0cd8b
+      internalID: 1765805521343295929
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kerzentorte_stapf_25
+      rect:
+        serializedVersion: 2
+        x: 1300
+        y: 0
+        width: 52
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fdfa0208318d4aeaaab0c7d4514926a9
+      internalID: 2924166201116037754
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kerzentorte_stapf_26
+      rect:
+        serializedVersion: 2
+        x: 1352
+        y: 0
+        width: 52
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9ad76397cd3b408aa0c974e141db620d
+      internalID: 1562055467292546628
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kerzentorte_stapf_27
+      rect:
+        serializedVersion: 2
+        x: 1404
+        y: 0
+        width: 52
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2e430b551f614de493606e2c8d26a901
+      internalID: 3471857972034856454
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kerzentorte_stapf_28
+      rect:
+        serializedVersion: 2
+        x: 1456
+        y: 0
+        width: 52
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c3e75024b97e42819ceb30b212f0dff6
+      internalID: 1893262872648978449
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kerzentorte_stapf_29
+      rect:
+        serializedVersion: 2
+        x: 1508
+        y: 0
+        width: 52
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b297dc7b9e7e413e87abe755b80c07e4
+      internalID: 3913972434486148088
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kerzentorte_stapf_30
+      rect:
+        serializedVersion: 2
+        x: 1560
+        y: 0
+        width: 52
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 45ed8e4225474d2eb9bd65b947b6383c
+      internalID: 2090277993237778065
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kerzentorte_stapf_31
+      rect:
+        serializedVersion: 2
+        x: 1612
+        y: 0
+        width: 52
+        height: 72
+      alignment: 9
+      pivot: {x: 0.5, y: 0.027777777777777776}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 661a739f9d78444bb4112c1b30869674
+      internalID: 2282489691233908295
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      kerzentorte_stapf_0: 2693254392373475675
+      kerzentorte_stapf_1: 4487080746531111986
+      kerzentorte_stapf_10: 2456160575815802089
+      kerzentorte_stapf_11: 4361802603510327655
+      kerzentorte_stapf_12: 4553640834570012755
+      kerzentorte_stapf_13: 4270852569665731266
+      kerzentorte_stapf_14: 2445448996940482178
+      kerzentorte_stapf_15: 2854532359850441847
+      kerzentorte_stapf_16: 1469673147773141458
+      kerzentorte_stapf_17: 4515372614473190998
+      kerzentorte_stapf_18: 3644460482891345566
+      kerzentorte_stapf_19: 1740010330841335718
+      kerzentorte_stapf_2: 2185936696349566058
+      kerzentorte_stapf_20: 4054150200800134518
+      kerzentorte_stapf_21: 3641309632936665939
+      kerzentorte_stapf_22: 1214750304002243126
+      kerzentorte_stapf_23: 1514260650298734751
+      kerzentorte_stapf_24: 1765805521343295929
+      kerzentorte_stapf_25: 2924166201116037754
+      kerzentorte_stapf_26: 1562055467292546628
+      kerzentorte_stapf_27: 3471857972034856454
+      kerzentorte_stapf_28: 1893262872648978449
+      kerzentorte_stapf_29: 3913972434486148088
+      kerzentorte_stapf_3: 1210672190358181921
+      kerzentorte_stapf_30: 2090277993237778065
+      kerzentorte_stapf_31: 2282489691233908295
+      kerzentorte_stapf_4: 2294094590608377648
+      kerzentorte_stapf_5: 2622319132285259296
+      kerzentorte_stapf_6: 3164819679701406873
+      kerzentorte_stapf_7: 4495132753539533413
+      kerzentorte_stapf_8: 2388430428332997545
+      kerzentorte_stapf_9: 3003157022674602029
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

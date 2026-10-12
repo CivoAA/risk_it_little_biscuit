@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// Flammenwurf des Baum-Bosses aus drei Teilen, die nie gestreckt werden:
 /// Ansatz (am Maul) | Mittelstueck (so oft wie noetig aneinandergereiht) | Spitze.
-/// Die Bilder zeichnet Tools/baumboss_feuer.py (je 8 Frames, 32x32).
+/// Je 8 Frames, 32x32.
 ///
 /// Das Objekt sitzt am Maul und zeigt mit +x in Feuerrichtung - zum Zielen
 /// einfach den Transform drehen. Laenge ueber <see cref="Length"/> in Welt-

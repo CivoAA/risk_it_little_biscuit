@@ -1,0 +1,419 @@
+fileFormatVersion: 2
+guid: fd2a5a395c0d4dff9812498a5480a928
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3844678846575379578
+    second: spiegelei_kriech_0
+  - first:
+      213: 3024726334905319791
+    second: spiegelei_kriech_1
+  - first:
+      213: 2567645844918832320
+    second: spiegelei_kriech_2
+  - first:
+      213: 2585716958742179920
+    second: spiegelei_kriech_3
+  - first:
+      213: 1815414386893441410
+    second: spiegelei_kriech_4
+  - first:
+      213: 3471355354063814012
+    second: spiegelei_kriech_5
+  - first:
+      213: 3380034086825866364
+    second: spiegelei_kriech_6
+  - first:
+      213: 2981781144580572733
+    second: spiegelei_kriech_7
+  - first:
+      213: 1465653234437019710
+    second: spiegelei_kriech_8
+  - first:
+      213: 2557528139694841485
+    second: spiegelei_kriech_9
+  - first:
+      213: 2114840991191224431
+    second: spiegelei_kriech_10
+  - first:
+      213: 3153190264884491728
+    second: spiegelei_kriech_11
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: spiegelei_kriech_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 44
+        height: 30
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed24050d64984fdc80de8d7328c0de9c
+      internalID: 3844678846575379578
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spiegelei_kriech_1
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 0
+        width: 44
+        height: 30
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1868d4a05df24409893b1cb47d67fa65
+      internalID: 3024726334905319791
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spiegelei_kriech_2
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 0
+        width: 44
+        height: 30
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b01267eb667f4f68b9e260b5af78c322
+      internalID: 2567645844918832320
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spiegelei_kriech_3
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 0
+        width: 44
+        height: 30
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 51cdaf3fd54c48e7991c6b88df02c657
+      internalID: 2585716958742179920
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spiegelei_kriech_4
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 0
+        width: 44
+        height: 30
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29accb11c6be4b4b8afdcb8779b254b2
+      internalID: 1815414386893441410
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spiegelei_kriech_5
+      rect:
+        serializedVersion: 2
+        x: 220
+        y: 0
+        width: 44
+        height: 30
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 60ebb48849344ccb9db9d1e087f77daa
+      internalID: 3471355354063814012
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spiegelei_kriech_6
+      rect:
+        serializedVersion: 2
+        x: 264
+        y: 0
+        width: 44
+        height: 30
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fbc65c3c136542908344b941f5d28581
+      internalID: 3380034086825866364
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spiegelei_kriech_7
+      rect:
+        serializedVersion: 2
+        x: 308
+        y: 0
+        width: 44
+        height: 30
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae4e1b26f1d34d84baa227b795a30252
+      internalID: 2981781144580572733
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spiegelei_kriech_8
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 0
+        width: 44
+        height: 30
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d2f87830aa14ab484759d49771dc6dc
+      internalID: 1465653234437019710
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spiegelei_kriech_9
+      rect:
+        serializedVersion: 2
+        x: 396
+        y: 0
+        width: 44
+        height: 30
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7f2a912b84774dc3b0f99112ba032d8a
+      internalID: 2557528139694841485
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spiegelei_kriech_10
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 0
+        width: 44
+        height: 30
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 205c551e1710431ab3ec9ffb02362ecf
+      internalID: 2114840991191224431
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spiegelei_kriech_11
+      rect:
+        serializedVersion: 2
+        x: 484
+        y: 0
+        width: 44
+        height: 30
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 26eb901da75b41fe88c0769c704cb0d1
+      internalID: 3153190264884491728
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      spiegelei_kriech_0: 3844678846575379578
+      spiegelei_kriech_1: 3024726334905319791
+      spiegelei_kriech_10: 2114840991191224431
+      spiegelei_kriech_11: 3153190264884491728
+      spiegelei_kriech_2: 2567645844918832320
+      spiegelei_kriech_3: 2585716958742179920
+      spiegelei_kriech_4: 1815414386893441410
+      spiegelei_kriech_5: 3471355354063814012
+      spiegelei_kriech_6: 3380034086825866364
+      spiegelei_kriech_7: 2981781144580572733
+      spiegelei_kriech_8: 1465653234437019710
+      spiegelei_kriech_9: 2557528139694841485
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

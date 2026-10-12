@@ -395,11 +395,23 @@ public class TestSceneHUD : MonoBehaviour
         if (ids.Count == 0) return;
 
         Label("<color=#9AA0A8>" + title + "</color>", bossMenu, fontSize - 8, TextAlignmentOptions.MidlineLeft);
-        foreach (EnemyId id in ids)
+
+        // Zwei Knoepfe pro Reihe - sonst schiebt die Liste den Rest des
+        // Panels aus dem Bild, seit es fuenf Zwischenbosse gibt.
+        GameObject row = null;
+        for (int i = 0; i < ids.Count; i++)
         {
-            EnemyId captured = id;
-            Button b = MakeButton(Bestiary.NameOf(id) + suffix, bossMenu, 320f, () => SpawnBoss(captured));
+            if (i % 2 == 0) row = Row(bossMenu);
+            EnemyId captured = ids[i];
+            Button b = MakeButton(Bestiary.NameOf(captured) + suffix, row.transform, 157f, () => SpawnBoss(captured));
             b.GetComponent<Image>().color = color;
+            TextMeshProUGUI text = b.GetComponentInChildren<TextMeshProUGUI>();
+            if (text != null)
+            {
+                text.enableAutoSizing = true;
+                text.fontSizeMin = 12f;
+                text.fontSizeMax = text.fontSize;
+            }
         }
     }
 

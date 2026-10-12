@@ -1,0 +1,419 @@
+fileFormatVersion: 2
+guid: 3a8c39ee03764aebb7c132a82a07ba69
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2858239819600875307
+    second: pizza_stapf_0
+  - first:
+      213: 1236348937294088182
+    second: pizza_stapf_1
+  - first:
+      213: 4213988847673481757
+    second: pizza_stapf_2
+  - first:
+      213: 3878732643957928974
+    second: pizza_stapf_3
+  - first:
+      213: 2938862161392299469
+    second: pizza_stapf_4
+  - first:
+      213: 2442859165203759560
+    second: pizza_stapf_5
+  - first:
+      213: 4269561641265542553
+    second: pizza_stapf_6
+  - first:
+      213: 3751562311831155828
+    second: pizza_stapf_7
+  - first:
+      213: 3918260240913377231
+    second: pizza_stapf_8
+  - first:
+      213: 1195584839436387422
+    second: pizza_stapf_9
+  - first:
+      213: 2750656137369645823
+    second: pizza_stapf_10
+  - first:
+      213: 3105628830427703045
+    second: pizza_stapf_11
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: pizza_stapf_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 36
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8dc7c45992344697a0763135b5beb471
+      internalID: 2858239819600875307
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pizza_stapf_1
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 0
+        width: 36
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9bbea6bce1e949098478889c6cec3dba
+      internalID: 1236348937294088182
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pizza_stapf_2
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 0
+        width: 36
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dfaef1fd1cd64d138d4aea262a93c020
+      internalID: 4213988847673481757
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pizza_stapf_3
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 0
+        width: 36
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c4f69ebb6ee14f80aa22c369d03b3e44
+      internalID: 3878732643957928974
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pizza_stapf_4
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 0
+        width: 36
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 96e8bdfee7784b76856725e0d72b7863
+      internalID: 2938862161392299469
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pizza_stapf_5
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 0
+        width: 36
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c2f85e8d2fbd4bf09cf1d05b04904e7d
+      internalID: 2442859165203759560
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pizza_stapf_6
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 0
+        width: 36
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d3d2b0c2624a41ac8263eb5735edc24e
+      internalID: 4269561641265542553
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pizza_stapf_7
+      rect:
+        serializedVersion: 2
+        x: 252
+        y: 0
+        width: 36
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7669b4ec80dd4c82a9ef029c351d8fe7
+      internalID: 3751562311831155828
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pizza_stapf_8
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 0
+        width: 36
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d0ce6002e574740af0b2e422c158453
+      internalID: 3918260240913377231
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pizza_stapf_9
+      rect:
+        serializedVersion: 2
+        x: 324
+        y: 0
+        width: 36
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c13c227c7d2d4284b024a5f08f31dcfe
+      internalID: 1195584839436387422
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pizza_stapf_10
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 0
+        width: 36
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 330628e15a4a4d50be45f9b21161ac19
+      internalID: 2750656137369645823
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pizza_stapf_11
+      rect:
+        serializedVersion: 2
+        x: 396
+        y: 0
+        width: 36
+        height: 52
+      alignment: 9
+      pivot: {x: 0.5, y: 0.057692307692307696}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b1a8a94893ae482b9de68d4b91eb49a6
+      internalID: 3105628830427703045
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      pizza_stapf_0: 2858239819600875307
+      pizza_stapf_1: 1236348937294088182
+      pizza_stapf_10: 2750656137369645823
+      pizza_stapf_11: 3105628830427703045
+      pizza_stapf_2: 4213988847673481757
+      pizza_stapf_3: 3878732643957928974
+      pizza_stapf_4: 2938862161392299469
+      pizza_stapf_5: 2442859165203759560
+      pizza_stapf_6: 4269561641265542553
+      pizza_stapf_7: 3751562311831155828
+      pizza_stapf_8: 3918260240913377231
+      pizza_stapf_9: 1195584839436387422
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

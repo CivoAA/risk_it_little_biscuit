@@ -15,7 +15,6 @@ using UnityEngine.Rendering;
 /// aendert man dort trotzdem ganz normal.
 ///
 /// Wiederholbar: ein vorhandenes Prefab wird aktualisiert, nicht ersetzt.
-/// Die Bilder kommen aus Tools/schleimkoenig.py.
 /// </summary>
 public static class SchleimkoenigBuilder
 {
@@ -54,7 +53,7 @@ public static class SchleimkoenigBuilder
         Sprite[] land = Load("schleimkoenig_landung");
         Sprite[] splash = Load("schleimkoenig_platsch");
         Sprite[] shadow = Load("schleimkoenig_schatten");
-        if (hop.Length == 0) return "Keine Bilder unter " + ArtFolder + " - erst Tools/schleimkoenig.py laufen lassen.";
+        if (hop.Length == 0) return "Keine Bilder unter " + ArtFolder + ".";
 
         EnsureFolder(System.IO.Path.GetDirectoryName(def.Prefab).Replace('\\', '/'));
 
@@ -258,10 +257,11 @@ public static class SpecialBuilders
 {
     public static bool Handles(EnemyId id)
     {
-        return id == EnemyId.Glutwurz || id == EnemyId.Schleimkoenig
+        return id == EnemyId.Glutwurz || id == EnemyId.Schleimkoenig || id == EnemyId.Milchpanzer
             || id == EnemyId.Verkohlter || id == EnemyId.VerkohlterTod
             || id == EnemyId.Eiskaiser || id == EnemyId.Lawinenkugel
-            || id == EnemyId.Squiddy || id == EnemyId.QuallenBaby;
+            || id == EnemyId.Squiddy || id == EnemyId.QuallenBaby
+            || ZwischenbossBuilder.Handles(id);
     }
 
     /// <summary>Baut nur das Prefab. Eintragen in GameCore macht die Werkstatt selbst.</summary>
@@ -271,12 +271,16 @@ public static class SpecialBuilders
         {
             case EnemyId.Glutwurz: return GlutwurzBuilder.Build();
             case EnemyId.Schleimkoenig: return SchleimkoenigBuilder.Build();
+            case EnemyId.Milchpanzer: return MilchpanzerBuilder.Build();
             case EnemyId.Verkohlter:
             case EnemyId.VerkohlterTod: return VerkohlterBuilder.Build(id);
             case EnemyId.Eiskaiser:
             case EnemyId.Lawinenkugel: return EiskaiserBuilder.Build();
             case EnemyId.Squiddy:
             case EnemyId.QuallenBaby: return SquiddyBuilder.Build();
+            case EnemyId.Stracciatella:
+            case EnemyId.Knusperhaus:
+            case EnemyId.Ofenkartoffel: return ZwischenbossBuilder.Build(id);
             default: return id + ": kein eigener Bauer.";
         }
     }

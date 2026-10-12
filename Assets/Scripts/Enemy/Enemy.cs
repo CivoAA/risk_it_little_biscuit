@@ -222,6 +222,13 @@ public class Enemy : MonoBehaviour
     public static event System.Action<Enemy, float> Damaged;
 
     /// <summary>
+    /// Ein Endboss (Rolle Boss) ist gefallen - kommt im Todesfall, bevor der
+    /// Gegner verschwindet. Die Story haengt hier ihr Kapitelende an
+    /// (<see cref="StoryDirector"/>).
+    /// </summary>
+    public static event System.Action<Enemy> BossDefeated;
+
+    /// <summary>
     /// Was dieser Gegner im Druck-Budget wiegt. Setzt der Director beim
     /// Spawnen; wer anders erzeugt wird, zaehlt als 1.
     /// </summary>
@@ -1049,7 +1056,9 @@ public class Enemy : MonoBehaviour
                 string bossKey = Identity != EnemyId.None ? Identity.ToString() : name.Replace("(Clone)", "").Trim();
                 Skills.RegisterBossVictory(bossKey);
                 Achievements.Unlock(Ach.BossVictory(bossKey));
-                if (SpawnDeath.Instance != null)
+                BossDefeated?.Invoke(this);
+                // Uebernimmt die Story das Ende, kommt kein Tod hinterher.
+                if (SpawnDeath.Instance != null && !StoryDirector.ClaimsWin)
                 {
                     Vector3 deathPos = transform.position;
                     deathPos.x += 50f;

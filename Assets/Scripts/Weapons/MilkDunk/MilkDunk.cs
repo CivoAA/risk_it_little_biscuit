@@ -18,8 +18,8 @@ using UnityEngine.SceneManagement;
 /// shots    = Ringe pro Tunker (+ Extra-Schuss 1:1), kurz hintereinander
 ///
 /// Die Werte stehen im Code (<see cref="LevelStats"/>), nicht am Prefab - sie
-/// ueberschreiben beim Start, was im Inspector steht. Bild aus
-/// Tools/schoko_milch.py (Resources/Weapons/milk_wave).
+/// ueberschreiben beim Start, was im Inspector steht. Bild in
+/// Resources/Weapons/milk_wave.
 /// </summary>
 public class MilkDunk : Weapon
 {
@@ -63,7 +63,7 @@ public class MilkDunk : Weapon
 
     /// <summary>
     /// Radius je Bild des Milchrings, als Anteil vom vollen Radius. Dieselbe
-    /// Kurve wie RING_R in Tools/schoko_milch.py - sonst passt der Treffer
+    /// Kurve wie im Bild - sonst passt der Treffer
     /// nicht mehr zum Bild.
     /// </summary>
     public static readonly float[] RingCurve =

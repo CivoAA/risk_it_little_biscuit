@@ -48,6 +48,11 @@ public enum EnemyId
     Fliegenpilz = 18,
     Fluegeldolch = 19,
     Kirschslime = 20,
+
+    /// <summary>
+    /// Zwischenboss der Kueche: Milchkarton auf Panzerketten mit Strohhalm-Sog
+    /// und Ruelpser (EnemyMilchpanzer). War bis Oktober 2026 ein normaler Brocken.
+    /// </summary>
     Milchpanzer = 21,
     WeisseMessermaus = 22,
 
@@ -117,6 +122,173 @@ public enum EnemyId
 
     /// <summary>Baby-Squiddy aus der Quallen-Brut (SquiddyBaby). Kommt nur von Squiddy, in keinem Plan.</summary>
     QuallenBaby = 40,
+
+    // Eiswelt, zweite Welle Gegner
+
+    /// <summary>Eiskeks-Sandwich: das Vanilleeis ist ein Maul. Huepft und schnappt bei jeder Landung zu (HopMovement).</summary>
+    EisSandwich = 41,
+
+    /// <summary>Zuckerwatte-Woelkchen am Papierstiel, schwebt schnell heran und laesst es schneien. Schwarmgegner.</summary>
+    Zuckerwolke = 42,
+
+    /// <summary>Kokos-Yeti: schokogetunkte Kokosmakrone mit Kirsche, stapft schwer. Der Brocken der Eiswelt.</summary>
+    KokosYeti = 43,
+
+    // Eiswelt, dritte Welle Gegner
+
+    /// <summary>Kakaotasse: rote Emaille-Tasse mit heissem Kakao und Marshmallows, watschelt auf Stummelfuesschen.</summary>
+    Kakaotasse = 44,
+
+    /// <summary>Puddingrobbe: Panna-Cotta-Robbe mit Himbeersosse, robbt und rutscht auf dem Bauch, jongliert ihre Himbeere.</summary>
+    Puddingrobbe = 45,
+
+    /// <summary>Sternplaetzchen mit Zuckerguss: rollt wie ein Rad, schnell und schwach. Schwarmgegner.</summary>
+    Plaetzchen = 46,
+
+    // Kueche, neue Gegner (Welle 4)
+
+    /// <summary>Wurst-Dackel: Wiener Wuerstchen im Hotdog-Broetchen-Maentelchen, trabt flink. Schnell und schwach.</summary>
+    Wurstdackel = 47,
+
+    /// <summary>Spiegelei: kriecht wie eine Amoebe, der Dotter mit Gesicht wabbelt hinterher.</summary>
+    Spiegelei = 48,
+
+    /// <summary>Spaghetti-Monster: grimmiges Fleischbaellchen mit Tomatensosse auf fuenf Nudelbeinen. Der Brocken der Kueche.</summary>
+    Fleischball = 49,
+
+    /// <summary>Erbsenschote: kriecht wie eine Raupe, drei Erbsen-Geschwister schauen heraus.</summary>
+    Erbsenschote = 50,
+
+    /// <summary>Kaesekeil: Lochkaese auf Stummelbeinen, in einem Loch wohnt eine Maus.</summary>
+    Kaesekeil = 51,
+
+    /// <summary>Popcorn: huepft in kleinen Saetzen (HopMovement). Schwarmgegner.</summary>
+    Popcorn = 52,
+
+    // Wald, neue Gegner (Welle 4)
+
+    /// <summary>Maronen-Igel: Marone schaut aus der stacheligen Schale, trippelt.</summary>
+    Maronenigel = 53,
+
+    /// <summary>Beerenspinne: Heidelbeere auf acht Salzstangen-Beinen, schnell.</summary>
+    Beerenspinne = 54,
+
+    /// <summary>Walnuss-Krabbe: Walnusspanzer, Stielaugen, schnappende Scheren. Zaeh.</summary>
+    Walnusskrabbe = 55,
+
+    /// <summary>Honigbaerchen: Honig-Quetschflasche in Baerform, der Honig schwappt im Kopf, eine Biene kreist.</summary>
+    Honigbaer = 56,
+
+    // Eiswelt, vierte Welle Gegner
+
+    /// <summary>Eiswuerfel-Baer: Gummibaer, in einen Eiswuerfel eingefroren, stapft auf den herausschauenden Fuessen.</summary>
+    Eiswuerfelbaer = 57,
+
+    /// <summary>Pfefferminz-Schnecke: Minzgelee-Schnecke mit Pfefferminzbonbon als Haus, gleitet mit Frostspur.</summary>
+    Minzschnecke = 58,
+
+    // Zweite Elites fuer Kueche und Eiswelt
+
+    /// <summary>Elite der Kueche: wuetende Erdbeer-Sahne-Torte mit brennender Kerze, stapft auf Schoko-Stummelbeinen.</summary>
+    Kerzentorte = 59,
+
+    /// <summary>Elite der Eiswelt: Fuerst-Pueckler-Eisbombe mit Eiskristall-Krone, Monokel und Zwirbelbart.</summary>
+    FuerstPueckler = 60,
+
+    // Geisterwald (Karte 4): leuchtende Normalgegner
+
+    /// <summary>Kuerbiswicht: Kuerbis mit geschnitztem Gesicht, die Kerze drin flackert. Watschelt auf Rankenbeinchen.</summary>
+    Kuerbiswicht = 61,
+
+    /// <summary>Gluehbirne: Glasbirne mit Gluehwendel und Messingsockel, stakst auf Drahtbeinen, Wackelkontakt.</summary>
+    Gluehbirne = 62,
+
+    /// <summary>Leuchtpilz: Nachtpilz mit cyan gluehenden Tupfen und Lamellen, der Hut federt nach.</summary>
+    Leuchtpilz = 63,
+
+    /// <summary>Baisergeist: schwebendes Baiser-Gespenst mit hohlen, fliederfarben gluehenden Augen.</summary>
+    Baisergeist = 64,
+
+    /// <summary>Lakritzkater: schwarzer Lakritz-Kater mit gluehenden Schlitzaugen und Bonbon-Gloeckchen, trabt flink.</summary>
+    Lakritzkater = 65,
+
+    /// <summary>Lebkuchen-Zombie: angebissener Lebkuchenmann mit giftgruen leuchtendem Zuckerguss. Der Brocken des Geisterwalds.</summary>
+    Lebkuchenzombie = 66,
+
+    /// <summary>Saurer Gluehwurm: Neon-Fruchtgummiwurm, buckelt sich wie eine Spannerraupe voran.</summary>
+    Gluehwurm = 67,
+
+    /// <summary>Windbeutel-Eule: aufgeschnittener Windbeutel mit Sahne, der Deckel ist der Eulenkopf mit Bernsteinaugen.</summary>
+    Windbeuteleule = 68,
+
+    /// <summary>Flambierkirsche: Kirsche mit blauer Rumflamme auf dem Kopf, flitzt. Schneller Schwarmgegner.</summary>
+    Flambierkirsche = 69,
+
+    // Vulkanwelt (Karte 5): Normalgegner
+
+    /// <summary>Feuerschote: rote Chili mit brennendem Zuendschnur-Stiel, marschiert auf Stummelbeinen.</summary>
+    Feuerschote = 70,
+
+    /// <summary>Lavakuchen: Schoko-Fondant als Mini-Vulkan mit Puderzucker-Haube, der fluessige Kern blubbert ueber.</summary>
+    Lavakuchen = 71,
+
+    /// <summary>Takoyaki: Oktopus-Baellchen trippelt auf seinen Tentakeln, Bonitoflocken tanzen in der Hitze. Flink.</summary>
+    Takoyaki = 72,
+
+    /// <summary>Kaesefondue: Caquelon mit Schweizerkreuzen stapft auf dem Rechaud-Dreibein, Kaese blubbert. Zaeh.</summary>
+    Kaesefondue = 73,
+
+    /// <summary>Schaschlik: Grillspiess, huepft auf seiner Holzspitze wie auf einem Pogo-Stick (HopMovement).</summary>
+    Schaschlik = 74,
+
+    /// <summary>Wasabi-Klecks: kriechender Wasabi mit Ingwer-Huetchen, dem selbst die Augen traenen.</summary>
+    Wasabiklecks = 75,
+
+    /// <summary>Pizzastueck: Peperoni-Pizza auf Teigbeinchen, der Kaese tropft ueber den Rand.</summary>
+    Pizzastueck = 76,
+
+    /// <summary>Drachenfrucht: kleiner Pitaya-Drache mit gruenen Schuppenblatt-Zacken, stapft.</summary>
+    Drachenfrucht = 77,
+
+    /// <summary>Ofenbrot-Golem: riesiger Brotlaib mit gluehenden Einschnitten und Baguette-Armen. Der Brocken der Vulkanwelt.</summary>
+    Brotgolem = 78,
+
+    /// <summary>Knisterbrause: Brocken Brausekristall, huepft knisternd heran. Schneller Schwarmgegner.</summary>
+    Knisterbrause = 79,
+
+    // Zwischenbosse von Eiswelt, Geisterwald und Vulkanwelt
+
+    /// <summary>
+    /// Zwischenboss der Eiswelt: Schneemann aus drei Eiskugeln. Frostblick =
+    /// "Ochs am Berg" - wer sich bewegt, waehrend er starrt, friert fest (EnemyStracciatella).
+    /// </summary>
+    Stracciatella = 80,
+
+    /// <summary>
+    /// Zwischenboss des Geisterwalds: Lebkuchenhaus auf Haehnchenkeulen. Spukspur =
+    /// ruft den Geist des Spielers, der dessen Weg versetzt nachlaeuft (EnemyKnusperhaus).
+    /// </summary>
+    Knusperhaus = 81,
+
+    /// <summary>
+    /// Zwischenboss der Vulkanwelt: Riesen-Folienkartoffel. Heisse Kartoffel = tickende
+    /// Bombe am Spieler, weitergeben durch Beruehren (EnemyOfenkartoffel).
+    /// </summary>
+    Ofenkartoffel = 82,
+
+    // Elites von Geisterwald und Vulkanwelt (je zwei, Ring-Debuet wie in Kueche/Eiswelt)
+
+    /// <summary>Elite des Geisterwalds: Hexenkessel voll leuchtender Minzsuppe, Augen und Mund gluehen von innen. Kocht ueber.</summary>
+    Spuksuppe = 83,
+
+    /// <summary>Elite des Geisterwalds: leuchtende Himbeer-Goetterspeise mit Sahnehaube, wackelt heran und macht BUH.</summary>
+    Wackelgeist = 84,
+
+    /// <summary>Elite der Vulkanwelt: Mais-Taco in Cowboystiefeln, die Fuellung brennt - und bricht aus, wenn es zu scharf wird.</summary>
+    Feuertaco = 85,
+
+    /// <summary>Elite der Vulkanwelt: Creme Brulee im Porzellanfoermchen, flambiert sich mit dem Kuechenbrenner selbst.</summary>
+    CremeBrulee = 86,
 }
 
 /// <summary>
@@ -539,11 +711,11 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Gegner/Kirschslime.prefab", hopFirst: 4, hopLast: 6);
 
         Def(EnemyId.Milchpanzer, "Milchpanzer",
-            health: 900f, damage: 14f, speed: 1.5f, exp: 650, pushTime: 0f,
-            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesRight,
-            sheet: "Assets/Art/Gegner/new/wirklich_saure_milch_1.png", fps: 8f,
-            colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
-            prefab: "Assets/Prefabs/Enemy/Gegner/Milchpanzer.prefab");
+            health: 3000f, damage: 14f, speed: 1.4f, exp: 700, pushTime: 0f,
+            role: EnemyRole.MiniBoss, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/miniboss/milchpanzer_fahrt.png", fps: 12f,
+            colliderRadius: 1.2f, colliderOffset: new Vector2(0f, 1.25f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Mini_Boss/Milchpanzer.prefab");
 
         Def(EnemyId.Honey, "Honey",
             health: 450f, damage: 10f, speed: 1.4f, exp: 350, pushTime: 0f,
@@ -625,7 +797,7 @@ public static class EnemyCatalog
         Def(EnemyId.Eiskaiser, "Eiskaiser",
             health: 7000f, damage: 30f, speed: 1.7f, exp: 0, pushTime: 0f,
             role: EnemyRole.Boss, facing: EnemyFacing.Neutral,
-            sheet: "Assets/Art/Gegner/new/boss/eiskaiser_walk.png", fps: 12f,
+            sheet: "Assets/Art/Gegner/new/boss/eiskaiser_walk_s.png", fps: 12f,
             colliderRadius: 1.0f, colliderOffset: new Vector2(0f, 1.15f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Boss/Eiskaiser.prefab");
 
@@ -649,6 +821,333 @@ public static class EnemyCatalog
             sheet: "Assets/Art/Gegner/new/boss/squiddy_baby.png", fps: 12f,
             colliderRadius: 0.32f, colliderOffset: new Vector2(0f, 0.55f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Boss/QuallenBaby.prefab");
+
+        Def(EnemyId.EisSandwich, "Eiskeks-Sandwich",
+            health: 18f, damage: 4f, speed: 2.2f, exp: 6, pushTime: 0.25f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/eis/sandwich_schnapp.png", fps: 14f,
+            colliderRadius: 0.36f, colliderOffset: new Vector2(0f, 0.36f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/EisSandwich.prefab", hopFirst: 3, hopLast: 9);
+
+        Def(EnemyId.Zuckerwolke, "Zuckerwoelkchen",
+            health: 7f, damage: 3f, speed: 2.6f, exp: 3, pushTime: 0.3f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/eis/zuckerwolke_schweben.png", fps: 12f,
+            colliderRadius: 0.36f, colliderOffset: new Vector2(0f, 0.66f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Zuckerwolke.prefab");
+
+        Def(EnemyId.KokosYeti, "Kokos-Yeti",
+            health: 900f, damage: 14f, speed: 1.3f, exp: 650, pushTime: 0.05f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/eis/kokosyeti_stapf.png", fps: 12f,
+            colliderRadius: 0.5f, colliderOffset: new Vector2(0f, 0.62f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/KokosYeti.prefab");
+
+        Def(EnemyId.Kakaotasse, "Kakaotasse",
+            health: 30f, damage: 5f, speed: 1.7f, exp: 8, pushTime: 0.25f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/eis/kakaotasse_watschel.png", fps: 12f,
+            colliderRadius: 0.36f, colliderOffset: new Vector2(0f, 0.42f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Kakaotasse.prefab");
+
+        Def(EnemyId.Puddingrobbe, "Puddingrobbe",
+            health: 24f, damage: 4f, speed: 2.3f, exp: 6, pushTime: 0.25f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/eis/puddingrobbe_rutsch.png", fps: 12f,
+            colliderRadius: 0.4f, colliderOffset: new Vector2(0f, 0.3f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Puddingrobbe.prefab");
+
+        Def(EnemyId.Plaetzchen, "Sternplaetzchen",
+            health: 8f, damage: 3f, speed: 2.8f, exp: 3, pushTime: 0.3f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/eis/plaetzchen_roll.png", fps: 16f,
+            colliderRadius: 0.36f, colliderOffset: new Vector2(0f, 0.4f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Plaetzchen.prefab");
+
+        // ---------------------------------------------------------- Welle 4
+        // Kueche (47-52), Wald (53-56), Eiswelt (57-58).
+
+        Def(EnemyId.Wurstdackel, "Wurst-Dackel",
+            health: 10f, damage: 3f, speed: 2.6f, exp: 4, pushTime: 0.3f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/kueche/dackel_trab.png", fps: 16f,
+            colliderRadius: 0.31f, colliderOffset: new Vector2(0f, 0.31f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Wurstdackel.prefab");
+
+        Def(EnemyId.Spiegelei, "Spiegelei",
+            health: 14f, damage: 3f, speed: 1.3f, exp: 5, pushTime: 0.25f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/kueche/spiegelei_kriech.png", fps: 12f,
+            colliderRadius: 0.28f, colliderOffset: new Vector2(0f, 0.22f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Spiegelei.prefab");
+
+        Def(EnemyId.Fleischball, "Spaghetti-Monster",
+            health: 120f, damage: 8f, speed: 1.5f, exp: 45, pushTime: 0.1f,
+            role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/kueche/fleischball_stakse.png", fps: 14f,
+            colliderRadius: 0.43f, colliderOffset: new Vector2(0f, 0.45f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Fleischball.prefab");
+
+        Def(EnemyId.Erbsenschote, "Erbsenschote",
+            health: 30f, damage: 4f, speed: 1.4f, exp: 10, pushTime: 0.2f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/kueche/erbsen_kriech.png", fps: 12f,
+            colliderRadius: 0.26f, colliderOffset: new Vector2(0f, 0.27f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Erbsenschote.prefab");
+
+        Def(EnemyId.Kaesekeil, "Kaesekeil",
+            health: 60f, damage: 6f, speed: 1.2f, exp: 22, pushTime: 0.15f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/kueche/kaese_watschel.png", fps: 12f,
+            colliderRadius: 0.38f, colliderOffset: new Vector2(0f, 0.38f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Kaesekeil.prefab");
+
+        Def(EnemyId.Popcorn, "Popcorn",
+            health: 4f, damage: 2f, speed: 2.4f, exp: 2, pushTime: 0.3f,
+            role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/kueche/popcorn_hops.png", fps: 14f,
+            colliderRadius: 0.26f, colliderOffset: new Vector2(0f, 0.41f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Popcorn.prefab", hopFirst: 3, hopLast: 9);
+
+        Def(EnemyId.Maronenigel, "Maronen-Igel",
+            health: 20f, damage: 4f, speed: 1.9f, exp: 7, pushTime: 0.25f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/wald/maronenigel_tripp.png", fps: 16f,
+            colliderRadius: 0.34f, colliderOffset: new Vector2(0f, 0.34f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Maronenigel.prefab");
+
+        Def(EnemyId.Beerenspinne, "Beerenspinne",
+            health: 16f, damage: 3f, speed: 2.5f, exp: 6, pushTime: 0.3f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/wald/beerenspinne_stakse.png", fps: 14f,
+            colliderRadius: 0.36f, colliderOffset: new Vector2(0f, 0.36f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Beerenspinne.prefab");
+
+        Def(EnemyId.Walnusskrabbe, "Walnuss-Krabbe",
+            health: 70f, damage: 6f, speed: 1.4f, exp: 26, pushTime: 0.15f,
+            role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/wald/walnusskrabbe_krabbel.png", fps: 14f,
+            colliderRadius: 0.4f, colliderOffset: new Vector2(0f, 0.4f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Walnusskrabbe.prefab");
+
+        Def(EnemyId.Honigbaer, "Honigbaerchen",
+            health: 35f, damage: 5f, speed: 1.8f, exp: 12, pushTime: 0.2f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/wald/honigbaer_watschel.png", fps: 14f,
+            colliderRadius: 0.34f, colliderOffset: new Vector2(0f, 0.42f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Honigbaer.prefab");
+
+        Def(EnemyId.Eiswuerfelbaer, "Eiswuerfel-Baer",
+            health: 45f, damage: 5f, speed: 1.4f, exp: 14, pushTime: 0.2f,
+            role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/eis/eiswuerfel_stapf.png", fps: 12f,
+            colliderRadius: 0.36f, colliderOffset: new Vector2(0f, 0.39f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Eiswuerfelbaer.prefab");
+
+        Def(EnemyId.Minzschnecke, "Pfefferminz-Schnecke",
+            health: 20f, damage: 3f, speed: 1.6f, exp: 6, pushTime: 0.25f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/eis/minzschnecke_gleit.png", fps: 12f,
+            colliderRadius: 0.35f, colliderOffset: new Vector2(0f, 0.34f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Minzschnecke.prefab");
+
+        Def(EnemyId.Kerzentorte, "Kerzentorte",
+            health: 380f, damage: 7f, speed: 1.15f, exp: 400, pushTime: 0.3f,
+            role: EnemyRole.Elite, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/kueche/kerzentorte_stapf.png", fps: 14f,
+            colliderRadius: 0.55f, colliderOffset: new Vector2(0f, 0.55f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Elite_Gegner/Kerzentorte.prefab");
+
+        Def(EnemyId.FuerstPueckler, "Fuerst Pueckler",
+            health: 450f, damage: 7f, speed: 1.1f, exp: 450, pushTime: 0.3f,
+            role: EnemyRole.Elite, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/eis/pueckler_schreit.png", fps: 14f,
+            colliderRadius: 0.56f, colliderOffset: new Vector2(0f, 0.6f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Elite_Gegner/FuerstPueckler.prefab");
+
+        Def(EnemyId.Kuerbiswicht, "Kuerbiswicht",
+            health: 40f, damage: 5f, speed: 1.6f, exp: 12, pushTime: 0.2f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/geist/kuerbiswicht_watschel.png", fps: 14f,
+            colliderRadius: 0.36f, colliderOffset: new Vector2(0f, 0.36f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Kuerbiswicht.prefab");
+
+        Def(EnemyId.Gluehbirne, "Gluehbirne",
+            health: 30f, damage: 5f, speed: 1.9f, exp: 10, pushTime: 0.25f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/geist/gluehbirne_stakse.png", fps: 14f,
+            colliderRadius: 0.3f, colliderOffset: new Vector2(0f, 0.45f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Gluehbirne.prefab");
+
+        Def(EnemyId.Leuchtpilz, "Leuchtpilz",
+            health: 55f, damage: 6f, speed: 1.4f, exp: 16, pushTime: 0.2f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/geist/leuchtpilz_tapp.png", fps: 12f,
+            colliderRadius: 0.38f, colliderOffset: new Vector2(0f, 0.4f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Leuchtpilz.prefab");
+
+        Def(EnemyId.Baisergeist, "Baisergeist",
+            health: 28f, damage: 5f, speed: 2f, exp: 10, pushTime: 0.25f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/geist/baisergeist_schweb.png", fps: 12f,
+            colliderRadius: 0.32f, colliderOffset: new Vector2(0f, 0.55f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Baisergeist.prefab");
+
+        Def(EnemyId.Lakritzkater, "Lakritzkater",
+            health: 35f, damage: 6f, speed: 2.3f, exp: 12, pushTime: 0.25f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/geist/lakritzkater_trab.png", fps: 14f,
+            colliderRadius: 0.36f, colliderOffset: new Vector2(0f, 0.35f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Lakritzkater.prefab");
+
+        Def(EnemyId.Lebkuchenzombie, "Lebkuchen-Zombie",
+            health: 110f, damage: 8f, speed: 1.2f, exp: 34, pushTime: 0.15f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/geist/lebkuchenzombie_schlurf.png", fps: 12f,
+            colliderRadius: 0.36f, colliderOffset: new Vector2(0f, 0.45f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Lebkuchenzombie.prefab");
+
+        Def(EnemyId.Gluehwurm, "Saurer Gluehwurm",
+            health: 22f, damage: 4f, speed: 1.7f, exp: 7, pushTime: 0.25f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/geist/gluehwurm_spann.png", fps: 12f,
+            colliderRadius: 0.32f, colliderOffset: new Vector2(0f, 0.22f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Gluehwurm.prefab");
+
+        Def(EnemyId.Windbeuteleule, "Windbeutel-Eule",
+            health: 60f, damage: 6f, speed: 1.4f, exp: 18, pushTime: 0.2f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/geist/windbeuteleule_watschel.png", fps: 14f,
+            colliderRadius: 0.36f, colliderOffset: new Vector2(0f, 0.42f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Windbeuteleule.prefab");
+
+        Def(EnemyId.Flambierkirsche, "Flambierkirsche",
+            health: 14f, damage: 4f, speed: 2.7f, exp: 5, pushTime: 0.3f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/geist/flambierkirsche_flitz.png", fps: 16f,
+            colliderRadius: 0.26f, colliderOffset: new Vector2(0f, 0.32f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Flambierkirsche.prefab");
+
+        Def(EnemyId.Feuerschote, "Feuerschote",
+            health: 40f, damage: 6f, speed: 2f, exp: 13, pushTime: 0.2f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/vulkan/feuerschote_marsch.png", fps: 14f,
+            colliderRadius: 0.3f, colliderOffset: new Vector2(0f, 0.45f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Feuerschote.prefab");
+
+        Def(EnemyId.Lavakuchen, "Lavakuchen",
+            health: 55f, damage: 6f, speed: 1.4f, exp: 16, pushTime: 0.2f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/vulkan/lavakuchen_watschel.png", fps: 12f,
+            colliderRadius: 0.36f, colliderOffset: new Vector2(0f, 0.3f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Lavakuchen.prefab");
+
+        Def(EnemyId.Takoyaki, "Takoyaki",
+            health: 30f, damage: 5f, speed: 2.4f, exp: 11, pushTime: 0.25f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/vulkan/takoyaki_trippel.png", fps: 16f,
+            colliderRadius: 0.32f, colliderOffset: new Vector2(0f, 0.45f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Takoyaki.prefab");
+
+        Def(EnemyId.Kaesefondue, "Kaesefondue",
+            health: 70f, damage: 6f, speed: 1.4f, exp: 24, pushTime: 0.15f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/vulkan/fondue_stapf.png", fps: 12f,
+            colliderRadius: 0.42f, colliderOffset: new Vector2(0f, 0.7f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Kaesefondue.prefab");
+
+        Def(EnemyId.Schaschlik, "Schaschlik",
+            health: 45f, damage: 6f, speed: 1.9f, exp: 14, pushTime: 0.25f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/vulkan/schaschlik_hops.png", fps: 14f,
+            colliderRadius: 0.3f, colliderOffset: new Vector2(0f, 0.75f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Schaschlik.prefab", hopFirst: 3, hopLast: 9);
+
+        Def(EnemyId.Wasabiklecks, "Wasabi-Klecks",
+            health: 50f, damage: 5f, speed: 1.3f, exp: 15, pushTime: 0.2f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/vulkan/wasabi_kriech.png", fps: 12f,
+            colliderRadius: 0.38f, colliderOffset: new Vector2(0f, 0.3f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Wasabiklecks.prefab");
+
+        Def(EnemyId.Pizzastueck, "Pizzastueck",
+            health: 45f, damage: 6f, speed: 1.7f, exp: 14, pushTime: 0.2f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/vulkan/pizza_stapf.png", fps: 14f,
+            colliderRadius: 0.34f, colliderOffset: new Vector2(0f, 0.5f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Pizzastueck.prefab");
+
+        Def(EnemyId.Drachenfrucht, "Drachenfrucht",
+            health: 40f, damage: 6f, speed: 2.1f, exp: 14, pushTime: 0.2f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/vulkan/drachenfrucht_stapf.png", fps: 14f,
+            colliderRadius: 0.32f, colliderOffset: new Vector2(0f, 0.48f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Drachenfrucht.prefab");
+
+        Def(EnemyId.Brotgolem, "Ofenbrot-Golem",
+            health: 160f, damage: 9f, speed: 1.1f, exp: 45, pushTime: 0.1f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/vulkan/brotgolem_stapf.png", fps: 12f,
+            colliderRadius: 0.55f, colliderOffset: new Vector2(0f, 0.75f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Brotgolem.prefab");
+
+        Def(EnemyId.Knisterbrause, "Knisterbrause",
+            health: 14f, damage: 4f, speed: 2.8f, exp: 5, pushTime: 0.3f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/vulkan/knisterbrause_huepf.png", fps: 16f,
+            colliderRadius: 0.24f, colliderOffset: new Vector2(0f, 0.25f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Knisterbrause.prefab");
+
+        // ------------------------------------------------- Zwischenbosse (Welten 3-5)
+
+        Def(EnemyId.Stracciatella, "Stracciatella",
+            health: 3200f, damage: 14f, speed: 1.5f, exp: 750, pushTime: 0f,
+            role: EnemyRole.MiniBoss, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/miniboss/stracciatella_gleit.png", fps: 12f,
+            colliderRadius: 1.0f, colliderOffset: new Vector2(0f, 1.15f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Mini_Boss/Stracciatella.prefab");
+
+        Def(EnemyId.Knusperhaus, "Knusperhaus",
+            health: 3600f, damage: 16f, speed: 1.7f, exp: 800, pushTime: 0f,
+            role: EnemyRole.MiniBoss, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/miniboss/knusperhaus_lauf.png", fps: 12f,
+            colliderRadius: 1.05f, colliderOffset: new Vector2(0f, 1.45f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Mini_Boss/Knusperhaus.prefab");
+
+        Def(EnemyId.Ofenkartoffel, "Ofenkartoffel",
+            health: 4200f, damage: 18f, speed: 1.45f, exp: 900, pushTime: 0f,
+            role: EnemyRole.MiniBoss, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/miniboss/ofenkartoffel_lauf.png", fps: 12f,
+            colliderRadius: 1.0f, colliderOffset: new Vector2(0f, 1.0f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Mini_Boss/Ofenkartoffel.prefab");
+
+        Def(EnemyId.Spuksuppe, "Spuksuppe",
+            health: 480f, damage: 8f, speed: 1.1f, exp: 480, pushTime: 0.3f,
+            role: EnemyRole.Elite, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/geist/spuksuppe_watschel.png", fps: 14f,
+            colliderRadius: 0.52f, colliderOffset: new Vector2(0f, 0.5f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Elite_Gegner/Spuksuppe.prefab");
+
+        Def(EnemyId.Wackelgeist, "Wackelgeist",
+            health: 520f, damage: 8f, speed: 1.15f, exp: 520, pushTime: 0.3f,
+            role: EnemyRole.Elite, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/geist/wackelgeist_boing.png", fps: 14f,
+            colliderRadius: 0.48f, colliderOffset: new Vector2(0f, 0.42f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Elite_Gegner/Wackelgeist.prefab");
+
+        Def(EnemyId.Feuertaco, "Feuertaco",
+            health: 560f, damage: 9f, speed: 1.25f, exp: 560, pushTime: 0.3f,
+            role: EnemyRole.Elite, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/vulkan/feuertaco_marsch.png", fps: 14f,
+            colliderRadius: 0.5f, colliderOffset: new Vector2(0f, 0.48f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Elite_Gegner/Feuertaco.prefab");
+
+        Def(EnemyId.CremeBrulee, "Creme Brulee",
+            health: 620f, damage: 9f, speed: 1.15f, exp: 620, pushTime: 0.3f,
+            role: EnemyRole.Elite, facing: EnemyFacing.Neutral,
+            sheet: "Assets/Art/Gegner/new/vulkan/cremebrulee_trippel.png", fps: 14f,
+            colliderRadius: 0.44f, colliderOffset: new Vector2(0f, 0.38f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Elite_Gegner/CremeBrulee.prefab");
 
         // ---------------------------------------------------------- Archiv
         //

@@ -333,7 +333,8 @@ public class UIController : MonoBehaviour
             textTarget.text = item.Item2;
 
             currentIndex = (currentIndex + 1) % unlockedVisuals.Count;
-            yield return new WaitForSeconds(3f);
+            // Echtzeit: auf dem Sieg-Bildschirm steht das Spiel (Time.timeScale = 0).
+            yield return new WaitForSecondsRealtime(3f);
         }
     }
 

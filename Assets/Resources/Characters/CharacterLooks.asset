@@ -77,3 +77,11 @@ MonoBehaviour:
     - {fileID: 2104897132110425234, guid: 3c4364e7c09a4ae7a19d5b3e1de11707, type: 3}
     - {fileID: 2278528077143287864, guid: 3c4364e7c09a4ae7a19d5b3e1de11707, type: 3}
     - {fileID: 4200867874681875747, guid: 3c4364e7c09a4ae7a19d5b3e1de11707, type: 3}
+  - animator: {fileID: 9100000, guid: 03cd32a4ec2f4232914bf2e03374ec36, type: 2}
+    footRows: 0
+    accent: {r: 0.62, g: 0.74, b: 0.52, a: 1}
+    portrait:
+    - {fileID: 2842872187988908076, guid: 5448be795cb64a309c7fd20c25719d21, type: 3}
+    - {fileID: 1805282820636335590, guid: 5448be795cb64a309c7fd20c25719d21, type: 3}
+    - {fileID: 2445302561274375153, guid: 5448be795cb64a309c7fd20c25719d21, type: 3}
+    - {fileID: 2627570662613193473, guid: 5448be795cb64a309c7fd20c25719d21, type: 3}

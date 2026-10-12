@@ -1,0 +1,523 @@
+fileFormatVersion: 2
+guid: 81e4164347634f768bd08524f190596f
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3077071668435050993
+    second: knusperhaus_lauf_glow_0
+  - first:
+      213: 3096514866120219053
+    second: knusperhaus_lauf_glow_1
+  - first:
+      213: 3133790116452042162
+    second: knusperhaus_lauf_glow_2
+  - first:
+      213: 3635230771898024330
+    second: knusperhaus_lauf_glow_3
+  - first:
+      213: 3015646445965873583
+    second: knusperhaus_lauf_glow_4
+  - first:
+      213: 2234488281570025584
+    second: knusperhaus_lauf_glow_5
+  - first:
+      213: 3949099612921960613
+    second: knusperhaus_lauf_glow_6
+  - first:
+      213: 1779127022883776079
+    second: knusperhaus_lauf_glow_7
+  - first:
+      213: 1785157907879776494
+    second: knusperhaus_lauf_glow_8
+  - first:
+      213: 3391621290938458667
+    second: knusperhaus_lauf_glow_9
+  - first:
+      213: 1991206405488720049
+    second: knusperhaus_lauf_glow_10
+  - first:
+      213: 2750663563249963389
+    second: knusperhaus_lauf_glow_11
+  - first:
+      213: 1790945306984223010
+    second: knusperhaus_lauf_glow_12
+  - first:
+      213: 2655509068175623614
+    second: knusperhaus_lauf_glow_13
+  - first:
+      213: 3094733871505685643
+    second: knusperhaus_lauf_glow_14
+  - first:
+      213: 4278035932076027492
+    second: knusperhaus_lauf_glow_15
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: knusperhaus_lauf_glow_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e6ee1a6305884610b50db0ad6d98f8b2
+      internalID: 3077071668435050993
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_lauf_glow_1
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8b450225f29f4533b7c962f5e6d6559b
+      internalID: 3096514866120219053
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_lauf_glow_2
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2ce2f9ff940b4d04a0ca602cfdfa9297
+      internalID: 3133790116452042162
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_lauf_glow_3
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: efd817c9b2984ccfa02f9871c32d40a0
+      internalID: 3635230771898024330
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_lauf_glow_4
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b060b878117345cd86c29c8de6fba240
+      internalID: 3015646445965873583
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_lauf_glow_5
+      rect:
+        serializedVersion: 2
+        x: 560
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 22afff568cbb405f9f57cd0b61757a70
+      internalID: 2234488281570025584
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_lauf_glow_6
+      rect:
+        serializedVersion: 2
+        x: 672
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e292cc9bd68645e6a7d3a634ff620b8e
+      internalID: 3949099612921960613
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_lauf_glow_7
+      rect:
+        serializedVersion: 2
+        x: 784
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5575944c627d46d58f695b785210c7a0
+      internalID: 1779127022883776079
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_lauf_glow_8
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2a4c1155f7d7451380583159fa0024df
+      internalID: 1785157907879776494
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_lauf_glow_9
+      rect:
+        serializedVersion: 2
+        x: 1008
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ab2fd0c605c4433860c283b95f1af7e
+      internalID: 3391621290938458667
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_lauf_glow_10
+      rect:
+        serializedVersion: 2
+        x: 1120
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: db6659ea7edf42e78b38463ed6ff64cc
+      internalID: 1991206405488720049
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_lauf_glow_11
+      rect:
+        serializedVersion: 2
+        x: 1232
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8402de1e19d9441e9218bd065550a98f
+      internalID: 2750663563249963389
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_lauf_glow_12
+      rect:
+        serializedVersion: 2
+        x: 1344
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ca1205006d6e497285ce8e2333bedcb0
+      internalID: 1790945306984223010
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_lauf_glow_13
+      rect:
+        serializedVersion: 2
+        x: 1456
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 52c803e2341d4b35883493964453772c
+      internalID: 2655509068175623614
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_lauf_glow_14
+      rect:
+        serializedVersion: 2
+        x: 1568
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1557fc7c1f92406f9048c37dfb0d4755
+      internalID: 3094733871505685643
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knusperhaus_lauf_glow_15
+      rect:
+        serializedVersion: 2
+        x: 1680
+        y: 0
+        width: 112
+        height: 136
+      alignment: 9
+      pivot: {x: 0.5, y: 0.04411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e22ae885c0764acd925cbc2467bb640d
+      internalID: 4278035932076027492
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      knusperhaus_lauf_glow_0: 3077071668435050993
+      knusperhaus_lauf_glow_1: 3096514866120219053
+      knusperhaus_lauf_glow_10: 1991206405488720049
+      knusperhaus_lauf_glow_11: 2750663563249963389
+      knusperhaus_lauf_glow_12: 1790945306984223010
+      knusperhaus_lauf_glow_13: 2655509068175623614
+      knusperhaus_lauf_glow_14: 3094733871505685643
+      knusperhaus_lauf_glow_15: 4278035932076027492
+      knusperhaus_lauf_glow_2: 3133790116452042162
+      knusperhaus_lauf_glow_3: 3635230771898024330
+      knusperhaus_lauf_glow_4: 3015646445965873583
+      knusperhaus_lauf_glow_5: 2234488281570025584
+      knusperhaus_lauf_glow_6: 3949099612921960613
+      knusperhaus_lauf_glow_7: 1779127022883776079
+      knusperhaus_lauf_glow_8: 1785157907879776494
+      knusperhaus_lauf_glow_9: 3391621290938458667
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

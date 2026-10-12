@@ -1,0 +1,939 @@
+fileFormatVersion: 2
+guid: ddba4bbe52df49078481424495976df5
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3909558844680370176
+    second: puddingrobbe_rutsch_0
+  - first:
+      213: 3300835237909964343
+    second: puddingrobbe_rutsch_1
+  - first:
+      213: 2621324174499239805
+    second: puddingrobbe_rutsch_2
+  - first:
+      213: 2692066614378259429
+    second: puddingrobbe_rutsch_3
+  - first:
+      213: 3937385658949568630
+    second: puddingrobbe_rutsch_4
+  - first:
+      213: 3541988875925976380
+    second: puddingrobbe_rutsch_5
+  - first:
+      213: 2716026000885463166
+    second: puddingrobbe_rutsch_6
+  - first:
+      213: 2428903458006630896
+    second: puddingrobbe_rutsch_7
+  - first:
+      213: 4027466699665109816
+    second: puddingrobbe_rutsch_8
+  - first:
+      213: 3519484950461940232
+    second: puddingrobbe_rutsch_9
+  - first:
+      213: 2795185673958753999
+    second: puddingrobbe_rutsch_10
+  - first:
+      213: 2684905459258233673
+    second: puddingrobbe_rutsch_11
+  - first:
+      213: 3708596859122990462
+    second: puddingrobbe_rutsch_12
+  - first:
+      213: 4390536571750064626
+    second: puddingrobbe_rutsch_13
+  - first:
+      213: 2177229560096345107
+    second: puddingrobbe_rutsch_14
+  - first:
+      213: 4066113341757969418
+    second: puddingrobbe_rutsch_15
+  - first:
+      213: 2667872686024950538
+    second: puddingrobbe_rutsch_16
+  - first:
+      213: 2453205094432120890
+    second: puddingrobbe_rutsch_17
+  - first:
+      213: 4255044289514616519
+    second: puddingrobbe_rutsch_18
+  - first:
+      213: 1956634199537079780
+    second: puddingrobbe_rutsch_19
+  - first:
+      213: 2820036598918395370
+    second: puddingrobbe_rutsch_20
+  - first:
+      213: 4008745626212432980
+    second: puddingrobbe_rutsch_21
+  - first:
+      213: 2005759235728985328
+    second: puddingrobbe_rutsch_22
+  - first:
+      213: 4115804749932760118
+    second: puddingrobbe_rutsch_23
+  - first:
+      213: 3758253308520047744
+    second: puddingrobbe_rutsch_24
+  - first:
+      213: 1822566436588304890
+    second: puddingrobbe_rutsch_25
+  - first:
+      213: 3069988511331417487
+    second: puddingrobbe_rutsch_26
+  - first:
+      213: 2080566791348069741
+    second: puddingrobbe_rutsch_27
+  - first:
+      213: 2043916106452204444
+    second: puddingrobbe_rutsch_28
+  - first:
+      213: 2548437494997520158
+    second: puddingrobbe_rutsch_29
+  - first:
+      213: 1255451376188355893
+    second: puddingrobbe_rutsch_30
+  - first:
+      213: 4182910611157407407
+    second: puddingrobbe_rutsch_31
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: puddingrobbe_rutsch_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 48
+        height: 44
+      alignment: 9
+      pivot: {x: 0.4166666666666667, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 511c786bbe9f410da2c20775263ebdc4
+      internalID: 3909558844680370176
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: puddingrobbe_rutsch_1
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 0
+        width: 48
+        height: 44
+      alignment: 9
+      pivot: {x: 0.4166666666666667, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d380d2a234c74179925b65dfd9ce59c6
+      internalID: 3300835237909964343
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: puddingrobbe_rutsch_2
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 48
+        height: 44
+      alignment: 9
+      pivot: {x: 0.4166666666666667, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e8a5c3566db4d6f8e17ae4deb8df094
+      internalID: 2621324174499239805
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: puddingrobbe_rutsch_3
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 0
+        width: 48
+        height: 44
+      alignment: 9
+      pivot: {x: 0.4166666666666667, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e07ddab112e24d47bd1069354d4872db
+      internalID: 2692066614378259429
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: puddingrobbe_rutsch_4
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 48
+        height: 44
+      alignment: 9
+      pivot: {x: 0.4166666666666667, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5eb036d91a0340c8918e4ecb79296b29
+      internalID: 3937385658949568630
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: puddingrobbe_rutsch_5
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 0
+        width: 48
+        height: 44
+      alignment: 9
+      pivot: {x: 0.4166666666666667, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1de204c571544ea49b3355c54e662404
+      internalID: 3541988875925976380
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: puddingrobbe_rutsch_6
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 0
+        width: 48
+        height: 44
+      alignment: 9
+      pivot: {x: 0.4166666666666667, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9d0176687b7e4f8baa76bfce3ee16b73
+      internalID: 2716026000885463166
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: puddingrobbe_rutsch_7
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 0
+        width: 48
+        height: 44
+      alignment: 9
+      pivot: {x: 0.4166666666666667, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 635eb4b1d1f44432b3f7a5d17373fe36
+      internalID: 2428903458006630896
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: puddingrobbe_rutsch_8
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 0
+        width: 48
+        height: 44
+      alignment: 9
+      pivot: {x: 0.4166666666666667, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 743b297e3f474d0da30243f7059d7542
+      internalID: 4027466699665109816
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: puddingrobbe_rutsch_9
+      rect:
+        serializedVersion: 2
+        x: 432
+        y: 0
+        width: 48
+        height: 44
+      alignment: 9
+      pivot: {x: 0.4166666666666667, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3cc56e045b654081b727d6c14b5c481d
+      internalID: 3519484950461940232
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: puddingrobbe_rutsch_10
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 0
+        width: 48
+        height: 44
+      alignment: 9
+      pivot: {x: 0.4166666666666667, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0da3ff9801934c1fa5835ff722006480
+      internalID: 2795185673958753999
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: puddingrobbe_rutsch_11
+      rect:
+        serializedVersion: 2
+        x: 528
+        y: 0
+        width: 48
+        height: 44
+      alignment: 9
+      pivot: {x: 0.4166666666666667, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fd1d511df395472e8da95c90d7a0af90
+      internalID: 2684905459258233673
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: puddingrobbe_rutsch_12
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 0
+        width: 48
+        height: 44
+      alignment: 9
+      pivot: {x: 0.4166666666666667, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1cc7020bb0b740b4bca0a9323947cb10
+      internalID: 3708596859122990462
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: puddingrobbe_rutsch_13
+      rect:
+        serializedVersion: 2
+        x: 624
+        y: 0
+        width: 48
+        height: 44
+      alignment: 9
+      pivot: {x: 0.4166666666666667, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a8201cdd11b4db9af3e744f3534b58f
+      internalID: 4390536571750064626
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: puddingrobbe_rutsch_14
+      rect:
+        serializedVersion: 2
+        x: 672
+        y: 0
+        width: 48
+        height: 44
+      alignment: 9
+      pivot: {x: 0.4166666666666667, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 278e1df2e60d4f628c4342e605bcb9f6
+      internalID: 2177229560096345107
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: puddingrobbe_rutsch_15
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 0
+        width: 48
+        height: 44
+      alignment: 9
+      pivot: {x: 0.4166666666666667, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 009314e8b55642639417cd956778769a
+      internalID: 4066113341757969418
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: puddingrobbe_rutsch_16
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 0
+        width: 48
+        height: 44
+      alignment: 9
+      pivot: {x: 0.4166666666666667, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9be76b8b54bf4f9c9992bb6bb617b236
+      internalID: 2667872686024950538
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: puddingrobbe_rutsch_17
+      rect:
+        serializedVersion: 2
+        x: 816
+        y: 0
+        width: 48
+        height: 44
+      alignment: 9
+      pivot: {x: 0.4166666666666667, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6d441d5efa124b609ed40f02de3cb027
+      internalID: 2453205094432120890
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: puddingrobbe_rutsch_18
+      rect:
+        serializedVersion: 2
+        x: 864
+        y: 0
+        width: 48
+        height: 44
+      alignment: 9
+      pivot: {x: 0.4166666666666667, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9decb99694964c139241a01f394f17e1
+      internalID: 4255044289514616519
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: puddingrobbe_rutsch_19
+      rect:
+        serializedVersion: 2
+        x: 912
+        y: 0
+        width: 48
+        height: 44
+      alignment: 9
+      pivot: {x: 0.4166666666666667, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab9e24492e474491aadf040a0109ba1d
+      internalID: 1956634199537079780
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: puddingrobbe_rutsch_20
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 0
+        width: 48
+        height: 44
+      alignment: 9
+      pivot: {x: 0.4166666666666667, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ff6176b7a4874b3eb6f316d94a6a2bd1
+      internalID: 2820036598918395370
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: puddingrobbe_rutsch_21
+      rect:
+        serializedVersion: 2
+        x: 1008
+        y: 0
+        width: 48
+        height: 44
+      alignment: 9
+      pivot: {x: 0.4166666666666667, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 420d6f24798f43ab832dccafc81ce965
+      internalID: 4008745626212432980
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: puddingrobbe_rutsch_22
+      rect:
+        serializedVersion: 2
+        x: 1056
+        y: 0
+        width: 48
+        height: 44
+      alignment: 9
+      pivot: {x: 0.4166666666666667, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 850906251672488b804644296b8d290f
+      internalID: 2005759235728985328
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: puddingrobbe_rutsch_23
+      rect:
+        serializedVersion: 2
+        x: 1104
+        y: 0
+        width: 48
+        height: 44
+      alignment: 9
+      pivot: {x: 0.4166666666666667, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 17e217dba7474bb6886a18457dcbc828
+      internalID: 4115804749932760118
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: puddingrobbe_rutsch_24
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 0
+        width: 48
+        height: 44
+      alignment: 9
+      pivot: {x: 0.4166666666666667, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8dc6a2feb8054523a183b0ac7ebf1eed
+      internalID: 3758253308520047744
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: puddingrobbe_rutsch_25
+      rect:
+        serializedVersion: 2
+        x: 1200
+        y: 0
+        width: 48
+        height: 44
+      alignment: 9
+      pivot: {x: 0.4166666666666667, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 544096f958274178a29ede94f1cb3fac
+      internalID: 1822566436588304890
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: puddingrobbe_rutsch_26
+      rect:
+        serializedVersion: 2
+        x: 1248
+        y: 0
+        width: 48
+        height: 44
+      alignment: 9
+      pivot: {x: 0.4166666666666667, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 588aa66a81754877ab1cc3b27016cecc
+      internalID: 3069988511331417487
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: puddingrobbe_rutsch_27
+      rect:
+        serializedVersion: 2
+        x: 1296
+        y: 0
+        width: 48
+        height: 44
+      alignment: 9
+      pivot: {x: 0.4166666666666667, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8514beed2f5645958f8f98dbc07e9669
+      internalID: 2080566791348069741
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: puddingrobbe_rutsch_28
+      rect:
+        serializedVersion: 2
+        x: 1344
+        y: 0
+        width: 48
+        height: 44
+      alignment: 9
+      pivot: {x: 0.4166666666666667, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d78718dacb664db484b1b3be8a5321fb
+      internalID: 2043916106452204444
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: puddingrobbe_rutsch_29
+      rect:
+        serializedVersion: 2
+        x: 1392
+        y: 0
+        width: 48
+        height: 44
+      alignment: 9
+      pivot: {x: 0.4166666666666667, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 438c8358e7fe476c8855fdea43ceecae
+      internalID: 2548437494997520158
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: puddingrobbe_rutsch_30
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 0
+        width: 48
+        height: 44
+      alignment: 9
+      pivot: {x: 0.4166666666666667, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 465041cc22db44cb897c5df5962c1606
+      internalID: 1255451376188355893
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: puddingrobbe_rutsch_31
+      rect:
+        serializedVersion: 2
+        x: 1488
+        y: 0
+        width: 48
+        height: 44
+      alignment: 9
+      pivot: {x: 0.4166666666666667, y: 0.06818181818181818}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2e12c3c3aef44aa49d372bd8e867a771
+      internalID: 4182910611157407407
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      puddingrobbe_rutsch_0: 3909558844680370176
+      puddingrobbe_rutsch_1: 3300835237909964343
+      puddingrobbe_rutsch_10: 2795185673958753999
+      puddingrobbe_rutsch_11: 2684905459258233673
+      puddingrobbe_rutsch_12: 3708596859122990462
+      puddingrobbe_rutsch_13: 4390536571750064626
+      puddingrobbe_rutsch_14: 2177229560096345107
+      puddingrobbe_rutsch_15: 4066113341757969418
+      puddingrobbe_rutsch_16: 2667872686024950538
+      puddingrobbe_rutsch_17: 2453205094432120890
+      puddingrobbe_rutsch_18: 4255044289514616519
+      puddingrobbe_rutsch_19: 1956634199537079780
+      puddingrobbe_rutsch_2: 2621324174499239805
+      puddingrobbe_rutsch_20: 2820036598918395370
+      puddingrobbe_rutsch_21: 4008745626212432980
+      puddingrobbe_rutsch_22: 2005759235728985328
+      puddingrobbe_rutsch_23: 4115804749932760118
+      puddingrobbe_rutsch_24: 3758253308520047744
+      puddingrobbe_rutsch_25: 1822566436588304890
+      puddingrobbe_rutsch_26: 3069988511331417487
+      puddingrobbe_rutsch_27: 2080566791348069741
+      puddingrobbe_rutsch_28: 2043916106452204444
+      puddingrobbe_rutsch_29: 2548437494997520158
+      puddingrobbe_rutsch_3: 2692066614378259429
+      puddingrobbe_rutsch_30: 1255451376188355893
+      puddingrobbe_rutsch_31: 4182910611157407407
+      puddingrobbe_rutsch_4: 3937385658949568630
+      puddingrobbe_rutsch_5: 3541988875925976380
+      puddingrobbe_rutsch_6: 2716026000885463166
+      puddingrobbe_rutsch_7: 2428903458006630896
+      puddingrobbe_rutsch_8: 4027466699665109816
+      puddingrobbe_rutsch_9: 3519484950461940232
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

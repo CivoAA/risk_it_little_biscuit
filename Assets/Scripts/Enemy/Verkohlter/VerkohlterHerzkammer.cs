@@ -29,7 +29,7 @@ using UnityEngine.Rendering.Universal;
 ///     zurueck, wo der Verkohlte stand, und raeumt alles wieder auf.
 /// Verschwindet der Boss anders (Test-Szene: Boss weg), gilt der zweite Weg.
 ///
-/// Bilder: Tools/verkohlter_herz.py (herzkammer_hinten / _glut / _vorne).
+/// Bilder: herzkammer_hinten / _glut / _vorne.
 /// </summary>
 public class VerkohlterHerzkammer : MonoBehaviour
 {
@@ -406,6 +406,8 @@ public class VerkohlterHerzkammer : MonoBehaviour
     private IEnumerator Win()
     {
         yield return new WaitForSeconds(WinDelay);
+        // Im Story-Modus kommt erst das Finale - den Sieg-Bildschirm zeigt dann die Story.
+        if (StoryDirector.ClaimsWin) yield break;
         PlayerController pc = PlayerController.Instance;
         GameManager gm = GameManager.Instance;
         if (pc == null || !pc.gameObject.activeSelf || gm == null || !gm.gameActiv) yield break;

@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 /// <summary>
-/// Baut die Vulkanwelt (Level 5, Szene Map_World4) aus den Python-Bildern:
+/// Baut die Vulkanwelt (Level 5, Szene Map_World4) aus den Bildern:
 ///  1. ein Tile je Sprite aus vulkan_boden.png,
 ///  2. ein Prefab je Lavaloch (Flipbook, PolygonCollider2D am Lochrand, MixerBlocker),
 ///  3. die Szene: 3x3-Endloswelt wie der Wald (WorldManager3x3 + Mixer-Spawner),
@@ -21,8 +21,6 @@ using UnityEngine.Tilemaps;
 /// Wiederholbar: Tiles und Prefabs werden aktualisiert, die Welt (Grid) wird
 /// neu gebaut, das Map-Objekt (MapDefinition) bleibt stehen - Musik oder
 /// Wellenplan, die dort spaeter eingetragen werden, gehen also nicht verloren.
-/// Bilder: Tools/vulkan_lava.py, dann Tools/vulkan_boden.py, Vorschau
-/// Tools/vulkan_vorschau.py.
 /// </summary>
 public static class VulkanBuilder
 {
@@ -48,7 +46,7 @@ public static class VulkanBuilder
     private const int FloorOrder = 5;              // wie der Waldboden
     private const int LavaOrder = 10;              // flach im Boden, unter Gegnern/XP (Objects)
     private const int PropLayer = 3;               // "Baundaries": haelt den Spieler, Gegner laufen drueber
-    private const float PoolGap = 1.6f;            // wie POOL_GAP in Tools/vulkan_boden.py
+    private const float PoolGap = 1.6f;
 
     [Serializable] private class PoolInfo
     {
@@ -78,7 +76,7 @@ public static class VulkanBuilder
     {
         AssetDatabase.Refresh();
         if (!File.Exists(LayoutPath) || !File.Exists(LavaInfoPath))
-            return "vulkan_layout.json oder vulkan_lava.json fehlt - erst Tools/vulkan_lava.py und Tools/vulkan_boden.py laufen lassen.";
+            return "vulkan_layout.json oder vulkan_lava.json fehlt.";
 
         // Szene zuerst oeffnen bzw. anlegen: OpenScene entlaedt unbenutzte Assets,
         // vorher geladene Tiles waeren danach kaputt (siehe KuecheBuilder).

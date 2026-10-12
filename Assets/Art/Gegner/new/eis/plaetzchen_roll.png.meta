@@ -1,0 +1,939 @@
+fileFormatVersion: 2
+guid: abda442f7bed484982461aff92364dd3
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2912729050567756247
+    second: plaetzchen_roll_0
+  - first:
+      213: 1394961074881625907
+    second: plaetzchen_roll_1
+  - first:
+      213: 1328274644596833191
+    second: plaetzchen_roll_2
+  - first:
+      213: 2177995792393938331
+    second: plaetzchen_roll_3
+  - first:
+      213: 1476940644566957760
+    second: plaetzchen_roll_4
+  - first:
+      213: 2520727481886600619
+    second: plaetzchen_roll_5
+  - first:
+      213: 1541633394375543897
+    second: plaetzchen_roll_6
+  - first:
+      213: 1864690162845538811
+    second: plaetzchen_roll_7
+  - first:
+      213: 1896770702199161982
+    second: plaetzchen_roll_8
+  - first:
+      213: 2262425812832057578
+    second: plaetzchen_roll_9
+  - first:
+      213: 1208029941447761891
+    second: plaetzchen_roll_10
+  - first:
+      213: 2058620871803874283
+    second: plaetzchen_roll_11
+  - first:
+      213: 4234021919036429803
+    second: plaetzchen_roll_12
+  - first:
+      213: 4502112112601884569
+    second: plaetzchen_roll_13
+  - first:
+      213: 2179267533133511569
+    second: plaetzchen_roll_14
+  - first:
+      213: 3187337664959369207
+    second: plaetzchen_roll_15
+  - first:
+      213: 2781396711643276596
+    second: plaetzchen_roll_16
+  - first:
+      213: 3419412228745212800
+    second: plaetzchen_roll_17
+  - first:
+      213: 1238893814169749605
+    second: plaetzchen_roll_18
+  - first:
+      213: 3990535437707537775
+    second: plaetzchen_roll_19
+  - first:
+      213: 2793748286696480692
+    second: plaetzchen_roll_20
+  - first:
+      213: 1409951157754689471
+    second: plaetzchen_roll_21
+  - first:
+      213: 3256563189879163376
+    second: plaetzchen_roll_22
+  - first:
+      213: 1337948681087283174
+    second: plaetzchen_roll_23
+  - first:
+      213: 4509922975535890637
+    second: plaetzchen_roll_24
+  - first:
+      213: 2112435430304697608
+    second: plaetzchen_roll_25
+  - first:
+      213: 2635445282155603060
+    second: plaetzchen_roll_26
+  - first:
+      213: 3429645983804426618
+    second: plaetzchen_roll_27
+  - first:
+      213: 3708397136781748295
+    second: plaetzchen_roll_28
+  - first:
+      213: 2208199551548986033
+    second: plaetzchen_roll_29
+  - first:
+      213: 1168700617783588518
+    second: plaetzchen_roll_30
+  - first:
+      213: 2845950645490034137
+    second: plaetzchen_roll_31
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: plaetzchen_roll_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 34
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a00f81adf7674c59ab06f1161807bdd1
+      internalID: 2912729050567756247
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plaetzchen_roll_1
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 0
+        width: 34
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2924b675202c42128e4ab5fed81b96cc
+      internalID: 1394961074881625907
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plaetzchen_roll_2
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 0
+        width: 34
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bff19c34531448bf854afff98807cb08
+      internalID: 1328274644596833191
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plaetzchen_roll_3
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 0
+        width: 34
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ceaa808b54584f7bb58470670acaa3b0
+      internalID: 2177995792393938331
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plaetzchen_roll_4
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 0
+        width: 34
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d1c61588465443d2ae6a88a9bd45c1bc
+      internalID: 1476940644566957760
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plaetzchen_roll_5
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 0
+        width: 34
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 478f3d8451384537b0d68703e6931bd4
+      internalID: 2520727481886600619
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plaetzchen_roll_6
+      rect:
+        serializedVersion: 2
+        x: 204
+        y: 0
+        width: 34
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a3b1aa9abd2d4bd598f09642580094b1
+      internalID: 1541633394375543897
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plaetzchen_roll_7
+      rect:
+        serializedVersion: 2
+        x: 238
+        y: 0
+        width: 34
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7f30bf889b244f8297cc63d67b6b635b
+      internalID: 1864690162845538811
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plaetzchen_roll_8
+      rect:
+        serializedVersion: 2
+        x: 272
+        y: 0
+        width: 34
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5a16615d952a4495a1503d47407bcd77
+      internalID: 1896770702199161982
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plaetzchen_roll_9
+      rect:
+        serializedVersion: 2
+        x: 306
+        y: 0
+        width: 34
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0c6c8182e89242ce959f8a9c9e57bb1e
+      internalID: 2262425812832057578
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plaetzchen_roll_10
+      rect:
+        serializedVersion: 2
+        x: 340
+        y: 0
+        width: 34
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9af8c1549af14b9f8913e65a752e1aa1
+      internalID: 1208029941447761891
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plaetzchen_roll_11
+      rect:
+        serializedVersion: 2
+        x: 374
+        y: 0
+        width: 34
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8142fda1172a40a1b08f10822b0c3ecf
+      internalID: 2058620871803874283
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plaetzchen_roll_12
+      rect:
+        serializedVersion: 2
+        x: 408
+        y: 0
+        width: 34
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1d448466b7f64df494857900a149501c
+      internalID: 4234021919036429803
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plaetzchen_roll_13
+      rect:
+        serializedVersion: 2
+        x: 442
+        y: 0
+        width: 34
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3bc61274c35c4b9687a18e89bf2b2e2d
+      internalID: 4502112112601884569
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plaetzchen_roll_14
+      rect:
+        serializedVersion: 2
+        x: 476
+        y: 0
+        width: 34
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 43afd344c7214557a58cc3b57e505e41
+      internalID: 2179267533133511569
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plaetzchen_roll_15
+      rect:
+        serializedVersion: 2
+        x: 510
+        y: 0
+        width: 34
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: af30accd29764fdc92a6f4a0ab9f1fd1
+      internalID: 3187337664959369207
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plaetzchen_roll_16
+      rect:
+        serializedVersion: 2
+        x: 544
+        y: 0
+        width: 34
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: be2aea51df58476691cc7d94538b6096
+      internalID: 2781396711643276596
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plaetzchen_roll_17
+      rect:
+        serializedVersion: 2
+        x: 578
+        y: 0
+        width: 34
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1fc6f3dc7fc54f86a8e91c0b37f249fc
+      internalID: 3419412228745212800
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plaetzchen_roll_18
+      rect:
+        serializedVersion: 2
+        x: 612
+        y: 0
+        width: 34
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c3f1fbb93b854ecdbf4640984599de73
+      internalID: 1238893814169749605
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plaetzchen_roll_19
+      rect:
+        serializedVersion: 2
+        x: 646
+        y: 0
+        width: 34
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4d423a349b8e455fb6478906bb726d54
+      internalID: 3990535437707537775
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plaetzchen_roll_20
+      rect:
+        serializedVersion: 2
+        x: 680
+        y: 0
+        width: 34
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8aa39682880f4d0da9be7aacc474d22b
+      internalID: 2793748286696480692
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plaetzchen_roll_21
+      rect:
+        serializedVersion: 2
+        x: 714
+        y: 0
+        width: 34
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b749f3db740b4a3d980c799fe5c8491b
+      internalID: 1409951157754689471
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plaetzchen_roll_22
+      rect:
+        serializedVersion: 2
+        x: 748
+        y: 0
+        width: 34
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aa8118493108485baf04966ce0b7f3c0
+      internalID: 3256563189879163376
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plaetzchen_roll_23
+      rect:
+        serializedVersion: 2
+        x: 782
+        y: 0
+        width: 34
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c130fbc4e884abc8f55cc0d770e280d
+      internalID: 1337948681087283174
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plaetzchen_roll_24
+      rect:
+        serializedVersion: 2
+        x: 816
+        y: 0
+        width: 34
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 097adbf22e5c44d48f1add3d30956306
+      internalID: 4509922975535890637
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plaetzchen_roll_25
+      rect:
+        serializedVersion: 2
+        x: 850
+        y: 0
+        width: 34
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f2e3b2c55db46ea854494ffee2a2606
+      internalID: 2112435430304697608
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plaetzchen_roll_26
+      rect:
+        serializedVersion: 2
+        x: 884
+        y: 0
+        width: 34
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dda90f1cd7e94bc682790a075e68635b
+      internalID: 2635445282155603060
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plaetzchen_roll_27
+      rect:
+        serializedVersion: 2
+        x: 918
+        y: 0
+        width: 34
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 70fef0cef2e645e785346effc5e0a276
+      internalID: 3429645983804426618
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plaetzchen_roll_28
+      rect:
+        serializedVersion: 2
+        x: 952
+        y: 0
+        width: 34
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 20a6ec02d1124868a2003341adaaa9ba
+      internalID: 3708397136781748295
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plaetzchen_roll_29
+      rect:
+        serializedVersion: 2
+        x: 986
+        y: 0
+        width: 34
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2a01c0785a264f36bf0ef23b1bd472dc
+      internalID: 2208199551548986033
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plaetzchen_roll_30
+      rect:
+        serializedVersion: 2
+        x: 1020
+        y: 0
+        width: 34
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 218f57d42e4a4161ace8465ab457eda8
+      internalID: 1168700617783588518
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plaetzchen_roll_31
+      rect:
+        serializedVersion: 2
+        x: 1054
+        y: 0
+        width: 34
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.07894736842105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b1f5a536e52c410c9f3d87b3e8327f8f
+      internalID: 2845950645490034137
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      plaetzchen_roll_0: 2912729050567756247
+      plaetzchen_roll_1: 1394961074881625907
+      plaetzchen_roll_10: 1208029941447761891
+      plaetzchen_roll_11: 2058620871803874283
+      plaetzchen_roll_12: 4234021919036429803
+      plaetzchen_roll_13: 4502112112601884569
+      plaetzchen_roll_14: 2179267533133511569
+      plaetzchen_roll_15: 3187337664959369207
+      plaetzchen_roll_16: 2781396711643276596
+      plaetzchen_roll_17: 3419412228745212800
+      plaetzchen_roll_18: 1238893814169749605
+      plaetzchen_roll_19: 3990535437707537775
+      plaetzchen_roll_2: 1328274644596833191
+      plaetzchen_roll_20: 2793748286696480692
+      plaetzchen_roll_21: 1409951157754689471
+      plaetzchen_roll_22: 3256563189879163376
+      plaetzchen_roll_23: 1337948681087283174
+      plaetzchen_roll_24: 4509922975535890637
+      plaetzchen_roll_25: 2112435430304697608
+      plaetzchen_roll_26: 2635445282155603060
+      plaetzchen_roll_27: 3429645983804426618
+      plaetzchen_roll_28: 3708397136781748295
+      plaetzchen_roll_29: 2208199551548986033
+      plaetzchen_roll_3: 2177995792393938331
+      plaetzchen_roll_30: 1168700617783588518
+      plaetzchen_roll_31: 2845950645490034137
+      plaetzchen_roll_4: 1476940644566957760
+      plaetzchen_roll_5: 2520727481886600619
+      plaetzchen_roll_6: 1541633394375543897
+      plaetzchen_roll_7: 1864690162845538811
+      plaetzchen_roll_8: 1896770702199161982
+      plaetzchen_roll_9: 2262425812832057578
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

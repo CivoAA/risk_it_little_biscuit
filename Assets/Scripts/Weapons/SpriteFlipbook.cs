@@ -3,8 +3,7 @@ using UnityEngine;
 /// <summary>
 /// Spielt eine Reihe Sprites am SpriteRenderer ab - fuer Waffenobjekte, die
 /// nur eine kleine Schleife brauchen (Strudel, Kruemel, Lache ...) und dafuer
-/// keinen eigenen Animator-Controller. Die Bilder zeichnet
-/// Tools/waffen_modelle.py.
+/// keinen eigenen Animator-Controller.
 ///
 /// Laeuft mit Time.deltaTime, steht also mit dem Spiel still (Level-Up,
 /// Pause). Blendet am Anfang kurz ein; wer seine Lebenszeit kennt, meldet sie

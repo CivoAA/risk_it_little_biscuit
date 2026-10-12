@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// Glatteis-Pfuetze der Eiswelt (Map_World5): wer drauf laeuft, rutscht.
 /// Kein Hindernis und kein Physik-Collider - die Eisflaeche ist ein Polygon
-/// (lokale Koordinaten, Bild von Tools/eis_props.py), gegen das der
+/// (lokale Koordinaten), gegen das der
 /// <see cref="PlayerController"/> seine Fuesse prueft.
 ///
 /// Auf dem Eis folgt die Geschwindigkeit der Eingabe nur langsam

@@ -4,8 +4,8 @@ using UnityEngine;
 
 /// <summary>
 /// Die Glutwurz - Endboss des Waldes (World2, Szene Map_World3). Ein
-/// Baumriese, der Feuer speit. Bilder aus Tools/baumboss.py, der Flammenwurf
-/// aus Tools/baumboss_feuer.py (<see cref="FlameBeam"/>), das Prefab baut
+/// Baumriese, der Feuer speit. Der Flammenwurf ist
+/// <see cref="FlameBeam"/>, das Prefab baut
 /// Tools -> Gegner -> Glutwurz bauen (GlutwurzBuilder).
 ///
 /// Er hat eine Attacke, den Glutatem, und zieht sie in zwei Phasen auf:
@@ -136,7 +136,7 @@ public class EnemyGlutwurz : MonoBehaviour
 
     private const float PlayerRadius = 0.45f;
 
-    /// <summary>Maulmitte ueber dem Pivot (Fuesse) - gemessen von Tools/baumboss.py.</summary>
+    /// <summary>Maulmitte ueber dem Pivot (Fuesse) - gemessen am Bild.</summary>
     private static readonly Vector2 MouthOffset = new Vector2(0f, 0.83f);
 
     private static readonly Color RageColor = new Color(1f, 0.82f, 0.7f, 1f);

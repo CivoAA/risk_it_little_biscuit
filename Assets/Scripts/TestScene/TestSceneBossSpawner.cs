@@ -28,8 +28,10 @@ public class TestSceneBossSpawner : MonoBehaviour
     private EnemyKeckKönig currentKing;
     private EnemyGlutwurz currentGlutwurz;
     private EnemySchleimkoenig currentSchleimkoenig;
+    private EnemyMilchpanzer currentMilchpanzer;
     private EnemyVerkohlter currentVerkohlter;
     private EnemySquiddy currentSquiddy;
+    private SelfAnimatedBoss currentMiniBoss;
 
     /// <summary>Steht gerade ein Boss?</summary>
     public bool Alive
@@ -51,8 +53,10 @@ public class TestSceneBossSpawner : MonoBehaviour
             if (currentKing != null) return currentKing.IsPhaseTwo;
             if (currentGlutwurz != null) return currentGlutwurz.IsPhaseTwo;
             if (currentSchleimkoenig != null) return currentSchleimkoenig.IsPhaseTwo;
+            if (currentMilchpanzer != null) return currentMilchpanzer.IsPhaseTwo;
             if (currentVerkohlter != null) return currentVerkohlter.IsPhaseTwo;
             if (currentSquiddy != null) return currentSquiddy.IsPhaseTwo;
+            if (currentMiniBoss != null) return currentMiniBoss.IsPhaseTwo;
             return false;
         }
     }
@@ -109,8 +113,10 @@ public class TestSceneBossSpawner : MonoBehaviour
         currentKing = current.GetComponent<EnemyKeckKönig>();
         currentGlutwurz = current.GetComponent<EnemyGlutwurz>();
         currentSchleimkoenig = current.GetComponent<EnemySchleimkoenig>();
+        currentMilchpanzer = current.GetComponent<EnemyMilchpanzer>();
         currentVerkohlter = current.GetComponent<EnemyVerkohlter>();
         currentSquiddy = current.GetComponent<EnemySquiddy>();
+        currentMiniBoss = current.GetComponent<SelfAnimatedBoss>();
 
         // Gleiche Vorsicht wie ueberall sonst: erzeugt wird in der aktiven
         // Szene, und das muss nicht die sein, in der der Spieler steht.
@@ -156,8 +162,10 @@ public class TestSceneBossSpawner : MonoBehaviour
         currentKing = null;
         currentGlutwurz = null;
         currentSchleimkoenig = null;
+        currentMilchpanzer = null;
         currentVerkohlter = null;
         currentSquiddy = null;
+        currentMiniBoss = null;
         return true;
     }
 

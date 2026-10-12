@@ -1,0 +1,939 @@
+fileFormatVersion: 2
+guid: 61b9e1038eac4d4488905ac38d82474f
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1493828414005471236
+    second: spuksuppe_watschel_glow_0
+  - first:
+      213: 1688604325238112004
+    second: spuksuppe_watschel_glow_1
+  - first:
+      213: 4335079132852919396
+    second: spuksuppe_watschel_glow_2
+  - first:
+      213: 2609046237795301841
+    second: spuksuppe_watschel_glow_3
+  - first:
+      213: 3969665767100604479
+    second: spuksuppe_watschel_glow_4
+  - first:
+      213: 1931038770054288662
+    second: spuksuppe_watschel_glow_5
+  - first:
+      213: 1484549890387220438
+    second: spuksuppe_watschel_glow_6
+  - first:
+      213: 3145577531342388187
+    second: spuksuppe_watschel_glow_7
+  - first:
+      213: 4369454558645213579
+    second: spuksuppe_watschel_glow_8
+  - first:
+      213: 3942688278174189377
+    second: spuksuppe_watschel_glow_9
+  - first:
+      213: 1428706306692586205
+    second: spuksuppe_watschel_glow_10
+  - first:
+      213: 2482922883635653809
+    second: spuksuppe_watschel_glow_11
+  - first:
+      213: 1832730707612564223
+    second: spuksuppe_watschel_glow_12
+  - first:
+      213: 1927731047862363352
+    second: spuksuppe_watschel_glow_13
+  - first:
+      213: 3270418511049385237
+    second: spuksuppe_watschel_glow_14
+  - first:
+      213: 2739365076743057904
+    second: spuksuppe_watschel_glow_15
+  - first:
+      213: 3749539103743948224
+    second: spuksuppe_watschel_glow_16
+  - first:
+      213: 1201362333383716467
+    second: spuksuppe_watschel_glow_17
+  - first:
+      213: 2756253715161888417
+    second: spuksuppe_watschel_glow_18
+  - first:
+      213: 2223214279441343920
+    second: spuksuppe_watschel_glow_19
+  - first:
+      213: 3208813101722073629
+    second: spuksuppe_watschel_glow_20
+  - first:
+      213: 1922930909346895036
+    second: spuksuppe_watschel_glow_21
+  - first:
+      213: 3905559546754614809
+    second: spuksuppe_watschel_glow_22
+  - first:
+      213: 4538845473468157894
+    second: spuksuppe_watschel_glow_23
+  - first:
+      213: 2515269856207360817
+    second: spuksuppe_watschel_glow_24
+  - first:
+      213: 2669750875471852948
+    second: spuksuppe_watschel_glow_25
+  - first:
+      213: 3959051507574290999
+    second: spuksuppe_watschel_glow_26
+  - first:
+      213: 1798752779726266809
+    second: spuksuppe_watschel_glow_27
+  - first:
+      213: 2717367571615704277
+    second: spuksuppe_watschel_glow_28
+  - first:
+      213: 1957090235412752522
+    second: spuksuppe_watschel_glow_29
+  - first:
+      213: 4002610324701766678
+    second: spuksuppe_watschel_glow_30
+  - first:
+      213: 4544611394809261096
+    second: spuksuppe_watschel_glow_31
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: spuksuppe_watschel_glow_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 56
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 518fb56e0d564639babb616d4f552272
+      internalID: 1493828414005471236
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spuksuppe_watschel_glow_1
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 0
+        width: 56
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0ff0729e73a64fd6a35cc373509670cc
+      internalID: 1688604325238112004
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spuksuppe_watschel_glow_2
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 0
+        width: 56
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 57546f72e5c941b1b0024be95c1c29b4
+      internalID: 4335079132852919396
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spuksuppe_watschel_glow_3
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 0
+        width: 56
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a0263bfd03ce4933b57936d1fcbb597e
+      internalID: 2609046237795301841
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spuksuppe_watschel_glow_4
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 0
+        width: 56
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 857dab5a7c954939a3ee343b05851256
+      internalID: 3969665767100604479
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spuksuppe_watschel_glow_5
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 0
+        width: 56
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 407d2bac85b64daf92d2ca44f763d548
+      internalID: 1931038770054288662
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spuksuppe_watschel_glow_6
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 0
+        width: 56
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4cb9a66a2640453fb14d416c8121bb78
+      internalID: 1484549890387220438
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spuksuppe_watschel_glow_7
+      rect:
+        serializedVersion: 2
+        x: 392
+        y: 0
+        width: 56
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f2a2abb1ba604b648cece15f16bb69d2
+      internalID: 3145577531342388187
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spuksuppe_watschel_glow_8
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 0
+        width: 56
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 748ccf890ae149bb9a87030bc14eb246
+      internalID: 4369454558645213579
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spuksuppe_watschel_glow_9
+      rect:
+        serializedVersion: 2
+        x: 504
+        y: 0
+        width: 56
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0d07e830c6ee490b87ae0263c4819add
+      internalID: 3942688278174189377
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spuksuppe_watschel_glow_10
+      rect:
+        serializedVersion: 2
+        x: 560
+        y: 0
+        width: 56
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90945b1e98514a7992511d508ac09142
+      internalID: 1428706306692586205
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spuksuppe_watschel_glow_11
+      rect:
+        serializedVersion: 2
+        x: 616
+        y: 0
+        width: 56
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ab9984dfc74447e95e06488a0b4bc3f
+      internalID: 2482922883635653809
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spuksuppe_watschel_glow_12
+      rect:
+        serializedVersion: 2
+        x: 672
+        y: 0
+        width: 56
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 066ec370718a41f3850ecdfa496694c9
+      internalID: 1832730707612564223
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spuksuppe_watschel_glow_13
+      rect:
+        serializedVersion: 2
+        x: 728
+        y: 0
+        width: 56
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e5c44f143418423f924e1bf25f75139e
+      internalID: 1927731047862363352
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spuksuppe_watschel_glow_14
+      rect:
+        serializedVersion: 2
+        x: 784
+        y: 0
+        width: 56
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8752c86abe704d58802a52f0e163aaf0
+      internalID: 3270418511049385237
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spuksuppe_watschel_glow_15
+      rect:
+        serializedVersion: 2
+        x: 840
+        y: 0
+        width: 56
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3df6a327b33748f29faa73e06d7c7397
+      internalID: 2739365076743057904
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spuksuppe_watschel_glow_16
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 0
+        width: 56
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0d137ad828a34169910fa461a0c9a3dc
+      internalID: 3749539103743948224
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spuksuppe_watschel_glow_17
+      rect:
+        serializedVersion: 2
+        x: 952
+        y: 0
+        width: 56
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 55f542f54a254589b143274a579f30bd
+      internalID: 1201362333383716467
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spuksuppe_watschel_glow_18
+      rect:
+        serializedVersion: 2
+        x: 1008
+        y: 0
+        width: 56
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e8f05a461dc84cefa479305fd1d9637e
+      internalID: 2756253715161888417
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spuksuppe_watschel_glow_19
+      rect:
+        serializedVersion: 2
+        x: 1064
+        y: 0
+        width: 56
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0173958ee0144b128fef434f7cdb27f2
+      internalID: 2223214279441343920
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spuksuppe_watschel_glow_20
+      rect:
+        serializedVersion: 2
+        x: 1120
+        y: 0
+        width: 56
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 24fa98bdb90742dd8f1ca2c1249325db
+      internalID: 3208813101722073629
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spuksuppe_watschel_glow_21
+      rect:
+        serializedVersion: 2
+        x: 1176
+        y: 0
+        width: 56
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9bd32724bb3b4288968ebe4bc414a6dc
+      internalID: 1922930909346895036
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spuksuppe_watschel_glow_22
+      rect:
+        serializedVersion: 2
+        x: 1232
+        y: 0
+        width: 56
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e199cdafef274585b2abc44c0c8cde72
+      internalID: 3905559546754614809
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spuksuppe_watschel_glow_23
+      rect:
+        serializedVersion: 2
+        x: 1288
+        y: 0
+        width: 56
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7201db3878d348d9b5117858e8c409ef
+      internalID: 4538845473468157894
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spuksuppe_watschel_glow_24
+      rect:
+        serializedVersion: 2
+        x: 1344
+        y: 0
+        width: 56
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec3ff36dcae84281962d3618b1abfdd4
+      internalID: 2515269856207360817
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spuksuppe_watschel_glow_25
+      rect:
+        serializedVersion: 2
+        x: 1400
+        y: 0
+        width: 56
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d8db7f8837814cb691904f16402edd12
+      internalID: 2669750875471852948
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spuksuppe_watschel_glow_26
+      rect:
+        serializedVersion: 2
+        x: 1456
+        y: 0
+        width: 56
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 342b931f73d543058ce6816b7703463d
+      internalID: 3959051507574290999
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spuksuppe_watschel_glow_27
+      rect:
+        serializedVersion: 2
+        x: 1512
+        y: 0
+        width: 56
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 056a6ebbfbe041b79a44fc41dd1dac25
+      internalID: 1798752779726266809
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spuksuppe_watschel_glow_28
+      rect:
+        serializedVersion: 2
+        x: 1568
+        y: 0
+        width: 56
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 92f4d5588d524682b75f43a8ea52c380
+      internalID: 2717367571615704277
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spuksuppe_watschel_glow_29
+      rect:
+        serializedVersion: 2
+        x: 1624
+        y: 0
+        width: 56
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a2814ae3f79c4912a4908a7f095bc2a0
+      internalID: 1957090235412752522
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spuksuppe_watschel_glow_30
+      rect:
+        serializedVersion: 2
+        x: 1680
+        y: 0
+        width: 56
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a4c283b0ab434fe798ca85a7a0534bb5
+      internalID: 4002610324701766678
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spuksuppe_watschel_glow_31
+      rect:
+        serializedVersion: 2
+        x: 1736
+        y: 0
+        width: 56
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cb9104b86ddc4f6a90a63f1bd2ba5739
+      internalID: 4544611394809261096
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      spuksuppe_watschel_glow_0: 1493828414005471236
+      spuksuppe_watschel_glow_1: 1688604325238112004
+      spuksuppe_watschel_glow_10: 1428706306692586205
+      spuksuppe_watschel_glow_11: 2482922883635653809
+      spuksuppe_watschel_glow_12: 1832730707612564223
+      spuksuppe_watschel_glow_13: 1927731047862363352
+      spuksuppe_watschel_glow_14: 3270418511049385237
+      spuksuppe_watschel_glow_15: 2739365076743057904
+      spuksuppe_watschel_glow_16: 3749539103743948224
+      spuksuppe_watschel_glow_17: 1201362333383716467
+      spuksuppe_watschel_glow_18: 2756253715161888417
+      spuksuppe_watschel_glow_19: 2223214279441343920
+      spuksuppe_watschel_glow_2: 4335079132852919396
+      spuksuppe_watschel_glow_20: 3208813101722073629
+      spuksuppe_watschel_glow_21: 1922930909346895036
+      spuksuppe_watschel_glow_22: 3905559546754614809
+      spuksuppe_watschel_glow_23: 4538845473468157894
+      spuksuppe_watschel_glow_24: 2515269856207360817
+      spuksuppe_watschel_glow_25: 2669750875471852948
+      spuksuppe_watschel_glow_26: 3959051507574290999
+      spuksuppe_watschel_glow_27: 1798752779726266809
+      spuksuppe_watschel_glow_28: 2717367571615704277
+      spuksuppe_watschel_glow_29: 1957090235412752522
+      spuksuppe_watschel_glow_3: 2609046237795301841
+      spuksuppe_watschel_glow_30: 4002610324701766678
+      spuksuppe_watschel_glow_31: 4544611394809261096
+      spuksuppe_watschel_glow_4: 3969665767100604479
+      spuksuppe_watschel_glow_5: 1931038770054288662
+      spuksuppe_watschel_glow_6: 1484549890387220438
+      spuksuppe_watschel_glow_7: 3145577531342388187
+      spuksuppe_watschel_glow_8: 4369454558645213579
+      spuksuppe_watschel_glow_9: 3942688278174189377
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

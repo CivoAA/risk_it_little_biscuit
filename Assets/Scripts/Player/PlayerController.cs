@@ -149,12 +149,27 @@ public class PlayerController : MonoBehaviour
     [System.NonSerialized] public bool Captured;
 
     /// <summary>
+    /// Kein Schaden, sonst alles normal - die Story setzt das nach dem Boss,
+    /// solange die Beute einfliegt und das Ende ablaeuft.
+    /// </summary>
+    [System.NonSerialized] public bool Untouchable;
+
+    /// <summary>
     /// Eingefroren (Frostring des Eiskaisers) bis zu diesem Zeitpunkt: steht
     /// still, Waffen feuern weiter. Setzt und verkuerzt <see cref="PlayerIceBlock"/>.
     /// </summary>
     [System.NonSerialized] public float FrozenUntil;
 
     public bool IsFrozen => Time.time < FrozenUntil;
+
+    /// <summary>
+    /// Fremder Zug in Einheiten/s (der Strohhalm-Sog des Milchpanzers). Kommt
+    /// zur eigenen Bewegung dazu und wird nach jedem Physikschritt verbraucht -
+    /// wer ziehen will, setzt ihn jeden FixedUpdate neu (<see cref="AddDrift"/>).
+    /// </summary>
+    private Vector2 externalDrift;
+
+    public void AddDrift(Vector2 velocity) => externalDrift += velocity;
 
     private int hitsoundinterval = 10;
     private PlayerHitFeedback hitFeedback;
@@ -285,11 +300,12 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         // In der Zwischensequenz bewegt ihn jemand anderes.
-        if (Captured) return;
+        if (Captured) { externalDrift = Vector2.zero; return; }
 
         // Im Eisblock: kein Schritt, auch kein Weiterrutschen auf Glatteis.
         if (IsFrozen)
         {
+            externalDrift = Vector2.zero;
             rb.linearVelocity = Vector2.zero;
             DecayShield(Time.fixedDeltaTime);
             return;
@@ -303,7 +319,8 @@ public class PlayerController : MonoBehaviour
         if (TyphoonFan.HasTailwind) speed *= 1f + TyphoonFan.TailwindBonus;
         Vector2 wanted = new Vector2(playerMoveDirection.x * speed, playerMoveDirection.y * speed);
         // Eiswelt: auf Glatteis rutscht man (sonst kommt wanted unveraendert zurueck).
-        rb.linearVelocity = Glatteis.Steer(rb.position, rb.linearVelocity, wanted, Time.fixedDeltaTime);
+        rb.linearVelocity = Glatteis.Steer(rb.position, rb.linearVelocity, wanted, Time.fixedDeltaTime) + externalDrift;
+        externalDrift = Vector2.zero;
 
         DecayShield(Time.fixedDeltaTime);
     }
@@ -604,7 +621,7 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        if (isImmune || Captured) return;
+        if (isImmune || Captured || Untouchable) return;
 
         // Kawarimi: waehrend der Wirkung weicht der Spieler allem aus.
         if (IsKawarimi || UnityEngine.Random.value < dodgeChance)

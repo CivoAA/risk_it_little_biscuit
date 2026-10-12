@@ -1,0 +1,419 @@
+fileFormatVersion: 2
+guid: f77a94eca55a4e78802bddbb61db8431
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1599348349819194308
+    second: leuchtpilz_tapp_glow_0
+  - first:
+      213: 1953989304799041767
+    second: leuchtpilz_tapp_glow_1
+  - first:
+      213: 3744516964057921172
+    second: leuchtpilz_tapp_glow_2
+  - first:
+      213: 4483661070774944971
+    second: leuchtpilz_tapp_glow_3
+  - first:
+      213: 3230143498212962582
+    second: leuchtpilz_tapp_glow_4
+  - first:
+      213: 1248737245394822520
+    second: leuchtpilz_tapp_glow_5
+  - first:
+      213: 2391484612478315829
+    second: leuchtpilz_tapp_glow_6
+  - first:
+      213: 4409859191770900071
+    second: leuchtpilz_tapp_glow_7
+  - first:
+      213: 3551759374130014411
+    second: leuchtpilz_tapp_glow_8
+  - first:
+      213: 2314675234984500110
+    second: leuchtpilz_tapp_glow_9
+  - first:
+      213: 3069674211432990362
+    second: leuchtpilz_tapp_glow_10
+  - first:
+      213: 2967359689787905388
+    second: leuchtpilz_tapp_glow_11
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: leuchtpilz_tapp_glow_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 38
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.09523809523809523}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6f8e5f886b064f1197bd0dea4e870966
+      internalID: 1599348349819194308
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: leuchtpilz_tapp_glow_1
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 0
+        width: 38
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.09523809523809523}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1c400a4f501b4ffc8269fd07f7e925f6
+      internalID: 1953989304799041767
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: leuchtpilz_tapp_glow_2
+      rect:
+        serializedVersion: 2
+        x: 76
+        y: 0
+        width: 38
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.09523809523809523}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed77d77bb0b04092b39e90d160fc3741
+      internalID: 3744516964057921172
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: leuchtpilz_tapp_glow_3
+      rect:
+        serializedVersion: 2
+        x: 114
+        y: 0
+        width: 38
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.09523809523809523}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7f37c4021e244325aa439772367afa04
+      internalID: 4483661070774944971
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: leuchtpilz_tapp_glow_4
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 0
+        width: 38
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.09523809523809523}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ede26a0c3d6646fbb61525e4aee0657f
+      internalID: 3230143498212962582
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: leuchtpilz_tapp_glow_5
+      rect:
+        serializedVersion: 2
+        x: 190
+        y: 0
+        width: 38
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.09523809523809523}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 31795b2ebeec47b599bbdc3c74bfe3d5
+      internalID: 1248737245394822520
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: leuchtpilz_tapp_glow_6
+      rect:
+        serializedVersion: 2
+        x: 228
+        y: 0
+        width: 38
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.09523809523809523}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 888b8e26863041e69263f0e7bc19161b
+      internalID: 2391484612478315829
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: leuchtpilz_tapp_glow_7
+      rect:
+        serializedVersion: 2
+        x: 266
+        y: 0
+        width: 38
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.09523809523809523}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b58e5979601a49edbb66358d5daf2f87
+      internalID: 4409859191770900071
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: leuchtpilz_tapp_glow_8
+      rect:
+        serializedVersion: 2
+        x: 304
+        y: 0
+        width: 38
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.09523809523809523}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0558856ffb4a4428b4b03cdcf51c8aae
+      internalID: 3551759374130014411
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: leuchtpilz_tapp_glow_9
+      rect:
+        serializedVersion: 2
+        x: 342
+        y: 0
+        width: 38
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.09523809523809523}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3a202756ed7a40f7ba9e7307627fdc35
+      internalID: 2314675234984500110
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: leuchtpilz_tapp_glow_10
+      rect:
+        serializedVersion: 2
+        x: 380
+        y: 0
+        width: 38
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.09523809523809523}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 772665b5c6644d6fb4c99980d6c670f9
+      internalID: 3069674211432990362
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: leuchtpilz_tapp_glow_11
+      rect:
+        serializedVersion: 2
+        x: 418
+        y: 0
+        width: 38
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.09523809523809523}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 939e370f32bd455f8f1003fd677c18b2
+      internalID: 2967359689787905388
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      leuchtpilz_tapp_glow_0: 1599348349819194308
+      leuchtpilz_tapp_glow_1: 1953989304799041767
+      leuchtpilz_tapp_glow_10: 3069674211432990362
+      leuchtpilz_tapp_glow_11: 2967359689787905388
+      leuchtpilz_tapp_glow_2: 3744516964057921172
+      leuchtpilz_tapp_glow_3: 4483661070774944971
+      leuchtpilz_tapp_glow_4: 3230143498212962582
+      leuchtpilz_tapp_glow_5: 1248737245394822520
+      leuchtpilz_tapp_glow_6: 2391484612478315829
+      leuchtpilz_tapp_glow_7: 4409859191770900071
+      leuchtpilz_tapp_glow_8: 3551759374130014411
+      leuchtpilz_tapp_glow_9: 2314675234984500110
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

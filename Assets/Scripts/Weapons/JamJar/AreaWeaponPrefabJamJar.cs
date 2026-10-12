@@ -38,7 +38,7 @@ public class AreaWeaponPrefabJamJar : MonoBehaviour
 
     private static readonly List<AreaWeaponPrefabJamJar> active = new List<AreaWeaponPrefabJamJar>();
 
-    /// <summary>Durchmesser der Lache in Pixeln je Einheit range x AOE (Stufen aus Tools/marmelade.py).</summary>
+    /// <summary>Durchmesser der Lache in Pixeln je Einheit range x AOE.</summary>
     public const float PixelsPerRange = 204.8f;
 
     private CircleCollider2D area;

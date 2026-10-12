@@ -1,0 +1,419 @@
+fileFormatVersion: 2
+guid: 57677cbe722241d19f75debefac8831e
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2276412834867331375
+    second: beerenspinne_stakse_0
+  - first:
+      213: 3556901595108725403
+    second: beerenspinne_stakse_1
+  - first:
+      213: 3461618859686281986
+    second: beerenspinne_stakse_2
+  - first:
+      213: 2553714521328385021
+    second: beerenspinne_stakse_3
+  - first:
+      213: 3921518638696390749
+    second: beerenspinne_stakse_4
+  - first:
+      213: 3190995529513260351
+    second: beerenspinne_stakse_5
+  - first:
+      213: 3067417617923092623
+    second: beerenspinne_stakse_6
+  - first:
+      213: 3903848871612362518
+    second: beerenspinne_stakse_7
+  - first:
+      213: 4201461929377893951
+    second: beerenspinne_stakse_8
+  - first:
+      213: 4015823660564170368
+    second: beerenspinne_stakse_9
+  - first:
+      213: 2261270562075515591
+    second: beerenspinne_stakse_10
+  - first:
+      213: 1961990149548983909
+    second: beerenspinne_stakse_11
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: beerenspinne_stakse_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 50
+        height: 36
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: be6b717d3f994460863b801c0aafcaa2
+      internalID: 2276412834867331375
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: beerenspinne_stakse_1
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 0
+        width: 50
+        height: 36
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: adde9d3866a4480383e81dd34cff6ea9
+      internalID: 3556901595108725403
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: beerenspinne_stakse_2
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 0
+        width: 50
+        height: 36
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 030582701bd0492b882ce81b063c4105
+      internalID: 3461618859686281986
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: beerenspinne_stakse_3
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 0
+        width: 50
+        height: 36
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 38bc2dcafc9a4849929c9c3b5bbf9596
+      internalID: 2553714521328385021
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: beerenspinne_stakse_4
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 0
+        width: 50
+        height: 36
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b6fd8be0615d471da8160d8e822337b0
+      internalID: 3921518638696390749
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: beerenspinne_stakse_5
+      rect:
+        serializedVersion: 2
+        x: 250
+        y: 0
+        width: 50
+        height: 36
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b7529732ae9646088ccb394f30f6a056
+      internalID: 3190995529513260351
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: beerenspinne_stakse_6
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 0
+        width: 50
+        height: 36
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 63176bdeacfa4f7d9250067443474b5c
+      internalID: 3067417617923092623
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: beerenspinne_stakse_7
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 0
+        width: 50
+        height: 36
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8645c3fafd114bd2a607f8878a10f653
+      internalID: 3903848871612362518
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: beerenspinne_stakse_8
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 0
+        width: 50
+        height: 36
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4758b6210a984b5aa14c6ef805abb8c5
+      internalID: 4201461929377893951
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: beerenspinne_stakse_9
+      rect:
+        serializedVersion: 2
+        x: 450
+        y: 0
+        width: 50
+        height: 36
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 219c3667494840cca12a47efbb6ffe6b
+      internalID: 4015823660564170368
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: beerenspinne_stakse_10
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 0
+        width: 50
+        height: 36
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a781308aff944f7998b2a94a420e0be1
+      internalID: 2261270562075515591
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: beerenspinne_stakse_11
+      rect:
+        serializedVersion: 2
+        x: 550
+        y: 0
+        width: 50
+        height: 36
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08333333333333333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bcf7c3df50554884a62e8e1025a5cf7d
+      internalID: 1961990149548983909
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      beerenspinne_stakse_0: 2276412834867331375
+      beerenspinne_stakse_1: 3556901595108725403
+      beerenspinne_stakse_10: 2261270562075515591
+      beerenspinne_stakse_11: 1961990149548983909
+      beerenspinne_stakse_2: 3461618859686281986
+      beerenspinne_stakse_3: 2553714521328385021
+      beerenspinne_stakse_4: 3921518638696390749
+      beerenspinne_stakse_5: 3190995529513260351
+      beerenspinne_stakse_6: 3067417617923092623
+      beerenspinne_stakse_7: 3903848871612362518
+      beerenspinne_stakse_8: 4201461929377893951
+      beerenspinne_stakse_9: 4015823660564170368
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

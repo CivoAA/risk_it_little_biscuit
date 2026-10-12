@@ -1,0 +1,939 @@
+fileFormatVersion: 2
+guid: 413487612b584b0ba820e6445d1f2567
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1675007292582997082
+    second: pueckler_schreit_0
+  - first:
+      213: 1593961530943761195
+    second: pueckler_schreit_1
+  - first:
+      213: 3220177163081021850
+    second: pueckler_schreit_2
+  - first:
+      213: 3086056039779781529
+    second: pueckler_schreit_3
+  - first:
+      213: 1442398996029202966
+    second: pueckler_schreit_4
+  - first:
+      213: 2245969470127328730
+    second: pueckler_schreit_5
+  - first:
+      213: 2284741198347818829
+    second: pueckler_schreit_6
+  - first:
+      213: 1396008443733142065
+    second: pueckler_schreit_7
+  - first:
+      213: 1588779261455916694
+    second: pueckler_schreit_8
+  - first:
+      213: 3985740589746447385
+    second: pueckler_schreit_9
+  - first:
+      213: 3054859211215124837
+    second: pueckler_schreit_10
+  - first:
+      213: 2144836507091781803
+    second: pueckler_schreit_11
+  - first:
+      213: 2278007186760985218
+    second: pueckler_schreit_12
+  - first:
+      213: 2440513851128770510
+    second: pueckler_schreit_13
+  - first:
+      213: 3802836174751693379
+    second: pueckler_schreit_14
+  - first:
+      213: 2544068874711326263
+    second: pueckler_schreit_15
+  - first:
+      213: 2119423856045683690
+    second: pueckler_schreit_16
+  - first:
+      213: 1865900478857105102
+    second: pueckler_schreit_17
+  - first:
+      213: 1233817472625098166
+    second: pueckler_schreit_18
+  - first:
+      213: 2579818199334058813
+    second: pueckler_schreit_19
+  - first:
+      213: 4157447269165700299
+    second: pueckler_schreit_20
+  - first:
+      213: 2916965383408196012
+    second: pueckler_schreit_21
+  - first:
+      213: 2100027437594074319
+    second: pueckler_schreit_22
+  - first:
+      213: 1568380122437294798
+    second: pueckler_schreit_23
+  - first:
+      213: 3749168767892571570
+    second: pueckler_schreit_24
+  - first:
+      213: 4007463290259284189
+    second: pueckler_schreit_25
+  - first:
+      213: 1426769394543173720
+    second: pueckler_schreit_26
+  - first:
+      213: 3885990572510617304
+    second: pueckler_schreit_27
+  - first:
+      213: 3295563823103895533
+    second: pueckler_schreit_28
+  - first:
+      213: 3034556823209341381
+    second: pueckler_schreit_29
+  - first:
+      213: 4118608117403923571
+    second: pueckler_schreit_30
+  - first:
+      213: 3900070364566203021
+    second: pueckler_schreit_31
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: pueckler_schreit_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 44e40c66318d461bb9d50c10127bc1bb
+      internalID: 1675007292582997082
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pueckler_schreit_1
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6e1831d47f964117b590510915f2ce9d
+      internalID: 1593961530943761195
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pueckler_schreit_2
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4bb4466e511a45e1b0784208d7743b94
+      internalID: 3220177163081021850
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pueckler_schreit_3
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee4fb312e9a74c0f9e5cd9fc3537d38d
+      internalID: 3086056039779781529
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pueckler_schreit_4
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4be8757b5fb74824b249d49c9de1cde3
+      internalID: 1442398996029202966
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pueckler_schreit_5
+      rect:
+        serializedVersion: 2
+        x: 260
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3b1edcdb72594e66a9463d2365813980
+      internalID: 2245969470127328730
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pueckler_schreit_6
+      rect:
+        serializedVersion: 2
+        x: 312
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: caa23fc50b49433893ab1e841b618d44
+      internalID: 2284741198347818829
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pueckler_schreit_7
+      rect:
+        serializedVersion: 2
+        x: 364
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 39771dedfcc64999814eaa874c5b94fb
+      internalID: 1396008443733142065
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pueckler_schreit_8
+      rect:
+        serializedVersion: 2
+        x: 416
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e74a87dfd3d34f79b68b0ff42eef7468
+      internalID: 1588779261455916694
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pueckler_schreit_9
+      rect:
+        serializedVersion: 2
+        x: 468
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a58e007f10c249949b3a5636aa8b913a
+      internalID: 3985740589746447385
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pueckler_schreit_10
+      rect:
+        serializedVersion: 2
+        x: 520
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ea64bd77c0144698263bec19fb90ac5
+      internalID: 3054859211215124837
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pueckler_schreit_11
+      rect:
+        serializedVersion: 2
+        x: 572
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c51a4148aec043b2bc0055f6a6e4e7de
+      internalID: 2144836507091781803
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pueckler_schreit_12
+      rect:
+        serializedVersion: 2
+        x: 624
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea850dd98ed9460a9d34862fe908c17a
+      internalID: 2278007186760985218
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pueckler_schreit_13
+      rect:
+        serializedVersion: 2
+        x: 676
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f794d2d8a78f41a797c0b985cf0198e3
+      internalID: 2440513851128770510
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pueckler_schreit_14
+      rect:
+        serializedVersion: 2
+        x: 728
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 443ad285804845e4996baf5e26c1ab60
+      internalID: 3802836174751693379
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pueckler_schreit_15
+      rect:
+        serializedVersion: 2
+        x: 780
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da813460927c4d359ae34119ec731446
+      internalID: 2544068874711326263
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pueckler_schreit_16
+      rect:
+        serializedVersion: 2
+        x: 832
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d1c4297590ed48e5898e2ce6257b9375
+      internalID: 2119423856045683690
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pueckler_schreit_17
+      rect:
+        serializedVersion: 2
+        x: 884
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a11c366af5f49aa8f34917f886f6aa7
+      internalID: 1865900478857105102
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pueckler_schreit_18
+      rect:
+        serializedVersion: 2
+        x: 936
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1d8ac43a2dca4d008cd10e3aa786e352
+      internalID: 1233817472625098166
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pueckler_schreit_19
+      rect:
+        serializedVersion: 2
+        x: 988
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a694a7cdcbc544e488ca6ecda4c88861
+      internalID: 2579818199334058813
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pueckler_schreit_20
+      rect:
+        serializedVersion: 2
+        x: 1040
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ef069d59a7d8446abc767d509b2d427f
+      internalID: 4157447269165700299
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pueckler_schreit_21
+      rect:
+        serializedVersion: 2
+        x: 1092
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 87fc7e383201477a8eee46ed059de3be
+      internalID: 2916965383408196012
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pueckler_schreit_22
+      rect:
+        serializedVersion: 2
+        x: 1144
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1ef29cfad8d34b4aaf4796330b24d458
+      internalID: 2100027437594074319
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pueckler_schreit_23
+      rect:
+        serializedVersion: 2
+        x: 1196
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8081149a5dc242a096cadb46f646e60b
+      internalID: 1568380122437294798
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pueckler_schreit_24
+      rect:
+        serializedVersion: 2
+        x: 1248
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9819bba5d707441f8d173583738e4fce
+      internalID: 3749168767892571570
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pueckler_schreit_25
+      rect:
+        serializedVersion: 2
+        x: 1300
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cb601d041d404296a266d6993fedb90d
+      internalID: 4007463290259284189
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pueckler_schreit_26
+      rect:
+        serializedVersion: 2
+        x: 1352
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 678706f23dfe45598872edc392f80abf
+      internalID: 1426769394543173720
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pueckler_schreit_27
+      rect:
+        serializedVersion: 2
+        x: 1404
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 14c1ac3ccc874aa8a37bcd7cf06d4763
+      internalID: 3885990572510617304
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pueckler_schreit_28
+      rect:
+        serializedVersion: 2
+        x: 1456
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cb0226a48dbb4c4ea6881843b014ae27
+      internalID: 3295563823103895533
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pueckler_schreit_29
+      rect:
+        serializedVersion: 2
+        x: 1508
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 22939a9b964348c08672304b28fa261b
+      internalID: 3034556823209341381
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pueckler_schreit_30
+      rect:
+        serializedVersion: 2
+        x: 1560
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e3d4b8fc10f643a39c531b3c0e965231
+      internalID: 4118608117403923571
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pueckler_schreit_31
+      rect:
+        serializedVersion: 2
+        x: 1612
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6942e7c851b44d72bb274dfe1f2399cb
+      internalID: 3900070364566203021
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      pueckler_schreit_0: 1675007292582997082
+      pueckler_schreit_1: 1593961530943761195
+      pueckler_schreit_10: 3054859211215124837
+      pueckler_schreit_11: 2144836507091781803
+      pueckler_schreit_12: 2278007186760985218
+      pueckler_schreit_13: 2440513851128770510
+      pueckler_schreit_14: 3802836174751693379
+      pueckler_schreit_15: 2544068874711326263
+      pueckler_schreit_16: 2119423856045683690
+      pueckler_schreit_17: 1865900478857105102
+      pueckler_schreit_18: 1233817472625098166
+      pueckler_schreit_19: 2579818199334058813
+      pueckler_schreit_2: 3220177163081021850
+      pueckler_schreit_20: 4157447269165700299
+      pueckler_schreit_21: 2916965383408196012
+      pueckler_schreit_22: 2100027437594074319
+      pueckler_schreit_23: 1568380122437294798
+      pueckler_schreit_24: 3749168767892571570
+      pueckler_schreit_25: 4007463290259284189
+      pueckler_schreit_26: 1426769394543173720
+      pueckler_schreit_27: 3885990572510617304
+      pueckler_schreit_28: 3295563823103895533
+      pueckler_schreit_29: 3034556823209341381
+      pueckler_schreit_3: 3086056039779781529
+      pueckler_schreit_30: 4118608117403923571
+      pueckler_schreit_31: 3900070364566203021
+      pueckler_schreit_4: 1442398996029202966
+      pueckler_schreit_5: 2245969470127328730
+      pueckler_schreit_6: 2284741198347818829
+      pueckler_schreit_7: 1396008443733142065
+      pueckler_schreit_8: 1588779261455916694
+      pueckler_schreit_9: 3985740589746447385
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

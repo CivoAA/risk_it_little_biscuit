@@ -19,8 +19,8 @@ using UnityEngine;
 /// duration = Pfuetze in Sekunden (Duration-Buff zaehlt), 0 = keine
 /// shots    = Klopse je Wurf (+ Extra-Schuss 1:1)
 ///
-/// Werte im Code (<see cref="LevelStats"/>), nicht am Prefab. Bilder aus
-/// Tools/koenigsplumps.py (Resources/Weapons/splat_*).
+/// Werte im Code (<see cref="LevelStats"/>), nicht am Prefab. Bilder in
+/// Resources/Weapons/splat_*.
 /// </summary>
 public class RoyalSplat : Weapon
 {
@@ -270,7 +270,7 @@ public class RoyalSplat : Weapon
     //  Bilder
     // ------------------------------------------------------------------
 
-    /// <summary>Radien der gemalten Platscher/Ringe in Pixeln (Tools/koenigsplumps.py, HIT_RADII).</summary>
+    /// <summary>Radien der gemalten Platscher/Ringe in Pixeln.</summary>
     private static readonly int[] HitRadii = { 32, 40, 48, 60, 72 };
 
     /// <summary>Radien der gemalten Pfuetzen (PUDDLE_RADII).</summary>

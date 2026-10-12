@@ -1,0 +1,939 @@
+fileFormatVersion: 2
+guid: c292350de13a47d8ba49e9fe8b5c473e
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2132573096558078805
+    second: wackelgeist_boing_0
+  - first:
+      213: 3770875745238858491
+    second: wackelgeist_boing_1
+  - first:
+      213: 3442005482735478535
+    second: wackelgeist_boing_2
+  - first:
+      213: 3376171982729656715
+    second: wackelgeist_boing_3
+  - first:
+      213: 3685620105970209743
+    second: wackelgeist_boing_4
+  - first:
+      213: 1639711997608080111
+    second: wackelgeist_boing_5
+  - first:
+      213: 1233489681644832884
+    second: wackelgeist_boing_6
+  - first:
+      213: 2217807366890795273
+    second: wackelgeist_boing_7
+  - first:
+      213: 3163343307068300794
+    second: wackelgeist_boing_8
+  - first:
+      213: 2442759713177436261
+    second: wackelgeist_boing_9
+  - first:
+      213: 1792584776461295969
+    second: wackelgeist_boing_10
+  - first:
+      213: 1626551265970488102
+    second: wackelgeist_boing_11
+  - first:
+      213: 3742882967578100741
+    second: wackelgeist_boing_12
+  - first:
+      213: 1337596512094642989
+    second: wackelgeist_boing_13
+  - first:
+      213: 3001958517374942117
+    second: wackelgeist_boing_14
+  - first:
+      213: 1818541843045158636
+    second: wackelgeist_boing_15
+  - first:
+      213: 2405695905746593921
+    second: wackelgeist_boing_16
+  - first:
+      213: 1725147385575166903
+    second: wackelgeist_boing_17
+  - first:
+      213: 3417098319649047463
+    second: wackelgeist_boing_18
+  - first:
+      213: 1251831065958288504
+    second: wackelgeist_boing_19
+  - first:
+      213: 3989869721270370825
+    second: wackelgeist_boing_20
+  - first:
+      213: 2641757850928436589
+    second: wackelgeist_boing_21
+  - first:
+      213: 3079171312019687383
+    second: wackelgeist_boing_22
+  - first:
+      213: 3435069466813611236
+    second: wackelgeist_boing_23
+  - first:
+      213: 3404732997519577806
+    second: wackelgeist_boing_24
+  - first:
+      213: 2662853924976600907
+    second: wackelgeist_boing_25
+  - first:
+      213: 2126737545406963161
+    second: wackelgeist_boing_26
+  - first:
+      213: 4428343299613904307
+    second: wackelgeist_boing_27
+  - first:
+      213: 3003267084274768183
+    second: wackelgeist_boing_28
+  - first:
+      213: 1949510559465525174
+    second: wackelgeist_boing_29
+  - first:
+      213: 1169292246620427298
+    second: wackelgeist_boing_30
+  - first:
+      213: 2621511457935876772
+    second: wackelgeist_boing_31
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: wackelgeist_boing_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f9a0a6165044c2d893a07c2171940ed
+      internalID: 2132573096558078805
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wackelgeist_boing_1
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dccf14f875484909b5c12aa670f64a23
+      internalID: 3770875745238858491
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wackelgeist_boing_2
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 784b046b9b6e4a4688420eaf77a5e7ea
+      internalID: 3442005482735478535
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wackelgeist_boing_3
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3e75f2589f904201aa965dc63328e8bd
+      internalID: 3376171982729656715
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wackelgeist_boing_4
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 885c5d7c1557404c98f5155230359a2b
+      internalID: 3685620105970209743
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wackelgeist_boing_5
+      rect:
+        serializedVersion: 2
+        x: 260
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bb8f63e258ad40b5b66adeae9060fe47
+      internalID: 1639711997608080111
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wackelgeist_boing_6
+      rect:
+        serializedVersion: 2
+        x: 312
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f181acfa3db24129a684bc9bb3df8b27
+      internalID: 1233489681644832884
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wackelgeist_boing_7
+      rect:
+        serializedVersion: 2
+        x: 364
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3e67628ce4e249a68a9e2bfdb7ed8ec0
+      internalID: 2217807366890795273
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wackelgeist_boing_8
+      rect:
+        serializedVersion: 2
+        x: 416
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2da386a8ae014d4cab08e7172163b5be
+      internalID: 3163343307068300794
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wackelgeist_boing_9
+      rect:
+        serializedVersion: 2
+        x: 468
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 21d43bc73804400cbb9396c9832bdf82
+      internalID: 2442759713177436261
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wackelgeist_boing_10
+      rect:
+        serializedVersion: 2
+        x: 520
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b592cc62f2d4ceb99f7bed7c364a170
+      internalID: 1792584776461295969
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wackelgeist_boing_11
+      rect:
+        serializedVersion: 2
+        x: 572
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5efc5093c9a248888bafa8dae135e7d7
+      internalID: 1626551265970488102
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wackelgeist_boing_12
+      rect:
+        serializedVersion: 2
+        x: 624
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 674b0022149c4e828c924f66f0e67c3b
+      internalID: 3742882967578100741
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wackelgeist_boing_13
+      rect:
+        serializedVersion: 2
+        x: 676
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3dccba47cfb04574a99af33790919908
+      internalID: 1337596512094642989
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wackelgeist_boing_14
+      rect:
+        serializedVersion: 2
+        x: 728
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 210260253bea4474a49caaffbef4fda7
+      internalID: 3001958517374942117
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wackelgeist_boing_15
+      rect:
+        serializedVersion: 2
+        x: 780
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 69dd27b7c5404b219f8dc500488855e6
+      internalID: 1818541843045158636
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wackelgeist_boing_16
+      rect:
+        serializedVersion: 2
+        x: 832
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 54483052e2534474a1fe13eebc9c33d5
+      internalID: 2405695905746593921
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wackelgeist_boing_17
+      rect:
+        serializedVersion: 2
+        x: 884
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 897a67f377de448db979adfb6f875d4c
+      internalID: 1725147385575166903
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wackelgeist_boing_18
+      rect:
+        serializedVersion: 2
+        x: 936
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e115bf3904974445844384b4ca8dd815
+      internalID: 3417098319649047463
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wackelgeist_boing_19
+      rect:
+        serializedVersion: 2
+        x: 988
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c74d9daf0e9549138fa8af7d58fae1bd
+      internalID: 1251831065958288504
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wackelgeist_boing_20
+      rect:
+        serializedVersion: 2
+        x: 1040
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 60c499d5cc5248ef927da41d2c0ee7ac
+      internalID: 3989869721270370825
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wackelgeist_boing_21
+      rect:
+        serializedVersion: 2
+        x: 1092
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e997e0301c2045d8876ba05082a6b1a2
+      internalID: 2641757850928436589
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wackelgeist_boing_22
+      rect:
+        serializedVersion: 2
+        x: 1144
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 102c3a178a4d4c979412ffbdc878479a
+      internalID: 3079171312019687383
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wackelgeist_boing_23
+      rect:
+        serializedVersion: 2
+        x: 1196
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7647cca6d5bb4e62a3219df85487ee85
+      internalID: 3435069466813611236
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wackelgeist_boing_24
+      rect:
+        serializedVersion: 2
+        x: 1248
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 43a9a42a41264664b70263170d401afe
+      internalID: 3404732997519577806
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wackelgeist_boing_25
+      rect:
+        serializedVersion: 2
+        x: 1300
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 339f0f5d27fe4cebb465bd12354254fc
+      internalID: 2662853924976600907
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wackelgeist_boing_26
+      rect:
+        serializedVersion: 2
+        x: 1352
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 73fa1063f7424b26b3657de0e7720536
+      internalID: 2126737545406963161
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wackelgeist_boing_27
+      rect:
+        serializedVersion: 2
+        x: 1404
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e401a189d94548389eaa956828bed2ff
+      internalID: 4428343299613904307
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wackelgeist_boing_28
+      rect:
+        serializedVersion: 2
+        x: 1456
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 575ba598c20e4c1d887d2a1ab1107a4b
+      internalID: 3003267084274768183
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wackelgeist_boing_29
+      rect:
+        serializedVersion: 2
+        x: 1508
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f1a3ae566f54424992719a1dbcc5bf66
+      internalID: 1949510559465525174
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wackelgeist_boing_30
+      rect:
+        serializedVersion: 2
+        x: 1560
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c48785d1dc1a4d318c55be01b60ee8ef
+      internalID: 1169292246620427298
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wackelgeist_boing_31
+      rect:
+        serializedVersion: 2
+        x: 1612
+        y: 0
+        width: 52
+        height: 68
+      alignment: 9
+      pivot: {x: 0.5, y: 0.029411764705882353}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1bd5ed0d58fb478a95477bdec4bea7ab
+      internalID: 2621511457935876772
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      wackelgeist_boing_0: 2132573096558078805
+      wackelgeist_boing_1: 3770875745238858491
+      wackelgeist_boing_10: 1792584776461295969
+      wackelgeist_boing_11: 1626551265970488102
+      wackelgeist_boing_12: 3742882967578100741
+      wackelgeist_boing_13: 1337596512094642989
+      wackelgeist_boing_14: 3001958517374942117
+      wackelgeist_boing_15: 1818541843045158636
+      wackelgeist_boing_16: 2405695905746593921
+      wackelgeist_boing_17: 1725147385575166903
+      wackelgeist_boing_18: 3417098319649047463
+      wackelgeist_boing_19: 1251831065958288504
+      wackelgeist_boing_2: 3442005482735478535
+      wackelgeist_boing_20: 3989869721270370825
+      wackelgeist_boing_21: 2641757850928436589
+      wackelgeist_boing_22: 3079171312019687383
+      wackelgeist_boing_23: 3435069466813611236
+      wackelgeist_boing_24: 3404732997519577806
+      wackelgeist_boing_25: 2662853924976600907
+      wackelgeist_boing_26: 2126737545406963161
+      wackelgeist_boing_27: 4428343299613904307
+      wackelgeist_boing_28: 3003267084274768183
+      wackelgeist_boing_29: 1949510559465525174
+      wackelgeist_boing_3: 3376171982729656715
+      wackelgeist_boing_30: 1169292246620427298
+      wackelgeist_boing_31: 2621511457935876772
+      wackelgeist_boing_4: 3685620105970209743
+      wackelgeist_boing_5: 1639711997608080111
+      wackelgeist_boing_6: 1233489681644832884
+      wackelgeist_boing_7: 2217807366890795273
+      wackelgeist_boing_8: 3163343307068300794
+      wackelgeist_boing_9: 2442759713177436261
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

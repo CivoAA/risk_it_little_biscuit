@@ -22,13 +22,11 @@ using UnityEngine.Rendering.Universal;
 /// Bild fallen, springen auf die andere Seite. Laeuft mit Time.deltaTime,
 /// steht also bei Level-Up und Pause still. Positionen rasten auf ganze
 /// Pixel (32 px je Einheit), wie die Pixel-Perfect-Kamera.
-///
-/// Die Vorschau in Tools/geist_licht.py rechnet mit denselben Nachtwerten.
 /// </summary>
 public class Geisterwald : MonoBehaviour
 {
     [Header("Nacht")]
-    [Tooltip("Farbe des globalen Lichts bei Nacht. Mal Staerke = Umgebungslicht (Tools/geist_licht.py AMBIENT). " +
+    [Tooltip("Farbe des globalen Lichts bei Nacht. Mal Staerke = Umgebungslicht. " +
              "Das Projekt rechnet linear: 0.35 Licht macht eine Farbe nicht 35 %, sondern etwa 62 % so hell.")]
     [SerializeField] private Color nightColor = new Color(0.27f, 0.34f, 1f);
     [SerializeField] private float nightIntensity = 0.35f;

@@ -156,6 +156,7 @@ public static class WeaponCatalog
     public static readonly WeaponDef FoxFire       = Def("foxfire", "Fox Fire", PoolKind.Weapon);
     public static readonly WeaponDef RoyalSplat    = Def("royal_splat", "Royal Splat", PoolKind.Weapon);
     public static readonly WeaponDef MochiMelody   = Def("mochi_melody", "Mochi Melody", PoolKind.Weapon);
+    public static readonly WeaponDef CrumbMayhem   = Def("crumb_mayhem", "Crumb Mayhem", PoolKind.Weapon);
 
     // ==================================================================
     //  Buffs
@@ -249,6 +250,8 @@ public static class WeaponCatalog
         "mochi_melody",
         "foxfire",
         "royal_splat",
+        // Tofus Startwaffe (tut noch nichts).
+        "crumb_mayhem",
 
         // Buffs
         "buff_max_hp",

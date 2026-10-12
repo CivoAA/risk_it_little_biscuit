@@ -88,6 +88,35 @@ public static class HubConsoleCheats
         });
 
         // ------------------------------------------------------------------
+        // Story testen.  ->  "story"            Stand anzeigen
+        //                    "story reset"      von vorn (Intro kommt wieder)
+        //                    "story kapitel 2"  so tun, als waeren 2 Welten geschafft
+        // ------------------------------------------------------------------
+        HubConsole.Add("story", "Story-Stand anzeigen / zuruecksetzen", (args, sink) =>
+        {
+            string was = args != null && args.Length > 0 ? args[0].ToLowerInvariant() : "";
+            if (was == "reset")
+            {
+                StoryProgress.ResetAll();
+                sink.Print("Story zurueckgesetzt. Terminal schliessen - Pomo weckt dich gleich.");
+                return;
+            }
+            if (was == "kapitel" || was == "chapter")
+            {
+                int n = UnityEngine.Mathf.Clamp(ArgAsInt(args, 1, 0), 0, 4);
+                StoryProgress.DebugSetChapter(n);
+                sink.Print($"Story steht jetzt auf {n} von 4 Splittern" + (n == 4 ? " - der Vulkan ist offen." : "."));
+                return;
+            }
+            sink.Print($"Intro gesehen: {(StoryProgress.IntroSeen ? "ja" : "nein")}");
+            foreach (string w in StoryProgress.ShardWorlds)
+                sink.Print($"  {(StoryProgress.HasShard(w) ? "[x]" : "[ ]")} {w}" +
+                           (StoryProgress.WasBriefed(w) ? "  (Briefing gesehen)" : ""));
+            sink.Print($"Vulkan offen: {(StoryProgress.FinaleOpen ? "ja" : "nein")}   Finale: {(StoryProgress.FinaleDone ? "geschafft" : "offen")}");
+            sink.Print("story reset | story kapitel <0-4>   -   im Lauf: F12 = Level gewonnen");
+        }, usage: "[reset | kapitel <n>]", hidden: true);
+
+        // ------------------------------------------------------------------
         // Shop leerraeumen.  ->  "resetcookie"
         // Alle gekauften Stufen zurueck auf 0, das Ausgegebene kommt aufs Konto.
         // ------------------------------------------------------------------

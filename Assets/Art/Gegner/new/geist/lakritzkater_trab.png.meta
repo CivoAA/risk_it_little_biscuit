@@ -1,0 +1,419 @@
+fileFormatVersion: 2
+guid: dfc60dd206464a4d8142012543d302bb
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2345894270891503324
+    second: lakritzkater_trab_0
+  - first:
+      213: 2929501984238738195
+    second: lakritzkater_trab_1
+  - first:
+      213: 4318367282711082162
+    second: lakritzkater_trab_2
+  - first:
+      213: 3268881893236773019
+    second: lakritzkater_trab_3
+  - first:
+      213: 2229572458695300813
+    second: lakritzkater_trab_4
+  - first:
+      213: 4029785176958410533
+    second: lakritzkater_trab_5
+  - first:
+      213: 3661650794734699982
+    second: lakritzkater_trab_6
+  - first:
+      213: 2394859248879881915
+    second: lakritzkater_trab_7
+  - first:
+      213: 1957575020558558141
+    second: lakritzkater_trab_8
+  - first:
+      213: 3999258930803876292
+    second: lakritzkater_trab_9
+  - first:
+      213: 3897095262727743582
+    second: lakritzkater_trab_10
+  - first:
+      213: 2668252852792789385
+    second: lakritzkater_trab_11
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: lakritzkater_trab_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 50
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.10526315789473684}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1357a6bf12f74af98cc8eeb003f10f2b
+      internalID: 2345894270891503324
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lakritzkater_trab_1
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 0
+        width: 50
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.10526315789473684}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a930bf29da8d47848997eb52d08778c8
+      internalID: 2929501984238738195
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lakritzkater_trab_2
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 0
+        width: 50
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.10526315789473684}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 196503c8c95b4045b819a904bb90fd2d
+      internalID: 4318367282711082162
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lakritzkater_trab_3
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 0
+        width: 50
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.10526315789473684}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3062ad10602246af8a103a4f6c832e68
+      internalID: 3268881893236773019
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lakritzkater_trab_4
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 0
+        width: 50
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.10526315789473684}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3da41d57ae074dc1b1aa8e4ff21c286c
+      internalID: 2229572458695300813
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lakritzkater_trab_5
+      rect:
+        serializedVersion: 2
+        x: 250
+        y: 0
+        width: 50
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.10526315789473684}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ca9817d45493463cbfd2d2f20f7c27ef
+      internalID: 4029785176958410533
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lakritzkater_trab_6
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 0
+        width: 50
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.10526315789473684}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d5ffbf650c48408babcf953b67df7fe8
+      internalID: 3661650794734699982
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lakritzkater_trab_7
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 0
+        width: 50
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.10526315789473684}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c65c152996df40f7af6d3b5fbe309cbb
+      internalID: 2394859248879881915
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lakritzkater_trab_8
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 0
+        width: 50
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.10526315789473684}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 941d2958df5f4b7eb6723b903ca99ae4
+      internalID: 1957575020558558141
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lakritzkater_trab_9
+      rect:
+        serializedVersion: 2
+        x: 450
+        y: 0
+        width: 50
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.10526315789473684}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1ae6494fd22e4ac58cd793bfeeb74a57
+      internalID: 3999258930803876292
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lakritzkater_trab_10
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 0
+        width: 50
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.10526315789473684}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c3d45c0b3eec4b62b9c8154557a0a644
+      internalID: 3897095262727743582
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lakritzkater_trab_11
+      rect:
+        serializedVersion: 2
+        x: 550
+        y: 0
+        width: 50
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.10526315789473684}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3bbf5ab0997742738041fd0b29dab30a
+      internalID: 2668252852792789385
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      lakritzkater_trab_0: 2345894270891503324
+      lakritzkater_trab_1: 2929501984238738195
+      lakritzkater_trab_10: 3897095262727743582
+      lakritzkater_trab_11: 2668252852792789385
+      lakritzkater_trab_2: 4318367282711082162
+      lakritzkater_trab_3: 3268881893236773019
+      lakritzkater_trab_4: 2229572458695300813
+      lakritzkater_trab_5: 4029785176958410533
+      lakritzkater_trab_6: 3661650794734699982
+      lakritzkater_trab_7: 2394859248879881915
+      lakritzkater_trab_8: 1957575020558558141
+      lakritzkater_trab_9: 3999258930803876292
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

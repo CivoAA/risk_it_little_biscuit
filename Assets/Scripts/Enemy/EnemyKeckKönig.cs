@@ -47,7 +47,7 @@ using UnityEngine;
 /// Prefab eine zweite Wahrheit daneben, und nach jedem Prefab-Neubau waere das
 /// Balancing wieder weg. Das ist dieselbe Linie wie bei den Wellenplaenen.
 ///
-/// Animation: kein Animator. Die Bilder kommen aus Tools/kekskoenig.py
+/// Animation: kein Animator. Die Bilder liegen unter
 /// (Assets/Art/Gegner/new/boss/kekskoenig_*.png, PPU 32, Pivot = Keksmitte)
 /// und haengen als Streifen am Prefab. Dieses Skript spielt sie selbst ab:
 /// laufen, stehen, ausholen + zittern, rennen, bremsen, werfen, Wutanfall.
@@ -248,7 +248,7 @@ public class EnemyKeckKönig : MonoBehaviour
     private Enemy enemy;
     private bool phaseTwo;
 
-    /// <summary>1 = grosse Fassung, 0.5 = kleine (Tools/kekskoenig.py --klein).</summary>
+    /// <summary>1 = grosse Fassung, 0.5 = kleine.</summary>
     private float size = 1f;
 
     private readonly List<BossTelegraphMarker> live = new List<BossTelegraphMarker>();
