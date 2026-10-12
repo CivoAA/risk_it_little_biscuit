@@ -4186,15 +4186,15 @@ MonoBehaviour:
     descriptionAfter: 
     rarityStats:
     - rarity: 0
-      statRange: {x: 0.1, y: 0.2}
+      statRange: {x: 0.05, y: 0.1}
     - rarity: 1
-      statRange: {x: 0.21, y: 0.3}
+      statRange: {x: 0.11, y: 0.15}
     - rarity: 2
-      statRange: {x: 0.31, y: 0.4}
+      statRange: {x: 0.16, y: 0.2}
     - rarity: 3
-      statRange: {x: 0.41, y: 0.5}
+      statRange: {x: 0.21, y: 0.25}
     - rarity: 4
-      statRange: {x: 0.51, y: 0.6}
+      statRange: {x: 0.26, y: 0.3}
   - powerUpName: luck
     descriptionBefore: 'Increase your Luck by '
     descriptionAfter: 

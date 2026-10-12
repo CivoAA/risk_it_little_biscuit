@@ -790,6 +790,7 @@
     { "key": "ui.skilltree.status.price", "value": "{0} SKILL POINTS" },
     { "key": "ui.skilltree.status.locked", "value": "LOCKED" },
     { "key": "ui.skilltree.status.needs", "value": "NEEDS: {0}" },
+    { "key": "ui.skilltree.status.row", "value": "{1}/{0} POINTS SPENT" },
     { "key": "ui.skilltree.branch.count", "value": "{0} of {1} learned" },
     { "key": "ui.skilltree.reset", "value": "RESET" },
     { "key": "ui.skilltree.reset.confirm", "value": "Reset {0}'s skill tree? You get {1} skill points back." },

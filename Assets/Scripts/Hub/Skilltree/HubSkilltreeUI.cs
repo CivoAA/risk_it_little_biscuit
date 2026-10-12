@@ -890,6 +890,11 @@ public class HubSkilltreeUI : MonoBehaviour
     static string MissingText(SkillNodeDef node)
     {
         string locked = Loc.Get("ui.skilltree.status.locked", "GESPERRT");
+
+        if (Skills.ParentsUnlocked(node) && !Skills.RowReached(node))
+            return string.Format(Loc.Get("ui.skilltree.status.row", "{1}/{0} PUNKTE VERTEILT"),
+                                 Skills.RowThreshold(node), Skills.SpentIn(node.Branch.Tree));
+
         var missing = new List<string>();
         foreach (SkillNodeDef parent in node.Requires)
             if (!Skills.IsUnlocked(parent)) missing.Add(parent.Name);

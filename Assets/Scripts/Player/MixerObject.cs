@@ -212,8 +212,8 @@ public class MixerObject : MonoBehaviour
                 break;
             }
 
-            // Zufällig auswählen
-            int randomIndex = Random.Range(0, available.Count);
+            // Zufällig auswählen, nach Gewicht (Speed kommt seltener)
+            int randomIndex = PickWeighted(available);
             PowerUpEntry selected = available[randomIndex];
 
             // PowerUp zuweisen
@@ -223,6 +223,30 @@ public class MixerObject : MonoBehaviour
             // Damit keine Duplikate vorkommen
             available.RemoveAt(randomIndex);
         }
+    }
+
+    /// <summary>
+    /// Wie oft ein Stat im Mixer auftaucht, verglichen mit den anderen (1 = normal).
+    /// Speed wurde gestapelt, um vor Bossen wegzulaufen - darum nur gut ein Drittel
+    /// so oft: statt in ~43 % kommt Speed in ~19 % der Mixer vor.
+    /// </summary>
+    private static float WeightOf(PowerUpEntry entry)
+    {
+        return entry != null && entry.powerUpName == "moveSpeed" ? 0.35f : 1f;
+    }
+
+    private static int PickWeighted(List<PowerUpEntry> entries)
+    {
+        float total = 0f;
+        foreach (PowerUpEntry e in entries) total += WeightOf(e);
+
+        float roll = Random.value * total;
+        for (int i = 0; i < entries.Count; i++)
+        {
+            roll -= WeightOf(entries[i]);
+            if (roll < 0f) return i;
+        }
+        return entries.Count - 1;
     }
 
     // ------------------------------------------------------------------

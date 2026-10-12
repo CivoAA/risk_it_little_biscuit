@@ -313,8 +313,15 @@ public static class Skills
     public static bool IsUnlocked(SkillNodeDef node)
         => node != null && (node.IsStart || Store.IsUnlocked(node.Branch.Tree.Id, node.Key));
 
-    /// <summary>Alle Vorbedingungen offen? Sagt noch nichts über den Preis.</summary>
+    /// <summary>
+    /// Alle Vorbedingungen offen und die Reihe erreicht (siehe
+    /// <see cref="RowReached"/>)? Sagt noch nichts über den Preis.
+    /// </summary>
     public static bool RequirementsMet(SkillNodeDef node)
+        => ParentsUnlocked(node) && RowReached(node);
+
+    /// <summary>Sind alle Knoten offen, an denen dieser hängt?</summary>
+    public static bool ParentsUnlocked(SkillNodeDef node)
     {
         if (node == null) return false;
 
@@ -325,6 +332,42 @@ public static class Skills
 
         return true;
     }
+
+    //  Reihen-Sperre: Man kann nicht eine Kategorie durchziehen und die anderen
+    //  liegen lassen. Für einen Knoten in Reihe N (= Schritt N) müssen im Baum
+    //  schon mindestens 70 % der Punkte verteilt sein, die die Reihen
+    //  1 bis N-1 über alle Kategorien zusammen kosten (aufgerundet). Wo die
+    //  Punkte liegen, ist egal.
+    //
+    //  Sterne zählen dabei nicht mit. So hängt die Schwelle nur an den normalen
+    //  Knoten, und die sind in jedem Baum gleich verteilt - ein Charakter mit
+    //  mehr Sternen kommt nicht später an seine Sterne als ein anderer.
+    //  Stand jetzt bei allen: Reihe 2 = 3, Reihe 3 = 12, Reihe 4 = 17, Reihe 5 = 22.
+
+    /// <summary>Anteil der Punkte aus den Reihen davor, der verteilt sein muss (aufgerundet).</summary>
+    public const int RowSharePercent = 70;
+
+    /// <summary>Wie viele Punkte im Baum verteilt sein müssen, bevor Reihe <paramref name="step"/> geht.</summary>
+    public static int RowThreshold(SkillTreeDef tree, int step)
+    {
+        if (tree == null || step <= 1) return 0;
+
+        int below = 0;
+        foreach (SkillNodeDef node in tree.AllNodes())
+        {
+            if (node.IsStart || node.HasGrants || node.Step >= step) continue;
+            below += node.Price;
+        }
+        return (below * RowSharePercent + 99) / 100;
+    }
+
+    /// <summary>Punkte, die für die Reihe dieses Knotens verteilt sein müssen.</summary>
+    public static int RowThreshold(SkillNodeDef node)
+        => node != null && node.Branch != null ? RowThreshold(node.Branch.Tree, node.Step) : 0;
+
+    /// <summary>Sind im Baum genug Punkte verteilt, um in der Reihe dieses Knotens zu lernen?</summary>
+    public static bool RowReached(SkillNodeDef node)
+        => node != null && (node.IsStart || SpentIn(node.Branch.Tree) >= RowThreshold(node));
 
     public static bool CanUnlock(SkillNodeDef node)
         => node != null && !IsUnlocked(node) && RequirementsMet(node) && CanAfford(node);
@@ -338,9 +381,16 @@ public static class Skills
     {
         if (node == null || IsUnlocked(node)) return false;
 
-        if (!RequirementsMet(node))
+        if (!ParentsUnlocked(node))
         {
             Debug.Log($"[Skills] '{node.Key}' ist noch gesperrt.");
+            return false;
+        }
+
+        if (!RowReached(node))
+        {
+            Debug.Log($"[Skills] Reihe {node.Step} braucht {RowThreshold(node)} verteilte Punkte " +
+                      $"({SpentIn(node.Branch.Tree)} verteilt).");
             return false;
         }
 

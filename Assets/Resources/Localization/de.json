@@ -790,6 +790,7 @@
     { "key": "ui.skilltree.status.price", "value": "{0} SKILLPUNKTE" },
     { "key": "ui.skilltree.status.locked", "value": "GESPERRT" },
     { "key": "ui.skilltree.status.needs", "value": "BRAUCHT: {0}" },
+    { "key": "ui.skilltree.status.row", "value": "{1}/{0} PUNKTE VERTEILT" },
     { "key": "ui.skilltree.branch.count", "value": "{0} von {1} gelernt" },
     { "key": "ui.skilltree.reset", "value": "RESET" },
     { "key": "ui.skilltree.reset.confirm", "value": "Skilltree von {0} zurücksetzen? Du bekommst {1} Skillpunkte zurück." },

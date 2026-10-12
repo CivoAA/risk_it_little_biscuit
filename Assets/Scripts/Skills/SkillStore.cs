@@ -161,6 +161,12 @@ public class SkillStore
         t?.bosses.Clear();
     }
 
+    /// <summary>Nur die Freischaltungen aller Bäume weg; XP und Boss-Siege bleiben.</summary>
+    public void ClearAllUnlocks()
+    {
+        foreach (TreeEntry t in order) t.unlocked.Clear();
+    }
+
     /// <summary>Freischaltungen, XP und Boss-Siege aller Bäume weg - für den harten Reset.</summary>
     public void ClearAll()
     {
