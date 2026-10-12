@@ -92,9 +92,9 @@ public class RoyalSplat : Weapon
     private float nextVolley;
     private readonly List<Vector2> claimed = new List<Vector2>();
 
-    private int LevelIndex(int length) { return Mathf.Clamp(weaponLevel, 0, length - 1); }
+    private int LevelIndex(int length) { return Mathf.Clamp(TableLevel, 0, length - 1); }
 
-    void Awake()
+    protected virtual void Awake()
     {
         stats = new List<WeaponStats>(LevelStats);
         maxweaponLevel = LevelStats.Length - 1;
@@ -103,7 +103,7 @@ public class RoyalSplat : Weapon
     void Update()
     {
         PlayerController player = PlayerController.Instance;
-        if (player == null || !IsActive) return;
+        if (player == null || !CanAttack) return;
 
         // laufende Salve (Extra-Schuss): Klopse kurz nacheinander, je auf eine andere Gruppe
         if (volleyLeft > 0)

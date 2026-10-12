@@ -1045,6 +1045,11 @@ public class Enemy : MonoBehaviour
                 // fliegen dem Spieler wie beim Boss gleich zu.
                 PlayerController.Instance.attractAllXP = true;
                 Achievements.Unlock(Ach.BossVictory(Identity.ToString()));
+                // 10 Siege ueber den Schleimkoenig schalten ihn als Charakter frei.
+                if (Identity == EnemyId.Schleimkoenig) Achievements.Progress(Ach.KillSlimeKing10, 1f);
+                Achievements.Progress(Ach.Midbosses5, 1f);
+                Achievements.Progress(Ach.Midbosses20, 1f);
+                Achievements.Progress(Ach.Midbosses45, 1f);
                 ClearCage();
                 break;
 
@@ -1056,6 +1061,9 @@ public class Enemy : MonoBehaviour
                 string bossKey = Identity != EnemyId.None ? Identity.ToString() : name.Replace("(Clone)", "").Trim();
                 Skills.RegisterBossVictory(bossKey);
                 Achievements.Unlock(Ach.BossVictory(bossKey));
+                Achievements.Progress(Ach.Bosses5, 1f);
+                Achievements.Progress(Ach.Bosses20, 1f);
+                Achievements.Progress(Ach.Bosses45, 1f);
                 BossDefeated?.Invoke(this);
                 // Uebernimmt die Story das Ende, kommt kein Tod hinterher.
                 if (SpawnDeath.Instance != null && !StoryDirector.ClaimsWin)

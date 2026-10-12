@@ -840,7 +840,9 @@ public class PlayerController : MonoBehaviour
             if (recipe.EvoWeapon == null) continue;
 
             bool w1Maxed = recipe.RequiredWeapon1 != null && recipe.RequiredWeapon1.weaponLevel >= recipe.RequiredWeapon1.maxweaponLevel;
-            bool w2Maxed = recipe.RequiredWeapon2 != null && recipe.RequiredWeapon2.weaponLevel >= recipe.RequiredWeapon2.maxweaponLevel;
+            // Ohne zweite Zutat (Evo des Tofus) reicht die erste.
+            bool w2Maxed = recipe.RequiredWeapon2 == null
+                || recipe.RequiredWeapon2.weaponLevel >= recipe.RequiredWeapon2.maxweaponLevel;
 
             if (w1Maxed && w2Maxed)
             {

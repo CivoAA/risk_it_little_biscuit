@@ -106,7 +106,7 @@ public class TyphoonFan : SaladFan
     void LateUpdate()
     {
         // Die Evo hat nur eine Stufe: aktiv sein heisst, sie wurde erhalten.
-        if (IsActive) Achievements.Unlock(Ach.TyphoonFanEvo);
+        if (IsActive && !IsCopy) Achievements.Unlock(Ach.TyphoonFanEvo);
     }
 
     /// <summary>Grundwellen plus eine je <see cref="ExtraShotsPerWave"/> Extra-Schuesse.</summary>

@@ -828,8 +828,8 @@ public partial class LevelUpScreen : MonoBehaviour
         int n = 0;
         foreach (EvoRecipe r in p.EvoCombinations)
             if (r != null && r.EvoWeapon != null && r.EvoWeapon.weaponLevel < 0
-                && Maxed(r.RequiredWeapon1) && Maxed(r.RequiredWeapon2)
-                && Owned(r.RequiredWeapon1) && Owned(r.RequiredWeapon2))
+                && Maxed(r.RequiredWeapon1) && Owned(r.RequiredWeapon1)
+                && (r.RequiredWeapon2 == null || (Maxed(r.RequiredWeapon2) && Owned(r.RequiredWeapon2))))
                 n++;
         return n;
     }
@@ -1533,7 +1533,8 @@ public partial class LevelUpScreen : MonoBehaviour
             nameText = s.Text("Name", body, new RectInt(3, 63, CardW - 6, 12), SizeText, GameHudSkin.Cream,
                               TextAlignmentOptions.Center, TextStyle.Outline);
 
-            for (int i = 0; i < 8; i++)
+            // 12: das Kruemelchaos des Tofus hat doppelt so viele Stufen wie normale Waffen.
+            for (int i = 0; i < 12; i++)
                 pips.Add(s.Img("Pip" + i, body, new RectInt(0, PipY, 5, 5), GameHudSkin.Pip(GameHudSkin.PipKind.Empty), Color.white));
             pipStar = s.Img("PipStar", body, new RectInt(0, PipY - 2, 9, 9), GameHudSkin.Star, Color.white);
 
@@ -1727,7 +1728,9 @@ public partial class LevelUpScreen : MonoBehaviour
                 footLabel.Set(Loc.Get("ui.levelup.replaces", "REPLACES"));
                 footLabel.SetColor(GameHudSkin.Parchment);
                 footA.sprite = r.RequiredWeapon1 != null ? r.RequiredWeapon1.weaponIcon : null;
-                footB.sprite = r.RequiredWeapon2 != null ? r.RequiredWeapon2.weaponIcon : null;
+                // Ohne zweite Zutat (Tofu): die erste noch einmal statt einer leeren Kachel.
+                Weapon second = r.RequiredWeapon2 != null ? r.RequiredWeapon2 : r.RequiredWeapon1;
+                footB.sprite = second != null ? second.weaponIcon : null;
                 footA.color = footB.color = Color.white;
                 SetActive(footArrow, false);
                 LayoutFooter(new Component[] { footLabel.Holder, footA, footPlus, footB });
@@ -1735,8 +1738,10 @@ public partial class LevelUpScreen : MonoBehaviour
             }
 
             Weapon partner = r.RequiredWeapon1 == weapon ? r.RequiredWeapon2 : r.RequiredWeapon1;
+            // Evo ohne zweite Zutat (Tofu): der "Partner" ist die Waffe selbst.
+            if (partner == null) partner = weapon;
             bool willMax = weapon.weaponLevel + 1 >= weapon.maxweaponLevel;
-            evoReady = willMax && Owned(partner) && Maxed(partner);
+            evoReady = willMax && (partner == weapon || (Owned(partner) && Maxed(partner)));
 
             footLabel.Set(evoReady ? Loc.Get("ui.levelup.evo_ready", "EVO!") : Loc.Get("ui.levelup.evo", "EVO"));
             footLabel.SetColor(evoReady ? GameHudSkin.GoldLight : GameHudSkin.JamLight);
@@ -2156,15 +2161,17 @@ public partial class LevelUpScreen : MonoBehaviour
         {
             recipe = r;
             Weapon evo = r.EvoWeapon;
+            // Evo ohne zweite Zutat (Tofu): die erste zweimal statt einer leeren Kachel.
+            bool solo = r.RequiredWeapon2 == null;
             a.Set(r.RequiredWeapon1);
-            b.Set(r.RequiredWeapon2);
+            b.Set(solo ? r.RequiredWeapon1 : r.RequiredWeapon2);
             iconEvo.sprite = evo.weaponIcon;
             iconEvo.enabled = iconEvo.sprite != null;
             name.Set(NameOf(evo));
 
             active = Owned(evo);
             bool maxA = Owned(r.RequiredWeapon1) && Maxed(r.RequiredWeapon1);
-            bool maxB = Owned(r.RequiredWeapon2) && Maxed(r.RequiredWeapon2);
+            bool maxB = solo || (Owned(r.RequiredWeapon2) && Maxed(r.RequiredWeapon2));
             bool gone = !active && (evo.hasBeenRemoved
                         || (r.RequiredWeapon1 != null && r.RequiredWeapon1.hasBeenRemoved)
                         || (r.RequiredWeapon2 != null && r.RequiredWeapon2.hasBeenRemoved));
@@ -2194,8 +2201,8 @@ public partial class LevelUpScreen : MonoBehaviour
             }
             else
             {
-                int n = (maxA ? 1 : 0) + (maxB ? 1 : 0);
-                text = n + "/2 " + Loc.Get("ui.evobook.maxed", "MAXED");
+                int n = (maxA ? 1 : 0) + (maxB && !solo ? 1 : 0);
+                text = n + (solo ? "/1 " : "/2 ") + Loc.Get("ui.evobook.maxed", "MAXED");
                 color = GameHudSkin.ParchDark;
             }
             status.Set(text);
@@ -2214,6 +2221,7 @@ public partial class LevelUpScreen : MonoBehaviour
         public string Detail()
         {
             if (recipe == null) return "";
+            if (recipe.RequiredWeapon2 == null) return Part(recipe.RequiredWeapon1);
             return Part(recipe.RequiredWeapon1) + "  +  " + Part(recipe.RequiredWeapon2);
         }
 

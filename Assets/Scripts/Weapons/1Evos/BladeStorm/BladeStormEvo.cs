@@ -49,8 +49,16 @@ public class BladeStormEvo : Weapon
             return;
         }
 
+        // Kopie des Tofus, die gerade nicht dran ist: Klingen im Orbit
+        // verschwinden, fliegende kommen erst zurueck und gehen dann.
+        if (Resting)
+        {
+            RestBlades();
+            return;
+        }
+
         // Achievment Unlocken
-        Achievements.Unlock(Ach.BladeSwarmEvo);
+        if (!IsCopy) Achievements.Unlock(Ach.BladeSwarmEvo);
 
         int desired = Mathf.Clamp(
             Mathf.RoundToInt(CurrentStats.shots) + BladeSwarm.ExtraBlades,
@@ -168,6 +176,19 @@ public class BladeStormEvo : Weapon
 
         blade.weapon = this;
         blades.Add(blade);
+    }
+
+    private void RestBlades()
+    {
+        firing = false;
+        volley.Clear();
+
+        for (int i = blades.Count - 1; i >= 0; i--)
+        {
+            if (!blades[i].InOrbit) continue;
+            Destroy(blades[i].gameObject);
+            blades.RemoveAt(i);
+        }
     }
 
     private void DespawnAllBlades()

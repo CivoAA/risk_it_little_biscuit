@@ -57,9 +57,9 @@ public class AreaWeaponJamJar : Weapon
 
     protected virtual void Update()
     {
-        if (!IsActive) return;
+        if (!CanAttack) return;
 
-        UnlockAchievements();
+        if (!IsCopy) UnlockAchievements();
 
         spawnCounter -= Time.deltaTime;
         if (spawnCounter > 0f) return;

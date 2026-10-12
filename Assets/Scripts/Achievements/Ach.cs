@@ -61,7 +61,7 @@ public static class Ach
 
     public static readonly AchievementDef BossIceEmperor = Def(
         "Boss_Ice_Emperor", "Meltdown", "Defeat the Ice Emperor on the Ice Cream Glacier.",
-        AchievementCategory.Progression);
+        AchievementCategory.Progression, grantsUnlock: "unlock_char_inari");
 
     public static readonly AchievementDef BossPhantom = Def(
         "Boss_Phantom", "Lights On", "Defeat the Phantom in the Haunted Forest.",
@@ -95,6 +95,38 @@ public static class Ach
     public static readonly AchievementDef KillSlimeKing = Def(
         "Kill_Slime_King", "Dethroned", "Defeat the Slime King.",
         AchievementCategory.Combat);
+
+    /// <summary>Zaehlt in Enemy.GrantRewards (Zwischenboss Schleimkoenig) mit.</summary>
+    public static readonly AchievementDef KillSlimeKing10 = Def(
+        "Kill_Slime_King_10", "Long Live the King", "Defeat the Slime King 10 times.",
+        AchievementCategory.Combat, goal: 10f, grantsUnlock: "unlock_char_slime_king");
+
+    // Zwischenbosse und Endbosse insgesamt, egal welche. Zaehlen in
+    // Enemy.GrantRewards (Rolle MiniBoss bzw. Boss).
+
+    public static readonly AchievementDef Midbosses5 = Def(
+        "Midbosses_5", "Midboss Hunter I", "Defeat 5 midbosses.",
+        AchievementCategory.Combat, goal: 5f);
+
+    public static readonly AchievementDef Midbosses20 = Def(
+        "Midbosses_20", "Midboss Hunter II", "Defeat 20 midbosses.",
+        AchievementCategory.Combat, goal: 20f);
+
+    public static readonly AchievementDef Midbosses45 = Def(
+        "Midbosses_45", "Midboss Hunter III", "Defeat 45 midbosses.",
+        AchievementCategory.Combat, goal: 45f);
+
+    public static readonly AchievementDef Bosses5 = Def(
+        "Bosses_5", "Boss Slayer I", "Defeat 5 bosses.",
+        AchievementCategory.Combat, goal: 5f);
+
+    public static readonly AchievementDef Bosses20 = Def(
+        "Bosses_20", "Boss Slayer II", "Defeat 20 bosses.",
+        AchievementCategory.Combat, goal: 20f);
+
+    public static readonly AchievementDef Bosses45 = Def(
+        "Bosses_45", "Boss Slayer III", "Defeat 45 bosses.",
+        AchievementCategory.Combat, goal: 45f);
 
     // ==================================================================
     //  Evolutionen
@@ -135,6 +167,87 @@ public static class Ach
     public static readonly AchievementDef TyphoonFanEvo = Def(
         "Typhoon_Fan_Evo", "Typhoon Fan Evo", "Obtained the Typhoon Fan Evo for the first time!",
         AchievementCategory.Evolutions);
+
+    // Evos der Startwaffen, die es noch nicht gibt (Platzhalter in
+    // Characters.StartEvoIdByskin). Ausgeloest in LevelUpButton ueber EvoFor() -
+    // sobald die Evo ein Rezept hat, laeuft das von allein.
+
+    public static readonly AchievementDef ChocoChipsEvo = Def(
+        "Choco_Chips_Evo", "Choco Chips Evo", "Obtained the Choco Chips Evo for the first time!",
+        AchievementCategory.Evolutions);
+
+    public static readonly AchievementDef SwordSlashEvo = Def(
+        "Sword_Slash_Evo", "Sword Slash Evo", "Obtained the Sword Slash Evo for the first time!",
+        AchievementCategory.Evolutions);
+
+    public static readonly AchievementDef MochiMelodyEvo = Def(
+        "Mochi_Melody_Evo", "Mochi Melody Evo", "Obtained the Mochi Melody Evo for the first time!",
+        AchievementCategory.Evolutions);
+
+    public static readonly AchievementDef FoxfireEvo = Def(
+        "Foxfire_Evo", "Foxfire Evo", "Obtained the Foxfire Evo for the first time!",
+        AchievementCategory.Evolutions);
+
+    public static readonly AchievementDef RoyalSplatEvo = Def(
+        "Royal_Splat_Evo", "Royal Splat Evo", "Obtained the Royal Splat Evo for the first time!",
+        AchievementCategory.Evolutions);
+
+    public static readonly AchievementDef CrumbMayhemEvo = Def(
+        "Crumb_Mayhem_Evo", "Crumb Mayhem Evo", "Obtained the Crumb Mayhem Evo for the first time!",
+        AchievementCategory.Evolutions);
+
+    // ==================================================================
+    //  Charaktere
+    // ==================================================================
+    // Ein Sieg je Charakter, ausgeloest in GameManager.GameOver ueber
+    // CharacterWin(). Zusammen mit den Startwaffen-Evos zaehlen sie auf
+    // AllCharacters - das schaltet den Tofu frei (Unlocks.CheckAllCharacters).
+
+    public static readonly AchievementDef WinCookie = Def(
+        "Win_Cookie", "Fresh from the Oven", "Beat a level with the Cookie.",
+        AchievementCategory.Characters);
+
+    public static readonly AchievementDef WinJam = Def(
+        "Win_Jam", "Sticky Victory", "Beat a level with Jam.",
+        AchievementCategory.Characters);
+
+    public static readonly AchievementDef WinOnigiri = Def(
+        "Win_Onigiri", "Rice and Shine", "Beat a level with Onigiri.",
+        AchievementCategory.Characters);
+
+    public static readonly AchievementDef WinToast = Def(
+        "Win_Toast", "A Toast!", "Beat a level with Toast.",
+        AchievementCategory.Characters);
+
+    public static readonly AchievementDef WinOnionKnight = Def(
+        "Win_Onion_Knight", "Tears of Joy", "Beat a level with the Onion Knight.",
+        AchievementCategory.Characters);
+
+    public static readonly AchievementDef WinMochi = Def(
+        "Win_Mochi", "Soft Power", "Beat a level with Mochi.",
+        AchievementCategory.Characters);
+
+    public static readonly AchievementDef WinInari = Def(
+        "Win_Inari", "Sly Fox", "Beat a level with Inari.",
+        AchievementCategory.Characters);
+
+    public static readonly AchievementDef WinSlimeKing = Def(
+        "Win_Slime_King", "Royal Decree", "Beat a level with the Slime King.",
+        AchievementCategory.Characters);
+
+    public static readonly AchievementDef WinTofu = Def(
+        "Win_Tofu", "Unflavored", "Beat a level with Tofu.",
+        AchievementCategory.Characters);
+
+    /// <summary>
+    /// Mit jedem Charakter (ausser dem Tofu) einmal gewonnen und einmal seine
+    /// Startwaffen-Evo bekommen: 8 Siege + 8 Evos = 16. Der Zaehler wird nicht
+    /// hochgezaehlt, sondern nachgerechnet (Unlocks.CheckAllCharacters).
+    /// </summary>
+    public static readonly AchievementDef AllCharacters = Def(
+        "All_Characters", "Full Bento",
+        "Beat a level and obtain the starting weapon Evo with every character except Tofu.",
+        AchievementCategory.Characters, goal: 16f, grantsUnlock: "unlock_char_tofu");
 
     // ==================================================================
     //  Waffen auf Maximalstufe
@@ -412,6 +525,54 @@ public static class Ach
     {
         if (string.IsNullOrEmpty(weaponId)) return null;
         return MaxLevelByWeapon.TryGetValue(weaponId, out AchievementDef def) ? def : null;
+    }
+
+    /// <summary>Sieg je Charakter - Index wie in <see cref="Characters"/>.</summary>
+    private static readonly AchievementDef[] WinBySkin =
+    {
+        WinCookie, WinJam, WinOnigiri, WinToast, WinOnionKnight, WinMochi, WinInari, WinSlimeKing, WinTofu,
+    };
+
+    /// <summary>Evo der Startwaffe je Charakter - passt zu Characters.StartEvoIdByskin.</summary>
+    private static readonly AchievementDef[] StartEvoBySkin =
+    {
+        ChocoChipsEvo, StickyShatterEvo, BladeSwarmEvo, TyphoonFanEvo, SwordSlashEvo,
+        MochiMelodyEvo, FoxfireEvo, RoyalSplatEvo, CrumbMayhemEvo,
+    };
+
+    /// <summary>Der Sieg-Erfolg eines Charakters, oder null.</summary>
+    public static AchievementDef CharacterWin(int skinIndex) =>
+        skinIndex >= 0 && skinIndex < WinBySkin.Length ? WinBySkin[skinIndex] : null;
+
+    /// <summary>Der Erfolg fuer die Startwaffen-Evo eines Charakters, oder null.</summary>
+    public static AchievementDef StartEvo(int skinIndex) =>
+        skinIndex >= 0 && skinIndex < StartEvoBySkin.Length ? StartEvoBySkin[skinIndex] : null;
+
+    /// <summary>Evo-weaponID (Characters.StartEvoId) -> ihr Erfolg, oder null.</summary>
+    public static AchievementDef EvoFor(string weaponId)
+    {
+        if (string.IsNullOrEmpty(weaponId)) return null;
+        for (int skin = 0; skin < Characters.Count; skin++)
+        {
+            if (Characters.StartEvoId(skin) == weaponId) return StartEvo(skin);
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// Stand fuer <see cref="AllCharacters"/>: Siege und Startwaffen-Evos aller
+    /// Charaktere ausser dem Tofu.
+    /// </summary>
+    public static int AllCharactersDone()
+    {
+        int done = 0;
+        for (int skin = 0; skin < Characters.Count; skin++)
+        {
+            if (skin == Characters.Tofu) continue;
+            if (Achievements.IsUnlocked(CharacterWin(skin))) done++;
+            if (Achievements.IsUnlocked(StartEvo(skin))) done++;
+        }
+        return done;
     }
 
     /// <summary>EnemyId-Name -> Boss-Erfolg (Endbosse der Welten und der Schleimkoenig).</summary>

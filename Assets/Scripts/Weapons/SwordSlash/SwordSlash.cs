@@ -93,7 +93,7 @@ public class SwordSlash : Weapon
     private float spawnCounter;
     private bool swinging;
 
-    void Awake()
+    protected virtual void Awake()
     {
         stats = new List<WeaponStats>(LevelStats);
         maxweaponLevel = LevelStats.Length - 1;
@@ -106,7 +106,7 @@ public class SwordSlash : Weapon
         Vector2 input = PlayerController.Instance.playerMoveDirection;
         if (input != Vector2.zero) moveDir = input.normalized;
 
-        if (!IsActive) return;
+        if (!CanAttack) return;
 
         spawnCounter -= Time.deltaTime;
         if (spawnCounter <= 0f && !swinging)

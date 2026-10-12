@@ -150,12 +150,12 @@ public class MochiMelody : Weapon
     private AudioSource[] voices;
     private int nextVoice;
 
-    private int LevelIndex(int length) { return Mathf.Clamp(weaponLevel, 0, length - 1); }
+    private int LevelIndex(int length) { return Mathf.Clamp(TableLevel, 0, length - 1); }
 
     public Vector2 Center => (Vector2)transform.position + originOffset;
     public int CurrentBounces => BouncesPerLevel[LevelIndex(BouncesPerLevel.Length)];
 
-    void Awake()
+    protected virtual void Awake()
     {
         stats = new List<WeaponStats>(LevelStats);
         maxweaponLevel = LevelStats.Length - 1;
@@ -164,7 +164,7 @@ public class MochiMelody : Weapon
     void Update()
     {
         PlayerController player = PlayerController.Instance;
-        bool active = player != null && IsActive;
+        bool active = player != null && CanAttack;
         if (!active)
         {
             wasActive = false;
@@ -308,7 +308,7 @@ public class MochiMelody : Weapon
         motif++;
         int[] tones = writer.Voicing(chord);
 
-        bool finale = weaponLevel >= FinaleLevel && thisChord % 4 == 3;
+        bool finale = TableLevel >= FinaleLevel && thisChord % 4 == 3;
         // Ohne Gegner und ohne Treffer im Takt bleibt der Akkord stumm
         if (crescendoHits == 0 && !AnyTargetNear(Mathf.Max(CurrentStats.range, ChordReach()))) return;
 

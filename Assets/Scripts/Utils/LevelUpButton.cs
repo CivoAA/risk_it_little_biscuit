@@ -207,6 +207,9 @@ public class LevelUpButton : MonoBehaviour
                 // Markiere Evo als aktiv
                 assingedWeapon.weaponLevel = 0;
                 assingedWeapon.posssibleEvo = false;
+
+                // Evo einer Startwaffe: Erfolg aus dem Katalog (zaehlt auf den Tofu).
+                Achievements.Unlock(Ach.EvoFor(assingedWeapon.weaponID));
             }
             else
             {

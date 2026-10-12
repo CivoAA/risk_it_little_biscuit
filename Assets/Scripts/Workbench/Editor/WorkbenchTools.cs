@@ -158,7 +158,8 @@ public static class WorkbenchTools
 
     private static string Id(Dictionary<Weapon, string> idOf, Weapon w)
     {
-        if (w == null) return "?";
+        // Leere zweite Zutat (Evo des Tofus) - im Katalog "".
+        if (w == null) return "";
         return idOf.TryGetValue(w, out string id) ? id : (w.weaponID ?? "?");
     }
 

@@ -484,6 +484,24 @@ public static class Shop
         runStartWeaponOverride = startWeaponIndex;
     }
 
+    /// <summary>
+    /// Gibt den eingefrorenen Stand wieder frei - beim Verlassen eines Laufs
+    /// (zurueck in Hub/World Map oder ins Hauptmenue). Ohne das bliebe
+    /// <see cref="RunSkinIndex"/> auf dem Charakter des letzten Laufs stehen,
+    /// und ein Wechsel im Hub kaeme bei der Werkbank nicht an.
+    /// </summary>
+    public static void ReleaseRun()
+    {
+        if (runValues == null) return;
+
+        runValues = null;
+        runStartWeaponOverride = -1;
+
+        // Die Werkbank haengt an RunSkinIndex - auf den gewaehlten Charakter umstellen.
+        Loadout.SyncCharacter();
+        RaiseChanged();
+    }
+
     /// <summary>Gewählter Charakter für diesen Lauf.</summary>
     public static int RunSkinIndex => runValues != null ? runSkinIndex : SkinIndex;
 

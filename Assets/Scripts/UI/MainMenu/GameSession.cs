@@ -69,6 +69,7 @@ public static class GameSession
     public static void LoadMainMenu()
     {
         ReturnScene = null;
+        Shop.ReleaseRun();
 
         // Während der Blende steht das Spiel - das Pausenmenü hat die Zeit beim
         // Schließen schon wieder auf 1 gesetzt. Erst direkt vor dem Laden läuft sie weiter.
