@@ -34,6 +34,7 @@ public class MelodyNote : MonoBehaviour
     public static bool IsTargeted(Enemy enemy) { return enemy != null && targeted.ContainsKey(enemy); }
 
     private MochiMelody owner;
+    private Transform box;
     private Enemy target;
     private readonly HashSet<Enemy> struck = new HashSet<Enemy>();
     private SpriteRenderer sr;
@@ -49,7 +50,8 @@ public class MelodyNote : MonoBehaviour
     private bool fading;
 
     public static void Launch(MochiMelody owner, Vector2 at, Vector2 dir, Enemy target,
-                              float damage, int bounces, int color)
+                              float damage, int bounces, int color,
+                              Transform box = null)
     {
         GameObject go = new GameObject("MelodyNote");
         go.transform.position = at;
@@ -62,6 +64,7 @@ public class MelodyNote : MonoBehaviour
 
         MelodyNote note = go.AddComponent<MelodyNote>();
         note.owner = owner;
+        note.box = box;
         note.pos = at;
         note.vel = dir.normalized * Speed;
         note.damage = damage;
@@ -165,6 +168,7 @@ public class MelodyNote : MonoBehaviour
         FoxFx.Play(MochiMelody.HitFrames, aim, 22f, 3);
         hit.TakeDamage(damage, null, 0.3f);
         if (owner != null) owner.NoteLanded();
+        if (box != null) BassSog.OnBoxHit(hit, box);
 
         if (bounces > 0)
         {

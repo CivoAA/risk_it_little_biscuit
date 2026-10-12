@@ -987,7 +987,7 @@ public class SkillTreeEditorWindow : EditorWindow
                 EditorUtility.SetDirty(asset);
             }
 
-            EditorGUILayout.LabelField("Zeigt im Spiel", r.ToRuntime().Describe(),
+            EditorGUILayout.LabelField("Zeigt im Spiel", r.ToRuntime().Explain(),
                                        EditorStyles.miniLabel);
 
             EditorGUILayout.EndVertical();

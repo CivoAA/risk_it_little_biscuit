@@ -662,3 +662,54 @@ MonoBehaviour:
     - geist_mitte_2
     - geist_oben_2
     - geist_unten_2
+  - id: kampf_fortissimo
+    category: 0
+    lane: 0
+    step: 5
+    shape: 3
+    price: 2
+    displayName: Fortissimo
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 1
+      stat: 0
+      value: 0
+      grantId: mochi_fortissimo
+      descriptionOverride: 
+    requires:
+    - kampf_mitte_4
+  - id: kampf_bass_sog
+    category: 0
+    lane: 2
+    step: 5
+    shape: 3
+    price: 2
+    displayName: Bass-Sog
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 1
+      stat: 0
+      value: 0
+      grantId: mochi_bass_sog
+      descriptionOverride: 
+    requires:
+    - kampf_mitte_4
+  - id: geist_paukenschlag
+    category: 1
+    lane: 1
+    step: 5
+    shape: 3
+    price: 2
+    displayName: Paukenschlag
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 1
+      stat: 0
+      value: 0
+      grantId: mochi_paukenschlag
+      descriptionOverride: 
+    requires:
+    - geist_mitte_4

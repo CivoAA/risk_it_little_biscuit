@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -9,6 +10,9 @@ using UnityEngine;
 /// Frueher hing das Glas am Spieler und wartete auf einen Abstand unter 0.001.
 /// Solange man lief, schob die Spielerbewegung es jeden Frame wieder weg - das
 /// Glas blieb als Glas liegen, bis man stehen blieb.
+///
+/// Mit mehreren Zielen huepft das Glas von Punkt zu Punkt (Sticky Shatter)
+/// und zerbricht erst am letzten.
 /// </summary>
 public class JamJarFlight : MonoBehaviour
 {
@@ -23,7 +27,10 @@ public class JamJarFlight : MonoBehaviour
     private float flightTime;
     private float arcHeight;
     private float age;
+    private float speed;
     private bool spin;
+    private IReadOnlyList<Vector2> targets;
+    private int leg;
     private Action<Vector2> landed;
 
     /// <summary>
@@ -33,15 +40,33 @@ public class JamJarFlight : MonoBehaviour
     /// </summary>
     public static void Launch(GameObject jar, Vector2 target, float speed, Action<Vector2> onLanded)
     {
-        JamJarFlight flight = jar.AddComponent<JamJarFlight>();
-        flight.start = jar.transform.position;
-        flight.target = target;
+        Launch(jar, new[] { target }, speed, onLanded);
+    }
 
-        float distance = Vector2.Distance(flight.start, target);
-        flight.flightTime = Mathf.Max(0.1f, distance / Mathf.Max(0.01f, speed));
-        flight.arcHeight = distance * ArcPerUnit;
+    /// <summary>
+    /// Wie oben, aber das Glas schlaegt nacheinander an allen
+    /// <paramref name="targets"/> auf. <paramref name="onImpact"/> kommt bei
+    /// jedem Aufschlag, zerstoert wird das Glas erst am letzten.
+    /// </summary>
+    public static void Launch(GameObject jar, IReadOnlyList<Vector2> targets, float speed, Action<Vector2> onImpact)
+    {
+        JamJarFlight flight = jar.AddComponent<JamJarFlight>();
+        flight.targets = targets;
+        flight.speed = Mathf.Max(0.01f, speed);
         flight.spin = jar.GetComponent<SpriteFlipbook>() == null;
-        flight.landed = onLanded;
+        flight.landed = onImpact;
+        flight.StartLeg(jar.transform.position, targets[0]);
+    }
+
+    private void StartLeg(Vector2 from, Vector2 to)
+    {
+        start = from;
+        target = to;
+        age = 0f;
+
+        float distance = Vector2.Distance(from, to);
+        flightTime = Mathf.Max(0.1f, distance / speed);
+        arcHeight = distance * ArcPerUnit;
     }
 
     private void Update()
@@ -57,9 +82,20 @@ public class JamJarFlight : MonoBehaviour
 
         if (t < 1f) return;
 
+        Vector2 reached = target;
         Action<Vector2> callback = landed;
-        landed = null;
-        Destroy(gameObject);
-        callback?.Invoke(target);
+        leg++;
+
+        if (leg < targets.Count)
+        {
+            StartLeg(reached, targets[leg]);
+        }
+        else
+        {
+            landed = null;
+            Destroy(gameObject);
+        }
+
+        callback?.Invoke(reached);
     }
 }

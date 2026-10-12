@@ -120,6 +120,24 @@ public sealed class SkillNodeDef
         }
     }
 
+    /// <summary>Nur die Werte des Knotens, eine Zeile je Belohnung (ohne Sterne).</summary>
+    public string StatText => JoinRewards(false);
+
+    /// <summary>Die Erklaerung(en) der Freischaltungen (Sterne) des Knotens, uebersetzt.</summary>
+    public string GrantText => JoinRewards(true);
+
+    private string JoinRewards(bool grants)
+    {
+        var sb = new System.Text.StringBuilder();
+        for (int i = 0; i < Rewards.Count; i++)
+        {
+            if (Rewards[i].IsGrant != grants) continue;
+            if (sb.Length > 0) sb.Append('\n');
+            sb.Append(Rewards[i].Explain());
+        }
+        return sb.ToString();
+    }
+
     private string DefaultDescription
     {
         get
@@ -132,7 +150,7 @@ public sealed class SkillNodeDef
             for (int i = 0; i < Rewards.Count; i++)
             {
                 if (i > 0) sb.Append('\n');
-                sb.Append(Rewards[i].Describe());
+                sb.Append(Rewards[i].Explain());
             }
 
             return sb.ToString();

@@ -2201,9 +2201,15 @@ MonoBehaviour:
   - EvoWeapon: {fileID: 6402918374650192837}
     RequiredWeapon1: {fileID: 2938475610293847561}
     RequiredWeapon2: {fileID: 3253892304407363630}
+  - EvoWeapon: {fileID: 9097722464392581908}
+    RequiredWeapon1: {fileID: 3847261950183746615}
+    RequiredWeapon2: {fileID: 5332209876871346002}
   - EvoWeapon: {fileID: 6097707072874508358}
     RequiredWeapon1: {fileID: 7868405423358879992}
     RequiredWeapon2: {fileID: 0}
+  - EvoWeapon: {fileID: 4052448573895074782}
+    RequiredWeapon1: {fileID: 1153859984778591767}
+    RequiredWeapon2: {fileID: 200782388726875803}
   immunityDuration: 0.3
   immunityTimer: 0
 --- !u!95 &3309684457716786782
@@ -9505,10 +9511,10 @@ MonoBehaviour:
   weaponLevel: -1
   maxweaponLevel: 0
   stats:
-  - cooldown: 4.5
+  - cooldown: 3.5
     duration: 5
     damage: 5
-    range: 1.6
+    range: 0.55
     AttackSpeed: 0.35
     shots: 5
     description: 
@@ -9519,7 +9525,11 @@ MonoBehaviour:
   hasBeenRemoved: 0
   jarPrefab: {fileID: 2231739409520687622, guid: e2ddee2c2d6030140bf434e26acbe2c1, type: 3}
   puddlePrefab: {fileID: 4913825698700667614, guid: 200d0195af5f63e468be79609f50201e, type: 3}
-  shardSpread: 2.5
+  bounces: 3
+  hopDistance: 2.5
+  hopAngle: 30
+  shardSpeed: 9
+  shardRange: 4
   slowMultiplier: 0.5
   throwRange: 5
 --- !u!1 &8145063348449925884
@@ -11013,13 +11023,13 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2fedaa0f7a995117d12d2dc58faefc6a, type: 3}
   m_Name:
-  m_EditorClassIdentifier: Assembly-CSharp::MochiMelodyEvo
+  m_EditorClassIdentifier: Assembly-CSharp::MusicBoxQuartet
   weaponID: evo_mochi_melody
   weaponLevel: -1
   maxweaponLevel: 0
   stats: []
-  weaponImage: {fileID: 3455439064490797819, guid: 644ce2f35a0e48acbaaea0978b9501ab, type: 3}
-  weaponIcon: {fileID: 3455439064490797819, guid: 644ce2f35a0e48acbaaea0978b9501ab, type: 3}
+  weaponImage: {fileID: 1817765522231278336, guid: 12483ae54dea609dbc764b9ffa462b26, type: 3}
+  weaponIcon: {fileID: 1817765522231278336, guid: 12483ae54dea609dbc764b9ffa462b26, type: 3}
   weaponIconEvo: {fileID: 0}
   posssibleEvo: 0
   hasBeenRemoved: 0

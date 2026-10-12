@@ -109,6 +109,11 @@ public class HubSkilltreeUI : MonoBehaviour
     Image detailRule;
     SkinButton learnButton, resetButton;
 
+    // Erklaerung eines Sterns: zu lang fuer die Spalte rechts, darum eine
+    // breite Box ueber dem Baumfeld.
+    RectTransform starBox;
+    TextMeshProUGUI starText;
+
     RectTransform dialog, dialogPage;
 
     int openedOnFrame = -1;
@@ -233,6 +238,7 @@ public class HubSkilltreeUI : MonoBehaviour
         BuildField();
         BuildCategories();
         BuildDetail();
+        BuildStarBox();
         BuildFooter();
 
         OptionsKit.Layout(page, scaler, Content);
@@ -373,6 +379,53 @@ public class HubSkilltreeUI : MonoBehaviour
         statusText = OptionsKit.Label("Status", page, DetX + 19, sy + 1, DetW - 24, 13, "", textFont,
                                       OptionsKit.SizeText, GameHudSkin.Cream, TextAlignmentOptions.Left);
         statusText.overflowMode = TextOverflowModes.Ellipsis;
+    }
+
+    const int StarBoxPad = 5, StarBoxInset = 4;
+
+    void BuildStarBox()
+    {
+        starBox = OptionsKit.Rect("StarBox", page, FieldX + StarBoxInset, BodyY, FieldW - 2 * StarBoxInset, 20);
+        Image back = starBox.gameObject.AddComponent<Image>();
+        back.sprite = GameHudSkin.Plate;
+        back.type = Image.Type.Sliced;
+        back.raycastTarget = false;
+
+        starText = OptionsKit.Label("Text", starBox, StarBoxPad, StarBoxPad - 1, FieldW - 2 * StarBoxInset - 2 * StarBoxPad, 13,
+                                    "", textFont, OptionsKit.SizeText, GameHudSkin.Parchment, TextAlignmentOptions.TopLeft);
+        starText.textWrappingMode = TextWrappingModes.Normal;
+        starBox.gameObject.SetActive(false);
+    }
+
+    /// <summary>
+    /// Zeigt die Erklaerung der Sterne von <paramref name="node"/> in der Box
+    /// ueber dem Baum - unten im Feld, bei Knoten der unteren Bahn oben, damit
+    /// die Box den Knoten selbst nicht verdeckt. Ohne Stern: Box weg.
+    /// </summary>
+    void ShowStarBox(SkillNodeDef node)
+    {
+        if (starBox == null) return;
+
+        string text = node != null && node.HasGrants ? node.GrantText : "";
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            starBox.gameObject.SetActive(false);
+            return;
+        }
+
+        int w = FieldW - 2 * StarBoxInset, tw = w - 2 * StarBoxPad;
+        starText.text = text;
+        int th = Mathf.CeilToInt(starText.GetPreferredValues(text, tw, 0f).y);
+        int h = th + 2 * StarBoxPad;
+        int y = node.Lane == SkillLane.Unten
+            ? BodyY + BannerH + 6
+            : BodyY + BodyH - StarBoxInset - h;
+
+        OptionsKit.Move(starBox, FieldX + StarBoxInset, y, w, h);
+        OptionsKit.Move(starText.rectTransform, StarBoxPad, StarBoxPad - 1, tw, th + 2);
+        starBox.gameObject.SetActive(true);
+        // Der Baum baut seine Knoten beim Kategoriewechsel neu - die Box muss obenauf.
+        starBox.SetAsLastSibling();
     }
 
     void BuildFooter()
@@ -692,6 +745,7 @@ public class HubSkilltreeUI : MonoBehaviour
 
         if (node != null) ShowNode(node);
         else ShowBranch(branch);
+        ShowStarBox(node);
 
         ReflowDetail();
 
@@ -724,7 +778,8 @@ public class HubSkilltreeUI : MonoBehaviour
         detailName.color = unlocked ? GameHudSkin.Gold : GameHudSkin.Cream;
         detailSub.text = node.Branch != null ? node.Branch.Name.ToUpperInvariant() : "";
         detailSub.color = Lift(accent, 0.25f);
-        detailDesc.text = node.Description;
+        // Sterne erklaert die Box ueber dem Baum; hier bleiben nur die Werte.
+        detailDesc.text = node.HasGrants ? node.StatText : node.Description;
 
         if (node.IsStart)
             SetStatus(null, Loc.Get("ui.skilltree.status.start", "Hier beginnt der Pfad."), GameHudSkin.Stone);

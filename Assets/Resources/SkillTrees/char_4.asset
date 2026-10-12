@@ -153,13 +153,13 @@ MonoBehaviour:
     step: 4
     shape: 1
     price: 1
-    displayName: Doppelwurf
+    displayName: Schwertarm
     description: 
     icon: {fileID: 0}
     rewards:
     - kind: 0
-      stat: 5
-      value: 1
+      stat: 38
+      value: 10
       grantId: 
       descriptionOverride: 
     requires:
@@ -195,7 +195,7 @@ MonoBehaviour:
     rewards:
     - kind: 0
       stat: 6
-      value: 0.5
+      value: 1
       grantId: 
       descriptionOverride: 
     requires:
@@ -217,7 +217,7 @@ MonoBehaviour:
       descriptionOverride: 
     - kind: 0
       stat: 6
-      value: 0.5
+      value: 1
       grantId: 
       descriptionOverride: 
     requires:
@@ -609,20 +609,20 @@ MonoBehaviour:
       descriptionOverride: 
     requires:
     - geist_mitte_4
-  - id: geist_schockwelle
+  - id: geist_zwiebelhaut
     category: 1
     lane: 1
     step: 5
     shape: 3
     price: 2
-    displayName: Kampfgeist
+    displayName: Zwiebelhaut
     description: 
     icon: {fileID: 0}
     rewards:
     - kind: 1
       stat: 0
       value: 0
-      grantId: rage
+      grantId: ritter_zwiebelhaut
       descriptionOverride: 
     requires:
     - geist_mitte_4
@@ -632,13 +632,13 @@ MonoBehaviour:
     step: 2
     shape: 4
     price: 1
-    displayName: Seelenhunger
+    displayName: Dicke Schale
     description: 
     icon: {fileID: 0}
     rewards:
     - kind: 0
-      stat: 8
-      value: 0.2
+      stat: 6
+      value: 1
       grantId: 
       descriptionOverride: 
     requires:
@@ -679,37 +679,37 @@ MonoBehaviour:
     - geist_mitte_2
     - geist_oben_2
     - geist_unten_2
-  - id: kampf_oben_4
+  - id: kampf_zwiebelring
     category: 0
     lane: 0
     step: 5
     shape: 3
     price: 2
-    displayName: Vier Richtungen
+    displayName: Zwiebelring
     description: 
     icon: {fileID: 0}
     rewards:
     - kind: 1
-      stat: 1
-      value: 10
-      grantId: shurikookie_vier_richtungen
+      stat: 0
+      value: 0
+      grantId: ritter_zwiebelring
       descriptionOverride: 
     requires:
     - kampf_mitte_4
-  - id: kampf_unten_4
+  - id: kampf_gegenschlag
     category: 0
     lane: 2
     step: 5
     shape: 3
     price: 2
-    displayName: Abpraller
+    displayName: Gegenschlag
     description: 
     icon: {fileID: 0}
     rewards:
     - kind: 1
-      stat: 1
-      value: 10
-      grantId: shurikookie_abpraller
+      stat: 0
+      value: 0
+      grantId: ritter_gegenschlag
       descriptionOverride: 
     requires:
     - kampf_mitte_4

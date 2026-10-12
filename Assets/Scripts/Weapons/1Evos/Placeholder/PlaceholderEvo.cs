@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 /// <summary>
 /// Platzhalter-Evos fuer die Startwaffen, die noch keine eigene Evo haben
-/// (Keks, Zwiebelritter, Mochi, Inari, Schleimkoenig). Angelegt am 12.10.2026,
+/// (Keks, Inari, Schleimkoenig). Angelegt am 12.10.2026,
 /// damit die Evo des Tofus (<see cref="CrumbMayhemEvo"/>) etwas zu kopieren hat.
 ///
 /// Jede ist schlicht die Startwaffe eine Stufe ueber ihrer Maximalstufe: eine

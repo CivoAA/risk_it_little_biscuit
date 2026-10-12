@@ -203,12 +203,12 @@ public static class WeaponCatalog
     public static readonly WeaponDef EvoStickyShatter  = Def("evo_sticky_shatter", "Sticky Shatter Evo", PoolKind.Evo);
     public static readonly WeaponDef EvoTyphoonFan     = Def("evo_typhoon_fan", "Typhoon Fan Evo", PoolKind.Evo);
     public static readonly WeaponDef EvoCrumbMayhem    = Def("evo_crumb_mayhem", "Crumb Mayhem Evo", PoolKind.Evo);
+    public static readonly WeaponDef EvoSwordSlash     = Def("evo_sword_slash", "Sword Slash Evo", PoolKind.Evo);
+    public static readonly WeaponDef EvoMochiMelody    = Def("evo_mochi_melody", "Music Box Quartet", PoolKind.Evo);
 
     // Platzhalter-Evos der Startwaffen, noch ohne Rezept (siehe PlaceholderEvo).
     // Bisher kommt man an sie nur ueber die Evo des Tofus, die sie kopiert.
     public static readonly WeaponDef EvoChocoChips     = Def("evo_choco_chips", "Choco Chips Evo", PoolKind.Evo);
-    public static readonly WeaponDef EvoSwordSlash     = Def("evo_sword_slash", "Sword Slash Evo", PoolKind.Evo);
-    public static readonly WeaponDef EvoMochiMelody    = Def("evo_mochi_melody", "Mochi Melody Evo", PoolKind.Evo);
     public static readonly WeaponDef EvoFoxFire        = Def("evo_foxfire", "Fox Fire Evo", PoolKind.Evo);
     public static readonly WeaponDef EvoRoyalSplat     = Def("evo_royal_splat", "Royal Splat Evo", PoolKind.Evo);
 
@@ -225,6 +225,8 @@ public static class WeaponCatalog
     public static readonly EvoDef RecipeBombSwarm     = Evo("evo_bomb_swarm", "candy_bomb", "cookie_saw");
     public static readonly EvoDef RecipeStickyShatter = Evo("evo_sticky_shatter", "jam_jar", "buff_aoe_range");
     public static readonly EvoDef RecipeTyphoonFan    = Evo("evo_typhoon_fan", "salad_fan", "buff_move_speed");
+    public static readonly EvoDef RecipeShellBlade    = Evo("evo_sword_slash", "sword_slash", "buff_armor");
+    public static readonly EvoDef RecipeMusicBox      = Evo("evo_mochi_melody", "mochi_melody", "turret");
     // Nur eine Zutat: das Kruemelchaos auf Maximalstufe.
     public static readonly EvoDef RecipeCrumbMayhem   = Evo("evo_crumb_mayhem", "crumb_mayhem", "");
 

@@ -515,6 +515,23 @@ public class PlayerController : MonoBehaviour
         DamageNumberController.Instance?.CreateText(Loc.Get("ui.float.wirbelsturm", "WIRBELSTURM!"), transform.position);
     }
 
+    // ------------------------------------------------------------------
+    // Geist: Paukenschlag
+    // ------------------------------------------------------------------
+
+    private float paukenschlagReadyAt;
+
+    /// <summary>Skilltree "Paukenschlag": faellt das Leben unter 35 %, auf der naechsten Eins alle Gegner wegschleudern.</summary>
+    private void TryPaukenschlag()
+    {
+        if (!Skills.HasGrant(SkillGrants.Paukenschlag) || Time.time < paukenschlagReadyAt) return;
+        if (playerHealth <= 0f || playerHealth > playerMaxHealth * Paukenschlag.Threshold) return;
+
+        paukenschlagReadyAt = Time.time + Paukenschlag.Cooldown;
+        Paukenschlag.Fire(transform);
+        DamageNumberController.Instance?.CreateText(Loc.Get("ui.float.paukenschlag", "PAUKENSCHLAG!"), transform.position);
+    }
+
     public void StartStats()
     {
         rageUntil = 0f;
@@ -523,6 +540,7 @@ public class PlayerController : MonoBehaviour
         kawarimiReadyAt = 0f;
         stickyRiceReadyAt = 0f;
         whirlwindReadyAt = 0f;
+        paukenschlagReadyAt = 0f;
 
         if (activeWeapon != null && activeWeapon.Length > 0)
         {
@@ -618,6 +636,13 @@ public class PlayerController : MonoBehaviour
         Heal(IsLastBreath ? playerHealthReg * 2f : playerHealthReg);
     }
 
+    /// <summary>
+    /// Wann der Spieler zuletzt getroffen wurde (Time.time) - auch wenn Schild
+    /// oder Zwiebelschale den Schaden geschluckt haben, nicht bei Ausweichen.
+    /// Fuer den Gegenschlag des Schwerthiebs.
+    /// </summary>
+    public float LastStruckTime { get; private set; } = -999f;
+
     public void TakeDamage(float damage)
     {
         if (isImmune || Captured || Untouchable) return;
@@ -633,6 +658,17 @@ public class PlayerController : MonoBehaviour
 
         float finalDamage = damage * Mathf.Pow(0.9f, playerArmor);
         if (finalDamage <= 0f) return;
+
+        LastStruckTime = Time.time;
+
+        // Schalenklinge: eine Zwiebelschale faengt den ganzen Treffer ab.
+        OnionShell onionShell = GetComponent<OnionShell>();
+        if (onionShell != null && onionShell.TryBlock())
+        {
+            isImmune = true;
+            immunityTimer = immunityDuration;
+            return;
+        }
 
         TryShockwave();
 
@@ -682,6 +718,7 @@ public class PlayerController : MonoBehaviour
             TryKawarimi();
             TryStickyRice();
             TryWhirlwind();
+            TryPaukenschlag();
         }
     }
 

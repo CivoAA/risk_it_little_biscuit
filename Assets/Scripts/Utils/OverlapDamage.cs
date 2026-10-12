@@ -73,6 +73,20 @@ public static class OverlapDamage
         }
     }
 
+    /// <summary>Wie oben, aber fuer einen Kreis (z.B. die Drehung des Schwerthiebs).</summary>
+    public static void FindEnemies(Vector2 center, float radius, List<Enemy> result)
+    {
+        result.Clear();
+
+        overlapBuffer.Clear();
+        Physics2D.OverlapCircle(center, radius, new ContactFilter2D().NoFilter(), overlapBuffer);
+
+        for (int i = 0; i < overlapBuffer.Count; i++)
+        {
+            AddEnemy(overlapBuffer[i], result);
+        }
+    }
+
     /// <summary>
     /// Schreibt alle Gegner, die auf dem Weg von <paramref name="fromCenter"/> zur
     /// aktuellen Position des Colliders getroffen wurden, in <paramref name="result"/>.
