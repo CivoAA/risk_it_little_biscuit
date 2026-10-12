@@ -68,15 +68,15 @@ public static class Unlocks
     // Karte was vergibt, steht in WorldChain weiter unten; die Levelauswahl
     // fragt ueber StoryFor/EndlessFor nach.
 
-    public static readonly UnlockDef StoryForest = Def(
-        "unlock_story_forest",
-        "Forest",
-        "You beat the Kitchen - the Forest is now open!");
+    public static readonly UnlockDef StoryKitchen = Def(
+        "unlock_story_kitchen",
+        "Kitchen",
+        "You beat the Forest - the Kitchen is now open!");
 
     public static readonly UnlockDef StoryGlacier = Def(
         "unlock_story_glacier",
         "Ice Cream Glacier",
-        "You beat the Forest - the Ice Cream Glacier is now open!");
+        "You beat the Kitchen - the Ice Cream Glacier is now open!");
 
     public static readonly UnlockDef StoryGhost = Def(
         "unlock_story_ghost",
@@ -371,8 +371,8 @@ public static class Unlocks
     /// </summary>
     private static readonly (int MapId, UnlockDef Story, UnlockDef Endless, UnlockDef Next)[] WorldChain =
     {
-        (0, null,         EndlessKitchen, StoryForest),   // Kueche
-        (3, StoryForest,  EndlessForest,  StoryGlacier),  // Wald
+        (3, null,         EndlessForest,  StoryKitchen),  // Wald
+        (0, StoryKitchen, EndlessKitchen, StoryGlacier),  // Kueche
         (5, StoryGlacier, EndlessGlacier, StoryGhost),    // Eisgletscher
         (6, StoryGhost,   EndlessGhost,   null),          // Geisterwald
     };
