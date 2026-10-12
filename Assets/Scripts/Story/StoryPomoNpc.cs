@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Pomo als Figur im Hub: steht neben der Reisekarte (Levelauswahl), tickt
-/// im Sekundentakt hin und her, blinzelt, und redet mit, solange ein
+/// im Halbsekundentakt hin und her, blinzelt, und redet mit, solange ein
 /// Gespraech mit ihr laeuft. [E] in der Naehe = ein Satz, der zum Stand der
 /// Story passt.
 ///
@@ -93,8 +93,8 @@ public class StoryPomoNpc : HubInteractable
         if (talking) f = Mathf.FloorToInt(Time.unscaledTime * 6f) % 2 == 0 ? 7 : 0;
         else
         {
-            // Ticken: Sekunde fuer Sekunde ein Pixel hoch und runter (Bilder 0-5 = ein 3-s-Zyklus)
-            f = Mathf.FloorToInt(Time.time * 2f) % 6;
+            // Ticken: ein Pixel hoch und runter (Bilder 0-5 = ein 1,5-s-Zyklus)
+            f = Mathf.FloorToInt(Time.time * 4f) % 6;
             if (Time.time > nextBlink)
             {
                 f = 6;

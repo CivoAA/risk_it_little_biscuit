@@ -991,7 +991,9 @@ public class HubLevelSelectUI : MonoBehaviour
         bool hasBoss = boss != EnemyId.None;
         Sprite bossSprite = hasBoss ? BossPortrait(boss) : null;
         // Bis zum ersten Sieg (egal mit welchem Charakter) nur der schwarze Umriss, ohne Namen.
-        bool bossKnown = hasBoss && Skills.HasAnyoneBeatenBoss(boss.ToString());
+        // Ein Story-Abschluss der Welt (Glutsplitter) zaehlt auch als Sieg.
+        bool bossKnown = hasBoss && (Skills.HasAnyoneBeatenBoss(boss.ToString())
+                                     || StoryProgress.IsShardWorld(e.planId) && StoryProgress.HasShard(e.planId));
 
         bossTile.enabled = true;
         bossQuestion.color = bossSprite == null ? OptionsKit.WithAlpha(GameHudSkin.Cream, 0.55f) : Color.clear;
