@@ -149,6 +149,12 @@ public class PlayerController : MonoBehaviour
     [System.NonSerialized] public bool Captured;
 
     /// <summary>
+    /// Kein Schaden, sonst alles normal - die Story setzt das nach dem Boss,
+    /// solange die Beute einfliegt und das Ende ablaeuft.
+    /// </summary>
+    [System.NonSerialized] public bool Untouchable;
+
+    /// <summary>
     /// Eingefroren (Frostring des Eiskaisers) bis zu diesem Zeitpunkt: steht
     /// still, Waffen feuern weiter. Setzt und verkuerzt <see cref="PlayerIceBlock"/>.
     /// </summary>
@@ -615,7 +621,7 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        if (isImmune || Captured) return;
+        if (isImmune || Captured || Untouchable) return;
 
         // Kawarimi: waehrend der Wirkung weicht der Spieler allem aus.
         if (IsKawarimi || UnityEngine.Random.value < dodgeChance)

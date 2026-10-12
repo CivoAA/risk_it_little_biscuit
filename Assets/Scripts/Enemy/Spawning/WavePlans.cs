@@ -748,8 +748,8 @@ public static class WavePlans
     ///
     /// Seit Oktober 2026 mit eigenen Gegnern (lauter heisses, scharfes und
     /// gebackenes Essen). Jede Phase stellt neue vor, meist mit einem eigenen
-    /// Burst. Einen Boss gibt es noch nicht - nach 20:00 geht es mit voller
-    /// Mischung weiter, dann Endlos. Elites: der Feuertaco ab 1:45 im Ring,
+    /// Burst. Bei 20:00 kommt der Verkohlte (Endboss der Story, Phase 3 in
+    /// seiner Herzkammer) - danach geht es mit voller Mischung weiter, dann Endlos. Elites: der Feuertaco ab 1:45 im Ring,
     /// die Creme Brulee (zaeher) ab 8:00 mit "FLAMBIERT!".
     ///
     ///   0:00  Anlauf (5 s), Knisterbrause
@@ -757,7 +757,7 @@ public static class WavePlans
     ///   3:00  + Lavakuchen, Pizzastuecke, Schaschliks (Huepfer), 8:00 Ring mit der ersten Creme Brulee
     ///   9:00  + Kaesefondue (zaeh), Wasabi-Kleckse, Drachenfruechte, 11:30 Ofenkartoffel (Zwischenboss)
     ///  14:00  + Ofenbrot-Golems (Brocken)
-    ///  20:00  alles, hoher Druck
+    ///  20:00  alles, hoher Druck - und der Verkohlte
     /// </summary>
     public static RunPlan World4()
     {
@@ -847,6 +847,7 @@ public static class WavePlans
             .Pool(EnemyId.Knisterbrause, 15f)
             .Pressure(300f, 450f)
             .Base(Patterns.Scatter)
+            .Boss(2f, EnemyId.Verkohlter, "DER VERKOHLTE!", 0.4f)
             .Burst(60f, EnemyId.Feuertaco, 1f, Patterns.Ambush, 0f)
             .Burst(240f, EnemyId.CremeBrulee, 1f, Patterns.Ambush, 0f)
             .Burst(420f, EnemyId.Feuertaco, 1f, Patterns.Arc, 0f);

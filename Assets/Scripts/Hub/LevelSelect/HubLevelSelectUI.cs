@@ -186,7 +186,7 @@ public class HubLevelSelectUI : MonoBehaviour
         public int Level = -1;
         public Rect Area;
         public GameObject Root;
-        public Image Glow, Back, Preview, Frame, Lock, Question, Chip;
+        public Image Glow, Back, Preview, Frame, Lock, Question, Chip, Shard;
         public TextMeshProUGUI Number;
         public Vector2 Home;             // Position ohne Aufprall-Versatz
     }
@@ -449,6 +449,9 @@ public class HubLevelSelectUI : MonoBehaviour
         s.Chip = OptionsKit.Img("Chip", rt, (Node - 11) / 2, Node - 5, 11, 12, GameHudSkin.LevelChip, true);
         s.Number = OptionsKit.Label("Number", rt, (Node - 11) / 2, Node - 6, 11, 13, "", pixelFont, OptionsKit.SizeText,
                                     GameHudSkin.Parchment, TextAlignmentOptions.Center);
+
+        // Story: der Glutsplitter dieser Welt ist schon bei Pomo (oben rechts an der Ecke)
+        s.Shard = OptionsKit.Img("Shard", rt, Node - 11, -5, 16, 16, StoryArt.Frame("glutsplitter", 2), Color.clear);
         return s;
     }
 
@@ -585,9 +588,9 @@ public class HubLevelSelectUI : MonoBehaviour
         openedAt = Time.unscaledTime;
         root.SetActive(true);
 
-        // Auf dem ersten offenen Level starten, damit man nie vor einer
-        // gesperrten Station steht und sich fragt, warum nichts geht.
-        selected = FirstUnlocked();
+        // Auf dem neuesten offenen Level starten - die Welten gehen der Reihe
+        // nach auf, das zuletzt geoeffnete ist das naechste Ziel.
+        selected = LastUnlocked();
 
         // Endless steht vorn, wenn im Hauptmenue "Endless" gedrueckt wurde oder
         // wenn die Story dieses Levels noch zu ist und nur Endless offen steht.
@@ -619,10 +622,10 @@ public class HubLevelSelectUI : MonoBehaviour
         PlaySfx(closeClip, true);
     }
 
-    int FirstUnlocked()
+    int LastUnlocked()
     {
-        for (int i = 0; i < levels.Count; i++)
-            if (StoryUnlocked(levels[i]) || EndlessUnlocked(levels[i])) return i;
+        for (int i = levels.Count - 1; i >= 0; i--)
+            if ((StoryUnlocked(levels[i]) || EndlessUnlocked(levels[i])) && IsLinked(levels[i])) return i;
         return 0;
     }
 
@@ -636,8 +639,9 @@ public class HubLevelSelectUI : MonoBehaviour
 
         LayoutPage(false);
 
-        // Levelstart laeuft schon - waehrend Absprung und Blende nichts mehr annehmen
-        if (launching || SceneFader.IsFading) return;
+        // Levelstart laeuft schon - waehrend Absprung und Blende nichts mehr annehmen.
+        // Ebenso, solange Pomo vor dem Start erzaehlt (Story-Briefing).
+        if (launching || SceneFader.IsFading || StoryDialog.IsOpen) return;
 
         // Das [E], mit dem die Auswahl aufgeht, darf nicht gleich ein Level starten
         if (Time.frameCount == openedOnFrame) return;
@@ -919,6 +923,8 @@ public class HubLevelSelectUI : MonoBehaviour
             s.Lock.color = !open ? Color.white : Color.clear;
             s.Question.color = open && (!linked || pic == null) ? OptionsKit.WithAlpha(GameHudSkin.Cream, 0.8f) : Color.clear;
 
+            s.Shard.color = StoryProgress.IsShardWorld(e.planId) && StoryProgress.HasShard(e.planId) ? Color.white : Color.clear;
+
             s.Number.text = (s.Level + 1).ToString();
             s.Number.color = isSel ? GameHudSkin.Gold : open ? GameHudSkin.Parchment : GameHudSkin.Stone;
         }
@@ -1053,7 +1059,7 @@ public class HubLevelSelectUI : MonoBehaviour
         bool open = e != null && IsOpenLevel(e);
         bool linked = e != null && IsLinked(e);
 
-        veil.color = !open ? new Color(0.07f, 0.05f, 0.06f, 0.72f) : Color.clear;
+        veil.color = !open ? new Color(0.07f, 0.05f, 0.06f, 0.6f) : Color.clear;
         bigLock.color = !open ? Color.white : Color.clear;
 
         bool soon = open && !linked;
@@ -1074,6 +1080,8 @@ public class HubLevelSelectUI : MonoBehaviour
     }
 
     /// <summary>Neues Panorama: das alte gleitet in <paramref name="dir"/>-Richtung hinaus, das neue herein. 0 = sofort.</summary>
+    private static readonly Color LockedTint = new Color(0.26f, 0.22f, 0.25f, 1f);
+
     void ShowPanorama(int dir)
     {
         LevelEntry e = Current;
@@ -1086,7 +1094,9 @@ public class HubLevelSelectUI : MonoBehaviour
                         panoNew.rectTransform.sizeDelta.x, panoNew.rectTransform.sizeDelta.y);
 
         panoNew.sprite = next;
-        panoNew.color = next != null ? Color.white : Color.clear;
+        // Gesperrt: das Bild selbst dunkel und entsaettigt - der Schleier allein
+        // wirkt im linearen Farbraum zu schwach, das Schloss soll klar davor stehen.
+        panoNew.color = next == null ? Color.clear : IsOpenLevel(e) ? Color.white : LockedTint;
 
         slideDir = animate ? dir : 0;
         slideAt = Time.unscaledTime;
@@ -1662,8 +1672,17 @@ public class HubLevelSelectUI : MonoBehaviour
     bool StoryUnlocked(LevelEntry e)
     {
         if (e == null) return false;
+        // Welten auf der Story-Route: feste Reihenfolge, jede Welt oeffnet die
+        // naechste (Glutsplitter). Die Route laeuft wie Unlocks.WorldChain.
+        if (StoryProgress.IsStoryWorld(e.planId))
+        {
+            if (!StoryProgress.IsWorldOpen(e.planId)) return false;
+            if (string.IsNullOrWhiteSpace(e.storyUnlockId)) return true;
+            // Der Vulkan haengt nur noch an der Route (alle vier Glutsplitter).
+            if (e.storyUnlockId == StoryProgress.FinaleUnlockId) return true;
+        }
         // Leer im Inspector = die Welten-Kette aus dem Code (Unlocks.StoryFor).
-        if (string.IsNullOrWhiteSpace(e.storyUnlockId))
+        else if (string.IsNullOrWhiteSpace(e.storyUnlockId))
         {
             UnlockDef chain = Unlocks.StoryFor(e.mapId);
             return chain == null || chain.IsUnlocked;
@@ -1674,6 +1693,8 @@ public class HubLevelSelectUI : MonoBehaviour
     bool EndlessUnlocked(LevelEntry e)
     {
         if (e == null || !e.endlessAvailable) return false;
+        // Auch Endless geht erst auf, wenn die Welt auf der Route erreicht ist.
+        if (!StoryProgress.IsWorldOpen(e.planId)) return false;
         // Leer im Inspector = erst nach dem ersten Story-Sieg hier (Unlocks.EndlessFor).
         if (string.IsNullOrWhiteSpace(e.endlessUnlockId))
         {
@@ -1725,6 +1746,9 @@ public class HubLevelSelectUI : MonoBehaviour
             PlayDenySound();
             return;
         }
+
+        // Story-Modus, erster Start dieser Welt: erst erzaehlt Pomo, dann geht es los.
+        if (StoryDirector.TryBrief(e.planId, endlessChosen, Play)) return;
 
         // Erst springt die Figur ab, dann geht es los.
         launching = true;

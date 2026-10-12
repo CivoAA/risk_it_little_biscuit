@@ -11,8 +11,9 @@ using UnityEngine;
 ///   Pausen      - kurz halten nach . ! ? (und kürzer nach ,)
 ///   Letter Pop  - jeder neue Buchstabe springt mit back_out auf
 ///   Wavy Text   - &lt;wave&gt;Wort&lt;/wave&gt; im Text lässt das Wort wellen
-///
-/// Farbige Wörter und Wackeln aus dem Video sind (noch) nicht drin.
+///   Wackeln     - &lt;shake&gt;Wort&lt;/shake&gt; zittert (Schreck, Wut)
+///   Farbe       - &lt;hot&gt; Glut-Orange, &lt;ice&gt; Eisblau, &lt;jam&gt; Marmeladenrot,
+///                 &lt;gold&gt; Gold (Schluesselwoerter der Story)
 ///
 /// Benutzung: Komponente auf das Objekt mit dem TMP-Text, dann
 /// <see cref="Play"/> mit dem Seitentext aufrufen. <see cref="IsDone"/> sagt,
@@ -44,9 +45,34 @@ public class DialogueText : MonoBehaviour
     [SerializeField, Tooltip("Video: 2.5 - bei unserer 8er-Schrift springt das zu sehr.")]
     private float waveHeight = 1.5f;
 
+    [Header("Shake")]
+    [SerializeField] private float shakeAmount = 0.7f;
+
+    /// <summary>Farben fuer &lt;hot&gt;, &lt;ice&gt;, &lt;jam&gt;, &lt;gold&gt; (Index 1-4, 0 = Textfarbe).</summary>
+    private static readonly Color32[] Tints =
+    {
+        new Color32(0, 0, 0, 0),
+        new Color32(0xff, 0x9a, 0x3c, 0xff),
+        new Color32(0x8f, 0xd3, 0xf5, 0xff),
+        new Color32(0xf0, 0x8a, 0x9a, 0xff),
+        new Color32(0xfb, 0xd8, 0x6a, 0xff),
+    };
+
+    /// <summary>Feuert fuer jeden neu getippten Buchstaben - fuer Stimmen-Klicks.</summary>
+    public event System.Action<char> CharRevealed;
+
+    /// <summary>Tippgeschwindigkeit (Zeichen pro Sekunde).</summary>
+    public float CharsPerSecond
+    {
+        get => charsPerSecond;
+        set => charsPerSecond = Mathf.Max(1f, value);
+    }
+
     private TMP_Text text;
     private string plain = "";
     private bool[] wave = new bool[0];
+    private bool[] shake = new bool[0];
+    private byte[] tint = new byte[0];
     private float[] revealedAt = new float[0];
     private int revealed;
     private float charBudget;
@@ -66,7 +92,7 @@ public class DialogueText : MonoBehaviour
     {
         if (text == null) text = GetComponent<TMP_Text>();
 
-        Parse(markup ?? "", out plain, out wave);
+        Parse(markup ?? "", out plain, out wave, out shake, out tint);
         revealedAt = new float[plain.Length];
         revealed = 0;
         charBudget = 0f;
@@ -77,7 +103,9 @@ public class DialogueText : MonoBehaviour
         text.richText = false;
         text.text = plain;
         text.ForceMeshUpdate();
-        Apply();
+        // Leere Seite: nichts anwenden - UpdateVertexData wuerde sonst die alten
+        // Vertices der vorigen Seite zurueck ins Mesh schreiben.
+        if (plain.Length > 0) Apply();
     }
 
     /// <summary>Sofort alles zeigen - ohne Pop, der Rest steht einfach da.</summary>
@@ -110,6 +138,7 @@ public class DialogueText : MonoBehaviour
                     char c = plain[revealed];
                     revealedAt[revealed] = clock;
                     revealed++;
+                    CharRevealed?.Invoke(c);
 
                     // Pause erst nach dem letzten Satzzeichen einer Gruppe ("?!", "...").
                     bool nextIsPunct = revealed < plain.Length && IsPunct(plain[revealed]);
@@ -163,9 +192,29 @@ public class DialogueText : MonoBehaviour
                 ? Mathf.Sin(clock * waveSpeed + src * waveSpacing) * waveHeight
                 : 0f;
 
+            // ---------- Shake ----------
+            float ox = 0f;
+            if (src < shake.Length && shake[src])
+            {
+                float t = Mathf.Floor(clock * 24f);
+                ox = (Hash(src * 7.13f + t) - 0.5f) * 2f * shakeAmount;
+                oy += (Hash(src * 3.71f + t * 1.3f) - 0.5f) * 2f * shakeAmount;
+            }
+
+            // ---------- Farbe ----------
+            if (src < tint.Length && tint[src] > 0)
+            {
+                Color32 tc = Tints[tint[src]];
+                for (int k = 0; k < 4; k++)
+                {
+                    byte a = cols[v0 + k].a;
+                    cols[v0 + k] = new Color32(tc.r, tc.g, tc.b, a);
+                }
+            }
+
             Vector3 center = (verts[v0] + verts[v0 + 2]) * 0.5f;
             for (int k = 0; k < 4; k++)
-                verts[v0 + k] = center + (verts[v0 + k] - center) * scale + new Vector3(0f, oy, 0f);
+                verts[v0 + k] = center + (verts[v0 + k] - center) * scale + new Vector3(ox, oy, 0f);
         }
 
         text.UpdateVertexData(TMP_VertexDataUpdateFlags.Vertices | TMP_VertexDataUpdateFlags.Colors32);
@@ -183,37 +232,65 @@ public class DialogueText : MonoBehaviour
 
     private static bool IsPunct(char c) => c == '.' || c == '!' || c == '?' || c == '…';
 
-    /// <summary>
-    /// Nimmt &lt;wave&gt;...&lt;/wave&gt; aus dem Text und merkt sich, welche Zeichen
-    /// wellen. Alles andere bleibt wörtlich stehen.
-    /// </summary>
-    private static void Parse(string markup, out string plainText, out bool[] waveFlags)
+    private static float Hash(float x)
     {
-        const string open = "<wave>", close = "</wave>";
+        float s = Mathf.Sin(x * 12.9898f) * 43758.5453f;
+        return s - Mathf.Floor(s);
+    }
+
+    private static readonly string[] TintTags = { null, "hot", "ice", "jam", "gold" };
+
+    /// <summary>
+    /// Nimmt die Tags (&lt;wave&gt;, &lt;shake&gt;, &lt;hot&gt;, &lt;ice&gt;, &lt;jam&gt;,
+    /// &lt;gold&gt; und ihre Gegenstuecke) aus dem Text und merkt sich je Zeichen,
+    /// was es tut. Alles andere bleibt wörtlich stehen.
+    /// </summary>
+    private static void Parse(string markup, out string plainText, out bool[] waveFlags,
+                              out bool[] shakeFlags, out byte[] tintIds)
+    {
         var sb = new StringBuilder(markup.Length);
-        var flags = new List<bool>(markup.Length);
-        bool inWave = false;
+        var waves = new List<bool>(markup.Length);
+        var shakes = new List<bool>(markup.Length);
+        var tints = new List<byte>(markup.Length);
+        bool inWave = false, inShake = false;
+        byte inTint = 0;
 
         for (int i = 0; i < markup.Length; i++)
         {
-            if (string.CompareOrdinal(markup, i, open, 0, open.Length) == 0)
+            if (markup[i] == '<')
             {
-                inWave = true;
-                i += open.Length - 1;
-                continue;
-            }
-            if (string.CompareOrdinal(markup, i, close, 0, close.Length) == 0)
-            {
-                inWave = false;
-                i += close.Length - 1;
-                continue;
+                int end = markup.IndexOf('>', i);
+                if (end > i)
+                {
+                    string tag = markup.Substring(i + 1, end - i - 1);
+                    bool closing = tag.StartsWith("/");
+                    string name = closing ? tag.Substring(1) : tag;
+                    bool known = true;
+                    if (name == "wave") inWave = !closing;
+                    else if (name == "shake") inShake = !closing;
+                    else
+                    {
+                        int t = System.Array.IndexOf(TintTags, name);
+                        if (t > 0) inTint = closing ? (byte)0 : (byte)t;
+                        else known = false;
+                    }
+                    if (known)
+                    {
+                        i = end;
+                        continue;
+                    }
+                }
             }
             sb.Append(markup[i]);
-            flags.Add(inWave);
+            waves.Add(inWave);
+            shakes.Add(inShake);
+            tints.Add(inTint);
         }
 
         plainText = sb.ToString();
-        waveFlags = flags.ToArray();
+        waveFlags = waves.ToArray();
+        shakeFlags = shakes.ToArray();
+        tintIds = tints.ToArray();
     }
 
     private static float BackOut(float t)

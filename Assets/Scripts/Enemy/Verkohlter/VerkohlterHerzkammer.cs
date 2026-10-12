@@ -406,6 +406,8 @@ public class VerkohlterHerzkammer : MonoBehaviour
     private IEnumerator Win()
     {
         yield return new WaitForSeconds(WinDelay);
+        // Im Story-Modus kommt erst das Finale - den Sieg-Bildschirm zeigt dann die Story.
+        if (StoryDirector.ClaimsWin) yield break;
         PlayerController pc = PlayerController.Instance;
         GameManager gm = GameManager.Instance;
         if (pc == null || !pc.gameObject.activeSelf || gm == null || !gm.gameActiv) yield break;

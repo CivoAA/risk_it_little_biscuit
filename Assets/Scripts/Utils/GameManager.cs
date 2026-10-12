@@ -94,6 +94,9 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            // Gewonnen: ab hier kann nichts mehr passieren - kein spaeter Tod,
+            // der den Sieg in einen zweiten Abschluss verwandelt.
+            if (PlayerController.Instance != null) PlayerController.Instance.Untouchable = true;
             Achievements.Unlock(Ach.FirstWin);
             SessionProgressTracker.Instance.EvaluateAfterGame();
             StartCoroutine(ShowWinScreen());
@@ -137,6 +140,11 @@ public class GameManager : MonoBehaviour
         UIController.Instance.WinPanel.SetActive(true);
         UIController.Instance.GameWinStats();
         UIController.Instance.StartRewardCycleDisplay_Win();
+
+        // Der Sieg-Bildschirm haelt das Spiel an: keine Gegner, die weiterlaufen,
+        // kein Laufen mehr. Der Bildschirm selbst rechnet auf unskalierter Zeit;
+        // Restart() und GoToMainMenu() setzen die Zeit beim Umschalten zurueck.
+        Time.timeScale = 0f;
     }
 
     /// <summary>
@@ -249,7 +257,9 @@ public class GameManager : MonoBehaviour
         UIController ui = UIController.Instance;
         if (ui == null) return false;
 
-        return !ui.GameOverPanel.activeSelf
+        return !StoryDialog.IsOpen
+            && !StoryCutscene.IsPlaying
+            && !ui.GameOverPanel.activeSelf
             && !ui.WinPanel.activeSelf
             && !ui.LevelUpPanel.activeSelf
             && !ui.PowerUpPanel.activeSelf
