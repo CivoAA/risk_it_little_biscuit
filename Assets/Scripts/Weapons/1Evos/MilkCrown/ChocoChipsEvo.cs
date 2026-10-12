@@ -140,6 +140,7 @@ public class ChocoChipsEvo : ChocoChips
         float damage = CurrentStats.damage;
         ChocoChipShot shot = go.AddComponent<ChocoChipShot>();
         shot.Launch(dir, speed, range, DunkedRadius, damage, DunkedPierce, DunkedFrames);
+        ApplySkills(shot);
         shot.Spent = at => ChocoPuddle.Create(at, damage);
     }
 

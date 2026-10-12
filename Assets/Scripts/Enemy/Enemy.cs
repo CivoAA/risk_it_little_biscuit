@@ -241,6 +241,13 @@ public class Enemy : MonoBehaviour
     public static IReadOnlyList<Enemy> Alive => alive;
 
     /// <summary>
+    /// Solange true, ist jeder <see cref="TakeDamage"/> ein Crit. Nur rund um
+    /// einen einzelnen Aufruf setzen und gleich danach zuruecknehmen
+    /// (Skilltree "Erster Bissen", siehe <see cref="ChocoChipShot"/>).
+    /// </summary>
+    public static bool ForceCrit;
+
+    /// <summary>
     /// Jeder Treffer per <see cref="TakeDamage"/>: Gegner und roher Schaden
     /// (vor Damage-Buff und Crit). Kommt auch fuer Treffer, die ihn toeten.
     /// </summary>
@@ -1030,7 +1037,7 @@ public class Enemy : MonoBehaviour
         float critChance = PlayerController.Instance.critChance;
         float critDamage = PlayerController.Instance.critDamage;
 
-        if (Random.value < critChance)
+        if (ForceCrit || Random.value < critChance)
         {
             finalDamage *= critDamage;
             DamageNumberController.Instance.CreateNumberCrit(finalDamage, transform.position);

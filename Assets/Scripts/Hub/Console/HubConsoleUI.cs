@@ -460,9 +460,12 @@ public class HubConsoleUI : MonoBehaviour, IHubConsoleSink
         if (line.Length == 0) return;
 
         PlaySfx(submitClip);
-        Remember(line);
 
-        Write(line, echoHex, promptSymbol + " ");
+        // Passwort weder in die Historie noch im Klartext auf den Bildschirm
+        bool password = HubConsole.IsAdminPassword(line);
+        if (!password) Remember(line);
+
+        Write(password ? new string('*', line.Length) : line, echoHex, promptSymbol + " ");
         HubConsole.Execute(line, this);
         RedrawLog();
     }
