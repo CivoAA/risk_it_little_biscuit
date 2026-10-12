@@ -1,0 +1,523 @@
+fileFormatVersion: 2
+guid: 3fa7c44dcc254c2c8475fb3eff72505a
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3554309285340436503
+    second: verkohlter_herz_panzer_0
+  - first:
+      213: 3451694056383512073
+    second: verkohlter_herz_panzer_1
+  - first:
+      213: 3538970052354569792
+    second: verkohlter_herz_panzer_2
+  - first:
+      213: 3335492750140468226
+    second: verkohlter_herz_panzer_3
+  - first:
+      213: 1546853635725440488
+    second: verkohlter_herz_panzer_4
+  - first:
+      213: 2393621993518067643
+    second: verkohlter_herz_panzer_5
+  - first:
+      213: 3001629974354761409
+    second: verkohlter_herz_panzer_6
+  - first:
+      213: 3093296842708513550
+    second: verkohlter_herz_panzer_7
+  - first:
+      213: 4178943013926904827
+    second: verkohlter_herz_panzer_8
+  - first:
+      213: 3704814351002315838
+    second: verkohlter_herz_panzer_9
+  - first:
+      213: 2773262503538156532
+    second: verkohlter_herz_panzer_10
+  - first:
+      213: 2442650329409947399
+    second: verkohlter_herz_panzer_11
+  - first:
+      213: 2116640766267673150
+    second: verkohlter_herz_panzer_12
+  - first:
+      213: 1906504595180281600
+    second: verkohlter_herz_panzer_13
+  - first:
+      213: 4291805637585732373
+    second: verkohlter_herz_panzer_14
+  - first:
+      213: 2767791245914593822
+    second: verkohlter_herz_panzer_15
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 4096
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: verkohlter_herz_panzer_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 144
+        height: 152
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4342105263157895}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29c396a90da34102b2de955403394e1d
+      internalID: 3554309285340436503
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_panzer_1
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 0
+        width: 144
+        height: 152
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4342105263157895}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 49bb5acdf43c4f3899d7b400b08721e7
+      internalID: 3451694056383512073
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_panzer_2
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 0
+        width: 144
+        height: 152
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4342105263157895}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ebb241bd36084ca0a347e52b8c70ee9d
+      internalID: 3538970052354569792
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_panzer_3
+      rect:
+        serializedVersion: 2
+        x: 432
+        y: 0
+        width: 144
+        height: 152
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4342105263157895}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 69c851945be3422bb40c95816150f2ef
+      internalID: 3335492750140468226
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_panzer_4
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 0
+        width: 144
+        height: 152
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4342105263157895}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c7d2d5a97fba43fe91f033a68d42afa9
+      internalID: 1546853635725440488
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_panzer_5
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 0
+        width: 144
+        height: 152
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4342105263157895}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3e8bc3d70d2043f09595bf183d78ee10
+      internalID: 2393621993518067643
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_panzer_6
+      rect:
+        serializedVersion: 2
+        x: 864
+        y: 0
+        width: 144
+        height: 152
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4342105263157895}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cf9700331e9a40ffb1904d348cdc0d26
+      internalID: 3001629974354761409
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_panzer_7
+      rect:
+        serializedVersion: 2
+        x: 1008
+        y: 0
+        width: 144
+        height: 152
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4342105263157895}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a5545ae76ab49e590b60dc63dfb912c
+      internalID: 3093296842708513550
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_panzer_8
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 0
+        width: 144
+        height: 152
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4342105263157895}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f9afbb1c09c0494891acb1d699908acc
+      internalID: 4178943013926904827
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_panzer_9
+      rect:
+        serializedVersion: 2
+        x: 1296
+        y: 0
+        width: 144
+        height: 152
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4342105263157895}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed61886f34d94a63aa87e88878c4db56
+      internalID: 3704814351002315838
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_panzer_10
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 0
+        width: 144
+        height: 152
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4342105263157895}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b6db2c80eb09479698b3b871194afee1
+      internalID: 2773262503538156532
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_panzer_11
+      rect:
+        serializedVersion: 2
+        x: 1584
+        y: 0
+        width: 144
+        height: 152
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4342105263157895}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1f213aafb0a742348ca24753b8f5763d
+      internalID: 2442650329409947399
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_panzer_12
+      rect:
+        serializedVersion: 2
+        x: 1728
+        y: 0
+        width: 144
+        height: 152
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4342105263157895}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a66a24a5667f4a07b44d56554786f8e7
+      internalID: 2116640766267673150
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_panzer_13
+      rect:
+        serializedVersion: 2
+        x: 1872
+        y: 0
+        width: 144
+        height: 152
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4342105263157895}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d36abab9372b44d08b0a30a05a2afd59
+      internalID: 1906504595180281600
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_panzer_14
+      rect:
+        serializedVersion: 2
+        x: 2016
+        y: 0
+        width: 144
+        height: 152
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4342105263157895}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 437e11c085a545808ff7aa4cef12008f
+      internalID: 4291805637585732373
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_panzer_15
+      rect:
+        serializedVersion: 2
+        x: 2160
+        y: 0
+        width: 144
+        height: 152
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4342105263157895}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ae0e52c9c5645ada3ff32cfdf87106a
+      internalID: 2767791245914593822
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      verkohlter_herz_panzer_0: 3554309285340436503
+      verkohlter_herz_panzer_1: 3451694056383512073
+      verkohlter_herz_panzer_10: 2773262503538156532
+      verkohlter_herz_panzer_11: 2442650329409947399
+      verkohlter_herz_panzer_12: 2116640766267673150
+      verkohlter_herz_panzer_13: 1906504595180281600
+      verkohlter_herz_panzer_14: 4291805637585732373
+      verkohlter_herz_panzer_15: 2767791245914593822
+      verkohlter_herz_panzer_2: 3538970052354569792
+      verkohlter_herz_panzer_3: 3335492750140468226
+      verkohlter_herz_panzer_4: 1546853635725440488
+      verkohlter_herz_panzer_5: 2393621993518067643
+      verkohlter_herz_panzer_6: 3001629974354761409
+      verkohlter_herz_panzer_7: 3093296842708513550
+      verkohlter_herz_panzer_8: 4178943013926904827
+      verkohlter_herz_panzer_9: 3704814351002315838
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

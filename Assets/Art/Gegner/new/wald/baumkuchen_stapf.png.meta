@@ -1,0 +1,939 @@
+fileFormatVersion: 2
+guid: a8d9ad33707c403cb1c3c904ad397ad2
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1578290029995643981
+    second: baumkuchen_stapf_0
+  - first:
+      213: 4493924793205506516
+    second: baumkuchen_stapf_1
+  - first:
+      213: 2002605984769932110
+    second: baumkuchen_stapf_2
+  - first:
+      213: 3995077729421066731
+    second: baumkuchen_stapf_3
+  - first:
+      213: 2150129983055196951
+    second: baumkuchen_stapf_4
+  - first:
+      213: 3411601262588362306
+    second: baumkuchen_stapf_5
+  - first:
+      213: 3744154202061577996
+    second: baumkuchen_stapf_6
+  - first:
+      213: 3384229184423903345
+    second: baumkuchen_stapf_7
+  - first:
+      213: 4326117704230769985
+    second: baumkuchen_stapf_8
+  - first:
+      213: 1811821229576220882
+    second: baumkuchen_stapf_9
+  - first:
+      213: 4252224750255627215
+    second: baumkuchen_stapf_10
+  - first:
+      213: 2585008375671837076
+    second: baumkuchen_stapf_11
+  - first:
+      213: 4291094999901227640
+    second: baumkuchen_stapf_12
+  - first:
+      213: 2771961039647764523
+    second: baumkuchen_stapf_13
+  - first:
+      213: 2496097368913946602
+    second: baumkuchen_stapf_14
+  - first:
+      213: 2924132981943049860
+    second: baumkuchen_stapf_15
+  - first:
+      213: 3273812657667132895
+    second: baumkuchen_stapf_16
+  - first:
+      213: 2826533630045912286
+    second: baumkuchen_stapf_17
+  - first:
+      213: 1194033429028549308
+    second: baumkuchen_stapf_18
+  - first:
+      213: 3339640768165012557
+    second: baumkuchen_stapf_19
+  - first:
+      213: 2373059388097334508
+    second: baumkuchen_stapf_20
+  - first:
+      213: 3865430945454693568
+    second: baumkuchen_stapf_21
+  - first:
+      213: 1296482266471833447
+    second: baumkuchen_stapf_22
+  - first:
+      213: 3242075969964603385
+    second: baumkuchen_stapf_23
+  - first:
+      213: 4476168537779054678
+    second: baumkuchen_stapf_24
+  - first:
+      213: 1475575718181957331
+    second: baumkuchen_stapf_25
+  - first:
+      213: 2427565933513830488
+    second: baumkuchen_stapf_26
+  - first:
+      213: 3118697400961640211
+    second: baumkuchen_stapf_27
+  - first:
+      213: 4295389576892348761
+    second: baumkuchen_stapf_28
+  - first:
+      213: 3597633949634800050
+    second: baumkuchen_stapf_29
+  - first:
+      213: 2870502384379998602
+    second: baumkuchen_stapf_30
+  - first:
+      213: 2612538995742734481
+    second: baumkuchen_stapf_31
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: baumkuchen_stapf_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 64
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06451612903225806}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b234efb892b046bbbe407106a0ef7a4e
+      internalID: 1578290029995643981
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baumkuchen_stapf_1
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 64
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06451612903225806}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c7d68d875e9946ae863644ff38cf0ebe
+      internalID: 4493924793205506516
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baumkuchen_stapf_2
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 64
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06451612903225806}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d2d93187d56f4bf499890e5487cbe355
+      internalID: 2002605984769932110
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baumkuchen_stapf_3
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 64
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06451612903225806}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bb426da2e72a43ff90783b762a49edb9
+      internalID: 3995077729421066731
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baumkuchen_stapf_4
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 0
+        width: 64
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06451612903225806}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 77a90f9044e0495b9a8471c7b9a8f331
+      internalID: 2150129983055196951
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baumkuchen_stapf_5
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 0
+        width: 64
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06451612903225806}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6614bf3693554ea198043c33aafd7543
+      internalID: 3411601262588362306
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baumkuchen_stapf_6
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 0
+        width: 64
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06451612903225806}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8068884bf20c4caca2a4f2425eb26a78
+      internalID: 3744154202061577996
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baumkuchen_stapf_7
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 0
+        width: 64
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06451612903225806}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7e5059441bab486f8d0a9fd840d70be6
+      internalID: 3384229184423903345
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baumkuchen_stapf_8
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 0
+        width: 64
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06451612903225806}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f47f7e2e0364579a6e08c774445c5df
+      internalID: 4326117704230769985
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baumkuchen_stapf_9
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 0
+        width: 64
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06451612903225806}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5873be29e54e49d09da7829952d073e2
+      internalID: 1811821229576220882
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baumkuchen_stapf_10
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 0
+        width: 64
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06451612903225806}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b49a94d75a454443bf03a936cd61e61c
+      internalID: 4252224750255627215
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baumkuchen_stapf_11
+      rect:
+        serializedVersion: 2
+        x: 704
+        y: 0
+        width: 64
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06451612903225806}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 99d00841e188496b9dea404163d3456f
+      internalID: 2585008375671837076
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baumkuchen_stapf_12
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 0
+        width: 64
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06451612903225806}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 79531f6518d641b3b38759b2ec2ad767
+      internalID: 4291094999901227640
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baumkuchen_stapf_13
+      rect:
+        serializedVersion: 2
+        x: 832
+        y: 0
+        width: 64
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06451612903225806}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2125fe3d470342098a30be8a3769150b
+      internalID: 2771961039647764523
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baumkuchen_stapf_14
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 0
+        width: 64
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06451612903225806}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee05a6b300144872adb4230a932a1c0e
+      internalID: 2496097368913946602
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baumkuchen_stapf_15
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 0
+        width: 64
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06451612903225806}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9c95e00436a2442bb71d858cc933ac25
+      internalID: 2924132981943049860
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baumkuchen_stapf_16
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 0
+        width: 64
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06451612903225806}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1d4d0ff0c5694e29b1e1382d916b4805
+      internalID: 3273812657667132895
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baumkuchen_stapf_17
+      rect:
+        serializedVersion: 2
+        x: 1088
+        y: 0
+        width: 64
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06451612903225806}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e1308275031e4a26b6219bc4cbf1435f
+      internalID: 2826533630045912286
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baumkuchen_stapf_18
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 0
+        width: 64
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06451612903225806}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 682cdd7844ee494eaeeb291dde6f987b
+      internalID: 1194033429028549308
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baumkuchen_stapf_19
+      rect:
+        serializedVersion: 2
+        x: 1216
+        y: 0
+        width: 64
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06451612903225806}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d5c5b629efcc487abb456a0610eedbdb
+      internalID: 3339640768165012557
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baumkuchen_stapf_20
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 0
+        width: 64
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06451612903225806}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 38a8569224dc478996c053589546d0af
+      internalID: 2373059388097334508
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baumkuchen_stapf_21
+      rect:
+        serializedVersion: 2
+        x: 1344
+        y: 0
+        width: 64
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06451612903225806}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 39968adda2fd43d5af3088458e4507e7
+      internalID: 3865430945454693568
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baumkuchen_stapf_22
+      rect:
+        serializedVersion: 2
+        x: 1408
+        y: 0
+        width: 64
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06451612903225806}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4e5b9f79fa564ff28e4e747ef885ab1a
+      internalID: 1296482266471833447
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baumkuchen_stapf_23
+      rect:
+        serializedVersion: 2
+        x: 1472
+        y: 0
+        width: 64
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06451612903225806}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f7936b775751494d9b33bb1173c10077
+      internalID: 3242075969964603385
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baumkuchen_stapf_24
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 0
+        width: 64
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06451612903225806}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f7d84137533e45579b6bc702731c81d8
+      internalID: 4476168537779054678
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baumkuchen_stapf_25
+      rect:
+        serializedVersion: 2
+        x: 1600
+        y: 0
+        width: 64
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06451612903225806}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 33996d1772b24dd9a60f0af463f9613d
+      internalID: 1475575718181957331
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baumkuchen_stapf_26
+      rect:
+        serializedVersion: 2
+        x: 1664
+        y: 0
+        width: 64
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06451612903225806}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 98b1397877844c6e9ca165917cd3fd5f
+      internalID: 2427565933513830488
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baumkuchen_stapf_27
+      rect:
+        serializedVersion: 2
+        x: 1728
+        y: 0
+        width: 64
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06451612903225806}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e7d13709125541d2aafbe9692a9fecfb
+      internalID: 3118697400961640211
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baumkuchen_stapf_28
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 0
+        width: 64
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06451612903225806}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e927dee915ca41838daa0a94dcba3ec1
+      internalID: 4295389576892348761
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baumkuchen_stapf_29
+      rect:
+        serializedVersion: 2
+        x: 1856
+        y: 0
+        width: 64
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06451612903225806}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 040ad05431ab49138d3bbdfd9dba6387
+      internalID: 3597633949634800050
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baumkuchen_stapf_30
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 0
+        width: 64
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06451612903225806}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 793178ba27654970ac69f46bf0f1517a
+      internalID: 2870502384379998602
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: baumkuchen_stapf_31
+      rect:
+        serializedVersion: 2
+        x: 1984
+        y: 0
+        width: 64
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5, y: 0.06451612903225806}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea7dcdcd6d5a4d3b985dedb56aa762e1
+      internalID: 2612538995742734481
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      baumkuchen_stapf_0: 1578290029995643981
+      baumkuchen_stapf_1: 4493924793205506516
+      baumkuchen_stapf_10: 4252224750255627215
+      baumkuchen_stapf_11: 2585008375671837076
+      baumkuchen_stapf_12: 4291094999901227640
+      baumkuchen_stapf_13: 2771961039647764523
+      baumkuchen_stapf_14: 2496097368913946602
+      baumkuchen_stapf_15: 2924132981943049860
+      baumkuchen_stapf_16: 3273812657667132895
+      baumkuchen_stapf_17: 2826533630045912286
+      baumkuchen_stapf_18: 1194033429028549308
+      baumkuchen_stapf_19: 3339640768165012557
+      baumkuchen_stapf_2: 2002605984769932110
+      baumkuchen_stapf_20: 2373059388097334508
+      baumkuchen_stapf_21: 3865430945454693568
+      baumkuchen_stapf_22: 1296482266471833447
+      baumkuchen_stapf_23: 3242075969964603385
+      baumkuchen_stapf_24: 4476168537779054678
+      baumkuchen_stapf_25: 1475575718181957331
+      baumkuchen_stapf_26: 2427565933513830488
+      baumkuchen_stapf_27: 3118697400961640211
+      baumkuchen_stapf_28: 4295389576892348761
+      baumkuchen_stapf_29: 3597633949634800050
+      baumkuchen_stapf_3: 3995077729421066731
+      baumkuchen_stapf_30: 2870502384379998602
+      baumkuchen_stapf_31: 2612538995742734481
+      baumkuchen_stapf_4: 2150129983055196951
+      baumkuchen_stapf_5: 3411601262588362306
+      baumkuchen_stapf_6: 3744154202061577996
+      baumkuchen_stapf_7: 3384229184423903345
+      baumkuchen_stapf_8: 4326117704230769985
+      baumkuchen_stapf_9: 1811821229576220882
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:
