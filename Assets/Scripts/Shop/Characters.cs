@@ -61,20 +61,20 @@ public static class Characters
     /// Die Evo der Startwaffe als <c>Weapon.weaponID</c>. Das Kruemelchaos des
     /// Tofus kopiert nach seiner eigenen Evo diese hier (<see cref="CrumbMayhemEvo"/>).
     ///
-    /// Fuer Keks, Ritter, Inari und Schleimkoenig sind es Platzhalter
+    /// Fuer den Schleimkoenig ist es ein Platzhalter
     /// (Stand 12.10.2026): eine Stufe ueber der Hoechststufe der Startwaffe,
     /// ohne Rezept - die richtigen Evos kommen noch. Bekommt eine davon ein
     /// Rezept, bleibt die Id hier einfach stehen.
     /// </summary>
     private static readonly string[] StartEvoIdByskin =
     {
-        "evo_choco_chips",     // 0 - Keks (Platzhalter)
+        "evo_choco_chips",     // 0 - Keks (Milchkrone)
         "evo_sticky_shatter",  // 1 - Marmelade
         "evo_blade_storm",     // 2 - Onigiri
         "evo_typhoon_fan",     // 3 - Toast
         "evo_sword_slash",     // 4 - Zwiebelritter (Schalenklinge)
         "evo_mochi_melody",    // 5 - Mochi (Spieluhr-Quartett)
-        "evo_foxfire",         // 6 - Inari (Platzhalter)
+        "evo_foxfire",         // 6 - Inari (Kyuubi)
         "evo_royal_splat",     // 7 - Schleimkoenig (Platzhalter)
         "evo_crumb_mayhem",    // 8 - Tofu
     };
@@ -150,9 +150,9 @@ public static class Characters
         "Direkt aus dem Toaster und noch warm. Das Stirnband sitzt, die Kruste auch - wer ihn anfasst, verbrennt sich die Finger.",
         "Schicht für Schicht Rüstung. Zieht er blank, weinen die Gegner - und manchmal er selbst ein bisschen mit.",
         "Ein Erdbeer-Mochi mit Schleife und dem süßesten Blick der Küche. Wer sie unterschätzt, wird plattgehüpft.",
-        "Ein kleiner Fuchs aus Inari-Sushi: außen goldene Tofutasche, innen Reis. Das blaue Halstuch hat er sich selbst gebunden - schief, aber mit Stolz.",
-        "Ein Wackelpudding aus Traubengelee, der sich selbst zum König gekrönt hat. Die Krone ist eine Nummer zu klein, das Zepter eine Nummer zu groß - aber wer ihm im Weg steht, wird eingeschleimt.",
-        "Ein Block Seidentofu, der alles mit derselben Miene hinnimmt. Kein Gewürz, keine Soße, keine Gefühle - aber wenn er losplumpst, fliegen die Krümel.",
+        "Ein kleiner Fuchs aus Inari-Sushi. Das Halstuch hat er selbst gebunden - schief, aber mit Stolz.",
+        "Wackelpudding mit selbstgebastelter Krone. Wer ihm im Weg steht, wird eingeschleimt.",
+        "Seidentofu ohne Miene. Kein Gewürz, keine Soße, keine Gefühle - aber wenn er plumpst, fliegen Krümel.",
     };
 
     /// <summary>

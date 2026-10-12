@@ -67,6 +67,7 @@ public class CrumbTrail : Weapon
         }
 
         GameObject crumb = Instantiate(prefab, pos, Quaternion.identity);
+        WeaponSounds.Play(WeaponSounds.CrumbDrop);
 
         Scene gameScene = RunScene.Current;
         if (gameScene.IsValid() && gameScene.isLoaded)

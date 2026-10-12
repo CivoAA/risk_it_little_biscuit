@@ -68,6 +68,7 @@ public class Vortex : Weapon
             Vector2 pos = PickSpawnPoint();
 
             GameObject vortex = Instantiate(prefab, pos, Quaternion.identity);
+            WeaponSounds.Play(WeaponSounds.VortexSpawn);
             liveVortices.Add(vortex);
 
             if (gameScene.IsValid() && gameScene.isLoaded)

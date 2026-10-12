@@ -52,7 +52,44 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 7664102079452405459, guid: 8406417695494c7439f47f323b65efc2, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7664102079452405459, guid: 8406417695494c7439f47f323b65efc2, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9198760150772881704, guid: 8406417695494c7439f47f323b65efc2, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 2221280294636246733, guid: 72e82837660840c78b3247e55f14a50f, type: 3}
+    - target: {fileID: 9198760150772881704, guid: 8406417695494c7439f47f323b65efc2, type: 3}
+      propertyPath: m_Size.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9198760150772881704, guid: 8406417695494c7439f47f323b65efc2, type: 3}
+      propertyPath: m_Size.y
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: -6253853041191081181, guid: 8406417695494c7439f47f323b65efc2, type: 3}
+      propertyPath: m_Size.x
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: -6253853041191081181, guid: 8406417695494c7439f47f323b65efc2, type: 3}
+      propertyPath: m_Size.y
+      value: 3.542
+      objectReference: {fileID: 0}
+    - target: {fileID: -6253853041191081181, guid: 8406417695494c7439f47f323b65efc2, type: 3}
+      propertyPath: m_Offset.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6253853041191081181, guid: 8406417695494c7439f47f323b65efc2, type: 3}
+      propertyPath: m_Offset.y
+      value: 1.771
+      objectReference: {fileID: 0}
     m_RemovedComponents:
+    - {fileID: 3486647794734513707, guid: 8406417695494c7439f47f323b65efc2, type: 3}
     - {fileID: -810063056940477484, guid: 8406417695494c7439f47f323b65efc2, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -60,6 +97,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3517284817995184227, guid: 8406417695494c7439f47f323b65efc2, type: 3}
       insertIndex: 3
       addedObject: {fileID: 6287274526262719892}
+    - targetCorrespondingSourceObject: {fileID: 3517284817995184227, guid: 8406417695494c7439f47f323b65efc2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4471937025811265093}
   m_SourcePrefab: {fileID: 100100000, guid: 8406417695494c7439f47f323b65efc2, type: 3}
 --- !u!1 &2532210210844876040 stripped
 GameObject:
@@ -80,3 +120,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weapon: {fileID: 0}
   enemiesInRange: []
+--- !u!114 &4471937025811265093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2532210210844876040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc50626105934462ad03c4f1e8868e2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpriteFlipbook
+  frames:
+  - {fileID: 2221280294636246733, guid: 72e82837660840c78b3247e55f14a50f, type: 3}
+  - {fileID: 3417971005271698728, guid: 72e82837660840c78b3247e55f14a50f, type: 3}
+  - {fileID: 3341968881561593376, guid: 72e82837660840c78b3247e55f14a50f, type: 3}
+  - {fileID: 3859849246598151712, guid: 72e82837660840c78b3247e55f14a50f, type: 3}
+  - {fileID: 4231421450575117469, guid: 72e82837660840c78b3247e55f14a50f, type: 3}
+  - {fileID: 3025083067470272945, guid: 72e82837660840c78b3247e55f14a50f, type: 3}
+  fps: 12
+  randomStart: 0
+  fadeIn: 0
+  fadeOut: 0

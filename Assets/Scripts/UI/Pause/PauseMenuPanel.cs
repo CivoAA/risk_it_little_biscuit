@@ -26,8 +26,10 @@ using UnityEngine.UI;
 /// Masse in Seitenpixeln (480x270, Ursprung oben links), ganzzahlig skaliert.
 /// Die Statwerte zieht <see cref="BuildStatModel"/> live aus PlayerController und
 /// GameManager - dieselben Felder, die das alte UIPausPanleStats abgefragt hat.
+/// Mit der Maus ueber einem Stat erklaert ein Zettel, was er tut
+/// (PauseMenuPanel.StatInfo.cs).
 /// </summary>
-public class PauseMenuPanel : MonoBehaviour
+public partial class PauseMenuPanel : MonoBehaviour
 {
     public enum PauseMode { Run, Hub }
 
@@ -77,6 +79,7 @@ public class PauseMenuPanel : MonoBehaviour
     /// <summary>Eine Statzeile. Value liest bei jedem Auffrischen neu.</summary>
     private class StatDef
     {
+        public string Id;
         public string Key;
         public string Fallback;
         public string Format;
@@ -94,6 +97,8 @@ public class PauseMenuPanel : MonoBehaviour
     private class StatCells
     {
         public StatDef Def;
+        public Color32 Color;
+        public int X, Y;
         public TMP_Text Name;
         public TMP_Text Value;
     }
@@ -328,6 +333,7 @@ public class PauseMenuPanel : MonoBehaviour
 
         rows.Clear();
         cells.Clear();
+        ResetStatInfo();
         chipValues = null;
         dialog = null;
         dialogPage = null;
@@ -363,6 +369,7 @@ public class PauseMenuPanel : MonoBehaviour
 
         BuildChips();
         BuildStats();
+        BuildStatInfo();
     }
 
     /// <summary>ZEIT / LEVEL / GOLD als drei gleich breite Schildchen.</summary>
@@ -422,6 +429,9 @@ public class PauseMenuPanel : MonoBehaviour
                 StatCells cell = new StatCells
                 {
                     Def = group.Rows[r],
+                    Color = group.Color,
+                    X = cx,
+                    Y = ry,
                     Name = OptionsKit.Label("Name_" + g + "_" + r, page, cx + 3, ry, ColW - 6, StatRowH,
                                             Loc.Get(group.Rows[r].Key, group.Rows[r].Fallback), textFont,
                                             OptionsKit.SizeText, GameHudSkin.Parchment,
@@ -430,6 +440,7 @@ public class PauseMenuPanel : MonoBehaviour
                                              "-", textFont, OptionsKit.SizeText, GameHudSkin.Cream,
                                              TextAlignmentOptions.Right),
                 };
+                AddStatHover(cx, ry, ColW, StatRowH, cells.Count);
                 cells.Add(cell);
             }
         }
@@ -459,6 +470,11 @@ public class PauseMenuPanel : MonoBehaviour
         OptionsKit.Label("Hint", page, x - 20, y, w + 40, 13,
                          Loc.Get("ui.pause.hint", "ESC schließt das Menü"), textFont, OptionsKit.SizeText,
                          GameHudSkin.Stone, TextAlignmentOptions.Center);
+
+        if (mode == PauseMode.Run)
+            OptionsKit.Label("InfoHint", page, x - 20, y + 12, w + 40, 13,
+                             Loc.Get("ui.pause.info.hint", "Maus auf einen Stat für Details"), textFont,
+                             OptionsKit.SizeText, GameHudSkin.Stone, TextAlignmentOptions.Center);
     }
 
     // ---------- Menuespalte ----------
@@ -579,6 +595,7 @@ public class PauseMenuPanel : MonoBehaviour
     {
         if (dialog != null) return;
 
+        HideStatInfo();
         dialogConfirm = onConfirm;
 
         // Eigene Ebene ueber der Karte: als letztes Kind gezeichnet, und die
@@ -702,6 +719,7 @@ public class PauseMenuPanel : MonoBehaviour
     {
         return new StatDef
         {
+            Id = id,
             Key = "ui.pause.stat." + id,
             Fallback = fallback,
             Format = format,
@@ -747,6 +765,7 @@ public class PauseMenuPanel : MonoBehaviour
             }
         }
 
+        RefreshStatInfo();
         RefreshChips();
     }
 

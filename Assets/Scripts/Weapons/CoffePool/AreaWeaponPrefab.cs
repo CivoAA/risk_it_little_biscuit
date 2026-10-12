@@ -54,7 +54,7 @@ public class AreaWeaponPrefab : MonoBehaviour
             transform.localScale = Vector3.zero;
         }
 
-        AudioController.Instance.PalySound(AudioController.Instance.areaWeaponSpawn);
+        WeaponSounds.Play(WeaponSounds.CoffeePool);
     }
 
     /// <summary>Kapsel genau so gross wie die gewaehlte Lache (ohne Umriss).</summary>

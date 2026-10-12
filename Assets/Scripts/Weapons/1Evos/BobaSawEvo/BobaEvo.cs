@@ -32,7 +32,7 @@ public class BobaEvo : Weapon
 
         while (elapsed < duration)
         {
-            AudioController.Instance.PalyModifiedSound(AudioController.Instance.NewBoba);
+            WeaponSounds.Play(WeaponSounds.BobaEvoShot);
 
             int projectileCount = 4;   // wie viele Bobas gleichzeitig
             float radius = 5f;         // Abstand vom Spieler (Kreisradius)

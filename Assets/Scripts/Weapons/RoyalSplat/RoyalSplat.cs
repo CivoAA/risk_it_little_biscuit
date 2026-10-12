@@ -135,7 +135,7 @@ public class RoyalSplat : Weapon
 
         claimed.Add(spot);
         SplatBlob.Throw(ground, throwHeight, spot, hit);
-        if (AudioController.Instance != null) AudioController.Instance.PalySound(AudioController.Instance.Werfen, 0.05f);
+        WeaponSounds.Play(WeaponSounds.SplatThrow);
         return true;
     }
 
@@ -239,7 +239,8 @@ public class RoyalSplat : Weapon
     {
         FoxFx.Play(HitFor(radius), at, 22f, 1);
         if (shake > 0f) ScreenShake.Kick(shake, 0.12f);
-        if (AudioController.Instance != null) AudioController.Instance.PalySound(AudioController.Instance.EarthHit, 0.12f);
+        // der letzte, grosse Platscher (mit Wackeln) etwas lauter und tiefer
+        WeaponSounds.Play(WeaponSounds.SplatLand, shake > 0f ? 1.3f : 1f, shake > 0f ? 0.9f : 1f);
 
         // erst sammeln, dann treffen - TakeDamage kann Gegner aus Alive nehmen
         hitBuffer.Clear();

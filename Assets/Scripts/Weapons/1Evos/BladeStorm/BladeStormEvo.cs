@@ -145,6 +145,7 @@ public class BladeStormEvo : Weapon
 
             Vector2 aim = TargetPosition - (Vector2)transform.position;
             blade.Launch(transform, aim.sqrMagnitude > 0.0001f ? aim.normalized : Vector2.up, swoopAt);
+            WeaponSounds.Play(WeaponSounds.VoidKunaiThrow);
 
             fireTimer += FireInterval;
             return;

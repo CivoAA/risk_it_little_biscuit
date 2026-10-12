@@ -47,6 +47,7 @@ public class Deathstrike : Weapon
             Vector2 spawnPos = target.transform.position;
 
             GameObject ds = Instantiate(prefab, spawnPos, Quaternion.identity);
+            WeaponSounds.Play(WeaponSounds.Deathstrike);
 
             if (gameScene.IsValid() && gameScene.isLoaded)
                 SceneManager.MoveGameObjectToScene(ds, gameScene);

@@ -86,6 +86,11 @@ public class TyphoonFan : SaladFan
         get { return EvoWaveSpeed; }
     }
 
+    protected override WeaponSounds.Sfx FireSound
+    {
+        get { return WeaponSounds.TyphoonGust; }
+    }
+
     protected override void Awake()
     {
         WeaponStats max = MaxLevelStats;

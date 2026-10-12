@@ -634,7 +634,7 @@ public class MochiMelody : Weapon
         voice.Stop();
         voice.clip = clip;
         voice.pitch = pitch;
-        voice.volume = volume * master;
+        voice.volume = volume * master * AudioSettingsManager.WeaponsScale;
         voice.PlayScheduled(System.Math.Max(dsp, AudioSettings.dspTime));
     }
 

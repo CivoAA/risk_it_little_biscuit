@@ -28,6 +28,12 @@ public class ChocoChipShot : MonoBehaviour
     private float age;
     private int frameOffset;
 
+    /// <summary>
+    /// Meldet die Stelle, an der das Stueck seinen letzten Gegner getroffen hat
+    /// (Durchschlag aufgebraucht). Am Ende der Flugweite kommt nichts.
+    /// </summary>
+    public System.Action<Vector2> Spent;
+
     private SpriteRenderer sr;
     private readonly List<Enemy> hitBuffer = new List<Enemy>();
     private readonly HashSet<Enemy> alreadyHit = new HashSet<Enemy>();
@@ -70,6 +76,7 @@ public class ChocoChipShot : MonoBehaviour
 
             if (hitsLeft <= 0)
             {
+                if (Spent != null) Spent(enemy != null ? (Vector2)enemy.transform.position : from);
                 Destroy(gameObject);
                 return;
             }

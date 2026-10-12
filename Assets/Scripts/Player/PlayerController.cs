@@ -794,6 +794,16 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Kurze Unverwundbarkeit von aussen, z.B. beim Weitergeben der heissen
+    /// Kartoffel (EnemyOfenkartoffel). Verkuerzt eine laufende nie.
+    /// </summary>
+    public void GrantImmunity(float seconds)
+    {
+        isImmune = true;
+        immunityTimer = Mathf.Max(immunityTimer, seconds);
+    }
+
     private void RemoveSecondChanceBuff()
     {
         if (activeBuffs == null) return;

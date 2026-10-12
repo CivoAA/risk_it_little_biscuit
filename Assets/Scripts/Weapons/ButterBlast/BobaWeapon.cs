@@ -35,7 +35,7 @@ public class BobaWeapon : Weapon
 
         for (int i = 0; i < shots; i++)
         {
-            AudioController.Instance.PalySound(AudioController.Instance.BOBA);
+            WeaponSounds.Play(WeaponSounds.ButterShot);
 
             GameObject BOBA = Instantiate(prefab, transform.position, transform.rotation);
             Scene gameScene = RunScene.Current;

@@ -10,11 +10,17 @@ public class AudioSettingsData
     public float musicVolume = 1f;
     public float effectsVolume = 1f;
 
+    // Eigener Regler fuer die Waffen-Sounds. Wirkt zusaetzlich zu den
+    // Geraeuschen (Waffen haengen in derselben Mixer-Gruppe): 100 % = so
+    // laut wie in der WeaponSounds-Tabelle.
+    public float weaponsVolume = 1f;
+
     // Stumm-Schalter je Kanal. Die Lautstaerke darueber bleibt stehen, damit
     // der Ton beim Wiedereinschalten so laut ist wie vorher.
     public bool masterMuted;
     public bool musicMuted;
     public bool effectsMuted;
+    public bool weaponsMuted;
 }
 
 public class AudioSettingsManager : MonoBehaviour
@@ -185,6 +191,19 @@ public class AudioSettingsManager : MonoBehaviour
         SaveSettings();
     }
 
+    public void SetWeaponsVolume(float value)
+    {
+        currentSettings.weaponsVolume = value;
+        currentSettings.weaponsMuted = false;
+        SaveSettings();
+    }
+
+    public void SetWeaponsMuted(bool muted)
+    {
+        currentSettings.weaponsMuted = muted;
+        SaveSettings();
+    }
+
     public void SetMasterMuted(bool muted)
     {
         currentSettings.masterMuted = muted;
@@ -210,6 +229,15 @@ public class AudioSettingsManager : MonoBehaviour
     public float EffectiveMaster => currentSettings.masterMuted ? 0f : currentSettings.masterVolume;
     public float EffectiveMusic => currentSettings.musicMuted ? 0f : currentSettings.musicVolume;
     public float EffectiveEffects => currentSettings.effectsMuted ? 0f : currentSettings.effectsVolume;
+
+    /// <summary>
+    /// Faktor fuer die Waffen-Sounds. Kein Mixer-Kanal: WeaponSounds und die
+    /// Mochi-Melodie rechnen ihn beim Abspielen selbst ein.
+    /// </summary>
+    public float EffectiveWeapons => currentSettings.weaponsMuted ? 0f : currentSettings.weaponsVolume;
+
+    /// <summary>Waffen-Faktor ohne neuen Manager anzulegen (fuer Abspiel-Code).</summary>
+    public static float WeaponsScale => instance != null ? instance.EffectiveWeapons : 1f;
 
     public void ApplySettingsNow()
     {

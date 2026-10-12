@@ -1,0 +1,523 @@
+fileFormatVersion: 2
+guid: 475948811c4746c98c82a5a68f489664
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2842405677804647777
+    second: verkohlter_herz_wut_0
+  - first:
+      213: 1919942420718997650
+    second: verkohlter_herz_wut_1
+  - first:
+      213: 3206659350351790664
+    second: verkohlter_herz_wut_2
+  - first:
+      213: 2798784817436659236
+    second: verkohlter_herz_wut_3
+  - first:
+      213: 1240382965793333418
+    second: verkohlter_herz_wut_4
+  - first:
+      213: 2132017202464822502
+    second: verkohlter_herz_wut_5
+  - first:
+      213: 1688347226547512587
+    second: verkohlter_herz_wut_6
+  - first:
+      213: 3156296742801005261
+    second: verkohlter_herz_wut_7
+  - first:
+      213: 2665811657765018260
+    second: verkohlter_herz_wut_8
+  - first:
+      213: 2049005571622569106
+    second: verkohlter_herz_wut_9
+  - first:
+      213: 2074741177967887076
+    second: verkohlter_herz_wut_10
+  - first:
+      213: 2231827998195956544
+    second: verkohlter_herz_wut_11
+  - first:
+      213: 2722567658188098305
+    second: verkohlter_herz_wut_12
+  - first:
+      213: 4040337761808671882
+    second: verkohlter_herz_wut_13
+  - first:
+      213: 2025820447725315191
+    second: verkohlter_herz_wut_14
+  - first:
+      213: 2846482655740156400
+    second: verkohlter_herz_wut_15
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 4096
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: verkohlter_herz_wut_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 144
+        height: 152
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4342105263157895}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8a4cf79d7ef3427fb956c3ab76ee4b56
+      internalID: 2842405677804647777
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_wut_1
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 0
+        width: 144
+        height: 152
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4342105263157895}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5df5373d866b46a7ace2042daf625e08
+      internalID: 1919942420718997650
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_wut_2
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 0
+        width: 144
+        height: 152
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4342105263157895}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1e8de358e9bf47c3945a29a443559392
+      internalID: 3206659350351790664
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_wut_3
+      rect:
+        serializedVersion: 2
+        x: 432
+        y: 0
+        width: 144
+        height: 152
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4342105263157895}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0c1b61679f6244ef97b511b881af01a0
+      internalID: 2798784817436659236
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_wut_4
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 0
+        width: 144
+        height: 152
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4342105263157895}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6798708c8c1c4794a3ef17ff8515530a
+      internalID: 1240382965793333418
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_wut_5
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 0
+        width: 144
+        height: 152
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4342105263157895}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c6f95229c5c14657b9b1b63b94418b97
+      internalID: 2132017202464822502
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_wut_6
+      rect:
+        serializedVersion: 2
+        x: 864
+        y: 0
+        width: 144
+        height: 152
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4342105263157895}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea1041d2408640b1adf185ae53519c8d
+      internalID: 1688347226547512587
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_wut_7
+      rect:
+        serializedVersion: 2
+        x: 1008
+        y: 0
+        width: 144
+        height: 152
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4342105263157895}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dae899fddd394d1db7e94e6deeabe677
+      internalID: 3156296742801005261
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_wut_8
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 0
+        width: 144
+        height: 152
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4342105263157895}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d1b1d9cd0a0e4db6b5d0946a04e30ab2
+      internalID: 2665811657765018260
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_wut_9
+      rect:
+        serializedVersion: 2
+        x: 1296
+        y: 0
+        width: 144
+        height: 152
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4342105263157895}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e88c35b21ad4136b197b9ebc7bb43f9
+      internalID: 2049005571622569106
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_wut_10
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 0
+        width: 144
+        height: 152
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4342105263157895}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f824f7481d7845b4b0300fb94612efe5
+      internalID: 2074741177967887076
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_wut_11
+      rect:
+        serializedVersion: 2
+        x: 1584
+        y: 0
+        width: 144
+        height: 152
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4342105263157895}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3e26ab2bb4164599a3be6ff19ba95307
+      internalID: 2231827998195956544
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_wut_12
+      rect:
+        serializedVersion: 2
+        x: 1728
+        y: 0
+        width: 144
+        height: 152
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4342105263157895}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 322c27348ada4e2c9ebb9f379478120f
+      internalID: 2722567658188098305
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_wut_13
+      rect:
+        serializedVersion: 2
+        x: 1872
+        y: 0
+        width: 144
+        height: 152
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4342105263157895}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 223b34c059824aa1b13bfd7d4752bd4a
+      internalID: 4040337761808671882
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_wut_14
+      rect:
+        serializedVersion: 2
+        x: 2016
+        y: 0
+        width: 144
+        height: 152
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4342105263157895}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 14777d5ec1b34080ac4daf00e75fcfa1
+      internalID: 2025820447725315191
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: verkohlter_herz_wut_15
+      rect:
+        serializedVersion: 2
+        x: 2160
+        y: 0
+        width: 144
+        height: 152
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4342105263157895}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75b3a00b372f4016b39bc4dfc7708a3d
+      internalID: 2846482655740156400
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      verkohlter_herz_wut_0: 2842405677804647777
+      verkohlter_herz_wut_1: 1919942420718997650
+      verkohlter_herz_wut_10: 2074741177967887076
+      verkohlter_herz_wut_11: 2231827998195956544
+      verkohlter_herz_wut_12: 2722567658188098305
+      verkohlter_herz_wut_13: 4040337761808671882
+      verkohlter_herz_wut_14: 2025820447725315191
+      verkohlter_herz_wut_15: 2846482655740156400
+      verkohlter_herz_wut_2: 3206659350351790664
+      verkohlter_herz_wut_3: 2798784817436659236
+      verkohlter_herz_wut_4: 1240382965793333418
+      verkohlter_herz_wut_5: 2132017202464822502
+      verkohlter_herz_wut_6: 1688347226547512587
+      verkohlter_herz_wut_7: 3156296742801005261
+      verkohlter_herz_wut_8: 2665811657765018260
+      verkohlter_herz_wut_9: 2049005571622569106
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

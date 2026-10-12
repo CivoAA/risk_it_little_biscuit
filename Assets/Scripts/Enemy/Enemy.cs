@@ -203,6 +203,31 @@ public class Enemy : MonoBehaviour
         health = Mathf.Max(1f, maxHealth * Mathf.Clamp01(fraction));
     }
 
+    /// <summary>Heilt, hoechstens bis <paramref name="capFraction"/> des vollen Lebens (Schlagadern des Herzens).</summary>
+    public void Heal(float amount, float capFraction = 1f)
+    {
+        if (amount <= 0f || health <= 0f) return;
+        float cap = MaxHealth * Mathf.Clamp01(capFraction);
+        if (health >= cap) return;
+        health = Mathf.Min(cap, health + amount);
+    }
+
+    /// <summary>
+    /// Werte fuer einen Gegner, der zur Laufzeit ohne Prefab und ohne Katalog-Id
+    /// entsteht (Schlagadern und Glutlinge im Herzen des Verkohlten). Nur
+    /// wirksam, solange Awake noch nicht lief - also am noch inaktiven Objekt
+    /// aufrufen und es erst danach einschalten.
+    /// </summary>
+    public void ConfigureRuntime(float hp, float contactDamage, float speed, int exp)
+    {
+        id = EnemyId.None;
+        health = hp;
+        damage = contactDamage;
+        moveSpeed = speed;
+        experienceToGive = exp;
+        rightlooking = false;
+    }
+
     // ---------------------------------------------------------------- Register
 
     private static readonly List<Enemy> alive = new List<Enemy>();
@@ -291,6 +316,19 @@ public class Enemy : MonoBehaviour
     /// <summary>Beim Tod keinen Todeseffekt des Prefabs abspielen (das Skript zeigt einen eigenen).</summary>
     [System.NonSerialized] public bool SkipDeathEffect;
 
+    /// <summary>
+    /// Faktor auf jeden Treffer, 1 = normal. Das Herz des Verkohlten liegt nach
+    /// dem Panzerbruch kurz offen und nimmt dann mehr Schaden.
+    /// </summary>
+    [System.NonSerialized] public float DamageTakenFactor = 1f;
+
+    /// <summary>
+    /// Gesetzt = Beruehrungsschaden nur, wenn das hier ja sagt. Das Herz des
+    /// Verkohlten braucht seinen Trefferkreis fuer Schuesse, soll aber nur im
+    /// Lavabecken unter ihm brennen - nicht hinter ihm auf dem Boden.
+    /// </summary>
+    [System.NonSerialized] public System.Func<bool> ContactAllowed;
+
     private bool deathHeld;
 
     /// <summary>Wer der Gegner ist: Katalog-Id, sonst wie der Director ihn gesetzt hat.</summary>
@@ -347,6 +385,50 @@ public class Enemy : MonoBehaviour
 
         // Elites erkennt man am Leuchten.
         if (role == EnemyRole.Elite && spriteRenderer != null) EliteGlow.Attach(spriteRenderer);
+
+        EnableSmoothMotion();
+    }
+
+    // ------------------------------------------------------ Weiche Bewegung
+
+    /// <summary>Gegner mit Rigidbody-Interpolation (siehe <see cref="EnableSmoothMotion"/>).</summary>
+    private bool smoothMotion;
+    private bool restoreInterpolation;
+
+    /// <summary>
+    /// Die Physik rechnet mit 50 Hz, der Bildschirm zeigt 60-240 Bilder. Ohne
+    /// Interpolation springt ein Gegner nur jedes 2.-5. Bild weiter, waehrend
+    /// Boden und Spieler (der interpoliert) fluessig laufen - die Gegner
+    /// zittern dann sichtbar gegen den Hintergrund.
+    ///
+    /// Nur fuer Normalgegner und Elites, die allein ueber die Geschwindigkeit
+    /// laufen. Bosse und Teleporter setzen ihre Position selbst per Transform -
+    /// das wuerde die Interpolation jedes Bild wieder ueberschreiben.
+    /// </summary>
+    private void EnableSmoothMotion()
+    {
+        if (rb == null || rb.bodyType != RigidbodyType2D.Dynamic) return;
+        if (role != EnemyRole.Normal && role != EnemyRole.Elite) return;
+        if (GetComponent<EnemyTeleport>() != null) return;
+
+        rb.interpolation = RigidbodyInterpolation2D.Interpolate;
+        smoothMotion = true;
+    }
+
+    /// <summary>
+    /// Versetzt den Gegner sofort. Mit Interpolation wuerde ein blosses
+    /// transform.position den Sprung verschlucken oder ihn ueber den
+    /// Bildschirm ziehen - darum fuer einen Physikschritt ohne.
+    /// </summary>
+    public void Teleport(Vector2 position)
+    {
+        if (smoothMotion)
+        {
+            rb.interpolation = RigidbodyInterpolation2D.None;
+            restoreInterpolation = true;
+        }
+        if (rb != null) rb.position = position;
+        transform.position = new Vector3(position.x, position.y, transform.position.z);
     }
 
     /// <summary>Altbestand: der Schalter "MiniBoss" am Prefab meint heute Elite.</summary>
@@ -412,6 +494,13 @@ public class Enemy : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
+        // Nach einem Teleport ist ein Physikschritt vergangen: wieder weich.
+        if (restoreInterpolation && rb != null && rb.simulated)
+        {
+            rb.interpolation = RigidbodyInterpolation2D.Interpolate;
+            restoreInterpolation = false;
+        }
+
         PlayerController player = PlayerController.Instance;
         if (player == null || !player.gameObject.activeSelf)
         {
@@ -917,7 +1006,7 @@ public class Enemy : MonoBehaviour
 
     protected virtual void OnCollisionStay2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player") && (ContactAllowed == null || ContactAllowed()))
         {
             PlayerController.Instance.TakeDamage(damage);
         }
@@ -925,7 +1014,7 @@ public class Enemy : MonoBehaviour
 
     protected virtual void OnTriggerStay2D(Collider2D other)
     {
-        if (other.CompareTag("PlayerHitbox"))
+        if (other.CompareTag("PlayerHitbox") && (ContactAllowed == null || ContactAllowed()))
         {
             PlayerController.Instance.TakeDamage(damage);
         }
@@ -937,7 +1026,7 @@ public class Enemy : MonoBehaviour
     {
         if (Untouchable) return;
 
-        float finalDamage = damage * PlayerController.Instance.damageMultiplier * Bestiary.DamageFactor(id);
+        float finalDamage = damage * PlayerController.Instance.damageMultiplier * Bestiary.DamageFactor(id) * DamageTakenFactor;
         float critChance = PlayerController.Instance.critChance;
         float critDamage = PlayerController.Instance.critDamage;
 

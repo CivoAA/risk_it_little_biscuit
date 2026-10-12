@@ -60,11 +60,11 @@ public class ChocoChips : Weapon
     }
 
     [Tooltip("Ausgangspunkt relativ zum Spieler-Pivot (der liegt unter den Fuessen).")]
-    [SerializeField] private Vector2 originOffset = new Vector2(0f, 0.4f);
+    [SerializeField] protected Vector2 originOffset = new Vector2(0f, 0.4f);
 
-    private float spawnCounter;
-    private bool firing;
-    private Vector2 lastMoveDir = Vector2.right;
+    protected float spawnCounter;
+    protected bool firing;
+    protected Vector2 lastMoveDir = Vector2.right;
 
     public int CurrentPierce
     {
@@ -90,7 +90,8 @@ public class ChocoChips : Weapon
         if (spawnCounter <= 0f) StartCoroutine(Volley());
     }
 
-    private IEnumerator Volley()
+    /// <summary>Eine Salve. Setzt am Ende <see cref="spawnCounter"/> neu und gibt <see cref="firing"/> frei.</summary>
+    protected virtual IEnumerator Volley()
     {
         firing = true;
 
@@ -110,7 +111,7 @@ public class ChocoChips : Weapon
             // Kommt aus dem Bauch, nicht exakt aus einem Punkt.
             origin += Random.insideUnitCircle * 0.12f;
 
-            AudioController.Instance.PalySound(AudioController.Instance.Werfen, 0.06f);
+            WeaponSounds.Play(WeaponSounds.ChocoShot);
             Spawn(origin, dir, range);
 
             if (i < chips - 1) yield return new WaitForSeconds(ChipInterval);
@@ -120,7 +121,7 @@ public class ChocoChips : Weapon
         firing = false;
     }
 
-    private void Spawn(Vector2 origin, Vector2 dir, float range)
+    protected virtual void Spawn(Vector2 origin, Vector2 dir, float range)
     {
         GameObject go = new GameObject("ChocoChip");
         go.transform.position = origin;
@@ -139,7 +140,7 @@ public class ChocoChips : Weapon
     }
 
     /// <summary>Naechster lebender Gegner im Radius, oder null.</summary>
-    private static Enemy Nearest(Vector2 origin, float radius)
+    protected static Enemy Nearest(Vector2 origin, float radius)
     {
         Enemy best = null;
         float bestSqr = radius * radius;

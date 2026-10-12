@@ -1,0 +1,419 @@
+fileFormatVersion: 2
+guid: 7c62da83db7a459f8a8f4c0637aeb11c
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3540507181588870478
+    second: kyubi_slam_112_0
+  - first:
+      213: 4045224268850297206
+    second: kyubi_slam_112_1
+  - first:
+      213: 3746312054807075422
+    second: kyubi_slam_112_2
+  - first:
+      213: 1927752287406363547
+    second: kyubi_slam_112_3
+  - first:
+      213: 2501464830817049110
+    second: kyubi_slam_112_4
+  - first:
+      213: 3014824262358129001
+    second: kyubi_slam_112_5
+  - first:
+      213: 3086861965411481786
+    second: kyubi_slam_112_6
+  - first:
+      213: 3343864771558356771
+    second: kyubi_slam_112_7
+  - first:
+      213: 4291788002297627722
+    second: kyubi_slam_112_8
+  - first:
+      213: 4423945257606439909
+    second: kyubi_slam_112_9
+  - first:
+      213: 2581982801310968436
+    second: kyubi_slam_112_10
+  - first:
+      213: 3063087777247451946
+    second: kyubi_slam_112_11
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 4096
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: kyubi_slam_112_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 252
+        height: 262
+      alignment: 9
+      pivot: {x: 0.5, y: 0.39541984732824437}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82014aa40068463ab863c98da23ab2a3
+      internalID: 3540507181588870478
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kyubi_slam_112_1
+      rect:
+        serializedVersion: 2
+        x: 252
+        y: 0
+        width: 252
+        height: 262
+      alignment: 9
+      pivot: {x: 0.5, y: 0.39541984732824437}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f666c601ea248c5ba466ff8eaf33585
+      internalID: 4045224268850297206
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kyubi_slam_112_2
+      rect:
+        serializedVersion: 2
+        x: 504
+        y: 0
+        width: 252
+        height: 262
+      alignment: 9
+      pivot: {x: 0.5, y: 0.39541984732824437}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 70186e7694f24839bc21af6b9c1942a6
+      internalID: 3746312054807075422
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kyubi_slam_112_3
+      rect:
+        serializedVersion: 2
+        x: 756
+        y: 0
+        width: 252
+        height: 262
+      alignment: 9
+      pivot: {x: 0.5, y: 0.39541984732824437}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ac84944e48a243dfaf01588c4d43b928
+      internalID: 1927752287406363547
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kyubi_slam_112_4
+      rect:
+        serializedVersion: 2
+        x: 1008
+        y: 0
+        width: 252
+        height: 262
+      alignment: 9
+      pivot: {x: 0.5, y: 0.39541984732824437}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a33c245cf8a24ebaab003a53f44ef21d
+      internalID: 2501464830817049110
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kyubi_slam_112_5
+      rect:
+        serializedVersion: 2
+        x: 1260
+        y: 0
+        width: 252
+        height: 262
+      alignment: 9
+      pivot: {x: 0.5, y: 0.39541984732824437}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee192fe57fcb4144b5d8e226b65c5d1a
+      internalID: 3014824262358129001
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kyubi_slam_112_6
+      rect:
+        serializedVersion: 2
+        x: 1512
+        y: 0
+        width: 252
+        height: 262
+      alignment: 9
+      pivot: {x: 0.5, y: 0.39541984732824437}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 439189b967c24d96ab5d11eec6e08f37
+      internalID: 3086861965411481786
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kyubi_slam_112_7
+      rect:
+        serializedVersion: 2
+        x: 1764
+        y: 0
+        width: 252
+        height: 262
+      alignment: 9
+      pivot: {x: 0.5, y: 0.39541984732824437}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 014fe7b7a0e241a9842d4f99956a8ce1
+      internalID: 3343864771558356771
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kyubi_slam_112_8
+      rect:
+        serializedVersion: 2
+        x: 2016
+        y: 0
+        width: 252
+        height: 262
+      alignment: 9
+      pivot: {x: 0.5, y: 0.39541984732824437}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 966b04c15d0e4c4e893718c25fc7cafc
+      internalID: 4291788002297627722
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kyubi_slam_112_9
+      rect:
+        serializedVersion: 2
+        x: 2268
+        y: 0
+        width: 252
+        height: 262
+      alignment: 9
+      pivot: {x: 0.5, y: 0.39541984732824437}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: acc635d6de2043ad93dcf9014913daac
+      internalID: 4423945257606439909
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kyubi_slam_112_10
+      rect:
+        serializedVersion: 2
+        x: 2520
+        y: 0
+        width: 252
+        height: 262
+      alignment: 9
+      pivot: {x: 0.5, y: 0.39541984732824437}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9c75c57ed35b41c68c29f93f40894897
+      internalID: 2581982801310968436
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kyubi_slam_112_11
+      rect:
+        serializedVersion: 2
+        x: 2772
+        y: 0
+        width: 252
+        height: 262
+      alignment: 9
+      pivot: {x: 0.5, y: 0.39541984732824437}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 36e0004df4b04006b0eaa0a70c325047
+      internalID: 3063087777247451946
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      kyubi_slam_112_0: 3540507181588870478
+      kyubi_slam_112_1: 4045224268850297206
+      kyubi_slam_112_10: 2581982801310968436
+      kyubi_slam_112_11: 3063087777247451946
+      kyubi_slam_112_2: 3746312054807075422
+      kyubi_slam_112_3: 1927752287406363547
+      kyubi_slam_112_4: 2501464830817049110
+      kyubi_slam_112_5: 3014824262358129001
+      kyubi_slam_112_6: 3086861965411481786
+      kyubi_slam_112_7: 3343864771558356771
+      kyubi_slam_112_8: 4291788002297627722
+      kyubi_slam_112_9: 4423945257606439909
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

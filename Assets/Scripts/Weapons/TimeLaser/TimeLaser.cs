@@ -62,7 +62,7 @@ public class TimeLaser : Weapon
 
     private void Fire(Vector3 targetPosition)
     {
-        AudioController.Instance.PalySound(AudioController.Instance.Laser);
+        WeaponSounds.Play(WeaponSounds.LaserShot);
 
         // Das Sprite zeigt vom Pivot aus nach links, darum +180
         Vector2 direction = (targetPosition - transform.position).normalized;

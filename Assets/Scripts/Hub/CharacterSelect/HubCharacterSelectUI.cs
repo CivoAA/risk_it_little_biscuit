@@ -99,7 +99,9 @@ public class HubCharacterSelectUI : MonoBehaviour
     // Bilder pro Sekunde, wenn ein gemaltes Portraet unter dem Cursor laeuft
     private const float PortraitFps = 6f;
 
-    private static readonly Color Silhouette = new Color(0.11f, 0.08f, 0.1f, 1f);
+    // Gesperrte Charaktere: stehendes Bild in dunklem Grau (Helligkeit = Grund + Luma * Anteil)
+    private const float LockedGreyBase = 0.06f, LockedGreyLuma = 0.5f;
+    private static readonly Dictionary<Sprite, Sprite> greyCache = new Dictionary<Sprite, Sprite>();
 
     // ==================================================================
     //  Zustand
@@ -160,6 +162,7 @@ public class HubCharacterSelectUI : MonoBehaviour
         public Image Frame, Back, Portrait, Lock, Question, Check, KeyChip, Glow;
         public TextMeshProUGUI Key;
         public Puppet Puppet;
+        public Sprite LockedFrame;       // gesperrt: das eine stehende Bild aus der Animation
     }
 
     private sealed class Btn
@@ -218,6 +221,8 @@ public class HubCharacterSelectUI : MonoBehaviour
 
     // Zeitmarken fuer die kleinen Auftritte (unscaledTime)
     private float openedAt = -10f, cursorAt = -10f, chosenAt = -10f;
+    private int stageLockedChar = -1;
+    private Sprite stageLockedFrame;
     private float lastClickAt = -10f;
     private int lastClickSlot = -1;
     private Color spotColor, spotTarget;
@@ -249,6 +254,7 @@ public class HubCharacterSelectUI : MonoBehaviour
     {
         // Szenenwechsel mit offener Auswahl: die Sperre wieder abmelden, sonst
         // reagiert der Hub beim naechsten Mal auf gar nichts mehr.
+        ClearGreyCache();
         if (!IsOpen) return;
         IsOpen = false;
         HubUI.PopModal();
@@ -462,6 +468,8 @@ public class HubCharacterSelectUI : MonoBehaviour
         descText = OptionsKit.Label("Desc", page, InfoX, StageY + 43, InfoW, 40, "", textFont,
                                     OptionsKit.SizeText, GameHudSkin.Parchment, TextAlignmentOptions.TopLeft);
         descText.textWrappingMode = TextWrappingModes.Normal;
+        // Zu lange Texte enden mit "..." statt in die Startwaffe zu laufen.
+        descText.overflowMode = TextOverflowModes.Ellipsis;
 
         string wl = Loc.Get("ui.charselect.weapon", "STARTWAFFE");
         // Das 14er-Werkbanksymbol 1:1 - groessere Symbole gibt es nicht fuer jede Waffe,
@@ -778,6 +786,7 @@ public class HubCharacterSelectUI : MonoBehaviour
             SlotView s = slots[i];
             int c = pageIndex * PerPage + i;
             s.Character = c < Characters.Count ? c : -1;
+            s.LockedFrame = null;
             s.Root.SetActive(s.Character >= 0 || showEmptySlots);
 
             // Versetzte Startphase - sonst atmen alle Kekse im Gleichtakt.
@@ -1054,25 +1063,30 @@ public class HubCharacterSelectUI : MonoBehaviour
 
             // Gemaltes Portraet (CharacterLooks.portrait): steht still, unter dem
             // Cursor huepft die Figur und der Strahlenkranz dreht sich. Gesperrte
-            // Charaktere bleiben beim Schatten aus der Animation - vom Portraet
-            // wuerde nur ein dunkles Quadrat uebrig.
-            Sprite[] icon = available ? CharacterLooks.PortraitFor(s.Character) : null;
+            // Charaktere zeigen das erste Bild in dunklem Grau und bewegen sich nicht.
+            Sprite[] icon = CharacterLooks.PortraitFor(s.Character);
             if (icon != null)
             {
-                int k = isCursor && animate ? Mathf.FloorToInt(now * PortraitFps) % icon.Length : 0;
+                int k = available && isCursor && animate ? Mathf.FloorToInt(now * PortraitFps) % icon.Length : 0;
                 s.Portrait.enabled = true;
-                s.Portrait.sprite = icon[k];
+                s.Portrait.sprite = available ? icon[k] : Grey(icon[k]);
                 s.Portrait.color = Color.white;
                 s.Portrait.rectTransform.sizeDelta = new Vector2(icon[k].rect.width, icon[k].rect.height);
                 s.Portrait.rectTransform.anchoredPosition = Vector2.zero;
             }
 
             // Der Keks unter dem Cursor trippelt auf der Stelle - er will los.
-            Sprite frame = icon != null ? null : s.Puppet.Frame(isCursor && animate);
+            Sprite frame = icon != null ? null : s.Puppet.Frame(available && isCursor && animate);
+            if (frame != null && !available)
+            {
+                // Ohne Portraet: das erste Bild festhalten, damit nichts atmet.
+                if (s.LockedFrame == null) s.LockedFrame = frame;
+                frame = s.LockedFrame;
+            }
             if (icon == null) s.Portrait.enabled = frame != null;
             if (frame != null)
             {
-                s.Portrait.sprite = frame;
+                s.Portrait.sprite = available ? frame : Grey(frame);
                 Vector2 size = FitSize(frame, PortraitTarget);
                 s.Portrait.rectTransform.sizeDelta = size;
                 // Etwas tiefer als mittig: der Kopf soll ganz ins Fenster, die Fuesse duerfen raus.
@@ -1082,7 +1096,7 @@ public class HubCharacterSelectUI : MonoBehaviour
                 Vector2 shift = new Vector2(Mathf.Round((frame.rect.width / 2f - body.center.x) * bk),
                                             Mathf.Round((frame.rect.height / 2f - body.center.y) * bk));
                 s.Portrait.rectTransform.anchoredPosition = shift + new Vector2(0f, -Mathf.Round(body.height * bk * 6f / 64f));
-                s.Portrait.color = Characters.IsAvailable(s.Character) ? Color.white : Silhouette;
+                s.Portrait.color = Color.white;
             }
 
             float glow = 0f;
@@ -1103,6 +1117,13 @@ public class HubCharacterSelectUI : MonoBehaviour
 
         stagePuppet.Set(any ? AnimatorFor(c) : null, 0f);
         Sprite frame = stagePuppet.Frame(false);
+        bool locked = any && !Characters.IsAvailable(c);
+        if (frame != null && locked)
+        {
+            // Gesperrt: steht still - das erste Bild nach dem Wechsel bleibt.
+            if (stageLockedChar != c || stageLockedFrame == null) { stageLockedChar = c; stageLockedFrame = frame; }
+            frame = stageLockedFrame;
+        }
 
         // Licht blendet zur Farbe des neuen Charakters hinueber
         spotColor = Color.Lerp(spotColor, spotTarget, animate ? 1f - Mathf.Exp(-dt * 10f) : 1f);
@@ -1113,7 +1134,7 @@ public class HubCharacterSelectUI : MonoBehaviour
         if (frame == null) stageChar.color = Color.clear;
         else
         {
-            stageChar.sprite = frame;
+            stageChar.sprite = locked ? Grey(frame) : frame;
             Vector2 size = FitSize(frame, StageTarget);
 
             // Fuesse auf die Platte: leere Zeilen unter den Fuessen stehen in CharacterLooks.
@@ -1142,7 +1163,7 @@ public class HubCharacterSelectUI : MonoBehaviour
                 else if (right > StageX + StageW - StageMargin) x -= right - (StageX + StageW - StageMargin);
             }
             OptionsKit.Move(stageChar.rectTransform, x, y, size.x, size.y);
-            stageChar.color = Characters.IsAvailable(c) ? Color.white : Silhouette;
+            stageChar.color = Color.white;
         }
 
         // Kruemel steigen im Licht langsam auf
@@ -1254,6 +1275,58 @@ public class HubCharacterSelectUI : MonoBehaviour
     }
 
     Color SpotColorFor(int index) => Color.Lerp(CharacterLooks.AccentFor(index), GameHudSkin.Cream, 0.45f);
+
+    /// <summary>
+    /// Graue Kopie eines Sprites fuer gesperrte Charaktere: gleiche Groesse,
+    /// gleicher Pivot, nur entsaettigt und abgedunkelt. Die Textur muss nicht
+    /// lesbar sein - sie geht ueber eine RenderTexture. Einmal je Sprite.
+    /// </summary>
+    static Sprite Grey(Sprite src)
+    {
+        if (src == null) return null;
+        if (greyCache.TryGetValue(src, out Sprite done) && done != null) return done;
+
+        Texture2D tex = src.texture;
+        Rect r = src.rect;
+        int w = Mathf.RoundToInt(r.width), h = Mathf.RoundToInt(r.height);
+
+        RenderTexture rt = RenderTexture.GetTemporary(tex.width, tex.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB);
+        RenderTexture prev = RenderTexture.active;
+        Graphics.Blit(tex, rt);
+        RenderTexture.active = rt;
+        var copy = new Texture2D(w, h, TextureFormat.RGBA32, false) { filterMode = FilterMode.Point, wrapMode = TextureWrapMode.Clamp };
+        copy.ReadPixels(new Rect(Mathf.RoundToInt(r.x), Mathf.RoundToInt(r.y), w, h), 0, 0);
+        RenderTexture.active = prev;
+        RenderTexture.ReleaseTemporary(rt);
+
+        Color32[] px = copy.GetPixels32();
+        for (int i = 0; i < px.Length; i++)
+        {
+            Color32 p = px[i];
+            float l = (0.299f * p.r + 0.587f * p.g + 0.114f * p.b) / 255f;
+            byte v = (byte)Mathf.RoundToInt(Mathf.Clamp01(LockedGreyBase + l * LockedGreyLuma) * 255f);
+            px[i] = new Color32(v, v, v, p.a);
+        }
+        copy.SetPixels32(px);
+        copy.Apply(false, true);
+
+        Sprite grey = Sprite.Create(copy, new Rect(0, 0, w, h), new Vector2(src.pivot.x / r.width, src.pivot.y / r.height),
+                                    src.pixelsPerUnit, 0, SpriteMeshType.FullRect, src.border);
+        grey.name = src.name + "_grey";
+        greyCache[src] = grey;
+        return grey;
+    }
+
+    static void ClearGreyCache()
+    {
+        foreach (Sprite g in greyCache.Values)
+        {
+            if (g == null) continue;
+            Destroy(g.texture);
+            Destroy(g);
+        }
+        greyCache.Clear();
+    }
 
     /// <summary>Animator des Charakters: erst aus <see cref="CharacterLooks"/>, sonst vom Hub-Spieler.</summary>
     static RuntimeAnimatorController AnimatorFor(int index)

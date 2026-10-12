@@ -2210,6 +2210,12 @@ MonoBehaviour:
   - EvoWeapon: {fileID: 4052448573895074782}
     RequiredWeapon1: {fileID: 1153859984778591767}
     RequiredWeapon2: {fileID: 200782388726875803}
+  - EvoWeapon: {fileID: 5991775075608281467}
+    RequiredWeapon1: {fileID: 5000454638203962994}
+    RequiredWeapon2: {fileID: 8707970117108101809}
+  - EvoWeapon: {fileID: 5655142979738305804}
+    RequiredWeapon1: {fileID: 7014266575022002265}
+    RequiredWeapon2: {fileID: 1253188992596307305}
   immunityDuration: 0.3
   immunityTimer: 0
 --- !u!95 &3309684457716786782
@@ -10242,8 +10248,8 @@ MonoBehaviour:
   weaponLevel: -1
   maxweaponLevel: 5
   stats: []
-  weaponImage: {fileID: 712035800519618848, guid: ac08ff516ef6d8c4c9e0b982de30b3fc, type: 3}
-  weaponIcon: {fileID: 712035800519618848, guid: ac08ff516ef6d8c4c9e0b982de30b3fc, type: 3}
+  weaponImage: {fileID: 2095794922842456303, guid: 6036ba35178747af8c3ca9a729a7d918, type: 3}
+  weaponIcon: {fileID: 2095794922842456303, guid: 6036ba35178747af8c3ca9a729a7d918, type: 3}
   weaponIconEvo: {fileID: 0}
   posssibleEvo: 0
   hasBeenRemoved: 0
@@ -10760,8 +10766,8 @@ MonoBehaviour:
     AttackSpeed: 0
     shots: 0
     description: +48% Gegner, +93% Leben, +30% Schaden, +76% Belohnung
-  weaponImage: {fileID: -3627844698242013704, guid: 809b5a194789472183719b5d6f0d38fe, type: 3}
-  weaponIcon: {fileID: -3627844698242013704, guid: 809b5a194789472183719b5d6f0d38fe, type: 3}
+  weaponImage: {fileID: 3139910639884746714, guid: 1313ab27cf0249809b609d32317cb04f, type: 3}
+  weaponIcon: {fileID: 3139910639884746714, guid: 1313ab27cf0249809b609d32317cb04f, type: 3}
   weaponIconEvo: {fileID: 0}
   posssibleEvo: 0
   hasBeenRemoved: 0
@@ -10882,7 +10888,7 @@ GameObject:
   - component: {fileID: 8009991847512401143}
   - component: {fileID: 5991775075608281467}
   m_Layer: 0
-  m_Name: Choco Chips Evo
+  m_Name: Milk Crown Evo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10919,8 +10925,8 @@ MonoBehaviour:
   weaponLevel: -1
   maxweaponLevel: 0
   stats: []
-  weaponImage: {fileID: 3566468386455610697, guid: 144a07fa5e744f69be7ebefa9cbacf82, type: 3}
-  weaponIcon: {fileID: 3566468386455610697, guid: 144a07fa5e744f69be7ebefa9cbacf82, type: 3}
+  weaponImage: {fileID: 1260111996921942723, guid: ac55b65c02aa41bda914bb6d6c9f7c17, type: 3}
+  weaponIcon: {fileID: 1260111996921942723, guid: ac55b65c02aa41bda914bb6d6c9f7c17, type: 3}
   weaponIconEvo: {fileID: 0}
   posssibleEvo: 0
   hasBeenRemoved: 0
@@ -11083,8 +11089,8 @@ MonoBehaviour:
   weaponLevel: -1
   maxweaponLevel: 0
   stats: []
-  weaponImage: {fileID: 4228068921110120819, guid: 0750c7d7a30445ed9c546433d7c66f29, type: 3}
-  weaponIcon: {fileID: 4228068921110120819, guid: 0750c7d7a30445ed9c546433d7c66f29, type: 3}
+  weaponImage: {fileID: 3780453611678588807, guid: 50bb193a9daa4ef0aaef70b0a281e6e6, type: 3}
+  weaponIcon: {fileID: 3780453611678588807, guid: 50bb193a9daa4ef0aaef70b0a281e6e6, type: 3}
   weaponIconEvo: {fileID: 0}
   posssibleEvo: 0
   hasBeenRemoved: 0

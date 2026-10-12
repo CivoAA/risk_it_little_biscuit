@@ -18,13 +18,14 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class FoxWisp : MonoBehaviour
 {
-    private enum State { Idle, Out, Back, Leap, Vanish }
+    private enum State { Idle, Out, Back, Leap, Vanish, Absorb }
 
     private const float Fps = 10f;
     private const int Ghosts = 4;
     private const int History = 10;
     private const float BackTime = 0.4f;
     private const float VanishTime = 0.2f;
+    private const float AbsorbTime = 0.32f;
 
     /// <summary>Der Gegner sitzt mit dem Pivot unten - getroffen wird etwas hoeher.</summary>
     private static readonly Vector2 AimOffset = new Vector2(0f, 0.35f);
@@ -36,6 +37,9 @@ public class FoxWisp : MonoBehaviour
 
     public Vector2 Slot;
     public float ReadyAt;
+
+    /// <summary>Eigene Bilder (Evo); null = die normalen des Fuchsfeuers.</summary>
+    public Sprite[] Frames;
 
     private State state = State.Idle;
     private SpriteRenderer body;
@@ -55,6 +59,9 @@ public class FoxWisp : MonoBehaviour
     private float cooldown;
     private float animPhase;
     private bool leap;
+    private Transform absorbTo;
+    private Vector2 absorbOffset;
+    private bool absorbPending;
 
     public bool IsIdle => state == State.Idle;
     public Vector2 Position => pos;
@@ -126,6 +133,48 @@ public class FoxWisp : MonoBehaviour
         BeginFlight(enemy, State.Out, 1.6f);
     }
 
+    /// <summary>
+    /// Fliegt in <paramref name="to"/> hinein und ist weg (Kyuubi: die Schwaenze
+    /// kehren in Inari zurueck). Ist es gerade zu einem Gegner unterwegs,
+    /// trifft es erst noch.
+    /// </summary>
+    public void Absorb(Transform to, Vector2 offset)
+    {
+        if (this == null || state == State.Vanish || state == State.Absorb) return;
+        absorbTo = to;
+        absorbOffset = offset;
+        if (state == State.Out)
+        {
+            absorbPending = true;
+            return;
+        }
+        StartAbsorb();
+    }
+
+    private void StartAbsorb()
+    {
+        from = pos;
+        Vector2 aimAt = absorbTo != null ? (Vector2)absorbTo.position + absorbOffset : pos;
+        ctrl = from + (aimAt - from) * 0.5f + Vector2.up * 1.1f;
+        t = 0f;
+        state = State.Absorb;
+    }
+
+    /// <summary>Fliegt von <paramref name="at"/> im Bogen an seinen Platz (nach dem Kyuubi).</summary>
+    public void ReturnFrom(Vector2 at, float pauseAfter)
+    {
+        pos = at;
+        for (int i = 0; i < History; i++) history[i] = at;
+        from = at;
+        Vector2 d = Slot - at;
+        Vector2 perp = d.sqrMagnitude > 0.0001f ? new Vector2(-d.y, d.x).normalized : Vector2.up;
+        ctrl = at + d * 0.5f + perp * (Random.value < 0.5f ? -1.5f : 1.5f) + Vector2.up * 1.5f;
+        cooldown = pauseAfter;
+        t = 0f;
+        state = State.Back;
+        transform.position = Snap(pos);
+    }
+
     /// <summary>Verglimmt und verschwindet (Waffe weg oder ein Irrlicht zu viel).</summary>
     public void Vanish()
     {
@@ -184,6 +233,17 @@ public class FoxWisp : MonoBehaviour
                 }
                 break;
 
+            case State.Absorb:
+                t += dt / AbsorbTime;
+                Vector2 home = absorbTo != null ? (Vector2)absorbTo.position + absorbOffset : pos;
+                pos = Bezier(from, ctrl, home, EaseIn(Mathf.Min(1f, t)));
+                if (t >= 1f)
+                {
+                    Destroy(gameObject);
+                    return;
+                }
+                break;
+
             case State.Vanish:
                 t += dt / VanishTime;
                 if (t >= 1f)
@@ -209,6 +269,13 @@ public class FoxWisp : MonoBehaviour
             return;
         }
 
+        if (absorbPending)
+        {
+            absorbPending = false;
+            StartAbsorb();
+            return;
+        }
+
         // zurueck im Bogen auf die andere Seite
         from = pos;
         Vector2 d = Slot - from;
@@ -220,7 +287,7 @@ public class FoxWisp : MonoBehaviour
 
     private void Draw()
     {
-        Sprite[] frames = leap ? FoxFire.SparkFrames : FoxFire.WispFrames;
+        Sprite[] frames = leap ? FoxFire.SparkFrames : (Frames != null && Frames.Length > 0 ? Frames : FoxFire.WispFrames);
         int frame = (int)((Time.time + animPhase) * Fps) % frames.Length;
         body.sprite = frames[frame];
 
@@ -231,7 +298,7 @@ public class FoxWisp : MonoBehaviour
         // Nachleuchten: alte Positionen, immer blasser und kleiner
         historyHead = (historyHead + 1) % History;
         history[historyHead] = pos;
-        bool moving = state == State.Out || state == State.Back || state == State.Leap;
+        bool moving = state == State.Out || state == State.Back || state == State.Leap || state == State.Absorb;
         Sprite[] trail = FoxFire.TrailFrames;
         for (int i = 0; i < Ghosts; i++)
         {

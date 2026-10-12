@@ -195,6 +195,7 @@ public static class GameSettings
             audio.SetMasterVolume(DefaultVolume);
             audio.SetMusicVolume(DefaultVolume);
             audio.SetEffectsVolume(DefaultVolume);
+            audio.SetWeaponsVolume(DefaultVolume);
         }
 
         // Nicht stur Englisch: "Standard" heisst hier die Sprache, die das

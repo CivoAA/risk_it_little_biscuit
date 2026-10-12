@@ -45,7 +45,7 @@ public class BoomerangEvo : Weapon
             StartCoroutine(MoveAndDestroy(boomerang, direction));
         }
 
-        AudioController.Instance?.PalySound(AudioController.Instance.Werfen);
+        WeaponSounds.Play(WeaponSounds.BoomerangEvo);
 
         spawnCounter = CurrentCooldown;
         shooting = false;

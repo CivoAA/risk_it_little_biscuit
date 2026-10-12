@@ -44,6 +44,8 @@ public class Companion : MonoBehaviour
     private int tier = 1;
     private float attackCounter;
     private float orbitAngle;
+    private float lastShot = -10f;
+    private CompanionVisual visual;
 
     private int TierIndex => Mathf.Clamp(tier - 1, 0, DamagePerTier.Length - 1);
 
@@ -57,14 +59,35 @@ public class Companion : MonoBehaviour
     public void SetTier(int shopTier)
     {
         tier = Mathf.Max(1, shopTier);
+        if (visual != null) visual.Init(tier, spriteRenderer);
+    }
+
+    /// <summary>Die Shop-Stufe bestimmt auch die Sorte (siehe <see cref="CompanionVisual"/>).</summary>
+    public int Tier { get { return tier; } }
+
+    public CompanionVisual Visual { get { return visual; } }
+
+    void Start()
+    {
+        visual = GetComponent<CompanionVisual>();
+        if (visual == null) visual = gameObject.AddComponent<CompanionVisual>();
+        visual.Init(tier, spriteRenderer);
     }
 
     void Update()
     {
         if (PlayerController.Instance == null) return;
 
+        Vector2 before = transform.position;
         Follow();
         Fight();
+
+        // Ohne frisches Ziel schaut er dahin, wo er hinfliegt.
+        Vector2 moved = (Vector2)transform.position - before;
+        if (visual != null && Time.time - lastShot > 0.8f && moved.sqrMagnitude > 0.0004f)
+        {
+            visual.Face(moved);
+        }
     }
 
     private void Follow()
@@ -114,15 +137,19 @@ public class Companion : MonoBehaviour
         CompanionProjectile blueprint = projectilePrefab.GetComponent<CompanionProjectile>();
         if (blueprint == null) return;
 
-        Vector2 direction = Aim.PredictDirection(transform.position, target, blueprint.MoveSpeed);
+        Vector3 muzzle = visual != null ? visual.Muzzle : transform.position;
+        Vector2 direction = Aim.PredictDirection(muzzle, target, blueprint.MoveSpeed);
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
-        if (spriteRenderer != null)
+        if (visual != null)
         {
-            spriteRenderer.flipX = direction.x < 0f;
+            visual.Face(direction);
+            visual.PlayShoot();
         }
 
-        GameObject shot = Instantiate(projectilePrefab, transform.position, Quaternion.Euler(0f, 0f, angle));
+        lastShot = Time.time;
+
+        GameObject shot = Instantiate(projectilePrefab, muzzle, Quaternion.Euler(0f, 0f, angle));
 
         Scene gameScene = RunScene.Current;
         if (gameScene.IsValid() && gameScene.isLoaded)

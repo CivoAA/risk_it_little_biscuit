@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4049075332170008149}
   - component: {fileID: 2899271730710989819}
   - component: {fileID: 1171575880491622298}
+  - component: {fileID: 5372816094417305219}
   m_Layer: 0
   m_Name: Laser
   m_TagString: Untagged
@@ -29,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: -0.30070576, w: 0.953717}
   m_LocalPosition: {x: -4.09, y: 4.6, z: 0}
-  m_LocalScale: {x: 4, y: 4, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -78,12 +79,12 @@ SpriteRenderer:
   m_SortingLayerID: 1682636205
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2212790594762488657, guid: 5449957829f38184cb13bd6b3b480c9e, type: 3}
+  m_Sprite: {fileID: 3073423537587431465, guid: 3d85ce006639497489050d58864084a8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 3.8, y: 0.34}
+  m_Size: {x: 15.75, y: 0.75}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -136,7 +137,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -1.895, y: 0}
+  m_Offset: {x: -7.58, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 1, y: 0.5}
@@ -146,5 +147,28 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 3.79, y: 0.32}
+  m_Size: {x: 15.16, y: 1.28}
   m_EdgeRadius: 0
+--- !u!114 &5372816094417305219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6344353764558535840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc50626105934462ad03c4f1e8868e2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpriteFlipbook
+  frames:
+  - {fileID: 3073423537587431465, guid: 3d85ce006639497489050d58864084a8, type: 3}
+  - {fileID: 3685110430284356388, guid: 3d85ce006639497489050d58864084a8, type: 3}
+  - {fileID: 2379184503421838133, guid: 3d85ce006639497489050d58864084a8, type: 3}
+  - {fileID: 3735250431410284287, guid: 3d85ce006639497489050d58864084a8, type: 3}
+  - {fileID: 1563016562839178864, guid: 3d85ce006639497489050d58864084a8, type: 3}
+  - {fileID: 1718900725854501999, guid: 3d85ce006639497489050d58864084a8, type: 3}
+  fps: 20
+  randomStart: 0
+  fadeIn: 0
+  fadeOut: 0

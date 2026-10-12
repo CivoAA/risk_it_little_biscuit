@@ -2,7 +2,9 @@ using System.Collections.Generic;
 
 /// <summary>
 /// Platzhalter-Evos fuer die Startwaffen, die noch keine eigene Evo haben
-/// (Keks, Inari, Schleimkoenig). Angelegt am 12.10.2026,
+/// (Schleimkoenig; der Keks hat seit 12.10.2026 die <see cref="ChocoChipsEvo"/>
+/// = Milchkrone, Inari den Kyuubi <see cref="FoxFireEvo"/>, Zwiebelritter
+/// und Mochi Schalenklinge und Spieluhr-Quartett). Angelegt am 12.10.2026,
 /// damit die Evo des Tofus (<see cref="CrumbMayhemEvo"/>) etwas zu kopieren hat.
 ///
 /// Jede ist schlicht die Startwaffe eine Stufe ueber ihrer Maximalstufe: eine

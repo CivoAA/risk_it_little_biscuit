@@ -289,6 +289,11 @@ public enum EnemyId
 
     /// <summary>Elite der Vulkanwelt: Creme Brulee im Porzellanfoermchen, flambiert sich mit dem Kuechenbrenner selbst.</summary>
     CremeBrulee = 86,
+
+    // Wald, Ersatz fuer den Pfannkuchen (der bleibt in der Kueche)
+
+    /// <summary>Baumkuchen-Stumpf: Baumkuchen als wandelnder Baumstumpf mit Schokoglasur, Setzling und Pilzchen obendrauf. Der Brocken des Waldes.</summary>
+    Baumkuchen = 87,
 }
 
 /// <summary>
@@ -1148,6 +1153,13 @@ public static class EnemyCatalog
             sheet: "Assets/Art/Gegner/new/vulkan/cremebrulee_trippel.png", fps: 14f,
             colliderRadius: 0.44f, colliderOffset: new Vector2(0f, 0.38f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Elite_Gegner/CremeBrulee.prefab");
+
+        Def(EnemyId.Baumkuchen, "Baumkuchen-Stumpf",
+            health: 600f, damage: 18f, speed: 1.75f, exp: 300, pushTime: 0.05f,
+            role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
+            sheet: "Assets/Art/Gegner/new/wald/baumkuchen_stapf.png", fps: 12f,
+            colliderRadius: 0.55f, colliderOffset: new Vector2(0f, 0.62f), scale: 1f,
+            prefab: "Assets/Prefabs/Enemy/Gegner/Baumkuchen.prefab");
 
         // ---------------------------------------------------------- Archiv
         //

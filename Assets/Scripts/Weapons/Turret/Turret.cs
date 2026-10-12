@@ -63,6 +63,7 @@ public class Turret : Weapon
 
             // Bewusst ohne Parent: der Turm soll stehen bleiben.
             GameObject turret = Instantiate(prefab, pos, Quaternion.identity);
+            WeaponSounds.Play(WeaponSounds.TurretBuild);
 
             if (gameScene.IsValid() && gameScene.isLoaded)
             {

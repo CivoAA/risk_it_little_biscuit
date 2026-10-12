@@ -205,11 +205,11 @@ public static class WeaponCatalog
     public static readonly WeaponDef EvoCrumbMayhem    = Def("evo_crumb_mayhem", "Crumb Mayhem Evo", PoolKind.Evo);
     public static readonly WeaponDef EvoSwordSlash     = Def("evo_sword_slash", "Sword Slash Evo", PoolKind.Evo);
     public static readonly WeaponDef EvoMochiMelody    = Def("evo_mochi_melody", "Music Box Quartet", PoolKind.Evo);
-
-    // Platzhalter-Evos der Startwaffen, noch ohne Rezept (siehe PlaceholderEvo).
-    // Bisher kommt man an sie nur ueber die Evo des Tofus, die sie kopiert.
-    public static readonly WeaponDef EvoChocoChips     = Def("evo_choco_chips", "Choco Chips Evo", PoolKind.Evo);
+    public static readonly WeaponDef EvoChocoChips     = Def("evo_choco_chips", "Milk Crown Evo", PoolKind.Evo);
     public static readonly WeaponDef EvoFoxFire        = Def("evo_foxfire", "Fox Fire Evo", PoolKind.Evo);
+
+    // Platzhalter-Evo einer Startwaffe, noch ohne Rezept (siehe PlaceholderEvo).
+    // Bisher kommt man an sie nur ueber die Evo des Tofus, die sie kopiert.
     public static readonly WeaponDef EvoRoyalSplat     = Def("evo_royal_splat", "Royal Splat Evo", PoolKind.Evo);
 
     // ==================================================================
@@ -229,6 +229,10 @@ public static class WeaponCatalog
     public static readonly EvoDef RecipeMusicBox      = Evo("evo_mochi_melody", "mochi_melody", "turret");
     // Nur eine Zutat: das Kruemelchaos auf Maximalstufe.
     public static readonly EvoDef RecipeCrumbMayhem   = Evo("evo_crumb_mayhem", "crumb_mayhem", "");
+    // Milchkrone: Schoko-Salve + Milch-Tunker - Keks und Milch.
+    public static readonly EvoDef RecipeChocoChips    = Evo("evo_choco_chips", "choco_chips", "milk_dunk");
+    // Kyuubi: Fuchsfeuer + Duration - das Feuer brennt laenger, mehr Seelen.
+    public static readonly EvoDef RecipeFoxFire       = Evo("evo_foxfire", "foxfire", "buff_duration");
 
     // ==================================================================
     //  Freischaltung

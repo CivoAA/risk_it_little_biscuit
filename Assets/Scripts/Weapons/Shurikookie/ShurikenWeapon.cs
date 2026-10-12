@@ -41,7 +41,7 @@ public class ShurikenWeapon : Weapon
 
         for (int i = 0; i < shots; i++)
         {
-            AudioController.Instance.PalySound(AudioController.Instance.Werfen, 0.1f);
+            WeaponSounds.Play(WeaponSounds.ShuriThrow);
 
             foreach (Vector2 dir in ThrowDirections()) SpawnOne(dir);
 

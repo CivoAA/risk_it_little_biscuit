@@ -26,10 +26,10 @@ public class CreditsPanel : MonoBehaviour
 
     private static readonly Section[] Sections =
     {
-        new Section { Key = "ui.credits.cat.dev",   Fallback = "DEVELOPER",     Names = new[] { "Name eintragen" } },
-        new Section { Key = "ui.credits.cat.pixel", Fallback = "PIXEL ARTISTS", Names = new[] { "Name eintragen" } },
-        new Section { Key = "ui.credits.cat.sound", Fallback = "SOUND DESIGN",  Names = new[] { "Name eintragen" } },
-        new Section { Key = "ui.credits.cat.test",  Fallback = "TESTER",        Names = new[] { "Name eintragen" } },
+        new Section { Key = "ui.credits.cat.dev",   Fallback = "DEVELOPER",     Names = new[] { "Civoknis", "Reo" } },
+        new Section { Key = "ui.credits.cat.pixel", Fallback = "PIXEL ARTISTS", Names = new[] { "Reo", "Raccoon" } },
+        new Section { Key = "ui.credits.cat.sound", Fallback = "SOUND DESIGN",  Names = new[] { "Reo" } },
+        new Section { Key = "ui.credits.cat.test",  Fallback = "TESTER",        Names = new[] { "Papa Civoknis", "DaCat", "JPC", "Bubbles", "Raccoon" } },
     };
 
     // ==================================================================

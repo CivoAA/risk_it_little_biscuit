@@ -19,6 +19,7 @@ public class ExplosiveStarEvoPrefab : MonoBehaviour
         if (collider.CompareTag("Enemy"))
         {
             GameObject fireBallExplosion = Instantiate(prefab, transform.position, transform.rotation);
+            WeaponSounds.Play(WeaponSounds.StarBoom);
             fireBallExplosion.transform.localScale *= weapon.CurrentStats.range * (PlayerController.Instance.AOERange * 0.7f);
             Scene gameScene = RunScene.Current;
             if (gameScene.IsValid() && gameScene.isLoaded)

@@ -10,11 +10,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3421461331455801935, guid: 2b4ac13679d26284db801190abb9f4e9, type: 3}
       propertyPath: m_LocalScale.x
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3421461331455801935, guid: 2b4ac13679d26284db801190abb9f4e9, type: 3}
       propertyPath: m_LocalScale.y
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3421461331455801935, guid: 2b4ac13679d26284db801190abb9f4e9, type: 3}
       propertyPath: m_LocalPosition.x
@@ -60,6 +60,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: EffectExplosion Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 3750111524805133661, guid: 2b4ac13679d26284db801190abb9f4e9, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 1450705098030687616, guid: df14d33eb1904a6e98c211074dcf3d21, type: 3}
+    - target: {fileID: 7841789987319207845, guid: 2b4ac13679d26284db801190abb9f4e9, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 0a978bea8c5a486e953b1d5379c22967, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -124,4 +132,4 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 1
+  m_Radius: 2

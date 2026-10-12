@@ -32,10 +32,14 @@ public class CandyBomb : Weapon
         {
             // Bombe erzeugen
             GameObject candyBomb = Instantiate(prefab, transform.position, transform.rotation);
+            WeaponSounds.Play(WeaponSounds.CandyDrop);
 
-            // 🔹 Größe skalieren basierend auf Waffen-Range + Spieler-AOE
+            // 🔹 Explosionsradius wächst mit Waffen-Range + Spieler-AOE. Nur der
+            // Kollider wächst - die Bombe selbst bleibt pixelgenau (Maßstab 1).
             float totalScale = stats[weaponLevel].range + PlayerController.Instance.AOERange;
-            candyBomb.transform.localScale = Vector3.one * totalScale;
+            CircleCollider2D blastArea = candyBomb.GetComponent<CircleCollider2D>();
+            if (blastArea != null) blastArea.radius *= totalScale;
+            else candyBomb.transform.localScale = Vector3.one * totalScale;
 
             // 🔹 In die Lauf-Szene verschieben (falls nötig)
             Scene gameScene = RunScene.Current;

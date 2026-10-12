@@ -167,6 +167,12 @@ public class SaladFan : Weapon
         get { return GeneratedWave; }
     }
 
+    /// <summary>Klang beim Schlag.</summary>
+    protected virtual WeaponSounds.Sfx FireSound
+    {
+        get { return WeaponSounds.SaladGust; }
+    }
+
     protected virtual void Awake()
     {
         stats = new List<WeaponStats>(LevelStats);
@@ -199,7 +205,7 @@ public class SaladFan : Weapon
         CollectTargets(origin, range);
         if (targets.Count == 0) return false;
 
-        AudioController.Instance.PalySound(AudioController.Instance.Werfen, 0.1f);
+        WeaponSounds.Play(FireSound);
 
         int waves = WaveCount();
         float speed = CurrentWaveSpeed;

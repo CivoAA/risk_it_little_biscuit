@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 2.4, y: -0.33, z: 0}
-  m_LocalScale: {x: 0.9, y: 0.9, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -79,7 +79,7 @@ SpriteRenderer:
   m_SortingLayerID: 1682636205
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 9085559941174392548, guid: 3dbd41155e2cc4b478f69e5db45cc6e6, type: 3}
+  m_Sprite: {fileID: 1321769639747057525, guid: 26094d60cd3945ff8a7171c6a241c909, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -90,28 +90,29 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!95 &417898722158653862
-Animator:
-  serializedVersion: 7
+--- !u!114 &417898722158653862
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4157201543728703972}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 5086cbd69c13f804dba74098f4987b54, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc50626105934462ad03c4f1e8868e2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpriteFlipbook
+  frames:
+  - {fileID: 1321769639747057525, guid: 26094d60cd3945ff8a7171c6a241c909, type: 3}
+  - {fileID: 2990141920377137640, guid: 26094d60cd3945ff8a7171c6a241c909, type: 3}
+  - {fileID: 3419355775645650912, guid: 26094d60cd3945ff8a7171c6a241c909, type: 3}
+  - {fileID: 3326945737604714354, guid: 26094d60cd3945ff8a7171c6a241c909, type: 3}
+  - {fileID: 3045232315752265711, guid: 26094d60cd3945ff8a7171c6a241c909, type: 3}
+  - {fileID: 2888097245158042695, guid: 26094d60cd3945ff8a7171c6a241c909, type: 3}
+  fps: 12
+  randomStart: 1
+  fadeIn: 0
+  fadeOut: 0
 --- !u!114 &-338004339016607988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -161,4 +162,4 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.5
+  m_Radius: 0.45

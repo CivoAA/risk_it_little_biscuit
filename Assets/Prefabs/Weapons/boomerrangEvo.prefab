@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4284877352369973353}
   - component: {fileID: 7875566364480378194}
   - component: {fileID: 4209515773655827153}
+  - component: {fileID: 5913577201468820417}
   m_Layer: 0
   m_Name: boomerrangEvo
   m_TagString: Untagged
@@ -30,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_LocalScale: {x: 1.4285714, y: 1.4285714, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -79,7 +80,7 @@ SpriteRenderer:
   m_SortingLayerID: 1682636205
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 8606171970372945185, guid: bf052f25273555245b58f93f3effa21c, type: 3}
+  m_Sprite: {fileID: 3335823937328781149, guid: 8c8aa9ec26f24afdbdd611a360ed1355, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -150,5 +151,26 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.25550076, y: 0}
-  m_Radius: 0.48034605
+  m_Offset: {x: 0, y: 0}
+  m_Radius: 0.47
+--- !u!114 &5913577201468820417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8570393853880803418}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc50626105934462ad03c4f1e8868e2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpriteFlipbook
+  frames:
+  - {fileID: 3335823937328781149, guid: 8c8aa9ec26f24afdbdd611a360ed1355, type: 3}
+  - {fileID: 2774470199367597566, guid: 8c8aa9ec26f24afdbdd611a360ed1355, type: 3}
+  - {fileID: 4203878445490351808, guid: 8c8aa9ec26f24afdbdd611a360ed1355, type: 3}
+  - {fileID: 2404383572818870579, guid: 8c8aa9ec26f24afdbdd611a360ed1355, type: 3}
+  fps: 10
+  randomStart: 1
+  fadeIn: 0
+  fadeOut: 0

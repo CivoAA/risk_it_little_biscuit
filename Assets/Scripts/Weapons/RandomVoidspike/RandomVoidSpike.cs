@@ -42,7 +42,7 @@ public class RandomVoidSpike : Weapon
             target.y - 0.5f                       // immer etwas tiefer
             );
             if (target == Vector2.zero) yield break;
-            AudioController.Instance.PalySound(AudioController.Instance.PlayerHit);
+            WeaponSounds.Play(WeaponSounds.VoidSpike);
             GameObject voidSpike = Instantiate(prefab, spawnPos, transform.rotation);
             if (gameScene.IsValid() && gameScene.isLoaded)
             {
