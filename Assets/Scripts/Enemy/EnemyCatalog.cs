@@ -499,6 +499,25 @@ public static class EnemyCatalog
     /// </summary>
     public const float GoldenHeartMaxHealth = 5f;
 
+    // ------------------------------------------------------------ XP ueber die Zeit
+
+    /// <summary>Bis hierhin (Sekunden) geben normale Gegner volle XP.</summary>
+    public const float NormalXpFalloffStart = 180f;   // Minute 3
+
+    /// <summary>Ab hier (Sekunden) gilt <see cref="NormalXpLateFactor"/> voll.</summary>
+    public const float NormalXpFalloffEnd = 240f;     // Minute 4
+
+    /// <summary>XP-Anteil normaler Gegner nach <see cref="NormalXpFalloffEnd"/>.</summary>
+    public const float NormalXpLateFactor = 0.8f;
+
+    /// <summary>
+    /// XP-Faktor fuer normale Gegner zur Laufzeit: 1 bis Minute 3, dann
+    /// gleitend runter bis Minute 4. Elites und Bosse bleiben unberuehrt.
+    /// </summary>
+    public static float NormalXpFactor(float runTime) =>
+        Mathf.Lerp(1f, NormalXpLateFactor,
+                   Mathf.InverseLerp(NormalXpFalloffStart, NormalXpFalloffEnd, runTime));
+
     /// <summary>
     /// Miniboss, Boss und Tod: unverrueckbar, zaehlen nicht zum Druck, werden
     /// nicht nach vorn geholt. Elites gehoeren NICHT dazu - die sind nur

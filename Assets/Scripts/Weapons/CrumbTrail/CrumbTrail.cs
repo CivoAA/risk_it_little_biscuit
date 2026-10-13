@@ -12,7 +12,10 @@ using UnityEngine.SceneManagement;
 /// damage      = Schaden pro Tick
 /// range       = Groesse des Kruemels (wird zusaetzlich mit AOERange skaliert)
 /// AttackSpeed = Abstand zwischen zwei Ticks
-/// shots       = maximale Anzahl gleichzeitig liegender Kruemel (+ playerShots)
+/// shots       = maximale Anzahl gleichzeitig liegender Kruemel. Waechst mit
+///               dem Duration-Buff (sonst kaeme die laengere Lebensdauer nie
+///               an, weil die Spur vorher abgeraeumt wird). Extra-Schuss
+///               zaehlt bewusst nicht.
 /// </summary>
 public class CrumbTrail : Weapon
 {
@@ -55,7 +58,7 @@ public class CrumbTrail : Weapon
     private void DropCrumb(Vector2 pos)
     {
         int maxCrumbs = Mathf.Max(1, Mathf.RoundToInt(
-            CurrentStats.shots + PlayerController.Instance.ExtraShots));
+            CurrentStats.shots * PlayerController.Instance.DurationMultiplier));
 
         // Aeltesten Kruemel abraeumen, damit die Spur eine feste Laenge hat und
         // nicht bei hoher Bewegungsgeschwindigkeit die Szene volllaeuft.

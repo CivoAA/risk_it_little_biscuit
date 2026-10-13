@@ -5,6 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class ShurikenWeapon : Weapon
 {
+    /// <summary>Drei Extra-Schuesse fuer einen Shuriken mehr.</summary>
+    protected override int ExtraShotsPerShot => 3;
+
     [SerializeField] private GameObject prefab;
     private float spawnCounter;
     public Vector2 moveDir;
@@ -37,7 +40,7 @@ public class ShurikenWeapon : Weapon
 
     IEnumerator SpawnShuriken()
     {
-        int shots = Mathf.RoundToInt(stats[weaponLevel].shots + PlayerController.Instance.ExtraShots);
+        int shots = Mathf.RoundToInt(stats[weaponLevel].shots + RollExtraShots());
 
         for (int i = 0; i < shots; i++)
         {

@@ -5,6 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class Deathstrike : Weapon
 {
+    /// <summary>Jeder Treffer ist ein Volltreffer: vier Extra-Schuesse fuer einen mehr.</summary>
+    protected override int ExtraShotsPerShot => 4;
+
     [SerializeField] private GameObject prefab;
     public List<Enemy> enemiesInRange = new List<Enemy>();
 
@@ -28,7 +31,7 @@ public class Deathstrike : Weapon
 
     IEnumerator SpawnDeathstrike()
     {
-        int count = Mathf.Clamp(Mathf.RoundToInt(stats[weaponLevel].shots + PlayerController.Instance.ExtraShots), 1, 20);
+        int count = Mathf.Clamp(Mathf.RoundToInt(stats[weaponLevel].shots + RollExtraShots()), 1, 20);
 
         Scene gameScene = RunScene.Current;
 

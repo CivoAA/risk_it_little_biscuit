@@ -40,6 +40,15 @@ public sealed class WeaponDef
     public string Name => Loc.Get($"weapon.{Id}.name", NameEn);
     public string Description => Loc.Get($"weapon.{Id}.desc", "");
 
+    /// <summary>
+    /// Wie die Waffe mit Extra-Schuss, AOE, Wirkdauer und Cooldown skaliert
+    /// (beim Buff: was der Buff macht). Gepflegt ueber Tools > Werkbank >
+    /// Skalierungs-Texte, gespeichert als weapon.[id].scaling in den Sprachdateien.
+    /// </summary>
+    public string Scaling => Loc.Get(ScalingKey, "");
+
+    public string ScalingKey => $"weapon.{Id}.scaling";
+
     /// <summary>Symbol fuer eine 14x14-Kachel.</summary>
     public Sprite Icon => WorkbenchIcons.Get(Id, 14);
 
@@ -308,6 +317,17 @@ public static class WeaponCatalog
     {
         if (string.IsNullOrEmpty(id)) return null;
         return ById.TryGetValue(id, out WeaponDef def) ? def : null;
+    }
+
+    /// <summary>Das Rezept zu einer Evo-Id, oder null.</summary>
+    public static EvoDef FindEvo(string id)
+    {
+        if (string.IsNullOrEmpty(id)) return null;
+        foreach (EvoDef evo in EvoRegistry)
+        {
+            if (evo.Id == id) return evo;
+        }
+        return null;
     }
 
     /// <summary>Alle Eintraege einer Art, in Katalogreihenfolge.</summary>

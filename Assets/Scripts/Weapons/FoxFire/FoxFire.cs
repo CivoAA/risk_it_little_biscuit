@@ -15,7 +15,7 @@ using UnityEngine;
 /// damage   = Treffer im Flammenring; Brand tickt mit <see cref="BurnTickFactor"/> davon
 /// range    = Jagdradius in Tiles
 /// duration = Brenndauer (Duration-Buff zaehlt)
-/// shots    = Irrlichter (+ Extra-Schuss 1:1)
+/// shots    = Irrlichter (+ eins je 2 Extra-Schuesse)
 ///
 /// Die Werte stehen im Code (<see cref="LevelStats"/>), nicht am Prefab - sie
 /// ueberschreiben beim Start, was im Inspector steht. Bilder in
@@ -23,6 +23,9 @@ using UnityEngine;
 /// </summary>
 public class FoxFire : Weapon
 {
+    /// <summary>Jedes Irrlicht bringt Brand und Lauffeuer mit: zwei Extra-Schuesse fuer eins mehr (gilt auch fuer Kyuubi).</summary>
+    protected override int ExtraShotsPerShot => 2;
+
     /// <summary>Fluggeschwindigkeit der Irrlichter in Tiles pro Sekunde.</summary>
     public const float FlySpeed = 12f;
 
@@ -194,7 +197,7 @@ public class FoxFire : Weapon
     /// <summary>So viele Irrlichter sollen hinter dem Fuchs schweben.</summary>
     protected virtual int WantedWisps(PlayerController player)
     {
-        return Mathf.Clamp(Mathf.RoundToInt(CurrentStats.shots + player.ExtraShots), 1, 9);
+        return Mathf.Clamp(Mathf.RoundToInt(CurrentStats.shots + WholeExtraShots), 1, 9);
     }
 
     /// <summary>Neues Irrlicht an <paramref name="at"/> (die Evo malt es anders).</summary>

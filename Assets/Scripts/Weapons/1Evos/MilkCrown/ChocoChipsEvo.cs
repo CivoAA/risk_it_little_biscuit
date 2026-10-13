@@ -15,7 +15,7 @@ using UnityEngine.SceneManagement;
 /// Der Keks taucht ab, eine Milchkrone (<see cref="MilkCrown"/>) schiesst um
 /// ihn hoch, ein Milchring (<see cref="MilkWave"/>) stoesst alles weg - und
 /// wenn die Zacken oben sind, fliegen aus ihnen <see cref="CrownChips"/>
-/// getunkte Stuecke in alle Richtungen (+2 je Extra-Schuss).
+/// getunkte Stuecke in alle Richtungen (+2 je zwei Extra-Schuesse).
 ///
 /// Die Werte stehen im Code (wie bei der Salve), nicht am Prefab.
 /// Bilder in Resources/Weapons: milk_crown_back/front, choco_chip_dunked,
@@ -23,13 +23,16 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class ChocoChipsEvo : ChocoChips
 {
+    /// <summary>Getunkte Stuecke sind schwerer: zwei Extra-Schuesse fuer eins mehr (Salve und Krone).</summary>
+    protected override int ExtraShotsPerShot => 2;
+
     /// <summary>Jede wievielte Salve ein Kronen-Tunker ist.</summary>
     public const int CrownEvery = 3;
 
     /// <summary>Stuecke aus der Krone ohne Extra-Schuesse.</summary>
     public const int CrownChips = 16;
 
-    /// <summary>So viele Stuecke mehr bringt ein Extra-Schuss in der Krone.</summary>
+    /// <summary>So viele Stuecke mehr bringen zwei Extra-Schuesse in der Krone (<see cref="ExtraShotsPerShot"/>).</summary>
     public const int CrownChipsPerExtraShot = 2;
 
     /// <summary>Radius des Milchrings beim Tunker in Tiles (mit AOE-Buff).</summary>
@@ -101,7 +104,7 @@ public class ChocoChipsEvo : ChocoChips
 
         if (IsActive && PlayerController.Instance != null)
         {
-            int count = CrownChips + CrownChipsPerExtraShot * Mathf.Max(0, PlayerController.Instance.ExtraShots);
+            int count = CrownChips + CrownChipsPerExtraShot * RollExtraShots();
             float step = 360f / count;
             float start = Random.Range(0f, step);
             Vector2 center = (Vector2)transform.position + originOffset;

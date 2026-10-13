@@ -13,10 +13,13 @@ using UnityEngine.SceneManagement;
 /// damage      = Schaden pro Tick
 /// range       = Radius (wird zusaetzlich mit AOERange skaliert)
 /// AttackSpeed = Abstand zwischen zwei Ticks
-/// shots       = Anzahl Wirbel pro Ausloesung (+ playerShots)
+/// shots       = Anzahl Wirbel pro Ausloesung (+ einer je 3 Extra-Schuesse)
 /// </summary>
 public class Vortex : Weapon
 {
+    /// <summary>Skaliert schon ueber AOE und Duration: drei Extra-Schuesse fuer einen Wirbel mehr.</summary>
+    protected override int ExtraShotsPerShot => 3;
+
     [SerializeField] private GameObject prefab;
 
     [Tooltip("Mindestabstand zwischen Spieler und Wirbelrand (Tiles). Steht der Spieler im Sog, zieht der Wirbel die Gegner auf ihn zu.")]
@@ -56,7 +59,7 @@ public class Vortex : Weapon
         spawning = true;
 
         int count = Mathf.Max(1, Mathf.RoundToInt(
-            CurrentStats.shots + PlayerController.Instance.ExtraShots));
+            CurrentStats.shots + RollExtraShots()));
 
         Scene gameScene = RunScene.Current;
 

@@ -17,13 +17,16 @@ using UnityEngine;
 /// damage   = Schaden je Aufschlag
 /// range    = Wurfweite in Tiles (die Abpraller springen <see cref="BounceRange"/>)
 /// duration = Pfuetze in Sekunden (Duration-Buff zaehlt), 0 = keine
-/// shots    = Klopse je Wurf (+ Extra-Schuss 1:1)
+/// shots    = Klopse je Wurf (+ einer je 3 Extra-Schuesse)
 ///
 /// Werte im Code (<see cref="LevelStats"/>), nicht am Prefab. Bilder in
 /// Resources/Weapons/splat_*.
 /// </summary>
 public class RoyalSplat : Weapon
 {
+    /// <summary>Ein Klops ist ein ganzer Wurf mit allen Abprallern: drei Extra-Schuesse fuer einen mehr.</summary>
+    protected override int ExtraShotsPerShot => 3;
+
     /// <summary>Trefferradius eines Aufschlags in Tiles (vor AOE-Buff und Stufen-Faktor).</summary>
     public const float HitRadius = 1.2f;
 
@@ -120,7 +123,7 @@ public class RoyalSplat : Weapon
         claimed.Clear();
         if (!Throw()) return;    // nichts in Reichweite - geladen warten
 
-        int count = Mathf.Clamp(Mathf.RoundToInt(CurrentStats.shots + player.ExtraShots), 1, 8);
+        int count = Mathf.Clamp(Mathf.RoundToInt(CurrentStats.shots + RollExtraShots()), 1, 8);
         volleyLeft = count - 1;
         nextVolley = Time.time + VolleyGap;
         nextThrow = Time.time + CurrentCooldown;

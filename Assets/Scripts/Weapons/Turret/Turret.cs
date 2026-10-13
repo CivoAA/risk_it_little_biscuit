@@ -15,10 +15,13 @@ using UnityEngine.SceneManagement;
 /// damage      = Schaden pro Schuss
 /// range       = Reichweite der Zielerfassung
 /// AttackSpeed = Abstand zwischen zwei Schuessen des Turms
-/// shots       = Anzahl Tuerme pro Aufbau (+ playerShots)
+/// shots       = Anzahl Tuerme pro Aufbau (+ einer je 3 Extra-Schuesse)
 /// </summary>
 public class Turret : Weapon
 {
+    /// <summary>Skaliert schon ueber AOE und Duration: drei Extra-Schuesse fuer einen Turm mehr.</summary>
+    protected override int ExtraShotsPerShot => 3;
+
     [SerializeField] private GameObject prefab;
 
     [Tooltip("Streuung, wenn mehrere Tuerme gleichzeitig aufgebaut werden.")]
@@ -48,7 +51,7 @@ public class Turret : Weapon
         building = true;
 
         int count = Mathf.Max(1, Mathf.RoundToInt(
-            CurrentStats.shots + PlayerController.Instance.ExtraShots));
+            CurrentStats.shots + RollExtraShots()));
 
         Scene gameScene = RunScene.Current;
 

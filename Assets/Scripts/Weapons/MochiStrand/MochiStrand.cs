@@ -96,7 +96,7 @@ public class MochiStrand : Weapon
         // Ohne Gegner in Reichweite wartet die Waffe geladen - ein Faden ins
         // Leere hat nichts, woran er kleben koennte.
         Vector2 origin = (Vector2)transform.position + originOffset;
-        int chains = Mathf.Max(1, Mathf.RoundToInt(CurrentStats.shots + PlayerController.Instance.ExtraShots));
+        int chains = Mathf.Max(1, Mathf.RoundToInt(CurrentStats.shots + RollExtraShots()));
         FindTargets(origin, CurrentStats.range, chains);
         if (targets.Count == 0) return;
 

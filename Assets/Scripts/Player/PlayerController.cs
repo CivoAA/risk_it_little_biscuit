@@ -25,8 +25,9 @@ public class PlayerController : MonoBehaviour
     public float playerShots;
 
     /// <summary>
-    /// Extra-Schuesse, die Waffen wirklich abfeuern: nur ganze. 1,5 oder 1,999
-    /// gibt einen, erst ab 2 gibt es zwei. Waffen lesen das hier, nie playerShots.
+    /// Ganze Extra-Schuesse (1,5 oder 1,999 gibt einen). Waffen fragen
+    /// stattdessen Weapon.RollExtraShots / WholeExtraShots - dort zaehlt der
+    /// Bruchteil als Chance und jede Waffe hat ihr eigenes Verhaeltnis.
     /// </summary>
     public int ExtraShots => Mathf.FloorToInt(playerShots + 0.0001f);
 

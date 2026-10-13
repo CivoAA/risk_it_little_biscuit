@@ -57,6 +57,10 @@ public class SpawnDirector : MonoBehaviour
     [Tooltip("Weiter weg wird ein Gegner nach vorn geholt statt stehen gelassen.")]
     [SerializeField] private float recycleDistance = 26f;
 
+    [Tooltip("Weiter weg springt ein Miniboss hinter den Spieler - knapp ausserhalb des Bildes, " .
+             "entgegen der Laufrichtung. Er laeuft dann weiter hinterher.")]
+    [SerializeField] private float miniBossFollowDistance = 20f;
+
     [Tooltip("So weit ausserhalb des sichtbaren Bildes muss ein Gegner mindestens erscheinen.")]
     [SerializeField] private float offScreenMargin = 1.5f;
 
@@ -263,6 +267,7 @@ public class SpawnDirector : MonoBehaviour
             maintenanceTimer = 0f;
             TrackPlayer();
             RecycleStragglers();
+            FollowMiniBosses();
         }
 
         spawnTimer += dt;
@@ -706,6 +711,32 @@ public class SpawnDirector : MonoBehaviour
 
             enemy.Teleport(SpawnPoint(points[0]));
             enemy.ResetBlocked();
+        }
+    }
+
+    /// <summary>
+    /// Minibosse werden nicht wie Normalgegner nach vorn geholt (siehe
+    /// <see cref="EnemyCatalog.IsBossRole"/>), sollen aber auch nicht weit
+    /// hinten haengen bleiben: ist einer zu weit weg, setzt er hinter dem
+    /// Spieler wieder an - ausserhalb des Bildes, entgegen der Laufrichtung.
+    /// </summary>
+    private void FollowMiniBosses()
+    {
+        if (PlayerController.Instance == null) return;
+
+        Vector2 player = PlayerController.Instance.transform.position;
+        float limitSqr = miniBossFollowDistance * miniBossFollowDistance;
+        IReadOnlyList<Enemy> alive = Enemy.Alive;
+
+        for (int i = 0; i < alive.Count; i++)
+        {
+            Enemy enemy = alive[i];
+            if (enemy == null || enemy.Role != EnemyRole.MiniBoss) continue;
+            if (((Vector2)enemy.transform.position - player).sqrMagnitude < limitSqr) continue;
+
+            Vector2 back = playerDir.sqrMagnitude > 0.0001f ? -playerDir : Random.insideUnitCircle.normalized;
+            Vector2 behind = player + new Vector2(back.x * spawnHalfWidth, back.y * spawnHalfHeight);
+            enemy.Teleport(SpawnPoint(behind));
         }
     }
 

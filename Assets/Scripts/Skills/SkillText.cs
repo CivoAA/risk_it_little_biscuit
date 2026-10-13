@@ -88,7 +88,7 @@ public static class SkillText
             case SkillType.RerollAmount:        return "+{0} Reroll";
             case SkillType.StartXPAmount:       return "+{0} Start XP";
             case SkillType.IncreaseShrinkSpeed: return "+{0} Shrink Speed";
-            case SkillType.IncreaseDropChance:  return "+{0}% Drop Chance";
+            case SkillType.IncreaseDropChance:  return "Magnets & hearts drop {0}% more often";
             case SkillType.LuckyXpChance:       return "{0}% Chance for double XP";
             case SkillType.GoldenHeartChance:   return "{0}% of hearts are golden (+Max Health)";
             case SkillType.LuckyReviveChance:   return "{0}% Chance to revive once";

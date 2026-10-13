@@ -15,7 +15,8 @@ using UnityEngine.SceneManagement;
 /// cooldown = Pause zwischen zwei Tunkern
 /// damage   = Schaden pro Ring
 /// range    = Radius des Rings in Tiles (wird mit AOERange skaliert)
-/// shots    = Ringe pro Tunker (+ Extra-Schuss 1:1), kurz hintereinander
+/// shots    = Ringe pro Tunker, kurz hintereinander. Extra-Schuss zaehlt bewusst
+///            nicht - mehr Ringe am selben Fleck waeren nur mehr Schaden.
 ///
 /// Die Werte stehen im Code (<see cref="LevelStats"/>), nicht am Prefab - sie
 /// ueberschreiben beim Start, was im Inspector steht. Bild in
@@ -110,7 +111,7 @@ public class MilkDunk : Weapon
     {
         dunking = true;
 
-        int waves = Mathf.Max(1, Mathf.RoundToInt(CurrentStats.shots + PlayerController.Instance.ExtraShots));
+        int waves = Mathf.Max(1, Mathf.RoundToInt(CurrentStats.shots));
         for (int i = 0; i < waves; i++)
         {
             if (!IsActive || PlayerController.Instance == null) break;

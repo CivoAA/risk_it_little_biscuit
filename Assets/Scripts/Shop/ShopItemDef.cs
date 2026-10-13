@@ -24,6 +24,19 @@ public enum ShopTab
     Upgrades = 1,
 }
 
+/// <summary>Wie der Shop den Wert einer Stufe anzeigt.</summary>
+public enum ShopValueStyle
+{
+    /// <summary>Roh, wie im Katalog: 0 / 1 / 2.</summary>
+    Plain,
+    /// <summary>Zuschlag: +0 / +1 / +2.</summary>
+    Bonus,
+    /// <summary>Anteil als Prozent: 0.1 -> +10 %.</summary>
+    Percent,
+    /// <summary>Echte Gesamtzahl: Grundwert (<see cref="ShopItemDef.DisplayBase"/>) + Wert.</summary>
+    Total,
+}
+
 /// <summary>
 /// Die unveränderliche Beschreibung eines Shop-Eintrags: Name, Text, Preise,
 /// Werte je Stufe, Symbol, Freischalt-Bedingung. Alles, was zum Spiel gehört -
@@ -67,13 +80,25 @@ public sealed class ShopItemDef
     /// </summary>
     public readonly string UnlocksWeapon;
 
+    /// <summary>Wie der Shop die Werte anzeigt. Aendert nichts am Spiel.</summary>
+    public readonly ShopValueStyle Style;
+
+    /// <summary>
+    /// Nur fuer <see cref="ShopValueStyle.Total"/>: was man ohne Kauf schon hat
+    /// (z.B. 1 Evo-Slot). Der Shop zeigt Grundwert + Wert.
+    /// </summary>
+    public readonly int DisplayBase;
+
     /// <summary>Position im Katalog - entspricht der Reihenfolge in Shop.cs.</summary>
     public int Order { get; internal set; }
 
     public ShopItemDef(string id, string nameEn, string descEn, ShopCategory category,
                        int[] costs, float[] values, string iconKey,
-                       string requiredUnlock, string unlocksWeapon)
+                       string requiredUnlock, string unlocksWeapon,
+                       ShopValueStyle style = ShopValueStyle.Plain, int displayBase = 0)
     {
+        Style          = style;
+        DisplayBase    = displayBase;
         Id             = id;
         NameEn         = nameEn;
         DescEn         = descEn;
@@ -107,6 +132,24 @@ public sealed class ShopItemDef
         if (Values.Count == 0) return 0f;
         return Values[Mathf.Clamp(level, 0, Values.Count - 1)];
     }
+
+    /// <summary>Ein Wert dieses Eintrags als Text fuer den Shop, je nach <see cref="Style"/>.</summary>
+    public string FormatValue(float value)
+    {
+        switch (Style)
+        {
+            case ShopValueStyle.Bonus:   return "+" + Nice(value);
+            case ShopValueStyle.Percent: return "+" + Nice(value * 100f) + "%";
+            case ShopValueStyle.Total:   return Nice(DisplayBase + value);
+            default:                     return Nice(value);
+        }
+    }
+
+    /// <summary>0,35 statt 0,3500001 - und ganze Zahlen ohne Komma.</summary>
+    static string Nice(float v) =>
+        Mathf.Approximately(v, Mathf.Round(v))
+            ? Mathf.RoundToInt(v).ToString()
+            : v.ToString("0.##");
 
     /// <summary>Gesamtpreis der ersten <paramref name="level"/> Käufe.</summary>
     public int TotalCostUpTo(int level)

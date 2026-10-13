@@ -233,9 +233,10 @@ public partial class PauseMenuPanel
             {
                 int whole = p.ExtraShots;
                 string text = Fmt("ui.pause.info.shots.now", "Jetzt: +{0} Geschosse pro Angriff", whole.ToString());
-                float missing = whole + 1f - p.playerShots;
-                if (missing > 0.001f && missing < 0.999f)
-                    text += "\n" + Fmt("ui.pause.info.shots.next", "Noch {0} bis zum nächsten", Num(missing, "0.##"));
+                float rest = p.playerShots - whole;
+                if (rest > 0.001f)
+                    text += "\n" + Fmt("ui.pause.info.shots.chance", "Dazu {0} % Chance auf eins mehr",
+                                       Num(rest * 100f, "0"));
                 return text;
             }
 

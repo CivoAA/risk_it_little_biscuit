@@ -68,7 +68,9 @@ public class GameHud : MonoBehaviour
     // Nur solange ein Gegner mit der Rolle Boss oder Zwischenboss lebt. Unten mittig, damit es
     // nicht mit Uhr und Ansage-Band oben kollidiert - und weil man beim
     // Ausweichen ohnehin auf den Boden schaut, wo die Warnflaechen liegen.
-    private const int BossW = 168, BossH = 24, BossBottom = 6;
+    // Zwei Leisten: Boss ganz unten, Zwischenboss darueber (rutscht nach
+    // unten, wenn kein Boss da ist).
+    private const int BossW = 168, BossH = 24, BossBottom = 6, BossGap = 2;
     private static readonly RectInt BossPlateR = new RectInt(0, 0, BossW, BossH);
     private static readonly RectInt BossNameR  = new RectInt(4, 2, BossW - 8, 10);
     private static readonly RectInt BossFrameR = new RectInt(4, 13, BossW - 8, 8);
@@ -163,12 +165,14 @@ public class GameHud : MonoBehaviour
 
     // Boss
     private RectTransform bottom;
-    private Bar bossBar;
-    private Shadowed bossName;
-    private Enemy boss;
+    private BossView bossView, miniView;
     private float nextBossSearch;
-    private string bossLabel;
-    private float bossShown = 1f, bossTrail = 1f, bossTrailHold;
+    // Alle lebenden Bosse/Zwischenbosse, alle 0,5 s neu gesammelt - Bosse sind selten
+    private readonly List<Enemy> bossCandidates = new List<Enemy>();
+    // Laufende Nummer je Gegner, damit zwei gleiche Zwischenbosse "NAME 1" / "NAME 2" heissen
+    private readonly Dictionary<Enemy, int> bossNumbers = new Dictionary<Enemy, int>();
+    private readonly Dictionary<EnemyId, int> bossIdCount = new Dictionary<EnemyId, int>();
+    private readonly List<Enemy> bossGone = new List<Enemy>();
 
     // Slots
     private readonly List<SlotView> weaponViews = new List<SlotView>();
@@ -348,16 +352,8 @@ public class GameHud : MonoBehaviour
 
     private void BuildBottom()
     {
-        Img("BossPlate", bottom, BossPlateR, GameHudSkin.Plate, Color.white, true);
-        bossName = Text("BossName", bottom, BossNameR, SizeLabel, GameHudSkin.Cream,
-                        TextAlignmentOptions.Center, TextStyle.Outline);
-        bossBar = new Bar(this, "Boss", bottom, BossFrameR, GameHudSkin.Jam, GameHudSkin.JamLight, GameHudSkin.JamDark);
-
-        // Kerbe bei der Haelfte: dort wechseln die Bosse in ihre zweite Phase
-        int x = BossFrameR.x + 1 + bossBar.InnerW / 2;
-        Color tick = GameHudSkin.Ink; tick.a = 0.6f;
-        Img("BossTick", bottom, new RectInt(x, BossFrameR.y + 1, 1, BossFrameR.height - 2), GameHudSkin.White, tick);
-
+        bossView = new BossView(this, "Boss", bottom);
+        miniView = new BossView(this, "MiniBoss", bottom);
         bottom.gameObject.SetActive(false);
     }
 
@@ -756,45 +752,83 @@ public class GameHud : MonoBehaviour
 
     private void UpdateBoss(float dt, float now)
     {
-        if (boss == null || !boss.isActiveAndEnabled)
+        // Nicht jeden Frame die ganze Gegnerliste durchgehen
+        if (now >= nextBossSearch)
         {
-            boss = null;
-            // Nicht jeden Frame die ganze Gegnerliste durchgehen
-            if (now >= nextBossSearch)
-            {
-                nextBossSearch = now + 0.5f;
-                foreach (Enemy e in Enemy.Alive)
-                {
-                    // Auch Zwischenbosse bekommen die Leiste - sie sind ein Bosskampf.
-                    if (e == null || (e.Role != EnemyRole.Boss && e.Role != EnemyRole.MiniBoss)) continue;
-                    boss = e;
-                    bossShown = bossTrail = e.HealthFraction;
-                    bossLabel = null;
-                    break;
-                }
-            }
+            nextBossSearch = now + 0.5f;
+            RefreshBossCandidates();
         }
 
-        bool show = boss != null;
+        // Je Rolle die Leiste mit dem wenigsten Leben - der, den man gerade wegputzt
+        Enemy boss = null, mini = null;
+        for (int i = bossCandidates.Count - 1; i >= 0; i--)
+        {
+            Enemy e = bossCandidates[i];
+            if (e == null || !e.isActiveAndEnabled) { bossCandidates.RemoveAt(i); continue; }
+            if (e.Role == EnemyRole.Boss) { if (boss == null || e.HealthFraction < boss.HealthFraction) boss = e; }
+            else if (mini == null || e.HealthFraction < mini.HealthFraction) mini = e;
+        }
+
+        bool show = boss != null || mini != null;
         if (bottom.gameObject.activeSelf != show) bottom.gameObject.SetActive(show);
         if (!show) return;
 
-        // Name kann sich mitten im Kampf aendern (Gespenst -> Squiddy)
-        string label = string.IsNullOrEmpty(boss.DisplayName) ? Bestiary.NameOf(boss.Id) : boss.DisplayName;
-        if (label != bossLabel)
+        bossView.Update(boss, BossLabel(boss), 0, dt, now);
+        miniView.Update(mini, BossLabel(mini), boss != null ? BossH + BossGap : 0, dt, now);
+    }
+
+    private void RefreshBossCandidates()
+    {
+        bossCandidates.Clear();
+        foreach (Enemy e in Enemy.Alive)
         {
-            bossLabel = label;
-            bossName.Set(label.ToUpperInvariant());
+            // Auch Zwischenbosse bekommen die Leiste - sie sind ein Bosskampf.
+            if (e == null || !e.isActiveAndEnabled) continue;
+            if (e.Role != EnemyRole.Boss && e.Role != EnemyRole.MiniBoss) continue;
+            bossCandidates.Add(e);
         }
 
-        float frac = Mathf.Clamp01(boss.HealthFraction);
-        if (frac < bossShown - 0.0001f) bossTrailHold = now + TrailHold;
-        bossShown = frac;
-        if (now >= bossTrailHold) bossTrail = Mathf.MoveTowards(bossTrail, bossShown, TrailDrain * dt);
-        if (bossTrail < bossShown) bossTrail = bossShown;
+        // Nummern der Toten freigeben
+        bossGone.Clear();
+        foreach (Enemy e in bossNumbers.Keys)
+            if (!bossCandidates.Contains(e)) bossGone.Add(e);
+        foreach (Enemy e in bossGone) bossNumbers.Remove(e);
 
-        bossBar.SetFill(bossShown, bossShown > 0f);
-        bossBar.SetTrail(bossTrail, GameHudSkin.Rose);
+        bossIdCount.Clear();
+        foreach (Enemy e in bossCandidates)
+        {
+            bossIdCount.TryGetValue(e.Id, out int n);
+            bossIdCount[e.Id] = n + 1;
+        }
+
+        // Neue bekommen die kleinste freie Nummer ihrer Sorte - die der anderen
+        // bleibt stehen, auch wenn einer stirbt.
+        foreach (Enemy e in bossCandidates)
+        {
+            if (bossNumbers.ContainsKey(e)) continue;
+            int nr = 1;
+            while (BossNumberTaken(e, nr)) nr++;
+            bossNumbers[e] = nr;
+        }
+    }
+
+    private bool BossNumberTaken(Enemy e, int nr)
+    {
+        foreach (KeyValuePair<Enemy, int> kv in bossNumbers)
+            if (kv.Value == nr && kv.Key != null && kv.Key.Id == e.Id) return true;
+        return false;
+    }
+
+    private string BossLabel(Enemy e)
+    {
+        if (e == null) return null;
+        // Name kann sich mitten im Kampf aendern (Gespenst -> Squiddy)
+        string label = string.IsNullOrEmpty(e.DisplayName) ? Bestiary.NameOf(e.Id) : e.DisplayName;
+        // Nummer nur, wenn es die Sorte mehrfach gibt (oder gab: "NAME 2" bleibt "NAME 2")
+        bossNumbers.TryGetValue(e, out int nr);
+        bossIdCount.TryGetValue(e.Id, out int count);
+        if (count > 1 || nr > 1) label += " " + nr;
+        return label;
     }
 
     // ---------- Phase / Ansage ----------
@@ -1116,6 +1150,67 @@ public class GameHud : MonoBehaviour
     /// aus drei Lagen - Grundfarbe, eine helle Zeile oben, eine dunkle unten.
     /// Breiten sind ganze Pixel, die Leiste waechst also in Pixelschritten.
     /// </summary>
+    /// <summary>Eine Boss-Leiste: Schild, Name, Balken mit Kerbe bei der Haelfte.</summary>
+    private sealed class BossView
+    {
+        private readonly RectTransform root;
+        private readonly Bar bar;
+        private readonly Shadowed name;
+        private Enemy target;
+        private string label;
+        private float shown = 1f, trail = 1f, trailHold;
+
+        public BossView(GameHud hud, string id, Transform parent)
+        {
+            root = NewRect(id, parent);
+            Place(root, new RectInt(0, 0, BossW, BossH));
+
+            hud.Img(id + "Plate", root, BossPlateR, GameHudSkin.Plate, Color.white, true);
+            name = hud.Text(id + "Name", root, BossNameR, SizeLabel, GameHudSkin.Cream,
+                            TextAlignmentOptions.Center, TextStyle.Outline);
+            bar = new Bar(hud, id, root, BossFrameR, GameHudSkin.Jam, GameHudSkin.JamLight, GameHudSkin.JamDark);
+
+            // Kerbe bei der Haelfte: dort wechseln die Bosse in ihre zweite Phase
+            int x = BossFrameR.x + 1 + bar.InnerW / 2;
+            Color tick = GameHudSkin.Ink; tick.a = 0.6f;
+            hud.Img(id + "Tick", root, new RectInt(x, BossFrameR.y + 1, 1, BossFrameR.height - 2), GameHudSkin.White, tick);
+
+            root.gameObject.SetActive(false);
+        }
+
+        /// <param name="lift">HUD-Pixel ueber der untersten Leiste.</param>
+        public void Update(Enemy e, string newLabel, int lift, float dt, float now)
+        {
+            bool show = e != null;
+            if (root.gameObject.activeSelf != show) root.gameObject.SetActive(show);
+            if (!show) { target = null; return; }
+
+            SetPos(root, 0f, lift);
+
+            float frac = Mathf.Clamp01(e.HealthFraction);
+            if (e != target)
+            {
+                // Anderer Gegner: keinen Schadensrest vom vorigen mitnehmen
+                target = e;
+                shown = trail = frac;
+            }
+
+            if (newLabel != label)
+            {
+                label = newLabel;
+                name.Set(label.ToUpperInvariant());
+            }
+
+            if (frac < shown - 0.0001f) trailHold = now + TrailHold;
+            shown = frac;
+            if (now >= trailHold) trail = Mathf.MoveTowards(trail, shown, TrailDrain * dt);
+            if (trail < shown) trail = shown;
+
+            bar.SetFill(shown, shown > 0f);
+            bar.SetTrail(trail, GameHudSkin.Rose);
+        }
+    }
+
     private sealed class Bar
     {
         public readonly int InnerW;

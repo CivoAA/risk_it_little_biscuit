@@ -106,22 +106,9 @@ public static class Unlocks
     // ==================================================================
     //  Charaktere
     // ==================================================================
-    // Ritter und Mochi vorerst von Anfang an offen (byDefault). Steht die
-    // Bedingung fest: byDefault weg und einen Erfolg mit grantsUnlock dafuer
-    // anlegen (Ach.cs) - dann nennt die Unlock-Anzeige auch die Bedingung.
-    // Abgefragt in Characters.UnlockIdByskin.
-
-    public static readonly UnlockDef CharOnionKnight = Def(
-        "unlock_char_onion_knight",
-        "Onion Knight",
-        "The Onion Knight joins your team!",
-        byDefault: true);
-
-    public static readonly UnlockDef CharMochi = Def(
-        "unlock_char_mochi",
-        "Mochi",
-        "Mochi joins your team!",
-        byDefault: true);
+    // Ritter und Mochi sind von Anfang an spielbar und haben keinen Unlock
+    // (leer in Characters.UnlockIdByskin). Die alten Ids
+    // "unlock_char_onion_knight" / "unlock_char_mochi" nicht wiederverwenden.
 
     /// <summary>Kommt mit "Meltdown" (Eiskaiser besiegt = Eisgletscher geschafft).</summary>
     public static readonly UnlockDef CharInari = Def(
