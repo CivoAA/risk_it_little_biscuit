@@ -61,6 +61,9 @@ public static class AchievementSteamSync
         }
     }
 
+    /// <summary>Fremde Stat-Aenderungen (z.B. <see cref="RunMetrics"/>) mit dem naechsten Takt abschicken.</summary>
+    public static void MarkStorePending() => storePending = true;
+
     /// <summary>Schickt gesammelte Änderungen ab. Wird vom AchievementRuntime getaktet.</summary>
     public static void StoreIfPending()
     {

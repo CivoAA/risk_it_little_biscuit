@@ -58,6 +58,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         gameActiv = true;
+        RunMetrics.RunStarted();
     }
 
     void Update()
@@ -98,6 +99,7 @@ public class GameManager : MonoBehaviour
         currencyPaid = Mathf.Max(currencyPaid, currency);
         gameActiv = false;
         storyWon = won;
+        RunMetrics.RunEnded(won, gameTime, ContinuedAsEndless);
 
         // Der Lauf ist vorbei - was sich an Charakter-XP angesammelt hat, jetzt
         // wegschreiben statt auf den naechsten 5-Sekunden-Takt zu warten.

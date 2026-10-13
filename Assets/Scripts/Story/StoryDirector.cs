@@ -43,7 +43,7 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class StoryDirector : MonoBehaviour
 {
-    private const float HubSettle = 0.7f;
+    private const float HubSettle = 0.1f;
 
     public static StoryDirector Instance { get; private set; }
 
@@ -71,7 +71,7 @@ public class StoryDirector : MonoBehaviour
 
         // Direkt im Hub gestartet (Editor): sceneLoaded ist da schon vorbei.
         Scene hub = SceneManager.GetSceneByName(GameSession.HubScene);
-        if (hub.IsValid() && hub.isLoaded) StoryPomoNpc.EnsureIn(hub);
+        if (hub.IsValid() && hub.isLoaded) OnHubLoaded(hub);
     }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
@@ -97,7 +97,14 @@ public class StoryDirector : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name == GameSession.HubScene) StoryPomoNpc.EnsureIn(scene);
+        if (scene.name == GameSession.HubScene) OnHubLoaded(scene);
+    }
+
+    private static void OnHubLoaded(Scene hub)
+    {
+        StoryPomoNpc.EnsureIn(hub);
+        // Gleich kommt das Intro mit eigener Musik - die Hub-Musik gar nicht erst anspielen.
+        if (!StoryProgress.IntroSeen) StoryMusic.HoldHubMusic();
     }
 
     // ==================================================================
@@ -166,7 +173,9 @@ public class StoryDirector : MonoBehaviour
         if (!hubScene.IsValid() || !hubScene.isLoaded) return false;
         HubUI ui = FindAnyObjectByType<HubUI>();
         if (ui == null || !ui.isActiveAndEnabled) return false;
-        if (SceneFader.IsFading || HubUI.InputBlocked) return false;
+        // Nicht auf das Ende der Blende warten: geht sie auf, darf die Story schon
+        // loslegen - sonst laeuft man erst ein paar Sekunden durch den Hub.
+        if (SceneFader.CoversScreen || HubUI.InputBlocked) return false;
         if (StoryDialog.IsOpen || StoryCutscene.IsPlaying || HubLevelSelectUI.IsOpen) return false;
         return true;
     }

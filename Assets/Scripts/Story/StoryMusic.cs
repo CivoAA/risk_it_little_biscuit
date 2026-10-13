@@ -9,6 +9,9 @@ using UnityEngine.Audio;
 ///   Begin   Hub-Musik blendet in 1 s aus, das Intro-Stueck in 1,5 s ein.
 ///   End     Intro blendet in 2,5 s aus; nach der halben Zeit beginnt die
 ///           Hub-Musik von vorn und blendet in 3 s auf ihre alte Lautstaerke.
+///   Hold    Kommt das Intro gleich beim ersten Hub-Besuch, schaltet der
+///           StoryDirector die Hub-Musik schon beim Laden stumm (mute) - so
+///           blendet der SceneFader sie gar nicht erst ein. End gibt sie frei.
 ///
 /// Die Hub-Musik ist die AudioSource auf "Hub_Music" in der Hub-Szene. Die
 /// Intro-Quelle haengt in derselben Mixer-Gruppe, damit der Musik-Regler gilt.
@@ -21,6 +24,27 @@ public static class StoryMusic
     private static AudioSource intro, hub;
     private static float hubVolume = 1f;
     private static Coroutine routine;
+    private static bool held;
+
+    /// <summary>Hub-Musik stumm halten, bis <see cref="EndIntro"/> sie zurueckholt.</summary>
+    public static void HoldHubMusic()
+    {
+        AudioSource src = FindHubMusic();
+        if (src == null) return;
+        hub = src;
+        if (src.volume > 0.001f) hubVolume = src.volume;
+        src.mute = true;
+        held = true;
+    }
+
+    private static void ReleaseHubMusic()
+    {
+        if (!held) return;
+        held = false;
+        if (hub == null) return;
+        hub.volume = hubVolume;
+        hub.mute = false;
+    }
 
     public static void BeginIntro()
     {
@@ -30,11 +54,13 @@ public static class StoryMusic
         if (clip == null)
         {
             Debug.LogWarning("[Story] Resources/Music/story_intro fehlt - Intro ohne eigene Musik.");
+            ReleaseHubMusic();
             return;
         }
 
-        hub = FindHubMusic();
-        if (hub != null) hubVolume = hub.volume > 0.001f ? hub.volume : hubVolume;
+        AudioSource found = FindHubMusic();
+        if (found != null) hub = found;
+        if (hub != null && !held && hub.volume > 0.001f) hubVolume = hub.volume;
 
         if (intro == null)
         {
@@ -62,7 +88,11 @@ public static class StoryMusic
     public static void EndIntro()
     {
         MonoBehaviour host = StoryDirector.Instance;
-        if (host == null || intro == null || !intro.isPlaying) return;
+        if (host == null)
+        {
+            ReleaseHubMusic();
+            return;
+        }
         if (routine != null) host.StopCoroutine(routine);
         routine = host.StartCoroutine(FadeBack());
     }
@@ -90,16 +120,20 @@ public static class StoryMusic
     private static IEnumerator FadeBack()
     {
         const float Out = 2.5f, In = 3f, HubStart = 1.25f;
-        float from = intro.volume;
+        // Ist das Intro-Stueck schon zu Ende, kommt nur die Hub-Musik zurueck.
+        float from = intro != null && intro.isPlaying ? intro.volume : 0f;
         bool hubStarted = false;
         for (float t = 0f; t < HubStart + In; t += Time.unscaledDeltaTime)
         {
-            intro.volume = from * (1f - Smooth(t / Out));
+            if (intro != null) intro.volume = from * (1f - Smooth(t / Out));
             if (t >= HubStart && hub != null)
             {
                 if (!hubStarted)
                 {
                     hubStarted = true;
+                    held = false;
+                    hub.mute = false;
+                    hub.volume = 0f;
                     hub.Stop();
                     hub.Play();
                 }
@@ -107,7 +141,7 @@ public static class StoryMusic
             }
             yield return null;
         }
-        intro.Stop();
+        if (intro != null) intro.Stop();
         if (hub != null) hub.volume = hubVolume;
         routine = null;
     }

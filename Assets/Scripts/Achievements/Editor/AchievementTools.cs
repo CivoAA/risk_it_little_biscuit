@@ -207,6 +207,23 @@ public static class AchievementTools
         EditorUtility.RevealInFinder(outPath);
     }
 
+    /// <summary>
+    /// Die Stat-Namen fuer <see cref="RunMetrics"/>. Jeder muss in Steamworks
+    /// (Stats &amp; Achievements > Stats) als INT, Set By "Client", Increment Only
+    /// und Aggregated angelegt sein. Tools/steam_metriken.py liest dieselbe Datei.
+    /// </summary>
+    [MenuItem("Tools/Erfolge/Metriken-Stats ausgeben", false, 214)]
+    public static void PrintMetricsList()
+    {
+        var names = RunMetrics.AllStatNames();
+        string outPath = Path.GetFullPath(Path.Combine(Application.dataPath, "..", "steam_metriken_stats.txt"));
+
+        File.WriteAllText(outPath, string.Join("\n", names) + "\n", new UTF8Encoding(false));
+
+        Debug.Log($"[Metrics] {names.Count} Stats geschrieben nach:\n{outPath}");
+        EditorUtility.RevealInFinder(outPath);
+    }
+
     /// <summary>TMP-Farbtags raus - Steam zeigt sonst den Auszeichnungstext mit an.</summary>
     private static string Strip(string text)
     {

@@ -37,6 +37,15 @@ public class SceneFader : MonoBehaviour
 
     public static bool IsFading => instance != null;
 
+    /// <summary>
+    /// Die Blende deckt das Bild noch ganz bzw. zieht gerade zu - false, sobald
+    /// sie wieder aufgeht. Wer gleich nach dem Wechsel etwas zeigen will (Story
+    /// im Hub), darf ab da loslegen und erscheint dann schon beim Aufblenden.
+    /// </summary>
+    public static bool CoversScreen => instance != null && !instance.lifting;
+
+    private bool lifting;
+
     private Image blend;
 
     /// <summary>Wie lange die Blende höchstens auf einen Wechsel wartet, bevor sie trotzdem aufgeht.</summary>
@@ -133,6 +142,7 @@ public class SceneFader : MonoBehaviour
         yield return null;
 
         // ---------- Aufblenden + neue Musik rein ----------
+        lifting = true;
         float total = Mathf.Max(FadeInTime, MusicInTime);
         for (float t = 0f; t < total; t += Time.unscaledDeltaTime)
         {
