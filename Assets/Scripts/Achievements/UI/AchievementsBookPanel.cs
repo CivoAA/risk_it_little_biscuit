@@ -189,6 +189,8 @@ public class AchievementsBookPanel : MonoBehaviour
         pixelFont = PixelUI.FindPixelFont();
         Build();
         BlockHub(true);
+
+        TutorialPanel.ShowOnce(TutorialTopic.Capsule);
     }
 
     private void OnEnable()
@@ -258,6 +260,9 @@ public class AchievementsBookPanel : MonoBehaviour
 
         // Das [E], mit dem die Kapsel aufgeht, darf sie nicht gleich wieder schliessen.
         if (Time.frameCount == openedFrame) return;
+
+        // Das Tutorial liegt obendrauf - solange ruht die Kapsel.
+        if (TutorialPanel.Blocking) return;
 
         if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.E))
         {

@@ -6,6 +6,7 @@ using UnityEngine;
 ///
 /// Spielen      -> lädt den Hub (dort steht die Levelauswahl)
 /// Endless      -> lädt denselben Hub, nur mit vorgewähltem Endless-Haken
+/// Profile      -> öffnet die Profilauswahl (baut sich selbst, siehe ProfilePanel)
 /// Optionen     -> öffnet das Options-Panel (baut sich selbst, siehe OptionsPanel)
 /// Achievements -> öffnet die Achievement-Liste (baut sich selbst, siehe AchievementPanel)
 /// Beenden      -> beendet das Spiel
@@ -37,6 +38,15 @@ public class MainMenuController : MonoBehaviour
     }
 
     // ---------- Overlays ----------
+
+    /// <summary>Profilauswahl (drei Spielstaende, siehe SaveProfiles).</summary>
+    public void OpenProfiles()
+    {
+        if (isLoading) return;
+        PlayClick();
+        // SPIELEN auf der Karte des aktiven Profils startet direkt.
+        ProfilePanel.Open(PlayStory);
+    }
 
     public void OpenOptions()
     {

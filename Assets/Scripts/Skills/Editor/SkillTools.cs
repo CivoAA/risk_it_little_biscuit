@@ -265,7 +265,7 @@ public static class SkillTools
     [MenuItem("Tools/Spielstand/Skilltree zurücksetzen", false, 323)]
     public static void ResetSave()
     {
-        string path = Path.Combine(Application.persistentDataPath, "skills.json");
+        string path = Path.Combine(SaveProfiles.Directory, "skills.json");
 
         bool ok = EditorUtility.DisplayDialog(
             "Skills zuruecksetzen",

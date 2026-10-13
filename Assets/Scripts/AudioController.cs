@@ -464,6 +464,39 @@ public class AudioController : MonoBehaviour
 
     private bool missingMixerLogged;
 
+    private AudioMixerGroup weaponsGroup;
+
+    /// <summary>
+    /// Ausgang fuer Waffen-Sounds: direkt die Master-Gruppe, an "Effects"
+    /// vorbei - Waffen hoeren nur auf den eigenen Waffen-Regler
+    /// (<see cref="AudioSettingsManager.WeaponsScale"/>, im Abspiel-Code
+    /// eingerechnet) und auf Master. Ohne Mixer null (= direkt an den Listener).
+    /// </summary>
+    public AudioMixerGroup WeaponsGroup
+    {
+        get
+        {
+            if (weaponsGroup != null || mainMixer == null) return weaponsGroup;
+            foreach (AudioMixerGroup g in mainMixer.FindMatchingGroups("Master"))
+            {
+                if (g.name == "Master") { weaponsGroup = g; break; }
+            }
+            return weaponsGroup;
+        }
+    }
+
+    /// <summary>
+    /// Eine der festen Quellen als Waffen-Sound spielen: haengt sie auf
+    /// <see cref="WeaponsGroup"/> um und rechnet den Waffen-Regler ein.
+    /// Nur fuer Quellen, die allein von Waffen benutzt werden.
+    /// </summary>
+    public void PlayWeaponSound(AudioSource sound, float volume)
+    {
+        if (sound == null) return;
+        if (WeaponsGroup != null) sound.outputAudioMixerGroup = WeaponsGroup;
+        PalySound(sound, volume * AudioSettingsManager.WeaponsScale);
+    }
+
     // keep your original methods (names preserved)
     public void PalySound(AudioSource sound, float? volume = null)
     {

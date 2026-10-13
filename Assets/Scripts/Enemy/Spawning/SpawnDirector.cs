@@ -57,7 +57,7 @@ public class SpawnDirector : MonoBehaviour
     [Tooltip("Weiter weg wird ein Gegner nach vorn geholt statt stehen gelassen.")]
     [SerializeField] private float recycleDistance = 26f;
 
-    [Tooltip("Weiter weg springt ein Miniboss hinter den Spieler - knapp ausserhalb des Bildes, " .
+    [Tooltip("Weiter weg springt ein Miniboss hinter den Spieler - knapp ausserhalb des Bildes, " +
              "entgegen der Laufrichtung. Er laeuft dann weiter hinterher.")]
     [SerializeField] private float miniBossFollowDistance = 20f;
 
@@ -349,6 +349,22 @@ public class SpawnDirector : MonoBehaviour
 
         Announce(PlanText("ENDLOS!"));
         Debug.Log($"[SpawnDirector] Endlos-Teil beginnt bei {runTime:0}s.");
+    }
+
+    /// <summary>
+    /// Story-Sieg, und der Spieler macht im Endless-Modus weiter
+    /// (<see cref="GameManager.ContinueAsEndless"/>): der Tod, der den Lauf
+    /// beenden sollte, verschwindet, und der Endlos-Teil beginnt sofort.
+    /// </summary>
+    public void ContinueAsEndless()
+    {
+        foreach (Enemy e in FindObjectsByType<Enemy>(FindObjectsSortMode.None))
+        {
+            if (e != null && e.Role == EnemyRole.DeathBoss) Destroy(e.gameObject);
+        }
+        finisherSpawned = true;
+
+        if (escalation == null && plan != null) BeginEndlessPart();
     }
 
     /// <summary>Ansage aus dem Endlos-Teil - uebersetzt wie die Ansagen im Plan.</summary>

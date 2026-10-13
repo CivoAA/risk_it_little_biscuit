@@ -78,6 +78,17 @@ public static class Skills
         RaiseChanged();
     }
 
+    /// <summary>Liest den Spielstand neu ein (Profilwechsel, <see cref="SaveProfiles"/>).</summary>
+    public static void Reload()
+    {
+        activeTree = null;
+        bonuses.Clear();
+        grants.Clear();
+        initialized = false;
+        Init();
+        RaiseChanged();
+    }
+
     private static SkillStore Store
     {
         get

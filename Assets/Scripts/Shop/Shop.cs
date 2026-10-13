@@ -299,6 +299,14 @@ public static class Shop
         RaiseChanged();
     }
 
+    /// <summary>Liest den Spielstand neu ein (Profilwechsel, <see cref="SaveProfiles"/>).</summary>
+    public static void Reload()
+    {
+        initialized = false;
+        Init();
+        RaiseChanged();
+    }
+
     private static ShopStore Store
     {
         get

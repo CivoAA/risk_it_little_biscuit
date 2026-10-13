@@ -10,15 +10,16 @@ public static class Difficulty
 {
     public enum Level { Easy = 0, Normal = 1, Hard = 2 }
 
-    private const string PrefsKey = "difficulty";
+    /// <summary>Gilt je Profil - siehe <see cref="SaveProfiles.PrefKey"/>.</summary>
+    public const string PrefsKey = "difficulty";
 
     public static Level Current
     {
-        get => (Level)Mathf.Clamp(PlayerPrefs.GetInt(PrefsKey, (int)Level.Normal), 0, 2);
+        get => (Level)Mathf.Clamp(PlayerPrefs.GetInt(SaveProfiles.PrefKey(PrefsKey), (int)Level.Normal), 0, 2);
         set
         {
             if (Current == value) return;
-            PlayerPrefs.SetInt(PrefsKey, (int)value);
+            PlayerPrefs.SetInt(SaveProfiles.PrefKey(PrefsKey), (int)value);
             PlayerPrefs.Save();
         }
     }

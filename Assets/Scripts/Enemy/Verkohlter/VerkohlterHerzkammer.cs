@@ -440,6 +440,15 @@ public class VerkohlterHerzkammer : MonoBehaviour
         gm.GameOver();
     }
 
+    /// <summary>
+    /// Story-Sieg in der Kammer, und der Spieler macht im Endless-Modus weiter:
+    /// derselbe Weg nach draussen wie im Endless-Lauf.
+    /// </summary>
+    public void LeaveForEndless()
+    {
+        StartCoroutine(Exit());
+    }
+
     // ---------------------------------------------------------------- Funken
 
     private void SpawnEmber(ref Particle p, bool anywhere)

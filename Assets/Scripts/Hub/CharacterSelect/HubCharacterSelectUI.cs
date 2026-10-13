@@ -585,6 +585,8 @@ public class HubCharacterSelectUI : MonoBehaviour
         if (HubUI.Instance != null) HubUI.Instance.SetPlayerFrozen(true);
 
         PlaySfx(openClip, true);
+
+        TutorialPanel.ShowOnce(TutorialTopic.Character);
     }
 
     public void Close()
@@ -611,6 +613,9 @@ public class HubCharacterSelectUI : MonoBehaviour
 
         // Das [E], mit dem die Auswahl aufgeht, darf nicht gleich durchschlagen
         if (Time.frameCount == openedOnFrame) return;
+
+        // Das Tutorial liegt obendrauf - Maus und Tasten gehoeren ihm.
+        if (TutorialPanel.Blocking) return;
 
         UpdateHover();
 

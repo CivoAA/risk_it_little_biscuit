@@ -4,7 +4,7 @@ using System.IO;
 using UnityEngine;
 
 /// <summary>
-/// Wie weit die Story ist. Gespeichert in story.json im persistentDataPath,
+/// Wie weit die Story ist. Gespeichert in story.json im Ordner des aktiven Profils,
 /// sofort bei jeder Aenderung (passiert nur ein paar Mal im ganzen Spiel).
 ///
 /// Die Welten heissen hier wie ihr Wellenplan (LevelEntry.planId bzw.
@@ -47,7 +47,7 @@ public static class StoryProgress
 
     private static SaveFile data;
 
-    public static string SavePath => Path.Combine(Application.persistentDataPath, FileName);
+    public static string SavePath => Path.Combine(SaveProfiles.Directory, FileName);
 
     /// <summary>Schreibt nichts auf die Platte (Test-Szene, Tests).</summary>
     public static bool SandboxMode { get; set; }
@@ -186,6 +186,9 @@ public static class StoryProgress
         if (!SandboxMode && File.Exists(SavePath)) File.Delete(SavePath);
         Debug.Log("[Story] Story zurueckgesetzt.");
     }
+
+    /// <summary>Liest story.json neu ein (Profilwechsel, <see cref="SaveProfiles"/>).</summary>
+    public static void Reload() => data = null;
 
     /// <summary>
     /// Nur fuer Konsole/Tests: setzt den Stand so, als waeren die ersten

@@ -526,6 +526,22 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+  - label: profile
+    onClick:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 241260809}
+          m_TargetAssemblyTypeName: MainMenuController, Assembly-CSharp
+          m_MethodName: OpenProfiles
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: 
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
   - label: achievements
     onClick:
       m_PersistentCalls:
@@ -581,10 +597,10 @@ MonoBehaviour:
   plateHoverSprite: {fileID: -8180486244138565967, guid: 27dc60bad0b7e66439b651ceac1a25ff, type: 3}
   skinPlateHeight: 14
   skinPlateMinWidth: 92
-  boxCenter: {x: 0, y: 0}
+  boxCenter: {x: 0, y: -12}
   minBoxWidth: 104
   paddingY: 8
-  rowStep: 18
+  rowStep: 16
   boxFill: {r: 0.16862746, g: 0.16862746, b: 0.1882353, a: 0.9411765}
   checkerA: {r: 0.16862746, g: 0.16862746, b: 0.1882353, a: 1}
   checkerB: {r: 0.1882353, g: 0.1882353, b: 0.21176471, a: 1}

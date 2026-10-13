@@ -273,7 +273,7 @@ public static class AchievementTools
     [MenuItem("Tools/Spielstand/Erfolge anzeigen", false, 311)]
     public static void ShowSave()
     {
-        string path = Path.Combine(Application.persistentDataPath, "achievements.json");
+        string path = Path.Combine(SaveProfiles.Directory, "achievements.json");
 
         if (!File.Exists(path))
         {
@@ -288,7 +288,7 @@ public static class AchievementTools
     [MenuItem("Tools/Spielstand/Erfolge zurücksetzen", false, 321)]
     public static void ResetSave()
     {
-        string path = Path.Combine(Application.persistentDataPath, "achievements.json");
+        string path = Path.Combine(SaveProfiles.Directory, "achievements.json");
 
         bool ok = EditorUtility.DisplayDialog(
             "Achievements zurücksetzen",

@@ -104,7 +104,7 @@ public class AreaWeaponJamJar : Weapon
 
         if (AudioController.Instance != null)
         {
-            AudioController.Instance.PalySound(AudioController.Instance.JarJamBreakingGlass, 0.1f);
+            AudioController.Instance.PlayWeaponSound(AudioController.Instance.JarJamBreakingGlass, 0.1f);
         }
 
         // Durch die Evo ersetzt: das Glas zerbricht, hinterlaesst aber nichts.

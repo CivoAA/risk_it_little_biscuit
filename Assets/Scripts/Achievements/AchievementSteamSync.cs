@@ -112,7 +112,10 @@ public static class AchievementSteamSync
 
             bool localHasIt = Achievements.IsUnlocked(def);
 
-            if (steamHasIt && !localHasIt)
+            // Von Steam uebernommen wird nur ins erste Profil (dort lag der Spielstand
+            // vor den Profilen). Sonst haette jedes neue Profil sofort den Fortschritt
+            // eines anderen - Erfolge schalten Charaktere und Shop-Plaetze frei.
+            if (steamHasIt && !localHasIt && SaveProfiles.Active == 0)
             {
                 Achievements.AdoptFromSteam(def);
                 pulled++;

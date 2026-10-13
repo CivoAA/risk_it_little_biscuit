@@ -14,9 +14,9 @@ using UnityEngine.Audio;
 /// dieselbe Variante hintereinander.
 ///
 /// Wie laut ein Sound ingame ist, steht nur hier in der Tabelle (volume); die
-/// WAVs selbst sind alle gleich laut normiert. Ausgabe ueber die Effekt-Gruppe
-/// des AudioControllers (Lautstaerke-Regler), dazu der eigene Waffen-Regler
-/// aus den Optionen (AudioSettingsManager.WeaponsScale).
+/// WAVs selbst sind alle gleich laut normiert. Ausgabe ueber
+/// AudioController.WeaponsGroup (Master, nicht Effects) - es zaehlen nur
+/// Master und der eigene Waffen-Regler (AudioSettingsManager.WeaponsScale).
 /// </summary>
 public static class WeaponSounds
 {
@@ -203,9 +203,8 @@ public static class WeaponSounds
         host = new GameObject("WeaponSounds");
         RunScene.Place(host, "Effekte");
 
-        AudioMixerGroup group = null;
-        if (AudioController.Instance != null && AudioController.Instance.EarthHit != null)
-            group = AudioController.Instance.EarthHit.outputAudioMixerGroup;
+        // An "Effects" vorbei: der Geraeusche-Regler soll Waffen nicht treffen.
+        AudioMixerGroup group = AudioController.Instance != null ? AudioController.Instance.WeaponsGroup : null;
 
         for (int i = 0; i < Voices; i++)
         {

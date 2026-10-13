@@ -15,7 +15,7 @@ using UnityEngine.UI;
 ///                greift wie ein Reiter ins Feld
 ///    Mitte       Banner mit dem Pfadnamen, darunter der Baum (HubSkilltreeGraph)
 ///    rechts      der Knoten unter der Maus bzw. der gewaehlte: Form, Name,
-///                Wirkung, Preis/Zustand
+///                Wirkung (scrollt, wenn sie zu lang ist), Preis/Zustand
 ///    Fussleiste  ZURUECK  RESET        Tastenhinweis             LERNEN
 ///
 ///  Klick auf einen Knoten waehlt ihn, LERNEN (oder ein zweiter Klick, Enter)
@@ -29,7 +29,8 @@ using UnityEngine.UI;
 ///  holt sich das Fenster ueber Skills.Sync() den Baum des gewaehlten Charakters.
 ///
 ///  Bedienung: Maus, W/S bzw. Hoch/Runter = Kategorie, A/D bzw. Links/Rechts =
-///  Knoten, Enter/Leertaste = lernen, Mausrad = Baum scrollen, E/ESC = zu.
+///  Knoten, Enter/Leertaste = lernen, Mausrad = Baum scrollen (ueber der rechten
+///  Spalte: deren Text), E/ESC = zu.
 ///
 ///  Das Fenster haengt als Komponente am Skilltree-Objekt im Hub (siehe
 ///  <see cref="HubSkilltreeTrigger"/>); gebaut wird es erst beim Oeffnen.
@@ -109,10 +110,12 @@ public class HubSkilltreeUI : MonoBehaviour
     Image detailRule;
     SkinButton learnButton, resetButton;
 
-    // Erklaerung eines Sterns: zu lang fuer die Spalte rechts, darum eine
-    // breite Box ueber dem Baumfeld.
-    RectTransform starBox;
-    TextMeshProUGUI starText;
+    // Der Text rechts sitzt in einem Fenster und scrollt, wenn er nicht passt.
+    RectTransform descView;
+    Image descHandle;
+    float descScroll, descHeight;
+    int descViewY, descViewH;
+    bool overDetail;
 
     RectTransform dialog, dialogPage;
 
@@ -146,6 +149,8 @@ public class HubSkilltreeUI : MonoBehaviour
         HubUI.Instance.SetPlayerFrozen(true);
 
         PlaySfx(openClip);
+
+        TutorialPanel.ShowOnce(TutorialTopic.Skilltree);
     }
 
     public void Close()
@@ -215,6 +220,9 @@ public class HubSkilltreeUI : MonoBehaviour
         textFont = PixelUI.FindTextFont();
         pixelFont = PixelUI.FindPixelFont();
         detailShapes = new SkillShapeSprites(HubSkilltreeGraph.Shape);
+        overDetail = false;
+        shownDesc = null;
+        descScroll = 0f;
 
         // Eigenes Wurzelobjekt: das Skilltree-Objekt im Hub ist skaliert und
         // traegt Sprite und Zone - die Leinwand gehoert nicht daran.
@@ -238,7 +246,6 @@ public class HubSkilltreeUI : MonoBehaviour
         BuildField();
         BuildCategories();
         BuildDetail();
-        BuildStarBox();
         BuildFooter();
 
         OptionsKit.Layout(page, scaler, Content);
@@ -347,7 +354,12 @@ public class HubSkilltreeUI : MonoBehaviour
 
     void BuildDetail()
     {
-        OptionsKit.Img("DetailWell", page, DetX, BodyY, DetW, BodyH, GameHudSkin.Well, true);
+        Image well = OptionsKit.Img("DetailWell", page, DetX, BodyY, DetW, BodyH, GameHudSkin.Well, true);
+        // Ueber der Spalte gehoert das Mausrad ihrem Text, nicht dem Baum.
+        well.raycastTarget = true;
+        PointerRelay relay = well.gameObject.AddComponent<PointerRelay>();
+        relay.Enter = () => overDetail = true;
+        relay.Exit = () => overDetail = false;
 
         int px = DetX + (DetW - PlateS) / 2, py = BodyY + 7;
         plateImg = OptionsKit.Img("Plate", page, px, py, PlateS, PlateS, GameHudSkin.IconPlate(false));
@@ -368,10 +380,15 @@ public class HubSkilltreeUI : MonoBehaviour
 
         detailRule = OptionsKit.Img("Rule", page, DetX + 5, py + PlateS + 44, DetW - 10, 2, GameHudSkin.Rule, true);
 
-        detailDesc = OptionsKit.Label("Desc", page, tx, py + PlateS + 48, tw, 40, "", textFont,
+        descView = OptionsKit.Rect("DescView", page, tx, py + PlateS + 48, tw, 40);
+        descView.gameObject.AddComponent<RectMask2D>();
+        detailDesc = OptionsKit.Label("Desc", descView, 0, 0, tw, 40, "", textFont,
                                       OptionsKit.SizeText, GameHudSkin.Parchment, TextAlignmentOptions.TopLeft);
         detailDesc.textWrappingMode = TextWrappingModes.Normal;
         detailDesc.richText = true;
+        descHandle = OptionsKit.Img("DescScroll", page, DetX + DetW - 4, py + PlateS + 48, 2, 40,
+                                    GameHudSkin.White, GameHudSkin.Stone);
+        descHandle.enabled = false;
 
         int sy = BodyY + BodyH - 17;
         OptionsKit.Img("StatusPlate", page, DetX + 3, sy, DetW - 6, 14, GameHudSkin.Plate, true);
@@ -379,53 +396,6 @@ public class HubSkilltreeUI : MonoBehaviour
         statusText = OptionsKit.Label("Status", page, DetX + 19, sy + 1, DetW - 24, 13, "", textFont,
                                       OptionsKit.SizeText, GameHudSkin.Cream, TextAlignmentOptions.Left);
         statusText.overflowMode = TextOverflowModes.Ellipsis;
-    }
-
-    const int StarBoxPad = 5, StarBoxInset = 4;
-
-    void BuildStarBox()
-    {
-        starBox = OptionsKit.Rect("StarBox", page, FieldX + StarBoxInset, BodyY, FieldW - 2 * StarBoxInset, 20);
-        Image back = starBox.gameObject.AddComponent<Image>();
-        back.sprite = GameHudSkin.Plate;
-        back.type = Image.Type.Sliced;
-        back.raycastTarget = false;
-
-        starText = OptionsKit.Label("Text", starBox, StarBoxPad, StarBoxPad - 1, FieldW - 2 * StarBoxInset - 2 * StarBoxPad, 13,
-                                    "", textFont, OptionsKit.SizeText, GameHudSkin.Parchment, TextAlignmentOptions.TopLeft);
-        starText.textWrappingMode = TextWrappingModes.Normal;
-        starBox.gameObject.SetActive(false);
-    }
-
-    /// <summary>
-    /// Zeigt die Erklaerung der Sterne von <paramref name="node"/> in der Box
-    /// ueber dem Baum - unten im Feld, bei Knoten der unteren Bahn oben, damit
-    /// die Box den Knoten selbst nicht verdeckt. Ohne Stern: Box weg.
-    /// </summary>
-    void ShowStarBox(SkillNodeDef node)
-    {
-        if (starBox == null) return;
-
-        string text = node != null && node.HasGrants ? node.GrantText : "";
-        if (string.IsNullOrWhiteSpace(text))
-        {
-            starBox.gameObject.SetActive(false);
-            return;
-        }
-
-        int w = FieldW - 2 * StarBoxInset, tw = w - 2 * StarBoxPad;
-        starText.text = text;
-        int th = Mathf.CeilToInt(starText.GetPreferredValues(text, tw, 0f).y);
-        int h = th + 2 * StarBoxPad;
-        int y = node.Lane == SkillLane.Unten
-            ? BodyY + BannerH + 6
-            : BodyY + BodyH - StarBoxInset - h;
-
-        OptionsKit.Move(starBox, FieldX + StarBoxInset, y, w, h);
-        OptionsKit.Move(starText.rectTransform, StarBoxPad, StarBoxPad - 1, tw, th + 2);
-        starBox.gameObject.SetActive(true);
-        // Der Baum baut seine Knoten beim Kategoriewechsel neu - die Box muss obenauf.
-        starBox.SetAsLastSibling();
     }
 
     void BuildFooter()
@@ -467,6 +437,9 @@ public class HubSkilltreeUI : MonoBehaviour
         // Das [E], mit dem das Fenster aufgeht, darf es nicht gleich schliessen.
         if (Time.frameCount == openedOnFrame) return;
 
+        // Das Tutorial liegt obendrauf - solange ruht der Baum.
+        if (TutorialPanel.Blocking) return;
+
         // Offene Rueckfrage: nur ESC/E bricht ab, der Baum dahinter ruht.
         if (dialog != null)
         {
@@ -494,7 +467,11 @@ public class HubSkilltreeUI : MonoBehaviour
             LearnSelected();
 
         float wheel = Input.mouseScrollDelta.y;
-        if (!Mathf.Approximately(wheel, 0f)) graph.Scroll(wheel > 0f ? -1f : 1f);
+        if (!Mathf.Approximately(wheel, 0f))
+        {
+            if (overDetail) ScrollDetail(-wheel * 13f);
+            else graph.Scroll(wheel > 0f ? -1f : 1f);
+        }
     }
 
     void StepBranch(int delta)
@@ -745,8 +722,6 @@ public class HubSkilltreeUI : MonoBehaviour
 
         if (node != null) ShowNode(node);
         else ShowBranch(branch);
-        ShowStarBox(node);
-
         ReflowDetail();
 
         // Der Knopf gilt immer dem GEWAEHLTEN Knoten, nicht dem unter der Maus.
@@ -778,8 +753,7 @@ public class HubSkilltreeUI : MonoBehaviour
         detailName.color = unlocked ? GameHudSkin.Gold : GameHudSkin.Cream;
         detailSub.text = node.Branch != null ? node.Branch.Name.ToUpperInvariant() : "";
         detailSub.color = Lift(accent, 0.25f);
-        // Sterne erklaert die Box ueber dem Baum; hier bleiben nur die Werte.
-        detailDesc.text = node.HasGrants ? node.StatText : node.Description;
+        detailDesc.text = node.HasGrants ? NodeText(node) : node.Description;
 
         if (node.IsStart)
             SetStatus(null, Loc.Get("ui.skilltree.status.start", "Hier beginnt der Pfad."), GameHudSkin.Stone);
@@ -847,7 +821,44 @@ public class HubSkilltreeUI : MonoBehaviour
         y += 4;
 
         int statusY = BodyY + BodyH - 17;
-        OptionsKit.Move(detailDesc.rectTransform, tx, y, tw, statusY - y - 1);
+        int viewH = statusY - y - 1;
+        bool sameText = detailDesc.text == shownDesc;
+        shownDesc = detailDesc.text;
+        descViewY = y;
+        descViewH = viewH;
+        descHeight = string.IsNullOrEmpty(detailDesc.text)
+            ? 0f
+            : Mathf.Ceil(detailDesc.GetPreferredValues(detailDesc.text, tw, 0f).y);
+
+        OptionsKit.Move(descView, tx, y, tw, viewH);
+        OptionsKit.Move(detailDesc.rectTransform, 0, 0, tw, Mathf.Max(viewH, descHeight + 2));
+        // Neuer Text faengt oben an; derselbe (Maus kurz weg und zurueck) bleibt stehen.
+        ScrollDetail(sameText ? 0f : -descScroll);
+    }
+
+    string shownDesc;
+
+    /// <summary>Werte und Sterne untereinander - die Sterne eine Stufe heller.</summary>
+    static string NodeText(SkillNodeDef node)
+    {
+        string stats = node.StatText, grants = node.GrantText;
+        if (string.IsNullOrWhiteSpace(grants)) return stats;
+        string g = $"<color=#{ColorUtility.ToHtmlStringRGB(GameHudSkin.Cream)}>{grants}</color>";
+        return string.IsNullOrWhiteSpace(stats) ? g : stats + '\n' + g;
+    }
+
+    /// <summary>Verschiebt den Text rechts um ganze Pixel und stellt den Balken nach.</summary>
+    void ScrollDetail(float delta)
+    {
+        float hidden = Mathf.Max(0f, descHeight - descViewH);
+        descScroll = Mathf.Round(Mathf.Clamp(descScroll + delta, 0f, hidden));
+        detailDesc.rectTransform.anchoredPosition = new Vector2(0f, descScroll);
+
+        descHandle.enabled = hidden > 0f;
+        if (hidden <= 0f) return;
+        float size = Mathf.Max(8f, Mathf.Round(descViewH * (descViewH / descHeight)));
+        float hy = descViewY + Mathf.Round((descViewH - size) * (descScroll / hidden));
+        OptionsKit.Move(descHandle.rectTransform, DetX + DetW - 4, hy, 2, size);
     }
 
     void SetShape(SkillShape shape, bool visible)

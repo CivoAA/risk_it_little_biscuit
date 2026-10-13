@@ -1904,7 +1904,7 @@ public partial class LevelUpScreen : MonoBehaviour
         public bool Disabled, Active;
         public float ShakeUntil;
 
-        private readonly RectInt rect;
+        private RectInt rect;
         private readonly Image bg, icon;
         private readonly RectTransform countChip, keyChip;
         private readonly PixText label, countText, keyText;
@@ -1958,6 +1958,9 @@ public partial class LevelUpScreen : MonoBehaviour
             if (icon != null) icon.rectTransform.pivot = new Vector2(0.5f, 1f);
             if (icon != null) icon.rectTransform.anchoredPosition += new Vector2(icon.rectTransform.sizeDelta.x * 0.5f, 0f);
         }
+
+        /// <summary>Waagerecht verschieben (die Leiste im Abschluss hat zwei oder drei Knoepfe).</summary>
+        public void MoveX(int x) => rect.x = x;
 
         public void SetLabel(string text)
         {
