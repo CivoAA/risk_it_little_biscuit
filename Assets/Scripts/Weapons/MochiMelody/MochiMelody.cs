@@ -22,7 +22,7 @@ using UnityEngine;
 /// damage   = Treffer einer Note; der Akkord macht <see cref="ChordFactor"/> davon (+ Crescendo)
 /// range    = Zielsuche der Noten in Tiles
 /// duration = so lange bremst der Akkord (Duration-Buff zaehlt)
-/// shots    = Noten pro Schlag (+ eine je 2 Extra-Schuesse, Spieluhr: je 3)
+/// shots    = Noten pro Schlag (+ eine je 2 Extra-Schuesse, Spieluhr: je 4)
 ///
 /// Die Werte stehen im Code (<see cref="LevelStats"/>), nicht am Prefab - sie
 /// ueberschreiben beim Start, was im Inspector steht. Bilder und Toene in

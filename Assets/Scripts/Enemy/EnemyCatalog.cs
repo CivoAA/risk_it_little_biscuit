@@ -510,13 +510,28 @@ public static class EnemyCatalog
     /// <summary>XP-Anteil normaler Gegner nach <see cref="NormalXpFalloffEnd"/>.</summary>
     public const float NormalXpLateFactor = 0.8f;
 
+    /// <summary>Ab hier (Sekunden) sinkt der XP-Anteil ein zweites Mal.</summary>
+    public const float NormalXpLate2Start = 600f;     // Minute 10
+
+    /// <summary>Ab hier (Sekunden) gilt <see cref="NormalXpLate2Factor"/> voll.</summary>
+    public const float NormalXpLate2End = 660f;       // Minute 11
+
+    /// <summary>XP-Anteil normaler Gegner nach <see cref="NormalXpLate2End"/>.</summary>
+    public const float NormalXpLate2Factor = 0.65f;
+
     /// <summary>
-    /// XP-Faktor fuer normale Gegner zur Laufzeit: 1 bis Minute 3, dann
-    /// gleitend runter bis Minute 4. Elites und Bosse bleiben unberuehrt.
+    /// XP-Faktor fuer normale Gegner zur Laufzeit: 1 bis Minute 3, gleitend
+    /// runter bis Minute 4, ab Minute 10 noch einmal gleitend runter bis
+    /// Minute 11. Elites und Bosse bleiben unberuehrt.
     /// </summary>
-    public static float NormalXpFactor(float runTime) =>
-        Mathf.Lerp(1f, NormalXpLateFactor,
-                   Mathf.InverseLerp(NormalXpFalloffStart, NormalXpFalloffEnd, runTime));
+    public static float NormalXpFactor(float runTime)
+    {
+        if (runTime >= NormalXpLate2Start)
+            return Mathf.Lerp(NormalXpLateFactor, NormalXpLate2Factor,
+                              Mathf.InverseLerp(NormalXpLate2Start, NormalXpLate2End, runTime));
+        return Mathf.Lerp(1f, NormalXpLateFactor,
+                          Mathf.InverseLerp(NormalXpFalloffStart, NormalXpFalloffEnd, runTime));
+    }
 
     /// <summary>
     /// Miniboss, Boss und Tod: unverrueckbar, zaehlen nicht zum Druck, werden
@@ -686,7 +701,7 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Elite_Gegner/Elite-Fluegdolch.prefab");
 
         Def(EnemyId.KeksKoenig, "Keks-Koenig",
-            health: 5000f, damage: 38.7f, speed: 4f, exp: 0, pushTime: 0f,
+            health: 7500f, damage: 38.7f, speed: 4f, exp: 0, pushTime: 0f,
             role: EnemyRole.Boss, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/new/boss/kekskoenig_lauf.png", fps: 12f,
             colliderRadius: 1.95f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
@@ -735,7 +750,7 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Gegner/Kirschslime.prefab", hopFirst: 4, hopLast: 6);
 
         Def(EnemyId.Milchpanzer, "Milchpanzer",
-            health: 3000f, damage: 14f, speed: 1.4f, exp: 700, pushTime: 0f,
+            health: 4500f, damage: 14f, speed: 1.4f, exp: 700, pushTime: 0f,
             role: EnemyRole.MiniBoss, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/miniboss/milchpanzer_fahrt.png", fps: 12f,
             colliderRadius: 1.2f, colliderOffset: new Vector2(0f, 1.25f), scale: 1f,
@@ -756,14 +771,14 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Gegner/WeisseMessermaus.prefab");
 
         Def(EnemyId.Glutwurz, "Glutwurz",
-            health: 7500f, damage: 40f, speed: 2.2f, exp: 0, pushTime: 0f,
+            health: 11250f, damage: 40f, speed: 2.2f, exp: 0, pushTime: 0f,
             role: EnemyRole.Boss, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/boss/baumboss_walk.png", fps: 12f,
             colliderRadius: 0.95f, colliderOffset: new Vector2(0f, 1.25f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Boss/Glutwurz.prefab");
 
         Def(EnemyId.Schleimkoenig, "Schleimkoenig",
-            health: 2400f, damage: 12f, speed: 1.6f, exp: 600, pushTime: 0f,
+            health: 3600f, damage: 12f, speed: 1.6f, exp: 600, pushTime: 0f,
             role: EnemyRole.MiniBoss, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/miniboss/schleimkoenig_hop.png", fps: 12f,
             colliderRadius: 1.15f, colliderOffset: new Vector2(0f, 0.85f), scale: 1f,
@@ -777,7 +792,7 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Boss/TodesRamen.prefab");
 
         Def(EnemyId.Verkohlter, "Der Verkohlte",
-            health: 6000f, damage: 25f, speed: 1.9f, exp: 0, pushTime: 0f,
+            health: 9000f, damage: 25f, speed: 1.9f, exp: 0, pushTime: 0f,
             role: EnemyRole.Boss, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/boss/verkohlter_walk.png", fps: 12f,
             colliderRadius: 0.85f, colliderOffset: new Vector2(0f, 1f), scale: 1f,
@@ -819,7 +834,7 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Elite_Gegner/Softi.prefab");
 
         Def(EnemyId.Eiskaiser, "Eiskaiser",
-            health: 7000f, damage: 30f, speed: 1.7f, exp: 0, pushTime: 0f,
+            health: 10500f, damage: 30f, speed: 1.7f, exp: 0, pushTime: 0f,
             role: EnemyRole.Boss, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/boss/eiskaiser_walk_s.png", fps: 12f,
             colliderRadius: 1.0f, colliderOffset: new Vector2(0f, 1.15f), scale: 1f,
@@ -833,7 +848,7 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Boss/Lawinenkugel.prefab");
 
         Def(EnemyId.Squiddy, "Das Gespenst",
-            health: 7200f, damage: 30f, speed: 1.9f, exp: 0, pushTime: 0f,
+            health: 10800f, damage: 30f, speed: 1.9f, exp: 0, pushTime: 0f,
             role: EnemyRole.Boss, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/boss/squiddy_geist_schweben.png", fps: 12f,
             colliderRadius: 1.2f, colliderOffset: new Vector2(0f, 2.05f), scale: 1f,
@@ -1125,21 +1140,21 @@ public static class EnemyCatalog
         // ------------------------------------------------- Zwischenbosse (Welten 3-5)
 
         Def(EnemyId.Stracciatella, "Stracciatella",
-            health: 3200f, damage: 14f, speed: 1.5f, exp: 750, pushTime: 0f,
+            health: 4800f, damage: 14f, speed: 1.5f, exp: 750, pushTime: 0f,
             role: EnemyRole.MiniBoss, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/miniboss/stracciatella_gleit.png", fps: 12f,
             colliderRadius: 1.0f, colliderOffset: new Vector2(0f, 1.15f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Mini_Boss/Stracciatella.prefab");
 
         Def(EnemyId.Knusperhaus, "Knusperhaus",
-            health: 3600f, damage: 16f, speed: 1.7f, exp: 800, pushTime: 0f,
+            health: 5400f, damage: 16f, speed: 1.7f, exp: 800, pushTime: 0f,
             role: EnemyRole.MiniBoss, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/miniboss/knusperhaus_lauf.png", fps: 12f,
             colliderRadius: 1.05f, colliderOffset: new Vector2(0f, 1.45f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Mini_Boss/Knusperhaus.prefab");
 
         Def(EnemyId.Ofenkartoffel, "Ofenkartoffel",
-            health: 4200f, damage: 18f, speed: 1.45f, exp: 900, pushTime: 0f,
+            health: 6300f, damage: 18f, speed: 1.45f, exp: 900, pushTime: 0f,
             role: EnemyRole.MiniBoss, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/miniboss/ofenkartoffel_lauf.png", fps: 12f,
             colliderRadius: 1.0f, colliderOffset: new Vector2(0f, 1.0f), scale: 1f,

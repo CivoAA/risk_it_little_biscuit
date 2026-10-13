@@ -23,8 +23,8 @@ using UnityEngine;
 /// </summary>
 public class MusicBoxQuartet : MochiMelody
 {
-    /// <summary>Jede Note kommt aus vier Boxen: drei Extra-Schuesse fuer eine mehr.</summary>
-    protected override int ExtraShotsPerShot => 3;
+    /// <summary>Jede Note kommt aus vier Boxen: vier Extra-Schuesse fuer eine mehr.</summary>
+    protected override int ExtraShotsPerShot => 4;
 
     /// <summary>So viele Boxen stehen auf einmal.</summary>
     public const int Boxes = 4;
@@ -37,6 +37,12 @@ public class MusicBoxQuartet : MochiMelody
 
     /// <summary>Schaden je Box relativ zur hoechsten Melodie-Stufe.</summary>
     public const float DamageFactor = 1.2f;
+
+    /// <summary>Davon geht noch so viel Schaden je Note ab (Melodie Hoechststufe 5.5 -> 6.6 - 1 = 5.6).</summary>
+    public const float DamageMinus = 1f;
+
+    /// <summary>Noten je Box und Schlag (Melodie Hoechststufe: 3) - mal vier Boxen.</summary>
+    public const int NotesPerBox = 1;
 
     /// <summary>Zielsuche je Box (Melodie Hoechststufe: 8) - jede Box kuemmert sich um ihre Ecke.</summary>
     public const float BoxRange = 7f;
@@ -52,8 +58,9 @@ public class MusicBoxQuartet : MochiMelody
     {
         base.Awake();
         WeaponStats max = stats[stats.Count - 1].Clone();
-        max.damage *= DamageFactor;
+        max.damage = max.damage * DamageFactor - DamageMinus;
         max.range = BoxRange;
+        max.shots = NotesPerBox;
         max.description = "Vier Musikboxen spielen die Melodie im Takt, alle vier Takte an neuer Stelle";
         stats = new List<WeaponStats> { max };
         maxweaponLevel = 0;

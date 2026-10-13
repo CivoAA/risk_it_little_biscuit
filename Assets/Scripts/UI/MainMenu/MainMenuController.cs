@@ -6,7 +6,8 @@ using UnityEngine;
 ///
 /// Spielen      -> lädt den Hub (dort steht die Levelauswahl)
 /// Endless      -> lädt denselben Hub, nur mit vorgewähltem Endless-Haken
-/// Profile      -> öffnet die Profilauswahl (baut sich selbst, siehe ProfilePanel)
+/// Profile      -> öffnet die Profilauswahl (baut sich selbst, siehe ProfilePanel);
+///                 kein Menüeintrag mehr, nur noch über das Profil-Schild oben links
 /// Optionen     -> öffnet das Options-Panel (baut sich selbst, siehe OptionsPanel)
 /// Achievements -> öffnet die Achievement-Liste (baut sich selbst, siehe AchievementPanel)
 /// Beenden      -> beendet das Spiel
