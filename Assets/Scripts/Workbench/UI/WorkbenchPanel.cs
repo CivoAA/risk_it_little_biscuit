@@ -38,6 +38,9 @@ public class WorkbenchPanel : MonoBehaviour
     // Kopfzeile
     private static readonly Vector4 Title   = new Vector4(9f, 14f, 140f, 9f);
     private static readonly Vector4 BtnBack = new Vector4(259f, 12f, 52f, 14f);
+    // Kurzer Hinweis zwischen Titel und Zurueck-Knopf (z.B. "kein Platz mehr")
+    private static readonly Vector4 Hint    = new Vector4(100f, 14f, 154f, 9f);
+    private const float HintShow = 2f, HintFade = 0.5f;
 
     // Verteiler-Board (Sprite ist 167x80: 165x78 plus 2px Schlagschatten)
     private static readonly Vector4 Parchment = new Vector4(9f, 26f, 167f, 80f);
@@ -150,6 +153,8 @@ public class WorkbenchPanel : MonoBehaviour
     private TMP_Text[] tabLabels;
     private TMP_Text countWeapons, countBuffs, evoTitle, libHead;
     private TMP_Text infoName, infoDesc;
+    private TMP_Text hint;
+    private float hintLeft;
     private GameObject scalingButton;
 
     // Skalierungs-Overlay: wie die Waffe mit Extra-Schuss, AOE, Wirkdauer skaliert
@@ -372,6 +377,8 @@ public class WorkbenchPanel : MonoBehaviour
 
     private void Update()
     {
+        TickHint();
+
         // Der Tastendruck, der das Fenster aufgemacht hat, darf es nicht gleich
         // wieder zumachen.
         if (Time.frameCount == openedFrame) return;
@@ -455,6 +462,9 @@ public class WorkbenchPanel : MonoBehaviour
     {
         Label("Title", page, Title, Loc.Get("ui.workbench.title", "WERKBANK"),
               SizeTitle, TextCream, TextAlignmentOptions.Left);
+
+        hint = Label("Hint", page, Hint, "", SizeText, TextGold, TextAlignmentOptions.Right);
+        hint.enabled = false;
 
         // Raus geht es mit E und Esc - aber nicht jeder probiert Tasten aus.
         // Die rechte Kante liegt buendig mit der Bibliothek darunter.
@@ -1033,8 +1043,44 @@ public class WorkbenchPanel : MonoBehaviour
 
     private void ClickEvo(EvoDef evo)
     {
-        if (!Loadout.ToggleEvo(evo)) return;
-        PlayClick();
+        if (Loadout.ToggleEvo(evo))
+        {
+            PlayClick();
+            return;
+        }
+
+        // Kein Platz mehr: sonst passiert beim Klick einfach nichts und der
+        // Spieler weiss nicht, warum.
+        PoolKind? full = Loadout.EvoBlockedBy(evo);
+        if (full == null) return;
+        ShowHint(full == PoolKind.Buff
+            ? Loc.Get("ui.workbench.hint.buffs_full", "Kein Platz mehr für Buffs")
+            : Loc.Get("ui.workbench.hint.weapons_full", "Kein Platz mehr für Waffen"));
+    }
+
+    // ---------- Hinweis ----------
+
+    private void ShowHint(string text)
+    {
+        hint.text = text;
+        hint.enabled = true;
+        hintLeft = HintShow + HintFade;
+        SetHintAlpha(1f);
+    }
+
+    private void TickHint()
+    {
+        if (hintLeft <= 0f) return;
+        hintLeft -= Time.unscaledDeltaTime;
+        if (hintLeft <= 0f) hint.enabled = false;
+        else SetHintAlpha(Mathf.Clamp01(hintLeft / HintFade));
+    }
+
+    private void SetHintAlpha(float a)
+    {
+        Color c = hint.color;
+        c.a = a;
+        hint.color = c;
     }
 
     // ---------- Skalierungs-Overlay ----------
