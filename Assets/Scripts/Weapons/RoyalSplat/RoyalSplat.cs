@@ -48,12 +48,12 @@ public class RoyalSplat : Weapon
     private static readonly WeaponStats[] LevelStats =
     {
         //    cooldown  damage  Wurfweite  Pfuetze  Klopse
-        Level(2.4f, 12f, 6.5f, 0f,   1, "Ein Gelee-Klops plumpst auf die dichteste Gegnergruppe und hüpft einmal weiter"),
-        Level(2.4f, 16f, 6.5f, 0f,   1, "Schaden +4"),
-        Level(2.2f, 16f, 7f,   0f,   1, "Der Klops hüpft zweimal weiter"),
-        Level(2.2f, 18f, 7f,   2.5f, 1, "Klebrige Pfütze: Wo er zuletzt landet, bleiben Gegner kleben"),
-        Level(2.0f, 20f, 7.5f, 2.5f, 1, "Hüpft dreimal weiter, größerer Platscher"),
-        Level(1.8f, 26f, 8f,   3f,   1, "Schaden +6, zum Schluss zerplatzt er in drei Mini-Klopse"),
+        Level(2.4f,  6f, 6.5f, 0f,   1, "Ein Gelee-Klops plumpst auf die dichteste Gegnergruppe und hüpft einmal weiter"),
+        Level(2.4f,  8f, 6.5f, 0f,   1, "Schaden +2"),
+        Level(2.2f,  8f, 7f,   0f,   1, "Der Klops hüpft zweimal weiter"),
+        Level(2.2f,  9f, 7f,   2.5f, 1, "Klebrige Pfütze: Wo er zuletzt landet, bleiben Gegner kleben"),
+        Level(2.0f, 10f, 7.5f, 2.5f, 1, "Hüpft dreimal weiter, größerer Platscher"),
+        Level(1.8f, 13f, 8f,   3f,   1, "Schaden +3, zum Schluss zerplatzt er in drei Mini-Klopse"),
     };
 
     private static readonly int[] BouncesPerLevel = { 1, 1, 2, 2, 3, 3 };
