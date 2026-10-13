@@ -29,6 +29,21 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private float endlessCurrencyStart = -1f;
 
+    /// <summary>
+    /// Story-Sieg, danach im Endless-Modus weitergespielt: so viel Waehrung
+    /// wurde beim Sieg schon gutgeschrieben - am Ende zaehlt nur der Rest.
+    /// </summary>
+    private int currencyPaid;
+
+    /// <summary>Der letzte Abschluss war ein Story-Sieg (Sieg-Bildschirm offen).</summary>
+    private bool storyWon;
+
+    /// <summary>
+    /// Dieser Lauf war Story und laeuft nach dem Sieg als Endless weiter.
+    /// Zurueck im Hub gilt dann wieder Story.
+    /// </summary>
+    public bool ContinuedAsEndless { get; private set; }
+
     private int lastTimerSecond = -1;
 
     void Awake()
@@ -78,8 +93,11 @@ public class GameManager : MonoBehaviour
 
         Achievements.Unlock(Ach.FirstDeath);
         currency = EstimateCurrency();
-        Shop.AddCurrency(currency);
+        // Nach "Endless weiterspielen" ist der Story-Teil schon ausgezahlt.
+        Shop.AddCurrency(Mathf.Max(0, currency - currencyPaid));
+        currencyPaid = Mathf.Max(currencyPaid, currency);
         gameActiv = false;
+        storyWon = won;
 
         // Der Lauf ist vorbei - was sich an Charakter-XP angesammelt hat, jetzt
         // wegschreiben statt auf den naechsten 5-Sekunden-Takt zu warten.
@@ -163,6 +181,48 @@ public class GameManager : MonoBehaviour
         return ((fromLevels + (10 * (level - 1)) + gameTime) / 2f) * currencyGainMultiplire;
     }
 
+    /// <summary>
+    /// Kann der Sieg-Bildschirm "Endless weiterspielen" anbieten? Nur nach
+    /// einem Story-Sieg auf einer echten Karte, deren Plan noch laeuft.
+    /// </summary>
+    public bool CanContinueAsEndless =>
+        storyWon && !gameActiv && !GameSession.IsEndless
+        && MapDefinition.Active != null && SpawnDirector.Active != null
+        && PlayerController.Instance != null && !SceneFader.IsFading;
+
+    /// <summary>
+    /// Story-Sieg, aber der Lauf geht weiter: Sieg-Bildschirm zu, Spieler
+    /// zurueck ins Spiel, und der Endlos-Teil beginnt direkt - wie in einem
+    /// Endless-Lauf nach dem Boss. Waehrung und Bestwerte des Siegs sind schon
+    /// verbucht; der Tod am Ende zaehlt als Endless-Lauf dieser Karte.
+    /// </summary>
+    public void ContinueAsEndless()
+    {
+        if (!CanContinueAsEndless) return;
+
+        GameSession.SelectedMode = GameMode.Endless;
+        ContinuedAsEndless = true;
+        storyWon = false;
+        bossSpawned = false;
+
+        UIController ui = UIController.Instance;
+        if (ui != null)
+        {
+            ui.WinPanel.SetActive(false);
+            ui.GameOverPanel.SetActive(false);
+        }
+
+        Time.timeScale = 1f;
+        gameActiv = true;
+        lastTimerSecond = -1;
+
+        PlayerController.Instance.ReviveForEndless();
+        SpawnDirector.Active.ContinueAsEndless();
+
+        // Vulkan-Finale: der Sieg fiel im Herz des Verkohlten - erst raus in die Welt.
+        if (VerkohlterHerzkammer.Active != null) VerkohlterHerzkammer.Active.LeaveForEndless();
+    }
+
     IEnumerator ShowGameOverScreen()
     {
         AudioController.Instance.PalySound(AudioController.Instance.GameOver);
@@ -175,6 +235,7 @@ public class GameManager : MonoBehaviour
     {
         // Bewusst ohne WinSound - der Sieg-Bildschirm kommt still.
         yield return new WaitForSeconds(1.5f);
+        if (gameActiv) yield break;   // schon im Endless-Modus weiter
         UIController.Instance.WinPanel.SetActive(true);
         UIController.Instance.GameWinStats();
         UIController.Instance.StartRewardCycleDisplay_Win();
@@ -214,6 +275,9 @@ public class GameManager : MonoBehaviour
     private void RestartNow()
     {
         Time.timeScale = 1f;
+
+        // Aus der Story heraus weitergespielt: im Hub gilt wieder Story.
+        if (ContinuedAsEndless) GameSession.SelectedMode = GameMode.Story;
 
         // Der Shop-Stand ist ohnehin aktuell - nur die Anzeige muss nachziehen.
         // Der WM_UIController haengt in der World Map und fehlt, wenn der Lauf

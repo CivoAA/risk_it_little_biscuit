@@ -351,6 +351,22 @@ public class SpawnDirector : MonoBehaviour
         Debug.Log($"[SpawnDirector] Endlos-Teil beginnt bei {runTime:0}s.");
     }
 
+    /// <summary>
+    /// Story-Sieg, und der Spieler macht im Endless-Modus weiter
+    /// (<see cref="GameManager.ContinueAsEndless"/>): der Tod, der den Lauf
+    /// beenden sollte, verschwindet, und der Endlos-Teil beginnt sofort.
+    /// </summary>
+    public void ContinueAsEndless()
+    {
+        foreach (Enemy e in FindObjectsByType<Enemy>(FindObjectsSortMode.None))
+        {
+            if (e != null && e.Role == EnemyRole.DeathBoss) Destroy(e.gameObject);
+        }
+        finisherSpawned = true;
+
+        if (escalation == null && plan != null) BeginEndlessPart();
+    }
+
     /// <summary>Ansage aus dem Endlos-Teil - uebersetzt wie die Ansagen im Plan.</summary>
     internal void SayPlan(string text)
     {

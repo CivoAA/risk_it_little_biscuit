@@ -609,7 +609,7 @@ public class MochiMelody : Weapon
     /// <summary>
     /// Eigene Stimmen statt der festen Quellen im AudioController: der spielt
     /// pro Quelle nur einen Ton gleichzeitig, ein Akkord braucht mehrere.
-    /// Die Mixer-Gruppe kommt vom Wurf-Geraeusch, damit der Effekte-Regler greift.
+    /// Ausgabe ueber AudioController.WeaponsGroup: nur der Waffen-Regler greift, nicht Effekte.
     /// Gespielt wird per PlayScheduled zur dspTime <paramref name="dsp"/> -
     /// liegt die schon zurueck, klingt der Ton sofort.
     /// </summary>
@@ -626,7 +626,7 @@ public class MochiMelody : Weapon
                 src.playOnAwake = false;
                 src.loop = false;
                 src.spatialBlend = 0f;
-                if (audio != null && audio.Werfen != null) src.outputAudioMixerGroup = audio.Werfen.outputAudioMixerGroup;
+                if (audio != null) src.outputAudioMixerGroup = audio.WeaponsGroup;
                 voices[i] = src;
             }
         }

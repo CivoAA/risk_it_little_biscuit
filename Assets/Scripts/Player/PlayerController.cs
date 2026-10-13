@@ -778,6 +778,18 @@ public class PlayerController : MonoBehaviour
         return true;
     }
 
+    /// <summary>
+    /// Story-Sieg, weiter im Endless-Modus: der Finisher hat den Spieler
+    /// womoeglich schon geholt (Execute) - zurueck ins Spiel, volle Leben,
+    /// kurz unverwundbar, und das Schild der Story-Szene ist wieder weg.
+    /// </summary>
+    public void ReviveForEndless()
+    {
+        Untouchable = false;
+        if (!gameObject.activeSelf) gameObject.SetActive(true);
+        Revive(1f, 3f, Loc.Get("ui.float.endless", "ENDLESS!"));
+    }
+
     private void Revive(float healthPercent, float immunity, string text)
     {
         playerHealth = Mathf.Max(1f, playerMaxHealth * Mathf.Clamp01(healthPercent));

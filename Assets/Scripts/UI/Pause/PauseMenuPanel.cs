@@ -20,8 +20,11 @@ using UnityEngine.UI;
 /// Zwei Auspraegungen:
 ///   Run - breite Karte: links vier Knoepfe, rechts ZEIT / LEVEL / GOLD und
 ///         darunter die Stats in drei Spalten. Time.timeScale = 0.
-///   Hub - schmale Karte, nur drei Knoepfe. Die Zeit laeuft weiter; gesperrt
-///         wird der Hub wie bei Shop und Skilltree ueber HubUI.PushModal.
+///   Hub - schmale Karte mit vier Knoepfen (WEITER, OPTIONEN, TUTORIALS,
+///         HAUPTMENUE). Die Zeit laeuft weiter; gesperrt wird der Hub wie bei
+///         Shop und Skilltree ueber HubUI.PushModal. TUTORIALS oeffnet
+///         <see cref="TutorialPanel.OpenLibrary"/> - dort laesst sich jedes
+///         Stations-Tutorial nachlesen, auch die uebersprungenen.
 ///
 /// Masse in Seitenpixeln (480x270, Ursprung oben links), ganzzahlig skaliert.
 /// Die Statwerte zieht <see cref="BuildStatModel"/> live aus PlayerController und
@@ -53,10 +56,10 @@ public partial class PauseMenuPanel : MonoBehaviour
     private const int GroupY = 4, StatRowY = 18, StatRowH = 14;
 
     // ---- Karte im Hub ----
-    private const int HubCardX = 156, HubCardY = 62, HubCardW = 168, HubCardH = 120;
-    private const int HubRibbonY = 50;
+    private const int HubCardX = 156, HubCardY = 52, HubCardW = 168, HubCardH = 144;
+    private const int HubRibbonY = 40;
     private static readonly RectInt HubContent = new RectInt(HubCardX - 12, HubRibbonY, HubCardW + 24, HubCardY + HubCardH - HubRibbonY);
-    private const int HubBtnY0 = 80, HubHintY = 154;
+    private const int HubBtnY0 = 70, HubHintY = 168;
 
     // ---- Bestaetigungsdialog ----
     private const int DlgX = 146, DlgY = 98, DlgW = 188, DlgH = 74;
@@ -68,7 +71,7 @@ public partial class PauseMenuPanel : MonoBehaviour
     // ==================================================================
 
     /// <summary>Ein Menueeintrag. Reihenfolge = Reihenfolge auf dem Brett.</summary>
-    private enum Entry { Resume, Options, GiveUp, MainMenu }
+    private enum Entry { Resume, Options, Tutorials, GiveUp, MainMenu }
 
     private class Row
     {
@@ -235,9 +238,10 @@ public partial class PauseMenuPanel : MonoBehaviour
             if (dialogPage != null) dialogPage.anchoredPosition = page.anchoredPosition;
         }
 
-        // Solange die Optionen offen sind, verschwindet das Menue ganz - sie
-        // liegen sonst als zweite Karte darueber. Danach ist es wieder da.
-        bool optionsOpen = OptionsPanel.IsOpen;
+        // Solange die Optionen (oder die Tutorials) offen sind, verschwindet das
+        // Menue ganz - sie liegen sonst als zweite Karte darueber. Danach ist es
+        // wieder da.
+        bool optionsOpen = OptionsPanel.IsOpen || TutorialPanel.IsOpen;
         if (canvas == null) canvas = GetComponent<Canvas>();
         if (canvas != null && canvas.enabled == optionsOpen) canvas.enabled = !optionsOpen;
 
@@ -455,7 +459,7 @@ public partial class PauseMenuPanel : MonoBehaviour
                           pixelFont, textFont);
 
         int x = HubCardX + (HubCardW - BtnW) / 2;
-        BuildMenu(new[] { Entry.Resume, Entry.Options, Entry.MainMenu }, x, HubBtnY0);
+        BuildMenu(new[] { Entry.Resume, Entry.Options, Entry.Tutorials, Entry.MainMenu }, x, HubBtnY0);
         Hint(x, HubHintY, BtnW);
     }
 
@@ -527,6 +531,7 @@ public partial class PauseMenuPanel : MonoBehaviour
         {
             case Entry.Resume:   return Loc.Get("ui.pause.btn.resume", "WEITER");
             case Entry.Options:  return Loc.Get("ui.pause.btn.options", "OPTIONEN");
+            case Entry.Tutorials: return Loc.Get("ui.pause.btn.tutorials", "TUTORIALS");
             case Entry.GiveUp:   return Loc.Get("ui.pause.btn.giveup", "RUN AUFGEBEN");
             default:             return Loc.Get("ui.pause.btn.mainmenu", "ZURÜCK ZUM HAUPTMENÜ");
         }
@@ -545,6 +550,13 @@ public partial class PauseMenuPanel : MonoBehaviour
                 OptionsPanel.Open();
                 optionsSeenFrame = Time.frameCount;
                 // Sofort weg, nicht erst im naechsten Update.
+                if (canvas == null) canvas = GetComponent<Canvas>();
+                if (canvas != null) canvas.enabled = false;
+                break;
+
+            case Entry.Tutorials:
+                TutorialPanel.OpenLibrary();
+                optionsSeenFrame = Time.frameCount;
                 if (canvas == null) canvas = GetComponent<Canvas>();
                 if (canvas != null) canvas.enabled = false;
                 break;

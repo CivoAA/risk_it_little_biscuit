@@ -10,9 +10,9 @@ public class AudioSettingsData
     public float musicVolume = 1f;
     public float effectsVolume = 1f;
 
-    // Eigener Regler fuer die Waffen-Sounds. Wirkt zusaetzlich zu den
-    // Geraeuschen (Waffen haengen in derselben Mixer-Gruppe): 100 % = so
-    // laut wie in der WeaponSounds-Tabelle.
+    // Eigener Regler fuer die Waffen-Sounds, unabhaengig von den Geraeuschen
+    // (Waffen laufen ueber AudioController.WeaponsGroup = Master, an Effects
+    // vorbei): 100 % = so laut wie in der WeaponSounds-Tabelle.
     public float weaponsVolume = 1f;
 
     // Stumm-Schalter je Kanal. Die Lautstaerke darueber bleibt stehen, damit

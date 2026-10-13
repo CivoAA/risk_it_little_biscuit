@@ -198,6 +198,9 @@ public class HubLevelSelectUI : MonoBehaviour
         public float Phase, Speed;
     }
 
+    /// <summary>Angezeigte Laufdauer im Steckbrief, fuer alle Level gleich (nicht aus dem Plan gerechnet).</summary>
+    private const int EstimatedMinutes = 22;
+
     /// <summary>Plan-Auszug fuer den Steckbrief, einmal je Plan gerechnet.</summary>
     private sealed class PlanInfo
     {
@@ -608,6 +611,8 @@ public class HubLevelSelectUI : MonoBehaviour
         if (HubUI.Instance != null) HubUI.Instance.SetPlayerFrozen(true);
 
         PlaySfx(openClip, true);
+
+        TutorialPanel.ShowOnce(TutorialTopic.LevelSelect);
     }
 
     public void Close()
@@ -645,6 +650,9 @@ public class HubLevelSelectUI : MonoBehaviour
 
         // Das [E], mit dem die Auswahl aufgeht, darf nicht gleich ein Level starten
         if (Time.frameCount == openedOnFrame) return;
+
+        // Das Tutorial liegt obendrauf - Maus und Tasten gehoeren ihm.
+        if (TutorialPanel.Blocking) return;
 
         UpdateHover();
 
@@ -1036,7 +1044,7 @@ public class HubLevelSelectUI : MonoBehaviour
         {
             timeText.text = endlessChosen
                 ? Loc.Get("ui.levelselect.nolimit", "OHNE ENDE")
-                : string.Format(Loc.Get("ui.levelselect.minutes", "~{0} MIN"), Mathf.RoundToInt(plan.Duration / 60f));
+                : string.Format(Loc.Get("ui.levelselect.minutes", "~{0} MIN"), EstimatedMinutes);
             kindsText.text = string.Format(Loc.Get("ui.levelselect.kinds", "{0} GEGNERARTEN"), plan.Kinds);
         }
 

@@ -218,6 +218,7 @@ public static class StoryTexts
         ["boss.World1"] = L(Who.KeksKoenig, Mood.Normal, "story.bark.boss.World1", "AUF DIE KNIE! Ich bin dein <shake>KÖNIG</shake>!"),
         ["boss.World2"] = L(Who.Glutwurz, Mood.Normal, "story.bark.boss.World2", "Es brennt... alles brennt... <shake>GEH WEG VON MEINEN WURZELN!</shake>"),
         ["boss.World5"] = L(Who.Eiskaiser, Mood.Normal, "story.bark.boss.World5", "NIEMAND BETRITT MEIN EIS! <shake>ICH HALTE ES ZUSAMMEN!</shake>"),
+        ["mini.World5"] = L(Who.Pomo, Mood.Shock, "story.bark.mini.World5", "Psst, Krümel! Macht der Schneemann sein Auge auf: <shake>STEHEN BLEIBEN!</shake> Keinen Mucks, bis es wieder zu ist."),
         ["boss.World6"] = L(Who.Gespenst, Mood.Normal, "story.bark.boss.World6", "Buuuh. Du bist der Krümel von der Uhr, oder? <wave>Ich weiß, was sie getan hat.</wave>"),
         ["boss.World4"] = L(Who.Verkohlter, Mood.Normal, "story.bark.boss.World4", "Ich HÖRE dich ticken, Uhr. <shake>Hundert Jahre zu spät!</shake>"),
     };

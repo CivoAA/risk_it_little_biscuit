@@ -22,6 +22,7 @@ using UnityEngine.SceneManagement;
 ///   Hub, erster Besuch          Intro-Cutscene + Gespraech "intro"
 ///   Levelauswahl, SPIELEN       "brief.[Plan]" einmal je Welt (nur Story-Modus)
 ///   Lauf, Start                 Zwischenruf "start.[Plan]"
+///   Lauf, Zwischenboss          Zwischenruf "mini.[Plan]" (nur Eis: Frostblick-Tipp)
 ///   Lauf, Boss erscheint        Zwischenruf "boss.[Plan]"
 ///   Lauf, Boss faellt           "defeat.[Plan]", Splitter fliegt ein,
 ///                               "count.N", dann der Sieg-Bildschirm
@@ -265,10 +266,12 @@ public class StoryDirector : MonoBehaviour
 
     private void OnBossSpawned(Enemy boss)
     {
-        if (boss == null || boss.Role != EnemyRole.Boss) return;
+        if (boss == null) return;
         string plan = RunPlan;
         if (!ChapterOpen(plan)) return;
-        StoryBark.Show(StoryTexts.Bark("boss." + plan));
+        // Zwischenboss: Pomo warnt nur, wo es einen Tipp gibt (Eis: Frostblick).
+        if (boss.Role == EnemyRole.MiniBoss) StoryBark.Show(StoryTexts.Bark("mini." + plan));
+        else if (boss.Role == EnemyRole.Boss) StoryBark.Show(StoryTexts.Bark("boss." + plan));
     }
 
     private void OnBossDefeated(Enemy boss)

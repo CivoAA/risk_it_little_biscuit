@@ -10979,8 +10979,8 @@ MonoBehaviour:
   weaponLevel: -1
   maxweaponLevel: 0
   stats: []
-  weaponImage: {fileID: 712035800519618848, guid: ac08ff516ef6d8c4c9e0b982de30b3fc, type: 3}
-  weaponIcon: {fileID: 712035800519618848, guid: ac08ff516ef6d8c4c9e0b982de30b3fc, type: 3}
+  weaponImage: {fileID: 1335706510655145044, guid: 7f682978c43448da8a202a6649e7e053, type: 3}
+  weaponIcon: {fileID: 1335706510655145044, guid: 7f682978c43448da8a202a6649e7e053, type: 3}
   weaponIconEvo: {fileID: 0}
   posssibleEvo: 0
   hasBeenRemoved: 0

@@ -45,6 +45,9 @@ public partial class LevelUpScreen
     private readonly List<StripTileView> deathTiles = new List<StripTileView>();
     private readonly List<NewEntry> newEntries = new List<NewEntry>();
     private ButtonView hubButton, menuButton;
+    /// <summary>Nur nach einem Story-Sieg: der Lauf geht im Endless-Modus weiter.</summary>
+    private ButtonView endlessButton;
+    private bool offerEndless;
     private float deathOpened;
     private int deathTileCount, newCount;
     private Sprite deadSprite;
@@ -149,6 +152,7 @@ public partial class LevelUpScreen
         hubButton = new ButtonView(this, deathLayer, new RectInt(bx, DeathButtonsY, DeathButtonW, ButtonH), GameHudSkin.Arrow, "R");
         menuButton = new ButtonView(this, deathLayer, new RectInt(bx + DeathButtonW + DeathButtonGap, DeathButtonsY, DeathButtonW, ButtonH),
                                     null, "M");
+        endlessButton = new ButtonView(this, deathLayer, new RectInt(bx, DeathButtonsY, DeathButtonW, ButtonH), GameHudSkin.Skull, "E");
 
         deathLayer.gameObject.SetActive(false);
     }
@@ -295,6 +299,20 @@ public partial class LevelUpScreen
         hubButton.SetCount("", false);
         menuButton.SetLabel(Loc.Get("ui.death.menu", "MAIN MENU"));
         menuButton.SetCount("", false);
+
+        // Story-Sieg: vorn ein dritter Knopf, der Lauf geht als Endless weiter.
+        offerEndless = deathWon && gm != null && gm.CanContinueAsEndless;
+        endlessButton.SetLabel(Loc.Get("ui.win.endless", "GO ENDLESS"));
+        endlessButton.SetCount("", false);
+        int buttonCount = offerEndless ? 3 : 2;
+        int bx = (RefW - (buttonCount * DeathButtonW + (buttonCount - 1) * DeathButtonGap)) / 2;
+        if (offerEndless)
+        {
+            endlessButton.MoveX(bx);
+            bx += DeathButtonW + DeathButtonGap;
+        }
+        hubButton.MoveX(bx);
+        menuButton.MoveX(bx + DeathButtonW + DeathButtonGap);
     }
 
     /// <summary>
@@ -482,21 +500,30 @@ public partial class LevelUpScreen
         bool buttons = t >= TButtons;
         SetActive(hubButton.Root, buttons);
         SetActive(menuButton.Root, buttons);
+        SetActive(endlessButton.Root, buttons && offerEndless);
         if (!buttons) return;
 
         bool live = now >= inputFrom && t >= TDone;
         bool hub = hubButton.Update(now, mouse, live);
         bool menu = menuButton.Update(now, mouse, live);
+        bool endless = offerEndless && endlessButton.Update(now, mouse, live);
         if (live)
         {
             if (Input.GetKeyDown(KeyCode.R) || Input.GetKeyDown(KeyCode.Return)
                 || Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Space)) hub = true;
             if (Input.GetKeyDown(KeyCode.M)) menu = true;
+            if (offerEndless && Input.GetKeyDown(KeyCode.E)) endless = true;
         }
 
         GameManager gm = GameManager.Instance;
         if (gm == null) return;
-        if (hub)
+        if (endless && gm.CanContinueAsEndless)
+        {
+            Click();
+            inputFrom = now + 5f;
+            gm.ContinueAsEndless();
+        }
+        else if (hub)
         {
             Click();
             inputFrom = now + 5f;   // doppelt ausloesen verhindern

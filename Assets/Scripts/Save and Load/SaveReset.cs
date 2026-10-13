@@ -105,7 +105,8 @@ public static class SaveReset
 
     /// <summary>
     /// "Spielstand zuruecksetzen" aus den Optionen (Reiter SPIEL) bzw. der Konsole:
-    /// loescht den gesamten Fortschritt und laedt das Hauptmenue neu.
+    /// loescht den gesamten Fortschritt (auch welche Tutorials schon gezeigt
+    /// wurden) und laedt das Hauptmenue neu.
     /// Einstellungen bleiben stehen; Steam-Achievements holt sich das Spiel
     /// ueber <see cref="AchievementSteamSync"/> wieder.
     /// </summary>
@@ -122,6 +123,8 @@ public static class SaveReset
         Bestiary.ResetAll();
         LevelRecords.ResetAll();
         StoryProgress.ResetAll();
+        // Ein neuer Spielstand erklaert die Stationen im Hub wieder von vorn.
+        TutorialPanel.ResetSeen();
 
         Debug.Log("[SaveReset] Spielstand zurueckgesetzt.");
 

@@ -320,6 +320,8 @@ public class WorkbenchPanel : MonoBehaviour
 
         Build();
         BlockHub(true);
+
+        TutorialPanel.ShowOnce(TutorialTopic.Workbench);
     }
 
     private void OnEnable()
@@ -373,6 +375,9 @@ public class WorkbenchPanel : MonoBehaviour
         // Der Tastendruck, der das Fenster aufgemacht hat, darf es nicht gleich
         // wieder zumachen.
         if (Time.frameCount == openedFrame) return;
+
+        // Das Tutorial liegt obendrauf - solange ruht die Werkbank.
+        if (TutorialPanel.Blocking) return;
 
         if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.E))
         {

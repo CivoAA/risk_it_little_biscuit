@@ -70,7 +70,9 @@ public class HubShopUI : MonoBehaviour
     [SerializeField] private Rect listArea    = new Rect(13f, 34f, 143f, 129f);
     [SerializeField] private Rect detailIconArea = new Rect(171f, 43f, 38f, 37f);
     [SerializeField] private Rect detailNameArea = new Rect(217f, 45f, 78f, 13f);
-    [SerializeField] private Rect detailTextArea = new Rect(217f, 65f, 78f, 44f);
+    [SerializeField] private Rect detailTextArea = new Rect(217f, 61f, 78f, 21f);
+    [Tooltip("Kurze Erklaerung unter dem Icon, ueber die ganze Breite bis zur Linie ueber PREIS.")]
+    [SerializeField] private Rect detailInfoArea = new Rect(171f, 85f, 125f, 26f);
     [SerializeField] private Rect priceTextArea  = new Rect(171f, 116f, 42f, 12f);
     [SerializeField] private Rect priceCoinArea  = new Rect(212f, 117f, 10f, 10f);
     [SerializeField] private Rect priceValueArea = new Rect(226f, 116f, 70f, 12f);
@@ -173,8 +175,12 @@ public class HubShopUI : MonoBehaviour
     [SerializeField] private Color detailTextColor = new Color32(0x63, 0x41, 0x45, 0xFF);
     [SerializeField] private Color buyTextColor   = new Color32(0xE6, 0xC4, 0x93, 0xFF);
     [SerializeField] private Color backTextColor  = new Color32(0x3B, 0x24, 0x33, 0xFF);
-    [Tooltip("Preis in der Liste, wenn das Geld nicht reicht.")]
+    [Tooltip("Fuellung des Preisschilds, wenn das Geld nicht reicht.")]
     [SerializeField] private Color tooExpensiveColor = new Color32(0xA8, 0x3C, 0x3C, 0xFF);
+    [Tooltip("Rahmen des roten Preisschilds.")]
+    [SerializeField] private Color tooExpensiveLineColor = new Color32(0x3B, 0x24, 0x33, 0xFF);
+    [Tooltip("Zahl auf dem roten Preisschild - hell, damit sie auf Rot lesbar ist.")]
+    [SerializeField] private Color tooExpensiveTextColor = new Color32(0xF2, 0xE2, 0xBE, 0xFF);
     [Tooltip("Name eines fertig gekauften Eintrags - blasser als der Rest.")]
     [SerializeField] private Color rowBoughtColor = new Color32(0x97, 0x71, 0x5E, 0xFF);
     [Tooltip("Rahmen eines fertig gekauften Eintrags.")]
@@ -230,11 +236,13 @@ public class HubShopUI : MonoBehaviour
         public TextMeshProUGUI Name;
         public Image Coin;
         public TextMeshProUGUI Price;
+        public GameObject PriceBadge;   // rotes Schild unter Muenze + Preis, wenn zu teuer
     }
 
     GameObject root;          // ganzer Canvasbereich, wird an- und ausgeschaltet
     RectTransform screen;     // exakt 320x180 darin - daran haengt alles Ausgemessene
-    TextMeshProUGUI goldValueText, detailNameText, detailText, priceValueText, buyText;
+    TextMeshProUGUI goldValueText, detailNameText, detailText, detailInfoText, priceValueText, buyText;
+    GameObject priceBadge;
     TextMeshProUGUI titleText, goldText, priceText, backText, resetText;
     Image detailIcon, buyImage, backImage, resetImage;
     Sprite resetSprite, resetHoverSprite;
@@ -394,10 +402,21 @@ public class HubShopUI : MonoBehaviour
         HubUiKit.Place((RectTransform)detailText.transform, detailTextArea);
         detailText.lineSpacing = detailLineSpacing;
 
+        detailInfoText = HubUiKit.NewText("DetailInfo", screen, font, detailFontSize,
+                                          detailTextColor, TextAlignmentOptions.TopLeft);
+        HubUiKit.Place((RectTransform)detailInfoText.transform, detailInfoArea);
+        detailInfoText.lineSpacing = detailLineSpacing;
+        // Ein langer Text wird lieber etwas kleiner, als ueber PREIS zu laufen.
+        detailInfoText.enableAutoSizing = true;
+        detailInfoText.fontSizeMin = minAutoFontSize;
+        detailInfoText.fontSizeMax = detailFontSize;
+
         var price = HubUiKit.NewText("PriceLabel", screen, font, detailNameFontSize,
                                      rowTextColor, TextAlignmentOptions.Left);
         HubUiKit.Place((RectTransform)price.transform, priceTextArea);
         priceText = price;
+
+        priceBadge = NewPriceBadge(screen, new Rect(priceCoinArea.x - 2f, priceValueArea.y - 1f, 20f, 14f));
 
         var priceCoin = HubUiKit.NewImage("PriceCoin", screen, coinSprite, Color.white);
         HubUiKit.Place((RectTransform)priceCoin.transform, priceCoinArea);
@@ -679,6 +698,11 @@ public class HubShopUI : MonoBehaviour
             row.Frame.color = rowFrameColor;
         }
 
+        // Schild reicht von vor der Muenze bis kurz vor den rechten Zeilenrahmen
+        float badgeX = rowCoinArea.x - 2f;
+        row.PriceBadge = NewPriceBadge(row.Go.transform,
+            new Rect(badgeX, rowPriceArea.y - 1f, rowPriceArea.xMax - 1f - badgeX, rowPriceArea.height + 2f));
+
         row.Marker = HubUiKit.NewText("Marker", row.Go.transform, font, rowFontSize,
                                       rowSelectedColor, TextAlignmentOptions.Left);
         HubUiKit.Place((RectTransform)row.Marker.transform, rowMarkerArea);
@@ -719,6 +743,32 @@ public class HubShopUI : MonoBehaviour
     /// Fuellt die Zeile, laesst unten aber <see cref="rowFrameGap"/> frei -
     /// sonst stossen die Rahmen zweier Zeilen aneinander und sehen doppelt dick aus.
     /// </summary>
+    /// <summary>
+    /// Rotes Preisschild mit 1-px-Rahmen. Rot als Schriftfarbe ging auf dem
+    /// Beige in der duennen Pixelschrift unter - hell auf Rot springt ins Auge.
+    /// </summary>
+    GameObject NewPriceBadge(Transform parent, Rect pixels)
+    {
+        var line = HubUiKit.NewImage("PriceBadge", parent, null, tooExpensiveLineColor);
+        HubUiKit.Place((RectTransform)line.transform, pixels);
+        var fill = HubUiKit.NewImage("Fill", line.transform, null, tooExpensiveColor);
+        var r = (RectTransform)fill.transform;
+        r.anchorMin = Vector2.zero;
+        r.anchorMax = Vector2.one;
+        r.offsetMin = new Vector2(1f, 1f);
+        r.offsetMax = new Vector2(-1f, -1f);
+        line.gameObject.SetActive(false);
+        return line.gameObject;
+    }
+
+    /// <summary>Schild an/aus; rechtsbuendiger Text rueckt dann vom Schildrand ab.</summary>
+    static void SetTooExpensive(GameObject badge, TextMeshProUGUI text, bool on)
+    {
+        if (badge != null && badge.activeSelf != on) badge.SetActive(on);
+        if (text.alignment == TextAlignmentOptions.Right)
+            text.margin = on ? new Vector4(0f, 0f, 3f, 0f) : Vector4.zero;
+    }
+
     void FillRow(RectTransform r)
     {
         r.anchorMin = Vector2.zero;
@@ -867,6 +917,8 @@ public class HubShopUI : MonoBehaviour
         HubUI.Instance.SetPlayerFrozen(true);
 
         PlaySfx(openClip);
+
+        TutorialPanel.ShowOnce(TutorialTopic.Shop);
     }
 
     public void Close()
@@ -930,6 +982,9 @@ public class HubShopUI : MonoBehaviour
 
         // Das [E], mit dem der Shop aufgeht, darf nicht gleich etwas kaufen
         if (Time.frameCount == openedOnFrame) return;
+
+        // Das Tutorial liegt obendrauf - solange ruht der Shop.
+        if (TutorialPanel.Blocking) return;
 
         if (Input.GetKeyDown(closeKey)) { Close(); return; }
 
@@ -1031,19 +1086,23 @@ public class HubShopUI : MonoBehaviour
                 row.Price.text = "-";
                 row.Price.color = rowLockedColor;
                 row.Coin.enabled = false;
+                SetTooExpensive(row.PriceBadge, row.Price, false);
             }
             else if (maxed)
             {
                 row.Price.text = MaxLabel;
                 row.Price.color = rowLockedColor;
                 row.Coin.enabled = false;
+                SetTooExpensive(row.PriceBadge, row.Price, false);
             }
             else
             {
+                bool tooExpensive = price > Currency;
                 row.Price.text = price.ToString();
-                row.Price.color = price > Currency ? tooExpensiveColor
+                row.Price.color = tooExpensive ? tooExpensiveTextColor
                                 : isSelected ? rowSelectedColor : rowTextColor;
                 row.Coin.enabled = coinSprite != null;
+                SetTooExpensive(row.PriceBadge, row.Price, tooExpensive);
             }
         }
 
@@ -1063,7 +1122,9 @@ public class HubShopUI : MonoBehaviour
         {
             detailNameText.text = "";
             detailText.text = "";
+            detailInfoText.text = "";
             priceValueText.text = "";
+            SetTooExpensive(priceBadge, priceValueText, false);
             SetBuyEnabled(false);
             return;
         }
@@ -1080,29 +1141,35 @@ public class HubShopUI : MonoBehaviour
         int price = Shop.NextPrice(entry);
 
         detailText.text = BuildDescription(entry, maxed);
+        detailInfoText.text = BuildInfo(entry);
 
         priceValueText.text = !hasCosts ? "-" : maxed ? MaxLabel : price.ToString();
-        priceValueText.color = (hasCosts && !maxed && price > Currency)
-            ? tooExpensiveColor : rowTextColor;
+        bool detailTooExpensive = hasCosts && !maxed && price > Currency;
+        priceValueText.color = detailTooExpensive ? tooExpensiveTextColor : rowTextColor;
+        SetTooExpensive(priceBadge, priceValueText, detailTooExpensive);
+        if (detailTooExpensive)
+        {
+            // Schild so breit wie die Zahl: Muenze + Abstand + Text + 3 px Luft
+            var br = (RectTransform)priceBadge.transform;
+            float textW = Mathf.Ceil(priceValueText.GetPreferredValues(priceValueText.text).x);
+            br.sizeDelta = new Vector2(priceValueArea.x - (priceCoinArea.x - 2f) + textW + 3f, br.sizeDelta.y);
+        }
 
         SetBuyEnabled(Shop.CanBuy(entry));
     }
 
     /// <summary>
-    /// Beschreibung, Stufe und der Sprung, den der naechste Kauf bringt -
-    /// derselbe Inhalt wie im alten Shop, nur auf drei Zeilen verteilt.
+    /// Neben dem Icon: Stufe und der Sprung, den der naechste Kauf bringt.
+    /// Bei einmaligen Freischaltungen (0 > 1) nur die Stufe - die Zahl sagt nichts.
     /// </summary>
     string BuildDescription(ShopItemDef entry, bool maxed)
     {
         var lines = new List<string>();
 
-        string text = entry.Description;
-        if (!string.IsNullOrEmpty(text)) lines.Add(text.Trim());
-
         if (entry.MaxLevel > 0)
             lines.Add(string.Format(Loc.Get("ui.shop.level", levelFormat), Shop.LevelOf(entry), entry.MaxLevel));
 
-        if (entry.Values.Count > 0)
+        if (entry.Values.Count > 0 && entry.MaxLevel > 1)
         {
             string current = entry.FormatValue(Shop.CurrentValue(entry));
             lines.Add(maxed
@@ -1111,6 +1178,21 @@ public class HubShopUI : MonoBehaviour
         }
 
         return string.Join("\n", lines);
+    }
+
+    /// <summary>
+    /// Unter dem Icon: was der Eintrag im Lauf bewirkt. Eigener Text aus
+    /// shop.&lt;id&gt;.info; fehlt er, die Buff-Beschreibung aus dem Level-Up
+    /// und zuletzt der alte Kurztext.
+    /// </summary>
+    string BuildInfo(ShopItemDef entry)
+    {
+        string text = Loc.Get($"shop.{entry.Id}.info", null);
+        if (string.IsNullOrEmpty(text) && !string.IsNullOrEmpty(entry.UnlocksWeapon))
+            text = Loc.Get($"weapon.{entry.UnlocksWeapon}.desc", null);
+        if (string.IsNullOrEmpty(text))
+            text = entry.Description;
+        return string.IsNullOrEmpty(text) ? "" : text.Trim();
     }
 
     void SetBuyEnabled(bool enabled)
