@@ -35,6 +35,30 @@ public static class AchievementSteamSync
         {
             Debug.LogWarning($"[Achievements] Steam-Meldung für '{def.SteamApiName}' fehlgeschlagen: {e.Message}");
         }
+
+        // Balken auf voll, damit Steam-Profil und Achievement zusammenpassen.
+        PushStat(def, def.Goal);
+    }
+
+    /// <summary>
+    /// Meldet den Zählerstand eines Fortschritts-Achievements an seinen Stat.
+    /// Nur lokal bei Steam - abgeschickt wird gesammelt über <see cref="StoreIfPending"/>.
+    /// </summary>
+    public static void PushStat(AchievementDef def, float value)
+    {
+        if (def == null || !def.HasProgress || !Available) return;
+
+        try
+        {
+            if (SteamUserStats.SetStat(def.SteamStatName, Mathf.FloorToInt(value)))
+            {
+                storePending = true;
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"[Achievements] Steam-Stat '{def.SteamStatName}' fehlgeschlagen: {e.Message}");
+        }
     }
 
     /// <summary>Schickt gesammelte Änderungen ab. Wird vom AchievementRuntime getaktet.</summary>
@@ -84,6 +108,8 @@ public static class AchievementSteamSync
                 continue;
             }
 
+            if (def.HasProgress && !steamHasIt) ReconcileStat(def);
+
             bool localHasIt = Achievements.IsUnlocked(def);
 
             if (steamHasIt && !localHasIt)
@@ -107,6 +133,27 @@ public static class AchievementSteamSync
     }
 
     /// <summary>
+    /// Zählerstand zwischen Stat und Spielstand angleichen: der höhere gewinnt.
+    /// Fehlt der Stat im Backend, liefert GetStat false - dann bleibt alles, wie es ist.
+    /// </summary>
+    private static void ReconcileStat(AchievementDef def)
+    {
+        try
+        {
+            if (!SteamUserStats.GetStat(def.SteamStatName, out int steamValue)) return;
+
+            float localValue = Achievements.GetValue(def);
+
+            if (steamValue > localValue) Achievements.AdoptValueFromSteam(def, steamValue);
+            else if (localValue > steamValue) PushStat(def, localValue);
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"[Achievements] Steam-Stat-Abgleich für '{def.SteamStatName}' fehlgeschlagen: {e.Message}");
+        }
+    }
+
+    /// <summary>
     /// Löscht die Achievements im Steam-Profil. Nur für Entwicklung gedacht -
     /// wird nirgends automatisch aufgerufen.
     /// </summary>
@@ -119,6 +166,7 @@ public static class AchievementSteamSync
             try
             {
                 SteamUserStats.ClearAchievement(def.SteamApiName);
+                if (def.HasProgress) SteamUserStats.SetStat(def.SteamStatName, 0);
             }
             catch (Exception e)
             {

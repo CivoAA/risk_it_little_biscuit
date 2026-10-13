@@ -72,6 +72,12 @@ public sealed class AchievementDef
     /// <summary>Hat einen Zähler statt nur an/aus.</summary>
     public bool HasProgress => Goal > 1f;
 
+    /// <summary>
+    /// Int-Stat im Steamworks-Backend, der den Zähler spiegelt - Steam zeigt
+    /// daraus den Fortschrittsbalken. Null bei einfachen Unlocks. Niemals ändern.
+    /// </summary>
+    public string SteamStatName => HasProgress ? "Stat_" + Id : null;
+
     public bool IsUnlocked => Achievements.IsUnlocked(this);
     public float Value => Achievements.GetValue(this);
 

@@ -174,6 +174,7 @@ public static class Achievements
         s.SetValue(def.Id, value);
 
         if (value >= def.Goal) Unlock(def);
+        else AchievementSteamSync.PushStat(def, value);
     }
 
     public static void Progress(string id, float amount) => Progress(Ach.Find(id), amount);
@@ -227,6 +228,27 @@ public static class Achievements
         s.Flush();
 
         Debug.Log($"[Achievements] Von Steam übernommen: {def.Id}");
+    }
+
+    /// <summary>
+    /// Übernimmt einen höheren Zählerstand aus dem Steam-Stat - wie
+    /// <see cref="AdoptFromSteam"/>, nur für den Fortschritt davor.
+    /// </summary>
+    internal static void AdoptValueFromSteam(AchievementDef def, float value)
+    {
+        if (def == null) return;
+
+        AchievementStore s = Store;
+        if (s.IsUnlocked(def.Id) || value <= s.GetValue(def.Id)) return;
+
+        if (value >= def.Goal)
+        {
+            AdoptFromSteam(def);
+            return;
+        }
+
+        s.SetValue(def.Id, value);
+        s.Flush();
     }
 
     /// <summary>Alle noch nicht freigeschalteten Achievements - für Cheats und Werkzeuge.</summary>

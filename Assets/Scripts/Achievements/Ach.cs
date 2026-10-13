@@ -129,7 +129,7 @@ public static class Ach
     // ==================================================================
 
     public static readonly AchievementDef BladeSwarmEvo = Def(
-        "Blade_Swarm_Evo", "Blade Swarm Evo", "Obtained the Blade Storm Evo for the first time!",
+        "Blade_Swarm_Evo", "Blade Swarm Evo", "Obtained the Blade Swarm Evo for the first time!",
         AchievementCategory.Evolutions);
 
     public static readonly AchievementDef BloodyForkEvo = Def(
@@ -181,7 +181,7 @@ public static class Ach
         AchievementCategory.Evolutions);
 
     public static readonly AchievementDef FoxfireEvo = Def(
-        "Foxfire_Evo", "Foxfire Evo", "Obtained the Foxfire Evo for the first time!",
+        "Foxfire_Evo", "Kyubi", "Obtained the Kyubi for the first time!",
         AchievementCategory.Evolutions);
 
     public static readonly AchievementDef RoyalSplatEvo = Def(
@@ -290,7 +290,7 @@ public static class Ach
         AchievementCategory.Weapons);
 
     public static readonly AchievementDef MaxBobaGun = Def(
-        "Max_Level_BobaGun", "Max Level: Boba Gun", "Reach the maximum level of the BobaGun weapon.",
+        "Max_Level_BobaGun", "Max Level: Boba Gun", "Reach the maximum level of the Boba Gun weapon.",
         AchievementCategory.Weapons);
 
     public static readonly AchievementDef MaxShurikookie = Def(

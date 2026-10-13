@@ -82,7 +82,7 @@
     { "key": "ach.Bosses_45.desc", "value": "Defeat 45 bosses." },
 
     { "key": "ach.Blade_Swarm_Evo.name", "value": "Blade Swarm Evo" },
-    { "key": "ach.Blade_Swarm_Evo.desc", "value": "Obtained the Blade Storm Evo for the first time!" },
+    { "key": "ach.Blade_Swarm_Evo.desc", "value": "Obtained the Blade Swarm Evo for the first time!" },
     { "key": "ach.Bloody_Fork_Evo.name", "value": "Bloody Fork Evo" },
     { "key": "ach.Bloody_Fork_Evo.desc", "value": "Obtained the Bloody Fork Evo for the first time!" },
     { "key": "ach.Explosive_Star_Evo.name", "value": "Explosive Star Evo" },
@@ -154,7 +154,7 @@
     { "key": "ach.Max_Level_Turret.name", "value": "Max Level: Turret" },
     { "key": "ach.Max_Level_Turret.desc", "value": "Reach the maximum level of the Turret weapon." },
     { "key": "ach.Max_Level_BobaGun.name", "value": "Max Level: Boba Gun" },
-    { "key": "ach.Max_Level_BobaGun.desc", "value": "Reach the maximum level of the BobaGun weapon." },
+    { "key": "ach.Max_Level_BobaGun.desc", "value": "Reach the maximum level of the Boba Gun weapon." },
     { "key": "ach.Max_Level_Shurikookie.name", "value": "Max Level: Shurikookie" },
     { "key": "ach.Max_Level_Shurikookie.desc", "value": "Reach the maximum level of the Shurikookie weapon." },
     { "key": "ach.Max_Level_SpikeFork.name", "value": "Max Level: Spike Fork" },
