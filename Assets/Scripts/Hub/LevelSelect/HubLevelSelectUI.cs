@@ -1705,13 +1705,10 @@ public class HubLevelSelectUI : MonoBehaviour
         if (e == null || !e.endlessAvailable) return false;
         // Auch Endless geht erst auf, wenn die Welt auf der Route erreicht ist.
         if (!StoryProgress.IsWorldOpen(e.planId)) return false;
-        // Leer im Inspector = erst nach dem ersten Story-Sieg hier (Unlocks.EndlessFor).
-        if (string.IsNullOrWhiteSpace(e.endlessUnlockId))
-        {
-            UnlockDef chain = Unlocks.EndlessFor(e.mapId);
-            return chain == null || chain.IsUnlocked;
-        }
-        return Unlocks.IsUnlocked(e.endlessUnlockId);
+        // Endless gibt es erst nach der ganzen Story (Herz des Verkohlten besiegt).
+        if (!Unlocks.Endless.IsUnlocked) return false;
+        // Optional im Inspector: noch eine Sperre obendrauf.
+        return string.IsNullOrWhiteSpace(e.endlessUnlockId) || Unlocks.IsUnlocked(e.endlessUnlockId);
     }
 
     /// <summary>

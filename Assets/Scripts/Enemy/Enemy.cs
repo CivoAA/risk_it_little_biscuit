@@ -133,6 +133,9 @@ public class Enemy : MonoBehaviour
 
     public bool IsElite => role == EnemyRole.Elite;
 
+    /// <summary>Gewoehnlicher Gegner - weder Elite noch irgendeine Boss-Form.</summary>
+    public bool IsNormal => role == EnemyRole.Normal;
+
     /// <summary>Beruehrungsschaden nach Lauf-Skalierung. Fuer Attacken, die ein Vielfaches davon machen.</summary>
     public float ContactDamage => damage;
 
@@ -1047,13 +1050,7 @@ public class Enemy : MonoBehaviour
             DamageNumberController.Instance.CreateNumber(finalDamage, transform.position);
         }
 
-        float before = health;
-        health -= finalDamage;
-        if (MinHealthFraction > 0f)
-        {
-            float floor = Mathf.Min(before, Mathf.Max(1f, maxHealth * MinHealthFraction));
-            if (health < floor) health = floor;
-        }
+        LoseHealth(finalDamage);
 
         // Fuer Waffen, die Treffer weiterreichen (Mochi-Faden) - roher Schaden
         // vor Multiplikatoren, weil der Empfaenger sie selbst noch einmal anwendet.
@@ -1066,26 +1063,54 @@ public class Enemy : MonoBehaviour
 
         ApplyKnockback(knockback);
 
-        if (health <= 0f)
-        {
-            if (HoldDeath)
-            {
-                health = 0f;
-                if (!deathHeld)
-                {
-                    deathHeld = true;
-                    Untouchable = true;
-                    DeathHeld?.Invoke();
-                }
-                return;
-            }
-            Die();
-            return;
-        }
+        if (DieIfDead()) return;
 
         // Slow nur anwenden, wenn der Gegner noch lebt - sonst laeuft er auf
         // einem gleich zerstoerten Objekt.
         if (slowMultiplier.HasValue) ApplySlow(slowMultiplier.Value, 1.5f);
+    }
+
+    /// <summary>
+    /// Fester Schaden ohne Spieler-Multiplikatoren, Krit und
+    /// <see cref="DamageTakenFactor"/> - fuer Prozent-Schaden, z.B. die
+    /// Ofenkartoffel, die sich mit ihrer eigenen Kartoffel sprengt.
+    /// </summary>
+    public void TakeTrueDamage(float amount)
+    {
+        if (Untouchable || amount <= 0f) return;
+        DamageNumberController.Instance.CreateNumberCrit(amount, transform.position);
+        LoseHealth(amount);
+        DieIfDead();
+    }
+
+    private void LoseHealth(float amount)
+    {
+        float before = health;
+        health -= amount;
+        if (MinHealthFraction > 0f)
+        {
+            float floor = Mathf.Min(before, Mathf.Max(1f, maxHealth * MinHealthFraction));
+            if (health < floor) health = floor;
+        }
+    }
+
+    /// <returns>true, wenn der Gegner tot ist (oder seinen Tod gerade festhaelt).</returns>
+    private bool DieIfDead()
+    {
+        if (health > 0f) return false;
+        if (HoldDeath)
+        {
+            health = 0f;
+            if (!deathHeld)
+            {
+                deathHeld = true;
+                Untouchable = true;
+                DeathHeld?.Invoke();
+            }
+            return true;
+        }
+        Die();
+        return true;
     }
 
     /// <summary>
@@ -1149,6 +1174,10 @@ public class Enemy : MonoBehaviour
     /// </summary>
     private void GrantRewards()
     {
+        // Lauf schon vorbei (Spieler tot): ein Boss, den noch fliegende
+        // Geschosse erwischen, zaehlt fuer nichts mehr - kein Sieg, kein Erfolg.
+        if (GameManager.Instance != null && !GameManager.Instance.gameActiv) return;
+
         switch (role)
         {
             case EnemyRole.DeathBoss:
@@ -1285,6 +1314,15 @@ public class Enemy : MonoBehaviour
             float scaled = exp * EnemyCatalog.NormalXpFactor(GameManager.Instance.gameTime);
             exp = Mathf.FloorToInt(scaled);
             if (Random.value < scaled - exp) exp++;
+            if (exp <= 0) return;
+        }
+
+        // Inari als Geisterfuchs (Fuchsgestalt): nur ein Viertel, Rest wieder als Chance.
+        if (FoxForm.Active && exp > 0)
+        {
+            float fox = exp * FoxForm.XpFactor;
+            exp = Mathf.FloorToInt(fox);
+            if (Random.value < fox - exp) exp++;
             if (exp <= 0) return;
         }
 

@@ -34,6 +34,9 @@ public abstract class SelfAnimatedBoss : MonoBehaviour
     /// <summary>Haelt ihn waehrend des Laufens kurz an (z. B. erschrocken). Das Bild setzt dann die Unterklasse.</summary>
     protected virtual bool Paused => false;
 
+    /// <summary>Faktor aufs Lauftempo, 1 = normal (z. B. Ofenkartoffel auf der Jagd).</summary>
+    protected virtual float SpeedFactor => 1f;
+
     private bool Moving => walking && !Paused;
 
     /// <summary>Der ganze Kampf: Laufen und Attacken im Wechsel. Startet bei OnEnable.</summary>
@@ -83,7 +86,7 @@ public abstract class SelfAnimatedBoss : MonoBehaviour
         if (Moving && player != null)
         {
             Vector2 to = (Vector2)player.transform.position - rb.position;
-            rb.linearVelocity = to.sqrMagnitude > 0.04f ? to.normalized * enemy.CurrentSpeed : Vector2.zero;
+            rb.linearVelocity = to.sqrMagnitude > 0.04f ? to.normalized * enemy.CurrentSpeed * SpeedFactor :Vector2.zero;
         }
         else
         {

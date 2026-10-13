@@ -64,9 +64,9 @@ public static class Unlocks
     //  Welten
     // ==================================================================
     // Story: die naechste Welt geht auf, wenn man die davor geschafft hat.
-    // Endless: geht nach dem ersten Story-Sieg in derselben Welt auf. Welche
-    // Karte was vergibt, steht in WorldChain weiter unten; die Levelauswahl
-    // fragt ueber StoryFor/EndlessFor nach.
+    // Welche Karte was vergibt, steht in WorldChain weiter unten; die
+    // Levelauswahl fragt ueber StoryFor nach.
+    // Endless: ein Unlock fuer alle Welten, nach dem Finale (ReportFinaleDone).
 
     public static readonly UnlockDef StoryKitchen = Def(
         "unlock_story_kitchen",
@@ -83,25 +83,16 @@ public static class Unlocks
         "Haunted Forest",
         "You beat the Ice Cream Glacier - the Haunted Forest is now open!");
 
-    public static readonly UnlockDef EndlessKitchen = Def(
-        "unlock_endless_kitchen",
-        "Endless: Kitchen",
-        "Endless mode is now open in the Kitchen!");
-
-    public static readonly UnlockDef EndlessForest = Def(
-        "unlock_endless_forest",
-        "Endless: Forest",
-        "Endless mode is now open in the Forest!");
-
-    public static readonly UnlockDef EndlessGlacier = Def(
-        "unlock_endless_glacier",
-        "Endless: Ice Cream Glacier",
-        "Endless mode is now open on the Ice Cream Glacier!");
-
-    public static readonly UnlockDef EndlessGhost = Def(
-        "unlock_endless_ghost",
-        "Endless: Haunted Forest",
-        "Endless mode is now open in the Haunted Forest!");
+    /// <summary>
+    /// Endless in allen Welten: erst wenn die Story durch ist (alle fuenf
+    /// Welten, das Herz des Verkohlten besiegt - StoryProgress.FinaleDone).
+    /// Die alten Ids "unlock_endless_kitchen/forest/glacier/ghost" (Endless je
+    /// Welt) nicht wiederverwenden.
+    /// </summary>
+    public static readonly UnlockDef Endless = Def(
+        "unlock_endless",
+        "Endless Mode",
+        "You destroyed the Charred One's heart - Endless mode is now open in every world!");
 
     // ==================================================================
     //  Charaktere
@@ -122,7 +113,7 @@ public static class Unlocks
         "Slime King",
         "The Slime King joins your team!");
 
-    /// <summary>Kommt mit "Full Bento" (mit jedem Charakter ein Sieg und seine Evo).</summary>
+    /// <summary>Kommt mit "Full Bento" (mit jedem Charakter ein Sieg).</summary>
     public static readonly UnlockDef CharTofu = Def(
         "unlock_char_tofu",
         "Tofu",
@@ -231,21 +222,20 @@ public static class Unlocks
     {
         if (def == null) return;
         if (def.Category == AchievementCategory.Evolutions) Grant(EvoSlot);
-        if (def.Category == AchievementCategory.Evolutions || def.Category == AchievementCategory.Characters)
+        if (def.Category == AchievementCategory.Characters)
             CheckAllCharacters();
     }
 
     /// <summary>
-    /// Zieht <see cref="Ach.AllCharacters"/> (Tofu) auf den Stand aus Siegen und
-    /// Startwaffen-Evos nach. Ist alles da, schaltet der Erfolg den Tofu frei.
+    /// Zieht <see cref="Ach.AllCharacters"/> (Tofu) auf den Stand aus den Siegen
+    /// nach. Ist alles da, schaltet der Erfolg den Tofu frei.
     /// </summary>
     public static void CheckAllCharacters()
     {
         AchievementDef all = Ach.AllCharacters;
         if (all.IsUnlocked) return;
 
-        float missing = Ach.AllCharactersDone() - all.Value;
-        if (missing > 0f) Achievements.Progress(all, missing);
+        Achievements.SetCountedValue(all, Ach.AllCharactersDone());
     }
 
     /// <summary>
@@ -387,17 +377,16 @@ public static class Unlocks
     // ==================================================================
 
     /// <summary>
-    /// Map-ID (Levelauswahl) -> was ihre Story braucht, was ihr Endless braucht
-    /// und was ein Story-Sieg dort fuer die naechste Welt oeffnet. Reihenfolge
-    /// wie in der Levelauswahl. Neue Welt = neue Zeile (und die alte letzte
-    /// bekommt ihr Next).
+    /// Map-ID (Levelauswahl) -> was ihre Story braucht und was ein Story-Sieg
+    /// dort fuer die naechste Welt oeffnet. Reihenfolge wie in der
+    /// Levelauswahl. Neue Welt = neue Zeile (und die alte letzte bekommt ihr Next).
     /// </summary>
-    private static readonly (int MapId, UnlockDef Story, UnlockDef Endless, UnlockDef Next)[] WorldChain =
+    private static readonly (int MapId, UnlockDef Story, UnlockDef Next)[] WorldChain =
     {
-        (3, null,         EndlessForest,  StoryKitchen),  // Wald
-        (0, StoryKitchen, EndlessKitchen, StoryGlacier),  // Kueche
-        (5, StoryGlacier, EndlessGlacier, StoryGhost),    // Eisgletscher
-        (6, StoryGhost,   EndlessGhost,   null),          // Geisterwald
+        (3, null,         StoryKitchen),  // Wald
+        (0, StoryKitchen, StoryGlacier),  // Kueche
+        (5, StoryGlacier, StoryGhost),    // Eisgletscher
+        (6, StoryGhost,   null),          // Geisterwald
     };
 
     /// <summary>Der Unlock, den die Story dieser Karte braucht. Null = immer offen.</summary>
@@ -407,26 +396,15 @@ public static class Unlocks
         return null;
     }
 
-    /// <summary>Der Unlock, den Endless auf dieser Karte braucht. Null = immer offen.</summary>
-    public static UnlockDef EndlessFor(int mapId)
-    {
-        foreach (var w in WorldChain) if (w.MapId == mapId) return w.Endless;
-        return null;
-    }
-
-    /// <summary>
-    /// Story-Sieg auf dieser Karte (GameManager.GameOver): Endless hier und die
-    /// Story der naechsten Welt gehen auf.
-    /// </summary>
+    /// <summary>Story-Sieg auf dieser Karte (GameManager.GameOver): die Story der naechsten Welt geht auf.</summary>
     public static void ReportStoryWin(int mapId)
     {
         foreach (var w in WorldChain)
-        {
-            if (w.MapId != mapId) continue;
-            Grant(w.Endless);
-            Grant(w.Next);
-        }
+            if (w.MapId == mapId) Grant(w.Next);
     }
+
+    /// <summary>Das Herz des Verkohlten ist besiegt (StoryDirector): Endless geht ueberall auf.</summary>
+    public static void ReportFinaleDone() => Grant(Endless);
 
     /// <summary>Begleiter im Shop, sobald irgendein Charakter <see cref="CompanionCharLevel"/> hat.</summary>
     public static void CheckCharLevels()
@@ -464,9 +442,9 @@ public static class Unlocks
         foreach (var w in WorldChain)
         {
             if (LevelRecords.StoryBest(w.MapId) <= 0f) continue;
-            Give(w.Endless);
             Give(w.Next);
         }
+        if (StoryProgress.FinaleDone) Give(Endless);
 
         // Erfolge mit Unlock (z.B. Eiskaiser -> Inari) und die erste Evo
         foreach (AchievementDef def in Ach.All)

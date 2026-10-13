@@ -7,7 +7,8 @@ using UnityEngine.SceneManagement;
 /// dem Fuchs, fliegt auf Befehl in einem Bogen zum Gegner (mit
 /// Nachleuchten), verpufft dort im Flammenring und kehrt im Bogen zurueck.
 /// Als Lauffeuer-Funke (<see cref="CreateLeap"/>) fliegt es nur hin und ist
-/// danach weg.
+/// danach weg. Mit dem Stern Irrlicht-Sprung fliegt es nach dem Ring noch zu
+/// einem zweiten Gegner in <see cref="HopRange"/>, bevor es zurueckkehrt.
 ///
 /// Lebt in der Lauf-Szene, nicht am Spieler: so dreht und spiegelt es nichts
 /// mit, und die Weltposition steuert es selbst.
@@ -26,6 +27,9 @@ public class FoxWisp : MonoBehaviour
     private const float BackTime = 0.4f;
     private const float VanishTime = 0.2f;
     private const float AbsorbTime = 0.32f;
+
+    /// <summary>Irrlicht-Sprung (Skilltree): so weit sucht das Irrlicht nach dem Ring ein zweites Ziel (Tiles).</summary>
+    public const float HopRange = 3.5f;
 
     /// <summary>Der Gegner sitzt mit dem Pivot unten - getroffen wird etwas hoeher.</summary>
     private static readonly Vector2 AimOffset = new Vector2(0f, 0.35f);
@@ -59,6 +63,7 @@ public class FoxWisp : MonoBehaviour
     private float cooldown;
     private float animPhase;
     private bool leap;
+    private bool hopped;
     private Transform absorbTo;
     private Vector2 absorbOffset;
     private bool absorbPending;
@@ -130,6 +135,7 @@ public class FoxWisp : MonoBehaviour
     {
         hit = shot;
         cooldown = cooldownAfter;
+        hopped = false;
         BeginFlight(enemy, State.Out, 1.6f);
     }
 
@@ -259,6 +265,7 @@ public class FoxWisp : MonoBehaviour
 
     private void Arrive()
     {
+        Enemy struck = target;
         if (target != null) targeted.Remove(target);
         target = null;
         FoxFire.Explode(aim, hit);
@@ -274,6 +281,18 @@ public class FoxWisp : MonoBehaviour
             absorbPending = false;
             StartAbsorb();
             return;
+        }
+
+        // Irrlicht-Sprung: einmal je Angriff weiter zum naechsten Gegner, erst dann zurueck
+        if (!hopped && Skills.HasGrant(SkillGrants.IrrlichtSprung))
+        {
+            Enemy next = FoxFire.FindTarget(pos, HopRange, struck);
+            if (next != null)
+            {
+                hopped = true;
+                BeginFlight(next, State.Out, 1f);
+                return;
+            }
         }
 
         // zurueck im Bogen auf die andere Seite

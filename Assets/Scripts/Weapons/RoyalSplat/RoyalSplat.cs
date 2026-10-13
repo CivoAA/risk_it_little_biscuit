@@ -9,15 +9,16 @@ using UnityEngine;
 /// Gruppe weiter (<see cref="SplatBlob"/>). Ein gestrichelter Ring am Boden
 /// zeigt vorher genau, wo und wie gross er landet.
 ///
-/// Stufen: mehr Abpraller, ab Stufe 4 bleibt beim letzten Aufschlag eine
-/// klebrige Pfuetze (<see cref="SplatPuddle"/>), auf Stufe 6 zerplatzt der
-/// Klops zum Schluss in drei Mini-Klopse.
+/// Stufen: mehr Abpraller, mehr Schaden, groesserer Platscher. Die klebrige
+/// Pfuetze (<see cref="SplatPuddle"/>) beim letzten Aufschlag und das
+/// Zerplatzen in drei Mini-Klopse gibt es seit 13.10.2026 nur ueber die
+/// Skilltree-Sterne <see cref="SkillGrants.Klebgelee"/> und
+/// <see cref="SkillGrants.Zerplatzen"/> (gelten auch fuer die Evo).
 ///
 /// cooldown = Pause zwischen zwei Wuerfen
 /// damage   = Schaden je Aufschlag
 /// range    = Wurfweite in Tiles (die Abpraller springen <see cref="BounceRange"/>)
-/// duration = Pfuetze in Sekunden (Duration-Buff zaehlt), 0 = keine
-/// shots    = Klopse je Wurf (+ einer je 3 Extra-Schuesse)
+/// shots   = Klopse je Wurf (+ einer je 3 Extra-Schuesse)
 ///
 /// Werte im Code (<see cref="LevelStats"/>), nicht am Prefab. Bilder in
 /// Resources/Weapons/splat_*.
@@ -39,7 +40,10 @@ public class RoyalSplat : Weapon
     /// <summary>Tempo-Faktor in der Pfuetze.</summary>
     public const float PuddleSlow = 0.45f;
 
-    /// <summary>Mini-Klopse der letzten Stufe: Schaden und Radius im Verhaeltnis zum grossen.</summary>
+    /// <summary>So lange bleibt die Pfuetze (Stern <see cref="SkillGrants.Klebgelee"/>), vor dem Duration-Buff.</summary>
+    public const float PuddleTime = 3f;
+
+    /// <summary>Mini-Klopse (Stern <see cref="SkillGrants.Zerplatzen"/>):Schaden und Radius im Verhaeltnis zum grossen.</summary>
     public const float MiniFactor = 0.45f;
 
     /// <summary>Der Gegner sitzt mit dem Pivot unten - seine Mitte liegt etwas hoeher.</summary>
@@ -47,31 +51,28 @@ public class RoyalSplat : Weapon
 
     private static readonly WeaponStats[] LevelStats =
     {
-        //    cooldown  damage  Wurfweite  Pfuetze  Klopse
-        Level(2.4f,  6f, 6.5f, 0f,   1, "Ein Gelee-Klops plumpst auf die dichteste Gegnergruppe und hüpft einmal weiter"),
-        Level(2.4f,  8f, 6.5f, 0f,   1, "Schaden +2"),
-        Level(2.2f,  8f, 7f,   0f,   1, "Der Klops hüpft zweimal weiter"),
-        Level(2.2f,  9f, 7f,   2.5f, 1, "Klebrige Pfütze: Wo er zuletzt landet, bleiben Gegner kleben"),
-        Level(2.0f, 10f, 7.5f, 2.5f, 1, "Hüpft dreimal weiter, größerer Platscher"),
-        Level(1.8f, 13f, 8f,   3f,   1, "Schaden +3, zum Schluss zerplatzt er in drei Mini-Klopse"),
+        //    cooldown  damage  Wurfweite  Klopse
+        Level(2.4f,  6f, 6.5f, 1, "Ein Gelee-Klops plumpst auf die dichteste Gegnergruppe und hüpft einmal weiter"),
+        Level(2.4f,  8f, 6.5f, 1, "Schaden +2"),
+        Level(2.2f,  8f, 7f,   1, "Der Klops hüpft zweimal weiter"),
+        Level(2.2f,  9f, 7f,   1, "Schaden +1"),
+        Level(2.0f, 10f, 7.5f, 1, "Hüpft dreimal weiter, größerer Platscher"),
+        Level(1.8f, 13f, 8f,   1, "Schaden +3, wirft schneller und weiter"),
     };
 
     private static readonly int[] BouncesPerLevel = { 1, 1, 2, 2, 3, 3 };
     private static readonly float[] RadiusPerLevel = { 1f, 1f, 1f, 1f, 1.25f, 1.25f };
-    private static readonly bool[] SplitPerLevel = { false, false, false, false, false, true };
 
     /// <summary>Abstand zwischen zwei Klopsen desselben Wurfs (Extra-Schuss).</summary>
     private const float VolleyGap = 0.18f;
 
-    private static WeaponStats Level(float cooldown, float damage, float range, float duration,
-                                     int shots, string description)
+    private static WeaponStats Level(float cooldown, float damage, float range, int shots, string description)
     {
         return new WeaponStats
         {
             cooldown = cooldown,
             damage = damage,
             range = range,
-            duration = duration,
             shots = shots,
             description = description,
         };
@@ -88,12 +89,12 @@ public class RoyalSplat : Weapon
     }
 
     [Tooltip("Hoehe der Zepterspitze ueber dem Spieler-Pivot (der liegt unter den Fuessen) - von dort fliegt der Klops los.")]
-    [SerializeField] private float throwHeight = 0.75f;
+    [SerializeField] protected float throwHeight = 0.75f;
 
     private float nextThrow;
     private int volleyLeft;
     private float nextVolley;
-    private readonly List<Vector2> claimed = new List<Vector2>();
+    protected readonly List<Vector2> claimed = new List<Vector2>();
 
     private int LevelIndex(int length) { return Mathf.Clamp(TableLevel, 0, length - 1); }
 
@@ -129,7 +130,8 @@ public class RoyalSplat : Weapon
         nextThrow = Time.time + CurrentCooldown;
     }
 
-    private bool Throw()
+    /// <summary>Ein Klops auf die naechste freie Gruppe. False, wenn nichts in Reichweite ist.</summary>
+    protected virtual bool Throw()
     {
         Hit hit = CurrentHit();
         Vector2 ground = transform.position;
@@ -142,15 +144,15 @@ public class RoyalSplat : Weapon
         return true;
     }
 
-    private Hit CurrentHit()
+    protected Hit CurrentHit()
     {
         return new Hit
         {
             damage = CurrentStats.damage,
             radius = HitRadius * RadiusPerLevel[LevelIndex(RadiusPerLevel.Length)] * AoeFactor(),
             bounces = BouncesPerLevel[LevelIndex(BouncesPerLevel.Length)],
-            puddleTime = CurrentStats.duration > 0f ? CurrentDuration : 0f,
-            split = SplitPerLevel[LevelIndex(SplitPerLevel.Length)],
+            puddleTime = Skills.HasGrant(SkillGrants.Klebgelee) ? PuddleTime * DurationFactor() : 0f,
+            split = Skills.HasGrant(SkillGrants.Zerplatzen),
         };
     }
 
@@ -158,6 +160,12 @@ public class RoyalSplat : Weapon
     {
         PlayerController player = PlayerController.Instance;
         return player != null ? Mathf.Clamp(player.AOERange, 0.5f, 2.2f) : 1f;
+    }
+
+    private static float DurationFactor()
+    {
+        PlayerController player = PlayerController.Instance;
+        return player != null ? player.DurationMultiplier : 1f;
     }
 
     // ------------------------------------------------------------------
@@ -237,8 +245,12 @@ public class RoyalSplat : Weapon
 
     private static readonly List<Enemy> hitBuffer = new List<Enemy>();
 
-    /// <summary>Platscher bei <paramref name="at"/>: Schaden fuer alle im Kreis, alle werden nach aussen geschubst.</summary>
-    public static void Splash(Vector2 at, float damage, float radius, HashSet<Enemy> seen, float shake)
+    /// <summary>
+    /// Platscher bei <paramref name="at"/>: Schaden fuer alle im Kreis, alle
+    /// werden nach aussen geschubst - ausser <paramref name="shove"/> ist aus
+    /// (die Evo zieht danach mit dem Strudel, da wuerde der Schubs gegenhalten).
+    /// </summary>
+    public static void Splash(Vector2 at, float damage, float radius, HashSet<Enemy> seen, float shake, bool shove = true)
     {
         FoxFx.Play(HitFor(radius), at, 22f, 1);
         if (shake > 0f) ScreenShake.Kick(shake, 0.12f);
@@ -265,7 +277,7 @@ public class RoyalSplat : Weapon
             Vector2 away = (Vector2)enemy.transform.position + BodyOffset - at;
             away = away.sqrMagnitude > 1e-4f ? away.normalized : Random.insideUnitCircle.normalized;
             enemy.TakeDamage(damage, null, 0f);
-            if (enemy != null) enemy.ApplyPull(away * Shove, 0.12f);
+            if (shove && enemy != null) enemy.ApplyPull(away * Shove, 0.12f);
         }
         hitBuffer.Clear();
     }

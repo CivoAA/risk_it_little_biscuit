@@ -179,7 +179,7 @@ public class GameHud : MonoBehaviour
     private readonly List<SlotView> buffViews = new List<SlotView>();
     private ItemMenu itemMenu;
     private ItemMenuBuffs itemMenuBuffs;
-    private CopyView copyView;
+    private readonly List<CopyView> copyViews = new List<CopyView>();
 
     // ==================================================================
     //  Aufbau
@@ -930,34 +930,31 @@ public class GameHud : MonoBehaviour
     /// <summary>
     /// Kruemelchaos des Tofus: rechts neben den Waffenslots die Waffe, die es
     /// gerade kopiert, und darunter die Zeit bis zum Wechsel - so laesst sich
-    /// z.B. der Schwerthieb abpassen.
+    /// z.B. der Schwerthieb abpassen. Mit Doppelbiss zwei Kacheln
+    /// nebeneinander, jede mit eigener Zeit.
     /// </summary>
     private void UpdateCopy(PlayerController p, int weaponCount, float now)
     {
-        CrumbMayhem mayhem = FindMayhem(p.activeEvos) ?? FindMayhem(p.activeWeapon);
-        Weapon copy = mayhem != null ? mayhem.CurrentCopy : null;
+        CrumbMayhem mayhem = CrumbMayhem.FindActive(p);
+        int lanes = mayhem != null ? mayhem.LaneCount : 0;
 
-        if (copy == null)
+        for (int i = 0; i < Mathf.Max(lanes, copyViews.Count); i++)
         {
-            if (copyView != null && copyView.Root.gameObject.activeSelf) copyView.Root.gameObject.SetActive(false);
-            return;
+            Weapon copy = i < lanes ? mayhem.CopyAt(i) : null;
+            if (copy == null)
+            {
+                if (i < copyViews.Count && copyViews[i].Root.gameObject.activeSelf)
+                    copyViews[i].Root.gameObject.SetActive(false);
+                continue;
+            }
+
+            while (copyViews.Count <= i) copyViews.Add(new CopyView(this, left));
+            CopyView view = copyViews[i];
+            if (!view.Root.gameObject.activeSelf) view.Root.gameObject.SetActive(true);
+
+            SetPos(view.Root, Margin + (weaponCount + i) * SlotStep, -WeaponY);
+            view.Apply(copy, mayhem is CrumbMayhemEvo, mayhem.SwapTimeLeftAt(i), CrumbMayhem.SwapInterval, now);
         }
-
-        if (copyView == null) copyView = new CopyView(this, left);
-        if (!copyView.Root.gameObject.activeSelf) copyView.Root.gameObject.SetActive(true);
-
-        SetPos(copyView.Root, Margin + weaponCount * SlotStep, -WeaponY);
-        copyView.Apply(copy, mayhem is CrumbMayhemEvo, mayhem.SwapTimeLeft, CrumbMayhem.SwapInterval, now);
-    }
-
-    private static CrumbMayhem FindMayhem(Weapon[] list)
-    {
-        if (list == null) return null;
-        foreach (Weapon w in list)
-        {
-            if (w is CrumbMayhem m && m.IsActive) return m;
-        }
-        return null;
     }
 
     private void SyncRow(List<SlotView> views, List<ItemSlotInfo> items, int count, int evoSlots,

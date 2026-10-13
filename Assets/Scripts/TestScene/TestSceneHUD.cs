@@ -37,12 +37,6 @@ public class TestSceneHUD : MonoBehaviour
         NumberGroupSizes = new[] { 3 }
     };
 
-    /// <summary>
-    /// Ruestung, die den Spieler unsterblich macht. Der Schadensrechner nimmt
-    /// 0.9 hoch Ruestung - bei 100000 ist das glatt 0, und TakeDamage steigt
-    /// aus, bevor ueberhaupt Leben abgezogen wird.
-    /// </summary>
-    private const float GodArmor = 100000f;
 
     private DamageMeter meter;
     private DummyArena arena;
@@ -493,10 +487,7 @@ public class TestSceneHUD : MonoBehaviour
 
         godMode = !godMode;
 
-        // Auf- und wieder abziehen statt den alten Wert zu merken: sonst
-        // verschwaende eine Ruestung, die waehrenddessen dazukommt, beim
-        // Abschalten wieder.
-        player.playerArmor += godMode ? GodArmor : -GodArmor;
+        player.GodMode = godMode;
 
         SetHint(godMode
             ? "Unsterblich an. Schaden wird komplett weggerechnet."

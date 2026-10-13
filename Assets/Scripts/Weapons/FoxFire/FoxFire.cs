@@ -44,12 +44,12 @@ public class FoxFire : Weapon
     private static readonly WeaponStats[] LevelStats =
     {
         //    cooldown  damage  Reichweite  Brand  Irrlichter
-        Level(2.4f,  4f, 6f,   2.0f, 2, "Zwei Irrlichter jagen Gegner und setzen sie in blaues Fuchsfeuer"),
-        Level(2.4f,  4f, 6f,   2.0f, 3, "Ein drittes Irrlicht schließt sich an"),
-        Level(2.2f,  6f, 6.5f, 3.0f, 3, "Schaden +2, das Feuer brennt länger"),
-        Level(2.2f,  6f, 6.5f, 3.0f, 3, "Lauffeuer: Stirbt ein brennender Gegner, springt sein Feuer weiter"),
-        Level(2.0f,  7f, 7f,   3.0f, 4, "Vier Irrlichter, größerer Flammenring"),
-        Level(1.8f,  9f, 7.5f, 3.5f, 4, "Schaden +2, das Lauffeuer springt auf zwei Gegner"),
+        Level(3.0f,  2f, 6f,   2.0f, 2, "Zwei Irrlichter jagen Gegner und setzen sie in blaues Fuchsfeuer"),
+        Level(3.0f,  2f, 6f,   2.0f, 3, "Ein drittes Irrlicht schließt sich an"),
+        Level(2.8f,  4f, 6.5f, 3.0f, 3, "Schaden +2, das Feuer brennt länger"),
+        Level(2.8f,  4f, 6.5f, 3.0f, 3, "Lauffeuer: Stirbt ein brennender Gegner, springt sein Feuer weiter"),
+        Level(2.6f,  5f, 7f,   3.0f, 4, "Vier Irrlichter, größerer Flammenring"),
+        Level(2.4f,  7f, 7.5f, 3.5f, 4, "Schaden +2, das Lauffeuer springt auf zwei Gegner"),
     };
 
     /// <summary>Auf so viele Gegner springt das Feuer eines toten Brennenden (0 = gar nicht).</summary>

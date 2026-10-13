@@ -6,8 +6,21 @@ public class BombSawEvo : Weapon
     [SerializeField] private GameObject prefab;
     private float spawnCounter;
 
+    // Der laufende Saegenkreis. Lebt er beim naechsten Cooldown noch (Wirkdauer
+    // >= Cooldown), wird er nur verlaengert statt einen zweiten daneben zu legen.
+    private GameObject orbit;
+    private float orbitEnd;
+    private float orbitAoe;
+
     void Update()
     {
+        // Ablauf selbst pruefen statt Destroy(orbit, t) - so laesst er sich verlaengern.
+        if (orbit != null && Time.time >= orbitEnd)
+        {
+            Destroy(orbit);
+            orbit = null;
+        }
+
         if (weaponLevel >= 0)
         {
             spawnCounter -= Time.deltaTime;
@@ -18,10 +31,20 @@ public class BombSawEvo : Weapon
                 Achievements.Unlock(Ach.BombSawEvo);
 
                 spawnCounter = CurrentCooldown;
+
+                // Kreis laeuft noch: nur verlaengern. Hat sich AOE geaendert,
+                // neu bauen, damit die Saegen die neue Groesse bekommen.
+                if (orbit != null && Mathf.Approximately(orbitAoe, PlayerController.Instance.AOERange))
+                {
+                    orbitEnd = Time.time + CurrentDuration;
+                    return;
+                }
+                if (orbit != null) Destroy(orbit);
+
                 WeaponSounds.Play(WeaponSounds.SawSpawn, 1f, 0.85f);
 
                 // Orbit-Pivot erstellen
-                GameObject orbit = new GameObject("OrbitPivotEvo");
+                orbit = new GameObject("OrbitPivotEvo");
                 Scene gameScene = RunScene.Current;
                 if (gameScene.IsValid() && gameScene.isLoaded)
                 {
@@ -30,8 +53,9 @@ public class BombSawEvo : Weapon
                 orbit.transform.position = transform.position;
 
                 // nach Ablauf der Duration das ganze Pivot (mit Kindern) zerstören
-                Destroy(orbit, CurrentDuration);
-            
+                orbitEnd = Time.time + CurrentDuration;
+                orbitAoe = PlayerController.Instance.AOERange;
+
                 
                 // berechne diagonale Distanz so, dass sie "mittig" zwischen den Kanten liegt
                 float diag = stats[weaponLevel].range * 0.7071f; // ca. 1/√2

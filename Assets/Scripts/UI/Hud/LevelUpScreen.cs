@@ -1075,6 +1075,7 @@ public partial class LevelUpScreen : MonoBehaviour
     private const string ArrowHex = "#f2c14e";
     private const string UpHex = "#b2ebb9";
     private const string PlainHex = "#fff4e0";
+    private const string DownHex = "#ff9a8a";   // Nachteil, z. B. mehr erlittener Schaden
 
     private static string Num(float v)
     {
@@ -1090,9 +1091,14 @@ public partial class LevelUpScreen : MonoBehaviour
         return "<color=" + (up ? UpHex : PlainHex) + ">" + value + "</color>";
     }
 
-    private static string Change(string from, string to)
+    private static string Change(string from, string to, string toHex = UpHex)
     {
-        return "<color=" + DimHex + ">" + from + "</color> <color=" + ArrowHex + ">></color> <color=" + UpHex + ">" + to + "</color>";
+        return "<color=" + DimHex + ">" + from + "</color> <color=" + ArrowHex + ">></color> <color=" + toHex + ">" + to + "</color>";
+    }
+
+    private static string Bad(string value)
+    {
+        return "<color=" + DownHex + ">" + value + "</color>";
     }
 
     private static string StatLabel(string id, string fallback) => Loc.Get("ui.levelup.stat." + id, fallback);
@@ -1199,7 +1205,7 @@ public partial class LevelUpScreen : MonoBehaviour
         if (id == "buff_glass_cannon")
         {
             AbsLine(lines, "damage", "Damage", from != null ? from.damage : (float?)null, to.damage, BuffMode.AbsPct);
-            AbsLine(lines, "maxhp", "Max HP", from != null ? from.range : (float?)null, to.range, BuffMode.AbsPctMinus);
+            AbsLine(lines, "dmgtaken", "Damage taken", from != null ? from.range : (float?)null, to.range, BuffMode.AbsPct, bad: true);
             return;
         }
         if (id == "buff_second_chance")
@@ -1233,7 +1239,8 @@ public partial class LevelUpScreen : MonoBehaviour
         }
     }
 
-    private static void AbsLine(List<StatLine> lines, string id, string fallback, float? from, float to, BuffMode mode)
+    /// <param name="bad">Nachteil (z. B. mehr erlittener Schaden): neuer Wert in Rot statt Gruen.</param>
+    private static void AbsLine(List<StatLine> lines, string id, string fallback, float? from, float to, BuffMode mode, bool bad = false)
     {
         string Fmt(float v)
         {
@@ -1249,8 +1256,10 @@ public partial class LevelUpScreen : MonoBehaviour
         lines.Add(new StatLine
         {
             Label = StatLabel(id, fallback),
-            Value = from.HasValue ? Change(Fmt(from.Value), Fmt(to)) : Single(Fmt(to), true),
-            Short = Single(Fmt(to), true),
+            Value = from.HasValue
+                ? Change(Fmt(from.Value), Fmt(to), bad ? DownHex : UpHex)
+                : (bad ? Bad(Fmt(to)) : Single(Fmt(to), true)),
+            Short = bad ? Bad(Fmt(to)) : Single(Fmt(to), true),
         });
     }
 

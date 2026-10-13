@@ -1,24 +1,19 @@
 using UnityEngine;
 
 /// <summary>
-/// Erster Buff mit Nachteil: deutlich mehr Schaden gegen weniger Max-HP.
+/// Erster Buff mit Nachteil: deutlich mehr Schaden, dafuer tut jeder Treffer mehr weh.
 ///
 /// stats[level].damage = Schadensbonus auf dieser Stufe (0.5 = +50%)
-/// stats[level].range  = Max-HP-Malus als Anteil (0.3 = -30%)
+/// stats[level].range  = mehr erlittener Schaden als Anteil (0.4 = +40%)
 ///
-/// Beide Werte sind absolut pro Stufe, nicht kumulativ. Der HP-Malus wird beim
-/// Level-Up erst zurueckgenommen und dann neu berechnet, sonst wuerde er sich
-/// auf einer bereits verkleinerten Basis stapeln und die Lebensleiste
-/// Richtung 0 fressen.
+/// Beide Werte sind absolut pro Stufe, nicht kumulativ. Beim Level-Up wird der
+/// alte Stand erst zurueckgenommen und dann der neue verbucht.
 /// </summary>
 public class GlassCannon : Weapon
 {
-    [Tooltip("Obergrenze fuer den HP-Malus, damit der Buff nicht toedlich ist.")]
-    [SerializeField] private float maxHealthPenalty = 0.6f;
-
     private int lastAppliedLevel = -2;
     private float appliedDamage;
-    private float appliedHealthLoss;
+    private float appliedDamageTaken;
 
     void Update()
     {
@@ -29,29 +24,14 @@ public class GlassCannon : Weapon
 
         // Alten Stand zuruecknehmen
         player.damageMultiplier -= appliedDamage;
-        player.playerMaxHealth += appliedHealthLoss;
+        player.damageTakenMultiplier -= appliedDamageTaken;
 
-        // Neuen Stand auf der unverfaelschten Basis berechnen
         appliedDamage = Mathf.Max(0f, stats[weaponLevel].damage);
-        float penalty = Mathf.Clamp(stats[weaponLevel].range, 0f, maxHealthPenalty);
-        appliedHealthLoss = player.playerMaxHealth * penalty;
+        appliedDamageTaken = Mathf.Max(0f, stats[weaponLevel].range);
 
         player.damageMultiplier += appliedDamage;
-        player.playerMaxHealth -= appliedHealthLoss;
+        player.damageTakenMultiplier += appliedDamageTaken;
 
-        // Mindestens 1 HP Kapazitaet lassen, sonst ist der naechste Tick toedlich
-        if (player.playerMaxHealth < 1f)
-        {
-            appliedHealthLoss -= 1f - player.playerMaxHealth;
-            player.playerMaxHealth = 1f;
-        }
-
-        if (player.playerHealth > player.playerMaxHealth)
-        {
-            player.playerHealth = player.playerMaxHealth;
-        }
-
-        UIController.Instance.UpdateHealthSlider();
         lastAppliedLevel = weaponLevel;
 
         if (weaponLevel == maxweaponLevel)

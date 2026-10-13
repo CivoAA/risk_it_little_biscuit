@@ -190,7 +190,9 @@ public partial class PauseMenuPanel : MonoBehaviour
     {
         if (mode == PauseMode.Run)
         {
-            Time.timeScale = 1f;
+            // Nach "Aufgeben" ist der Lauf vorbei und das Spiel bleibt stehen.
+            GameManager gm = GameManager.Instance;
+            if (gm == null || gm.gameActiv) Time.timeScale = 1f;
             if (GameManager.Instance != null) GameManager.Instance.OnPauseMenuClosed();
         }
         else
@@ -562,7 +564,7 @@ public partial class PauseMenuPanel : MonoBehaviour
                 break;
 
             case Entry.GiveUp:
-                OpenDialog(Loc.Get("ui.pause.dialog.giveup", "Lauf wirklich aufgeben?"),
+                OpenDialog(Loc.Get("ui.pause.dialog.giveup", "Lauf wirklich aufgeben? Gold und Char-XP bekommst du trotzdem."),
                            GiveUpRun);
                 break;
 
@@ -577,15 +579,15 @@ public partial class PauseMenuPanel : MonoBehaviour
     }
 
     /// <summary>
-    /// Lauf abbrechen. GameManager.Restart bringt den Spieler dorthin zurueck,
-    /// wo der Lauf gestartet wurde - Hub oder World Map.
+    /// Lauf aufgeben: endet wie ein Tod - mit Abrechnung und Game-Over-Bildschirm,
+    /// von dem aus es wie gewohnt zurueck in Hub oder World Map geht.
     /// </summary>
     private static void GiveUpRun()
     {
         GameManager manager = GameManager.Instance;
         Close();
 
-        if (manager != null) manager.Restart();
+        if (manager != null) manager.GiveUp();
         else Time.timeScale = 1f;
     }
 

@@ -36,6 +36,8 @@ public class PlayerController : MonoBehaviour
     public float dodgeChance;
     public float luck;
     public float damageMultiplier = 1;
+    /// <summary>Erlittener Schaden, 1 = unveraendert. Die Glaskanone legt hier drauf (1.4 = +40%).</summary>
+    public float damageTakenMultiplier = 1f;
     public float lifeStealChance;
     public float lifeStealMultiplire = 0.1f;
     public float powerUpShrinkSpeed = 1f;
@@ -154,6 +156,10 @@ public class PlayerController : MonoBehaviour
     /// solange die Beute einfliegt und das Ende ablaeuft.
     /// </summary>
     [System.NonSerialized] public bool Untouchable;
+
+    /// <summary>Unsterblich-Schalter der Test-Szene: kein Schaden, eigener Flag,
+    /// damit er sich nicht mit Untouchable der Story in die Quere kommt.</summary>
+    [System.NonSerialized] public bool GodMode;
 
     /// <summary>
     /// Eingefroren (Frostring des Eiskaisers) bis zu diesem Zeitpunkt: steht
@@ -471,15 +477,21 @@ public class PlayerController : MonoBehaviour
         bool active = IsKawarimi;
         if (!active && !kawarimiFaded) return;
 
-        SpriteRenderer body = hitFeedback != null && hitFeedback.playerSpriteRenderer != null
-            ? hitFeedback.playerSpriteRenderer
-            : (animator != null ? animator.GetComponent<SpriteRenderer>() : null);
+        SpriteRenderer body = BodyRenderer();
         if (body == null) return;
 
         Color c = body.color;
         c.a = active ? KawarimiAlpha : 1f;
         body.color = c;
         kawarimiFaded = active;
+    }
+
+    /// <summary>Der SpriteRenderer der Spielfigur (fuer Deckkraft, Doppelgaenger und Schleimklon).</summary>
+    public SpriteRenderer BodyRenderer()
+    {
+        return hitFeedback != null && hitFeedback.playerSpriteRenderer != null
+            ? hitFeedback.playerSpriteRenderer
+            : (animator != null ? animator.GetComponent<SpriteRenderer>() : null);
     }
 
     // ------------------------------------------------------------------
@@ -533,15 +545,78 @@ public class PlayerController : MonoBehaviour
         DamageNumberController.Instance?.CreateText(Loc.Get("ui.float.paukenschlag", "PAUKENSCHLAG!"), transform.position);
     }
 
+    // ------------------------------------------------------------------
+    // Geist: Schleimteilung
+    // ------------------------------------------------------------------
+
+    private float slimeSplitReadyAt;
+
+    /// <summary>Skilltree "Schleimteilung": faellt das Leben unter 35 %, lockt ein Gelee-Doppelgaenger die Gegner weg.</summary>
+    private void TrySlimeSplit()
+    {
+        if (!Skills.HasGrant(SkillGrants.Schleimteilung) || Time.time < slimeSplitReadyAt) return;
+        if (playerHealth <= 0f || playerHealth > playerMaxHealth * SlimeSplit.Threshold) return;
+
+        slimeSplitReadyAt = Time.time + SlimeSplit.Duration + SlimeSplit.Cooldown;
+        SlimeSplit.Fire(transform, BodyRenderer());
+        DamageNumberController.Instance?.CreateText(Loc.Get("ui.float.schleimteilung", "SCHLEIMTEILUNG!"), transform.position);
+    }
+
+    // ------------------------------------------------------------------
+    // Geist: Kruemelsturm
+    // ------------------------------------------------------------------
+
+    private float kruemelsturmReadyAt;
+
+    /// <summary>Skilltree "Kruemelsturm": faellt das Leben unter 35 %, greifen alle Kopien des Kruemelchaos gleichzeitig an.</summary>
+    private void TryKruemelsturm()
+    {
+        if (!Skills.HasGrant(SkillGrants.Kruemelsturm) || Time.time < kruemelsturmReadyAt) return;
+        if (playerHealth <= 0f || playerHealth > playerMaxHealth * CrumbMayhem.StormThreshold) return;
+
+        CrumbMayhem mayhem = CrumbMayhem.FindActive(this);
+        if (mayhem == null || !mayhem.Storm()) return;
+
+        kruemelsturmReadyAt = Time.time + CrumbMayhem.StormDuration + CrumbMayhem.StormCooldown;
+        WeaponSounds.Play(WeaponSounds.SawBoom);
+        DamageNumberController.Instance?.CreateText(Loc.Get("ui.float.kruemelsturm", "KRÜMELSTURM!"), transform.position);
+    }
+
+    // ------------------------------------------------------------------
+    // Geist: Fuchsgestalt
+    // ------------------------------------------------------------------
+
+    private float foxFormReadyAt;
+
+    /// <summary>
+    /// Skilltree "Fuchsgestalt": ein toedlicher Treffer verwandelt Inari mit
+    /// 1 Leben in den Geisterfuchs (<see cref="FoxForm"/>). True = Tod verhindert.
+    /// </summary>
+    private bool TryFoxForm()
+    {
+        if (!Skills.HasGrant(SkillGrants.Fuchsgestalt) || Time.time < foxFormReadyAt) return false;
+
+        foxFormReadyAt = Time.time + FoxForm.Duration + FoxForm.Cooldown;
+        playerHealth = 1f;
+        UIController.Instance.UpdateHealthSlider();
+        FoxForm.Fire(this);
+        DamageNumberController.Instance?.CreateText(Loc.Get("ui.float.fuchsgestalt", "FUCHSGESTALT!"), transform.position);
+        return true;
+    }
+
     public void StartStats()
     {
         rageUntil = 0f;
+        foxFormReadyAt = 0f;
+        FoxForm.Cancel();
         rageReadyAt = 0f;
         kawarimiUntil = 0f;
         kawarimiReadyAt = 0f;
         stickyRiceReadyAt = 0f;
         whirlwindReadyAt = 0f;
         paukenschlagReadyAt = 0f;
+        slimeSplitReadyAt = 0f;
+        kruemelsturmReadyAt = 0f;
 
         if (activeWeapon != null && activeWeapon.Length > 0)
         {
@@ -644,9 +719,25 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public float LastStruckTime { get; private set; } = -999f;
 
+    /// <summary>Hoechstens so viel Schaden schluckt die Ruestung (0.8 = 80 %).</summary>
+    public const float ArmorMaxReduction = 0.8f;
+    /// <summary>Bei so viel Ruestung ist die Haelfte des Maximums erreicht (40 %).</summary>
+    public const float ArmorHalfPoint = 7f;
+
+    /// <summary>
+    /// Anteil des Schadens, den die Ruestung abfaengt: max * a / (a + k).
+    /// Jeder Punkt bringt weniger als der davor, 80 % werden nie erreicht.
+    /// 1 = 10 %, 5 = 33 %, 10 = 47 %, 20 = 59 %, 40 = 68 %.
+    /// </summary>
+    public static float ArmorReduction(float armor)
+    {
+        if (armor <= 0f) return 0f;
+        return ArmorMaxReduction * armor / (armor + ArmorHalfPoint);
+    }
+
     public void TakeDamage(float damage)
     {
-        if (isImmune || Captured || Untouchable) return;
+        if (isImmune || Captured || Untouchable || GodMode || FoxForm.Active) return;
 
         // Kawarimi: waehrend der Wirkung weicht der Spieler allem aus.
         if (IsKawarimi || UnityEngine.Random.value < dodgeChance)
@@ -657,7 +748,9 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        float finalDamage = damage * Mathf.Pow(0.9f, playerArmor);
+        // Erst die Ruestung, dann der Aufschlag (Glaskanone). Beides sind Faktoren,
+        // die Reihenfolge aendert das Ergebnis also nicht.
+        float finalDamage = damage * (1f - ArmorReduction(playerArmor)) * damageTakenMultiplier;
         if (finalDamage <= 0f) return;
 
         LastStruckTime = Time.time;
@@ -705,9 +798,9 @@ public class PlayerController : MonoBehaviour
                 hitsoundinterval = 0;
             }
 
-            // Erst das Glück aus dem Skilltree, dann der Buff - so bleibt der
-            // Buff erhalten, wenn das Glück schon rettet.
-            if (playerHealth <= 0 && !TryLuckyRevive() && !TryUseSecondChance())
+            // Erst Inaris Fuchsgestalt, dann das Glück aus dem Skilltree, dann
+            // der Buff - so bleibt der Buff erhalten, wenn vorher schon etwas rettet.
+            if (playerHealth <= 0 && !TryFoxForm() && !TryLuckyRevive() && !TryUseSecondChance())
             {
                 gameObject.SetActive(false);
                 GameManager.Instance.GameOver();
@@ -720,6 +813,8 @@ public class PlayerController : MonoBehaviour
             TryStickyRice();
             TryWhirlwind();
             TryPaukenschlag();
+            TrySlimeSplit();
+            TryKruemelsturm();
         }
     }
 

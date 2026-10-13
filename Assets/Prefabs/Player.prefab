@@ -2216,6 +2216,9 @@ MonoBehaviour:
   - EvoWeapon: {fileID: 5655142979738305804}
     RequiredWeapon1: {fileID: 7014266575022002265}
     RequiredWeapon2: {fileID: 1253188992596307305}
+  - EvoWeapon: {fileID: 4889264274671078726}
+    RequiredWeapon1: {fileID: 4266359328006293607}
+    RequiredWeapon2: {fileID: 5775431626742797176}
   immunityDuration: 0.3
   immunityTimer: 0
 --- !u!95 &3309684457716786782
@@ -2705,7 +2708,7 @@ MonoBehaviour:
     damage: 8
     range: 3.5
     AttackSpeed: 0.2
-    shots: 8
+    shots: 2
     description: 
   weaponImage: {fileID: -1960307383892287612, guid: fdb2c0766cc5a5041a5999f97dd8a787, type: 3}
   weaponIcon: {fileID: -1960307383892287612, guid: fdb2c0766cc5a5041a5999f97dd8a787, type: 3}
@@ -9863,30 +9866,29 @@ MonoBehaviour:
   - cooldown: 0
     duration: 0
     damage: 0.25
-    range: 0.12
+    range: 0.15
     AttackSpeed: 0
     shots: 0
-    description: +25% Schaden, -12% Max HP
+    description: +25% Schaden, +15% erlittener Schaden
   - cooldown: 0
     duration: 0
     damage: 0.45
-    range: 0.2
+    range: 0.25
     AttackSpeed: 0
     shots: 0
-    description: +45% Schaden, -20% Max HP
+    description: +45% Schaden, +25% erlittener Schaden
   - cooldown: 0
     duration: 0
     damage: 0.7
-    range: 0.3
+    range: 0.4
     AttackSpeed: 0
     shots: 0
-    description: +70% Schaden, -30% Max HP
+    description: +70% Schaden, +40% erlittener Schaden
   weaponImage: {fileID: -3627844698242013704, guid: 809b5a194789472183719b5d6f0d38fe, type: 3}
   weaponIcon: {fileID: -3627844698242013704, guid: 809b5a194789472183719b5d6f0d38fe, type: 3}
   weaponIconEvo: {fileID: 0}
   posssibleEvo: 0
   hasBeenRemoved: 0
-  maxHealthPenalty: 0.6
 --- !u!1 &8642106959609226173
 GameObject:
   m_ObjectHideFlags: 0
@@ -11143,9 +11145,18 @@ MonoBehaviour:
   weaponLevel: -1
   maxweaponLevel: 0
   stats: []
-  weaponImage: {fileID: 3526305591666443358, guid: 24e25b86c9ee4aeeb5b7d43004ec4de6, type: 3}
-  weaponIcon: {fileID: 3526305591666443358, guid: 24e25b86c9ee4aeeb5b7d43004ec4de6, type: 3}
+  weaponImage: {fileID: 3780453611678588807, guid: ac7d630e4f96455181eab3a057e4329d, type: 3}
+  weaponIcon: {fileID: 3780453611678588807, guid: ac7d630e4f96455181eab3a057e4329d, type: 3}
   weaponIconEvo: {fileID: 0}
   posssibleEvo: 0
   hasBeenRemoved: 0
   throwHeight: 0.75
+  vortexFrames:
+  - {fileID: 4467382399352183153, guid: 172176b6d60d401889adbb29824afa1c, type: 3}
+  - {fileID: 2807772678826817250, guid: 172176b6d60d401889adbb29824afa1c, type: 3}
+  - {fileID: 4229148513097289395, guid: 172176b6d60d401889adbb29824afa1c, type: 3}
+  - {fileID: 4382422524439196035, guid: 172176b6d60d401889adbb29824afa1c, type: 3}
+  - {fileID: 3760621875285482037, guid: 172176b6d60d401889adbb29824afa1c, type: 3}
+  - {fileID: 2848097771257846133, guid: 172176b6d60d401889adbb29824afa1c, type: 3}
+  - {fileID: 4265377990234647740, guid: 172176b6d60d401889adbb29824afa1c, type: 3}
+  - {fileID: 4367343376953244895, guid: 172176b6d60d401889adbb29824afa1c, type: 3}

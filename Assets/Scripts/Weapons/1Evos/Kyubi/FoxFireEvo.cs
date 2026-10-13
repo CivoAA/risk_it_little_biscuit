@@ -229,7 +229,8 @@ public class FoxFireEvo : FoxFire
         nextAwaken = Time.time + AwakenPause;
 
         PlayerController player = PlayerController.Instance;
-        if (player == null || !IsActive || Resting) return;
+        // ausgeschaltet (Fuchsgestalt): die Irrlichter kommen beim Wiedereinschalten von selbst
+        if (player == null || !IsActive || Resting || !enabled) return;
 
         int count = WantedWisps(player);
         for (int i = 0; i < count; i++)
