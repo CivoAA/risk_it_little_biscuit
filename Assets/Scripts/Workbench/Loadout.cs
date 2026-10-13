@@ -471,17 +471,8 @@ public static class Loadout
     /// </summary>
     public static bool ToggleEvo(EvoDef evo)
     {
-        if (evo == null) return false;
-
-        List<WeaponDef> parts = new List<WeaponDef>();
-        foreach (string id in new[] { evo.IngredientA, evo.IngredientB })
-        {
-            if (string.IsNullOrEmpty(id)) continue;
-            WeaponDef def = WeaponCatalog.Find(id);
-            if (def == null || def.Kind == PoolKind.Evo) return false;
-            if (!parts.Contains(def)) parts.Add(def);
-        }
-        if (parts.Count == 0) return false;
+        List<WeaponDef> parts = EvoParts(evo);
+        if (parts == null) return false;
 
         bool allIn = parts.TrueForAll(def => Contains(def.Id));
         bool changed = false;
@@ -496,17 +487,7 @@ public static class Loadout
         }
         else
         {
-            int missingWeapons = 0, missingBuffs = 0;
-            foreach (WeaponDef def in parts)
-            {
-                if (Contains(def.Id)) continue;
-                if (!IsSelectable(def.Id)) return false;
-                if (def.Kind == PoolKind.Buff) missingBuffs++;
-                else missingWeapons++;
-            }
-
-            if (Count(PoolKind.Weapon) + missingWeapons > WeaponCapacity) return false;
-            if (Count(PoolKind.Buff) + missingBuffs > BuffCapacity) return false;
+            if (!MissingFits(parts, out _)) return false;
 
             foreach (WeaponDef def in parts)
             {
@@ -518,6 +499,56 @@ public static class Loadout
 
         if (changed) Fire();
         return changed;
+    }
+
+    /// <summary>
+    /// Warum <see cref="ToggleEvo"/> eine Evo nicht einraeumen kann, weil der
+    /// Verteiler voll ist: die Art (Waffen/Buffs), der der Platz fehlt. Null,
+    /// wenn die Evo passt, schon drin liegt oder aus anderem Grund scheitert.
+    /// </summary>
+    public static PoolKind? EvoBlockedBy(EvoDef evo)
+    {
+        List<WeaponDef> parts = EvoParts(evo);
+        if (parts == null || parts.TrueForAll(def => Contains(def.Id))) return null;
+        return MissingFits(parts, out PoolKind? full) ? null : full;
+    }
+
+    /// <summary>Die Zutaten einer Evo, ohne Doppelte. Null, wenn sie keine taugt.</summary>
+    private static List<WeaponDef> EvoParts(EvoDef evo)
+    {
+        if (evo == null) return null;
+
+        List<WeaponDef> parts = new List<WeaponDef>();
+        foreach (string id in new[] { evo.IngredientA, evo.IngredientB })
+        {
+            if (string.IsNullOrEmpty(id)) continue;
+            WeaponDef def = WeaponCatalog.Find(id);
+            if (def == null || def.Kind == PoolKind.Evo) return null;
+            if (!parts.Contains(def)) parts.Add(def);
+        }
+        return parts.Count == 0 ? null : parts;
+    }
+
+    /// <summary>
+    /// Passen die fehlenden Zutaten noch in den Verteiler? <paramref name="full"/>
+    /// nennt die Art, der der Platz fehlt - bleibt null, wenn eine Zutat gar
+    /// nicht waehlbar ist.
+    /// </summary>
+    private static bool MissingFits(List<WeaponDef> parts, out PoolKind? full)
+    {
+        full = null;
+        int missingWeapons = 0, missingBuffs = 0;
+        foreach (WeaponDef def in parts)
+        {
+            if (Contains(def.Id)) continue;
+            if (!IsSelectable(def.Id)) return false;
+            if (def.Kind == PoolKind.Buff) missingBuffs++;
+            else missingWeapons++;
+        }
+
+        if (Count(PoolKind.Weapon) + missingWeapons > WeaponCapacity) full = PoolKind.Weapon;
+        else if (Count(PoolKind.Buff) + missingBuffs > BuffCapacity) full = PoolKind.Buff;
+        return full == null;
     }
 
     /// <summary>Leert den Verteiler. Der feste erste Platz bleibt.</summary>

@@ -397,6 +397,8 @@
     { "key": "ui.workbench.evo.none", "value": "0/2" },
     { "key": "ui.workbench.evo.solo_ready", "value": "1/1" },
     { "key": "ui.workbench.evo.solo_none", "value": "0/1" },
+    { "key": "ui.workbench.hint.weapons_full", "value": "No room left for weapons" },
+    { "key": "ui.workbench.hint.buffs_full", "value": "No room left for buffs" },
     { "key": "ui.workbench.overlay.title", "value": "ALL EVOLUTIONS" },
     { "key": "ui.workbench.btn.back", "value": "BACK" },
     { "key": "ui.workbench.btn.clear", "value": "CLEAR" },
