@@ -57,7 +57,7 @@ public class SpawnDirector : MonoBehaviour
     [Tooltip("Weiter weg wird ein Gegner nach vorn geholt statt stehen gelassen.")]
     [SerializeField] private float recycleDistance = 26f;
 
-    [Tooltip("Weiter weg springt ein Miniboss hinter den Spieler - knapp ausserhalb des Bildes, " .
+    [Tooltip("Weiter weg springt ein Miniboss hinter den Spieler - knapp ausserhalb des Bildes, " +
              "entgegen der Laufrichtung. Er laeuft dann weiter hinterher.")]
     [SerializeField] private float miniBossFollowDistance = 20f;
 

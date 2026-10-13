@@ -11,7 +11,9 @@ using UnityEngine;
 /// Bestiarium, Erfolge. Einstellungen (Audio, Sprache, Grafik) bleiben.
 ///
 /// Laeuft in SubsystemRegistration, also vor allen BeforeSceneLoad-Loadern
-/// (Shop, Skills, Unlocks, Loadout, Achievements).
+/// (Shop, Skills, Unlocks, Loadout, Achievements) und vor der Profil-Migration
+/// in <see cref="SaveProfiles"/>. Die Marke liegt einmal im Hauptordner; der
+/// Reset gilt fuer einen alten Spielstand dort und fuer alle Profilordner.
 ///
 /// Fuer einen weiteren Pflicht-Reset spaeter: <see cref="SaveVersion"/> hochzaehlen
 /// und in <see cref="Run"/> sagen, was ab der alten Version zu tun ist.
@@ -47,22 +49,40 @@ public static class SaveReset
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     private static void Run()
     {
-        string dir = Application.persistentDataPath;
-        string markerPath = Path.Combine(dir, MarkerFile);
+        string root = Application.persistentDataPath;
+        string markerPath = Path.Combine(root, MarkerFile);
 
         try
         {
             int version = ReadVersion(markerPath);
             if (version >= SaveVersion) return;
 
-            if (version < 1) DeleteProgress(dir);
-            else if (version < 3) ClearSkillTrees(dir);
+            foreach (string dir in SaveDirectories(root))
+            {
+                if (version < 1) DeleteProgress(dir);
+                else if (version < 3) ClearSkillTrees(dir);
+            }
 
             File.WriteAllText(markerPath, SaveVersion.ToString());
         }
         catch (Exception e)
         {
             Debug.LogWarning("[SaveReset] Reset fehlgeschlagen: " + e.Message);
+        }
+    }
+
+    /// <summary>
+    /// Hauptordner (Spielstand von vor den Profilen, wird danach nach profile1
+    /// verschoben) plus jeder vorhandene Profilordner. Bewusst ohne
+    /// <see cref="SaveProfiles.DirectoryOf"/> - das legt Ordner an und laedt die Profile.
+    /// </summary>
+    private static System.Collections.Generic.IEnumerable<string> SaveDirectories(string root)
+    {
+        yield return root;
+        for (int i = 1; i <= SaveProfiles.SlotCount; i++)
+        {
+            string dir = Path.Combine(root, "profile" + i);
+            if (Directory.Exists(dir)) yield return dir;
         }
     }
 
@@ -73,7 +93,7 @@ public static class SaveReset
             string path = Path.Combine(dir, file);
             if (!File.Exists(path)) continue;
             File.Delete(path);
-            Debug.Log("[SaveReset] geloescht: " + file);
+            Debug.Log("[SaveReset] geloescht: " + path);
         }
     }
 
@@ -105,8 +125,8 @@ public static class SaveReset
 
     /// <summary>
     /// "Spielstand zuruecksetzen" aus den Optionen (Reiter SPIEL) bzw. der Konsole:
-    /// loescht den gesamten Fortschritt (auch welche Tutorials schon gezeigt
-    /// wurden) und laedt das Hauptmenue neu.
+    /// loescht den gesamten Fortschritt des aktiven Profils (<see cref="SaveProfiles"/>,
+    /// auch welche Tutorials schon gezeigt wurden) und laedt das Hauptmenue neu.
     /// Einstellungen bleiben stehen; Steam-Achievements holt sich das Spiel
     /// ueber <see cref="AchievementSteamSync"/> wieder.
     /// </summary>
@@ -125,6 +145,8 @@ public static class SaveReset
         StoryProgress.ResetAll();
         // Ein neuer Spielstand erklaert die Stationen im Hub wieder von vorn.
         TutorialPanel.ResetSeen();
+        // Gilt fuer das aktive Profil - die anderen beiden bleiben unberuehrt.
+        SaveProfiles.ResetActiveStats();
 
         Debug.Log("[SaveReset] Spielstand zurueckgesetzt.");
 

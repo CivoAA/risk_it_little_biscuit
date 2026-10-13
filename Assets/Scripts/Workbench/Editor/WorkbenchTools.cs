@@ -209,7 +209,7 @@ public static class WorkbenchTools
     [MenuItem("Tools/Spielstand/Werkbank-Datei im Explorer zeigen", false, 313)]
     private static void ShowSave()
     {
-        string path = Path.Combine(Application.persistentDataPath, "loadout.json");
+        string path = Path.Combine(SaveProfiles.Directory, "loadout.json");
         if (File.Exists(path)) EditorUtility.RevealInFinder(path);
         else Debug.Log($"[Werkbank] Noch kein Spielstand - erwartet unter {path}.");
     }

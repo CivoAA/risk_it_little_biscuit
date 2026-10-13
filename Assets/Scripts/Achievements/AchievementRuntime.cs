@@ -86,6 +86,12 @@ public class AchievementRuntime : MonoBehaviour
         FlushAll();
     }
 
+    /// <summary>Nach einem Profilwechsel: Abgleich mit Steam noch einmal laufen lassen.</summary>
+    internal static void ResyncSteam()
+    {
+        if (instance != null) instance.steamSynced = false;
+    }
+
     private static void FlushAll()
     {
         Achievements.Flush();

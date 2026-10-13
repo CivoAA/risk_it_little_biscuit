@@ -133,19 +133,25 @@ public class TutorialPanel : MonoBehaviour
     }
 
     public static bool HasSeen(TutorialTopic topic) =>
-        PlayerPrefs.GetInt(SeenPrefix + TutorialContent.Get(topic).Key, 0) == 1;
+        PlayerPrefs.GetInt(SaveProfiles.PrefKey(SeenPrefix + TutorialContent.Get(topic).Key), 0) == 1;
 
     public static void MarkSeen(TutorialTopic topic)
     {
-        PlayerPrefs.SetInt(SeenPrefix + TutorialContent.Get(topic).Key, 1);
+        PlayerPrefs.SetInt(SaveProfiles.PrefKey(SeenPrefix + TutorialContent.Get(topic).Key), 1);
         PlayerPrefs.Save();
     }
 
     /// <summary>Alle Tutorials kommen beim naechsten Oeffnen wieder (Spielstand zuruecksetzen).</summary>
     public static void ResetSeen()
     {
-        foreach (TutorialTopicDef t in TutorialContent.All) PlayerPrefs.DeleteKey(SeenPrefix + t.Key);
+        foreach (TutorialTopicDef t in TutorialContent.All) PlayerPrefs.DeleteKey(SaveProfiles.PrefKey(SeenPrefix + t.Key));
         PlayerPrefs.Save();
+    }
+
+    /// <summary>Die PlayerPrefs-Schluessel aller Tutorials, ohne Profil-Vorsilbe (fuer <see cref="SaveProfiles"/>).</summary>
+    public static System.Collections.Generic.IEnumerable<string> AllSeenKeys()
+    {
+        foreach (TutorialTopicDef t in TutorialContent.All) yield return SeenPrefix + t.Key;
     }
 
     private static void Create(bool asLibrary, TutorialTopic topic)

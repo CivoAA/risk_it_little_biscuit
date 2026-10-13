@@ -115,7 +115,7 @@ public static class Bestiary
 
     public static event Action Changed;
 
-    public static string SavePath => Path.Combine(Application.persistentDataPath, FileName);
+    public static string SavePath => Path.Combine(SaveProfiles.Directory, FileName);
 
     // ==================================================================
     //  Abfragen
@@ -233,6 +233,24 @@ public static class Bestiary
         kills.Clear();
         Save();
         Changed?.Invoke();
+    }
+
+    /// <summary>Liest bestiary.json neu ein (Profilwechsel, <see cref="SaveProfiles"/>).</summary>
+    public static void Reload()
+    {
+        kills.Clear();
+        loaded = false;
+        dirty = false;
+        Changed?.Invoke();
+    }
+
+    // Ohne Domain-Reload blieben sonst die Zahlen des letzten Profils stehen.
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetRuntimeState()
+    {
+        kills.Clear();
+        loaded = false;
+        dirty = false;
     }
 
     // ==================================================================

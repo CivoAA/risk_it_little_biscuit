@@ -220,7 +220,26 @@ public class JuicyMainMenu : MonoBehaviour
         diamondColor = showBox ? boxHoverColor : plainHoverColor;
         Build();
         BuildVersion();
+        BuildExtras();
         Loc.LanguageChanged += OnLanguageChanged;
+    }
+
+    /// <summary>
+    /// Kueche mit Leben (<see cref="MainMenuStage"/>) und das Profil-Schild oben
+    /// links (<see cref="MainMenuProfileBadge"/>) - beide ohne Szenenobjekt.
+    /// </summary>
+    private void BuildExtras()
+    {
+        if (GetComponent<MainMenuStage>() == null) gameObject.AddComponent<MainMenuStage>();
+
+        MainMenuProfileBadge badge = GetComponent<MainMenuProfileBadge>();
+        if (badge == null) badge = gameObject.AddComponent<MainMenuProfileBadge>();
+        MainMenuController controller = GetComponent<MainMenuController>();
+        badge.OnOpen = () =>
+        {
+            if (controller != null) controller.OpenProfiles();
+            else ProfilePanel.Open();
+        };
     }
 
     private bool SkinPlates => showPlates && plateStyle == PlateStyle.Skin;
@@ -547,7 +566,7 @@ public class JuicyMainMenu : MonoBehaviour
             EventSystem.current.SetSelectedGameObject(null);
     }
 
-    private static bool OverlayOpen => OptionsPanel.IsOpen || AchievementPanel.IsOpen;
+    private static bool OverlayOpen => OptionsPanel.IsOpen || AchievementPanel.IsOpen || ProfilePanel.IsOpen;
 
     private int ResolveActive()
     {

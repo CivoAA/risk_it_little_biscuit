@@ -242,7 +242,7 @@ public static class ShopTools
     [MenuItem("Tools/Spielstand/Shop anzeigen", false, 312)]
     public static void ShowSave()
     {
-        string path = Path.Combine(Application.persistentDataPath, "save.json");
+        string path = Path.Combine(SaveProfiles.Directory, "save.json");
 
         if (!File.Exists(path))
         {
@@ -257,7 +257,7 @@ public static class ShopTools
     [MenuItem("Tools/Spielstand/Shop zurücksetzen", false, 322)]
     public static void ResetSave()
     {
-        string path = Path.Combine(Application.persistentDataPath, "save.json");
+        string path = Path.Combine(SaveProfiles.Directory, "save.json");
 
         bool ok = EditorUtility.DisplayDialog(
             "Shop zurücksetzen",

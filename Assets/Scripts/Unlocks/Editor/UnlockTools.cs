@@ -161,7 +161,7 @@ public static class UnlockTools
     [MenuItem("Tools/Spielstand/Unlocks zurücksetzen", false, 324)]
     public static void ResetSave()
     {
-        string path = Path.Combine(Application.persistentDataPath, "unlocks.json");
+        string path = Path.Combine(SaveProfiles.Directory, "unlocks.json");
 
         bool ok = EditorUtility.DisplayDialog(
             "Unlocks zurücksetzen",

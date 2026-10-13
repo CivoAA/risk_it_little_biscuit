@@ -14,7 +14,7 @@ using UnityEngine;
 /// ist die Map-ID aus der Levelauswahl (MapsManager.selectedMap), sonst die der
 /// geladenen <see cref="MapDefinition"/>.
 ///
-/// Gespeichert in level_records.json im persistentDataPath, sofort beim
+/// Gespeichert in level_records.json im Ordner des aktiven Profils, sofort beim
 /// Eintragen - das passiert nur einmal je Lauf.
 /// </summary>
 public static class LevelRecords
@@ -39,7 +39,7 @@ public static class LevelRecords
     private static readonly Dictionary<int, Entry> entries = new Dictionary<int, Entry>();
     private static bool loaded;
 
-    public static string SavePath => Path.Combine(Application.persistentDataPath, FileName);
+    public static string SavePath => Path.Combine(SaveProfiles.Directory, FileName);
 
     /// <summary>Schnellster Story-Sieg in Sekunden, 0 = keiner.</summary>
     public static float StoryBest(int mapId)
@@ -103,6 +103,17 @@ public static class LevelRecords
         entries.Clear();
         Save();
     }
+
+    /// <summary>Liest level_records.json neu ein (Profilwechsel, <see cref="SaveProfiles"/>).</summary>
+    public static void Reload()
+    {
+        entries.Clear();
+        loaded = false;
+    }
+
+    // Ohne Domain-Reload blieben sonst die Zahlen des letzten Profils stehen.
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetRuntimeState() => Reload();
 
     // ==================================================================
 

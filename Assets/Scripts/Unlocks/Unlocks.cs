@@ -261,6 +261,13 @@ public static class Unlocks
         Init();
     }
 
+    /// <summary>Liest den Spielstand neu ein (Profilwechsel, <see cref="SaveProfiles"/>).</summary>
+    public static void Reload()
+    {
+        initialized = false;
+        Init();
+    }
+
     private static UnlockStore Store
     {
         get

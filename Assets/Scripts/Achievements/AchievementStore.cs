@@ -64,7 +64,7 @@ public class AchievementStore
 
     public AchievementStore(string directory = null)
     {
-        savePath = Path.Combine(directory ?? Application.persistentDataPath, FileName);
+        savePath = Path.Combine(directory ?? SaveProfiles.Directory, FileName);
     }
 
     public string SavePath => savePath;

@@ -422,10 +422,11 @@ public class OptionsPanel : MonoBehaviour
         ButtonRow(Loc.Get("ui.options.game.credits", "Credits"),
                   Loc.Get("ui.options.game.credits.btn", "ANZEIGEN"), SkinButton.Kind.Wood, CreditsPanel.Open);
 
-        SkinButton reset = ButtonRow(Loc.Get("ui.options.game.reset", "Spielstand zurücksetzen"),
+        SkinButton reset = ButtonRow(Loc.Get("ui.options.game.reset", "Profil zurücksetzen"),
                                      Loc.Get("ui.options.game.reset.btn", "ZURÜCKSETZEN"), SkinButton.Kind.Danger,
-                                     () => OpenDialog(Loc.Get("ui.options.game.reset.confirm",
-                                                              "Wirklich alles löschen? Münzen, Upgrades, Skills und Erfolge sind danach weg."),
+                                     () => OpenDialog(string.Format(Loc.Get("ui.options.game.reset.confirm",
+                                                              "Profil \"{0}\" zurücksetzen? Münzen, Upgrades, Skills und Erfolge dieses Profils sind danach weg."),
+                                                                        SaveProfiles.NameOf(SaveProfiles.Active)),
                                                       ResetSave));
         reset.Disabled = !SaveReset.Allowed;
     }
