@@ -353,6 +353,9 @@ public class EiskaiserFrostRing : MonoBehaviour
         // Stampfer schon aus (die Kristalle sind nur ausserhalb seines Koerpers gezeichnet).
         float low = radius < StartRadius + BandBehind + 0.3f ? 0f : radius - BandBehind;
         if (dist > radius + BandAhead || dist < low) return;
+        // Ausserhalb der roten Scheibe trifft nichts - die Front laeuft dort
+        // nur noch unsichtbar aus, bis die letzten Kristalle weg sind.
+        if (dist > maxRadius) return;
 
         // Schon im Eisblock (vom ersten Ring): nicht noch einmal - sonst ist der
         // zweite Ring ein sicherer Treffer, gegen den man nichts tun kann.
