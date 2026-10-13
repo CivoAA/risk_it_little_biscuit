@@ -66,11 +66,11 @@ public class EnemyEiskaiser : MonoBehaviour
     private const float RingDamageFactor = 1.3f;
     private const float FreezeTime = 1.2f, FreezeTimeP2 = 1.4f;
     /// <summary>
-    /// Zweiter Ring in Phase 2: erst wenn der erste weit genug draussen ist, dass
-    /// man sich zur naechsten Luecke umsetzen kann (vorher war er nicht zu schaffen).
+    /// Zweiter Ring in Phase 2: Bahnen und rote Flaeche erst, wenn der erste
+    /// ganz durch ist - sonst steht man in einer neuen Luecke und der alte Ring
+    /// erwischt einen noch. Dann so lange laden, bis er stoesst.
     /// </summary>
-    private const float SecondRingDelay = 1.8f;
-    private const float SecondLanesAfter = 0.7f;    // Bahnen des zweiten Rings erst dann zeigen
+    private const float SecondChargeTime = 1.1f;
     private const float ComboChanceP2 = 0.25f;
 
     /// <summary>Bilder im Zauber-Streifen: 0-6 laden, 7-9 halten, 10 Zepterstoss, 11-15 erholen.</summary>
@@ -143,6 +143,10 @@ public class EnemyEiskaiser : MonoBehaviour
     private readonly System.Collections.Generic.List<EiskaiserLawinenkugel> forming =
         new System.Collections.Generic.List<EiskaiserLawinenkugel>();
     private EiskaiserFrostRing pendingRing;
+    private EiskaiserFrostRing flyingRing;
+
+    /// <summary>Ein losgelassener Ring ist noch unterwegs - solange keine neue Attacke.</summary>
+    private bool RingBusy => flyingRing != null && !flyingRing.Done;
 
     private enum Attack { None, Kick, Ring }
     private Attack last = Attack.None;
@@ -243,11 +247,12 @@ public class EnemyEiskaiser : MonoBehaviour
 
     // ---------------------------------------------------------------- Laufen
 
+    /// <summary>Laeuft mindestens so lange - und weiter, bis der letzte Frostring durch ist.</summary>
     private IEnumerator Walk(float seconds)
     {
         Play(walk, Fps, true);
         float t = 0f;
-        while (t < seconds)
+        while (t < seconds || RingBusy)
         {
             t += Time.deltaTime;
             PlayerController player = Player();
@@ -405,18 +410,18 @@ public class EnemyEiskaiser : MonoBehaviour
             float[] gaps2 = new float[RingGaps];
             for (int i = 0; i < RingGaps; i++) gaps2[i] = gaps[i] + Mathf.PI / RingGaps;
             yield return PlayRange(cast, CastStomp, CastStomp + 1);
+            // Erst wenn der erste Ring ganz durch ist, gibt es die neuen Bahnen
+            while (RingBusy) yield return null;
+
+            pendingRing = EiskaiserFrostRing.Prepare(center, gaps2, gap, RingRadius, speed, crystal, iceBlock, damage, freeze);
+            EiskaiserSounds.Charge();
             float w = 0f;
-            while (w < SecondRingDelay)
+            while (w < SecondChargeTime)
             {
                 w += Time.deltaTime;
-                if (pendingRing == null && w >= SecondLanesAfter)
-                {
-                    pendingRing = EiskaiserFrostRing.Prepare(center, gaps2, gap, RingRadius, speed, crystal, iceBlock, damage, freeze);
-                    EiskaiserSounds.Charge();
-                }
                 // Zepter wieder hoch: die Ansage fuer den zweiten Stoss
-                int f = Mathf.Min(CastHoldFirst - 1, Mathf.FloorToInt(w / SecondRingDelay * CastHoldFirst));
-                body.sprite = w < SecondRingDelay - 0.3f
+                int f = Mathf.Min(CastHoldFirst - 1, Mathf.FloorToInt(w / SecondChargeTime * CastHoldFirst));
+                body.sprite = w < SecondChargeTime - 0.3f
                     ? cast[f]
                     : cast[CastHoldFirst + Mathf.FloorToInt(w * Fps) % (CastHoldLast - CastHoldFirst + 1)];
                 yield return null;
@@ -432,6 +437,7 @@ public class EnemyEiskaiser : MonoBehaviour
     {
         body.sprite = cast[CastStomp];
         if (ring != null) ring.Release();
+        flyingRing = ring;
         ScreenShake.Kick(5f, 0.4f);
         EiskaiserSounds.Stomp();
     }

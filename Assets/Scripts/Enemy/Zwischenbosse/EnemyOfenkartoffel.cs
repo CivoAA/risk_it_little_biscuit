@@ -13,13 +13,16 @@ using UnityEngine;
 ///             um sie herum zeigt Reichweite und Restzeit. Weitergeben geht nur
 ///             im Vorbeilaufen (knapp vor dem Beruehren, danach kurz
 ///             unverwundbar): an irgendeinen Gegner (dann fliegt der mitsamt
-///             seinen Nachbarn in die Luft) - oder zurueck an die Ofenkartoffel
-///             selbst, die dann erschrocken stehen bleibt und sich einen
-///             ordentlichen Brocken ihrer Leben wegsprengt.
+///             seinen Nachbarn in die Luft) - oder zurueck an die Ofenkartoffel.
+///             Die Lunte laeuft dabei einfach weiter. Hat der Boss sie, jagt er
+///             dem Spieler hinterher, immer schneller, und gibt sie nach kurzer
+///             Pause beim Beruehren zurueck. Knallt es bei ihm, kostet ihn das
+///             10 % seiner vollen Leben.
 ///             Bleibt sie beim Spieler, knallt es dort.
 ///
-/// Wer das Spiel versteht, rennt also MIT der Bombe in die Horde - oder mutig
-/// an den Boss heran. Ab der Haelfte: kuerzere Lunte, oefter.
+/// Waffen kratzen ihn kaum (95 % weniger Schaden), und Beruehren tut nicht
+/// weh - der Kampf ist die Kartoffel. Also moeglichst spaet abgeben, damit
+/// sie bei ihm bleibt. Ab der Haelfte: kuerzere Lunte, oefter.
 /// </summary>
 public class EnemyOfenkartoffel : SelfAnimatedBoss
 {
@@ -30,13 +33,36 @@ public class EnemyOfenkartoffel : SelfAnimatedBoss
     private const float WalkMinPhase2 = 3f, WalkMaxPhase2 = 4.5f;
 
     /// <summary>Lunte ab dem Moment, in dem sie klebt.</summary>
-    private const float Fuse = 4.5f, FusePhase2 = 3.6f;
+    private const float Fuse = 10f, FusePhase2 = 8f;
 
-    /// <summary>Zurueck beim Boss: dann geht es schnell.</summary>
-    private const float FuseOnBoss = 0.9f;
+    /// <summary>Faktor auf jeden Waffentreffer: 95 % weniger Schaden.</summary>
+    private const float WeaponDamageTaken = 0.05f;
+
+    /// <summary>
+    /// Jagd mit der Kartoffel, als Vielfaches vom Lauftempo des SPIELERS (damit
+    /// Tempo-Upgrades ihn nicht abhaengen): Start, Zuwachs pro Sekunde, Obergrenze.
+    /// Er holt einen also sicher ein - frueh abgeben heisst, sie kommt zurueck.
+    /// Durchgerechnet (10 s Lunte, 1,5 s Stun): direkt abgegeben holt er einen
+    /// nach ~6 s Jagd ein, bei knapp 5 s Restlunte schafft er es nicht mehr.
+    /// ChaseMax ist nur ein Notdeckel - innerhalb einer Lunte wird er nie erreicht.
+    /// </summary>
+    private const float ChaseStart = 0.6f, ChaseGrowth = 0.25f, ChaseMax = 4f;
+
+    /// <summary>Kartoffel zurueckbekommen: so lange steht er erschrocken da - Zeit, Abstand aufzubauen.</summary>
+    private const float Stun = 1.5f;
+
+    /// <summary>Zwischen Boss und Spieler: so lange, bis sie wieder zurueck darf.</summary>
+    private const float BackAndForthCooldown = 1.5f;
 
     /// <summary>Ab hier zappelt sie in Panik (Bilder 4-7).</summary>
-    private const float PanicAt = 1.2f;
+    private const float PanicAt = 2f;
+
+    /// <summary>
+    /// So knapp vor dem Knall nimmt der Boss sie nicht mehr an - sonst waere
+    /// "bis zur letzten Sekunde warten" immer richtig. Gleich PanicAt, damit
+    /// das Zappeln es ankuendigt. An normale Gegner geht es weiter.
+    /// </summary>
+    private const float NoPassBackAt = PanicAt;
 
     private const float FlightTime = 0.65f;
     private const float HopTime = 0.22f;
@@ -59,8 +85,8 @@ public class EnemyOfenkartoffel : SelfAnimatedBoss
     private const float PlayerBlastFactor = 2.4f;
     private const float EnemyBlastDamage = 400f;
 
-    /// <summary>Anteil seiner vollen Leben, den er sich selbst wegsprengt.</summary>
-    private const float SelfBlastFraction = 0.08f;
+    /// <summary>Anteil seiner vollen Leben, den er sich selbst wegsprengt (fest, ohne Spieler-Multiplikatoren).</summary>
+    private const float SelfBlastFraction = 0.10f;
 
     /// <summary>Im Wurf-Streifen: bei diesem Bild verlaesst die Kartoffel die Hand (aus dem Bildskript).</summary>
     private const int ReleaseFrame = 5;
@@ -95,10 +121,14 @@ public class EnemyOfenkartoffel : SelfAnimatedBoss
     private Vector2 flyFrom;
     private float flyClock, flyTime;
     private Holder flyTo;
+    private Holder passedBy;
+
+    /// <summary>Wie lange der Boss die Kartoffel schon hat - davon haengt sein Tempo ab.</summary>
+    private float chaseClock;
+    private float stunLeft;
 
     private SpriteRenderer potatoR;
     private BossTelegraphMarker zone;
-    private bool scared;
 
     private class Blast
     {
@@ -111,8 +141,16 @@ public class EnemyOfenkartoffel : SelfAnimatedBoss
 
     // ---------------------------------------------------------------- Ablauf
 
+    protected override void Awake()
+    {
+        base.Awake();
+        // Beruehren tut nicht weh - Schaden macht nur die Kartoffel.
+        enemy.ContactAllowed = () => false;
+    }
+
     protected override IEnumerator Run()
     {
+        enemy.DamageTakenFactor = WeaponDamageTaken;
         yield return Walk(FirstWalk);
         while (true)
         {
@@ -133,13 +171,29 @@ public class EnemyOfenkartoffel : SelfAnimatedBoss
         yield return PlayOnce(throwing, ReleaseFrame);
     }
 
-    /// <summary>Erschrocken (eigene Kartoffel zurueckbekommen): bleibt stehen, bis es knallt.</summary>
-    protected override bool Paused => scared;
+    /// <summary>Mit der eigenen Kartoffel jagt er dem Spieler hinterher, immer schneller.</summary>
+    protected override float SpeedFactor
+    {
+        get
+        {
+            PlayerController player = Player;
+            if (holder != Holder.Boss || player == null || enemy.CurrentSpeed <= 0f) return 1f;
+            float chase = player.moveSpeed * Mathf.Min(ChaseMax, ChaseStart + ChaseGrowth * chaseClock);
+            return Mathf.Max(1f, chase / enemy.CurrentSpeed);
+        }
+    }
+
+    /// <summary>Erschrocken (eigene Kartoffel zurueckbekommen): bleibt kurz stehen, dann geht die Jagd los.</summary>
+    protected override bool Paused => stunLeft > 0f;
 
     protected override void Update()
     {
         base.Update();
-        if (scared) Show(throwing, 6);
+        if (stunLeft > 0f)
+        {
+            stunLeft -= Time.deltaTime;
+            Show(throwing, 6);
+        }
         UpdatePotato();
         UpdateBlasts();
     }
@@ -155,6 +209,7 @@ public class EnemyOfenkartoffel : SelfAnimatedBoss
         flyClock = 0f;
         flyTime = FlightTime;
         flyTo = Holder.Player;
+        passedBy = Holder.None;
         fuseTotal = IsPhaseTwo ? FusePhase2 : Fuse;
         fuseLeft = fuseTotal;
         age = 0f;
@@ -223,6 +278,7 @@ public class EnemyOfenkartoffel : SelfAnimatedBoss
 
         fuseLeft -= dt;
         cooldown -= dt;
+        if (holder == Holder.Boss && stunLeft <= 0f) chaseClock += dt;
 
         // Ticken: jede volle Sekunde
         int tick = Mathf.CeilToInt(fuseLeft);
@@ -243,6 +299,7 @@ public class EnemyOfenkartoffel : SelfAnimatedBoss
         }
 
         if (holder == Holder.Player && cooldown <= 0f) TryPass();
+        else if (holder == Holder.Boss && cooldown <= 0f && stunLeft <= 0f) TryPassBack();
 
         if (fuseLeft <= 0f) Explode();
     }
@@ -250,13 +307,15 @@ public class EnemyOfenkartoffel : SelfAnimatedBoss
     private void Land(Holder target)
     {
         holder = target;
-        cooldown = CatchCooldown;
-        SquiddySounds.Plop();
+        // Hin und her zwischen Boss und Spieler: erst nach einer Pause wieder zurueck.
+        bool rally = target == Holder.Boss || passedBy == Holder.Boss;
+        cooldown = rally ? BackAndForthCooldown : CatchCooldown;
         if (target == Holder.Boss)
         {
-            fuseLeft = Mathf.Min(fuseLeft, FuseOnBoss);
-            scared = true;
+            chaseClock = 0f;
+            stunLeft = Stun;
         }
+        SquiddySounds.Plop();
         if (zone == null)
         {
             zone = BossTelegraph.Zone(ZoneCenter(holder), BlastRadius);
@@ -270,7 +329,7 @@ public class EnemyOfenkartoffel : SelfAnimatedBoss
         if (player == null) return;
         Vector2 me = player.transform.position;
 
-        if ((me - Local(BodyCenter)).sqrMagnitude <= PassRadiusBoss * PassRadiusBoss)
+        if (fuseLeft > NoPassBackAt && (me - Local(BodyCenter)).sqrMagnitude <= PassRadiusBoss * PassRadiusBoss)
         {
             Hop(Holder.Boss, null);
             return;
@@ -291,10 +350,22 @@ public class EnemyOfenkartoffel : SelfAnimatedBoss
         if (best != null) Hop(Holder.Enemy, best);
     }
 
+    /// <summary>Der Boss hat sie: holt er den Spieler ein, springt sie zurueck.</summary>
+    private void TryPassBack()
+    {
+        PlayerController player = Player;
+        if (player == null) return;
+        if (((Vector2)player.transform.position - Local(BodyCenter)).sqrMagnitude <= PassRadiusBoss * PassRadiusBoss)
+        {
+            Hop(Holder.Player, null);
+        }
+    }
+
     private void Hop(Holder target, Enemy e)
     {
         SquiddySounds.Spit();
         if (holder == Holder.Player && Player != null) Player.GrantImmunity(PassImmunity);
+        passedBy = holder;
         flyFrom = HolderPos(holder);
         holderEnemy = e;
         holder = Holder.Flying;
@@ -312,7 +383,7 @@ public class EnemyOfenkartoffel : SelfAnimatedBoss
         zone = null;
         holder = Holder.None;
         holderEnemy = null;
-        scared = false;
+        stunLeft = 0f;
         if (potatoR != null) potatoR.enabled = false;
 
         VerkohlterSounds.Crack();
@@ -340,10 +411,7 @@ public class EnemyOfenkartoffel : SelfAnimatedBoss
             }
         }
 
-        if (was == Holder.Boss || ((Vector2)transform.position + BodyCenter - at).sqrMagnitude <= BlastRadius * BlastRadius)
-        {
-            enemy.TakeDamage(enemy.MaxHealth * SelfBlastFraction);
-        }
+        if (was == Holder.Boss) enemy.TakeTrueDamage(enemy.MaxHealth * SelfBlastFraction);
     }
 
     // ---------------------------------------------------------------- Explosion
@@ -387,7 +455,7 @@ public class EnemyOfenkartoffel : SelfAnimatedBoss
         blasts.Clear();
         holder = Holder.None;
         holderEnemy = null;
-        scared = false;
+        stunLeft = 0f;
     }
 
 #if UNITY_EDITOR

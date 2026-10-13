@@ -164,9 +164,8 @@ public static class Ach
         "Typhoon_Fan_Evo", "Typhoon Fan Evo", "Obtained the Typhoon Fan Evo for the first time!",
         AchievementCategory.Evolutions);
 
-    // Evos der Startwaffen, die es noch nicht gibt (Platzhalter in
-    // Characters.StartEvoIdByskin). Ausgeloest in LevelUpButton ueber EvoFor() -
-    // sobald die Evo ein Rezept hat, laeuft das von allein.
+    // Evos der Startwaffen (Characters.StartEvoIdByskin). Ausgeloest in
+    // LevelUpButton ueber EvoFor().
 
     public static readonly AchievementDef ChocoChipsEvo = Def(
         "Choco_Chips_Evo", "Milk Crown Evo", "Obtained the Milk Crown Evo for the first time!",
@@ -185,7 +184,7 @@ public static class Ach
         AchievementCategory.Evolutions);
 
     public static readonly AchievementDef RoyalSplatEvo = Def(
-        "Royal_Splat_Evo", "Royal Splat Evo", "Obtained the Royal Splat Evo for the first time!",
+        "Royal_Splat_Evo", "Slime Maelstrom", "Obtained the Slime Maelstrom for the first time!",
         AchievementCategory.Evolutions);
 
     public static readonly AchievementDef CrumbMayhemEvo = Def(
@@ -196,8 +195,8 @@ public static class Ach
     //  Charaktere
     // ==================================================================
     // Ein Sieg je Charakter, ausgeloest in GameManager.GameOver ueber
-    // CharacterWin(). Zusammen mit den Startwaffen-Evos zaehlen sie auf
-    // AllCharacters - das schaltet den Tofu frei (Unlocks.CheckAllCharacters).
+    // CharacterWin(). Zusammen zaehlen sie auf AllCharacters - das schaltet
+    // den Tofu frei (Unlocks.CheckAllCharacters).
 
     public static readonly AchievementDef WinCookie = Def(
         "Win_Cookie", "Fresh from the Oven", "Beat a level with the Cookie.",
@@ -236,14 +235,14 @@ public static class Ach
         AchievementCategory.Characters);
 
     /// <summary>
-    /// Mit jedem Charakter (ausser dem Tofu) einmal gewonnen und einmal seine
-    /// Startwaffen-Evo bekommen: 8 Siege + 8 Evos = 16. Der Zaehler wird nicht
+    /// Mit jedem Charakter (ausser dem Tofu) einmal gewonnen: 8 Siege. Bis
+    /// 13.10.2026 zaehlten auch die Startwaffen-Evos mit (16). Der Zaehler wird nicht
     /// hochgezaehlt, sondern nachgerechnet (Unlocks.CheckAllCharacters).
     /// </summary>
     public static readonly AchievementDef AllCharacters = Def(
         "All_Characters", "Full Bento",
-        "Beat a level and obtain the starting weapon Evo with every character except Tofu.",
-        AchievementCategory.Characters, goal: 16f, grantsUnlock: "unlock_char_tofu");
+        "Beat a level with every character except Tofu.",
+        AchievementCategory.Characters, goal: 8f, grantsUnlock: "unlock_char_tofu");
 
     // ==================================================================
     //  Waffen auf Maximalstufe
@@ -556,7 +555,7 @@ public static class Ach
     }
 
     /// <summary>
-    /// Stand fuer <see cref="AllCharacters"/>: Siege und Startwaffen-Evos aller
+    /// Stand fuer <see cref="AllCharacters"/>: Siege aller
     /// Charaktere ausser dem Tofu.
     /// </summary>
     public static int AllCharactersDone()
@@ -566,7 +565,6 @@ public static class Ach
         {
             if (skin == Characters.Tofu) continue;
             if (Achievements.IsUnlocked(CharacterWin(skin))) done++;
-            if (Achievements.IsUnlocked(StartEvo(skin))) done++;
         }
         return done;
     }

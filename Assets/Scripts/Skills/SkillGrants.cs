@@ -72,6 +72,24 @@ public static class SkillGrants
     /// <summary>Evo der Mochi-Melodie: 20 % je Box-Treffer, dass der Gegner 3 s auf diese Box zulaeuft (siehe <see cref="BassSog"/>).</summary>
     public const string BassSog = "mochi_bass_sog";
 
+    /// <summary>Koenigsplumps: wo der Klops zuletzt landet, bleibt eine klebrige Pfuetze (siehe <see cref="RoyalSplat"/>).</summary>
+    public const string Klebgelee = "schleim_klebgelee";
+
+    /// <summary>Koenigsplumps: zum Schluss zerplatzt der Klops in drei Mini-Klopse (siehe <see cref="SplatBlob"/>).</summary>
+    public const string Zerplatzen = "schleim_zerplatzen";
+
+    /// <summary>Kruemelchaos: zwei kopierte Waffen gleichzeitig, um einen halben Wechsel versetzt (siehe <see cref="CrumbMayhem"/>).</summary>
+    public const string Doppelbiss = "tofu_doppelbiss";
+
+    /// <summary>Kruemelchaos: die abgeloeste Waffe bleibt noch kurz mit doppeltem Schaden dran (siehe <see cref="CrumbMayhem"/>).</summary>
+    public const string Nachgeschmack = "tofu_nachgeschmack";
+
+    /// <summary>Fuchsfeuer / Kyuubi: nach dem Flammenring springt das Irrlicht noch auf einen zweiten Gegner (siehe <see cref="FoxWisp"/>).</summary>
+    public const string IrrlichtSprung = "inari_irrlicht_sprung";
+
+    /// <summary>Fuchsfeuer / Kyuubi: der Brand stapelt sich bis dreimal, jeder Stapel tickt voll (siehe <see cref="FoxBurn"/>).</summary>
+    public const string BlauesInferno = "inari_blaues_inferno";
+
     // ------------------------------------------------------------ Wissen
 
     /// <summary>Bestiarium: +1 % Schaden je 1000 Kills einer Gegnerart (siehe <see cref="Bestiary"/>).</summary>
@@ -103,8 +121,17 @@ public static class SkillGrants
     /// <summary>Paukenschlag: unter 35 % Leben auf der naechsten Eins alle Gegner um Mochi wegschleudern und betaeuben (alle 35 s, siehe <see cref="Paukenschlag"/>).</summary>
     public const string Paukenschlag = "mochi_paukenschlag";
 
+    /// <summary>Schleimteilung: unter 35 % Leben lockt ein Gelee-Doppelgaenger 5 s lang alle Gegner in der Naehe weg (alle 35 s, siehe <see cref="SlimeSplit"/>).</summary>
+    public const string Schleimteilung = "schleim_teilung";
+
+    /// <summary>Kruemelsturm: unter 35 % Leben greifen 3 s lang alle Kopien des Kruemelchaos gleichzeitig an (alle 35 s, siehe <see cref="CrumbMayhem"/>).</summary>
+    public const string Kruemelsturm = "tofu_kruemelsturm";
+
     /// <summary>Zwiebelhaut: die Schalenklinge haelt bis zu 3 Schalen statt einer (siehe <see cref="OnionShell"/>).</summary>
     public const string Zwiebelhaut = "ritter_zwiebelhaut";
+
+    /// <summary>Fuchsgestalt: ein toedlicher Treffer verwandelt Inari 10 s in den Geisterfuchs statt zu sterben (alle 2 min, siehe <see cref="FoxForm"/>).</summary>
+    public const string Fuchsgestalt = "inari_fuchsgestalt";
 
     // ==================================================================
     //  Der Katalog - was hier steht, steht im Editor zur Auswahl.
@@ -159,6 +186,24 @@ public static class SkillGrants
         new Def(BassSog, "Bass-Sog",
                 "Nur Evo: Trifft eine Musikbox einen Gegner, laeuft er mit 20% Chance 3 Sekunden lang auf diese Box zu statt auf dich. Bosse nicht."),
 
+        new Def(Klebgelee, "Klebgelee",
+                "Wo der Koenigsplumps zuletzt landet, bleibt 3 Sekunden eine klebrige Pfuetze, in der Gegner 55% langsamer sind. Gilt auch fuer die Evo."),
+
+        new Def(Zerplatzen, "Zerplatzen",
+                "Nach dem letzten Aufschlag zerplatzt der Koenigsplumps in drei Mini-Klopse. Gilt auch fuer die Evo."),
+
+        new Def(Doppelbiss, "Doppelbiss",
+                "Das Kruemelchaos kopiert zwei Waffen gleichzeitig, jede mit eigenem Wechsel, versetzt um eine halbe Runde. Jede macht dafuer 65% Schaden. Gilt auch fuer die Evo."),
+
+        new Def(Nachgeschmack, "Nachgeschmack",
+                "Wird eine kopierte Waffe abgeloest, greift sie noch einmal mit doppeltem Schaden an, bevor sie ruht. Gilt auch fuer die Evo."),
+
+        new Def(IrrlichtSprung, "Irrlicht-Sprung",
+                "Nach dem Flammenring springt jedes Irrlicht noch auf einen zweiten Gegner in der Naehe, bevor es zurueckkehrt. Gilt auch fuer Kyuubi."),
+
+        new Def(BlauesInferno, "Blaues Inferno",
+                "Trifft das Fuchsfeuer einen Gegner, der schon brennt, stapelt sich der Brand - bis zu dreimal, jeder Stapel brennt voll mit. Gilt auch fuer Kyuubi."),
+
         new Def(Zwiebelring, "Zwiebelring",
                 "Jede 3. Hiebserie endet mit einer Drehung, die rundherum trifft. Bei der Schalenklinge ist jeder 3. Hieb eine Drehung."),
 
@@ -192,8 +237,17 @@ public static class SkillGrants
         new Def(Paukenschlag, "Paukenschlag",
                 "Faellt dein Leben unter 35%, schleudert ein Paukenschlag auf der naechsten Eins alle Gegner um dich weit weg und betaeubt sie 1,5 Sekunden (alle 35 Sekunden). Bosse nicht."),
 
+        new Def(Schleimteilung, "Schleimteilung",
+                "Faellt dein Leben unter 35%, spaltet sich ein Gelee-Doppelgaenger ab. Alle Gegner in der Naehe laufen 5 Sekunden lang auf ihn zu statt auf dich (alle 35 Sekunden). Bosse nicht."),
+
+        new Def(Kruemelsturm, "Kruemelsturm",
+                "Faellt dein Leben unter 35%, zerbroeselst du: 3 Sekunden lang greifen alle Waffen des Kruemelchaos gleichzeitig an (alle 35 Sekunden)."),
+
         new Def(Zwiebelhaut, "Zwiebelhaut",
                 "Mit der Schalenklinge haeltst du bis zu 3 Zwiebelschalen statt einer."),
+
+        new Def(Fuchsgestalt, "Fuchsgestalt",
+                "Statt zu sterben wirst du 10 Sekunden lang zum Geisterfuchs: unverwundbar, deine Waffen ruhen, jeder normale Gegner, den du beruehrst, nimmt 100 Schaden. Jeder Kill heilt 1 Leben, Gegner lassen aber nur ein Viertel der XP fallen. Elites und Bosse nicht (alle 2 Minuten)."),
     };
 
     /// <summary>Eintrag zu einer Id. Null, wenn die Id nicht (mehr) im Katalog steht.</summary>

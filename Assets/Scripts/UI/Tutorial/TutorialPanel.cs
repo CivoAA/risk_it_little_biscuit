@@ -18,7 +18,7 @@ using UnityEngine.UI;
 ///                 Seite LOS GEHT'S!. Liegt ueber dem Fenster, das es erklaert.
 ///   Bibliothek  - links alle Themen als Liste, rechts dieselben Seiten.
 ///
-/// Welche Themen schon gezeigt wurden, steht in den PlayerPrefs
+/// Welche Themen schon gezeigt wurden, steht in <see cref="ProfilePrefs"/>
 /// (<c>tutorial.seen.[key]</c>); "Spielstand zuruecksetzen" loescht das mit.
 /// Wer in den Optionen "Tipps" abschaltet, bekommt keine Tutorials mehr
 /// ungefragt - nachschlagen geht immer.
@@ -133,22 +133,15 @@ public class TutorialPanel : MonoBehaviour
     }
 
     public static bool HasSeen(TutorialTopic topic) =>
-        PlayerPrefs.GetInt(SaveProfiles.PrefKey(SeenPrefix + TutorialContent.Get(topic).Key), 0) == 1;
+        ProfilePrefs.GetInt(SeenPrefix + TutorialContent.Get(topic).Key) == 1;
 
-    public static void MarkSeen(TutorialTopic topic)
-    {
-        PlayerPrefs.SetInt(SaveProfiles.PrefKey(SeenPrefix + TutorialContent.Get(topic).Key), 1);
-        PlayerPrefs.Save();
-    }
+    public static void MarkSeen(TutorialTopic topic) =>
+        ProfilePrefs.SetInt(SeenPrefix + TutorialContent.Get(topic).Key, 1);
 
     /// <summary>Alle Tutorials kommen beim naechsten Oeffnen wieder (Spielstand zuruecksetzen).</summary>
-    public static void ResetSeen()
-    {
-        foreach (TutorialTopicDef t in TutorialContent.All) PlayerPrefs.DeleteKey(SaveProfiles.PrefKey(SeenPrefix + t.Key));
-        PlayerPrefs.Save();
-    }
+    public static void ResetSeen() => ProfilePrefs.DeleteKeys(AllSeenKeys());
 
-    /// <summary>Die PlayerPrefs-Schluessel aller Tutorials, ohne Profil-Vorsilbe (fuer <see cref="SaveProfiles"/>).</summary>
+    /// <summary>Die Schluessel aller Tutorials (fuer <see cref="ProfilePrefs"/> und den Uebergang in <see cref="SaveProfiles"/>).</summary>
     public static System.Collections.Generic.IEnumerable<string> AllSeenKeys()
     {
         foreach (TutorialTopicDef t in TutorialContent.All) yield return SeenPrefix + t.Key;

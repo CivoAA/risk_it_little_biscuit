@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 /// Ein Klops des <see cref="RoyalSplat"/>: fliegt im Bogen zu einem festen
 /// Landepunkt (der Ring am Boden zeigt ihn vorher an), klatscht auf und
 /// springt zur naechsten Gruppe weiter, bis die Abpraller verbraucht sind.
-/// Zum Schluss bleibt je nach Stufe eine Pfuetze, oder er zerplatzt in
+/// Zum Schluss bleibt je nach Skilltree-Stern eine Pfuetze, oder er zerplatzt in
 /// Mini-Klopse.
 ///
 /// Damit es sich sauber anfuehlt:
@@ -201,8 +201,17 @@ public class SplatBlob : MonoBehaviour
         Begin(to, 0f, pendingBounce, 0.3f + 0.025f * dist, 0.7f + 0.13f * dist);
     }
 
-    private void Split()
+    private void Split() { SplitAt(to, hit, seen); }
+
+    /// <summary>
+    /// Zerplatzen (Stern <see cref="SkillGrants.Zerplatzen"/>): drei Mini-Klopse
+    /// springen von <paramref name="at"/> aus auseinander - der erste zur
+    /// naechsten Gruppe, die anderen im 120-Grad-Abstand. Auch fuer den
+    /// Schleimklon der Evo (<see cref="SlimeClone"/>).
+    /// </summary>
+    public static void SplitAt(Vector2 at, RoyalSplat.Hit hit, HashSet<Enemy> seen)
     {
+        Vector2 to = at;
         RoyalSplat.Hit small = hit;
         small.damage = hit.damage * RoyalSplat.MiniFactor;
         small.radius = Mathf.Max(0.75f, hit.radius * 0.6f);

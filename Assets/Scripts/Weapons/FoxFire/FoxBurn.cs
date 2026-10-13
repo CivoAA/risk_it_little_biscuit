@@ -6,11 +6,18 @@ using UnityEngine;
 /// Gegner, solange er brennt, springt das Feuer weiter (Lauffeuer,
 /// <see cref="FoxFire.Leap"/>) - erkannt ueber <see cref="Enemy.Damaged"/>,
 /// das vor dem Tod feuert, wenn das Leben schon auf 0 steht.
+///
+/// Stern Blaues Inferno: wird ein brennender Gegner erneut angezuendet,
+/// kommt ein Stapel dazu (hoechstens <see cref="MaxStacks"/>); jeder Stapel
+/// tickt den vollen Brandschaden. Erlischt das Feuer, ist es wieder einer.
 /// </summary>
 public class FoxBurn : MonoBehaviour
 {
     private const float TickInterval = 0.5f;
     private const float MarkFps = 10f;
+
+    /// <summary>Blaues Inferno: so oft stapelt sich der Brand hoechstens.</summary>
+    public const int MaxStacks = 3;
 
     private Enemy enemy;
     private SpriteRenderer enemySprite;
@@ -19,6 +26,7 @@ public class FoxBurn : MonoBehaviour
     private float until;
     private float tickTimer;
     private bool spent;
+    private int stacks = 1;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void Hook()
@@ -50,7 +58,15 @@ public class FoxBurn : MonoBehaviour
         else
         {
             // Erloschen und neu angezuendet: darf beim naechsten Tod wieder weiterspringen
-            if (Time.time >= burn.until) burn.spent = false;
+            if (Time.time >= burn.until)
+            {
+                burn.spent = false;
+                burn.stacks = 1;
+            }
+            else if (Skills.HasGrant(SkillGrants.BlauesInferno))
+            {
+                burn.stacks = Mathf.Min(MaxStacks, burn.stacks + 1);
+            }
             burn.hit.tickDamage = Mathf.Max(burn.hit.tickDamage, hit.tickDamage);
             burn.hit.leaps = Mathf.Max(burn.hit.leaps, hit.leaps);
             burn.hit.damage = Mathf.Max(burn.hit.damage, hit.damage);
@@ -102,7 +118,7 @@ public class FoxBurn : MonoBehaviour
         tickTimer += TickInterval;
 
         // kein Rueckstoss - brennen soll den Gegner nicht wegschieben
-        enemy.TakeDamage(hit.tickDamage, null, 0f);
+        enemy.TakeDamage(hit.tickDamage * stacks, null, 0f);
     }
 
     void OnDestroy()

@@ -446,7 +446,7 @@ public partial class LevelUpScreen
         private readonly CanvasGroup group;
         private readonly Image ring, flash, headMain, headHi, headLo, icon, barFill, rollStar, well;
         private readonly RectTransform barFillRect;
-        private readonly PixText headText, nameText, bigValue, nowLabel, nowValue, rollLabel, rangeText, keyText;
+        private readonly PixText headText, nameText, bigValue, nowLabel, nowValue, rangeText, keyText;
         private readonly List<Image> pips = new List<Image>();
         private readonly Image[] sparkles = new Image[3];
         private PowerUpRarity rarity;
@@ -501,8 +501,6 @@ public partial class LevelUpScreen
             nowValue = s.Text("NowValue", body, new RectInt(38, 104, CardW - 45, 11), SizeText, GameHudSkin.Cream,
                               TextAlignmentOptions.Right, TextStyle.Shadow);
 
-            rollLabel = s.Text("RollLabel", body, new RectInt(7, 115, 44, 11), SizeText, GameHudSkin.ParchDark,
-                               TextAlignmentOptions.Left, TextStyle.Shadow);
             s.Img("BarFrame", body, new RectInt(BarX, BarY, BarW, BarH), GameHudSkin.BarFrame, Color.white, true);
             barFill = s.Img("BarFill", body, new RectInt(BarX + 1, BarY + 1, BarW - 2, BarH - 2), GameHudSkin.White, Color.white);
             barFillRect = barFill.rectTransform;
@@ -562,7 +560,6 @@ public partial class LevelUpScreen
             // Wie gut der Wurf innerhalb seiner Seltenheit war.
             Vector2 range = b.Range;
             float q = range.y - range.x > 0.0001f ? Mathf.Clamp01((gain - range.x) / (range.y - range.x)) : 1f;
-            rollLabel.Set(Loc.Get("ui.mixer.roll", "ROLL"));
             int fillW = Mathf.Max(1, Mathf.RoundToInt(q * (BarW - 2)));
             barFillRect.sizeDelta = new Vector2(fillW, BarH - 2);
             barFill.color = main;

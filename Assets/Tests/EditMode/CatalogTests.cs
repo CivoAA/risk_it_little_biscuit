@@ -371,7 +371,7 @@ public class CatalogTests
                 $"Evo '{Characters.StartEvoId(skin)}' von Charakter {skin} hat keinen Erfolg (Ach.StartEvoBySkin).");
         }
 
-        Assert.AreEqual(2 * (Characters.Count - 1), (int)Ach.AllCharacters.Goal,
+        Assert.AreEqual(Characters.Count - 1, (int)Ach.AllCharacters.Goal,
             "Ziel von All_Characters passt nicht mehr zur Zahl der Charaktere.");
         Assert.IsNotNull(Unlocks.Find(Ach.AllCharacters.GrantsUnlock));
         Assert.IsNotNull(Unlocks.Find(Ach.KillSlimeKing10.GrantsUnlock));

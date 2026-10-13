@@ -17,10 +17,10 @@ using UnityEngine;
 ///                  (2, 3, 4 ... bis <see cref="MaxElites"/>), gemischt aus
 ///                  den Elites der Welt
 ///   Boss-Wellen    1 Miniboss + Boss, dann 2 Minibosse + Boss, dann 3 ...
-///                  Die naechste kommt erst, wenn die letzte geraeumt ist
-///                  (plus <see cref="BossBreak"/>) - so stehen nie zwei Bosse
-///                  derselben Welt gleichzeitig da (zwei Verkohlte = zwei
-///                  Herzkammern).
+///                  alle <see cref="BossInterval"/> s, egal ob die letzte
+///                  schon geraeumt ist - wer nicht hinterherkommt, hat bald
+///                  mehrere Bosse gleichzeitig. (Der Verkohlte holt in den
+///                  Boss-Wellen niemanden ins Herz, zwei davon sind also ok.)
 ///
 /// Bis der Spieler stirbt. Wer Elite, Miniboss und Boss einer Welt ist, liest
 /// die Klasse aus dem Wellenplan selbst (Rollen aus dem <see cref="EnemyCatalog"/>)
@@ -41,8 +41,8 @@ public class EndlessEscalation
     /// <summary>Erste Boss-Welle, Sekunden nach Beginn des Endlos-Teils.</summary>
     public const float FirstBossWave = 150f;
 
-    /// <summary>Pause nach einer geraeumten Boss-Welle bis zur naechsten.</summary>
-    public const float BossBreak = 90f;
+    /// <summary>Abstand zwischen zwei Boss-Wellen - die naechste wartet nicht auf die letzte.</summary>
+    public const float BossInterval = 150f;
 
     public const int MaxMiniBosses = 4;
 
@@ -99,11 +99,11 @@ public class EndlessEscalation
     {
         time += dt;
 
-        // Boss-Welle geraeumt? (Unity-Vergleich: tote Gegner sind hier == null.)
+        // Alle Bosse geraeumt: der Nachschub laeuft wieder voll.
+        // (Unity-Vergleich: tote Gegner sind hier == null.)
         if (bossWave.Count > 0 && bossWave.TrueForAll(e => e == null))
         {
             bossWave.Clear();
-            nextBoss = time + BossBreak;
             director.ReleasePressure();
         }
 
@@ -120,9 +120,11 @@ public class EndlessEscalation
             }
         }
 
-        if (bossWave.Count == 0 && time >= nextBoss && (boss != EnemyId.None || miniBosses.Count > 0))
+        if (time >= nextBoss && (boss != EnemyId.None || miniBosses.Count > 0))
         {
             bossWaves++;
+            nextBoss = time + BossInterval;
+            bossWave.RemoveAll(e => e == null);
             int minis = miniBosses.Count > 0 ? Mathf.Min(bossWaves, MaxMiniBosses) : 0;
 
             director.SayPlan("BOSS-WELLE!");
@@ -134,12 +136,8 @@ public class EndlessEscalation
             }
             Add(director.SpawnEndlessBoss(boss));
 
-            // Nichts gesetzt (Prefab fehlt): nicht in jedem Frame neu versuchen.
-            if (bossWave.Count == 0)
-            {
-                nextBoss = time + BossBreak;
-                director.ReleasePressure();
-            }
+            // Nichts gesetzt (Prefab fehlt): nicht gedaempft stehen bleiben.
+            if (bossWave.Count == 0) director.ReleasePressure();
         }
     }
 

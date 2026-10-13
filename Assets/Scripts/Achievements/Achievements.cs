@@ -186,6 +186,32 @@ public static class Achievements
 
     public static void Progress(string id, float amount) => Progress(Ach.Find(id), amount);
 
+    /// <summary>
+    /// Setzt einen nachgerechneten Zaehler direkt - auch nach unten, damit ein
+    /// Stand aus einer alten Zaehlweise nicht haengen bleibt (All_Characters
+    /// zaehlte frueher auch Evos). Erreicht er das Ziel, wird freigeschaltet.
+    /// </summary>
+    public static void SetCountedValue(AchievementDef def, float value)
+    {
+        if (def == null) return;
+
+        AchievementStore s = Store;
+        if (s.IsUnlocked(def.Id)) return;
+
+        if (value >= def.Goal)
+        {
+            Unlock(def);
+            return;
+        }
+
+        value = Mathf.Max(0f, value);
+        if (Mathf.Approximately(s.GetValue(def.Id), value)) return;
+
+        s.SetValue(def.Id, value);
+        s.Flush();
+        AchievementSteamSync.PushStat(def, value);
+    }
+
     // ==================================================================
     //  Belohnungen
     // ==================================================================

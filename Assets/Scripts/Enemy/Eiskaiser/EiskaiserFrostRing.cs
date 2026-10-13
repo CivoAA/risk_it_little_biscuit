@@ -9,7 +9,8 @@ using UnityEngine;
 ///
 /// Lesbarkeit:
 ///   - schon waehrend der Kaiser laedt, zeigen hellblaue Bahnen, wo die
-///     Luecken liegen werden (blau = sicher, rot bleibt "hier tut es weh")
+///     Luecken liegen werden (blau = sicher), alles andere ist rot (hier tut
+///     es weh). Hinter der Front verschwindet das Rot - dort kommt nichts mehr.
 ///   - die Kristalle brechen reihenweise aus dem Boden, so sieht man die
 ///     Front kommen
 ///
@@ -31,8 +32,16 @@ public class EiskaiserFrostRing : MonoBehaviour
     private const float BandAhead = 0.2f;
 
     private static readonly Color LaneColor = new Color(0.62f, 0.9f, 1f, 0.3f);
+    // Dasselbe Rot wie die Warnflaechen der anderen Boss-Attacken (BossTelegraph)
+    private static readonly Color DangerColor = new Color(1f, 0.16f, 0.10f, 0.26f);
+    private const float DangerFadeIn = 0.25f;
+    private const int DangerPixelsPerUnit = 8;
+    private const int DangerOrder = -4;           // unter den Bahnen (-3); nur diese Ebene wird maskiert
     private const float StartRadius = 1.8f;       // erst ausserhalb seines Koerpers
     private static Sprite whiteSprite;
+    private static Sprite maskDisc;
+    /// <summary>Rote Flaechen je Lueckenform - gedreht wird per Transform, gebaut nur einmal.</summary>
+    private static readonly Dictionary<string, Sprite> dangerSprites = new Dictionary<string, Sprite>();
 
     // ------------------------------------------------------------ Zustand
 
@@ -49,6 +58,12 @@ public class EiskaiserFrostRing : MonoBehaviour
     private bool running;
 
     private readonly List<GameObject> lanes = new List<GameObject>();
+    private SpriteRenderer danger;
+    private SpriteMask passed;
+    private float shownAt;
+
+    /// <summary>Losgelassen und die Front ist ganz draussen - von diesem Ring kommt nichts mehr.</summary>
+    public bool Done => running && radius > maxRadius;
     private readonly List<Crystal> live = new List<Crystal>();
     private readonly Stack<SpriteRenderer> pool = new Stack<SpriteRenderer>();
 
@@ -82,6 +97,7 @@ public class EiskaiserFrostRing : MonoBehaviour
         ring.damage = damage;
         ring.freezeSeconds = freezeSeconds;
         ring.ShowLanes();
+        ring.ShowDanger();
         return ring;
     }
 
@@ -125,6 +141,109 @@ public class EiskaiserFrostRing : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Rot: alles, wo der Ring trifft. Eine Maske waechst mit der Front mit und
+    /// nimmt das Rot dahinter weg.
+    /// </summary>
+    private void ShowDanger()
+    {
+        var go = new GameObject("Gefahrenzone");
+        go.transform.SetParent(transform, false);
+        go.transform.position = center;
+        go.transform.rotation = Quaternion.Euler(0f, 0f, gapAngles[0] * Mathf.Rad2Deg);
+        danger = go.AddComponent<SpriteRenderer>();
+        danger.sprite = DangerSprite(gapAngles, gapLength, maxRadius);
+        danger.sortingLayerName = "Objects";
+        danger.sortingOrder = DangerOrder;
+        danger.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
+        danger.color = new Color(DangerColor.r, DangerColor.g, DangerColor.b, 0f);
+        shownAt = Time.time;
+
+        var maskGo = new GameObject("Front");
+        maskGo.transform.SetParent(transform, false);
+        maskGo.transform.position = center;
+        maskGo.transform.localScale = Vector3.zero;
+        passed = maskGo.AddComponent<SpriteMask>();
+        passed.sprite = MaskDisc();
+        // Nur die rote Flaeche maskieren, sonst nichts in der Szene
+        int layer = SortingLayer.NameToID("Objects");
+        passed.isCustomRangeActive = true;
+        passed.frontSortingLayerID = layer;
+        passed.frontSortingOrder = DangerOrder;
+        passed.backSortingLayerID = layer;
+        passed.backSortingOrder = DangerOrder - 1;
+    }
+
+    /// <summary>
+    /// Scheibe bis maxRadius, Luecken ausgespart - dieselben Luecken wie bei den
+    /// Kristallen (InGap). Die erste Luecke liegt bei 0 Grad, die
+    /// echte Lage kommt ueber die Drehung.
+    /// </summary>
+    private static Sprite DangerSprite(float[] gaps, float gapLength, float maxRadius)
+    {
+        var rel = new float[gaps.Length];
+        var key = new System.Text.StringBuilder();
+        key.Append(gapLength.ToString("F2")).Append('|').Append(maxRadius.ToString("F2"));
+        for (int i = 0; i < gaps.Length; i++)
+        {
+            rel[i] = Mathf.Repeat(gaps[i] - gaps[0], Mathf.PI * 2f);
+            key.Append('|').Append(rel[i].ToString("F3"));
+        }
+        if (dangerSprites.TryGetValue(key.ToString(), out Sprite cached) && cached != null) return cached;
+
+        int size = Mathf.CeilToInt(maxRadius * 2f * DangerPixelsPerUnit) + 2;
+        float mid = size * 0.5f;
+        var pixels = new Color32[size * size];
+        var on = new Color32(255, 255, 255, 255);
+        var off = new Color32(255, 255, 255, 0);
+        for (int y = 0; y < size; y++)
+        {
+            for (int x = 0; x < size; x++)
+            {
+                float dx = (x + 0.5f - mid) / DangerPixelsPerUnit;
+                float dy = (y + 0.5f - mid) / DangerPixelsPerUnit;
+                float r = Mathf.Sqrt(dx * dx + dy * dy);
+                bool hit = r <= maxRadius && !InGap(rel, gapLength, Mathf.Atan2(dy, dx), r);
+                pixels[y * size + x] = hit ? on : off;
+            }
+        }
+        var tex = new Texture2D(size, size, TextureFormat.RGBA32, false)
+        {
+            wrapMode = TextureWrapMode.Clamp,
+            filterMode = FilterMode.Bilinear,
+            hideFlags = HideFlags.HideAndDontSave,
+        };
+        tex.SetPixels32(pixels);
+        tex.Apply(false, false);
+        Sprite sprite = Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), DangerPixelsPerUnit);
+        sprite.hideFlags = HideFlags.HideAndDontSave;
+        dangerSprites[key.ToString()] = sprite;
+        return sprite;
+    }
+
+    /// <summary>Scheibe mit Radius 1 bei Scale 1 - fuer die Maske hinter der Front.</summary>
+    private static Sprite MaskDisc()
+    {
+        if (maskDisc != null) return maskDisc;
+        const int size = 64;
+        const float mid = size * 0.5f;
+        var tex = new Texture2D(size, size, TextureFormat.RGBA32, false) { hideFlags = HideFlags.HideAndDontSave };
+        var pixels = new Color32[size * size];
+        for (int y = 0; y < size; y++)
+        {
+            for (int x = 0; x < size; x++)
+            {
+                float dx = x + 0.5f - mid, dy = y + 0.5f - mid;
+                pixels[y * size + x] = dx * dx + dy * dy <= mid * mid ? new Color32(255, 255, 255, 255) : new Color32(0, 0, 0, 0);
+            }
+        }
+        tex.SetPixels32(pixels);
+        tex.Apply(false, false);
+        maskDisc = Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), mid);
+        maskDisc.hideFlags = HideFlags.HideAndDontSave;
+        return maskDisc;
+    }
+
     // ------------------------------------------------------------ Ablauf
 
     private void Update()
@@ -150,6 +269,20 @@ public class EiskaiserFrostRing : MonoBehaviour
                 c.a *= 1f - k;
                 sr.color = c;
             }
+
+            // Was die Front hinter sich gelassen hat, trifft nicht mehr
+            if (passed != null)
+            {
+                float behind = Mathf.Max(0f, radius - BandBehind);
+                passed.transform.localScale = new Vector3(behind, behind, 1f);
+            }
+        }
+
+        if (danger != null)
+        {
+            Color d = DangerColor;
+            d.a *= Mathf.Clamp01((now - shownAt) / DangerFadeIn);
+            danger.color = d;
         }
 
         AnimateCrystals(now);
@@ -197,7 +330,9 @@ public class EiskaiserFrostRing : MonoBehaviour
         }
     }
 
-    private bool InGap(float angle, float r)
+    private bool InGap(float angle, float r) => InGap(gapAngles, gapLength, angle, r);
+
+    private static bool InGap(float[] gapAngles, float gapLength, float angle, float r)
     {
         float half = gapLength * 0.5f / Mathf.Max(r, 0.5f);
         foreach (float g in gapAngles)

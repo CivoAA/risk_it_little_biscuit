@@ -6,8 +6,7 @@ using System.Collections.Generic;
 /// (<c>RequiredWeapon2</c> bleibt im Rezept leer).
 ///
 /// Funktioniert genau wie <see cref="CrumbMayhem"/>, kopiert aber die Evos der
-/// Startwaffen (<see cref="Characters.StartEvoId"/>) - fuer Charaktere ohne
-/// eigene Evo die Platzhalter aus <see cref="PlaceholderEvo"/>. Evos haben nur
+/// Startwaffen (<see cref="Characters.StartEvoId"/>). Evos haben nur
 /// eine Stufe; der Schadensbonus bleibt auf dem Stand der Maximalstufe
 /// (+10 % je Kruemelchaos-Stufe, also +120 %).
 /// </summary>

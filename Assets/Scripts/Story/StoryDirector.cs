@@ -285,7 +285,8 @@ public class StoryDirector : MonoBehaviour
 
     private void OnBossDefeated(Enemy boss)
     {
-        if (ClaimsWin || !InRun) return;
+        // Schon tot? Dann gibt es keinen Splitter (und keine naechste Welt) mehr.
+        if (ClaimsWin || !InRun || !RunStillOn()) return;
         string plan = RunPlan;
         if (!ChapterOpen(plan)) return;
 
@@ -329,6 +330,7 @@ public class StoryDirector : MonoBehaviour
     {
         StoryBark.HideNow();
         StoryProgress.MarkFinaleDone();
+        Unlocks.ReportFinaleDone();
         Shield(true);
 
         // Das Herz zerfaellt noch - erst wenn die Kammer dunkel ist, beginnt das Finale.
@@ -450,6 +452,7 @@ public class StoryDirector : MonoBehaviour
             if (!StoryProgress.AllShardsSeen) StoryProgress.MarkAllShardsSeen();
             StoryProgress.MarkBriefed(StoryProgress.FinaleWorld);
             StoryProgress.MarkFinaleDone();
+            Unlocks.ReportFinaleDone();
             Debug.Log("[Story] (F12) Finale als gesehen markiert - der Epilog kommt.");
         }
     }

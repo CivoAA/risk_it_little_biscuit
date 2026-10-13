@@ -18,7 +18,7 @@ public class BombSawEvoPrefab : MonoBehaviour
         if (collider.CompareTag("Enemy"))
         {
             WeaponSounds.Play(WeaponSounds.SawBoom);
-            float grow = weapon.CurrentStats.range * (PlayerController.Instance.AOERange * 0.7f);
+            float grow = weapon.CurrentStats.range * (PlayerController.Instance.AOERange * 0.4f);
             if (SpawnCandyBurst(grow)) return;
 
             GameObject fireBallExplosion = Instantiate(prefab, transform.position, transform.rotation);

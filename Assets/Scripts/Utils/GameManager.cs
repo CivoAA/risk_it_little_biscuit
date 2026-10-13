@@ -86,13 +86,26 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public void GameOver()
+    public void GameOver() => EndRun(false);
+
+    /// <summary>
+    /// Lauf aufgeben (Pausenmenue): rechnet ab wie ein Tod - Waehrung, Char-XP,
+    /// Bestwerte -, sonst muesste man auf den Tod warten, um sie zu bekommen.
+    /// </summary>
+    public void GiveUp()
+    {
+        if (!gameActiv) return;
+        EndRun(true);
+    }
+
+    private void EndRun(bool gaveUp)
     {
         // Ein Endless-Lauf endet immer mit dem Tod - auch wenn der Boss vorher
         // gefallen ist (der setzt bossSpawned), gibt es keinen Sieg-Bildschirm.
-        bool won = bossSpawned && !GameSession.IsEndless;
+        // Aufgegeben ist nie gewonnen.
+        bool won = !gaveUp && bossSpawned && !GameSession.IsEndless;
 
-        Achievements.Unlock(Ach.FirstDeath);
+        if (!gaveUp) Achievements.Unlock(Ach.FirstDeath);
         currency = EstimateCurrency();
         // Nach "Endless weiterspielen" ist der Story-Teil schon ausgezahlt.
         Shop.AddCurrency(Mathf.Max(0, currency - currencyPaid));
@@ -111,7 +124,7 @@ public class GameManager : MonoBehaviour
         if (MapDefinition.Active != null)
         {
             LevelRecords.ReportRun(LevelRecords.CurrentMapId(), GameSession.IsEndless, won, gameTime);
-            // Story-Sieg: Endless hier und die naechste Welt gehen auf.
+            // Story-Sieg: die naechste Welt geht auf.
             if (won) Unlocks.ReportStoryWin(LevelRecords.CurrentMapId());
         }
 
@@ -120,6 +133,9 @@ public class GameManager : MonoBehaviour
 
         if (!won)
         {
+            // Tot ist tot: das Spiel steht sofort still - kein Geschoss, das
+            // danach noch den Boss erwischt, kein Schaden, keine XP mehr.
+            Time.timeScale = 0f;
             SessionProgressTracker.Instance.EvaluateAfterGame();
             StartCoroutine(ShowGameOverScreen());
         }
@@ -185,10 +201,11 @@ public class GameManager : MonoBehaviour
 
     /// <summary>
     /// Kann der Sieg-Bildschirm "Endless weiterspielen" anbieten? Nur nach
-    /// einem Story-Sieg auf einer echten Karte, deren Plan noch laeuft.
+    /// einem Story-Sieg auf einer echten Karte, deren Plan noch laeuft, und
+    /// erst wenn Endless freigeschaltet ist (Story durch).
     /// </summary>
     public bool CanContinueAsEndless =>
-        storyWon && !gameActiv && !GameSession.IsEndless
+        storyWon && !gameActiv && !GameSession.IsEndless && Unlocks.Endless.IsUnlocked
         && MapDefinition.Active != null && SpawnDirector.Active != null
         && PlayerController.Instance != null && !SceneFader.IsFading;
 
@@ -228,7 +245,8 @@ public class GameManager : MonoBehaviour
     IEnumerator ShowGameOverScreen()
     {
         AudioController.Instance.PalySound(AudioController.Instance.GameOver);
-        yield return new WaitForSeconds(1.5f);
+        // Echtzeit: das Spiel steht seit dem Tod (Time.timeScale = 0).
+        yield return new WaitForSecondsRealtime(1.5f);
         UIController.Instance.GameOverPanel.SetActive(true);
         UIController.Instance.GameOverStats();
         UIController.Instance.StartRewardCycleDisplay_GameOver();

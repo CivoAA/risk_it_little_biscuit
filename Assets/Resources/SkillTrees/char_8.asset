@@ -662,3 +662,54 @@ MonoBehaviour:
     - geist_mitte_2
     - geist_oben_2
     - geist_unten_2
+  - id: kampf_doppelbiss
+    category: 0
+    lane: 0
+    step: 5
+    shape: 3
+    price: 2
+    displayName: Doppelbiss
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 1
+      stat: 0
+      value: 0
+      grantId: tofu_doppelbiss
+      descriptionOverride: 
+    requires:
+    - kampf_mitte_4
+  - id: kampf_nachgeschmack
+    category: 0
+    lane: 2
+    step: 5
+    shape: 3
+    price: 2
+    displayName: Nachgeschmack
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 1
+      stat: 0
+      value: 0
+      grantId: tofu_nachgeschmack
+      descriptionOverride: 
+    requires:
+    - kampf_mitte_4
+  - id: geist_kruemelsturm
+    category: 1
+    lane: 1
+    step: 5
+    shape: 3
+    price: 2
+    displayName: "Kr\xFCmelsturm"
+    description: 
+    icon: {fileID: 0}
+    rewards:
+    - kind: 1
+      stat: 0
+      value: 0
+      grantId: tofu_kruemelsturm
+      descriptionOverride: 
+    requires:
+    - geist_mitte_4

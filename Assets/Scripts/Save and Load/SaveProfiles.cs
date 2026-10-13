@@ -12,8 +12,9 @@ using UnityEngine;
 ///
 /// Jeder Katalog fragt nur <see cref="Directory"/> - welches Profil gerade
 /// gilt, weiss allein diese Klasse. Einstellungen (Ton, Anzeige, Sprache)
-/// bleiben fuer alle Profile gleich; profilgebundene PlayerPrefs (Tutorials,
-/// Schwierigkeit) laufen ueber <see cref="PrefKey"/>.
+/// bleiben fuer alle Profile gleich; profilgebundene Werte (Tutorials,
+/// Schwierigkeit) liegen in <see cref="ProfilePrefs"/> (prefs.json), damit
+/// die Steam Cloud sie mitnimmt.
 ///
 /// Verwaltet werden die Profile im Hauptmenue (<see cref="ProfilePanel"/>):
 /// waehlen, umbenennen, loeschen. Alles davon ist waehrend eines Laufs gesperrt
@@ -36,6 +37,7 @@ public static class SaveProfiles
     {
         "save.json", "unlocks.json", "skills.json", "achievements.json",
         "loadout.json", "bestiary.json", "level_records.json", "story.json",
+        ProfilePrefs.FileName,
     };
 
     /// <summary>Profilgebundene PlayerPrefs ohne festen Namen: alles, was so anfaengt.</summary>
@@ -169,7 +171,7 @@ public static class SaveProfiles
         }
     }
 
-    /// <summary>PlayerPrefs-Schluessel fuer das aktive Profil.</summary>
+    /// <summary>Alter PlayerPrefs-Schluessel des aktiven Profils - nur noch fuer den Uebergang in <see cref="ProfilePrefs"/>.</summary>
     public static string PrefKey(string key) => PrefKeyOf(Active, key);
 
     private static string PrefKeyOf(int slot, string key) => "profile" + (slot + 1) + "." + key;
@@ -341,6 +343,7 @@ public static class SaveProfiles
     /// <summary>Alle Spielstand-Kataloge aus dem (neuen) aktiven Ordner lesen.</summary>
     private static void ReloadCatalogs()
     {
+        ProfilePrefs.Invalidate();
         // Shop zuerst: Verteiler und Skilltree haengen am gewaehlten Charakter.
         Shop.ReleaseRun();
         Shop.Reload();
@@ -477,7 +480,8 @@ public static class SaveProfiles
         PlayerPrefs.Save();
     }
 
-    private static IEnumerable<string> ProfilePrefKeys()
+    /// <summary>Alle profilgebundenen Schluessel (ohne Profil-Vorsilbe).</summary>
+    internal static IEnumerable<string> ProfilePrefKeys()
     {
         foreach (string k in PrefKeysFixed) yield return k;
         foreach (string k in TutorialPanel.AllSeenKeys()) yield return k;
@@ -502,6 +506,7 @@ public static class SaveProfiles
 
         foreach (string key in ProfilePrefKeys()) PlayerPrefs.DeleteKey(PrefKeyOf(slot, key));
         PlayerPrefs.Save();
+        ProfilePrefs.Invalidate();
     }
 
     private static void SaveMeta()

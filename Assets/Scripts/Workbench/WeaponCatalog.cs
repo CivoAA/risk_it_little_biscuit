@@ -217,9 +217,8 @@ public static class WeaponCatalog
     public static readonly WeaponDef EvoChocoChips     = Def("evo_choco_chips", "Milk Crown Evo", PoolKind.Evo);
     public static readonly WeaponDef EvoFoxFire        = Def("evo_foxfire", "Fox Fire Evo", PoolKind.Evo);
 
-    // Platzhalter-Evo einer Startwaffe, noch ohne Rezept (siehe PlaceholderEvo).
-    // Bisher kommt man an sie nur ueber die Evo des Tofus, die sie kopiert.
-    public static readonly WeaponDef EvoRoyalSplat     = Def("evo_royal_splat", "Royal Splat Evo", PoolKind.Evo);
+    // Schleimstrudel (Schleimkoenig) - Rezept unten.
+    public static readonly WeaponDef EvoRoyalSplat     = Def("evo_royal_splat", "Slime Maelstrom", PoolKind.Evo);
 
     // ==================================================================
     //  Rezepte - Reihenfolge wie im Player-Prefab
@@ -242,6 +241,8 @@ public static class WeaponCatalog
     public static readonly EvoDef RecipeChocoChips    = Evo("evo_choco_chips", "choco_chips", "milk_dunk");
     // Kyuubi: Fuchsfeuer + Duration - das Feuer brennt laenger, mehr Seelen.
     public static readonly EvoDef RecipeFoxFire       = Evo("evo_foxfire", "foxfire", "buff_duration");
+    // Schleimstrudel: Koenigsplumps + Vortex - der Klon oeffnet einen riesigen Strudel.
+    public static readonly EvoDef RecipeRoyalSplat    = Evo("evo_royal_splat", "royal_splat", "vortex");
 
     // ==================================================================
     //  Freischaltung

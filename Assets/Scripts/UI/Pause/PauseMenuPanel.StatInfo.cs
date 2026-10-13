@@ -153,7 +153,7 @@ public partial class PauseMenuPanel
         {
             case "maxhp":      return "Deine maximalen Lebenspunkte. Heilung füllt dich bis zu diesem Wert auf.";
             case "regen":      return "Heilt dich in festen Abständen von selbst, solange du nicht volle HP hast.";
-            case "armor":      return "Jeder Punkt senkt erlittenen Schaden um 10 %. Mehrere Punkte multiplizieren sich: 10 Punkte = 65 % weniger.";
+            case "armor":      return "Rüstung senkt erlittenen Schaden, jeder Punkt etwas weniger als der davor. Höchstens 80 %: 1 Punkt = 10 %, 10 Punkte = 47 %, 20 Punkte = 59 %.";
             case "dodge":      return "Chance, einem Treffer komplett auszuweichen. Dann gibt es gar keinen Schaden.";
             case "lifesteal":  return "Chance bei jedem Treffer an einem Gegner, dich um 1 HP zu heilen. Höchstens einmal alle {0} s.";
             case "damage":     return "Multipliziert den Schaden aller deiner Waffen.";
@@ -190,8 +190,8 @@ public partial class PauseMenuPanel
 
             case "armor":
             {
-                float cut = (1f - Mathf.Pow(0.9f, p.playerArmor)) * 100f;
-                float next = (1f - Mathf.Pow(0.9f, p.playerArmor + 1f)) * 100f;
+                float cut = PlayerController.ArmorReduction(p.playerArmor) * 100f;
+                float next = PlayerController.ArmorReduction(p.playerArmor + 1f) * 100f;
                 return Fmt("ui.pause.info.armor.now", "Jetzt: {0} % weniger Schaden\nMit einem Punkt mehr: {1} %",
                            Num(cut, "0"), Num(next, "0"));
             }
