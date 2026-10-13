@@ -66,12 +66,12 @@ public class MochiMelody : Weapon
     private static readonly WeaponStats[] LevelStats =
     {
         //    Schlag  damage  Reichweite  Bremse  Noten
-        Level(0.55f, 4f, 6.5f, 0.6f, 1, "Mochi singt: drei Noten pro Takt jagen Gegner, auf der Vier platzt ein Akkord-Ring"),
-        Level(0.55f, 5f, 6.5f, 0.6f, 1, "Schaden +1, der Akkord bremst länger"),
-        Level(0.50f, 5f, 7f,   0.8f, 2, "Zwei Noten pro Schlag, schnelleres Tempo"),
-        Level(0.50f, 6f, 7f,   0.8f, 2, "Notenkette: Jede Note springt nach dem Treffer zu einem zweiten Gegner"),
-        Level(0.46f, 7f, 7.5f, 1.0f, 2, "Schaden +1, schnelleres Tempo, größerer Akkord-Ring"),
-        Level(0.44f, 8f, 8f,   1.2f, 3, "Großes Finale: drei Noten pro Schlag, jeder vierte Takt endet mit einem Notenregen"),
+        Level(0.55f, 2.5f, 6.5f, 0.6f, 1, "Mochi singt: drei Noten pro Takt jagen Gegner, auf der Vier platzt ein Akkord-Ring"),
+        Level(0.55f, 3.5f, 6.5f, 0.6f, 1, "Schaden +1, der Akkord bremst länger"),
+        Level(0.50f, 3.5f, 7f,   0.8f, 2, "Zwei Noten pro Schlag, schnelleres Tempo"),
+        Level(0.50f, 4f, 7f,   0.8f, 2, "Notenkette: Jede Note springt nach dem Treffer zu einem zweiten Gegner"),
+        Level(0.46f, 5f, 7.5f, 1.0f, 2, "Schaden +1, schnelleres Tempo, größerer Akkord-Ring"),
+        Level(0.44f, 5.5f, 8f,   1.2f, 3, "Großes Finale: drei Noten pro Schlag, jeder vierte Takt endet mit einem Notenregen"),
     };
 
     /// <summary>So oft springt eine Note nach dem ersten Treffer weiter.</summary>
