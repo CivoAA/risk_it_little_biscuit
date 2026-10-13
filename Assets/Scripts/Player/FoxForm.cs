@@ -17,8 +17,9 @@ using UnityEngine.SceneManagement;
 ///
 /// Danach zerfaellt der Fuchs, Inari steht wieder da (kurz unverwundbar).
 /// Ausgeloest von <see cref="PlayerController"/>, der auch die Abklingzeit
-/// haelt. Bilder: die des Neunschwanzes aus der Evo (kyubi_rise/leap/fade,
-/// Pivot am Boden unter der Fuchsmitte, Blick nach rechts).
+/// haelt. Bilder: eigener kleiner Geisterfuchs (Resources/Weapons/foxform_*,
+/// 64x48, Pivot am Boden unter der Fuchsmitte, Blick nach rechts).
+/// Fehlen sie, springen die Neunschwanz-Bilder der Evo ein.
 /// </summary>
 public class FoxForm : MonoBehaviour
 {
@@ -47,14 +48,12 @@ public class FoxForm : MonoBehaviour
     private const float AfterImmunity = 1.5f;
 
     /// <summary>Fuchsmitte ueber dem Pivot (der liegt unter den Fuessen).</summary>
-    private static readonly Vector2 BodyCenter = new Vector2(0f, 0.9f);
+    private static readonly Vector2 BodyCenter = new Vector2(0f, 0.6f);
 
     private const float RiseFps = 13f;
     private const float RunFps = 14f;
+    private const float IdleFps = 8f;
     private const float FadeFps = 11f;
-
-    // Bilder im Sprung-Streifen der Evo: 4-6 im Flug - als Galopp geloopt
-    private const int RunFirst = 4, RunCount = 3;
 
     private enum Phase { Rise, Run, Fade }
 
@@ -117,7 +116,7 @@ public class FoxForm : MonoBehaviour
         shadow = s.AddComponent<SpriteRenderer>();
         shadow.sortingLayerID = body.sortingLayerID;
         shadow.sortingOrder = body.sortingOrder - 6;
-        shadow.sprite = FoxFireEvo.ShadowSprite;
+        shadow.sprite = ShadowSprite;
 
         playerBody = who.BodyRenderer();
         if (playerBody != null) playerBody.enabled = false;
@@ -151,10 +150,10 @@ public class FoxForm : MonoBehaviour
             PauseWeapons();
             Contact();
 
-            if (phase == Phase.Rise && age >= FoxFireEvo.RiseFrames.Length / RiseFps) Enter(Phase.Run);
+            if (phase == Phase.Rise && age >= RiseFrames.Length / RiseFps) Enter(Phase.Run);
             if (lifetime >= Duration) BeginFade();
         }
-        else if (age >= FoxFireEvo.FadeFrames.Length / FadeFps)
+        else if (age >= FadeFrames.Length / FadeFps)
         {
             Destroy(gameObject);
             return;
@@ -283,26 +282,26 @@ public class FoxForm : MonoBehaviour
         switch (phase)
         {
             case Phase.Rise:
-                ShowFrame(FoxFireEvo.RiseFrames, (int)(age * RiseFps));
+                ShowFrame(RiseFrames, (int)(age * RiseFps));
                 break;
 
             case Phase.Run:
-                Sprite[] leap = FoxFireEvo.LeapFrames;
                 bool moving = player.playerMoveDirection.sqrMagnitude > 0.01f;
-                if (moving && leap.Length >= RunFirst + RunCount)
+                if (moving)
                 {
-                    ShowFrame(leap, RunFirst + (int)(age * RunFps) % RunCount);
+                    Sprite[] run = RunFrames;
+                    ShowFrame(run, (int)(age * RunFps) % run.Length);
                 }
                 else
                 {
-                    // steht er, bleibt der fertig aufgestiegene Fuchs stehen
-                    Sprite[] rise = FoxFireEvo.RiseFrames;
-                    ShowFrame(rise, rise.Length - 1);
+                    // steht er, atmet er, wiegt die Schwaenze und blinzelt
+                    Sprite[] idle = IdleFrames;
+                    ShowFrame(idle, (int)(age * IdleFps) % idle.Length);
                 }
                 break;
 
             case Phase.Fade:
-                ShowFrame(FoxFireEvo.FadeFrames, (int)(age * FadeFps));
+                ShowFrame(FadeFrames, (int)(age * FadeFps));
                 if (shadow != null) shadow.enabled = false;
                 break;
         }
@@ -312,6 +311,41 @@ public class FoxForm : MonoBehaviour
     {
         if (frames == null || frames.Length == 0) return;
         body.sprite = frames[Mathf.Clamp(f, 0, frames.Length - 1)];
+    }
+
+    // ------------------------------------------------------------------
+    //  Bilder (Resources/Weapons/foxform_*)
+    // ------------------------------------------------------------------
+
+    private static Sprite[] rise, run, idle, fade;
+    private static Sprite shadowSprite;
+
+    private static Sprite[] Load(ref Sprite[] cache, string name, Sprite[] fallback)
+    {
+        if (cache == null || cache.Length == 0 || cache[0] == null)
+        {
+            cache = SpriteStrip.Load("Weapons/" + name);
+            if (cache.Length == 0) cache = fallback;
+        }
+        return cache;
+    }
+
+    private static Sprite[] RiseFrames => Load(ref rise, "foxform_rise", FoxFireEvo.RiseFrames);
+    private static Sprite[] RunFrames => Load(ref run, "foxform_run", FoxFireEvo.LeapFrames);
+    private static Sprite[] IdleFrames => Load(ref idle, "foxform_idle", RiseFrames);
+    private static Sprite[] FadeFrames => Load(ref fade, "foxform_fade", FoxFireEvo.FadeFrames);
+
+    private static Sprite ShadowSprite
+    {
+        get
+        {
+            if (shadowSprite == null)
+            {
+                Sprite[] s = SpriteStrip.Load("Weapons/foxform_shadow");
+                shadowSprite = s.Length > 0 ? s[0] : FoxFireEvo.ShadowSprite;
+            }
+            return shadowSprite;
+        }
     }
 
     private static Vector3 Snap(Vector2 p)
