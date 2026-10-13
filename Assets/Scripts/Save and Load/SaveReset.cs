@@ -22,10 +22,13 @@ using UnityEngine;
 ///       weg, Charakter-XP und Boss-Siege bleiben. Wer schon auf 1 war,
 ///       bekommt nur das; wer noch keine Marke hat, wie bisher den kompletten
 ///       Reset (der leert die Skilltrees ohnehin mit).
+///   3 - Neue Levelkurve (CharLevel, voller Baum = 7,5 Mio. XP): wieder nur
+///       die gelernten Knoten weg. Die XP bleiben, das Level rechnet sich
+///       daraus neu - niemand faengt bei 0 an.
 /// </summary>
 public static class SaveReset
 {
-    public const int SaveVersion = 2;
+    public const int SaveVersion = 3;
 
     private const string MarkerFile = "save_version.txt";
 
@@ -53,7 +56,7 @@ public static class SaveReset
             if (version >= SaveVersion) return;
 
             if (version < 1) DeleteProgress(dir);
-            else if (version < 2) ClearSkillTrees(dir);
+            else if (version < 3) ClearSkillTrees(dir);
 
             File.WriteAllText(markerPath, SaveVersion.ToString());
         }

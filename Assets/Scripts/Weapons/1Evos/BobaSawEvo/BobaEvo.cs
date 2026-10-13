@@ -2,61 +2,71 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Boba Saw Evo (Cookie Saw + Boba Gun). Feuert ohne Pause: alle
+/// <see cref="VolleyInterval"/> Sekunden <see cref="ProjectileCount"/> Bobas
+/// im Kreis, der Kreis dreht sich dabei weiter.
+///
+/// Bewusst ohne Duration: die Salve hoert nie auf, ein Duration-Buff haette
+/// nichts zu verlaengern. Der Cooldown-Buff macht das Feuer dichter.
+/// </summary>
 public class BobaEvo : Weapon
 {
+    /// <summary>Abstand zwischen zwei Salven vor dem Cooldown-Buff.</summary>
+    private const float VolleyInterval = 0.1f;
+
+    /// <summary>So weit dreht sich der Kreis pro Salve (Grad).</summary>
+    private const float SpinPerVolley = 40f;
+
+    /// <summary>Bobas pro Salve.</summary>
+    private const int ProjectileCount = 4;
+
+    /// <summary>Abstand des Zielpunkts vom Spieler - gibt nur die Richtung vor.</summary>
+    private const float Radius = 5f;
+
     [SerializeField] private GameObject prefab;
     public Vector2 target;
     private float spawnCounter;
+    private float spin;
 
     void Update()
     {
-        if (weaponLevel >= 0)
-        {
-            spawnCounter -= Time.deltaTime;
-            if (spawnCounter <= 0)
-            {
-                // Achievment Unlocken
-                Achievements.Unlock(Ach.BobaSawEvo);
-                spawnCounter = CurrentCooldown;
-                StartCoroutine(SpawnShuriken());
-            }
-        }
-    }
+        if (!CanAttack) return;
 
-    IEnumerator SpawnShuriken()
-    {
         // Achievment Unlocken
         Achievements.Unlock(Ach.BobaSawEvo);
-        float duration = CurrentDuration;
-        float elapsed = 0f;
 
-        while (elapsed < duration)
+        spawnCounter -= Time.deltaTime;
+        if (spawnCounter > 0f) return;
+
+        float mult = PlayerController.Instance != null ? PlayerController.Instance.CooldownMultiplier : 1f;
+        spawnCounter += VolleyInterval * mult;
+        if (spawnCounter <= 0f) spawnCounter = VolleyInterval * mult;
+
+        FireVolley();
+        spin = (spin + SpinPerVolley) % 360f;
+    }
+
+    private void FireVolley()
+    {
+        WeaponSounds.Play(WeaponSounds.BobaEvoShot);
+
+        for (int i = 0; i < ProjectileCount; i++)
         {
-            WeaponSounds.Play(WeaponSounds.BobaEvoShot);
+            // Winkel berechnen für jedes Projektil
+            float angle = (360f / ProjectileCount) * i + spin;
+            Vector3 offset = new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad), 0) * Radius;
 
-            int projectileCount = 4;   // wie viele Bobas gleichzeitig
-            float radius = 5f;         // Abstand vom Spieler (Kreisradius)
-
-            for (int i = 0; i < projectileCount; i++)
+            // Projektil am Spieler spawnen
+            GameObject boba = Instantiate(prefab, PlayerController.Instance.transform.position, Quaternion.identity);
+            Scene gameScene = RunScene.Current;
+            if (gameScene.IsValid() && gameScene.isLoaded)
             {
-                // Winkel berechnen für jedes Projektil
-                float angle = (360f / projectileCount) * i + (elapsed * 200f); 
-                Vector3 offset = new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad), 0) * radius;
-
-                // Projektil am Spieler spawnen
-                GameObject boba = Instantiate(prefab, PlayerController.Instance.transform.position, Quaternion.identity);
-                Scene gameScene = RunScene.Current;
-                if (gameScene.IsValid() && gameScene.isLoaded)
-                {
-                    SceneManager.MoveGameObjectToScene(boba, gameScene);
-                }
-
-                // Zielpunkt = Position um den Spieler herum
-                StartCoroutine(MoveAndDestroy(boba, PlayerController.Instance.transform.position + offset));
+                SceneManager.MoveGameObjectToScene(boba, gameScene);
             }
 
-            yield return new WaitForSeconds(0.1f);
-            elapsed += 0.2f;
+            // Zielpunkt = Position um den Spieler herum
+            StartCoroutine(MoveAndDestroy(boba, PlayerController.Instance.transform.position + offset));
         }
     }
 

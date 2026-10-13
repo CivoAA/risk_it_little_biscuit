@@ -31,7 +31,7 @@ public class FireBall : Weapon
 
     private IEnumerator SpawnFireBalls()
     {
-        int shots = Mathf.RoundToInt(stats[weaponLevel].shots + PlayerController.Instance.ExtraShots);
+        int shots = Mathf.RoundToInt(stats[weaponLevel].shots + RollExtraShots());
 
         for (int i = 0; i < shots; i++)
         {

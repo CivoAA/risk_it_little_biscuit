@@ -8,7 +8,7 @@ using UnityEngine;
 /// Zielt und schlaegt wie der <see cref="SaladFan"/> (erbt von ihm), aber mit
 /// wenigen, schweren Wellen: Schaden x<see cref="DamageFactor"/> der hoechsten
 /// Faecherstufe, groesser, schneller, durchschlagender. Dafuer zaehlen
-/// Extra-Schuesse nur halb (<see cref="ExtraShotsPerWave"/>): ein Faecher mit
+/// Extra-Schuesse nur halb (<see cref="ExtraShotsPerShot"/>): ein Faecher mit
 /// 8 Wellen wird zum Taifunfaecher mit 4.
 ///
 /// Jede Hauptwelle zieht eine Windschneise (<see cref="TyphoonTrail"/>) hinter
@@ -25,11 +25,11 @@ using UnityEngine;
 /// </summary>
 public class TyphoonFan : SaladFan
 {
+    /// <summary>Wenige schwere Wellen: zwei Extra-Schuesse fuer eine mehr.</summary>
+    protected override int ExtraShotsPerShot => 2;
+
     /// <summary>Schaden einer Welle relativ zur hoechsten Faecherstufe.</summary>
     public const float DamageFactor = 2.2f;
-
-    /// <summary>So viele Extra-Schuesse ergeben eine Welle mehr.</summary>
-    public const int ExtraShotsPerWave = 2;
 
     /// <summary>Groesse einer Welle in Tiles (Faecher: 1).</summary>
     private const float EvoWaveSize = 1.5f;
@@ -112,13 +112,6 @@ public class TyphoonFan : SaladFan
     {
         // Die Evo hat nur eine Stufe: aktiv sein heisst, sie wurde erhalten.
         if (IsActive && !IsCopy) Achievements.Unlock(Ach.TyphoonFanEvo);
-    }
-
-    /// <summary>Grundwellen plus eine je <see cref="ExtraShotsPerWave"/> Extra-Schuesse.</summary>
-    protected override int WaveCount()
-    {
-        int extra = Mathf.Max(0, PlayerController.Instance.ExtraShots) / ExtraShotsPerWave;
-        return Mathf.Max(1, Mathf.RoundToInt(CurrentStats.shots) + extra);
     }
 
     /// <summary>

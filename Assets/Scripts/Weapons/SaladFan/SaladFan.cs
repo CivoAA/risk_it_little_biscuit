@@ -18,7 +18,7 @@ using UnityEngine.SceneManagement;
 /// cooldown = Pause zwischen zwei Schlaegen
 /// damage   = Schaden der Welle am ersten Gegner
 /// range    = Zielsuche und Flugweite in Tiles
-/// shots    = Wellen pro Schlag (+ playerShots)
+/// shots    = Wellen pro Schlag (+ Extra-Schuss 1:1, Taifunfaecher 1:2)
 ///
 /// Die Werte stehen im Code (<see cref="LevelStats"/>), nicht am Prefab - sie
 /// ueberschreiben beim Start, was im Inspector steht.
@@ -179,10 +179,10 @@ public class SaladFan : Weapon
         maxweaponLevel = LevelStats.Length - 1;
     }
 
-    /// <summary>Wellen pro Schlag: Stufe plus Extra-Schuss 1:1.</summary>
+    /// <summary>Wellen pro Schlag: Stufe plus Extra-Schuss (siehe ExtraShotsPerShot).</summary>
     protected virtual int WaveCount()
     {
-        return Mathf.Max(1, Mathf.RoundToInt(CurrentStats.shots + PlayerController.Instance.ExtraShots));
+        return Mathf.Max(1, Mathf.RoundToInt(CurrentStats.shots + RollExtraShots()));
     }
 
     void Update()

@@ -1277,7 +1277,18 @@ public class Enemy : MonoBehaviour
         PlayerController player = PlayerController.Instance;
         bool lucky = player != null && Random.value < player.luckyXpChance;
 
-        SpawnExp.Instance.SpawnEP(transform.position, lucky ? experienceToGive * 2 : experienceToGive, lucky);
+        int exp = experienceToGive;
+        if (role == EnemyRole.Normal && exp > 0 && GameManager.Instance != null)
+        {
+            // Ab Minute 3-4 etwas weniger. Der Rest hinter dem Komma ist eine
+            // Chance auf +1, sonst gaeben 1-XP-Gegner gar nichts mehr.
+            float scaled = exp * EnemyCatalog.NormalXpFactor(GameManager.Instance.gameTime);
+            exp = Mathf.FloorToInt(scaled);
+            if (Random.value < scaled - exp) exp++;
+            if (exp <= 0) return;
+        }
+
+        SpawnExp.Instance.SpawnEP(transform.position, lucky ? exp * 2 : exp, lucky);
     }
 
     /// <summary>Todeseffekt-Prefab - der SpawnDirector legt davon beim Laden einen Vorrat an.</summary>

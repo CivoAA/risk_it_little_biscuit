@@ -36,66 +36,74 @@ public static class Shop
     // ==================================================================
 
     public static readonly ShopItemDef CurrencyGain = Def(
-        "currency_gain", "Currency Gain", "Increase your Currency gain by",
+        "currency_gain", "Currency Gain", "You earn more coins in every run.",
         ShopCategory.Upgrades,
         costs:  new[] { 300, 600, 1000, 1500 },
-        values: new[] { 0f, 0.1f, 0.2f, 0.35f, 0.5f });
+        values: new[] { 0f, 0.1f, 0.2f, 0.35f, 0.5f },
+        style: ShopValueStyle.Percent);
 
     public static readonly ShopItemDef Rerolls = Def(
-        "rerolls", "Rerolls", "Increase your Rerolls by",
+        "rerolls", "Rerolls", "Extra rerolls per run: roll new choices at the mixer.",
         ShopCategory.Upgrades,
         costs:  new[] { 200, 400, 600, 800, 1000 },
-        values: new[] { 0f, 1f, 2f, 3f, 4f, 5f });
+        values: new[] { 0f, 1f, 2f, 3f, 4f, 5f },
+        style: ShopValueStyle.Bonus);
 
     public static readonly ShopItemDef Banish = Def(
-        "banish", "Banish", "Increase your Banishs by",
+        "banish", "Banish", "Extra banishes per run: remove a choice for the rest of the run.",
         ShopCategory.Upgrades,
         costs:  new[] { 500, 1200 },
-        values: new[] { 0f, 1f, 2f });
+        values: new[] { 0f, 1f, 2f },
+        style: ShopValueStyle.Bonus);
 
     public static readonly ShopItemDef ShrinkSpeed = Def(
-        "shrink_speed", "Shrink Speed", "Increase your Shrink Speed by",
+        "shrink_speed", "Shrink Speed", "The mixer circle shrinks faster, so you get your choice sooner.",
         ShopCategory.Upgrades,
         costs:  new[] { 400, 700, 1000, 1400 },
-        values: new[] { 0f, 0.1f, 0.2f, 0.3f, 0.4f });
+        values: new[] { 0f, 0.1f, 0.2f, 0.3f, 0.4f },
+        style: ShopValueStyle.Percent);
 
     // ==================================================================
     //  Slots
     // ==================================================================
 
     public static readonly ShopItemDef BuffSlot = Def(
-        "buff_slot", "Buff Slot", "Increases your Buff Slots by",
+        "buff_slot", "Buff Slot", "How many buffs you can carry in a run.",
         ShopCategory.Slots,
-        costs:  new[] { 1200, 2000, 3500 },
-        values: new[] { 0f, 1f, 2f, 3f },
-        requiredUnlock: "unlock_buff_slot");
+        costs:  new[] { 1200, 2000 },
+        values: new[] { 0f, 1f, 2f },
+        requiredUnlock: "unlock_buff_slot",
+        style: ShopValueStyle.Total, displayBase: Loadout.BaseBuffSlots);
 
     public static readonly ShopItemDef WeaponSlot = Def(
-        "weapon_slot", "Weapon Slot", "Increases your Weapon Slots by",
+        "weapon_slot", "Weapon Slot", "How many weapons you can carry in a run.",
         ShopCategory.Slots,
         costs:  new[] { 1500, 2500, 4000 },
         values: new[] { 0f, 1f, 2f, 3f },
-        requiredUnlock: "unlock_weapon_slot");
+        requiredUnlock: "unlock_weapon_slot",
+        style: ShopValueStyle.Total, displayBase: Loadout.BaseWeaponSlots);
 
     /// <summary>Evo-Slots, die jeder Lauf ohne Kauf hat. Der Shop-Eintrag legt drauf.</summary>
     public const int BaseEvoSlots = 1;
 
     public static readonly ShopItemDef EvoSlot = Def(
-        "evo_slot", "Evo Slot", "Increase your Evo Slots by",
+        "evo_slot", "Evo Slot", "How many weapons you can evolve in a run.",
         ShopCategory.Slots,
-        costs:  new[] { 500, 1500, 2500, 3000, 4000 },
+        costs:  new[] { 1000, 1500, 2500, 3000, 4000 },
         values: new[] { 0f, 1f, 2f, 3f, 4f, 5f },
-        requiredUnlock: "unlock_evo_slot");
+        requiredUnlock: "unlock_evo_slot",
+        style: ShopValueStyle.Total, displayBase: BaseEvoSlots);
 
     /// <summary>
     /// Weitere gespeicherte Builds an der Werkbank. Einer ist immer da, jeder
     /// Kauf gibt einen mehr - siehe <see cref="Loadout.PresetCount"/>.
     /// </summary>
     public static readonly ShopItemDef LoadoutPreset = Def(
-        "loadout_preset", "Build Preset", "Increases your saved builds at the workbench by",
+        "loadout_preset", "Build Preset", "How many builds you can save per character at the workbench.",
         ShopCategory.Slots,
         costs:  new[] { 750, 1500, 2500 },
-        values: new[] { 0f, 1f, 2f, 3f });
+        values: new[] { 0f, 1f, 2f, 3f },
+        style: ShopValueStyle.Total, displayBase: Loadout.BasePresets);
 
     // ==================================================================
     //  Waffen
@@ -552,10 +560,12 @@ public static class Shop
                                    int[] costs, float[] values,
                                    string icon = null,
                                    string requiredUnlock = null,
-                                   string unlocksWeapon = null)
+                                   string unlocksWeapon = null,
+                                   ShopValueStyle style = ShopValueStyle.Plain,
+                                   int displayBase = 0)
     {
         ShopItemDef def = new ShopItemDef(id, nameEn, descEn, category, costs, values,
-                                          icon, requiredUnlock, unlocksWeapon)
+                                          icon, requiredUnlock, unlocksWeapon, style, displayBase)
         {
             Order = Registry.Count
         };

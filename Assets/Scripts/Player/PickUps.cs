@@ -81,7 +81,7 @@ public class PickUps : MonoBehaviour
         idleTime += Time.deltaTime;
         AnimateIdle();
 
-        if (player == null) return;
+        if (player == null || !CanCollect) return;
 
         float distance = Vector3.Distance(transform.position, player.position);
 
@@ -102,9 +102,29 @@ public class PickUps : MonoBehaviour
         spriteRenderer.sprite = idleFrames[Mathf.FloorToInt(idleTime * idleFps) % idleFrames.Length];
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    /// <summary>
+    /// Normale Herzen bleiben liegen, solange der Spieler nichts heilen kann
+    /// (volles Leben, Schild voll) - fuer spaeter. Goldene geben Max-Leben
+    /// und gehen immer.
+    /// </summary>
+    private bool CanCollect
     {
-        if (other.CompareTag("PlayerHitbox"))
+        get
+        {
+            if (PickUp_id != 0) return true;
+            PlayerController p = PlayerController.Instance;
+            return p != null && p.CanReceiveHealing;
+        }
+    }
+
+    // Stay statt nur Enter: steht der Spieler mit vollem Leben auf dem Herz
+    // und wird dann getroffen, soll es trotzdem eingesammelt werden.
+    void OnTriggerEnter2D(Collider2D other) => TryCollect(other);
+    void OnTriggerStay2D(Collider2D other) => TryCollect(other);
+
+    private void TryCollect(Collider2D other)
+    {
+        if (other.CompareTag("PlayerHitbox") && CanCollect)
         {
             if(PickUp_id == 0)
             {

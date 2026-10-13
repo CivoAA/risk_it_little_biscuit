@@ -5,6 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class BobaWeapon : Weapon
 {
+    /// <summary>Wenige schwere Schuesse: zwei Extra-Schuesse fuer einen mehr.</summary>
+    protected override int ExtraShotsPerShot => 2;
+
     [SerializeField] private GameObject prefab;
     public List<Enemy> enemiesInRange;
     public Vector2 target;
@@ -31,7 +34,7 @@ public class BobaWeapon : Weapon
 
     IEnumerator SpawnShuriken()
     {
-        int shots = Mathf.RoundToInt(stats[weaponLevel].shots + PlayerController.Instance.ExtraShots);
+        int shots = Mathf.RoundToInt(stats[weaponLevel].shots + RollExtraShots());
 
         for (int i = 0; i < shots; i++)
         {

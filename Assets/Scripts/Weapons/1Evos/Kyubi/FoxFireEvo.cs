@@ -94,7 +94,7 @@ public class FoxFireEvo : FoxFire
 
     private int BaseTails(PlayerController player)
     {
-        return Mathf.Clamp(Mathf.RoundToInt(CurrentStats.shots + player.ExtraShots), 1, MaxTails);
+        return Mathf.Clamp(Mathf.RoundToInt(CurrentStats.shots + WholeExtraShots), 1, MaxTails);
     }
 
     private static int SoulsNeeded(int baseTails)

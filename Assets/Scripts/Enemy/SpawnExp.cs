@@ -61,6 +61,7 @@ public class SpawnExp : MonoBehaviour
         if (xp != null)
         {
             xp.xpValue = expAmount;
+            xp.lucky = lucky;
         }
     }
 

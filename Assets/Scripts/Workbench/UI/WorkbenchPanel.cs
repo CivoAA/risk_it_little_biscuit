@@ -85,8 +85,10 @@ public class WorkbenchPanel : MonoBehaviour
     private const float LibGridDX = 4f;
     private const int LibCols = 7;
     private static readonly Vector4 InfoBox  = new Vector4(186f, 108f, 119f, 50f);
-    private static readonly Vector4 InfoName = new Vector4(190f, 111f, 111f, 9f);
+    private static readonly Vector4 InfoName = new Vector4(190f, 111f, 96f, 9f);
     private static readonly Vector4 InfoDesc = new Vector4(190f, 121f, 111f, 35f);
+    // "?" oben rechts in der Info-Box: oeffnet den Skalierungs-Text (wie btn_close 14x10)
+    private static readonly Vector4 BtnScaling = new Vector4(288f, 110f, 14f, 10f);
 
     // Evo-Overlay
     private static readonly Vector4 Overlay      = new Vector4(180f, 42f, 131f, 122f);
@@ -127,6 +129,7 @@ public class WorkbenchPanel : MonoBehaviour
     private TMP_FontAsset font;
     private PoolKind tab = PoolKind.Weapon;
     private bool overlayOpen;
+    private bool scalingOpen;
 
     // Geoeffnet wird mit [E], geschlossen auch - im Frame des Oeffnens darf die
     // Taste darum nicht noch einmal zaehlen.
@@ -147,6 +150,12 @@ public class WorkbenchPanel : MonoBehaviour
     private TMP_Text[] tabLabels;
     private TMP_Text countWeapons, countBuffs, evoTitle, libHead;
     private TMP_Text infoName, infoDesc;
+    private GameObject scalingButton;
+
+    // Skalierungs-Overlay: wie die Waffe mit Extra-Schuss, AOE, Wirkdauer skaliert
+    private GameObject scalingRoot;
+    private TMP_Text scalingTitle, scalingText;
+    private RectTransform scalingContent;
     private readonly List<PresetButton> presetButtons = new List<PresetButton>();
 
     private WeaponDef inspected;
@@ -227,10 +236,18 @@ public class WorkbenchPanel : MonoBehaviour
     /// Komponente statt eines EventTriggers - das ist billiger und liest sich
     /// besser.
     /// </summary>
-    private class Hoverable : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    private class Hoverable : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
         public Image Target;
         public Action<bool> Notify;
+
+        /// <summary>Rechtsklick - bei Kacheln: Skalierungs-Text oeffnen.</summary>
+        public Action RightClick;
+
+        public void OnPointerClick(PointerEventData e)
+        {
+            if (e.button == PointerEventData.InputButton.Right) RightClick?.Invoke();
+        }
 
         /// <summary>
         /// Null heisst: immer. Sonst entscheidet die Bedingung - ein grauer
@@ -359,12 +376,13 @@ public class WorkbenchPanel : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.E))
         {
-            if (overlayOpen) SetOverlay(false);
+            if (scalingOpen) SetScaling(null);
+            else if (overlayOpen) SetOverlay(false);
             else Close();
             return;
         }
 
-        if (overlayOpen) return;
+        if (overlayOpen || scalingOpen) return;
 
         if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) StepTab(-1);
         if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) StepTab(1);
@@ -421,6 +439,7 @@ public class WorkbenchPanel : MonoBehaviour
         BuildTabs();
         BuildLibrary();
         BuildOverlay();
+        BuildScalingOverlay();
 
         Rebuild();
     }
@@ -504,6 +523,7 @@ public class WorkbenchPanel : MonoBehaviour
                 if (captured.Closed) InspectClosed(kind);
                 else Inspect(on ? captured.Def : null);
             };
+            hover.RightClick = () => { if (!captured.Closed) SetScaling(captured.Def); };
 
             Button button = slot.Frame.gameObject.AddComponent<Button>();
             button.transition = Selectable.Transition.None;
@@ -580,6 +600,16 @@ public class WorkbenchPanel : MonoBehaviour
             // 34px sind fuer "Explosivstern" zu wenig. Lieber abgeschnitten als
             // ueber den Chiprand hinaus - den ganzen Namen zeigt das Overlay.
             chip.Label.overflowMode = TextOverflowModes.Ellipsis;
+
+            // Klick legt beide Zutaten in den Verteiler oder nimmt sie raus.
+            EvoChip captured = chip;
+            MakeEvoClickable(chip.Frame, () => captured.Def);
+            Hoverable chipHover = chip.Frame.GetComponent<Hoverable>();
+            chipHover.Notify = on =>
+            {
+                if (on && captured.Def != null) Inspect(captured.Def.Result);
+            };
+            chipHover.RightClick = () => { if (captured.Def != null) SetScaling(captured.Def.Result); };
 
             chips.Add(chip);
         }
@@ -767,6 +797,22 @@ public class WorkbenchPanel : MonoBehaviour
         infoDesc = Label("InfoDesc", page, InfoDesc, "", SizeSmall, TextDim,
                          TextAlignmentOptions.TopLeft);
         infoDesc.textWrappingMode = TextWrappingModes.Normal;
+
+        // "?" - zeigt, wie die Kachel in der Info-Box skaliert. Rechtsklick
+        // auf eine Kachel tut dasselbe, ohne erst hierher zu muessen.
+        Image help = Img("BtnScaling", page, BtnScaling, Gfx("btn_close"));
+        help.raycastTarget = true;
+        Label("Q", help.rectTransform, new Vector4(0f, 1f, BtnScaling.z, 8f), "?",
+              SizeText, TextCream, TextAlignmentOptions.Center);
+
+        Button hb = help.gameObject.AddComponent<Button>();
+        hb.transition = Selectable.Transition.None;
+        hb.targetGraphic = help;
+        hb.onClick.AddListener(() => SetScaling(inspected));
+
+        AddHover(help);
+        scalingButton = help.gameObject;
+        scalingButton.SetActive(false);
     }
 
     /// <summary>
@@ -838,18 +884,26 @@ public class WorkbenchPanel : MonoBehaviour
             Hoverable hover = t.Frame.gameObject.AddComponent<Hoverable>();
             hover.Target = t.Hover;
             hover.Notify = on => Inspect(on ? def : null);
+            hover.RightClick = () => SetScaling(def);
 
             Button button = t.Frame.gameObject.AddComponent<Button>();
             button.transition = Selectable.Transition.None;
             button.targetGraphic = t.Frame;
             button.onClick.AddListener(() =>
             {
-                // Evos kann man nicht verteilen - die entstehen aus ihren Zutaten.
+                // Eine Evo selbst kommt nicht in den Verteiler - ein Klick
+                // raeumt stattdessen ihre beiden Zutaten ein oder aus.
+                if (def.Kind == PoolKind.Evo)
+                {
+                    ClickEvo(WeaponCatalog.FindEvo(def.Id));
+                    return;
+                }
+
                 // Die Standardwaffe liegt fest im Verteiler: Loadout.Remove
                 // sagt ohnehin nein - dann soll es auch nicht klacken, als
                 // waere etwas passiert.
                 // Ungekauftes (Schloss) laesst sich erst nach dem Shop-Kauf waehlen.
-                if (def.Kind == PoolKind.Evo || Loadout.IsLocked(def.Id)) return;
+                if (Loadout.IsLocked(def.Id)) return;
                 if (!Loadout.IsSelectable(def.Id)) return;
                 PlayClick();
                 Loadout.Toggle(def.Id);
@@ -945,14 +999,124 @@ public class WorkbenchPanel : MonoBehaviour
                               new Vector4(RowStateX, 5f, RowStateW, 9f), "",
                               SizeSmall, TextDim, TextAlignmentOptions.Right);
 
+            EvoRow captured = row;
+            MakeEvoClickable(row.Frame, () => captured.Def);
+
             rows.Add(row);
         }
 
         overlayRoot.SetActive(false);
     }
 
+    /// <summary>
+    /// Macht einen Evo-Chip oder eine Evo-Zeile anklickbar: der Klick raeumt
+    /// beide Zutaten ein oder aus (<see cref="Loadout.ToggleEvo"/>). Die Evo
+    /// kommt ueber <paramref name="evo"/>, weil Chips und Zeilen bei jedem
+    /// Auffrischen neu sortiert werden.
+    /// </summary>
+    private void MakeEvoClickable(Image frame, Func<EvoDef> evo)
+    {
+        frame.raycastTarget = true;
+
+        Button button = frame.gameObject.AddComponent<Button>();
+        button.transition = Selectable.Transition.None;
+        button.targetGraphic = frame;
+        button.onClick.AddListener(() => ClickEvo(evo()));
+
+        AddHover(frame);
+    }
+
+    private void ClickEvo(EvoDef evo)
+    {
+        if (!Loadout.ToggleEvo(evo)) return;
+        PlayClick();
+    }
+
+    // ---------- Skalierungs-Overlay ----------
+
+    /// <summary>
+    /// Liegt auf derselben Flaeche wie das Evo-Overlay: Name oben, darunter
+    /// scrollbar der Text aus <see cref="WeaponDef.Scaling"/> - wie die Kachel
+    /// mit Extra-Schuss, AOE, Wirkdauer und Cooldown umgeht.
+    /// </summary>
+    private void BuildScalingOverlay()
+    {
+        scalingRoot = NewRect("ScalingOverlay", page).gameObject;
+        RectTransform root = (RectTransform)scalingRoot.transform;
+        root.anchorMin = root.anchorMax = root.pivot = new Vector2(0f, 1f);
+        root.sizeDelta = new Vector2(RefW, RefH);
+        root.anchoredPosition = Vector2.zero;
+
+        Image bg = Img("Sheet", root, Overlay, Gfx("overlay_evo"));
+        bg.raycastTarget = true;
+
+        scalingTitle = Label("Title", root, OverlayTitle, "", SizeText, TextCream,
+                             TextAlignmentOptions.Left);
+        scalingTitle.overflowMode = TextOverflowModes.Ellipsis;
+
+        Image close = Img("BtnClose", root, BtnClose, Gfx("btn_close"));
+        close.raycastTarget = true;
+        Label("X", close.rectTransform, new Vector4(0f, 1f, BtnClose.z, 8f), "x",
+              SizeText, TextCream, TextAlignmentOptions.Center);
+
+        Button cb = close.gameObject.AddComponent<Button>();
+        cb.transition = Selectable.Transition.None;
+        cb.targetGraphic = close;
+        cb.onClick.AddListener(() =>
+        {
+            PlayClick();
+            SetScaling(null);
+        });
+
+        AddHover(close);
+
+        RectTransform view = Rect("View", root, OverlayView.x, OverlayView.y,
+                                  OverlayView.z, OverlayView.w);
+        view.gameObject.AddComponent<RectMask2D>();
+        CatchScroll(view);
+
+        ScrollRect scroll = view.gameObject.AddComponent<ScrollRect>();
+        scroll.horizontal = false;
+        scroll.movementType = ScrollRect.MovementType.Clamped;
+        scroll.scrollSensitivity = 8f;
+        scroll.viewport = view;
+
+        scalingContent = Rect("Content", view, 0f, 0f, OverlayView.z, OverlayView.w);
+        scroll.content = scalingContent;
+
+        scalingText = Label("Text", scalingContent, new Vector4(2f, 1f, OverlayView.z - 4f, OverlayView.w),
+                            "", SizeSmall, TextCream, TextAlignmentOptions.TopLeft);
+        scalingText.textWrappingMode = TextWrappingModes.Normal;
+
+        scalingRoot.SetActive(false);
+    }
+
+    /// <summary>Oeffnet den Skalierungs-Text fuer <paramref name="def"/>; null schliesst.</summary>
+    private void SetScaling(WeaponDef def)
+    {
+        string text = def != null ? def.Scaling : null;
+        bool open = !string.IsNullOrEmpty(text);
+
+        if (open && overlayOpen) SetOverlay(false);
+        if (open) PlayClick();
+
+        scalingOpen = open;
+        scalingRoot.SetActive(open);
+        if (!open) return;
+
+        scalingTitle.text = def.Name;
+        scalingText.text = text;
+
+        // Hoehe nach dem Text, damit der ScrollRect weiss, wie weit es geht
+        float height = Mathf.Ceil(scalingText.GetPreferredValues(text, OverlayView.z - 4f, 0f).y) + 2f;
+        scalingText.rectTransform.sizeDelta = new Vector2(OverlayView.z - 4f, height);
+        scalingContent.sizeDelta = new Vector2(OverlayView.z, Mathf.Max(OverlayView.w, height + 2f));
+        scalingContent.anchoredPosition = Vector2.zero;
+    }
+
     private void SetOverlay(bool open)
     {
+        if (open && scalingOpen) SetScaling(null);
         overlayOpen = open;
         overlayRoot.SetActive(open);
         if (open)
@@ -1082,8 +1246,13 @@ public class WorkbenchPanel : MonoBehaviour
             if (closed) sprite = "slot_used";
             if (t.Lock != null) t.Lock.enabled = closed;
 
+            // Evos leuchten, sobald beide Zutaten im Verteiler liegen.
+            bool dim = t.Def.Kind == PoolKind.Evo
+                ? Loadout.StateOf(WeaponCatalog.FindEvo(t.Def.Id)) != EvoState.Ready
+                : inPool || closed;
+
             t.Frame.sprite = Gfx(sprite);
-            t.Icon.color = inPool || closed || t.Def.Kind == PoolKind.Evo ? IconUsedTint : Color.white;
+            t.Icon.color = dim ? IconUsedTint : Color.white;
         }
     }
 
@@ -1183,7 +1352,10 @@ public class WorkbenchPanel : MonoBehaviour
     /// </summary>
     private void SetEvoIcons(Image[] icons, EvoDef def)
     {
-        WeaponDef[] parts = { def.A, def.B, def.Result };
+        // Die Tofu-Evo entsteht aus ihrer Waffe allein - die steht dann auf
+        // beiden Zutatenplaetzen, statt dass einer leer bleibt.
+        WeaponDef b = def.IngredientCount == 1 ? def.A : def.B;
+        WeaponDef[] parts = { def.A, b, def.Result };
 
         for (int k = 0; k < 3; k++)
         {
@@ -1229,6 +1401,7 @@ public class WorkbenchPanel : MonoBehaviour
     private void InspectPreset(int index)
     {
         inspected = null;
+        scalingButton.SetActive(false);
 
         infoName.text = string.Format(Loc.Get("ui.workbench.preset.name", "BUILD {0}"), index + 1);
 
@@ -1256,6 +1429,7 @@ public class WorkbenchPanel : MonoBehaviour
     {
         if (def == null && inspected != null) return;
         inspected = def;
+        scalingButton.SetActive(def != null && !string.IsNullOrEmpty(def.Scaling));
 
         if (def == null)
         {
@@ -1276,11 +1450,7 @@ public class WorkbenchPanel : MonoBehaviour
 
         if (def.Kind == PoolKind.Evo)
         {
-            EvoDef recipe = null;
-            foreach (EvoDef e in WeaponCatalog.Evos)
-            {
-                if (e.Id == def.Id) { recipe = e; break; }
-            }
+            EvoDef recipe = WeaponCatalog.FindEvo(def.Id);
 
             if (recipe != null)
             {
@@ -1321,6 +1491,7 @@ public class WorkbenchPanel : MonoBehaviour
     private void InspectClosed(PoolKind kind)
     {
         inspected = null;
+        scalingButton.SetActive(false);
         infoName.text = Loc.Get("ui.workbench.closed.title", "Gesperrter Platz");
         infoName.color = TextDim;
         infoDesc.text = kind == PoolKind.Buff

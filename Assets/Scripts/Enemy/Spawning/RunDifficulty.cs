@@ -82,10 +82,10 @@ public static class RunDifficulty
         switch ((planId ?? "").Trim().ToLowerInvariant())
         {
             case "world2": return (1.0f, 1.0f);    // Welt 1 Wald - Massstab
-            case "world1": return (1.2f, 1.1f);    // Welt 2 Kueche
-            case "world5": return (1.45f, 1.2f);   // Welt 3 Eisgletscher
-            case "world6": return (1.8f, 1.35f);   // Welt 4 Geisterwald
-            case "world4": return (2.3f, 1.5f);    // Welt 5 Vulkan
+            case "world1": return (1.6f, 1.1f);    // Welt 2 Kueche
+            case "world5": return (2.1f, 1.2f);    // Welt 3 Eisgletscher
+            case "world6": return (2.7f, 1.35f);   // Welt 4 Geisterwald
+            case "world4": return (3.5f, 1.5f);    // Welt 5 Vulkan
             default: return (1f, 1f);
         }
     }
@@ -130,10 +130,18 @@ public static class RunDifficulty
         InEndlessPart = true;
     }
 
+    /// <summary>
+    /// Extra-Leben fuer Zwischenbosse und Bosse, oben auf Chaos und Weltstufe.
+    /// Nur Leben - Schaden und Belohnung bleiben wie sie sind.
+    /// </summary>
+    public const float BossHealthBonus = 2f;
+
     /// <summary>Haengt die aktuellen Faktoren an einen frisch erzeugten Gegner.</summary>
     public static void Apply(Enemy enemy)
     {
         if (enemy == null) return;
-        enemy.ApplyRunScaling(HealthFactor, DamageFactor, RewardFactor);
+        bool boss = enemy.Role == EnemyRole.Boss || enemy.Role == EnemyRole.MiniBoss;
+        float health = HealthFactor * (boss ? BossHealthBonus : 1f);
+        enemy.ApplyRunScaling(health, DamageFactor, RewardFactor);
     }
 }

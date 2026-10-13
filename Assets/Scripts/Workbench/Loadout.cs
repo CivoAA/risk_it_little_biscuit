@@ -56,7 +56,7 @@ public static class Loadout
 
     /// <summary>Slots im Lauf ohne Shop-Kauf. Frueher am Player-Prefab (3 / 1).</summary>
     public const int BaseWeaponSlots = 3;
-    public const int BaseBuffSlots = 1;
+    public const int BaseBuffSlots = 2;
 
     /// <summary>So viele Eintraege muss man je Slot im Lauf mitnehmen.</summary>
     public const int PicksPerSlot = 3;
@@ -458,6 +458,67 @@ public static class Loadout
     }
 
     public static bool Toggle(string id) => Contains(id) ? Remove(id) : Add(id);
+
+    /// <summary>
+    /// Ein Klick auf eine Evo: liegen schon alle Zutaten im Verteiler, fliegen
+    /// sie raus - sonst kommen die fehlenden dazu. Die Startwaffe des
+    /// Charakters bleibt dabei immer liegen.
+    ///
+    /// Alles oder nichts: ist eine Zutat nicht waehlbar (fremde Startwaffe,
+    /// nicht gekauft) oder fehlt fuer eine davon der Platz, passiert gar
+    /// nichts - eine halb eingeraeumte Evo hilft keinem. Gibt false zurueck,
+    /// wenn sich nichts geaendert hat.
+    /// </summary>
+    public static bool ToggleEvo(EvoDef evo)
+    {
+        if (evo == null) return false;
+
+        List<WeaponDef> parts = new List<WeaponDef>();
+        foreach (string id in new[] { evo.IngredientA, evo.IngredientB })
+        {
+            if (string.IsNullOrEmpty(id)) continue;
+            WeaponDef def = WeaponCatalog.Find(id);
+            if (def == null || def.Kind == PoolKind.Evo) return false;
+            if (!parts.Contains(def)) parts.Add(def);
+        }
+        if (parts.Count == 0) return false;
+
+        bool allIn = parts.TrueForAll(def => Contains(def.Id));
+        bool changed = false;
+
+        if (allIn)
+        {
+            foreach (WeaponDef def in parts)
+            {
+                if (IsLocked(def.Id)) continue;
+                changed |= Get(def.Kind).Remove(def.Id);
+            }
+        }
+        else
+        {
+            int missingWeapons = 0, missingBuffs = 0;
+            foreach (WeaponDef def in parts)
+            {
+                if (Contains(def.Id)) continue;
+                if (!IsSelectable(def.Id)) return false;
+                if (def.Kind == PoolKind.Buff) missingBuffs++;
+                else missingWeapons++;
+            }
+
+            if (Count(PoolKind.Weapon) + missingWeapons > WeaponCapacity) return false;
+            if (Count(PoolKind.Buff) + missingBuffs > BuffCapacity) return false;
+
+            foreach (WeaponDef def in parts)
+            {
+                if (Contains(def.Id)) continue;
+                Get(def.Kind).Add(def.Id);
+                changed = true;
+            }
+        }
+
+        if (changed) Fire();
+        return changed;
+    }
 
     /// <summary>Leert den Verteiler. Der feste erste Platz bleibt.</summary>
     public static void Clear()

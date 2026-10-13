@@ -23,6 +23,9 @@ using UnityEngine;
 /// </summary>
 public class MusicBoxQuartet : MochiMelody
 {
+    /// <summary>Jede Note kommt aus vier Boxen: drei Extra-Schuesse fuer eine mehr.</summary>
+    protected override int ExtraShotsPerShot => 3;
+
     /// <summary>So viele Boxen stehen auf einmal.</summary>
     public const int Boxes = 4;
 

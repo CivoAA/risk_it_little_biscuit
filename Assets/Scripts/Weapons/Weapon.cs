@@ -97,6 +97,43 @@ public class Weapon : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// So viele Extra-Schuesse braucht die Waffe fuer ein Geschoss mehr
+    /// (2 = halb so stark wie 1:1). 0 = Extra-Schuss wirkt hier nicht.
+    /// Waffen mit wenigen, schweren Treffern stehen hoeher, damit ein
+    /// Extra-Schuss jeder Waffe ungefaehr gleich viel bringt.
+    /// </summary>
+    protected virtual int ExtraShotsPerShot => 1;
+
+    /// <summary>Extra-Schuesse nach <see cref="ExtraShotsPerShot"/>, mit Bruchteil.</summary>
+    private float ExtraShotValue
+    {
+        get
+        {
+            PlayerController player = PlayerController.Instance;
+            if (player == null || ExtraShotsPerShot <= 0) return 0f;
+            return Mathf.Max(0f, player.playerShots) / ExtraShotsPerShot;
+        }
+    }
+
+    /// <summary>
+    /// Zusatz-Geschosse fuer EINEN Angriff: ganze sicher, der Rest als Chance
+    /// (0,6 = 60 % auf eins mehr). Pro Angriff genau einmal aufrufen.
+    /// </summary>
+    protected int RollExtraShots()
+    {
+        float value = ExtraShotValue;
+        int whole = Mathf.FloorToInt(value + 0.0001f);
+        float rest = value - whole;
+        return rest > 0.0001f && Random.value < rest ? whole + 1 : whole;
+    }
+
+    /// <summary>
+    /// Zusatz fuer Dinge, die dauerhaft da sind (Irrlichter, Klingen im
+    /// Orbit): nur ganze, sonst wuerde die Zahl jeden Frame springen.
+    /// </summary>
+    protected int WholeExtraShots => Mathf.FloorToInt(ExtraShotValue + 0.0001f);
+
     public void LevelUP()
     {
         if (weaponLevel < stats.Count - 1)

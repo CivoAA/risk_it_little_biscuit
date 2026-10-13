@@ -10,6 +10,9 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class TimeLaser : Weapon
 {
+    /// <summary>Wie die Schuesse der Stufe nur halb: zwei Extra-Schuesse fuer einen Strahl mehr.</summary>
+    protected override int ExtraShotsPerShot => 2;
+
     [SerializeField] private GameObject prefab; // Das Laserobjekt
     public List<Enemy> enemiesInRange = new List<Enemy>();
     private readonly List<Enemy> targets = new List<Enemy>();
@@ -39,7 +42,7 @@ public class TimeLaser : Weapon
     IEnumerator SpawnLaser()
     {
         shooting = true;
-        int shots = Mathf.RoundToInt((stats[weaponLevel].shots + PlayerController.Instance.ExtraShots) * 0.5f);
+        int shots = Mathf.RoundToInt(stats[weaponLevel].shots * 0.5f) + RollExtraShots();
 
         // Sofort Cooldown setzen, damit neuer Schuss nach Ablauf wieder möglich ist
         spawnCounter = CurrentCooldown;

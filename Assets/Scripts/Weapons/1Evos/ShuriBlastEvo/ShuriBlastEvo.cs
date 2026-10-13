@@ -5,6 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class ShuriBlastEvo : Weapon
 {
+    /// <summary>Wie der Shurikookie: drei Extra-Schuesse fuer einen mehr.</summary>
+    protected override int ExtraShotsPerShot => 3;
+
     [SerializeField] private GameObject prefab;
     public List<Enemy> enemiesInRange = new List<Enemy>();
     public Vector2 target;
@@ -30,7 +33,7 @@ public class ShuriBlastEvo : Weapon
     {
         shooting = true;
 
-        int shots = Mathf.RoundToInt(stats[weaponLevel].shots + PlayerController.Instance.ExtraShots);
+        int shots = Mathf.RoundToInt(stats[weaponLevel].shots + RollExtraShots());
 
         for (int i = 0; i < shots; i++)
         {

@@ -22,7 +22,7 @@ using UnityEngine;
 /// damage   = Treffer einer Note; der Akkord macht <see cref="ChordFactor"/> davon (+ Crescendo)
 /// range    = Zielsuche der Noten in Tiles
 /// duration = so lange bremst der Akkord (Duration-Buff zaehlt)
-/// shots    = Noten pro Schlag (+ Extra-Schuss 1:1)
+/// shots    = Noten pro Schlag (+ eine je 2 Extra-Schuesse, Spieluhr: je 3)
 ///
 /// Die Werte stehen im Code (<see cref="LevelStats"/>), nicht am Prefab - sie
 /// ueberschreiben beim Start, was im Inspector steht. Bilder und Toene in
@@ -30,6 +30,9 @@ using UnityEngine;
 /// </summary>
 public class MochiMelody : Weapon
 {
+    /// <summary>Zwei Extra-Schuesse fuer eine Note mehr pro Schlag.</summary>
+    protected override int ExtraShotsPerShot => 2;
+
     /// <summary>Akkord-Schaden im Verhaeltnis zum Notenschaden (ohne Crescendo).</summary>
     public const float ChordFactor = 1.5f;
 
@@ -416,7 +419,7 @@ public class MochiMelody : Weapon
     private void SingNote(int color, float damageScale)
     {
         PlayerController player = PlayerController.Instance;
-        int count = Mathf.Clamp(Mathf.RoundToInt(CurrentStats.shots + player.ExtraShots), 1, 8);
+        int count = Mathf.Clamp(Mathf.RoundToInt(CurrentStats.shots + RollExtraShots()), 1, 8);
         float damage = CurrentStats.damage * damageScale;
 
         List<Source> from = Sources();

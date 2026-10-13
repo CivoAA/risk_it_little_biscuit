@@ -5,6 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class BoomerangEvo : Weapon
 {
+    /// <summary>Jeder Wurf zaehlt doppelt (Ring), darum zwei Extra-Schuesse fuer ein Paar mehr.</summary>
+    protected override int ExtraShotsPerShot => 2;
+
     [SerializeField] private GameObject prefab;
     private float spawnCounter;
     private bool shooting = false;
@@ -27,7 +30,7 @@ public class BoomerangEvo : Weapon
 
     IEnumerator SpawnBoomerangRing()
     {
-        int totalBoomerangs = Mathf.RoundToInt((stats[weaponLevel].shots + PlayerController.Instance.ExtraShots) * 2);
+        int totalBoomerangs = Mathf.RoundToInt((stats[weaponLevel].shots + RollExtraShots()) * 2);
         float angleStep = 360f / totalBoomerangs;
 
         for (int i = 0; i < totalBoomerangs; i++)

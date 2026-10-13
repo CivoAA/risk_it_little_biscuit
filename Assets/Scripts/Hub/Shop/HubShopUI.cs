@@ -1104,20 +1104,14 @@ public class HubShopUI : MonoBehaviour
 
         if (entry.Values.Count > 0)
         {
-            string current = Nice(Shop.CurrentValue(entry));
+            string current = entry.FormatValue(Shop.CurrentValue(entry));
             lines.Add(maxed
                 ? string.Format(upgradeFormat, current, MaxLabel)
-                : string.Format(upgradeFormat, current, Nice(Shop.NextValue(entry))));
+                : string.Format(upgradeFormat, current, entry.FormatValue(Shop.NextValue(entry))));
         }
 
         return string.Join("\n", lines);
     }
-
-    /// <summary>0,35 statt 0,3500001 - und ganze Zahlen ohne Komma.</summary>
-    static string Nice(float v) =>
-        Mathf.Approximately(v, Mathf.Round(v))
-            ? Mathf.RoundToInt(v).ToString()
-            : v.ToString("0.##");
 
     void SetBuyEnabled(bool enabled)
     {

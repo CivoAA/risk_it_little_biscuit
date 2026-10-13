@@ -12,7 +12,7 @@ using UnityEngine.SceneManagement;
 /// cooldown = Pause zwischen zwei Salven
 /// damage   = Schaden pro Stueck
 /// range    = Zielsuche und Flugweite in Tiles
-/// shots    = Stuecke pro Salve (+ Extra-Schuss 1:1)
+/// shots    = Stuecke pro Salve (+ Extra-Schuss 1:1, Milchkrone 1:2)
 /// Durchschlag je Stufe steht in <see cref="PiercePerLevel"/>.
 ///
 /// Die Werte stehen im Code (<see cref="LevelStats"/>), nicht am Prefab - sie
@@ -98,7 +98,7 @@ public class ChocoChips : Weapon
     {
         firing = true;
 
-        int chips = Mathf.Max(1, Mathf.RoundToInt(CurrentStats.shots + PlayerController.Instance.ExtraShots));
+        int chips = Mathf.Max(1, Mathf.RoundToInt(CurrentStats.shots + RollExtraShots()));
         for (int i = 0; i < chips; i++)
         {
             if (!IsActive || PlayerController.Instance == null) break;

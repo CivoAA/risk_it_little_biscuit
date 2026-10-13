@@ -219,13 +219,14 @@ public partial class LevelUpScreen
                         v => Mathf.RoundToInt(v).ToString(CultureInfo.InvariantCulture));
 
         coinChip.Set(Loc.Get("ui.death.coins", "COINS"), gm != null ? gm.currency : 0);
-        // Charakter-XP aus diesem Lauf. Ist dabei ein Charakter-Level gefallen,
-        // steht das neue Level statt der Ueberschrift da.
+        // Charakter-Level im Skilltree (nicht das Lauf-Level) und darunter die
+        // Skillpunkte, die dieser Lauf dazugebracht hat.
         int charLevel = Skills.Level;
-        string charLabel = gm != null && charLevel > gm.charLevelBeforeGame
-            ? string.Format(Loc.Get("ui.death.charlevelup", "CHAR LV {0}!"), charLevel)
-            : Loc.Get("ui.death.charxp", "CHAR XP");
-        soulChip.Set(charLabel, gm != null ? Mathf.RoundToInt(gm.charXpGained) : 0);
+        int gainedPoints = gm != null ? Mathf.Max(0, charLevel - gm.charLevelBeforeGame) : 0;
+        string charLabel = string.Format(gainedPoints > 0
+            ? Loc.Get("ui.death.charlevelup", "CHAR LV {0}!")
+            : Loc.Get("ui.death.charlevel", "CHAR LV {0}"), charLevel);
+        soulChip.Set(charLabel, gainedPoints, " " + Loc.Get("ui.death.charpoints", "SKILL POINTS"));
 
         // ---- Build ----
         buildLabel.Set(Loc.Get("ui.death.build", "YOUR BUILD"));
@@ -633,6 +634,7 @@ public partial class LevelUpScreen
         private readonly RectInt rect;
         private readonly Color accent, accentLight;
         private int target;
+        private string unit = "";
 
         public LootChip(LevelUpScreen s, Transform parent, RectInt r, Sprite iconSprite, Color accent, Color accentLight)
         {
@@ -656,11 +658,12 @@ public partial class LevelUpScreen
             sparkle = s.Img("Sparkle", root, new RectInt(r.width - 8, 3, 3, 3), GameHudSkin.Sparkle, Color.white);
         }
 
-        public void Set(string text, int amount)
+        public void Set(string text, int amount, string unit = "")
         {
             label.Set(text);
             target = Mathf.Max(0, amount);
-            value.Set("+0");
+            this.unit = unit;
+            value.Set("+0" + unit);
         }
 
         public void Animate(float now, float t)
@@ -669,7 +672,7 @@ public partial class LevelUpScreen
             if (t < 0f) return;
             float k = Mathf.Clamp01(t / 0.8f);
             k = 1f - (1f - k) * (1f - k) * (1f - k);
-            value.Set("+" + Mathf.RoundToInt(target * k).ToString(CultureInfo.InvariantCulture));
+            value.Set("+" + Mathf.RoundToInt(target * k).ToString(CultureInfo.InvariantCulture) + unit);
 
             bool done = k >= 1f;
             float after = t - 0.8f;
