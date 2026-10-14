@@ -61,9 +61,8 @@ function Fetch([string[]]$names) {
     return $out
 }
 
-$names = Get-Content (Join-Path $Root 'steam_metriken_stats.txt') | ForEach-Object { $_.Trim() } | Where-Object { $_ }
-$v = @{}; $missing = @()
-Write-Host 'Hole Daten von Steam ...'
+function ReadNames { Get-Content (Join-Path $Root 'steam_metriken_stats.txt') | ForEach-Object { $_.Trim() } | Where-Object { $_ } }
+$names = ReadNames
 # Erst mit einem Stat pruefen, ob Steam den Key annimmt - sonst neuen Key abfragen.
 for ($try = 1; ; $try++) {
     try { $null = Fetch @($names[0]); break }
@@ -75,6 +74,12 @@ for ($try = 1; ; $try++) {
         $key = AskKey
     }
 }
+
+# Holt alle Stats frisch und baut die Seite. Die Helfer unten lesen $v per Scope-Kette.
+function BuildPage {
+$names = ReadNames
+$v = @{}; $missing = @()
+Write-Host "$(Get-Date -Format 'HH:mm:ss')  Hole Daten von Steam ..."
 for ($i = 0; $i -lt $names.Count; $i += $Chunk) {
     $part = @($names[$i..([Math]::Min($i + $Chunk, $names.Count) - 1)])
     $got = Fetch $part
@@ -88,12 +93,16 @@ for ($i = 0; $i -lt $names.Count; $i += $Chunk) {
     }
     $got.GetEnumerator() | ForEach-Object { $v[$_.Key] = $_.Value }
 }
+BuildHtml
+}
+
 function G([string]$n) { if ($v.ContainsKey($n)) { $v[$n] } else { 0 } }
 function Pct($part, $whole) { if ($whole) { '{0:0.0} %' -f (100 * $part / $whole) } else { '&ndash;' } }
 function Bar($part, $whole) { $w = if ($whole) { [Math]::Round(100 * $part / $whole, 1) } else { 0 }; "<div class=bar><span style='width:$($w.ToString([Globalization.CultureInfo]::InvariantCulture))%'></span></div>" }
 function Num($n) { '{0:N0}' -f $n }
 function Hours($min) { '{0:N1}' -f ($min / 60) }
 
+function BuildHtml {
 $runsTotal = 0; foreach ($c in 0..($Chars.Count - 1)) { $runsTotal += G "m_char${c}_runs" }
 $winsTotal = 0; foreach ($c in 0..($Chars.Count - 1)) { $winsTotal += G "m_char${c}_wins" }
 $minTotal = 0; foreach ($c in 0..($Chars.Count - 1)) { $minTotal += G "m_char${c}_min" }
@@ -144,8 +153,12 @@ tr:last-child td{border-bottom:0}.n{text-align:right;font-variant-numeric:tabula
 .bar{height:8px;background:var(--line);border-radius:4px;overflow:hidden;margin-bottom:2px}.bar span{display:block;height:100%;background:var(--acc)}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
 .note{color:var(--mut)}.warn{color:var(--warn)}
+.head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.btn{background:var(--acc);color:#fff;border-radius:8px;padding:8px 14px;text-decoration:none;font-weight:600;white-space:nowrap}
+.btn.busy{opacity:.6;pointer-events:none}
 </style></head><body><main>
-<h1>Risk it Little Biscuit &ndash; Metriken</h1>
+<div class=head><h1>Risk it Little Biscuit &ndash; Metriken</h1>
+<a class=btn href="/refresh" onclick="this.classList.add('busy');this.textContent='L&auml;dt &hellip;'">Aktualisieren</a></div>
 <p class=sub>Summe &uuml;ber alle Spieler ($zeitraum) &middot; Stand $stand</p>
 $emptyHtml
 <div class=kpis>
@@ -168,8 +181,48 @@ $($mapRows -join "`n")</table>
 $missingHtml
 </main></body></html>
 "@
+$html
+}
 
-$outFile = Join-Path $env:TEMP 'biscuit_metriken.html'
-[IO.File]::WriteAllText($outFile, $html, (New-Object Text.UTF8Encoding $false))
-Write-Host "Fertig: $outFile"
-Start-Process $outFile
+# Kleiner lokaler Server, damit der Knopf "Aktualisieren" neu holen kann (eine file://-Seite kann das nicht).
+# Laeuft, solange das Konsolenfenster offen ist.
+
+$page = BuildPage
+
+$probe = New-Object Net.Sockets.TcpListener([Net.IPAddress]::Loopback, 0)
+$probe.Start(); $port = $probe.LocalEndpoint.Port; $probe.Stop()
+$listener = New-Object Net.HttpListener
+$listener.Prefixes.Add("http://localhost:$port/")
+$listener.Start()
+Write-Host ''
+Write-Host "Metriken laufen auf http://localhost:$port/"
+Write-Host 'Fenster offen lassen, solange du die Seite benutzt - Schliessen beendet den Server.'
+Start-Process "http://localhost:$port/"
+
+$utf8 = New-Object Text.UTF8Encoding $false
+while ($listener.IsListening) {
+    $ctx = $listener.GetContext()
+    $res = $ctx.Response
+    try {
+        switch ($ctx.Request.Url.AbsolutePath) {
+            '/' {
+                $bytes = $utf8.GetBytes($page)
+                $res.ContentType = 'text/html; charset=utf-8'
+                $res.Headers.Add('Cache-Control', 'no-store')
+                $res.OutputStream.Write($bytes, 0, $bytes.Length)
+            }
+            '/refresh' {
+                try { $page = BuildPage }
+                catch {
+                    # Alte Zahlen behalten, Fehler oben auf der Seite zeigen.
+                    $msg = [Net.WebUtility]::HtmlEncode($_.Exception.Message)
+                    Write-Host "Fehler: $($_.Exception.Message)"
+                    $page = $page -replace '<p class=warn data-err>.*?</p>', ''
+                    $page = $page -replace '(<p class=sub>.*?</p>)', "`$1<p class=warn data-err>Aktualisieren fehlgeschlagen: $msg</p>"
+                }
+                $res.Redirect('/')
+            }
+            default { $res.StatusCode = 404 }
+        }
+    } finally { $res.Close() }
+}
