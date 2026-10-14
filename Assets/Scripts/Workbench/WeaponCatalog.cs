@@ -295,6 +295,8 @@ public static class WeaponCatalog
         "buff_dodge",
         "buff_cooldown",
         "buff_duration",
+        // Zweite Zutat der Marmeladen-Evo (Sticky Shatter) - darum ohne Shop.
+        "buff_aoe_range",
         "buff_glass_cannon",
         "buff_second_chance",
     };
