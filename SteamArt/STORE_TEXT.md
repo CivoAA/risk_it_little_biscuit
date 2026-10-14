@@ -1,6 +1,6 @@
 # Steam-Shoptexte
 
-Stand: 2026-10-03. Kurzbeschreibung = Steam-Limit 300 Zeichen.
+Stand: 2026-10-05. Kurzbeschreibung = Steam-Limit 300 Zeichen.
 "Über das Spiel" ist in Steam-BBCode geschrieben und kann direkt in Steamworks
 eingefügt werden. `[img]`-Zeilen sind Platzhalter: Bild/GIF in Steamworks unter
 "Bilder für Beschreibung" hochladen und den Pfad ersetzen.
