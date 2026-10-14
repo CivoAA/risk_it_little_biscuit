@@ -209,10 +209,6 @@ public static class Shop
         costs: new[] { 750 }, values: new[] { 0f, 1f },
         unlocksWeapon: "buff_extra_shot");
 
-    public static readonly ShopItemDef BuffAoeRange = Def(
-        "buff_aoe_range", "AOE Range", "Unlocks AOE Range Buff", ShopCategory.Buffs,
-        costs: new[] { 750 }, values: new[] { 0f, 1f }, unlocksWeapon: "buff_aoe_range");
-
     public static readonly ShopItemDef BuffDamage = Def(
         "buff_damage", "Damage", "Unlocks Damage Buff", ShopCategory.Buffs,
         costs: new[] { 750 }, values: new[] { 0f, 1f }, unlocksWeapon: "buff_damage");
