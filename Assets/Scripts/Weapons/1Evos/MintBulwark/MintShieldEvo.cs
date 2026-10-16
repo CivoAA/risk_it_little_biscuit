@@ -3,11 +3,12 @@ using UnityEngine;
 
 /// <summary>
 /// Pfefferminz-Bollwerk - die Evo des Pfefferminz-Schilds. Rezept:
-/// Pfefferminz-Schild + HP-Regeneration (Minze = frisch = heilt).
+/// Pfefferminz-Schild + Candy-Frisbee (das Rad ist der Frisbee im Grossen).
 ///
 /// Die Blase kann alles, was die Basiswaffe auf Hoechststufe kann (zwei
-/// Schichten, Ueberdruck, Frische Brise, Bonbons), waechst schneller nach und
-/// heilt bei jedem Platzen. Alle <see cref="WheelInterval"/> Sekunden zieht sie
+/// Schichten, Ueberdruck, Frische Brise, Bonbons) und waechst schneller nach,
+/// regeneriert aber kein Leben - geheilt wird nur, wenn das Rad zurueckkommt.
+/// Alle <see cref="WheelInterval"/> Sekunden zieht sie
 /// sich zu einem grossen Pfefferminz-Rad zusammen (<see cref="MintWheel"/>), das
 /// von Gruppe zu Gruppe rollt, bei jedem Abprall klirrt und am Ende als
 /// heilende Polarlicht-Nova zur Blase zurueckkehrt. Solange das Rad unterwegs
@@ -31,8 +32,7 @@ public class MintShieldEvo : MintShield
     public const float ClinkDamage = 11.2f;
     public const float NovaDamage = 12.8f;
 
-    /// <summary>Heilung je geplatzter Schicht und beim Zurueckkehren des Rads.</summary>
-    public const float PopHeal = 3f;
+    /// <summary>Heilung beim Zurueckkehren des Rads - die einzige Heilung der Evo.</summary>
     public const float NovaHeal = 6f;
 
     /// <summary>Das Rad sucht Gegner in diesem Umkreis (Tiles).</summary>
@@ -65,6 +65,7 @@ public class MintShieldEvo : MintShield
     }
 
     protected override bool HideBubble => wheelOut;
+    protected override float RegenPerSecond => 0f;
     protected override Sprite[] IdleBubble => EvoBubbleFrames;
 
     protected override void Update()
@@ -104,11 +105,6 @@ public class MintShieldEvo : MintShield
         wheelOut = true;
         float mult = PlayerController.Instance.CooldownMultiplier;
         wheelTimer = WheelInterval * mult;
-    }
-
-    protected override void OnPopped(Vector2 center)
-    {
-        PlayerController.Instance?.Heal(PopHeal);
     }
 
     /// <summary>Vom Rad, wenn es wieder beim Spieler ist: Nova, Heilung, alle Schichten wieder da.</summary>

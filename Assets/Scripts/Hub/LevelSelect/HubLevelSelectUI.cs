@@ -145,7 +145,9 @@ public class HubLevelSelectUI : MonoBehaviour
     private const int WinX = FrameX + 3, WinY = FrameY + 3, WinW = FrameW - 6, WinH = FrameH - 6;
 
     // Reiseroute
-    private const int Node = 30, NodeInset = 3, NodeStep = 52, NodeY = 202, NodeWave = 8;
+    // NodeY so, dass die Sterne unter dem Nummernschild noch auf der Karte liegen
+    private const int Node = 30, NodeInset = 3, NodeStep = 52, NodeY = 197, NodeWave = 8;
+    private const int StarSize = 7, StarStep = 6;
     private const int PerPage = 5;
     private const int CharTarget = 40;           // Figur 1:1 (32er), der Ritter mit Schwert auch
 
@@ -187,6 +189,7 @@ public class HubLevelSelectUI : MonoBehaviour
         public Rect Area;
         public GameObject Root;
         public Image Glow, Back, Preview, Frame, Lock, Question, Chip, Shard;
+        public readonly Image[] Stars = new Image[3];
         public TextMeshProUGUI Number;
         public Vector2 Home;             // Position ohne Aufprall-Versatz
     }
@@ -452,6 +455,12 @@ public class HubLevelSelectUI : MonoBehaviour
         s.Chip = OptionsKit.Img("Chip", rt, (Node - 11) / 2, Node - 5, 11, 12, GameHudSkin.LevelChip, true);
         s.Number = OptionsKit.Label("Number", rt, (Node - 11) / 2, Node - 6, 11, 13, "", pixelFont, OptionsKit.SizeText,
                                     GameHudSkin.Parchment, TextAlignmentOptions.Center);
+
+        // Darunter drei Sterne: Sieg auf Leicht, Normal, Schwer (LevelRecords.Stars)
+        int starsX = (Node - (2 * StarStep + StarSize)) / 2;
+        for (int k = 0; k < 3; k++)
+            s.Stars[k] = OptionsKit.Img("Star" + (k + 1), rt, starsX + k * StarStep, Node + 6, StarSize, StarSize,
+                                        GameHudSkin.MiniStarEmpty, Color.clear);
 
         // Story: der Glutsplitter dieser Welt ist schon bei Pomo (oben rechts an der Ecke)
         s.Shard = OptionsKit.Img("Shard", rt, Node - 11, -5, 16, 16, StoryArt.Frame("glutsplitter", 2), Color.clear);
@@ -932,6 +941,14 @@ public class HubLevelSelectUI : MonoBehaviour
             s.Question.color = open && (!linked || pic == null) ? OptionsKit.WithAlpha(GameHudSkin.Cream, 0.8f) : Color.clear;
 
             s.Shard.color = StoryProgress.IsShardWorld(e.planId) && StoryProgress.HasShard(e.planId) ? Color.white : Color.clear;
+
+            // Sterne nur an spielbaren Welten
+            int stars = open && linked && e.mapId >= 0 ? LevelRecords.Stars(e.mapId) : -1;
+            for (int k = 0; k < 3; k++)
+            {
+                s.Stars[k].sprite = k < stars ? GameHudSkin.MiniStar : GameHudSkin.MiniStarEmpty;
+                s.Stars[k].color = stars >= 0 ? Color.white : Color.clear;
+            }
 
             s.Number.text = (s.Level + 1).ToString();
             s.Number.color = isSel ? GameHudSkin.Gold : open ? GameHudSkin.Parchment : GameHudSkin.Stone;

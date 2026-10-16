@@ -139,8 +139,12 @@ public class GameManager : MonoBehaviour
         if (MapDefinition.Active != null)
         {
             LevelRecords.ReportRun(LevelRecords.CurrentMapId(), GameSession.IsEndless, won, gameTime);
-            // Story-Sieg: die naechste Welt geht auf.
-            if (won) Unlocks.ReportStoryWin(LevelRecords.CurrentMapId());
+            // Story-Sieg: die naechste Welt geht auf, Sterne nach Schwierigkeit.
+            if (won)
+            {
+                Unlocks.ReportStoryWin(LevelRecords.CurrentMapId());
+                LevelRecords.ReportWin(LevelRecords.CurrentMapId(), RunDifficulty.Level);
+            }
         }
 
         // Charakter-Level nach dem Lauf: ab Level 10 gibt es den Begleiter im Shop.

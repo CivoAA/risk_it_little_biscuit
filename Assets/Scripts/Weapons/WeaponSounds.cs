@@ -80,6 +80,9 @@ public static class WeaponSounds
     public static readonly Sfx SplatThrow     = new Sfx("splat_throw",     0.14f, 0.08f,  0.08f);
     // Bubble Gun: noch ohne eigene WAVs - hoeher gestimmte Boba-/Marmeladen-Klaenge.
     public static readonly Sfx BubbleShot     = new Sfx("boba_shot",       0.13f, 0.08f,  0.08f, 1.5f);
+    // Candy-Frisbee: noch ohne eigene WAVs - hoeher gestimmter Bumerang-Wurf und Rad-Abprall.
+    public static readonly Sfx FrisbeeThrow   = new Sfx("boomerang_throw", 0.14f, 0.1f,   0.05f, 1.3f);
+    public static readonly Sfx FrisbeeHit     = new Sfx("mint_wheel_bounce", 0.10f, 0.05f, 0.08f, 1.5f);
 
     // Flaechen / Einschlaege
     public static readonly Sfx FireballBoom   = new Sfx("fireball_boom",   0.22f, 0.1f,   0.07f);

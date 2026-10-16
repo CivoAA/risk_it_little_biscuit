@@ -82,6 +82,7 @@ m_pick_royal_splat
 m_pick_mochi_melody
 m_pick_crumb_mayhem
 m_pick_bubble_gun
+m_pick_candy_frisbee
 m_pick_buff_damage
 m_pick_buff_crit_chance
 m_pick_buff_crit_damage

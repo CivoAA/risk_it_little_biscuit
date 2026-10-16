@@ -62,8 +62,17 @@ public static class RunDifficulty
     /// <summary>Mehr Gegner gleichzeitig auf dem Feld.</summary>
     public static float CountFactor => 1f + (Effective - 1f) * 0.8f;
 
-    /// <summary>Zaeher. Waechst leicht ueberproportional, damit hohes Chaos beisst.</summary>
-    public static float HealthFactor => Mathf.Pow(Effective, 1.4f) * WorldHealth;
+    /// <summary>Zaeher. Waechst leicht ueberproportional, damit hohes Chaos beisst. Dazu die Schwierigkeit.</summary>
+    public static float HealthFactor => Mathf.Pow(Effective, 1.4f) * WorldHealth * Difficulty.EnemyFactor(Level);
+
+    /// <summary>Schwierigkeit des laufenden Laufs - beim Start aus dem Hub uebernommen.</summary>
+    public static Difficulty.Level Level { get; private set; } = Difficulty.Level.Normal;
+
+    /// <summary>
+    /// Faktor auf jeden Schaden, den der Spieler nimmt (<see cref="PlayerController.TakeDamage"/>).
+    /// Dort statt am Gegner, damit auch Boss-Attacken mit eigenem Schaden mitzaehlen.
+    /// </summary>
+    public static float DifficultyDamage => Difficulty.EnemyFactor(Level);
 
     /// <summary>Mehr Schaden - vorsichtiger als Leben, sonst wird es unfair statt schwer.</summary>
     public static float DamageFactor => (1f + (Effective - 1f) * 0.5f) * WorldDamage;
@@ -107,9 +116,10 @@ public static class RunDifficulty
     {
         Chaos = GameSession.Chaos;
         Curse = 0f;
+        Level = Difficulty.Current;
         InEndlessPart = false;
         (WorldHealth, WorldDamage) = WorldTier(planId);
-        Debug.Log($"[RunDifficulty] Lauf ({planId}) startet mit Chaos {Chaos:0.00} " +
+        Debug.Log($"[RunDifficulty] Lauf ({planId}) startet auf {Level} mit Chaos {Chaos:0.00} " +
                   $"(Gegner x{CountFactor:0.00}, Leben x{HealthFactor:0.00}, Belohnung x{RewardFactor:0.00}).");
     }
 

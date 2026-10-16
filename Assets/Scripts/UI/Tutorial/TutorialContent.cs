@@ -12,6 +12,7 @@ public enum TutorialTopic
     LevelSelect,
     Shop,
     Capsule,
+    Difficulty,
 }
 
 /// <summary>Eine Seite: Bildtafel links, Ueberschrift + Text (+ Hinweiskasten) rechts.</summary>
@@ -209,6 +210,44 @@ public static class TutorialContent
                         Tip = "Gold gibt es nach *jedem* Lauf - auch wenn du verlierst.",
                         TipIcon = () => GameHudSkin.Coin,
                         Draw = DrawModes,
+                    },
+                    new TutorialPageDef
+                    {
+                        Head = "Sterne",
+                        Body = "Unter jeder Station stehen *drei Sterne*. Besiegst du eine Welt in der Story, " +
+                               "gibt es Sterne nach der Schwierigkeit: *Leicht* einen, *Normal* zwei, " +
+                               "*Schwer* alle drei.",
+                        Tip = "Schaffst du eine Welt gleich beim ersten Mal auf *Schwer*, leuchten sofort " +
+                              "alle drei Sterne. Die Schwierigkeit stellst du am *Chili-Regal* in Ricos Laden ein.",
+                        TipIcon = () => GameHudSkin.Chili,
+                        Draw = DrawStars,
+                    },
+                },
+            },
+            new TutorialTopicDef
+            {
+                Topic = TutorialTopic.Difficulty, Key = "difficulty", Title = "SCHWIERIGKEIT",
+                Icon = () => GameHudSkin.Chili,
+                Pages = new[]
+                {
+                    new TutorialPageDef
+                    {
+                        Head = "Wie scharf darf's sein?",
+                        Body = "Am *Chili-Regal* wählst du die Schwierigkeit. *Leicht* ist ein wenig " +
+                               "leichter, *Normal* ist das Spiel, wie es gedacht ist, und *Schwer* ist " +
+                               "deutlich schwerer - die Gegner halten mehr aus und treffen härter.",
+                        Tip = "Du kannst im Hub *jederzeit* umschalten. Die Wahl gilt ab dem nächsten Lauf.",
+                        TipIcon = () => GameHudSkin.Bulb,
+                        Draw = DrawDifficulty,
+                    },
+                    new TutorialPageDef
+                    {
+                        Head = "Sterne sammeln",
+                        Body = "Jeder Story-Sieg bringt Sterne in der *Levelauswahl*: *Leicht* einen, " +
+                               "*Normal* zwei, *Schwer* alle drei. Einmal verdiente Sterne bleiben.",
+                        Tip = "Ein Sieg auf *Schwer* gibt gleich *alle drei* Sterne - auch beim ersten Mal.",
+                        TipIcon = () => GameHudSkin.MiniStar,
+                        Draw = DrawStars,
                     },
                 },
             },
@@ -1108,6 +1147,91 @@ public static class TutorialContent
             time.text = (secs / 60).ToString("00") + ":" + (secs % 60).ToString("00");
             skullImg.color = t > 5.2f ? Color.white : new Color(1f, 1f, 1f, 0.35f);
         });
+    }
+
+    /// <summary>Eine Station, darunter fuellen sich die Sterne: Sieg auf Leicht, Normal, Schwer.</summary>
+    private static void DrawStars(TutorialPicture p)
+    {
+        p.Loop = 7f;
+
+        const float sx = 54, sy = 12, size = 28;
+        p.Img(sx + 3, sy + 3, size - 6, size - 6, GameHudSkin.White, GameHudSkin.MintDark);
+        p.Img(sx, sy, size, size, GameHudSkin.SlotFrame(GameHudSkin.SlotLook.Gold), Color.white, true);
+        p.ShadowText(sx, sy + 7, size, "1", GameHudSkin.Cream);
+
+        // Drei Sterne doppelt gross: 14 px, 12 px Abstand (Kontur ueberlappt)
+        var stars = new Image[3];
+        for (int k = 0; k < 3; k++) stars[k] = p.Sprite(49 + k * 12, sy + size + 6, GameHudSkin.MiniStarEmpty, 2);
+
+        string[] wins =
+        {
+            T("win.easy", "SIEG AUF LEICHT"), T("win.normal", "SIEG AUF NORMAL"), T("win.hard", "SIEG AUF SCHWER"),
+        };
+        float[] at = { 1.0f, 3.0f, 5.0f };
+        TextMeshProUGUI line = p.Text(0, 72, W, wins[0], GameHudSkin.Cream);
+        TextMeshProUGUI count = p.Text(0, 88, W, "", GameHudSkin.Gold);
+
+        for (int k = 0; k < 3; k++) p.Burst(at[k] + 0.05f, 56 + k * 12, sy + size + 13, 0.5f);
+
+        p.Tick(t =>
+        {
+            int stage = t >= at[2] ? 2 : t >= at[1] ? 1 : t >= at[0] ? 0 : -1;
+            for (int k = 0; k < 3; k++)
+                stars[k].sprite = k <= stage ? GameHudSkin.MiniStar : GameHudSkin.MiniStarEmpty;
+
+            int shown = t >= at[2] - 0.8f ? 2 : t >= at[1] - 0.8f ? 1 : 0;
+            line.text = wins[shown];
+            Show(line, t >= 0.3f);
+            count.text = stage >= 0 ? string.Format(T("stars", "{0} / 3 STERNE"), stage + 1) : "";
+        });
+    }
+
+    // ==================================================================
+    //  Schwierigkeit
+    // ==================================================================
+
+    /// <summary>Chili oben, darunter LEICHT / NORMAL / SCHWER - der Zeiger klickt sich durch.</summary>
+    private static void DrawDifficulty(TutorialPicture p)
+    {
+        p.Loop = 6f;
+
+        Sprite chili = GameHudSkin.Chili;
+        Image chiliImg = p.Sprite(Mathf.Round(W / 2f - chili.rect.width * 3f / 2f), 6, chili, 3);
+
+        string[] names =
+        {
+            Loc.Get("ui.difficulty.easy", "LEICHT"), Loc.Get("ui.difficulty.normal", "NORMAL"),
+            Loc.Get("ui.difficulty.hard", "SCHWER"),
+        };
+        string[] says =
+        {
+            T("diff.easy", "EIN WENIG LEICHTER"), T("diff.normal", "WIE GEDACHT"), T("diff.hard", "DEUTLICH SCHWERER"),
+        };
+        var buttons = new FakeButton[3];
+        for (int i = 0; i < 3; i++)
+            buttons[i] = p.Button(2 + i * 45, 52, 42, 18, names[i], GameHudSkin.ButtonLook.Wood);
+
+        TextMeshProUGUI say = p.Text(0, 78, W, "", GameHudSkin.Cream);
+
+        p.Tick(t =>
+        {
+            int sel = t >= 4.2f ? 1 : t >= 2.6f ? 2 : t >= 1.0f ? 0 : 1;
+            for (int i = 0; i < 3; i++)
+                buttons[i].SetLook(i == sel ? GameHudSkin.ButtonLook.Active : GameHudSkin.ButtonLook.Wood);
+            say.text = says[sel];
+            say.color = sel == 2 ? (Color)GameHudSkin.JamLight : sel == 0 ? GameHudSkin.Mint : GameHudSkin.Cream;
+
+            // Je schaerfer, desto mehr zittert die Chili
+            float shake = sel == 2 ? Mathf.Round(Mathf.Sin(t * 40f)) : 0f;
+            TutorialPicture.Place(chiliImg, Mathf.Round(W / 2f - chili.rect.width * 3f / 2f) + shake, 6);
+        });
+
+        p.Cursor(TutorialPicture.At(0f, 122, 106),
+                 TutorialPicture.ClickAt(1.0f, 23, 61),
+                 TutorialPicture.ClickAt(2.6f, 113, 61),
+                 TutorialPicture.ClickAt(4.2f, 68, 61),
+                 TutorialPicture.At(5.4f, 68, 61),
+                 TutorialPicture.At(6.0f, 122, 106));
     }
 
     // ==================================================================

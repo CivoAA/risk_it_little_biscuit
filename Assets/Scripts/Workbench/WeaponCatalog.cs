@@ -175,6 +175,7 @@ public static class WeaponCatalog
     public static readonly WeaponDef IceDispenser  = Def("ice_dispenser", "Ice Dispenser", PoolKind.Weapon);
     public static readonly WeaponDef MintShield    = Def("mint_shield", "Mint Shield", PoolKind.Weapon);
     public static readonly WeaponDef BubbleGun     = Def("bubble_gun", "P. Bubble Gun", PoolKind.Weapon);
+    public static readonly WeaponDef CandyFrisbee  = Def("candy_frisbee", "Candy Frisbee", PoolKind.Weapon);
 
     // ==================================================================
     //  Buffs
@@ -249,8 +250,8 @@ public static class WeaponCatalog
     public static readonly EvoDef RecipeFoxFire       = Evo("evo_foxfire", "foxfire", "buff_duration");
     // Schleimstrudel: Koenigsplumps + Vortex - der Klon oeffnet einen riesigen Strudel.
     public static readonly EvoDef RecipeRoyalSplat    = Evo("evo_royal_splat", "royal_splat", "vortex");
-    // Pfefferminz-Bollwerk: Pfefferminz-Schild + HP-Regeneration - Minze ist frisch, die Blase heilt.
-    public static readonly EvoDef RecipeMintShield    = Evo("evo_mint_shield", "mint_shield", "buff_regeneration");
+    // Pfefferminz-Bollwerk: Pfefferminz-Schild + Candy-Frisbee - das Rad ist der Frisbee im Grossen.
+    public static readonly EvoDef RecipeMintShield    = Evo("evo_mint_shield", "mint_shield", "candy_frisbee");
 
     // ==================================================================
     //  Freischaltung
@@ -281,6 +282,7 @@ public static class WeaponCatalog
         "sword_slash",
         "salad_fan",
         "bubble_gun",
+        "candy_frisbee",
         // Schoko-Salve ist die Startwaffe des Kekses. Der Shurikookie war es
         // frueher und haengt darum nicht mehr am Shop: ohne Startwaffe kaeme
         // ihn keiner frei.

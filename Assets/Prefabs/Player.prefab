@@ -2138,6 +2138,7 @@ MonoBehaviour:
   - {fileID: 6318984886979886592}
   - {fileID: 6726658811918204575}
   - {fileID: 2847561938274615028}
+  - {fileID: 8273645019283746152}
   activeBuffs:
   - {fileID: 1329916437877316911}
   - {fileID: 3253892304407363630}
@@ -2226,7 +2227,7 @@ MonoBehaviour:
     RequiredWeapon2: {fileID: 5775431626742797176}
   - EvoWeapon: {fileID: 5887054342971084015}
     RequiredWeapon1: {fileID: 6726658811918204575}
-    RequiredWeapon2: {fileID: 5012595627938629680}
+    RequiredWeapon2: {fileID: 8273645019283746152}
   immunityDuration: 0.3
   immunityTimer: 0
 --- !u!95 &3309684457716786782
@@ -3500,6 +3501,7 @@ Transform:
   - {fileID: 6755999326891065878}
   - {fileID: 187215066691291842}
   - {fileID: 4491827365019283745}
+  - {fileID: 3928475610928374651}
   m_Father: {fileID: 4991830239493606234}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6430632289492379781
@@ -11384,3 +11386,56 @@ MonoBehaviour:
   posssibleEvo: 0
   hasBeenRemoved: 0
   originOffset: {x: 0, y: 0.4}
+--- !u!1 &6159283740192837465
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3928475610928374651}
+  - component: {fileID: 8273645019283746152}
+  m_Layer: 0
+  m_Name: Candy Frisbee
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3928475610928374651
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6159283740192837465}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3466192261950400575}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8273645019283746152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6159283740192837465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb494c50d2c4f338bccafacdc249667, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CandyFrisbee
+  weaponID: candy_frisbee
+  weaponLevel: -1
+  maxweaponLevel: 5
+  stats: []
+  weaponImage: {fileID: 7310442915526031841, guid: a00116b13ec346ba998db55e52177f02, type: 3}
+  weaponIcon: {fileID: 7310442915526031841, guid: a00116b13ec346ba998db55e52177f02, type: 3}
+  weaponIconEvo: {fileID: 0}
+  posssibleEvo: 0
+  hasBeenRemoved: 0

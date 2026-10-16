@@ -11,8 +11,9 @@ using UnityEngine.UI;
 ///   Senke       Beschreibung der Wahl
 ///   Fussleiste  SCHLIESSEN
 ///
-/// Die Wahl landet in <see cref="Difficulty.Current"/> - hat aber noch keine
-/// Wirkung im Spiel. Pfeiltasten/A-D wechseln, Esc/E/Enter schliessen.
+/// Die Wahl landet in <see cref="Difficulty.Current"/> und gilt ab dem naechsten
+/// Lauf. Pfeiltasten/A-D wechseln, Esc/E/Enter schliessen. Beim ersten Oeffnen
+/// kommt das Tutorial (<see cref="TutorialTopic.Difficulty"/>).
 /// </summary>
 public class DifficultyPanel : MonoBehaviour
 {
@@ -36,9 +37,9 @@ public class DifficultyPanel : MonoBehaviour
     private static readonly string[] DescKeys = { "ui.difficulty.desc.easy", "ui.difficulty.desc.normal", "ui.difficulty.desc.hard" };
     private static readonly string[] DescFallbacks =
     {
-        "Mild wie eine grüne Chili. Für einen entspannten Lauf.",
+        "Ein wenig leichter: Gegner halten weniger aus und treffen schwächer.",
         "Das Spiel, wie es gedacht ist.",
-        "Feuerscharf - nur für ganz harte Kekse.",
+        "Deutlich schwerer: Gegner halten mehr aus und treffen härter.",
     };
 
     // ==================================================================
@@ -77,6 +78,7 @@ public class DifficultyPanel : MonoBehaviour
         pixelFont = PixelUI.FindPixelFont();
         Build();
         BlockHub(true);
+        TutorialPanel.ShowOnce(TutorialTopic.Difficulty);
     }
 
     private void OnEnable() => Loc.LanguageChanged += Build;
@@ -117,6 +119,7 @@ public class DifficultyPanel : MonoBehaviour
 
         // Der Tastendruck, der das Fenster geoeffnet hat, darf es nicht gleich schliessen.
         if (Time.frameCount == openedFrame) return;
+        if (TutorialPanel.Blocking) return;
 
         if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.E) ||
             Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
@@ -171,7 +174,7 @@ public class DifficultyPanel : MonoBehaviour
         description.textWrappingMode = TextWrappingModes.Normal;
 
         OptionsKit.Label("Hint", page, CardX, HintY, CardW, 14,
-                         Loc.Get("ui.difficulty.wip", "Noch ohne Wirkung - kommt bald."), textFont,
+                         Loc.Get("ui.difficulty.stars", "Story-Siege bringen Sterne - je schärfer, desto mehr."), textFont,
                          OptionsKit.SizeText, GameHudSkin.Stone, TextAlignmentOptions.Center);
 
         SkinButton.Create(page, CardX + (CardW - FootW) / 2, FootY, FootW, FootH,

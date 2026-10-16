@@ -748,21 +748,16 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        // Erst die Ruestung, dann der Aufschlag (Glaskanone). Beides sind Faktoren,
-        // die Reihenfolge aendert das Ergebnis also nicht.
-        float finalDamage = damage * (1f - ArmorReduction(playerArmor)) * damageTakenMultiplier;
+        // Erst die Ruestung, dann der Aufschlag (Glaskanone) und die Schwierigkeit.
+        // Alles Faktoren, die Reihenfolge aendert das Ergebnis also nicht.
+        float finalDamage = damage * (1f - ArmorReduction(playerArmor)) * damageTakenMultiplier
+                          * RunDifficulty.DifficultyDamage;
         if (finalDamage <= 0f) return;
 
         LastStruckTime = Time.time;
 
-        // Pfefferminz-Schild: die Minzblase faengt den Treffer ab und platzt.
-        if (MintShield.TryBlockAny())
-        {
-            isImmune = true;
-            // etwas laenger als sonst - sonst nimmt der naechste Kontakt gleich die zweite Schicht
-            immunityTimer = Mathf.Max(immunityDuration, MintShield.BlockImmunity);
-            return;
-        }
+        // Pfefferminz-Schild: der Treffer laesst die Minzblase platzen, der Schaden geht trotzdem durch.
+        MintShield.TriggerAny();
 
         // Schalenklinge: eine Zwiebelschale faengt den ganzen Treffer ab.
         OnionShell onionShell = GetComponent<OnionShell>();

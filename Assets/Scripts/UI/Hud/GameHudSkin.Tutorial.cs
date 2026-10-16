@@ -113,8 +113,42 @@ public static partial class GameHudSkin
         "..S..",
     }, TutorialColors));
 
+    /// <summary>Chili - Thema Schwierigkeit (wie das Chili-Regal in Ricos Laden).</summary>
+    public static Sprite Chili => Get("chili", () => Outlined(new[]
+    {
+        "....mm",
+        "...mn.",
+        "..rrr.",
+        ".rhrr.",
+        ".rhrd.",
+        "rrrd..",
+        "rrd...",
+        "rd....",
+    }, TutorialColors));
+
+    /// <summary>Kleiner Stern der Levelauswahl: geschafft.</summary>
+    public static Sprite MiniStar => Get("ministar", () => Outlined(new[]
+    {
+        "..l..",
+        ".lyy.",
+        "yyyyo",
+        ".yyo.",
+        ".y.o.",
+    }, TutorialColors));
+
+    /// <summary>Kleiner Stern der Levelauswahl: noch offen.</summary>
+    public static Sprite MiniStarEmpty => Get("ministarempty", () => Outlined(new[]
+    {
+        "..s..",
+        ".sSS.",
+        "SSSSS",
+        ".SSS.",
+        ".S.S.",
+    }, TutorialColors));
+
     private static Dictionary<char, Color32> TutorialColors => tutorialColors ??= new Dictionary<char, Color32>
     {
+        { 'm', Mint }, { 'n', MintDark },
         { 'w', Cream }, { 'g', ParchDark }, { 'k', Ink },
         { 'r', Jam }, { 'h', JamLight }, { 'd', JamDark },
         { 'y', Gold }, { 'l', GoldLight }, { 'o', GoldDark },

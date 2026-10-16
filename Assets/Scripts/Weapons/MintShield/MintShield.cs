@@ -3,9 +3,11 @@ using UnityEngine;
 
 /// <summary>
 /// Pfefferminz-Schild - eine Minzblase mit rot-weissen Pfefferminzstreifen
-/// legt sich um die Figur und faengt den naechsten Treffer komplett ab
-/// (<see cref="PlayerController.TakeDamage"/> fragt <see cref="TryBlockAny"/>).
-/// Dabei platzt sie in einer eisigen Druckwelle: Schaden, kraeftiger Schubs,
+/// legt sich um die Figur. Solange sie steht, regeneriert der Spieler langsam
+/// Leben (<see cref="RegenPerLevel"/>). Den naechsten Treffer haelt sie nicht
+/// auf - er ist nur der Ausloeser (<see cref="PlayerController.TakeDamage"/>
+/// ruft <see cref="TriggerAny"/>): die Blase platzt in einer eisigen
+/// Druckwelle: Schaden, kraeftiger Schubs,
 /// Gegner frieren fast fest (Slow). Nach <c>cooldown</c> Sekunden waechst eine
 /// neue Blase.
 ///
@@ -26,9 +28,6 @@ public class MintShield : Weapon
     public const float WaveSlow = 0.45f;
     public const float WaveKnockback = 3f;
 
-    /// <summary>So lange ist der Spieler nach einem abgefangenen Treffer unverwundbar.</summary>
-    public const float BlockImmunity = 0.8f;
-
     /// <summary>Ueberdruck: so viele Gegner so nah an der Blase lassen sie platzen.</summary>
     public const int OverpressureCount = 5;
     public const float OverpressureRadius = 1.35f;
@@ -45,17 +44,21 @@ public class MintShield : Weapon
     private static readonly WeaponStats[] LevelStats =
     {
         //    cooldown damage Radius Bonbons Bremse
-        Level(9f,   1f,  2.2f, 0, 1.5f, "Eine Minzblase fängt einen Treffer ab und platzt in einer eisigen Welle"),
-        Level(8f,   2f,  2.2f, 0, 1.5f, "Schaden +1, wächst schneller nach"),
-        Level(8f,   4f,  2.4f, 0, 1.6f, "Überdruck: platzt von selbst, wenn sich Gegner drängen, Schaden +2"),
-        Level(7.5f, 6f,  2.4f, 0, 1.6f, "Frische Brise: kühle Stöße, solange die Blase steht, Schaden +2"),
-        Level(7f,   8f,  2.7f, 0, 1.8f, "Zweite Schicht, größere Welle, Schaden +2"),
-        Level(6f,   10f, 2.8f, 8, 1.8f, "Minzsturm: die Welle schleudert Pfefferminzbonbons, Schaden +2"),
+        Level(9f,   1f,  2.2f, 0, 1.5f, "Eine Minzblase heilt dich langsam und platzt bei einem Treffer in einer eisigen Welle"),
+        Level(8f,   2f,  2.2f, 0, 1.5f, "Schaden +1, mehr Heilung, wächst schneller nach"),
+        Level(8f,   4f,  2.4f, 0, 1.6f, "Überdruck: platzt von selbst, wenn sich Gegner drängen, Schaden +2, mehr Heilung"),
+        Level(7.5f, 6f,  2.4f, 0, 1.6f, "Frische Brise: kühle Stöße, solange die Blase steht, Schaden +2, mehr Heilung"),
+        Level(7f,   8f,  2.7f, 0, 1.8f, "Zweite Schicht, größere Welle, Schaden +2, mehr Heilung"),
+        Level(6f,   10f, 2.8f, 8, 1.8f, "Minzsturm: die Welle schleudert Pfefferminzbonbons, Schaden +2, mehr Heilung"),
     };
 
     protected override int ExtraShotsPerShot => 0;
 
     private static readonly int[] ChargesPerLevel = { 1, 1, 1, 1, 2, 2 };
+
+    /// <summary>Leben pro Sekunde, solange mindestens eine Blase steht.</summary>
+    private static readonly float[] RegenPerLevel = { 0.5f, 0.7f, 0.9f, 1.1f, 1.3f, 1.5f };
+    private const float RegenTick = 1f;
     private const int OverpressureFrom = 2;
     private const int BreezeFrom = 3;
 
@@ -81,6 +84,7 @@ public class MintShield : Weapon
 
     protected float recharge;
     private float breezeTimer = BreezeInterval;
+    private float regenTimer = RegenTick;
     private float pressureTimer;
     private float lastPressurePop = -10f;
     private bool wasActive;
@@ -103,8 +107,11 @@ public class MintShield : Weapon
     protected int MaxCharges => ChargesPerLevel[Lvl];
     public Vector2 BubbleCenter => (Vector2)transform.position + Center;
 
-    /// <summary>Von <see cref="PlayerController.TakeDamage"/>: faengt eine Blase den Treffer?</summary>
-    public static bool TryBlockAny()
+    /// <summary>
+    /// Von <see cref="PlayerController.TakeDamage"/>: der Spieler wurde getroffen,
+    /// die erste stehende Blase platzt. Den Schaden haelt sie nicht auf.
+    /// </summary>
+    public static void TriggerAny()
     {
         for (int i = 0; i < shields.Count; i++)
         {
@@ -113,11 +120,13 @@ public class MintShield : Weapon
             {
                 WeaponSounds.Play(WeaponSounds.MintBlock);
                 s.Pop();
-                return true;
+                return;
             }
         }
-        return false;
     }
+
+    /// <summary>Leben pro Sekunde, solange eine Blase steht. Die Evo heilt stattdessen, wenn das Rad zurueckkommt.</summary>
+    protected virtual float RegenPerSecond => RegenPerLevel[Lvl];
 
     protected virtual void Update()
     {
@@ -155,6 +164,7 @@ public class MintShield : Weapon
 
         if (Charges > 0 && CanAttack && !HideBubble)
         {
+            UpdateRegen();
             if (Lvl >= OverpressureFrom) CheckOverpressure();
             if (Lvl >= BreezeFrom) UpdateBreeze();
         }
@@ -187,6 +197,15 @@ public class MintShield : Weapon
         }
     }
 
+    private void UpdateRegen()
+    {
+        if (RegenPerSecond <= 0f) return;
+        regenTimer -= Time.deltaTime;
+        if (regenTimer > 0f) return;
+        regenTimer = RegenTick;
+        PlayerController.Instance.Heal(RegenPerSecond * RegenTick);
+    }
+
     private void UpdateBreeze()
     {
         breezeTimer -= Time.deltaTime;
@@ -207,9 +226,6 @@ public class MintShield : Weapon
             if (near[i] != null) near[i].TakeDamage(CurrentStats.damage * BreezeFactor, 0.7f, 0.8f);
         near.Clear();
     }
-
-    /// <summary>Nach jeder geplatzten Schicht (die Evo heilt hier).</summary>
-    protected virtual void OnPopped(Vector2 center) { }
 
     /// <summary>Eine Schicht platzt: Welle, ggf. Bonbons.</summary>
     protected void Pop()
@@ -247,7 +263,6 @@ public class MintShield : Weapon
                 MintCandy.Launch(c + d * 0.6f, d, CurrentStats.damage * CandyFactor, radius * 2.2f);
             }
         }
-        OnPopped(c);
     }
 
     // ------------------------------------------------------------------

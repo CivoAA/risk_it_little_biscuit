@@ -418,6 +418,10 @@ public static class Ach
         "Max_Level_BubbleGun", "Max Level: P. Bubble Gun", "Reach the maximum level of the P. Bubble Gun weapon.",
         AchievementCategory.Weapons);
 
+    public static readonly AchievementDef MaxCandyFrisbee = Def(
+        "Max_Level_CandyFrisbee", "Max Level: Candy Frisbee", "Reach the maximum level of the Candy Frisbee weapon.",
+        AchievementCategory.Weapons);
+
     // ==================================================================
     //  Buffs auf Maximalstufe
     // ==================================================================
@@ -590,7 +594,7 @@ public static class Ach
         { "foxfire",        MaxFoxfire },        { "royal_splat",   MaxRoyalSplat },
         { "mochi_melody",   MaxMochiMelody },
         { "ice_dispenser",  MaxIceDispenser },   { "mint_shield",   MaxMintShield },
-        { "bubble_gun",     MaxBubbleGun },
+        { "bubble_gun",     MaxBubbleGun },      { "candy_frisbee", MaxCandyFrisbee },
 
         { "buff_extra_shot",    MaxExtraShot },     { "buff_cooldown",     MaxCooldown },
         { "buff_duration",      MaxDuration },      { "buff_glass_cannon", MaxGlassCannon },
