@@ -584,17 +584,17 @@ public class Enemy : MonoBehaviour
     /// ueber das Festkleben hinaus - jeder Gegner mit eigenem Nachlauf, damit
     /// nach dem Aufloesen nicht alle auf einmal vor dem Spieler auftauchen.
     /// </summary>
-    public bool RecycleHeld => Time.time < recycleHoldUntil;
+    public bool RecycleHeld => Time.time < recycleHoldUntil || IsBubbled;
 
     /// <summary>
     /// Klebt den Gegner fest. Bosse und Minibosse steuern sich selbst und
-    /// bleiben frei.
+    /// bleiben frei. Wer in einer Blase steckt, auch - die traegt ihn gerade.
     /// </summary>
     /// <param name="seconds">So lange steht er still.</param>
     /// <param name="recycleDelay">So lange nach dem Aufloesen wird er noch nicht umgesetzt.</param>
     public void Freeze(float seconds, float recycleDelay)
     {
-        if (IsBoss) return;
+        if (IsBoss || IsBubbled) return;
 
         if (!IsFrozen)
         {
@@ -672,6 +672,100 @@ public class Enemy : MonoBehaviour
         Vector2 toPlayer = ChaseTarget(player) - (Vector2)transform.position;
         if (toPlayer.sqrMagnitude < 0.0001f) return Vector3.zero;
         return toPlayer.normalized;
+    }
+
+    // -------------------------------------------------------------- Blase
+
+    private bool bubbled;
+    private RigidbodyType2D bubbledBodyType;
+    private bool bubbledFullContacts;
+    private LayerMask bubbledExclude;
+    private bool bubbledSelfSteered;
+    private float bubbledMinHealth;
+    private System.Func<bool> bubbledContact;
+
+    /// <summary>Steckt gerade in einer Blase der <see cref="BubbleGun"/>.</summary>
+    public bool IsBubbled => bubbled;
+
+    /// <summary>
+    /// Darf die Bubble Gun ihn einfangen? Nur gewoehnliche Gegner, die sich
+    /// nicht selbst steuern (Boss-Helfer wie Squiddy-Babys), nicht
+    /// festgeklebt sind und nicht schon in einer Blase stecken.
+    /// </summary>
+    public bool CanBeBubbled =>
+        IsNormal && !bubbled && !SelfSteered && !IsFrozen && !HoldDeath && !Untouchable
+        && rb != null && health > 0f;
+
+    /// <summary>
+    /// Faengt den Gegner ein: er laeuft nicht mehr selbst, laesst sich nicht
+    /// mehr schieben, macht keinen Beruehrungsschaden und kann nicht sterben
+    /// (Schaden nimmt er weiter, das Leben bleibt aber bei mindestens 1).
+    /// Bewegt wird er nur noch ueber <see cref="MoveInBubble"/>.
+    /// </summary>
+    public bool EnterBubble()
+    {
+        if (!CanBeBubbled) return false;
+
+        bubbled = true;
+
+        bubbledSelfSteered = SelfSteered;
+        SelfSteered = true;
+
+        bubbledMinHealth = MinHealthFraction;
+        // Winziger Anteil = der Boden liegt bei 1 Leben (siehe LoseHealth).
+        MinHealthFraction = 0.000001f;
+
+        bubbledContact = ContactAllowed;
+        ContactAllowed = () => false;
+
+        bubbledBodyType = rb.bodyType;
+        rb.linearVelocity = Vector2.zero;
+        rb.bodyType = RigidbodyType2D.Kinematic;
+        // Ohne volle Kontakte saehen Trigger ohne dynamischen Koerper (Pfuetzen,
+        // Bomben-Radien ...) den gefangenen Gegner nicht mehr - er soll aber
+        // weiter Schaden nehmen.
+        bubbledFullContacts = rb.useFullKinematicContacts;
+        rb.useFullKinematicContacts = true;
+        // Kein Kontakt mehr zu anderen Gegnern - sonst schiebt die Blase sie
+        // beim Tragen vor sich her bzw. durch die Gruppe.
+        bubbledExclude = rb.excludeLayers;
+        rb.excludeLayers = bubbledExclude | (1 << gameObject.layer);
+
+        pushCounter = 0f;
+        externalVelocity = Vector2.zero;
+        externalVelocityTimer = 0f;
+        return true;
+    }
+
+    /// <summary>Traegt den gefangenen Gegner (Pivot) an diese Stelle. Jeden Physikschritt aufrufen.</summary>
+    public void MoveInBubble(Vector2 position)
+    {
+        if (!bubbled || rb == null) return;
+        rb.linearVelocity = Vector2.zero;
+        rb.MovePosition(position);
+    }
+
+    /// <summary>Laesst ihn wieder frei - danach kann er auch wieder sterben.</summary>
+    public void LeaveBubble()
+    {
+        if (!bubbled) return;
+        bubbled = false;
+
+        SelfSteered = bubbledSelfSteered;
+        MinHealthFraction = bubbledMinHealth;
+        ContactAllowed = bubbledContact;
+        bubbledContact = null;
+
+        if (rb != null)
+        {
+            rb.useFullKinematicContacts = bubbledFullContacts;
+            rb.excludeLayers = bubbledExclude;
+            rb.bodyType = bubbledBodyType;
+            rb.linearVelocity = Vector2.zero;
+        }
+
+        // Der Weg zum Spieler wird neu bewertet - er wurde ja versetzt.
+        ResetBlocked();
     }
 
     // ------------------------------------------------------------ Gelockt
@@ -809,7 +903,7 @@ public class Enemy : MonoBehaviour
         {
             Collider2D hit = corridorHits[i];
             if (hit == ownCollider) continue;
-            if (byCollider.TryGetValue(hit, out Enemy other) && other != null) enemies++;
+            if (byCollider.TryGetValue(hit, out Enemy other) && other != null && !other.bubbled) enemies++;
         }
         return enemies;
     }
@@ -968,6 +1062,8 @@ public class Enemy : MonoBehaviour
             float otherRadius;
             if (byCollider.TryGetValue(hit, out Enemy other) && other != null)
             {
+                // Gefangene schweben durch - um sie wird nicht herumgelaufen.
+                if (other.bubbled) continue;
                 otherCenter = other.BodyCenter;
                 otherRadius = other.BodyRadius;
             }

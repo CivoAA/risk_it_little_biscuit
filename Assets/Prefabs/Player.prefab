@@ -2137,6 +2137,7 @@ MonoBehaviour:
   - {fileID: 7868405423358879992}
   - {fileID: 6318984886979886592}
   - {fileID: 6726658811918204575}
+  - {fileID: 2847561938274615028}
   activeBuffs:
   - {fileID: 1329916437877316911}
   - {fileID: 3253892304407363630}
@@ -3498,6 +3499,7 @@ Transform:
   - {fileID: 2408534575433799892}
   - {fileID: 6755999326891065878}
   - {fileID: 187215066691291842}
+  - {fileID: 4491827365019283745}
   m_Father: {fileID: 4991830239493606234}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6430632289492379781
@@ -11328,3 +11330,57 @@ MonoBehaviour:
   weaponIconEvo: {fileID: 0}
   posssibleEvo: 0
   hasBeenRemoved: 0
+--- !u!1 &1734528809126543210
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4491827365019283745}
+  - component: {fileID: 2847561938274615028}
+  m_Layer: 0
+  m_Name: P. Bubble Gun
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4491827365019283745
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1734528809126543210}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3466192261950400575}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2847561938274615028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1734528809126543210}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ea12d3a22b5f0b0430ef1a516732bd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BubbleGun
+  weaponID: bubble_gun
+  weaponLevel: -1
+  maxweaponLevel: 5
+  stats: []
+  weaponImage: {fileID: 7310442915526031841, guid: fb898fdb622d398e9439f3463db68cf9, type: 3}
+  weaponIcon: {fileID: 7310442915526031841, guid: fb898fdb622d398e9439f3463db68cf9, type: 3}
+  weaponIconEvo: {fileID: 0}
+  posssibleEvo: 0
+  hasBeenRemoved: 0
+  originOffset: {x: 0, y: 0.4}

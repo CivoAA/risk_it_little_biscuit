@@ -174,6 +174,7 @@ public static class WeaponCatalog
     public static readonly WeaponDef CrumbMayhem   = Def("crumb_mayhem", "Crumb Mayhem", PoolKind.Weapon);
     public static readonly WeaponDef IceDispenser  = Def("ice_dispenser", "Ice Dispenser", PoolKind.Weapon);
     public static readonly WeaponDef MintShield    = Def("mint_shield", "Mint Shield", PoolKind.Weapon);
+    public static readonly WeaponDef BubbleGun     = Def("bubble_gun", "P. Bubble Gun", PoolKind.Weapon);
 
     // ==================================================================
     //  Buffs
@@ -279,6 +280,7 @@ public static class WeaponCatalog
         "turret",
         "sword_slash",
         "salad_fan",
+        "bubble_gun",
         // Schoko-Salve ist die Startwaffe des Kekses. Der Shurikookie war es
         // frueher und haengt darum nicht mehr am Shop: ohne Startwaffe kaeme
         // ihn keiner frei.
