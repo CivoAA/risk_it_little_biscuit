@@ -172,6 +172,8 @@ public static class WeaponCatalog
     public static readonly WeaponDef RoyalSplat    = Def("royal_splat", "Royal Splat", PoolKind.Weapon);
     public static readonly WeaponDef MochiMelody   = Def("mochi_melody", "Mochi Melody", PoolKind.Weapon);
     public static readonly WeaponDef CrumbMayhem   = Def("crumb_mayhem", "Crumb Mayhem", PoolKind.Weapon);
+    public static readonly WeaponDef IceDispenser  = Def("ice_dispenser", "Ice Dispenser", PoolKind.Weapon);
+    public static readonly WeaponDef MintShield    = Def("mint_shield", "Mint Shield", PoolKind.Weapon);
 
     // ==================================================================
     //  Buffs
@@ -220,6 +222,9 @@ public static class WeaponCatalog
     // Schleimstrudel (Schleimkoenig) - Rezept unten.
     public static readonly WeaponDef EvoRoyalSplat     = Def("evo_royal_splat", "Slime Maelstrom", PoolKind.Evo);
 
+    // Pfefferminz-Bollwerk (Pfefferminz-Schild) - Rezept unten.
+    public static readonly WeaponDef EvoMintShield     = Def("evo_mint_shield", "Mint Shield Evo", PoolKind.Evo);
+
     // ==================================================================
     //  Rezepte - Reihenfolge wie im Player-Prefab
     // ==================================================================
@@ -243,6 +248,8 @@ public static class WeaponCatalog
     public static readonly EvoDef RecipeFoxFire       = Evo("evo_foxfire", "foxfire", "buff_duration");
     // Schleimstrudel: Koenigsplumps + Vortex - der Klon oeffnet einen riesigen Strudel.
     public static readonly EvoDef RecipeRoyalSplat    = Evo("evo_royal_splat", "royal_splat", "vortex");
+    // Pfefferminz-Bollwerk: Pfefferminz-Schild + HP-Regeneration - Minze ist frisch, die Blase heilt.
+    public static readonly EvoDef RecipeMintShield    = Evo("evo_mint_shield", "mint_shield", "buff_regeneration");
 
     // ==================================================================
     //  Freischaltung
@@ -285,6 +292,10 @@ public static class WeaponCatalog
         "royal_splat",
         // Tofus Startwaffe (kopiert die Startwaffen der anderen).
         "crumb_mayhem",
+        // Eiswuerfel-Spender, Pfefferminz-Schild (16.10.2026): fuer alle
+        // sofort verfuegbar, ohne Shop.
+        "ice_dispenser",
+        "mint_shield",
 
         // Buffs
         "buff_max_hp",

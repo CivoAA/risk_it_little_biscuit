@@ -22,6 +22,9 @@ using UnityEngine;
 ///   Strg + F5   Kyubi (Fuchsfeuer-Evo) statt des Fuchsfeuers, gleich mit
 ///               neun Schwaenzen - erwacht, sobald Gegner in Reichweite sind
 ///   F4          Koenigsplumps geben bzw. eine Stufe hoeher
+///   Strg + F7   Eiswuerfel-Spender geben bzw. eine Stufe hoeher
+///   Strg + F8   Pfefferminz-Schild geben bzw. eine Stufe hoeher
+///   Strg + Alt + F8  Pfefferminz-Bollwerk (Schild-Evo) statt des Schilds
 ///   Shift + F4-F8  nur noch diese Waffe: alle anderen Waffen und Evos weg,
 ///               sie selbst auf Stufe 1 - zum Vergleichen als Startwaffe.
 ///               F4-F8 gehen ueberall, wo ein Spieler steht (auch Test-Szene).
@@ -60,8 +63,23 @@ public class RunDebugKeys : MonoBehaviour
         go.AddComponent<RunDebugKeys>();
     }
 
+    private static bool Ctrl => Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl);
+
     private void Update()
     {
+        if (Ctrl && Input.GetKeyDown(ChocoChipsKey))
+        {
+            GiveWeapon<IceDispenser>("Eiswuerfel-Spender");
+            return;
+        }
+
+        if (Ctrl && Input.GetKeyDown(MilkDunkKey))
+        {
+            if (Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt)) GiveMintBulwark();
+            else GiveWeapon(FindBaseMintShield(), "Pfefferminz-Schild");
+            return;
+        }
+
         if (Input.GetKeyDown(ChocoChipsKey))
         {
             GiveWeapon<ChocoChips>("Schoko-Salve");
@@ -159,12 +177,47 @@ public class RunDebugKeys : MonoBehaviour
     /// ablegen und mit dieser allein auf Stufe 1 weiterspielen. Laeuft ueber
     /// TestSceneLoadout, damit Evo-Partner wie im Spiel markiert werden.
     /// </summary>
-    private void GiveWeapon<T>(string label) where T : Weapon
+    private static MintShield FindBaseMintShield()
+    {
+        PlayerController player = PlayerController.Instance;
+        if (player == null) return null;
+        foreach (MintShield m in player.GetComponentsInChildren<MintShield>(true))
+            if (!(m is MintShieldEvo)) return m;
+        return null;
+    }
+
+    /// <summary>Pfefferminz-Bollwerk zum Anschauen: Schild weg, Evo dran.</summary>
+    private void GiveMintBulwark()
     {
         PlayerController player = PlayerController.Instance;
         if (player == null) return;
 
-        T weapon = player.GetComponentInChildren<T>(true);
+        MintShieldEvo evo = player.GetComponentInChildren<MintShieldEvo>(true);
+        if (evo == null)
+        {
+            Debug.LogWarning("[RunDebugKeys] Pfefferminz-Bollwerk haengt nicht am Player-Prefab.");
+            return;
+        }
+        MintShield shield = FindBaseMintShield();
+        if (shield != null) TestSceneLoadout.Remove(shield);
+        if (evo.weaponLevel < 0) TestSceneLoadout.StepUp(player, evo);
+
+        if (DamageNumberController.Instance != null)
+            DamageNumberController.Instance.CreateText("Pfefferminz-Bollwerk", player.transform.position + Vector3.up * 1.2f);
+    }
+
+    private void GiveWeapon<T>(string label) where T : Weapon
+    {
+        PlayerController player = PlayerController.Instance;
+        if (player == null) return;
+        GiveWeapon(player.GetComponentInChildren<T>(true), label);
+    }
+
+    private void GiveWeapon(Weapon weapon, string label)
+    {
+        PlayerController player = PlayerController.Instance;
+        if (player == null) return;
+
         if (weapon == null)
         {
             Debug.LogWarning("[RunDebugKeys] " + label + " haengt nicht am Player-Prefab.");

@@ -242,6 +242,11 @@ public static class Ach
         "Crumb_Mayhem_Evo", "Crumb Mayhem Evo", "Obtained the Crumb Mayhem Evo for the first time!",
         AchievementCategory.Evolutions);
 
+    // Pfefferminz-Bollwerk - keine Startwaffen-Evo, ausgeloest in MintShieldEvo.
+    public static readonly AchievementDef MintShieldEvo = Def(
+        "Mint_Shield_Evo", "Peppermint Bulwark", "Obtained the Peppermint Bulwark for the first time!",
+        AchievementCategory.Evolutions);
+
     // ==================================================================
     //  Charaktere
     // ==================================================================
@@ -399,6 +404,14 @@ public static class Ach
 
     public static readonly AchievementDef MaxMochiMelody = Def(
         "Max_Level_MochiMelody", "Max Level: Mochi Melody", "Reach the maximum level of the Mochi Melody weapon.",
+        AchievementCategory.Weapons);
+
+    public static readonly AchievementDef MaxIceDispenser = Def(
+        "Max_Level_IceDispenser", "Max Level: Ice Cube Dispenser", "Reach the maximum level of the Ice Cube Dispenser weapon.",
+        AchievementCategory.Weapons);
+
+    public static readonly AchievementDef MaxMintShield = Def(
+        "Max_Level_MintShield", "Max Level: Peppermint Shield", "Reach the maximum level of the Peppermint Shield weapon.",
         AchievementCategory.Weapons);
 
     // ==================================================================
@@ -572,6 +585,7 @@ public static class Ach
         { "choco_chips",    MaxChocoChips },     { "milk_dunk",     MaxMilkDunk },
         { "foxfire",        MaxFoxfire },        { "royal_splat",   MaxRoyalSplat },
         { "mochi_melody",   MaxMochiMelody },
+        { "ice_dispenser",  MaxIceDispenser },   { "mint_shield",   MaxMintShield },
 
         { "buff_extra_shot",    MaxExtraShot },     { "buff_cooldown",     MaxCooldown },
         { "buff_duration",      MaxDuration },      { "buff_glass_cannon", MaxGlassCannon },

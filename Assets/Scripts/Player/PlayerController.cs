@@ -755,6 +755,15 @@ public class PlayerController : MonoBehaviour
 
         LastStruckTime = Time.time;
 
+        // Pfefferminz-Schild: die Minzblase faengt den Treffer ab und platzt.
+        if (MintShield.TryBlockAny())
+        {
+            isImmune = true;
+            // etwas laenger als sonst - sonst nimmt der naechste Kontakt gleich die zweite Schicht
+            immunityTimer = Mathf.Max(immunityDuration, MintShield.BlockImmunity);
+            return;
+        }
+
         // Schalenklinge: eine Zwiebelschale faengt den ganzen Treffer ab.
         OnionShell onionShell = GetComponent<OnionShell>();
         if (onionShell != null && onionShell.TryBlock())

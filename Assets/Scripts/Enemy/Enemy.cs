@@ -624,6 +624,12 @@ public class Enemy : MonoBehaviour
         recycleHoldUntil = Mathf.Max(recycleHoldUntil, frozenUntil + recycleDelay);
     }
 
+    /// <summary>Festkleben sofort beenden (Eiswuerfel-Spender: zerschmettert).</summary>
+    public void EndFreeze()
+    {
+        if (IsFrozen) Unfreeze();
+    }
+
     private void Unfreeze()
     {
         frozenUntil = 0f;

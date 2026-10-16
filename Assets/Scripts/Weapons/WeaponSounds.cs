@@ -101,6 +101,23 @@ public static class WeaponSounds
     public static readonly Sfx KyubiSlam      = new Sfx("kyubi_slam",      0.34f, 1.0f,   0.03f);
     public static readonly Sfx KyubiHowl      = new Sfx("kyubi_howl",      0.24f, 1.0f,   0.02f);
 
+    // Eiswuerfel-Spender
+    public static readonly Sfx IceLaunch      = new Sfx("ice_launch",      0.12f, 0.08f,  0.06f);
+    public static readonly Sfx IceHit         = new Sfx("ice_hit",         0.09f, 0.05f,  0.08f);
+    public static readonly Sfx IceFreeze      = new Sfx("ice_freeze",      0.14f, 0.12f,  0.06f);
+    public static readonly Sfx IceShatter     = new Sfx("ice_shatter",     0.18f, 0.08f,  0.07f);
+
+    // Pfefferminz-Schild
+    public static readonly Sfx MintForm       = new Sfx("mint_form",       0.14f, 0.3f,   0.04f);
+    public static readonly Sfx MintBurst      = new Sfx("mint_burst",      0.26f, 0.2f,   0.04f);
+    public static readonly Sfx MintPulse      = new Sfx("mint_pulse",      0.08f, 0.3f,   0.06f);
+    public static readonly Sfx MintBlock      = new Sfx("mint_block",      0.20f, 0.1f,   0.03f);
+
+    // Pfefferminz-Bollwerk (Evo)
+    public static readonly Sfx MintWheelLaunch = new Sfx("mint_wheel_launch", 0.18f, 0.5f,  0.03f);
+    public static readonly Sfx MintWheelBounce = new Sfx("mint_wheel_bounce", 0.20f, 0.08f, 0.05f);
+    public static readonly Sfx MintNova        = new Sfx("mint_nova",         0.30f, 0.8f,  0.03f);
+
     // ------------------------------------------------------------ Abspielen
 
     private const string Folder = "Sounds/Weapons/";
