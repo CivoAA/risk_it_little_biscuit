@@ -59,6 +59,7 @@ public class GameManager : MonoBehaviour
     {
         gameActiv = true;
         RunMetrics.RunStarted();
+        SecretAchievements.RunStarted();
     }
 
     void Update()
@@ -74,6 +75,8 @@ public class GameManager : MonoBehaviour
             {
                 lastTimerSecond = currentSecond;
                 UIController.Instance.UpdateTimer(gameTime);
+                CheckEndlessGoal();
+                SecretAchievements.Tick(gameTime, kills);
             }
 
             // Das Pausenmenue hoert selbst auf Escape - sonst wuerde es sich
@@ -84,6 +87,18 @@ public class GameManager : MonoBehaviour
             }
         }
 
+    }
+
+    /// <summary>
+    /// Endless-Erfolg der Welt: <see cref="Ach.EndlessMinutes"/> Minuten im
+    /// Endless-Modus durchgehalten. Nur auf echten Karten, nicht in der Test-Szene.
+    /// </summary>
+    private void CheckEndlessGoal()
+    {
+        if (!GameSession.IsEndless || gameTime < Ach.EndlessMinutes * 60f) return;
+        if (MapDefinition.Active == null || SpawnDirector.Active == null) return;
+        AchievementDef def = Ach.EndlessFor(SpawnDirector.Active.PlanId);
+        if (def != null && !def.IsUnlocked) Achievements.Unlock(def);
     }
 
     public void GameOver() => EndRun(false);
@@ -147,6 +162,7 @@ public class GameManager : MonoBehaviour
             Achievements.Unlock(Ach.FirstWin);
             // Sieg mit diesem Charakter - zaehlt auf den Tofu (Ach.AllCharacters).
             Achievements.Unlock(Ach.CharacterWin(Shop.RunSkinIndex));
+            SecretAchievements.LevelBeaten();
             SessionProgressTracker.Instance.EvaluateAfterGame();
             StartCoroutine(ShowWinScreen());
         }

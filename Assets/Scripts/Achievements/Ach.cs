@@ -63,6 +63,38 @@ public static class Ach
         "Boss_Phantom", "Lights On", "Defeat the Phantom in the Haunted Forest.",
         AchievementCategory.Progression);
 
+    public static readonly AchievementDef BossCharredOne = Def(
+        "Boss_Charred_One", "Heartless", "Defeat the Charred One in the Volcano.",
+        AchievementCategory.Progression);
+
+    /// <summary>Herz des Verkohlten im Story-Finale zerstoert (StoryDirector.FinaleEnding) - oeffnet Endless.</summary>
+    public static readonly AchievementDef StoryComplete = Def(
+        "Story_Complete", "The Clock Rings", "Finish the story: destroy the Charred One's heart.",
+        AchievementCategory.Progression);
+
+    // 40 Minuten Endless je Welt (EndlessMinutes). Ausgeloest in GameManager.Update
+    // ueber EndlessFor(); "Endless weiterspielen" nach einem Story-Sieg zaehlt mit.
+
+    public static readonly AchievementDef EndlessForest = Def(
+        "Endless_Forest", "Evergreen", "Survive 40 minutes of Endless mode in the Forest.",
+        AchievementCategory.Progression);
+
+    public static readonly AchievementDef EndlessKitchen = Def(
+        "Endless_Kitchen", "Slow Cooker", "Survive 40 minutes of Endless mode in the Kitchen.",
+        AchievementCategory.Progression);
+
+    public static readonly AchievementDef EndlessGlacier = Def(
+        "Endless_Glacier", "Permafrost", "Survive 40 minutes of Endless mode on the Ice Cream Glacier.",
+        AchievementCategory.Progression);
+
+    public static readonly AchievementDef EndlessHaunted = Def(
+        "Endless_Haunted", "Witching Hours", "Survive 40 minutes of Endless mode in the Haunted Forest.",
+        AchievementCategory.Progression);
+
+    public static readonly AchievementDef EndlessVolcano = Def(
+        "Endless_Volcano", "Eternal Embers", "Survive 40 minutes of Endless mode in the Volcano.",
+        AchievementCategory.Progression);
+
     // ==================================================================
     //  Kampf
     // ==================================================================
@@ -96,6 +128,25 @@ public static class Ach
     public static readonly AchievementDef KillSlimeKing10 = Def(
         "Kill_Slime_King_10", "Long Live the King", "Defeat the Slime King 10 times.",
         AchievementCategory.Combat, goal: 10f, grantsUnlock: "unlock_char_slime_king");
+
+    // Erster Sieg ueber jeden Zwischenboss der Wellenplaene. Ausgeloest in
+    // Enemy.GrantRewards (Rolle MiniBoss) ueber BossVictory().
+
+    public static readonly AchievementDef MidbossMilkTank = Def(
+        "Midboss_Milk_Tank", "Slurped Dry", "Defeat the Milk Tank in the Kitchen.",
+        AchievementCategory.Combat);
+
+    public static readonly AchievementDef MidbossStracciatella = Def(
+        "Midboss_Stracciatella", "Staring Contest", "Defeat Stracciatella on the Ice Cream Glacier.",
+        AchievementCategory.Combat);
+
+    public static readonly AchievementDef MidbossGingerbreadHouse = Def(
+        "Midboss_Gingerbread_House", "Nibble, Nibble", "Defeat the Gingerbread Hut in the Haunted Forest.",
+        AchievementCategory.Combat);
+
+    public static readonly AchievementDef MidbossBakedPotato = Def(
+        "Midboss_Baked_Potato", "Peeled", "Defeat the Baked Potato in the Volcano.",
+        AchievementCategory.Combat);
 
     // Zwischenbosse und Endbosse insgesamt, egal welche. Zaehlen in
     // Enemy.GrantRewards (Rolle MiniBoss bzw. Boss).
@@ -189,6 +240,11 @@ public static class Ach
 
     public static readonly AchievementDef CrumbMayhemEvo = Def(
         "Crumb_Mayhem_Evo", "Crumb Mayhem Evo", "Obtained the Crumb Mayhem Evo for the first time!",
+        AchievementCategory.Evolutions);
+
+    // Pfefferminz-Bollwerk - keine Startwaffen-Evo, ausgeloest in MintShieldEvo.
+    public static readonly AchievementDef MintShieldEvo = Def(
+        "Mint_Shield_Evo", "Peppermint Bulwark", "Obtained the Peppermint Bulwark for the first time!",
         AchievementCategory.Evolutions);
 
     // ==================================================================
@@ -350,6 +406,14 @@ public static class Ach
         "Max_Level_MochiMelody", "Max Level: Mochi Melody", "Reach the maximum level of the Mochi Melody weapon.",
         AchievementCategory.Weapons);
 
+    public static readonly AchievementDef MaxIceDispenser = Def(
+        "Max_Level_IceDispenser", "Max Level: Ice Cube Dispenser", "Reach the maximum level of the Ice Cube Dispenser weapon.",
+        AchievementCategory.Weapons);
+
+    public static readonly AchievementDef MaxMintShield = Def(
+        "Max_Level_MintShield", "Max Level: Peppermint Shield", "Reach the maximum level of the Peppermint Shield weapon.",
+        AchievementCategory.Weapons);
+
     // ==================================================================
     //  Buffs auf Maximalstufe
     // ==================================================================
@@ -439,6 +503,25 @@ public static class Ach
     // ==================================================================
     //  Geheim
     // ==================================================================
+    // Beobachtet und ausgeloest in SecretAchievements. Bis zum Freischalten
+    // zeigt die Liste "???" und den Hinweis ach.<Id>.hint.
+
+    public static readonly AchievementDef SecretFamilyReunion = Def(
+        "Secret_Family_Reunion", "Family Reunion", "Defeat the Cookie King as the Cookie.",
+        AchievementCategory.Secrets, hidden: true);
+
+    public static readonly AchievementDef SecretPacifist = Def(
+        "Secret_Pacifist", "Pacifist", "Survive the first 90 seconds of a run without defeating a single enemy.",
+        AchievementCategory.Secrets, hidden: true);
+
+    public static readonly AchievementDef SecretDiet = Def(
+        "Secret_Diet", "On a Diet", "Beat a level without picking up a single heart.",
+        AchievementCategory.Secrets, hidden: true);
+
+    public static readonly AchievementDef SecretFlawless = Def(
+        "Secret_Flawless", "Not a Scratch", "Beat a level without losing any health. Shields don't count.",
+        AchievementCategory.Secrets, hidden: true);
+
     // Beispiel - hidden: true zeigt in der Liste "???", bis es freigeschaltet ist:
     //
     // public static readonly AchievementDef SecretRamen = Def(
@@ -502,6 +585,7 @@ public static class Ach
         { "choco_chips",    MaxChocoChips },     { "milk_dunk",     MaxMilkDunk },
         { "foxfire",        MaxFoxfire },        { "royal_splat",   MaxRoyalSplat },
         { "mochi_melody",   MaxMochiMelody },
+        { "ice_dispenser",  MaxIceDispenser },   { "mint_shield",   MaxMintShield },
 
         { "buff_extra_shot",    MaxExtraShot },     { "buff_cooldown",     MaxCooldown },
         { "buff_duration",      MaxDuration },      { "buff_glass_cannon", MaxGlassCannon },
@@ -569,15 +653,42 @@ public static class Ach
         return done;
     }
 
-    /// <summary>EnemyId-Name -> Boss-Erfolg (Endbosse der Welten und der Schleimkoenig).</summary>
+    /// <summary>EnemyId-Name -> Boss-Erfolg (Endbosse der Welten und Zwischenbosse).</summary>
     private static readonly Dictionary<string, AchievementDef> ByBoss = new Dictionary<string, AchievementDef>
     {
         { "KeksKoenig",    BossCookieKing },
         { "Glutwurz",      BossEmberroot },
         { "Eiskaiser",     BossIceEmperor },
         { "Squiddy",       BossPhantom },
+        { "Verkohlter",    BossCharredOne },
         { "Schleimkoenig", KillSlimeKing },
+        { "Milchpanzer",   MidbossMilkTank },
+        { "Stracciatella", MidbossStracciatella },
+        { "Knusperhaus",   MidbossGingerbreadHouse },
+        { "Ofenkartoffel", MidbossBakedPotato },
     };
+
+    /// <summary>So lange muss ein Endless-Lauf dauern (Laufzeit, Minuten).</summary>
+    public const float EndlessMinutes = 40f;
+
+    /// <summary>Story-Welt-Id (SpawnDirector.PlanId ohne "Demo") -> Endless-Erfolg.</summary>
+    private static readonly Dictionary<string, AchievementDef> EndlessByWorld =
+        new Dictionary<string, AchievementDef>(System.StringComparer.OrdinalIgnoreCase)
+    {
+        { "World2", EndlessForest },
+        { "World1", EndlessKitchen },
+        { "World5", EndlessGlacier },
+        { "World6", EndlessHaunted },
+        { "World4", EndlessVolcano },
+    };
+
+    /// <summary>Der Endless-Erfolg einer Welt (Wellenplan-Id, "Demo" wird ignoriert), oder null.</summary>
+    public static AchievementDef EndlessFor(string planId)
+    {
+        if (string.IsNullOrEmpty(planId)) return null;
+        string world = planId.Trim().Replace("Demo", "");
+        return EndlessByWorld.TryGetValue(world, out AchievementDef def) ? def : null;
+    }
 
     /// <summary>Der Erfolg fuer einen besiegten Boss (Schluessel = EnemyId-Name), oder null.</summary>
     public static AchievementDef BossVictory(string enemyId)

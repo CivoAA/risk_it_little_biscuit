@@ -1318,6 +1318,7 @@ Transform:
   - {fileID: 181380642156540494}
   - {fileID: 2658530957147946328}
   - {fileID: 291499174613137522}
+  - {fileID: 2527516144996007020}
   m_Father: {fileID: 4991830239493606234}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1872045825326429319
@@ -2134,6 +2135,8 @@ MonoBehaviour:
   - {fileID: 4266359328006293607}
   - {fileID: 1153859984778591767}
   - {fileID: 7868405423358879992}
+  - {fileID: 6318984886979886592}
+  - {fileID: 6726658811918204575}
   activeBuffs:
   - {fileID: 1329916437877316911}
   - {fileID: 3253892304407363630}
@@ -2171,6 +2174,7 @@ MonoBehaviour:
   - {fileID: 4052448573895074782}
   - {fileID: 5655142979738305804}
   - {fileID: 4889264274671078726}
+  - {fileID: 5887054342971084015}
   maxLevelStuff:
   - {fileID: 9138393922043077461}
   EvoCombinations:
@@ -2219,6 +2223,9 @@ MonoBehaviour:
   - EvoWeapon: {fileID: 4889264274671078726}
     RequiredWeapon1: {fileID: 4266359328006293607}
     RequiredWeapon2: {fileID: 5775431626742797176}
+  - EvoWeapon: {fileID: 5887054342971084015}
+    RequiredWeapon1: {fileID: 6726658811918204575}
+    RequiredWeapon2: {fileID: 5012595627938629680}
   immunityDuration: 0.3
   immunityTimer: 0
 --- !u!95 &3309684457716786782
@@ -3489,6 +3496,8 @@ Transform:
   - {fileID: 1808685469523212151}
   - {fileID: 4482878347644214275}
   - {fileID: 2408534575433799892}
+  - {fileID: 6755999326891065878}
+  - {fileID: 187215066691291842}
   m_Father: {fileID: 4991830239493606234}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6430632289492379781
@@ -11160,3 +11169,162 @@ MonoBehaviour:
   - {fileID: 2848097771257846133, guid: 172176b6d60d401889adbb29824afa1c, type: 3}
   - {fileID: 4265377990234647740, guid: 172176b6d60d401889adbb29824afa1c, type: 3}
   - {fileID: 4367343376953244895, guid: 172176b6d60d401889adbb29824afa1c, type: 3}
+--- !u!1 &7513455131353537971
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6755999326891065878}
+  - component: {fileID: 6318984886979886592}
+  m_Layer: 0
+  m_Name: Ice Dispenser
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6755999326891065878
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7513455131353537971}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3466192261950400575}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6318984886979886592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7513455131353537971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87592660fa9d4ff68f2427a495125851, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::IceDispenser
+  weaponID: ice_dispenser
+  weaponLevel: -1
+  maxweaponLevel: 5
+  stats: []
+  weaponImage: {fileID: 4535748764456234572, guid: e76b0d145b8c4d248b1bb271d4996a7a, type: 3}
+  weaponIcon: {fileID: 4535748764456234572, guid: e76b0d145b8c4d248b1bb271d4996a7a, type: 3}
+  weaponIconEvo: {fileID: 0}
+  posssibleEvo: 0
+  hasBeenRemoved: 0
+--- !u!1 &1613416648350431430
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 187215066691291842}
+  - component: {fileID: 6726658811918204575}
+  m_Layer: 0
+  m_Name: Mint Shield
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &187215066691291842
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1613416648350431430}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3466192261950400575}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6726658811918204575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1613416648350431430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98ebccee31064a00a1e55371b6d2c0b3, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::MintShield
+  weaponID: mint_shield
+  weaponLevel: -1
+  maxweaponLevel: 5
+  stats: []
+  weaponImage: {fileID: 1675850388365202844, guid: fdab31829b9347958b76be73249e27ec, type: 3}
+  weaponIcon: {fileID: 1675850388365202844, guid: fdab31829b9347958b76be73249e27ec, type: 3}
+  weaponIconEvo: {fileID: 0}
+  posssibleEvo: 0
+  hasBeenRemoved: 0
+--- !u!1 &7728415899621917942
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2527516144996007020}
+  - component: {fileID: 5887054342971084015}
+  m_Layer: 0
+  m_Name: Mint Shield Evo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2527516144996007020
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7728415899621917942}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7413418079001370670}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5887054342971084015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7728415899621917942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e79b62d4cea45679614128d683b1d8e, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::MintShieldEvo
+  weaponID: evo_mint_shield
+  weaponLevel: -1
+  maxweaponLevel: 0
+  stats: []
+  weaponImage: {fileID: 1744077572764996383, guid: 9986fa4f981e40f6b821743ccda39247, type: 3}
+  weaponIcon: {fileID: 1744077572764996383, guid: 9986fa4f981e40f6b821743ccda39247, type: 3}
+  weaponIconEvo: {fileID: 0}
+  posssibleEvo: 0
+  hasBeenRemoved: 0

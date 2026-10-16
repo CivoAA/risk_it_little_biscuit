@@ -755,6 +755,15 @@ public class PlayerController : MonoBehaviour
 
         LastStruckTime = Time.time;
 
+        // Pfefferminz-Schild: die Minzblase faengt den Treffer ab und platzt.
+        if (MintShield.TryBlockAny())
+        {
+            isImmune = true;
+            // etwas laenger als sonst - sonst nimmt der naechste Kontakt gleich die zweite Schicht
+            immunityTimer = Mathf.Max(immunityDuration, MintShield.BlockImmunity);
+            return;
+        }
+
         // Schalenklinge: eine Zwiebelschale faengt den ganzen Treffer ab.
         OnionShell onionShell = GetComponent<OnionShell>();
         if (onionShell != null && onionShell.TryBlock())
@@ -788,6 +797,7 @@ public class PlayerController : MonoBehaviour
             isImmune = true;
             immunityTimer = immunityDuration;
             playerHealth -= finalDamage;
+            SecretAchievements.HealthLost();
             UIController.Instance.UpdateHealthSlider();
             AudioController.Instance.PalyModifiedSound(AudioController.Instance.PlayerHit);
             if (hitFeedback != null) hitFeedback.OnPlayerHit();
@@ -849,7 +859,9 @@ public class PlayerController : MonoBehaviour
         if (secondChanceCharges <= 0) return false;
 
         secondChanceCharges--;
-        Revive(secondChanceHealthPercent, secondChanceImmunity, Loc.Get("ui.float.second_chance", "Second Chance!"));
+        Revive(secondChanceHealthPercent, secondChanceImmunity, Loc.Get("ui.float.second_chance", "Second Chance!"), false);
+        // Eigener Auftritt mit eigenem Klang statt des Level-Up-Sounds.
+        SecondChanceFx.Play(this, immunityTimer);
 
         // Aufgebraucht: der Buff verschwindet fuer den Rest des Laufs und gibt
         // seinen Platz frei, damit ein neuer Buff reinkann.
@@ -885,7 +897,7 @@ public class PlayerController : MonoBehaviour
         Revive(1f, 3f, Loc.Get("ui.float.endless", "ENDLESS!"));
     }
 
-    private void Revive(float healthPercent, float immunity, string text)
+    private void Revive(float healthPercent, float immunity, string text, bool playSound = true)
     {
         playerHealth = Mathf.Max(1f, playerMaxHealth * Mathf.Clamp01(healthPercent));
 
@@ -896,7 +908,7 @@ public class PlayerController : MonoBehaviour
 
         UIController.Instance.UpdateHealthSlider();
         DamageNumberController.Instance?.CreateText(text, transform.position);
-        if (AudioController.Instance != null)
+        if (playSound && AudioController.Instance != null)
         {
             AudioController.Instance.PalySound(AudioController.Instance.LevelUpSound);
         }

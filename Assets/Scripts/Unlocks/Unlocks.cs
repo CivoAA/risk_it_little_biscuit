@@ -276,7 +276,14 @@ public static class Unlocks
 
     // ==================================================================
 
-    public static bool IsUnlocked(UnlockDef def) => def != null && (def.ByDefault || Store.IsUnlocked(def.Id));
+    public static bool IsUnlocked(UnlockDef def)
+    {
+        if (def == null) return false;
+        // Endless haengt allein an der Story: ein Eintrag in unlocks.json
+        // (Testen, Story zurueckgesetzt) oeffnet ihn nicht.
+        if (def == Endless) return StoryProgress.FinaleDone;
+        return def.ByDefault || Store.IsUnlocked(def.Id);
+    }
 
     /// <summary>
     /// Abfrage über die Id. Eine unbekannte Id gilt als nicht freigeschaltet -
@@ -445,6 +452,14 @@ public static class Unlocks
             Give(w.Next);
         }
         if (StoryProgress.FinaleDone) Give(Endless);
+        else if (s.IsUnlocked(Endless.Id))
+        {
+            // Alter Eintrag ohne geschaffte Story weg - sonst bliebe beim echten
+            // Finale die Meldung "Endless ist offen" aus (Grant sieht ihn schon).
+            s.SetUnlocked(Endless.Id, false);
+            changed = true;
+        }
+        if (StoryProgress.FinaleDone) Achievements.Unlock(Ach.StoryComplete);
 
         // Erfolge mit Unlock (z.B. Eiskaiser -> Inari) und die erste Evo
         foreach (AchievementDef def in Ach.All)

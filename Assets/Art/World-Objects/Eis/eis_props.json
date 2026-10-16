@@ -180,10 +180,10 @@
      0.1456
     ]
    ],
-   "frameW": 88,
-   "frameH": 62,
-   "pivotX": 44.0,
-   "pivotY": 32,
+   "frameW": 97,
+   "frameH": 66,
+   "pivotX": 50,
+   "pivotY": 36,
    "halfW": 1.575,
    "halfH": 1.05,
    "weight": 3.0
@@ -306,10 +306,10 @@
      0.2437
     ]
    ],
-   "frameW": 124,
-   "frameH": 82,
-   "pivotX": 62.0,
-   "pivotY": 42,
+   "frameW": 142,
+   "frameH": 79,
+   "pivotX": 65,
+   "pivotY": 38,
    "halfW": 2.25,
    "halfH": 1.425,
    "weight": 2.4
@@ -432,10 +432,10 @@
      0.348
     ]
    ],
-   "frameW": 168,
-   "frameH": 106,
-   "pivotX": 84.0,
-   "pivotY": 54,
+   "frameW": 187,
+   "frameH": 109,
+   "pivotX": 92,
+   "pivotY": 59,
    "halfW": 3.075,
    "halfH": 1.875,
    "weight": 1.4
@@ -558,10 +558,10 @@
      0.1812
     ]
    ],
-   "frameW": 204,
-   "frameH": 70,
-   "pivotX": 102.0,
-   "pivotY": 36,
+   "frameW": 207,
+   "frameH": 74,
+   "pivotX": 101,
+   "pivotY": 38,
    "halfW": 3.75,
    "halfH": 1.2,
    "weight": 1.2

@@ -96,7 +96,9 @@ public sealed class AchievementDef
     {
         get
         {
-            if (Hidden && !IsUnlocked) return Loc.Get("ach.hidden.desc", "A secret waiting to be found.");
+            // Eigener Hinweis je Erfolg, sonst der allgemeine Text.
+            if (Hidden && !IsUnlocked)
+                return Loc.Get($"ach.{Id}.hint", Loc.Get("ach.hidden.desc", "A secret waiting to be found."));
             return Loc.Get($"ach.{Id}.desc", DescEn);
         }
     }

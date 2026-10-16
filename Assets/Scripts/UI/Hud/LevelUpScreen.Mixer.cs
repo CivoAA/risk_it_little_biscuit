@@ -446,14 +446,14 @@ public partial class LevelUpScreen
         private readonly CanvasGroup group;
         private readonly Image ring, flash, headMain, headHi, headLo, icon, barFill, rollStar, well;
         private readonly RectTransform barFillRect;
-        private readonly PixText headText, nameText, bigValue, nowLabel, nowValue, rangeText, keyText;
+        private readonly PixText headText, nameText, bigValue, nowValue, minText, maxText, keyText;
         private readonly List<Image> pips = new List<Image>();
         private readonly Image[] sparkles = new Image[3];
         private PowerUpRarity rarity;
         private int iconW, iconH;
 
         private const int PlateX = 36, PlateY = 21, IconScale = 3;
-        private const int BarX = 50, BarY = 118, BarW = 46, BarH = 7;
+        private const int BarX = 10, BarY = 119, BarW = 90, BarH = 7;
 
         public MixerCardView(LevelUpScreen s, Transform parent, int index)
         {
@@ -496,10 +496,9 @@ public partial class LevelUpScreen
             Color lineHi = GameHudSkin.Cream; lineHi.a = 0.06f;
             s.Img("DividerHi", body, new RectInt(8, 101, CardW - 16, 1), GameHudSkin.White, lineHi);
 
-            nowLabel = s.Text("NowLabel", body, new RectInt(7, 104, 50, 11), SizeText, GameHudSkin.ParchDark,
-                              TextAlignmentOptions.Left, TextStyle.Shadow);
-            nowValue = s.Text("NowValue", body, new RectInt(38, 104, CardW - 45, 11), SizeText, GameHudSkin.Cream,
-                              TextAlignmentOptions.Right, TextStyle.Shadow);
+            // Alter Wert > neuer Wert, ohne Beschriftung - "JETZT" hat mehr verwirrt als erklaert.
+            nowValue = s.Text("NowValue", body, new RectInt(4, 104, CardW - 8, 11), SizeText, GameHudSkin.Cream,
+                              TextAlignmentOptions.Center, TextStyle.Shadow);
 
             s.Img("BarFrame", body, new RectInt(BarX, BarY, BarW, BarH), GameHudSkin.BarFrame, Color.white, true);
             barFill = s.Img("BarFill", body, new RectInt(BarX + 1, BarY + 1, BarW - 2, BarH - 2), GameHudSkin.White, Color.white);
@@ -507,8 +506,11 @@ public partial class LevelUpScreen
             rollStar = s.Img("RollStar", body, new RectInt(BarX + BarW + 1, BarY - 1, 9, 9), GameHudSkin.Star, Color.white);
 
             well = s.Img("Well", body, new RectInt(4, 128, CardW - 8, 14), GameHudSkin.Well, Color.white, true);
-            rangeText = s.Text("Range", body, new RectInt(4, 129, CardW - 8, 12), SizeText, GameHudSkin.Parchment,
-                               TextAlignmentOptions.Center, TextStyle.Shadow);
+            // MIN/MAX direkt unter den Balkenenden: der Balken zeigt, wo der Wurf dazwischen liegt.
+            minText = s.Text("Min", body, new RectInt(BarX - 2, 129, CardW / 2 - BarX, 12), SizeText, GameHudSkin.Parchment,
+                             TextAlignmentOptions.Left, TextStyle.Shadow);
+            maxText = s.Text("Max", body, new RectInt(CardW / 2, 129, CardW / 2 - BarX + 2, 12), SizeText, GameHudSkin.Parchment,
+                             TextAlignmentOptions.Right, TextStyle.Shadow);
 
             ring = s.Img("Ring", body, new RectInt(0, 0, CardW, CardH), GameHudSkin.Ring, Color.clear, true);
             flash = s.Img("Flash", body, new RectInt(1, 1, CardW - 2, CardH - 2), GameHudSkin.White, new Color(1f, 1f, 1f, 0f));
@@ -548,7 +550,6 @@ public partial class LevelUpScreen
             bigValue.Set(FormatStat(gain, meta, true));
             bigValue.SetColor(RarityLight(rarity));
 
-            nowLabel.Set(Loc.Get("ui.mixer.now", "NOW"));
             if (TryGetStat(field, out float cur))
             {
                 float after = AfterPick(field, cur, gain);
@@ -565,8 +566,8 @@ public partial class LevelUpScreen
             barFill.color = main;
             rollStar.enabled = q >= 0.9f;
 
-            rangeText.Set(Loc.Get("ui.mixer.range", "RANGE") + " " + FormatStat(range.x, meta, false)
-                          + " - " + FormatStat(range.y, meta, false));
+            minText.Set("<color=" + DimHex + ">" + Loc.Get("ui.mixer.min", "MIN") + "</color> " + FormatStat(range.x, meta, false));
+            maxText.Set(FormatStat(range.y, meta, false) + " <color=" + DimHex + ">" + Loc.Get("ui.mixer.max", "MAX") + "</color>");
         }
 
         public void Animate(float now, float dealT, bool focused, bool held, int picked, int myIndex)

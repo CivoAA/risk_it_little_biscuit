@@ -284,7 +284,7 @@ public static class TutorialContent
     private static Sprite Icon14(string id) => WorkbenchIcons.Get(id, 14);
     private static Sprite Icon10(string id) => WorkbenchIcons.Get(id, 10);
 
-    /// <summary>Waffen fuer die Bildtafeln - nie die Startwaffe des gewaehlten Charakters doppelt.</summary>
+    /// <summary>Waffen fuer die Bildtafeln - nie die Startwaffe des gewaehlten Charakters doppelt, nie eine fremde.</summary>
     private static string[] SomeWeapons(int count)
     {
         string start = Characters.StartWeaponId(Me());
@@ -296,6 +296,8 @@ public static class TutorialContent
         foreach (string id in wanted)
         {
             if (id == start) continue;
+            // Startwaffen der anderen bekommt dieser Charakter nie - nicht als Beispiel zeigen.
+            if (!Characters.IsWeaponAllowed(id, Me())) continue;
             list.Add(id);
             if (list.Count == count) break;
         }

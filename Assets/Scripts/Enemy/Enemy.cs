@@ -624,6 +624,12 @@ public class Enemy : MonoBehaviour
         recycleHoldUntil = Mathf.Max(recycleHoldUntil, frozenUntil + recycleDelay);
     }
 
+    /// <summary>Festkleben sofort beenden (Eiswuerfel-Spender: zerschmettert).</summary>
+    public void EndFreeze()
+    {
+        if (IsFrozen) Unfreeze();
+    }
+
     private void Unfreeze()
     {
         frozenUntil = 0f;
@@ -1162,7 +1168,7 @@ public class Enemy : MonoBehaviour
         if (GameManager.Instance != null) GameManager.Instance.kills++;
         Bestiary.AddKill(id);
 
-        AudioController.Instance.PalyModifiedSound(AudioController.Instance.enemyDeath);
+        AudioController.Instance.PlayEnemyDeath();
 
         Destroy(gameObject);
     }
@@ -1218,6 +1224,7 @@ public class Enemy : MonoBehaviour
                 // Der erste Boss-Sieg ueberhaupt schaltet Cursed Sugar im Shop frei.
                 Unlocks.Grant(Unlocks.CursedSugar);
                 Achievements.Progress(Ach.Bosses45, 1f);
+                SecretAchievements.BossDefeated(Identity);
                 BossDefeated?.Invoke(this);
                 // Uebernimmt die Story das Ende, kommt kein Tod hinterher -
                 // im Endless-Modus vorerst auch nicht.
