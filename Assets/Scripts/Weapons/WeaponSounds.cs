@@ -78,6 +78,8 @@ public static class WeaponSounds
     public static readonly Sfx TurretBuild    = new Sfx("turret_build",    0.18f, 0.15f,  0.04f);
     public static readonly Sfx FoxfireLaunch  = new Sfx("foxfire_launch",  0.13f, 0.07f,  0.04f);
     public static readonly Sfx SplatThrow     = new Sfx("splat_throw",     0.14f, 0.08f,  0.08f);
+    // Bubble Gun: noch ohne eigene WAVs - hoeher gestimmte Boba-/Marmeladen-Klaenge.
+    public static readonly Sfx BubbleShot     = new Sfx("boba_shot",       0.13f, 0.08f,  0.08f, 1.5f);
 
     // Flaechen / Einschlaege
     public static readonly Sfx FireballBoom   = new Sfx("fireball_boom",   0.22f, 0.1f,   0.07f);
@@ -94,6 +96,7 @@ public static class WeaponSounds
     public static readonly Sfx Deathstrike    = new Sfx("deathstrike",     0.19f, 0.07f,  0.08f);
     public static readonly Sfx FoxfireBurst   = new Sfx("foxfire_burst",   0.15f, 0.08f,  0.07f);
     public static readonly Sfx SplatLand      = new Sfx("splat_land",      0.20f, 0.08f,  0.07f);
+    public static readonly Sfx BubblePop      = new Sfx("jam_splat",       0.18f, 0.08f,  0.08f, 1.6f);
 
     // Kyuubi (Fuchsfeuer-Evo): Seelen leise, das Erwachen gross
     public static readonly Sfx KyubiSoul      = new Sfx("kyubi_soul",      0.10f, 0.06f,  0.03f);
