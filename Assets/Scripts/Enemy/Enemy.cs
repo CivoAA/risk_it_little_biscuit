@@ -1218,6 +1218,7 @@ public class Enemy : MonoBehaviour
                 // Der erste Boss-Sieg ueberhaupt schaltet Cursed Sugar im Shop frei.
                 Unlocks.Grant(Unlocks.CursedSugar);
                 Achievements.Progress(Ach.Bosses45, 1f);
+                SecretAchievements.BossDefeated(Identity);
                 BossDefeated?.Invoke(this);
                 // Uebernimmt die Story das Ende, kommt kein Tod hinterher -
                 // im Endless-Modus vorerst auch nicht.

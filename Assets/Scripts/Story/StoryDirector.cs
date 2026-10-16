@@ -331,6 +331,7 @@ public class StoryDirector : MonoBehaviour
         StoryBark.HideNow();
         StoryProgress.MarkFinaleDone();
         Unlocks.ReportFinaleDone();
+        Achievements.Unlock(Ach.StoryComplete);
         Shield(true);
 
         // Das Herz zerfaellt noch - erst wenn die Kammer dunkel ist, beginnt das Finale.

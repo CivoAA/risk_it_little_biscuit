@@ -150,10 +150,10 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 204
-        height: 70
+        width: 207
+        height: 74
       alignment: 9
-      pivot: {x: 0.5, y: 0.5143}
+      pivot: {x: 0.4879, y: 0.5135}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -170,12 +170,12 @@ TextureImporter:
       name: eis_glatteis_lang_1
       rect:
         serializedVersion: 2
-        x: 204
+        x: 207
         y: 0
-        width: 204
-        height: 70
+        width: 207
+        height: 74
       alignment: 9
-      pivot: {x: 0.5, y: 0.5143}
+      pivot: {x: 0.4879, y: 0.5135}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -192,12 +192,12 @@ TextureImporter:
       name: eis_glatteis_lang_2
       rect:
         serializedVersion: 2
-        x: 408
+        x: 414
         y: 0
-        width: 204
-        height: 70
+        width: 207
+        height: 74
       alignment: 9
-      pivot: {x: 0.5, y: 0.5143}
+      pivot: {x: 0.4879, y: 0.5135}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -214,12 +214,12 @@ TextureImporter:
       name: eis_glatteis_lang_3
       rect:
         serializedVersion: 2
-        x: 612
+        x: 621
         y: 0
-        width: 204
-        height: 70
+        width: 207
+        height: 74
       alignment: 9
-      pivot: {x: 0.5, y: 0.5143}
+      pivot: {x: 0.4879, y: 0.5135}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -236,12 +236,12 @@ TextureImporter:
       name: eis_glatteis_lang_4
       rect:
         serializedVersion: 2
-        x: 816
+        x: 828
         y: 0
-        width: 204
-        height: 70
+        width: 207
+        height: 74
       alignment: 9
-      pivot: {x: 0.5, y: 0.5143}
+      pivot: {x: 0.4879, y: 0.5135}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -258,12 +258,12 @@ TextureImporter:
       name: eis_glatteis_lang_5
       rect:
         serializedVersion: 2
-        x: 1020
+        x: 1035
         y: 0
-        width: 204
-        height: 70
+        width: 207
+        height: 74
       alignment: 9
-      pivot: {x: 0.5, y: 0.5143}
+      pivot: {x: 0.4879, y: 0.5135}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -280,12 +280,12 @@ TextureImporter:
       name: eis_glatteis_lang_6
       rect:
         serializedVersion: 2
-        x: 1224
+        x: 1242
         y: 0
-        width: 204
-        height: 70
+        width: 207
+        height: 74
       alignment: 9
-      pivot: {x: 0.5, y: 0.5143}
+      pivot: {x: 0.4879, y: 0.5135}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -302,12 +302,12 @@ TextureImporter:
       name: eis_glatteis_lang_7
       rect:
         serializedVersion: 2
-        x: 1428
+        x: 1449
         y: 0
-        width: 204
-        height: 70
+        width: 207
+        height: 74
       alignment: 9
-      pivot: {x: 0.5, y: 0.5143}
+      pivot: {x: 0.4879, y: 0.5135}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -324,12 +324,12 @@ TextureImporter:
       name: eis_glatteis_lang_8
       rect:
         serializedVersion: 2
-        x: 1632
+        x: 1656
         y: 0
-        width: 204
-        height: 70
+        width: 207
+        height: 74
       alignment: 9
-      pivot: {x: 0.5, y: 0.5143}
+      pivot: {x: 0.4879, y: 0.5135}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -346,12 +346,12 @@ TextureImporter:
       name: eis_glatteis_lang_9
       rect:
         serializedVersion: 2
-        x: 1836
+        x: 1863
         y: 0
-        width: 204
-        height: 70
+        width: 207
+        height: 74
       alignment: 9
-      pivot: {x: 0.5, y: 0.5143}
+      pivot: {x: 0.4879, y: 0.5135}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -368,12 +368,12 @@ TextureImporter:
       name: eis_glatteis_lang_10
       rect:
         serializedVersion: 2
-        x: 2040
+        x: 2070
         y: 0
-        width: 204
-        height: 70
+        width: 207
+        height: 74
       alignment: 9
-      pivot: {x: 0.5, y: 0.5143}
+      pivot: {x: 0.4879, y: 0.5135}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -390,12 +390,12 @@ TextureImporter:
       name: eis_glatteis_lang_11
       rect:
         serializedVersion: 2
-        x: 2244
+        x: 2277
         y: 0
-        width: 204
-        height: 70
+        width: 207
+        height: 74
       alignment: 9
-      pivot: {x: 0.5, y: 0.5143}
+      pivot: {x: 0.4879, y: 0.5135}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -412,12 +412,12 @@ TextureImporter:
       name: eis_glatteis_lang_12
       rect:
         serializedVersion: 2
-        x: 2448
+        x: 2484
         y: 0
-        width: 204
-        height: 70
+        width: 207
+        height: 74
       alignment: 9
-      pivot: {x: 0.5, y: 0.5143}
+      pivot: {x: 0.4879, y: 0.5135}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -434,12 +434,12 @@ TextureImporter:
       name: eis_glatteis_lang_13
       rect:
         serializedVersion: 2
-        x: 2652
+        x: 2691
         y: 0
-        width: 204
-        height: 70
+        width: 207
+        height: 74
       alignment: 9
-      pivot: {x: 0.5, y: 0.5143}
+      pivot: {x: 0.4879, y: 0.5135}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -456,12 +456,12 @@ TextureImporter:
       name: eis_glatteis_lang_14
       rect:
         serializedVersion: 2
-        x: 2856
+        x: 2898
         y: 0
-        width: 204
-        height: 70
+        width: 207
+        height: 74
       alignment: 9
-      pivot: {x: 0.5, y: 0.5143}
+      pivot: {x: 0.4879, y: 0.5135}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -478,12 +478,12 @@ TextureImporter:
       name: eis_glatteis_lang_15
       rect:
         serializedVersion: 2
-        x: 3060
+        x: 3105
         y: 0
-        width: 204
-        height: 70
+        width: 207
+        height: 74
       alignment: 9
-      pivot: {x: 0.5, y: 0.5143}
+      pivot: {x: 0.4879, y: 0.5135}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []

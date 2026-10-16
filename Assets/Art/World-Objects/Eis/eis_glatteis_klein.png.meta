@@ -150,10 +150,10 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 88
-        height: 62
+        width: 97
+        height: 66
       alignment: 9
-      pivot: {x: 0.5, y: 0.5161}
+      pivot: {x: 0.5155, y: 0.5455}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -170,12 +170,12 @@ TextureImporter:
       name: eis_glatteis_klein_1
       rect:
         serializedVersion: 2
-        x: 88
+        x: 97
         y: 0
-        width: 88
-        height: 62
+        width: 97
+        height: 66
       alignment: 9
-      pivot: {x: 0.5, y: 0.5161}
+      pivot: {x: 0.5155, y: 0.5455}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -192,12 +192,12 @@ TextureImporter:
       name: eis_glatteis_klein_2
       rect:
         serializedVersion: 2
-        x: 176
+        x: 194
         y: 0
-        width: 88
-        height: 62
+        width: 97
+        height: 66
       alignment: 9
-      pivot: {x: 0.5, y: 0.5161}
+      pivot: {x: 0.5155, y: 0.5455}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -214,12 +214,12 @@ TextureImporter:
       name: eis_glatteis_klein_3
       rect:
         serializedVersion: 2
-        x: 264
+        x: 291
         y: 0
-        width: 88
-        height: 62
+        width: 97
+        height: 66
       alignment: 9
-      pivot: {x: 0.5, y: 0.5161}
+      pivot: {x: 0.5155, y: 0.5455}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -236,12 +236,12 @@ TextureImporter:
       name: eis_glatteis_klein_4
       rect:
         serializedVersion: 2
-        x: 352
+        x: 388
         y: 0
-        width: 88
-        height: 62
+        width: 97
+        height: 66
       alignment: 9
-      pivot: {x: 0.5, y: 0.5161}
+      pivot: {x: 0.5155, y: 0.5455}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -258,12 +258,12 @@ TextureImporter:
       name: eis_glatteis_klein_5
       rect:
         serializedVersion: 2
-        x: 440
+        x: 485
         y: 0
-        width: 88
-        height: 62
+        width: 97
+        height: 66
       alignment: 9
-      pivot: {x: 0.5, y: 0.5161}
+      pivot: {x: 0.5155, y: 0.5455}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -280,12 +280,12 @@ TextureImporter:
       name: eis_glatteis_klein_6
       rect:
         serializedVersion: 2
-        x: 528
+        x: 582
         y: 0
-        width: 88
-        height: 62
+        width: 97
+        height: 66
       alignment: 9
-      pivot: {x: 0.5, y: 0.5161}
+      pivot: {x: 0.5155, y: 0.5455}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -302,12 +302,12 @@ TextureImporter:
       name: eis_glatteis_klein_7
       rect:
         serializedVersion: 2
-        x: 616
+        x: 679
         y: 0
-        width: 88
-        height: 62
+        width: 97
+        height: 66
       alignment: 9
-      pivot: {x: 0.5, y: 0.5161}
+      pivot: {x: 0.5155, y: 0.5455}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -324,12 +324,12 @@ TextureImporter:
       name: eis_glatteis_klein_8
       rect:
         serializedVersion: 2
-        x: 704
+        x: 776
         y: 0
-        width: 88
-        height: 62
+        width: 97
+        height: 66
       alignment: 9
-      pivot: {x: 0.5, y: 0.5161}
+      pivot: {x: 0.5155, y: 0.5455}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -346,12 +346,12 @@ TextureImporter:
       name: eis_glatteis_klein_9
       rect:
         serializedVersion: 2
-        x: 792
+        x: 873
         y: 0
-        width: 88
-        height: 62
+        width: 97
+        height: 66
       alignment: 9
-      pivot: {x: 0.5, y: 0.5161}
+      pivot: {x: 0.5155, y: 0.5455}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -368,12 +368,12 @@ TextureImporter:
       name: eis_glatteis_klein_10
       rect:
         serializedVersion: 2
-        x: 880
+        x: 970
         y: 0
-        width: 88
-        height: 62
+        width: 97
+        height: 66
       alignment: 9
-      pivot: {x: 0.5, y: 0.5161}
+      pivot: {x: 0.5155, y: 0.5455}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -390,12 +390,12 @@ TextureImporter:
       name: eis_glatteis_klein_11
       rect:
         serializedVersion: 2
-        x: 968
+        x: 1067
         y: 0
-        width: 88
-        height: 62
+        width: 97
+        height: 66
       alignment: 9
-      pivot: {x: 0.5, y: 0.5161}
+      pivot: {x: 0.5155, y: 0.5455}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -412,12 +412,12 @@ TextureImporter:
       name: eis_glatteis_klein_12
       rect:
         serializedVersion: 2
-        x: 1056
+        x: 1164
         y: 0
-        width: 88
-        height: 62
+        width: 97
+        height: 66
       alignment: 9
-      pivot: {x: 0.5, y: 0.5161}
+      pivot: {x: 0.5155, y: 0.5455}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -434,12 +434,12 @@ TextureImporter:
       name: eis_glatteis_klein_13
       rect:
         serializedVersion: 2
-        x: 1144
+        x: 1261
         y: 0
-        width: 88
-        height: 62
+        width: 97
+        height: 66
       alignment: 9
-      pivot: {x: 0.5, y: 0.5161}
+      pivot: {x: 0.5155, y: 0.5455}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -456,12 +456,12 @@ TextureImporter:
       name: eis_glatteis_klein_14
       rect:
         serializedVersion: 2
-        x: 1232
+        x: 1358
         y: 0
-        width: 88
-        height: 62
+        width: 97
+        height: 66
       alignment: 9
-      pivot: {x: 0.5, y: 0.5161}
+      pivot: {x: 0.5155, y: 0.5455}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -478,12 +478,12 @@ TextureImporter:
       name: eis_glatteis_klein_15
       rect:
         serializedVersion: 2
-        x: 1320
+        x: 1455
         y: 0
-        width: 88
-        height: 62
+        width: 97
+        height: 66
       alignment: 9
-      pivot: {x: 0.5, y: 0.5161}
+      pivot: {x: 0.5155, y: 0.5455}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []

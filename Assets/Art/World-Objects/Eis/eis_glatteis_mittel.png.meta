@@ -150,10 +150,10 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 124
-        height: 82
+        width: 142
+        height: 79
       alignment: 9
-      pivot: {x: 0.5, y: 0.5122}
+      pivot: {x: 0.4577, y: 0.481}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -170,12 +170,12 @@ TextureImporter:
       name: eis_glatteis_mittel_1
       rect:
         serializedVersion: 2
-        x: 124
+        x: 142
         y: 0
-        width: 124
-        height: 82
+        width: 142
+        height: 79
       alignment: 9
-      pivot: {x: 0.5, y: 0.5122}
+      pivot: {x: 0.4577, y: 0.481}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -192,12 +192,12 @@ TextureImporter:
       name: eis_glatteis_mittel_2
       rect:
         serializedVersion: 2
-        x: 248
+        x: 284
         y: 0
-        width: 124
-        height: 82
+        width: 142
+        height: 79
       alignment: 9
-      pivot: {x: 0.5, y: 0.5122}
+      pivot: {x: 0.4577, y: 0.481}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -214,12 +214,12 @@ TextureImporter:
       name: eis_glatteis_mittel_3
       rect:
         serializedVersion: 2
-        x: 372
+        x: 426
         y: 0
-        width: 124
-        height: 82
+        width: 142
+        height: 79
       alignment: 9
-      pivot: {x: 0.5, y: 0.5122}
+      pivot: {x: 0.4577, y: 0.481}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -236,12 +236,12 @@ TextureImporter:
       name: eis_glatteis_mittel_4
       rect:
         serializedVersion: 2
-        x: 496
+        x: 568
         y: 0
-        width: 124
-        height: 82
+        width: 142
+        height: 79
       alignment: 9
-      pivot: {x: 0.5, y: 0.5122}
+      pivot: {x: 0.4577, y: 0.481}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -258,12 +258,12 @@ TextureImporter:
       name: eis_glatteis_mittel_5
       rect:
         serializedVersion: 2
-        x: 620
+        x: 710
         y: 0
-        width: 124
-        height: 82
+        width: 142
+        height: 79
       alignment: 9
-      pivot: {x: 0.5, y: 0.5122}
+      pivot: {x: 0.4577, y: 0.481}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -280,12 +280,12 @@ TextureImporter:
       name: eis_glatteis_mittel_6
       rect:
         serializedVersion: 2
-        x: 744
+        x: 852
         y: 0
-        width: 124
-        height: 82
+        width: 142
+        height: 79
       alignment: 9
-      pivot: {x: 0.5, y: 0.5122}
+      pivot: {x: 0.4577, y: 0.481}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -302,12 +302,12 @@ TextureImporter:
       name: eis_glatteis_mittel_7
       rect:
         serializedVersion: 2
-        x: 868
+        x: 994
         y: 0
-        width: 124
-        height: 82
+        width: 142
+        height: 79
       alignment: 9
-      pivot: {x: 0.5, y: 0.5122}
+      pivot: {x: 0.4577, y: 0.481}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -324,12 +324,12 @@ TextureImporter:
       name: eis_glatteis_mittel_8
       rect:
         serializedVersion: 2
-        x: 992
+        x: 1136
         y: 0
-        width: 124
-        height: 82
+        width: 142
+        height: 79
       alignment: 9
-      pivot: {x: 0.5, y: 0.5122}
+      pivot: {x: 0.4577, y: 0.481}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -346,12 +346,12 @@ TextureImporter:
       name: eis_glatteis_mittel_9
       rect:
         serializedVersion: 2
-        x: 1116
+        x: 1278
         y: 0
-        width: 124
-        height: 82
+        width: 142
+        height: 79
       alignment: 9
-      pivot: {x: 0.5, y: 0.5122}
+      pivot: {x: 0.4577, y: 0.481}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -368,12 +368,12 @@ TextureImporter:
       name: eis_glatteis_mittel_10
       rect:
         serializedVersion: 2
-        x: 1240
+        x: 1420
         y: 0
-        width: 124
-        height: 82
+        width: 142
+        height: 79
       alignment: 9
-      pivot: {x: 0.5, y: 0.5122}
+      pivot: {x: 0.4577, y: 0.481}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -390,12 +390,12 @@ TextureImporter:
       name: eis_glatteis_mittel_11
       rect:
         serializedVersion: 2
-        x: 1364
+        x: 1562
         y: 0
-        width: 124
-        height: 82
+        width: 142
+        height: 79
       alignment: 9
-      pivot: {x: 0.5, y: 0.5122}
+      pivot: {x: 0.4577, y: 0.481}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -412,12 +412,12 @@ TextureImporter:
       name: eis_glatteis_mittel_12
       rect:
         serializedVersion: 2
-        x: 1488
+        x: 1704
         y: 0
-        width: 124
-        height: 82
+        width: 142
+        height: 79
       alignment: 9
-      pivot: {x: 0.5, y: 0.5122}
+      pivot: {x: 0.4577, y: 0.481}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -434,12 +434,12 @@ TextureImporter:
       name: eis_glatteis_mittel_13
       rect:
         serializedVersion: 2
-        x: 1612
+        x: 1846
         y: 0
-        width: 124
-        height: 82
+        width: 142
+        height: 79
       alignment: 9
-      pivot: {x: 0.5, y: 0.5122}
+      pivot: {x: 0.4577, y: 0.481}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -456,12 +456,12 @@ TextureImporter:
       name: eis_glatteis_mittel_14
       rect:
         serializedVersion: 2
-        x: 1736
+        x: 1988
         y: 0
-        width: 124
-        height: 82
+        width: 142
+        height: 79
       alignment: 9
-      pivot: {x: 0.5, y: 0.5122}
+      pivot: {x: 0.4577, y: 0.481}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []
@@ -478,12 +478,12 @@ TextureImporter:
       name: eis_glatteis_mittel_15
       rect:
         serializedVersion: 2
-        x: 1860
+        x: 2130
         y: 0
-        width: 124
-        height: 82
+        width: 142
+        height: 79
       alignment: 9
-      pivot: {x: 0.5, y: 0.5122}
+      pivot: {x: 0.4577, y: 0.481}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData:
       outline: []

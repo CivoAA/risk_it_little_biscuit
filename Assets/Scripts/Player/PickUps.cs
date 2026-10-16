@@ -129,6 +129,7 @@ public class PickUps : MonoBehaviour
             if(PickUp_id == 0)
             {
                 PlayerController.Instance.Heal(PlayerController.Instance.playerMaxHealth * 0.1f);
+                SecretAchievements.HeartEaten();
 
             }
             else if (PickUp_id == 1)
@@ -140,6 +141,7 @@ public class PickUps : MonoBehaviour
                 PlayerController p = PlayerController.Instance;
                 float bonus = EnemyCatalog.GoldenHeartMaxHealth;
                 p.playerMaxHealth += bonus;
+                SecretAchievements.HeartEaten();
                 p.Heal(p.playerMaxHealth * 0.1f + bonus);
                 DamageNumberController.Instance?.CreateText(string.Format(Loc.Get("ui.float.maxhp", "+{0} Max HP"), bonus.ToString("0")), transform.position);
             }
