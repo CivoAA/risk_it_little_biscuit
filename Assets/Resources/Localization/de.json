@@ -770,6 +770,8 @@
     { "key": "ui.mixer.chance", "value": "Chance" },
     { "key": "ui.mixer.now", "value": "JETZT" },
     { "key": "ui.mixer.range", "value": "BEREICH" },
+    { "key": "ui.mixer.min", "value": "MIN" },
+    { "key": "ui.mixer.max", "value": "MAX" },
     { "key": "ui.mixer.rarity.common", "value": "GEWÖHNLICH" },
     { "key": "ui.mixer.rarity.uncommon", "value": "UNGEWÖHNLICH" },
     { "key": "ui.mixer.rarity.rare", "value": "SELTEN" },

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using System.Collections.Generic;
 
 /// <summary>
 /// Schickt Sterne los, die wie das DVD-Logo ueber den Bildschirm prallen.
@@ -13,8 +14,18 @@ public class CelestialStar : Weapon
     [SerializeField] private float moveSpeed = 5.5f;
     private float spawnCounter;
 
+    // Sterne, die gerade fliegen. Wird die Waffe durch die Evo ersetzt,
+    // verschwinden sie sofort, statt neben den Explosivsternen weiterzufliegen.
+    private readonly List<GameObject> liveStars = new List<GameObject>();
+
     void Update()
     {
+        if (!IsActive)
+        {
+            ClearStars();
+            return;
+        }
+
         if (weaponLevel == maxweaponLevel)
         {
             Achievements.Unlock(Ach.MaxCelestialStar);
@@ -48,10 +59,22 @@ public class CelestialStar : Weapon
             }
 
             BouncingStar.Launch(star, moveSpeed, CurrentDuration);
+            liveStars.RemoveAll(s => s == null);
+            liveStars.Add(star);
 
             // 1 Sekunde warten, bevor nächster Star gespawnt wird
             if (i < count - 1)
                 yield return new WaitForSeconds(1f);
+            if (!IsActive) yield break;
         }
+    }
+
+    private void ClearStars()
+    {
+        if (liveStars.Count == 0) return;
+        StopAllCoroutines();
+        foreach (GameObject star in liveStars)
+            if (star != null) Destroy(star);
+        liveStars.Clear();
     }
 }

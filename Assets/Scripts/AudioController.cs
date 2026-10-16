@@ -534,6 +534,70 @@ public class AudioController : MonoBehaviour
         sound.Play();
     }
 
+    // ------------------------------------------------------------ Gegner-Tod
+
+    [Header("Gegner-Tod")]
+    [Tooltip("So viele Todes-Sounds duerfen gleichzeitig klingen.")]
+    public int enemyDeathVoices = 5;
+    [Tooltip("Mindestabstand zwischen zwei Todes-Sounds - was dazwischen stirbt, bleibt stumm.")]
+    public float enemyDeathGap = 0.05f;
+
+    private AudioSource[] enemyDeathPool;
+    private int enemyDeathNext;
+    private float enemyDeathNextTime;
+
+    /// <summary>
+    /// Todes-Sound eines Gegners. Frueher lief jeder Tod ueber dieselbe Quelle
+    /// mit Stop + Play - sterben viele Gegner auf einmal, wurde der Sound jeden
+    /// Frame neu angerissen (Knacken, Stottern, springende Tonhoehe). Jetzt:
+    /// kleiner Pool aus Kopien von <see cref="enemyDeath"/> plus Mindestpause.
+    /// </summary>
+    public void PlayEnemyDeath()
+    {
+        if (enemyDeath == null || enemyDeath.clip == null) return;
+
+        float now = Time.unscaledTime;
+        if (now < enemyDeathNextTime) return;
+        enemyDeathNextTime = now + enemyDeathGap;
+
+        if (enemyDeathPool == null || enemyDeathPool.Length == 0 || enemyDeathPool[0] == null)
+            CreateEnemyDeathPool();
+
+        // freie Stimme suchen, sonst die aelteste abschneiden
+        AudioSource src = null;
+        for (int i = 0; i < enemyDeathPool.Length; i++)
+        {
+            int k = (enemyDeathNext + i) % enemyDeathPool.Length;
+            if (!enemyDeathPool[k].isPlaying) { src = enemyDeathPool[k]; enemyDeathNext = k; break; }
+        }
+        if (src == null) src = enemyDeathPool[enemyDeathNext];
+        enemyDeathNext = (enemyDeathNext + 1) % enemyDeathPool.Length;
+
+        src.Stop();
+        src.pitch = Random.Range(0.7f, 1.3f);
+        src.volume = masterVolume;   // wie bisher PalyModifiedSound
+        src.Play();
+    }
+
+    private void CreateEnemyDeathPool()
+    {
+        enemyDeathPool = new AudioSource[Mathf.Max(1, enemyDeathVoices)];
+        enemyDeathNext = 0;
+        GameObject go = new GameObject("EnemyDeathVoices");
+        go.transform.SetParent(transform, false);
+        for (int i = 0; i < enemyDeathPool.Length; i++)
+        {
+            AudioSource src = go.AddComponent<AudioSource>();
+            src.playOnAwake = false;
+            src.loop = false;
+            src.clip = enemyDeath.clip;
+            src.outputAudioMixerGroup = enemyDeath.outputAudioMixerGroup;
+            src.priority = enemyDeath.priority;
+            src.spatialBlend = 0f;
+            enemyDeathPool[i] = src;
+        }
+    }
+
     public void PalySoundMenu(AudioSource sound)
     {
         if (sound == null) return;

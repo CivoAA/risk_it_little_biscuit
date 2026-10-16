@@ -1168,7 +1168,7 @@ public class Enemy : MonoBehaviour
         if (GameManager.Instance != null) GameManager.Instance.kills++;
         Bestiary.AddKill(id);
 
-        AudioController.Instance.PalyModifiedSound(AudioController.Instance.enemyDeath);
+        AudioController.Instance.PlayEnemyDeath();
 
         Destroy(gameObject);
     }
