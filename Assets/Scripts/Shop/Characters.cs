@@ -215,6 +215,17 @@ public static class Characters
         return true;
     }
 
+    /// <summary>
+    /// Wem gehoert die Waffe allein (<see cref="ExclusiveWeaponIdByskin"/>)?
+    /// -1 heisst: niemandem, jeder darf sie haben. Das Evo-Buch im Lauf
+    /// schreibt damit "NUR INARI" an fremde Rezepte.
+    /// </summary>
+    public static int ExclusiveOwner(string weaponId)
+    {
+        if (string.IsNullOrEmpty(weaponId)) return -1;
+        return System.Array.IndexOf(ExclusiveWeaponIdByskin, weaponId);
+    }
+
     public static string NameOf(int skinIndex)
     {
         if (skinIndex < 0 || skinIndex >= NameByskin.Length) return "Charakter " + skinIndex;

@@ -57,9 +57,13 @@ public partial class LevelUpScreen : MonoBehaviour
     private const int StripY = 240, StripTile = 22, StripStep = 24, StripGroupGap = 12, StripMax = 8;
 
     // ---- Evo-Buch ----
-    private const int EntryW = 212, EntryH = 40, EntryGapX = 8, EntryStepY = 44;
-    private const int EntriesX = 24, EntriesY = 54, EntriesPerPage = 8;
+    // Titel 8-32, Unterzeile 35, Reiter 49-65, Eintraege ab 69, Fuss 234.
+    private const int BookSubtitleY = 35;
+    private const int TabsY = 49, TabW = 112, TabH = 16, TabGap = 6;
+    private const int EntryW = 212, EntryH = 38, EntryGapX = 8, EntryStepY = 41;
+    private const int EntriesX = 24, EntriesY = 69, EntriesPerPage = 8;
     private const int BookFooterY = 234;
+    private const float EntryStagger = 0.025f, EntryAppear = 0.14f;
 
     // ---- Tempo ----
     private const float InputDelay = 0.3f;      // so lange nach dem Oeffnen zaehlt kein Klick
@@ -128,9 +132,14 @@ public partial class LevelUpScreen : MonoBehaviour
     private PixText bookTitle, bookSubtitle, slotsText, pageText;
     private RectTransform slotsChip;
     private ButtonView backButton, prevButton, nextButton;
+    private ButtonView ownTab, lockedTab;
     private readonly List<EntryView> entries = new List<EntryView>();
+    private readonly List<BookItem> bookOwn = new List<BookItem>();
+    private readonly List<BookItem> bookLocked = new List<BookItem>();
+    private bool bookShowLocked;
     private int bookPage;
     private int bookFocus = -1;
+    private float bookShownAt;
 
     private static readonly Regex ColorTags = new Regex("<color=[^>]*>|</color>", RegexOptions.Compiled);
 
@@ -239,8 +248,13 @@ public partial class LevelUpScreen : MonoBehaviour
         bookSign = Img("Sign", bookLayer, new RectInt(170, TitleY, 140, 24), GameHudSkin.Sign, Color.white, true).rectTransform;
         bookTitle = Text("Title", bookSign, new RectInt(0, 0, 140, 23), SizeTitle, GameHudSkin.Cream,
                          TextAlignmentOptions.Center, TextStyle.Shadow);
-        bookSubtitle = Text("Subtitle", bookLayer, new RectInt(0, 38, RefW, SubtitleH), SizeText,
+        bookSubtitle = Text("Subtitle", bookLayer, new RectInt(0, BookSubtitleY, RefW, SubtitleH), SizeText,
                             GameHudSkin.Parchment, TextAlignmentOptions.Center, TextStyle.Outline);
+
+        // Zwei Reiter: was dieser Charakter erreichen kann, und was nicht.
+        int tabsX = (RefW - 2 * TabW - TabGap) / 2;
+        ownTab = new ButtonView(this, bookLayer, new RectInt(tabsX, TabsY, TabW, TabH), GameHudSkin.EvoArrow, null);
+        lockedTab = new ButtonView(this, bookLayer, new RectInt(tabsX + TabW + TabGap, TabsY, TabW, TabH), GameHudSkin.Lock, null);
 
         for (int i = 0; i < EntriesPerPage; i++)
         {
@@ -360,6 +374,8 @@ public partial class LevelUpScreen : MonoBehaviour
             inputFrom = now + 0.12f;
             bookPage = 0;
             bookFocus = -1;
+            bookShowLocked = false;
+            bookShownAt = now;
             RefreshBook();
         }
     }
@@ -948,15 +964,172 @@ public partial class LevelUpScreen : MonoBehaviour
     //  Evo-Buch
     // ==================================================================
 
-    private List<EvoRecipe> Recipes()
+    /// <summary>
+    /// Wie weit eine Zutat - oder ein ganzes Rezept - in diesem Lauf noch
+    /// kommt. Aufsteigend nach Schwere: ein Rezept nimmt das Schlimmste seiner
+    /// Zutaten. Foreign und OneWeapon gelten fuer immer (Reiter GESPERRT), der
+    /// Rest nur fuer diesen Lauf.
+    /// </summary>
+    private enum Reach { Open, NoSlot, NotInBuild, NotBought, Gone, OneWeapon, Foreign }
+
+    private struct BookItem
     {
-        var list = new List<EvoRecipe>();
-        PlayerController p = PlayerController.Instance;
-        if (p == null || p.EvoCombinations == null) return list;
-        foreach (EvoRecipe r in p.EvoCombinations)
-            if (r != null && r.EvoWeapon != null) list.Add(r);
-        return list;
+        public EvoRecipe Recipe;
+        public Reach Reach;
+        public bool Signature;   // Evo der eigenen Startwaffe - steht vorne und traegt die Krone
+        public int Owner;        // Charakter, dem die fremde Zutat gehoert (-1 = keiner)
+        public int Order;        // Platz in EvoCombinations, damit die Sortierung stabil bleibt
     }
+
+    private static bool Permanent(Reach r) => r == Reach.Foreign || r == Reach.OneWeapon;
+
+    /// <summary>
+    /// Dieselben Schranken, nach denen <see cref="PlayerController.RandomWeapon"/>
+    /// zieht (IsWeaponUnlocked/IsBuffUnlocked, Slots) - das Buch soll nichts
+    /// versprechen, was das Level-Up nie anbietet.
+    /// </summary>
+    private static Reach ReachOf(Weapon w) => ReachOf(w, null);
+
+    /// <param name="picking">Karte, die gerade gewaehlt wird: ist sie neu, belegt sie
+    /// gleich einen Slot ihrer Art - der fehlt dann der Partnerzutat.</param>
+    private static Reach ReachOf(Weapon w, Weapon picking)
+    {
+        if (w == null) return Reach.Open;
+        if (w.hasBeenRemoved) return Reach.Gone;
+        if (w.weaponLevel >= 0) return Reach.Open;
+
+        int skin = Shop.RunSkinIndex;
+        if (!Characters.IsWeaponAllowed(w.weaponID, skin)) return Reach.Foreign;
+
+        PlayerController p = PlayerController.Instance;
+        if (p == null) return Reach.Open;
+        bool buff = p.activeBuffs != null && System.Array.IndexOf(p.activeBuffs, w) >= 0;
+        // Der Tofu traegt nur seine eigene Waffe - jede andere bleibt draussen.
+        if (!buff && Characters.OnlyStartWeapon(skin)) return Reach.OneWeapon;
+
+        if (!Loadout.AllowsInRun(w.weaponID)) return Reach.NotInBuild;
+        if (!WeaponCatalog.IsUnlocked(w.weaponID)) return Reach.NotBought;
+
+        int used = buff ? CountOwned(p.activeBuffs) : CountOwned(p.activeWeapon) + CountOwned(p.activeEvos);
+        if (picking != null && picking != w && !Owned(picking)
+            && (p.activeBuffs != null && System.Array.IndexOf(p.activeBuffs, picking) >= 0) == buff)
+            used++;
+        if (used >= (buff ? p.BuffSlots : p.WeaponSlots)) return Reach.NoSlot;
+        return Reach.Open;
+    }
+
+    private static Reach ReachOf(EvoRecipe r)
+    {
+        if (Owned(r.EvoWeapon)) return Reach.Open;
+        Reach a = ReachOf(r.RequiredWeapon1);
+        Reach b = ReachOf(r.RequiredWeapon2);
+        Reach worst = a > b ? a : b;
+        if (r.EvoWeapon.hasBeenRemoved && worst < Reach.Gone) worst = Reach.Gone;
+        return worst;
+    }
+
+    /// <summary>
+    /// Wie <see cref="ReachOf(EvoRecipe)"/>, aber aus Sicht einer Level-Up-Karte:
+    /// die Karte selbst kommt ja gerade, zaehlt also als erreichbar.
+    /// </summary>
+    private static Reach ReachAfterPick(EvoRecipe r, Weapon picking)
+    {
+        if (r.EvoWeapon.hasBeenRemoved) return Reach.Gone;
+        Reach a = r.RequiredWeapon1 == picking ? Reach.Open : ReachOf(r.RequiredWeapon1, picking);
+        Reach b = r.RequiredWeapon2 == picking ? Reach.Open : ReachOf(r.RequiredWeapon2, picking);
+        return a > b ? a : b;
+    }
+
+    private static int CountOwned(Weapon[] list)
+    {
+        int n = 0;
+        if (list != null) foreach (Weapon w in list) if (Owned(w)) n++;
+        return n;
+    }
+
+    /// <summary>Charakter, dem die Waffe allein gehoert - der eigene zaehlt nicht.</summary>
+    private static int ForeignOwner(Weapon w)
+    {
+        if (w == null) return -1;
+        int owner = Characters.ExclusiveOwner(w.weaponID);
+        return owner == Shop.RunSkinIndex ? -1 : owner;
+    }
+
+    private static bool MaxedIn(Weapon w) => w == null || (Owned(w) && Maxed(w));
+
+    private static bool IsReady(EvoRecipe r) =>
+        !Owned(r.EvoWeapon) && ReachOf(r) == Reach.Open && MaxedIn(r.RequiredWeapon1) && MaxedIn(r.RequiredWeapon2);
+
+    /// <summary>Kurzer Grund, warum es in diesem Lauf nicht weitergeht - null heisst: geht.</summary>
+    private static string ReachText(Reach r)
+    {
+        switch (r)
+        {
+            case Reach.NoSlot:     return Loc.Get("ui.evobook.slots_full", "SLOTS FULL");
+            case Reach.NotInBuild: return Loc.Get("ui.evobook.not_in_build", "NOT IN BUILD");
+            case Reach.NotBought:  return Loc.Get("ui.evobook.not_bought", "NOT UNLOCKED");
+            case Reach.Gone:       return Loc.Get("ui.evobook.banished", "BANISHED");
+            case Reach.OneWeapon:  return Loc.Get("ui.evobook.one_weapon", "ONLY 1 WEAPON");
+            default:               return null;
+        }
+    }
+
+    private static string CharName(int skin) => Characters.DisplayName(skin).ToUpperInvariant();
+
+    /// <summary>
+    /// Teilt die Rezepte auf die beiden Reiter auf. Eigene: die Evo der
+    /// Startwaffe vorne, dann bereit, aktiv, nach Fortschritt, im Lauf
+    /// blockiert, verbannt. Gesperrte: nach Charakter, wie in der Keksdose.
+    /// </summary>
+    private void CollectBook()
+    {
+        bookOwn.Clear();
+        bookLocked.Clear();
+        PlayerController p = PlayerController.Instance;
+        if (p == null || p.EvoCombinations == null) return;
+
+        string start = Characters.StartWeaponId(Shop.RunSkinIndex);
+        for (int i = 0; i < p.EvoCombinations.Count; i++)
+        {
+            EvoRecipe r = p.EvoCombinations[i];
+            if (r == null || r.EvoWeapon == null) continue;
+
+            var item = new BookItem { Recipe = r, Reach = ReachOf(r), Order = i };
+            item.Signature = !string.IsNullOrEmpty(start) && (IdOf(r.RequiredWeapon1) == start || IdOf(r.RequiredWeapon2) == start);
+            item.Owner = Mathf.Max(ForeignOwner(r.RequiredWeapon1), ForeignOwner(r.RequiredWeapon2));
+            (Permanent(item.Reach) ? bookLocked : bookOwn).Add(item);
+        }
+
+        bookOwn.Sort((x, y) =>
+        {
+            int c = (x.Signature ? 0 : 1).CompareTo(y.Signature ? 0 : 1);
+            if (c == 0) c = Rank(x).CompareTo(Rank(y));
+            return c != 0 ? c : x.Order.CompareTo(y.Order);
+        });
+        bookLocked.Sort((x, y) =>
+        {
+            int c = (x.Owner < 0 ? 99 : x.Owner).CompareTo(y.Owner < 0 ? 99 : y.Owner);
+            return c != 0 ? c : x.Order.CompareTo(y.Order);
+        });
+    }
+
+    private static string IdOf(Weapon w) => w != null ? w.weaponID : null;
+
+    private static int Rank(BookItem it)
+    {
+        EvoRecipe r = it.Recipe;
+        if (IsReady(r)) return 0;
+        if (Owned(r.EvoWeapon)) return 1;
+        if (it.Reach == Reach.Gone) return 9;
+        if (it.Reach != Reach.Open) return 8;
+        // Je naeher dran, desto weiter vorne: ausgereizt 2, vorhanden 1.
+        int score = Score(r.RequiredWeapon1) + (r.RequiredWeapon2 == null ? 2 : Score(r.RequiredWeapon2));
+        return 2 + (4 - score);
+    }
+
+    private static int Score(Weapon w) => !Owned(w) ? 0 : Maxed(w) ? 2 : 1;
+
+    private List<BookItem> BookList => bookShowLocked ? bookLocked : bookOwn;
 
     private int PageCount(int n) => Mathf.Max(1, (n + EntriesPerPage - 1) / EntriesPerPage);
 
@@ -977,22 +1150,37 @@ public partial class LevelUpScreen : MonoBehaviour
             shadow.anchoredPosition = new Vector2((RefW - w) / 2 + 1, -(TitleY + 1));
         }
 
-        List<EvoRecipe> recipes = Recipes();
-        int pages = PageCount(recipes.Count);
+        CollectBook();
+        if (bookShowLocked && bookLocked.Count == 0) bookShowLocked = false;
+        List<BookItem> list = BookList;
+        int pages = PageCount(list.Count);
         bookPage = Mathf.Clamp(bookPage, 0, pages - 1);
 
         int evoSlots = p != null ? p.EvoSlots : 0;
-        int evoUsed = 0;
-        foreach (EvoRecipe r in recipes) if (Owned(r.EvoWeapon)) evoUsed++;
+        int evoUsed = 0, ready = 0;
+        foreach (BookItem it in bookOwn)
+        {
+            if (Owned(it.Recipe.EvoWeapon)) evoUsed++;
+            if (IsReady(it.Recipe)) ready++;
+        }
         bool slotFree = evoUsed < evoSlots;
 
         for (int i = 0; i < entries.Count; i++)
         {
             int idx = bookPage * EntriesPerPage + i;
-            bool on = idx < recipes.Count;
+            bool on = idx < list.Count;
             entries[i].Root.gameObject.SetActive(on);
-            if (on) entries[i].Fill(recipes[idx], slotFree);
+            if (on) entries[i].Fill(list[idx], slotFree);
         }
+
+        ownTab.SetLabel(Loc.Get("ui.evobook.tab.own", "YOUR EVOS"));
+        // Zahl blinkt golden, sobald eine Evo bereit ist - wie am EVOS-Knopf.
+        ownTab.SetCount(bookOwn.Count.ToString(), ready > 0);
+        ownTab.Active = !bookShowLocked;
+        lockedTab.SetLabel(Loc.Get("ui.evobook.tab.locked", "LOCKED"));
+        lockedTab.SetCount(bookLocked.Count.ToString(), false);
+        lockedTab.Active = bookShowLocked;
+        lockedTab.Disabled = bookLocked.Count == 0;
 
         slotsText.Set(Loc.Get("ui.evobook.slots", "EVO SLOTS") + " " + evoUsed + "/" + evoSlots);
         int sw = Mathf.CeilToInt(slotsText.Width) + 10;
@@ -1013,6 +1201,17 @@ public partial class LevelUpScreen : MonoBehaviour
         nextButton.Disabled = bookPage >= pages - 1;
     }
 
+    private string BookHint()
+    {
+        if (!bookShowLocked)
+            return Loc.Get("ui.evobook.hint", "Max out both ingredients - the evo shows up on your next level up");
+        int skin = Shop.RunSkinIndex;
+        if (Characters.OnlyStartWeapon(skin))
+            return string.Format(Loc.Get("ui.evobook.hint_solo", "{0} carries only one weapon"),
+                                 Characters.DisplayName(skin));
+        return Loc.Get("ui.evobook.hint_locked", "These evos need another character's starting weapon");
+    }
+
     private void UpdateBook(float now, Vector2 mouse)
     {
         bool inputOpen = now >= inputFrom;
@@ -1023,24 +1222,32 @@ public partial class LevelUpScreen : MonoBehaviour
         bookFocus = hover;
 
         for (int i = 0; i < entries.Count; i++)
-            if (entries[i].Root.gameObject.activeSelf) entries[i].Animate(now, i == bookFocus);
+        {
+            if (!entries[i].Root.gameObject.activeSelf) continue;
+            float t = Mathf.Clamp01((now - bookShownAt - i * EntryStagger) / EntryAppear);
+            entries[i].Animate(now, i == bookFocus, t);
+        }
 
         // Unterzeile: unter dem Zeiger die Zutaten mit Stufe, sonst der Tipp.
         if (bookFocus >= 0) bookSubtitle.Set(entries[bookFocus].Detail());
-        else bookSubtitle.Set(Loc.Get("ui.evobook.hint", "Max out both ingredients - the evo shows up on your next level up"));
+        else bookSubtitle.Set(BookHint());
         bookSubtitle.SetColor(bookFocus >= 0 ? (Color)GameHudSkin.Cream : (Color)GameHudSkin.Parchment);
 
+        if (ownTab.Update(now, mouse, inputOpen)) SetBookTab(false, now);
+        if (lockedTab.Update(now, mouse, inputOpen) && !lockedTab.Disabled) SetBookTab(true, now);
+
         bool back = backButton.Update(now, mouse, inputOpen);
-        if (prevButton.Root.gameObject.activeSelf && prevButton.Update(now, mouse, inputOpen)) Flip(-1);
-        if (nextButton.Root.gameObject.activeSelf && nextButton.Update(now, mouse, inputOpen)) Flip(1);
+        if (prevButton.Root.gameObject.activeSelf && prevButton.Update(now, mouse, inputOpen)) Flip(-1, now);
+        if (nextButton.Root.gameObject.activeSelf && nextButton.Update(now, mouse, inputOpen)) Flip(1, now);
 
         if (inputOpen)
         {
             if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.E)
                 || Input.GetKeyDown(KeyCode.Backspace) || Input.GetMouseButtonDown(1))
                 back = true;
-            if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) Flip(-1);
-            if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) Flip(1);
+            if (Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyDown(KeyCode.Q)) SetBookTab(!bookShowLocked, now);
+            if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) Flip(-1, now);
+            if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) Flip(1, now);
         }
 
         if (back)
@@ -1050,12 +1257,25 @@ public partial class LevelUpScreen : MonoBehaviour
         }
     }
 
-    private void Flip(int dir)
+    private void SetBookTab(bool locked, float now)
     {
-        int pages = PageCount(Recipes().Count);
+        if (locked == bookShowLocked) return;
+        if (locked && bookLocked.Count == 0) return;
+        bookShowLocked = locked;
+        bookPage = 0;
+        bookFocus = -1;
+        bookShownAt = now;
+        Click();
+        RefreshBook();
+    }
+
+    private void Flip(int dir, float now)
+    {
+        int pages = PageCount(BookList.Count);
         int next = Mathf.Clamp(bookPage + dir, 0, pages - 1);
         if (next == bookPage) return;
         bookPage = next;
+        bookShownAt = now;
         Click();
         RefreshBook();
     }
@@ -1706,8 +1926,11 @@ public partial class LevelUpScreen : MonoBehaviour
                 foreach (EvoRecipe r in p.EvoCombinations)
                 {
                     if (r == null || r.EvoWeapon == null) continue;
+                    // Nur Evos, die dieser Lauf noch hergibt - keine fremden
+                    // Startwaffen, nichts ausserhalb des Builds, kein voller Slot.
                     if (kind == Kind.Evo ? r.EvoWeapon == w
-                        : (r.RequiredWeapon1 == w || r.RequiredWeapon2 == w) && !Owned(r.EvoWeapon) && !r.EvoWeapon.hasBeenRemoved)
+                        : (r.RequiredWeapon1 == w || r.RequiredWeapon2 == w) && !Owned(r.EvoWeapon)
+                          && ReachAfterPick(r, w) == Reach.Open)
                         recipes.Add(r);
                 }
             }
@@ -2133,12 +2356,13 @@ public partial class LevelUpScreen : MonoBehaviour
         public readonly RectInt Rect;
 
         private readonly CanvasGroup group;
-        private readonly Image ring, iconEvo, plus, arrow, check;
+        private readonly Image ring, evoTile, iconEvo, plus, arrow, check, lockMark, crown;
         private readonly Image[] sparkles = new Image[2];
         private readonly PixText name, status;
         private readonly IngredientView a, b;
         private EvoRecipe recipe;
-        private bool ready, active;
+        private bool ready, active, locked;
+        private float baseAlpha = 1f;
 
         public EntryView(LevelUpScreen s, Transform parent, RectInt r)
         {
@@ -2151,15 +2375,18 @@ public partial class LevelUpScreen : MonoBehaviour
 
             s.Img("Frame", Root, new RectInt(0, 0, r.width, r.height), GameHudSkin.Card, Color.white, true);
 
-            a = new IngredientView(s, Root, 8, 9);
-            plus = s.Img("Plus", Root, new RectInt(33, 16, 7, 7), GameHudSkin.Plus, Color.white);
-            b = new IngredientView(s, Root, 43, 9);
-            arrow = s.Img("Arrow", Root, new RectInt(69, 16, 9, 7), GameHudSkin.Arrow, Color.white);
+            a = new IngredientView(s, Root, 8, 8);
+            plus = s.Img("Plus", Root, new RectInt(33, 15, 7, 7), GameHudSkin.Plus, Color.white);
+            b = new IngredientView(s, Root, 43, 8);
+            arrow = s.Img("Arrow", Root, new RectInt(69, 15, 9, 7), GameHudSkin.Arrow, Color.white);
 
-            s.Img("EvoTile", Root, new RectInt(82, 7, 26, 26), GameHudSkin.Tile(26, GameHudSkin.TileKind.Evo), Color.white);
-            iconEvo = s.Img("EvoIcon", Root, new RectInt(87, 11, 16, 16), null, Color.white);
+            evoTile = s.Img("EvoTile", Root, new RectInt(82, 6, 26, 26), GameHudSkin.Tile(26, GameHudSkin.TileKind.Evo), Color.white);
+            iconEvo = s.Img("EvoIcon", Root, new RectInt(87, 10, 16, 16), null, Color.white);
             iconEvo.preserveAspect = true;
-            check = s.Img("Check", Root, new RectInt(100, 3, 9, 8), GameHudSkin.Check, Color.white);
+            check = s.Img("Check", Root, new RectInt(100, 2, 9, 8), GameHudSkin.Check, Color.white);
+            lockMark = s.Img("Lock", Root, new RectInt(101, 1, 7, 9), GameHudSkin.Lock, Color.white);
+            // Die Evo der eigenen Startwaffe: Krone oben auf der Kachel.
+            crown = s.Img("Crown", Root, new RectInt(89, 1, 11, 7), GameHudSkin.Crown, Color.white);
 
             for (int i = 0; i < 2; i++)
             {
@@ -2167,33 +2394,32 @@ public partial class LevelUpScreen : MonoBehaviour
                 sparkles[i].enabled = false;
             }
 
-            name = s.Text("Name", Root, new RectInt(114, 7, r.width - 118, 12), SizeText, GameHudSkin.Cream,
+            name = s.Text("Name", Root, new RectInt(114, 6, r.width - 118, 12), SizeText, GameHudSkin.Cream,
                           TextAlignmentOptions.Left, TextStyle.Outline);
-            status = s.Text("Status", Root, new RectInt(114, 21, r.width - 118, 12), SizeText, GameHudSkin.Parchment,
+            status = s.Text("Status", Root, new RectInt(114, 20, r.width - 118, 12), SizeText, GameHudSkin.Parchment,
                             TextAlignmentOptions.Left, TextStyle.Shadow);
 
             ring = s.Img("Ring", Root, new RectInt(0, 0, r.width, r.height), GameHudSkin.Ring, Color.clear, true);
         }
 
-        public void Fill(EvoRecipe r, bool slotFree)
+        public void Fill(BookItem item, bool slotFree)
         {
-            recipe = r;
-            Weapon evo = r.EvoWeapon;
+            recipe = item.Recipe;
+            Weapon evo = recipe.EvoWeapon;
             // Evo ohne zweite Zutat (Tofu): die erste zweimal statt einer leeren Kachel.
-            bool solo = r.RequiredWeapon2 == null;
-            a.Set(r.RequiredWeapon1);
-            b.Set(solo ? r.RequiredWeapon1 : r.RequiredWeapon2);
+            bool solo = recipe.RequiredWeapon2 == null;
+            // Gesperrt: nur die fremde Zutat bekommt das Schloss, nicht ihr Partner.
+            locked = Permanent(item.Reach);
+            a.Set(recipe.RequiredWeapon1, locked);
+            b.Set(solo ? recipe.RequiredWeapon1 : recipe.RequiredWeapon2, locked);
             iconEvo.sprite = evo.weaponIcon;
             iconEvo.enabled = iconEvo.sprite != null;
             name.Set(NameOf(evo));
 
             active = Owned(evo);
-            bool maxA = Owned(r.RequiredWeapon1) && Maxed(r.RequiredWeapon1);
-            bool maxB = solo || (Owned(r.RequiredWeapon2) && Maxed(r.RequiredWeapon2));
-            bool gone = !active && (evo.hasBeenRemoved
-                        || (r.RequiredWeapon1 != null && r.RequiredWeapon1.hasBeenRemoved)
-                        || (r.RequiredWeapon2 != null && r.RequiredWeapon2.hasBeenRemoved));
-            ready = !active && !gone && maxA && maxB;
+            bool gone = !active && item.Reach == Reach.Gone;
+            bool blocked = !active && !locked && !gone && item.Reach != Reach.Open;
+            ready = IsReady(recipe);
 
             string text;
             Color color;
@@ -2202,9 +2428,16 @@ public partial class LevelUpScreen : MonoBehaviour
                 text = Loc.Get("ui.evobook.active", "ACTIVE");
                 color = GameHudSkin.MintLight;
             }
-            else if (gone)
+            else if (item.Reach == Reach.Foreign && item.Owner >= 0)
             {
-                text = Loc.Get("ui.evobook.banished", "BANISHED");
+                // Name in Gold, der Rest gedaempft: "NUR INARI".
+                string who = "<color=" + ArrowHex + ">" + CharName(item.Owner) + "</color>";
+                text = string.Format(Loc.Get("ui.evobook.only_char", "{0} ONLY"), who);
+                color = GameHudSkin.StoneLight;
+            }
+            else if (locked || gone)
+            {
+                text = ReachText(item.Reach);
                 color = GameHudSkin.StoneLight;
             }
             else if (ready && slotFree)
@@ -2217,23 +2450,34 @@ public partial class LevelUpScreen : MonoBehaviour
                 text = Loc.Get("ui.evobook.no_slot", "NO EVO SLOT");
                 color = GameHudSkin.JamLight;
             }
+            else if (blocked)
+            {
+                text = ReachText(item.Reach);
+                color = GameHudSkin.JamLight;
+            }
             else
             {
-                int n = (maxA ? 1 : 0) + (maxB && !solo ? 1 : 0);
+                int n = (MaxedIn(recipe.RequiredWeapon1) ? 1 : 0) + (!solo && MaxedIn(recipe.RequiredWeapon2) ? 1 : 0);
                 text = n + (solo ? "/1 " : "/2 ") + Loc.Get("ui.evobook.maxed", "MAXED");
                 color = GameHudSkin.ParchDark;
             }
             status.Set(text);
             status.SetColor(color);
+            name.SetColor(locked ? (Color)GameHudSkin.ParchDark : (Color)GameHudSkin.Cream);
 
             check.enabled = active;
-            float dim = gone ? 0.45f : 1f;
-            group.alpha = dim;
+            lockMark.enabled = locked;
+            crown.enabled = item.Signature;
+
+            // Gesperrt: als Vorschau lesbar, aber sichtbar nicht zu haben.
+            baseAlpha = gone ? 0.45f : blocked ? 0.8f : 1f;
+            SetColor(evoTile, new Color(1f, 1f, 1f, locked ? 0.55f : 1f));
+            SetColor(iconEvo, new Color(1f, 1f, 1f, locked ? 0.45f : 1f));
             float used = active ? 0.35f : 1f;
             a.SetFade(used);
             b.SetFade(used);
-            SetColor(plus, new Color(1f, 1f, 1f, used));
-            SetColor(arrow, new Color(1f, 1f, 1f, used));
+            SetColor(plus, new Color(1f, 1f, 1f, locked ? 0.5f : used));
+            SetColor(arrow, new Color(1f, 1f, 1f, locked ? 0.5f : used));
         }
 
         public string Detail()
@@ -2246,15 +2490,23 @@ public partial class LevelUpScreen : MonoBehaviour
         private static string Part(Weapon w)
         {
             if (w == null) return "?";
-            string lvl = Owned(w) ? (w.weaponLevel + 1) + "/" + (w.maxweaponLevel + 1)
-                                  : Loc.Get("ui.evobook.missing", "missing");
+            string lvl;
+            if (Owned(w)) lvl = (w.weaponLevel + 1) + "/" + (w.maxweaponLevel + 1);
+            else
+            {
+                Reach r = ReachOf(w);
+                int owner = ForeignOwner(w);
+                lvl = r == Reach.Foreign && owner >= 0 ? CharName(owner)
+                    : ReachText(r) ?? Loc.Get("ui.evobook.missing", "missing");
+            }
             return NameOf(w) + " (" + lvl + ")";
         }
 
-        public void Animate(float now, bool focused)
+        /// <param name="appear">0..1 seit dem Aufblaettern - die Eintraege fallen nacheinander ein.</param>
+        public void Animate(float now, bool focused, float appear)
         {
             Color rc = Color.clear;
-            if (focused) rc = GameHudSkin.GoldLight;
+            if (focused) rc = locked ? (Color)GameHudSkin.StoneLight : (Color)GameHudSkin.GoldLight;
             else if (ready)
             {
                 rc = GameHudSkin.Gold;
@@ -2262,8 +2514,13 @@ public partial class LevelUpScreen : MonoBehaviour
             }
             SetColor(ring, rc);
 
+            float e = 1f - (1f - appear) * (1f - appear);
+            float alpha = baseAlpha * e;
+            if (!Mathf.Approximately(group.alpha, alpha)) group.alpha = alpha;
+
+            int drop = Mathf.RoundToInt((1f - e) * 4f);
             int lift = focused ? 1 : 0;
-            SetPos(Root, Rect.x, -(Rect.y - lift));
+            SetPos(Root, Rect.x, -(Rect.y - lift + drop));
 
             for (int i = 0; i < sparkles.Length; i++)
             {
@@ -2272,20 +2529,25 @@ public partial class LevelUpScreen : MonoBehaviour
                 sparkles[i].enabled = vis;
                 if (!vis) continue;
                 int corner = (Mathf.FloorToInt(cycle) + i) % 3;
-                Vector2Int pos = corner == 0 ? new Vector2Int(81, 5) : corner == 1 ? new Vector2Int(106, 30) : new Vector2Int(105, 6);
+                Vector2Int pos = corner == 0 ? new Vector2Int(81, 4) : corner == 1 ? new Vector2Int(106, 29) : new Vector2Int(105, 5);
                 SetPos(sparkles[i].rectTransform, pos.x, -pos.y);
             }
         }
     }
 
-    /// <summary>Zutat im Evo-Buch: Kachel, Symbol, Stufe bzw. Stern.</summary>
+    /// <summary>
+    /// Zutat im Evo-Buch: Kachel, Symbol, Stufe bzw. Stern. Kommt sie in
+    /// diesem Lauf nicht (fremde Startwaffe, nicht im Build, Slots voll),
+    /// sitzt statt der Stufe ein Schloss in der Ecke, verbannt ein Kreuz.
+    /// </summary>
     private sealed class IngredientView
     {
         public readonly Image Icon;
-        private readonly Image tile, star;
+        private readonly Image tile, star, lockMark, banishMark;
         private readonly RectTransform chip;
         private readonly PixText level;
         private readonly int x, y;
+        private float iconAlpha = 1f;
 
         public IngredientView(LevelUpScreen s, Transform parent, int x, int y)
         {
@@ -2296,16 +2558,25 @@ public partial class LevelUpScreen : MonoBehaviour
             chip = s.Img("Chip", parent, new RectInt(x + StripTile - 6, y + StripTile - 8, 8, 10), GameHudSkin.LevelChip, Color.white, true).rectTransform;
             level = s.Text("Level", chip, new RectInt(0, 0, 8, 10), SizeText, GameHudSkin.Cream, TextAlignmentOptions.Center, TextStyle.Plain);
             star = s.Img("Max", parent, new RectInt(x + StripTile - 8, y + StripTile - 8, 9, 9), GameHudSkin.Star, Color.white);
+            lockMark = s.Img("Lock", parent, new RectInt(x + StripTile - 5, y + StripTile - 8, 7, 9), GameHudSkin.Lock, Color.white);
+            banishMark = s.Img("Banished", parent, new RectInt(x + StripTile - 7, y + StripTile - 7, 9, 9), GameHudSkin.Banish, Color.white);
         }
 
-        public void Set(Weapon w)
+        /// <param name="permanentOnly">Nur Sperren fuer immer markieren (Reiter GESPERRT).</param>
+        public void Set(Weapon w, bool permanentOnly)
         {
             bool owned = Owned(w);
+            Reach reach = ReachOf(w);
+            if (permanentOnly && !Permanent(reach)) reach = Reach.Open;
             GameHudSkin.TileKind k = !owned ? GameHudSkin.TileKind.Empty : IsBuff(w) ? GameHudSkin.TileKind.Buff : GameHudSkin.TileKind.Weapon;
             tile.sprite = GameHudSkin.Tile(StripTile, k);
             Icon.sprite = w != null ? w.weaponIcon : null;
             Icon.enabled = Icon.sprite != null;
-            SetColor(Icon, owned ? Color.white : new Color(1f, 1f, 1f, 0.4f));
+            iconAlpha = owned ? 1f : Permanent(reach) ? 0.3f : 0.4f;
+            SetColor(Icon, new Color(1f, 1f, 1f, iconAlpha));
+
+            SetActive(lockMark, !owned && reach != Reach.Open && reach != Reach.Gone);
+            SetActive(banishMark, !owned && reach == Reach.Gone);
 
             bool maxed = owned && Maxed(w);
             SetActive(star, maxed);
@@ -2322,7 +2593,7 @@ public partial class LevelUpScreen : MonoBehaviour
         public void SetFade(float a)
         {
             SetColor(tile, new Color(1f, 1f, 1f, a));
-            if (Icon.color.a > a) SetColor(Icon, new Color(1f, 1f, 1f, a));
+            SetColor(Icon, new Color(1f, 1f, 1f, Mathf.Min(iconAlpha, a)));
         }
 
         private static bool IsBuff(Weapon w)

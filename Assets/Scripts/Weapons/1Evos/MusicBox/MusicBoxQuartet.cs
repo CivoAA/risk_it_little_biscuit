@@ -36,10 +36,10 @@ public class MusicBoxQuartet : MochiMelody
     public const float BoxDistance = 2.2f;
 
     /// <summary>Schaden je Box relativ zur hoechsten Melodie-Stufe.</summary>
-    public const float DamageFactor = 1.2f;
+    public const float DamageFactor = 1.4f;
 
-    /// <summary>Davon geht noch so viel Schaden je Note ab (Melodie Hoechststufe 5.5 -> 6.6 - 1 = 5.6).</summary>
-    public const float DamageMinus = 1f;
+    /// <summary>Davon geht noch so viel Schaden je Note ab (Melodie Hoechststufe 4 -> 5.6 - 0 = 5.6).</summary>
+    public const float DamageMinus = 0f;
 
     /// <summary>Noten je Box und Schlag (Melodie Hoechststufe: 3) - mal vier Boxen.</summary>
     public const int NotesPerBox = 1;

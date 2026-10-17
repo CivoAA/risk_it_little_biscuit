@@ -470,8 +470,9 @@ public static class Unlocks
         }
 
         // Schon einmal einen Boss besiegt -> Cursed Sugar
+        // (Nicht Ach.BossPhantom - das ist trotz Namen "100 Elites besiegen".)
         if (Ach.Bosses5.Value >= 1f || Ach.BossCookieKing.IsUnlocked || Ach.BossEmberroot.IsUnlocked
-            || Ach.BossIceEmperor.IsUnlocked || Ach.BossPhantom.IsUnlocked)
+            || Ach.BossIceEmperor.IsUnlocked)
         {
             Give(CursedSugar);
         }

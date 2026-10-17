@@ -47,7 +47,8 @@ public static class KuecheBuilder
     /// </summary>
     private static readonly float[] VariantWeights = { 40f, 40f, 6f, 1.5f, 1.5f, 2f, 1.2f, 0.6f, 0.6f, 1.2f };
 
-    [Serializable] private class PropInfo { public string name; public int colliderW; public int colliderH; }
+    // colliderX: Mitte der Box in px relativ zum Pivot (optional, fuer schiefe Props wie den Mehlsack).
+    [Serializable] private class PropInfo { public string name; public int colliderW; public int colliderH; public int colliderX; }
     [Serializable] private class PropInfoList { public List<PropInfo> props = new List<PropInfo>(); }
 
     [MenuItem("Tools/Welt/Kueche einrichten", false, 120)]
@@ -154,7 +155,7 @@ public static class KuecheBuilder
             var box = GetOrAdd<BoxCollider2D>(root);
             box.isTrigger = false;
             box.size = new Vector2(p.colliderW / Ppu, Mathf.Max(p.colliderH, 12) / Ppu);
-            box.offset = new Vector2(0f, box.size.y * 0.3f);
+            box.offset = new Vector2(p.colliderX / Ppu, box.size.y * 0.3f);
 
             GetOrAdd<MixerBlocker>(root);
 

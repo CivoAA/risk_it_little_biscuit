@@ -37,11 +37,14 @@ public class RandomVoidSpike : Weapon
         Scene gameScene = RunScene.Current;
         for (int i = 0; i < count; i++)
         {
-            Vector2 spawnPos = new Vector2(
-            target.x,
-            target.y - 0.5f                       // immer etwas tiefer
-            );
             if (target == Vector2.zero) yield break;
+            // Jeder zweite Stachel sucht sich einen Gegner in Reichweite,
+            // die anderen bleiben zufaellig.
+            Vector2 at = i % 2 == 1 && TryRandomEnemy(out Vector2 enemyPos) ? enemyPos : target;
+            Vector2 spawnPos = new Vector2(
+            at.x,
+            at.y - 0.5f                           // immer etwas tiefer
+            );
             WeaponSounds.Play(WeaponSounds.VoidSpike);
             GameObject voidSpike = Instantiate(prefab, spawnPos, transform.rotation);
             if (gameScene.IsValid() && gameScene.isLoaded)
@@ -62,6 +65,16 @@ public class RandomVoidSpike : Weapon
         Destroy(obj);
     }
 }
+
+    private bool TryRandomEnemy(out Vector2 position)
+    {
+        position = Vector2.zero;
+        if (enemiesInRange == null) return false;
+        enemiesInRange.RemoveAll(e => e == null || !e.isActiveAndEnabled);
+        if (enemiesInRange.Count == 0) return false;
+        position = enemiesInRange[Random.Range(0, enemiesInRange.Count)].transform.position;
+        return true;
+    }
 
     private void UpdateTarget()
     {
