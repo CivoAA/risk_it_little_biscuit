@@ -12,7 +12,8 @@ public class ExtraShot : Weapon
         }
         if (weaponLevel != lastAppliedLevel && weaponLevel >= 0)
         {
-            PlayerController.Instance.playerShots += stats[weaponLevel].damage;
+            // eigener Topf: zaehlt bei jeder Waffe 1:1 (siehe Weapon.ExtraShotValue)
+            PlayerController.Instance.buffShots += stats[weaponLevel].damage;
             lastAppliedLevel = weaponLevel;
         }
     }

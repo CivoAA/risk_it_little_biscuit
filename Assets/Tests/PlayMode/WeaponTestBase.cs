@@ -35,6 +35,7 @@ public abstract class WeaponTestBase
 
         TestSceneLoadout.ClearAll(player);
         player.playerShots = 0;
+        player.buffShots = 0;
         player.damageMultiplier = 1f;
         player.critChance = 0f;
 

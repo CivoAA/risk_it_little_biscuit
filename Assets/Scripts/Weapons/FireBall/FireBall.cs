@@ -22,7 +22,8 @@ public class FireBall : Weapon
         UpdateTarget();
 
         spawnCounter -= Time.deltaTime;
-        if (spawnCounter <= 0)
+        // Cooldown erst starten, wenn auch ein Ziel da ist
+        if (spawnCounter <= 0 && target != Vector2.zero)
         {
             spawnCounter = CurrentCooldown;
             StartCoroutine(SpawnFireBalls());

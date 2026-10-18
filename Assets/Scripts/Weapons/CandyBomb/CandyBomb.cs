@@ -30,6 +30,9 @@ public class CandyBomb : Weapon
 
         for (int i = 0; i < shots; i++)
         {
+            // mitten in der Salve zur Evo geworden: stats[-99] gibt es nicht
+            if (!IsActive) break;
+
             // Bombe erzeugen
             GameObject candyBomb = Instantiate(prefab, transform.position, transform.rotation);
             WeaponSounds.Play(WeaponSounds.CandyDrop);

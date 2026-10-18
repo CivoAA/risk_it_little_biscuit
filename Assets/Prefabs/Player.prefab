@@ -2842,36 +2842,36 @@ MonoBehaviour:
     shots: 0
     description: XX
   - cooldown: 30
-    duration: 15
-    damage: 3
+    duration: 17
+    damage: 4
     range: 0
     AttackSpeed: 1
     shots: 0
     description: XX
-  - cooldown: 32
+  - cooldown: 30
     duration: 17
     damage: 4
     range: 0
     AttackSpeed: 2
     shots: 0
     description: XX
-  - cooldown: 32
-    duration: 17
-    damage: 4
+  - cooldown: 28
+    duration: 19
+    damage: 5
     range: 0
     AttackSpeed: 2
     shots: 0
     description: XX
-  - cooldown: 34
+  - cooldown: 28
     duration: 19
     damage: 5
     range: 0
     AttackSpeed: 3
     shots: 0
     description: XX
-  - cooldown: 36
+  - cooldown: 26
     duration: 21
-    damage: 5
+    damage: 6
     range: 0
     AttackSpeed: 3
     shots: 0
@@ -3655,7 +3655,7 @@ MonoBehaviour:
     AttackSpeed: 5
     shots: 1
     description: XX
-  - cooldown: 4
+  - cooldown: 3
     duration: 0
     damage: 5
     range: 5
@@ -9358,7 +9358,7 @@ MonoBehaviour:
     damage: 3
     range: 0
     AttackSpeed: 0
-    shots: 6
+    shots: 8
     description: 
   weaponImage: {fileID: -8079531964657431639, guid: 36c9afe7f8e457444bdf5ec56d49030d, type: 3}
   weaponIcon: {fileID: -8079531964657431639, guid: 36c9afe7f8e457444bdf5ec56d49030d, type: 3}

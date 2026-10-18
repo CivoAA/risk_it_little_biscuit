@@ -53,6 +53,6 @@ public class UIPausPanleStats : MonoBehaviour
         statTexts[13].text = GameManager.Instance.currencyGainMultiplire.ToString("F1");
 
         // 14 Extra Shots
-        statTexts[14].text = PlayerController.Instance.playerShots.ToString("F1");
+        statTexts[14].text = PlayerController.Instance.TotalShots.ToString("F1");
     }
 }

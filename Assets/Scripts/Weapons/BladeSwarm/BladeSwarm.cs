@@ -113,9 +113,11 @@ public class BladeSwarm : Weapon
     /// </summary>
     public const int ExtraShotsPerBlade = 2;
 
-    /// <summary>Kunai aus Extra-Schuessen. Auch von <see cref="BladeStormEvo"/> genutzt.</summary>
-    public static int ExtraBlades =>
-        PlayerController.Instance != null ? PlayerController.Instance.ExtraShots / ExtraShotsPerBlade : 0;
+    /// <summary>
+    /// Kunai aus Extra-Schuessen (Buff 1:1, der Rest 1:2), nur ganze.
+    /// Auch von <see cref="BladeStormEvo"/> genutzt.
+    /// </summary>
+    public static int ExtraBlades => Mathf.FloorToInt(Weapon.ExtraShotsFor(ExtraShotsPerBlade) + 0.0001f);
 
     /// <summary>Ring-Radius bis zur Kunai-Mitte: halbe Kunai-Laenge (~0.64) + halbe Figur (0.5) + Luft.</summary>
     public const float RingRadius = 1.25f;
