@@ -68,6 +68,8 @@ public static class GeistBuilder
         public bool flat;
         public float colliderW;
         public float colliderH;
+        public float colliderX;                    // px, Mitte der Box relativ zum Pivot
+        public float? colliderBottom;              // px, Unterkante relativ zum Pivot (leer = Standard)
         public int glowFrames;
         public float glowFps;
         public Dictionary<string, object> light;
@@ -185,6 +187,9 @@ public static class GeistBuilder
                 glowFps = Convert.ToSingle(d["glowFps"]),
                 light = d["light"] as Dictionary<string, object>,
             };
+            // Optional: Baeume mit breiten Wurzeln brauchen die Box tiefer bzw. versetzt.
+            if (d.TryGetValue("colliderX", out object cx)) p.colliderX = Convert.ToSingle(cx);
+            if (d.TryGetValue("colliderBottom", out object cb)) p.colliderBottom = Convert.ToSingle(cb);
             string artPath = $"{ArtFolder}/geist_{p.name}.png";
             Sprite sprite = AssetDatabase.LoadAllAssetsAtPath(artPath).OfType<Sprite>().FirstOrDefault();
             if (sprite == null)
@@ -223,7 +228,8 @@ public static class GeistBuilder
                 var box = GetOrAdd<BoxCollider2D>(root);
                 box.isTrigger = false;
                 box.size = new Vector2(p.colliderW / Ppu, Mathf.Max(p.colliderH, 12f) / Ppu);
-                box.offset = new Vector2(0f, box.size.y * 0.3f);
+                float bottom = p.colliderBottom.HasValue ? p.colliderBottom.Value / Ppu : -box.size.y * 0.2f;
+                box.offset = new Vector2(p.colliderX / Ppu, bottom + box.size.y * 0.5f);
                 GetOrAdd<MixerBlocker>(root);
 
                 // Glow-Kind sortiert mit dem Prop - sonst laege die Flamme vor jedem Gegner.

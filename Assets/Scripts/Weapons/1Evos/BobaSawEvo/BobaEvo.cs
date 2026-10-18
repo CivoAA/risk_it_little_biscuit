@@ -13,7 +13,7 @@ using UnityEngine.SceneManagement;
 public class BobaEvo : Weapon
 {
     /// <summary>Abstand zwischen zwei Salven vor dem Cooldown-Buff.</summary>
-    private const float VolleyInterval = 0.1f;
+    private const float VolleyInterval = 0.14f;
 
     /// <summary>So weit dreht sich der Kreis pro Salve (Grad).</summary>
     private const float SpinPerVolley = 40f;

@@ -19,3 +19,6 @@ Assets/Resources/Feedback.meta
 
 # Cloudflare-Wrangler-Cache (enthaelt Account-ID und E-Mail)
 Tools/feedback-proxy/.wrangler/
+
+# Steam-Screenshots (Rohmaterial)
+/SteamArt/Screenshots/

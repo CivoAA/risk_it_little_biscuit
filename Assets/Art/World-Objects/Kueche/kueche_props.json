@@ -7,8 +7,9 @@
   },
   {
    "name": "mehlsack",
-   "colliderW": 40,
-   "colliderH": 9
+   "colliderW": 46,
+   "colliderH": 9,
+   "colliderX": -3
   },
   {
    "name": "milchtuete",
