@@ -47,6 +47,9 @@ public class Spikefork : Weapon
 
         for (int i = 0; i < shots; i++)
         {
+            // mitten in der Salve zur Evo geworden: stats[-99] gibt es nicht
+            if (!IsActive) break;
+
             WeaponSounds.Play(WeaponSounds.ForkStab);
 
             // erster Fork

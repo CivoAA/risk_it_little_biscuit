@@ -42,7 +42,8 @@ public class TimeLaser : Weapon
     IEnumerator SpawnLaser()
     {
         shooting = true;
-        int shots = Mathf.RoundToInt(stats[weaponLevel].shots * 0.5f) + RollExtraShots();
+        // Halbe aufrunden: Mathf.RoundToInt macht aus 2,5 eine 2 (zur geraden Zahl)
+        int shots = Mathf.FloorToInt(stats[weaponLevel].shots * 0.5f + 0.5f) + RollExtraShots();
 
         // Sofort Cooldown setzen, damit neuer Schuss nach Ablauf wieder möglich ist
         spawnCounter = CurrentCooldown;

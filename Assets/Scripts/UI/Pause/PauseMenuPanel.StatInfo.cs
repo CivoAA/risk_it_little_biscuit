@@ -231,12 +231,16 @@ public partial class PauseMenuPanel
 
             case "shots":
             {
-                int whole = p.ExtraShots;
+                float total = p.TotalShots;
+                int whole = Mathf.FloorToInt(total + 0.0001f);
                 string text = Fmt("ui.pause.info.shots.now", "Jetzt: +{0} Geschosse pro Angriff", whole.ToString());
-                float rest = p.playerShots - whole;
+                float rest = total - whole;
                 if (rest > 0.001f)
                     text += "\n" + Fmt("ui.pause.info.shots.chance", "Dazu {0} % Chance auf eins mehr",
                                        Num(rest * 100f, "0"));
+                if (p.buffShots > 0.001f)
+                    text += "\n" + Fmt("ui.pause.info.shots.buff", "Davon +{0} vom Extraschuss-Buff - zählt bei jeder Waffe voll",
+                                       Num(p.buffShots, "0.##"));
                 return text;
             }
 

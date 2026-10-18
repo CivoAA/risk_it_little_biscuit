@@ -105,15 +105,18 @@ public class Weapon : MonoBehaviour
     /// </summary>
     protected virtual int ExtraShotsPerShot => 1;
 
-    /// <summary>Extra-Schuesse nach <see cref="ExtraShotsPerShot"/>, mit Bruchteil.</summary>
-    private float ExtraShotValue
+    /// <summary>
+    /// Extra-Schuesse mit Bruchteil: Skilltree/Mixer nach
+    /// <see cref="ExtraShotsPerShot"/>, der Buff (<see cref="PlayerController.buffShots"/>) immer 1:1.
+    /// </summary>
+    private float ExtraShotValue => ExtraShotsFor(ExtraShotsPerShot);
+
+    /// <summary>Wie <see cref="ExtraShotValue"/>, fuer ein beliebiges Verhaeltnis (Kunai).</summary>
+    public static float ExtraShotsFor(int extraShotsPerShot)
     {
-        get
-        {
-            PlayerController player = PlayerController.Instance;
-            if (player == null || ExtraShotsPerShot <= 0) return 0f;
-            return Mathf.Max(0f, player.playerShots) / ExtraShotsPerShot;
-        }
+        PlayerController player = PlayerController.Instance;
+        if (player == null || extraShotsPerShot <= 0) return 0f;
+        return Mathf.Max(0f, player.playerShots) / extraShotsPerShot + Mathf.Max(0f, player.buffShots);
     }
 
     /// <summary>

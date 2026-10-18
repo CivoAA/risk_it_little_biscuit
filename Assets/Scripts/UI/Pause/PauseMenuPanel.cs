@@ -709,7 +709,7 @@ public partial class PauseMenuPanel : MonoBehaviour
                     Stat("critchance", "Krit-Chance",   "F0", () => p() != null ? p().critChance * 100f : 0f),
                     Stat("critdamage", "Krit-Schaden",  "F1", () => p() != null ? p().critDamage : 0f),
                     Stat("size",       "Größe",         "F1", () => p() != null ? p().AOERange : 0f),
-                    Stat("shots",      "Extra-Schüsse", "F1", () => p() != null ? p().playerShots : 0f),
+                    Stat("shots",      "Extra-Schüsse", "F1", () => p() != null ? p().TotalShots : 0f),
                 },
             },
             new StatGroup

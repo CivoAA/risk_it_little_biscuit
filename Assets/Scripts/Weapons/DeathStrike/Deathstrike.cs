@@ -22,7 +22,9 @@ public class Deathstrike : Weapon
         if (weaponLevel < 0) return;
 
         spawnCounter -= Time.deltaTime;
-        if (spawnCounter <= 0f)
+        // Cooldown erst starten, wenn auch ein Gegner da ist
+        enemiesInRange.RemoveAll(e => e == null);
+        if (spawnCounter <= 0f && enemiesInRange.Count > 0)
         {
             spawnCounter = CurrentCooldown;
             StartCoroutine(SpawnDeathstrike());

@@ -77,7 +77,12 @@ public class AreaWeaponPrefab : MonoBehaviour
 
     void Update()
     {
-        if (weapon == null || !weapon.IsActive) return;
+        // Waffe weg (z.B. zur Blutgabel weiterentwickelt): Lache sofort entfernen
+        if (weapon == null || !weapon.IsActive)
+        {
+            Destroy(gameObject);
+            return;
+        }
 
         timer -= Time.deltaTime;
         if (pool != null)

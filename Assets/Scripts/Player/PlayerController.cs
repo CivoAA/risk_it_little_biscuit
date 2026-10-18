@@ -31,6 +31,16 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public int ExtraShots => Mathf.FloorToInt(playerShots + 0.0001f);
 
+    /// <summary>
+    /// Extra-Schuesse aus dem Extra-Schuss-Buff. Getrennt von
+    /// <see cref="playerShots"/> (Skilltree, Mixer): sie zaehlen bei jeder
+    /// Waffe 1:1, egal welches Verhaeltnis die Waffe sonst hat.
+    /// </summary>
+    [System.NonSerialized] public float buffShots;
+
+    /// <summary>Alle Extra-Schuesse zusammen, nur fuer die Anzeige.</summary>
+    public float TotalShots => playerShots + buffShots;
+
     public float critChance;
     public float critDamage;
     public float dodgeChance;
