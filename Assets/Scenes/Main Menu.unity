@@ -576,15 +576,15 @@ MonoBehaviour:
           m_CallState: 2
   showBox: 0
   showPlates: 1
-  plateStyle: 0
+  plateStyle: 2
   plateSprite: {fileID: -6331290707015815530, guid: 3cd3336a39c907248b63435e6fe20379, type: 3}
   plateHoverSprite: {fileID: -8180486244138565967, guid: 27dc60bad0b7e66439b651ceac1a25ff, type: 3}
   skinPlateHeight: 14
   skinPlateMinWidth: 92
-  boxCenter: {x: 0, y: -12}
+  boxCenter: {x: 0, y: -10}
   minBoxWidth: 104
   paddingY: 8
-  rowStep: 16
+  rowStep: 20
   boxFill: {r: 0.16862746, g: 0.16862746, b: 0.1882353, a: 0.9411765}
   checkerA: {r: 0.16862746, g: 0.16862746, b: 0.1882353, a: 1}
   checkerB: {r: 0.1882353, g: 0.1882353, b: 0.21176471, a: 1}
@@ -2313,7 +2313,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 2653286179059575396, guid: a234eace18d720642a1f77c0493f0ea3, type: 2}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: bc0630a1da204c03ac1481d78049d18a, type: 3}
+  m_Resource: {fileID: 8300000, guid: f010e683ebfc42e39af0f4721c1d2fd7, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.5
   m_Pitch: 1

@@ -41,7 +41,13 @@ public class JuicyMainMenu : MonoBehaviour
         /// <summary>Holzknöpfe aus GameHudSkin wie in Optionen und Pause, der erste Eintrag in Gold.</summary>
         Skin,
         /// <summary>Die gezeichneten Platten aus plateSprite / plateHoverSprite.</summary>
-        Sprite
+        Sprite,
+        /// <summary>
+        /// Kleine Holzschilder wie das Logo (GameHudSkin.MenuSign): Maserung, Nieten,
+        /// Kante, Schatten, Symbol links. Gewaehlt: Goldrahmen, Schild hebt sich,
+        /// Kekse zeigen von beiden Seiten drauf, es funkelt.
+        /// </summary>
+        Sign
     }
 
     [Header("Einträge (oben nach unten)")]
@@ -61,6 +67,8 @@ public class JuicyMainMenu : MonoBehaviour
     private int skinPlateHeight = 14;
     [SerializeField, Tooltip("Mindestbreite der Holzknöpfe (nur Skin).")]
     private int skinPlateMinWidth = 92;
+    [SerializeField, Tooltip("Mindestbreite der Holzschilder (nur Sign). Gerade Zahl.")]
+    private int signMinWidth = 100;
     [SerializeField, Tooltip("Mitte der Box relativ zur Canvas-Mitte.")]
     private Vector2 boxCenter = new Vector2(0f, 0f);
     [SerializeField] private int minBoxWidth = 104;
@@ -158,6 +166,18 @@ public class JuicyMainMenu : MonoBehaviour
         public JuicyMenuItem relay;
         public Sprite plateNormal, platePressed;
         public Color textColor, hoverColor;
+        // Nur Sign:
+        public Image ring;
+        public TMP_Text shadow;
+        public RectTransform icon;
+        public Sprite signLit, signDown, signLitDown;
+        public Color dimColor, shadowColor;
+        public Vector2 labelHome, iconHome;
+        public float pressT, lift, litT;
+        public bool waving;
+        public RectTransform shineMask;
+        public Image shine;
+        public float shineT = 1f, dimStrength;
         public float textWidth;
         public float baseY;
         public float scale = 1f;
@@ -165,6 +185,12 @@ public class JuicyMainMenu : MonoBehaviour
         public float underlineWidth;
         public float colorT;
         public float alpha = 1f;
+    }
+
+    private struct Sparkle
+    {
+        public Image image;
+        public float age, life;
     }
 
     private struct Particle
@@ -195,6 +221,9 @@ public class JuicyMainMenu : MonoBehaviour
     private int hoveredIndex = -1;
     private float dimT;
     private float diamondX, diamondY, diamondHalfWidth, diamondAlpha;
+    private int lastActive = -1;
+    private float hopT, blinkTimer = 2.5f, sparkleTimer, startShineTimer = 0.4f;
+    private Sparkle[] sparkles;
 
     // ==================================================================
     //  Aufbau
@@ -212,9 +241,9 @@ public class JuicyMainMenu : MonoBehaviour
         if (font == null) font = PixelUI.FindPixelFont();
         textFont = PixelUI.FindTextFont();
         if (plateStyle == PlateStyle.Sprite) showPlates &= plateSprite != null;
-        textColor = SkinPlates ? (Color)GameHudSkin.Cream
+        textColor = SkinPlates || SignPlates ? (Color)GameHudSkin.Cream
                   : showPlates ? plateTextColor : showBox ? boxTextColor : plainTextColor;
-        hoverColor = SkinPlates ? (Color)GameHudSkin.Cream
+        hoverColor = SkinPlates || SignPlates ? (Color)GameHudSkin.Cream
                    : showPlates ? plateHoverColor : showBox ? boxHoverColor : plainHoverColor;
         // Die Rauten sitzen neben dem Eintrag auf dem Hintergrund, nicht auf der Platte.
         diamondColor = showBox ? boxHoverColor : plainHoverColor;
@@ -243,6 +272,7 @@ public class JuicyMainMenu : MonoBehaviour
     }
 
     private bool SkinPlates => showPlates && plateStyle == PlateStyle.Skin;
+    private bool SignPlates => showPlates && plateStyle == PlateStyle.Sign;
 
     /// <summary>
     /// Die Menü-Schrift, solange sie jedes Zeichen kennt - sonst die Schrift mit
@@ -303,10 +333,18 @@ public class JuicyMainMenu : MonoBehaviour
         if (showBox) BuildParticles(clip, inner);
 
         RectTransform list = PixelUI.Rect("Items", clip, inner, Vector2.zero);
-        diamondLeft = BuildDiamond("DiamondL", list, out diamondLeftImage);
-        diamondRight = BuildDiamond("DiamondR", list, out diamondRightImage);
-
-        for (int i = 0; i < entries.Count; i++) items.Add(BuildItem(i, list, inner.x));
+        if (SignPlates)
+        {
+            for (int i = 0; i < entries.Count; i++) items.Add(BuildSignItem(i, list));
+            BuildCookies(list);
+            BuildSparkles(list);
+        }
+        else
+        {
+            diamondLeft = BuildDiamond("DiamondL", list, out diamondLeftImage);
+            diamondRight = BuildDiamond("DiamondR", list, out diamondRightImage);
+            for (int i = 0; i < entries.Count; i++) items.Add(BuildItem(i, list, inner.x));
+        }
         LinkNavigation();
 
     }
@@ -318,6 +356,17 @@ public class JuicyMainMenu : MonoBehaviour
     /// </summary>
     private void BuildPlateSprites(float widest, ref int boxWidth)
     {
+        if (SignPlates)
+        {
+            // Platz fuer Symbol + Nieten links und gleich viel rechts, damit die Schrift mittig bleibt.
+            int w = Mathf.Max(signMinWidth, Mathf.CeilToInt(widest) + 2 * 22);
+            if (w % 2 != 0) w++;
+            plateSize = new Vector2(w + 2, GameHudSkin.SignH);
+            // Kekse links und rechts: 14 breit, 3 Abstand, 2 Luft zum Wippen.
+            boxWidth = Mathf.Max(boxWidth, w + 2 * (14 + 3 + 2) + 4);
+            return;
+        }
+
         if (SkinPlates)
         {
             // Holzknopf aus GameHudSkin: 9-Slice mit PPU 100, also ein Texel = ein Pixel.
@@ -471,6 +520,121 @@ public class JuicyMainMenu : MonoBehaviour
         return item;
     }
 
+    // ---------- Holzschild (Sign) ----------
+
+    /// <summary>Gerade Groesse: Mitte auf ganzem Pixel. Ungerade: auf halbem, sonst liegen die Kanten krumm.</summary>
+    private static float Half(float size) => Mathf.RoundToInt(size) % 2 == 1 ? 0.5f : 0f;
+
+    /// <summary>Mitte des Bretts relativ zur Bildmitte des Schilds (Brett sitzt oben, darunter Kante und Schatten).</summary>
+    private float FaceMid => plateSize.y * 0.5f - (GameHudSkin.SignFaceTop + GameHudSkin.SignFaceH * 0.5f);
+
+    private Item BuildSignItem(int index, Transform parent)
+    {
+        Entry entry = entries[index];
+        Item item = new Item();
+        item.baseY = boxSize.y * 0.5f - paddingY - rowStep * (index + 0.5f);
+
+        // Der erste Eintrag (Start) ist das goldene Schild, darauf dunkle Schrift.
+        int w = Mathf.RoundToInt(plateSize.x) - 2;
+        bool primary = index == 0;
+        GameHudSkin.SignLook look = primary ? GameHudSkin.SignLook.Gold : GameHudSkin.SignLook.Wood;
+        GameHudSkin.SignLook lit = primary ? GameHudSkin.SignLook.GoldLit : GameHudSkin.SignLook.WoodLit;
+        item.plateNormal = GameHudSkin.MenuSign(w, look, false);
+        item.signDown = GameHudSkin.MenuSign(w, look, true);
+        item.signLit = GameHudSkin.MenuSign(w, lit, false);
+        item.signLitDown = GameHudSkin.MenuSign(w, lit, true);
+
+        // Trefferflaeche = nur das Schild, ohne Schatten darunter.
+        Image hit = PixelUI.Panel("Item_" + entry.label, parent, plateSize, new Vector2(-plateSize.x, item.baseY), Color.clear);
+        hit.raycastTarget = true;
+        hit.raycastPadding = new Vector4(1f, 4f, 1f, 1f);
+        item.rect = hit.rectTransform;
+        item.group = hit.gameObject.AddComponent<CanvasGroup>();
+
+        item.ring = PixelUI.Panel("Ring", item.rect, plateSize, Vector2.zero, new Color(1f, 1f, 1f, 0f));
+        item.ring.sprite = GameHudSkin.MenuSignRing(w);
+        item.plate = PixelUI.Panel("Plate", item.rect, plateSize, Vector2.zero, Color.white);
+        item.plate.sprite = item.plateNormal;
+
+        // Lichtschimmer, auf das Brett beschnitten (RectMask2D schneidet auf ganzen Pixeln).
+        item.shineMask = PixelUI.Rect("ShineMask", item.rect, new Vector2(plateSize.x - 4f, GameHudSkin.SignFaceH),
+                                      new Vector2(0f, FaceMid));
+        item.shineMask.gameObject.AddComponent<RectMask2D>();
+        Sprite shineSprite = GameHudSkin.MenuShine;
+        item.shine = PixelUI.Panel("Shine", item.shineMask, shineSprite.rect.size, Vector2.zero, Color.white);
+        item.shine.sprite = shineSprite;
+        item.shine.enabled = false;
+
+        // Gold dunkelt weniger ab - sonst wird es senffarben.
+        item.dimStrength = primary ? 0.1f : 0.2f;
+        item.textColor = primary ? (Color)GameHudSkin.Ink : (Color)GameHudSkin.Cream;
+        item.hoverColor = primary ? (Color)GameHudSkin.Night : Color.white;
+        item.dimColor = primary ? (Color)GameHudSkin.Ink : (Color)GameHudSkin.ParchDark;
+        item.shadowColor = primary ? (Color)GameHudSkin.GoldLight : (Color)GameHudSkin.Ink;
+
+        Sprite iconSprite = GameHudSkin.MenuIcon(entry.label.ToLowerInvariant());
+        if (iconSprite != null)
+        {
+            Vector2 iconSize = iconSprite.rect.size;
+            // Links neben der Niete; senkrecht auf die Brettmitte.
+            float ix = -plateSize.x * 0.5f + 8f + iconSize.x * 0.5f;
+            float iy = Mathf.Round(FaceMid - Half(iconSize.y)) + Half(iconSize.y);
+            item.iconHome = new Vector2(ix, iy);
+            Image icon = PixelUI.Panel("Icon", item.rect, iconSize, item.iconHome, Color.white);
+            icon.sprite = iconSprite;
+            item.icon = icon.rectTransform;
+        }
+
+        string text = entry.Text;
+        item.labelHome = new Vector2(0f, Mathf.Round(FaceMid));
+        Vector2 labelSize = new Vector2(plateSize.x, GameHudSkin.SignFaceH);
+        item.visual = PixelUI.Rect("Visual", item.rect, labelSize, item.labelHome);
+        // Harte Pixel-Kante unter der Schrift: auf Holz dunkel, auf Gold hell (eingeschnitzt).
+        item.shadow = PixelUI.Label("Shadow", item.visual, labelSize, new Vector2(0f, -1f), text, fontSize,
+                                    item.shadowColor, TextAlignmentOptions.Center, FontFor(text));
+        item.shadow.textWrappingMode = TextWrappingModes.NoWrap;
+        item.label = PixelUI.Label("Label", item.visual, labelSize, Vector2.zero, text, fontSize,
+                                   item.textColor, TextAlignmentOptions.Center, FontFor(text));
+        item.label.textWrappingMode = TextWrappingModes.NoWrap;
+        item.textWidth = item.label.GetPreferredValues(text).x;
+
+        Button button = hit.gameObject.AddComponent<Button>();
+        button.transition = Selectable.Transition.None;
+        button.targetGraphic = hit;
+        int captured = index;
+        button.onClick.AddListener(() => Activate(captured));
+
+        item.relay = hit.gameObject.AddComponent<JuicyMenuItem>();
+        item.relay.Owner = this;
+        item.relay.Index = index;
+        return item;
+    }
+
+    /// <summary>Statt der Rauten: der Keks aus dem Logo links und rechts vom gewaehlten Schild.</summary>
+    private void BuildCookies(Transform parent)
+    {
+        Sprite cookie = GameHudSkin.MenuCookie(false);
+        diamondLeftImage = PixelUI.Panel("CookieL", parent, cookie.rect.size, Vector2.zero, Color.clear);
+        diamondRightImage = PixelUI.Panel("CookieR", parent, cookie.rect.size, Vector2.zero, Color.clear);
+        diamondLeftImage.sprite = diamondRightImage.sprite = cookie;
+        diamondLeft = diamondLeftImage.rectTransform;
+        diamondRight = diamondRightImage.rectTransform;
+        // Rechts gespiegelt, schaut dann auch zum Schild. -1 ist ganzzahlig, die Pixel bleiben heil.
+        diamondRight.localScale = new Vector3(-1f, 1f, 1f);
+    }
+
+    private void BuildSparkles(Transform parent)
+    {
+        sparkles = new Sparkle[12];
+        for (int i = 0; i < sparkles.Length; i++)
+        {
+            Image img = PixelUI.Panel("Sparkle", parent, new Vector2(5f, 5f), Vector2.zero, Color.white);
+            img.sprite = GameHudSkin.MenuSparkle(0);
+            img.enabled = false;
+            sparkles[i] = new Sparkle { image = img };
+        }
+    }
+
     private void LinkNavigation()
     {
         for (int i = 0; i < items.Count; i++)
@@ -605,6 +769,13 @@ public class JuicyMainMenu : MonoBehaviour
         // ---------- 5. Punch beim Klick ----------
         // Aktion sofort, ohne Wartezeit - der Punch läuft einfach mit.
         items[index].scale = punchScale;
+        if (SignPlates)
+        {
+            // Schild wird ins Brett gedrueckt, die Kekse huepfen, es staubt Gold.
+            items[index].pressT = 0.16f;
+            hopT = 1f;
+            for (int i = 0; i < 6; i++) SpawnSparkle(index, true);
+        }
         entries[index].onClick.Invoke();
     }
 
@@ -629,8 +800,17 @@ public class JuicyMainMenu : MonoBehaviour
         int active = ResolveActive();
 
         AnimateBox(t);
-        AnimateItems(t, time, dt, active);
-        AnimateDiamonds(time, dt, active);
+        if (SignPlates)
+        {
+            AnimateSigns(t, time, dt, active);
+            AnimateCookies(time, dt, active);
+            AnimateSparkles(dt, active);
+        }
+        else
+        {
+            AnimateItems(t, time, dt, active);
+            AnimateDiamonds(time, dt, active);
+        }
         AnimateParticles(time, dt);
     }
 
@@ -690,6 +870,221 @@ public class JuicyMainMenu : MonoBehaviour
             c.a = item.alpha;
             item.label.color = c;
             item.underlineImage.color = c;
+        }
+    }
+
+    // ---------- Holzschilder (Sign) ----------
+    private void AnimateSigns(float t, float time, float dt, int active)
+    {
+        dimT = Damp(dimT, active >= 0 ? 1f : 0f, dimSpeed, dt);
+
+        for (int i = 0; i < items.Count; i++)
+        {
+            Item item = items[i];
+            bool isActive = i == active;
+
+            float s = Mathf.Clamp01((t - boxPopTime * 0.5f - i * staggerDelay) / slideDuration);
+            float slideX = Mathf.LerpUnclamped(-slideDistance, 0f, BackOut(s));
+            item.group.alpha = Mathf.Clamp01(s * 2.5f);
+
+            // Gewaehlt hebt sich das Schild um einen Pixel - der Schatten bleibt an der Wand.
+            item.lift = Damp(item.lift, isActive ? 1f : 0f, 18f, dt);
+            item.litT = Damp(item.litT, isActive ? 1f : 0f, 14f, dt);
+            item.pressT = Mathf.Max(0f, item.pressT - dt);
+            bool down = item.pressT > 0f;
+
+            item.rect.anchoredPosition = new Vector2(Mathf.Round(slideX), item.baseY + Mathf.Round(item.lift));
+            item.plate.sprite = isActive ? (down ? item.signLitDown : item.signLit)
+                                         : (down ? item.signDown : item.plateNormal);
+
+            // Abdunkeln ueber die Farbe statt die Deckkraft: die Wand scheint nicht
+            // durch, und dunkle Schrift auf Gold wird nicht grau.
+            float dim = isActive ? 0f : dimT;
+            float k = 1f - item.dimStrength * dim;
+            item.plate.color = new Color(k, k * 0.97f, k * 0.97f, 1f);
+            if (item.icon != null) item.icon.GetComponent<Image>().color = new Color(k, k, k, 1f);
+
+            float ringPulse = 0.7f + 0.3f * Mathf.Sin(time * 5f);
+            item.ring.color = new Color(1f, 1f, 1f, item.litT * ringPulse);
+
+            Vector2 press = down ? new Vector2(0f, -2f) : Vector2.zero;
+            item.visual.anchoredPosition = item.labelHome + press;
+            item.shineMask.anchoredPosition = new Vector2(0f, FaceMid) + press;
+
+            // Schimmer: beim Anwaehlen einmal, START zieht ihn alle paar Sekunden von selbst
+            // (sobald es fertig eingeflogen ist) - der Hauptknopf lebt auch ohne Maus.
+            if (i == 0 && s >= 1f)
+            {
+                startShineTimer -= dt;
+                if (startShineTimer <= 0f)
+                {
+                    startShineTimer = 4f;
+                    item.shineT = 0f;
+                }
+            }
+            AnimateShine(item, dt);
+            if (item.icon != null) item.icon.anchoredPosition = item.iconHome + press;
+
+            Color c = Color.Lerp(item.textColor, item.dimColor, dim);
+            item.label.color = Color.Lerp(c, item.hoverColor, item.litT);
+            Color sh = item.shadowColor;
+            sh.a = Mathf.Lerp(1f, 0.6f, dim);
+            item.shadow.color = sh;
+
+            bool wave = isActive && item.litT > 0.5f;
+            if (wave || item.waving)
+            {
+                Wave(item.label, time, wave);
+                Wave(item.shadow, time, wave);
+                item.waving = wave;
+            }
+        }
+    }
+
+    private void AnimateShine(Item item, float dt)
+    {
+        if (item.shineT >= 1f)
+        {
+            item.shine.enabled = false;
+            return;
+        }
+        item.shineT = Mathf.Min(1f, item.shineT + dt / 0.45f);
+        float half = item.shineMask.sizeDelta.x * 0.5f + item.shine.rectTransform.sizeDelta.x;
+        float x = Mathf.Lerp(-half, half, item.shineT * item.shineT * (3f - 2f * item.shineT));
+        // 11 breit, 12 hoch: waagerecht auf halbem, senkrecht auf ganzem Pixel.
+        item.shine.rectTransform.anchoredPosition = new Vector2(Mathf.Round(x) + 0.5f, 0f);
+        item.shine.enabled = true;
+    }
+
+    /// <summary>
+    /// Eine kleine Welle laeuft alle knapp zwei Sekunden durch die Schrift: jeder
+    /// Buchstabe hopst nacheinander genau einen Pixel hoch - ganze Pixel, kein
+    /// weiches Wabern. Aus = Mesh einmal frisch, alles wieder auf der Linie.
+    /// </summary>
+    private static void Wave(TMP_Text text, float time, bool on)
+    {
+        text.ForceMeshUpdate();
+        if (!on) return;
+
+        TMP_TextInfo info = text.textInfo;
+        float head = Mathf.Repeat(time * 14f, 26f);
+        for (int c = 0; c < info.characterCount; c++)
+        {
+            TMP_CharacterInfo ch = info.characterInfo[c];
+            if (!ch.isVisible) continue;
+            float p = head - c;
+            if (p < 0f || p >= 2f) continue;
+            Vector3[] v = info.meshInfo[ch.materialReferenceIndex].vertices;
+            for (int k = 0; k < 4; k++) v[ch.vertexIndex + k].y += 1f;
+        }
+        text.UpdateVertexData(TMP_VertexDataUpdateFlags.Vertices);
+    }
+
+    // ---------- Kekse links und rechts vom gewaehlten Schild ----------
+    private void AnimateCookies(float time, float dt, int active)
+    {
+        if (active != lastActive && active >= 0)
+        {
+            hopT = 1f;
+            items[active].shineT = 0f;
+        }
+        lastActive = active;
+
+        if (active >= 0)
+        {
+            Vector2 pos = items[active].rect.anchoredPosition;
+            float y = pos.y + Mathf.Round(FaceMid);
+            // Frisch eingeblendet: direkt hin statt quer durchs Menue zu fliegen.
+            if (diamondAlpha < 0.05f)
+            {
+                diamondX = pos.x;
+                diamondY = y;
+            }
+            diamondX = Damp(diamondX, pos.x, 20f, dt);
+            diamondY = Damp(diamondY, y, 20f, dt);
+            diamondHalfWidth = plateSize.x * 0.5f + 3f + diamondLeft.sizeDelta.x * 0.5f;
+        }
+        diamondAlpha = Damp(diamondAlpha, active >= 0 ? 1f : 0f, 16f, dt);
+
+        // Wippt zum Schild hin wie ein Zeigefinger; beim Wechsel ein Hopser.
+        float nudge = Mathf.Round((0.5f + 0.5f * Mathf.Sin(time * 7f)) * 2f);
+        hopT = Mathf.Max(0f, hopT - dt * 4.5f);
+        float hop = Mathf.Round(Mathf.Sin(hopT * Mathf.PI) * 3f);
+
+        // Ab und zu blinzeln.
+        blinkTimer -= dt;
+        if (blinkTimer < -0.12f) blinkTimer = UnityEngine.Random.Range(1.8f, 3.6f);
+        Sprite face = GameHudSkin.MenuCookie(blinkTimer < 0f);
+
+        float x = Mathf.Round(diamondX), y0 = Mathf.Round(diamondY) + hop;
+        float hw = Mathf.Round(diamondHalfWidth);
+        diamondLeft.anchoredPosition = new Vector2(x - hw + nudge, y0);
+        diamondRight.anchoredPosition = new Vector2(x + hw - nudge, y0);
+        diamondLeftImage.color = diamondRightImage.color = new Color(1f, 1f, 1f, diamondAlpha);
+        diamondLeftImage.sprite = diamondRightImage.sprite = face;
+    }
+
+    // ---------- Funkeln am gewaehlten Schild, wie die Sterne im Logo ----------
+    private void AnimateSparkles(float dt, int active)
+    {
+        if (active >= 0)
+        {
+            sparkleTimer -= dt;
+            if (sparkleTimer <= 0f)
+            {
+                sparkleTimer = UnityEngine.Random.Range(0.16f, 0.36f);
+                SpawnSparkle(active, false);
+            }
+        }
+
+        for (int i = 0; i < sparkles.Length; i++)
+        {
+            Sparkle sp = sparkles[i];
+            if (!sp.image.enabled) continue;
+            sp.age += dt;
+            float u = sp.age / sp.life;
+            if (u >= 1f) sp.image.enabled = false;
+            // Punkt -> kleiner Stern -> grosser Stern -> kleiner -> Punkt.
+            else sp.image.sprite = GameHudSkin.MenuSparkle(u < 0.2f || u > 0.85f ? 0 : u < 0.4f || u > 0.65f ? 1 : 2);
+            sparkles[i] = sp;
+        }
+    }
+
+    private void SpawnSparkle(int index, bool burst)
+    {
+        for (int i = 0; i < sparkles.Length; i++)
+        {
+            if (sparkles[i].image.enabled) continue;
+
+            // Auf dem Goldrahmen: meist Ober- oder Unterkante, sonst die Seiten.
+            Vector2 c = items[index].rect.anchoredPosition;
+            float hw = plateSize.x * 0.5f;
+            float top = plateSize.y * 0.5f - 1f, bottom = plateSize.y * 0.5f - 19f;
+            float x, y;
+            if (UnityEngine.Random.value < 0.75f)
+            {
+                x = UnityEngine.Random.Range(-hw + 6f, hw - 6f);
+                y = UnityEngine.Random.value < 0.6f ? top : bottom;
+            }
+            else
+            {
+                x = (UnityEngine.Random.value < 0.5f ? -1f : 1f) * hw;
+                y = UnityEngine.Random.Range(bottom + 3f, top - 3f);
+            }
+            if (burst)
+            {
+                x += UnityEngine.Random.Range(-3f, 3f);
+                y += UnityEngine.Random.Range(-3f, 3f);
+            }
+
+            // 5x5: Mitte auf halbem Pixel.
+            sparkles[i].image.rectTransform.anchoredPosition =
+                new Vector2(Mathf.Round(c.x + x) + 0.5f, Mathf.Round(c.y + y) + 0.5f);
+            sparkles[i].image.sprite = GameHudSkin.MenuSparkle(0);
+            sparkles[i].image.enabled = true;
+            sparkles[i].age = 0f;
+            sparkles[i].life = burst ? UnityEngine.Random.Range(0.35f, 0.55f) : UnityEngine.Random.Range(0.45f, 0.7f);
+            return;
         }
     }
 
