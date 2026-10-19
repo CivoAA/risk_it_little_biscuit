@@ -35,8 +35,12 @@ public static class HubConsoleCheats
         // ------------------------------------------------------------------
         // Beispiel 2: alles freischalten.  ->  "alleswirdgut"
         // ------------------------------------------------------------------
-        HubConsole.Add("alleswirdgut", "schaltet alle Unlocks frei", (args, sink) =>
+        HubConsole.Add("alleswirdgut", "schaltet alle Unlocks und alle Welten frei", (args, sink) =>
         {
+            // Erst die Story: die Welten haengen an den Glutsplittern, Endless am
+            // Finale (StoryProgress) - die Unlocks allein oeffnen keine Karte.
+            bool welten = StoryProgress.DebugOpenAllWorlds();
+
             int neu = 0;
             foreach (UnlockDef u in Unlocks.All)
             {
@@ -45,7 +49,8 @@ public static class HubConsoleCheats
                 neu++;
             }
 
-            sink.Print(neu > 0
+            if (welten) sink.Print(T("cheat.worlds", "Alle Welten offen, Story und Endless."));
+            sink.Print(neu > 0 || welten
                 ? string.Format(T("cheat.unlocks", "{0} Sachen freigeschaltet. Viel Spaß damit."), neu)
                 : T("cheat.allopen", "War schon alles offen. Gierig."));
         }, hidden: true);

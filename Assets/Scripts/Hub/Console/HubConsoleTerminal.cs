@@ -4,7 +4,8 @@ using UnityEngine;
 /// <summary>
 /// Das Terminal im Hub. Haengt an einem leeren GameObject, die Zone ist ein
 /// Rechteck - Groesse und Versatz stehen im Inspector, der Gizmo zeigt sie in
-/// der Szene an. [E] in der Zone oeffnet die Konsole.
+/// der Szene an. [E] in der Zone oeffnet das Endless-Scoreboard,
+/// Strg + Shift + E die Konsole.
 ///
 /// Cheat-Codes gibt es auf zwei Wegen:
 ///   * ohne Code: die Liste unten im Inspector (Code, Antwort, Unlock, Muenzen)
@@ -133,8 +134,20 @@ public class HubConsoleTerminal : HubInteractable
             entry.schonBenutzt = true;
     }
 
+    /// <summary>
+    /// [E] zeigt das Endless-Scoreboard (<see cref="HubScoreboardPanel"/>).
+    /// Die Konsole gibt es nur mit Strg + Shift + E - fuer Spieler unsichtbar.
+    /// </summary>
     protected override void OnInteract()
     {
+        bool ctrl = Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl);
+        bool shift = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+        if (!(ctrl && shift))
+        {
+            HubScoreboardPanel.Open();
+            return;
+        }
+
         if (console == null)
         {
             Debug.LogWarning($"{name}: keine HubConsoleUI gefunden.");

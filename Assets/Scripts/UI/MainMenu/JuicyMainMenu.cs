@@ -254,12 +254,14 @@ public class JuicyMainMenu : MonoBehaviour
     }
 
     /// <summary>
-    /// Kueche mit Leben (<see cref="MainMenuStage"/>) und das Profil-Schild oben
-    /// links (<see cref="MainMenuProfileBadge"/>) - beide ohne Szenenobjekt.
+    /// Kueche mit Leben (<see cref="MainMenuStage"/>), das Profil-Schild oben
+    /// links (<see cref="MainMenuProfileBadge"/>) und das Endless-Scoreboard
+    /// unten links (<see cref="MainMenuScoreboard"/>) - alle ohne Szenenobjekt.
     /// </summary>
     private void BuildExtras()
     {
         if (GetComponent<MainMenuStage>() == null) gameObject.AddComponent<MainMenuStage>();
+        if (GetComponent<MainMenuScoreboard>() == null) gameObject.AddComponent<MainMenuScoreboard>();
 
         MainMenuProfileBadge badge = GetComponent<MainMenuProfileBadge>();
         if (badge == null) badge = gameObject.AddComponent<MainMenuProfileBadge>();

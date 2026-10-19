@@ -1262,6 +1262,7 @@ public class Enemy : MonoBehaviour
         GrantRewards();
         SpawnDeathEffect();
         if (GameManager.Instance != null) GameManager.Instance.kills++;
+        EndlessScore.AddKill(role);
         Bestiary.AddKill(id);
 
         AudioController.Instance.PlayEnemyDeath();

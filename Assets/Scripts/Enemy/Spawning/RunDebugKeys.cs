@@ -12,6 +12,9 @@ using UnityEngine;
 ///               Spieler sofort ein (Phase 3, Herzkammer). Geht auch in der
 ///               Test-Szene, dort ueber den TestSceneBossSpawner.
 ///               In der Herzkammer: naechste Phase des Endkampfs.
+///   F11         Sofort in den Endlos-Teil (Elite- und Boss-Wellen). Ein
+///               Story-Lauf wird dabei zum Endless-Lauf und reicht beim Tod
+///               seinen Score ein (im Editor nur ins Log, siehe ScoreIntegrity)
 ///   F3          Das Gespenst / Squiddy (Endboss Geisterwald) wie ein Boss-Beat,
 ///               auch in der Test-Szene
 ///   Shift + F3  dasselbe auf halbem Leben - die Enthuellung startet sofort
@@ -40,6 +43,7 @@ public class RunDebugKeys : MonoBehaviour
 {
     private const KeyCode SpawnKingKey = KeyCode.F9;
     private const KeyCode SpawnCharredKey = KeyCode.F10;
+    private const KeyCode SkipToEndlessKey = KeyCode.F11;
     private const KeyCode SpawnSquiddyKey = KeyCode.F3;
     private const KeyCode ChocoChipsKey = KeyCode.F7;
     private const KeyCode MilkDunkKey = KeyCode.F8;
@@ -120,6 +124,14 @@ public class RunDebugKeys : MonoBehaviour
         if (Input.GetKeyDown(SpawnCharredKey))
         {
             SpawnCharred();
+            return;
+        }
+
+        if (Input.GetKeyDown(SkipToEndlessKey))
+        {
+            if (GameManager.Instance == null || SpawnDirector.Active == null) return;
+            Debug.Log("[RunDebugKeys] (F11) Sofort in den Endlos-Teil.");
+            GameManager.Instance.DebugSkipToEndless();
             return;
         }
 

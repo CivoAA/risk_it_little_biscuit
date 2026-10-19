@@ -119,6 +119,7 @@ public class MixerObject : MonoBehaviour
                 chargeSprite.transform.localScale = Vector3.zero;
                 actionTriggered = true;
                 mixerActive = true;
+                EndlessScore.AddMixer();
                 unused.Remove(this);
 
                 // Vor dem Oeffnen wuerfeln - die Mixer-Ansicht liest die
