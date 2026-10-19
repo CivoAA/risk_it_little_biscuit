@@ -2139,6 +2139,9 @@ MonoBehaviour:
   - {fileID: 6726658811918204575}
   - {fileID: 2847561938274615028}
   - {fileID: 8273645019283746152}
+  - {fileID: 2653822206787010178}
+  - {fileID: 8862591644298472921}
+  - {fileID: 8429253179888675247}
   activeBuffs:
   - {fileID: 1329916437877316911}
   - {fileID: 3253892304407363630}
@@ -3502,6 +3505,9 @@ Transform:
   - {fileID: 187215066691291842}
   - {fileID: 4491827365019283745}
   - {fileID: 3928475610928374651}
+  - {fileID: 2669840140124836393}
+  - {fileID: 5675960692634458745}
+  - {fileID: 7117370598902210771}
   m_Father: {fileID: 4991830239493606234}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6430632289492379781
@@ -11436,6 +11442,165 @@ MonoBehaviour:
   stats: []
   weaponImage: {fileID: 7310442915526031841, guid: a00116b13ec346ba998db55e52177f02, type: 3}
   weaponIcon: {fileID: 7310442915526031841, guid: a00116b13ec346ba998db55e52177f02, type: 3}
+  weaponIconEvo: {fileID: 0}
+  posssibleEvo: 0
+  hasBeenRemoved: 0
+--- !u!1 &6222680466348554130
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2669840140124836393}
+  - component: {fileID: 2653822206787010178}
+  m_Layer: 0
+  m_Name: Popcorn Pan
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2669840140124836393
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6222680466348554130}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3466192261950400575}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2653822206787010178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6222680466348554130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b60998904cd74f1eb4da45731c1b7fca, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::PopcornPan
+  weaponID: popcorn_pan
+  weaponLevel: -1
+  maxweaponLevel: 5
+  stats: []
+  weaponImage: {fileID: 2546503485374086405, guid: fab30a6041d04208ac78d85e6e1bd494, type: 3}
+  weaponIcon: {fileID: 2546503485374086405, guid: fab30a6041d04208ac78d85e6e1bd494, type: 3}
+  weaponIconEvo: {fileID: 0}
+  posssibleEvo: 0
+  hasBeenRemoved: 0
+--- !u!1 &8054432900399039501
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5675960692634458745}
+  - component: {fileID: 8862591644298472921}
+  m_Layer: 0
+  m_Name: Sauce Bottle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5675960692634458745
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8054432900399039501}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3466192261950400575}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8862591644298472921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8054432900399039501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39d8c89c7cfb45efb292fcf5708313d1, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::SauceBottle
+  weaponID: sauce_bottle
+  weaponLevel: -1
+  maxweaponLevel: 5
+  stats: []
+  weaponImage: {fileID: 2378835794972822857, guid: dc284334898640f7a99f5b8b85b1eb7c, type: 3}
+  weaponIcon: {fileID: 2378835794972822857, guid: dc284334898640f7a99f5b8b85b1eb7c, type: 3}
+  weaponIconEvo: {fileID: 0}
+  posssibleEvo: 0
+  hasBeenRemoved: 0
+--- !u!1 &5198764128915132896
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7117370598902210771}
+  - component: {fileID: 8429253179888675247}
+  m_Layer: 0
+  m_Name: Gummy Gang
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7117370598902210771
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5198764128915132896}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3466192261950400575}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8429253179888675247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5198764128915132896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af33f945203947e18be2bfb708651b7d, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::GummyGang
+  weaponID: gummy_gang
+  weaponLevel: -1
+  maxweaponLevel: 5
+  stats: []
+  weaponImage: {fileID: 4157698694273622250, guid: 5997a335c077465589035cbbe3535218, type: 3}
+  weaponIcon: {fileID: 4157698694273622250, guid: 5997a335c077465589035cbbe3535218, type: 3}
   weaponIconEvo: {fileID: 0}
   posssibleEvo: 0
   hasBeenRemoved: 0

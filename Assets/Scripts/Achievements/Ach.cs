@@ -422,6 +422,18 @@ public static class Ach
         "Max_Level_CandyFrisbee", "Max Level: Candy Frisbee", "Reach the maximum level of the Candy Frisbee weapon.",
         AchievementCategory.Weapons);
 
+    public static readonly AchievementDef MaxPopcornPan = Def(
+        "Max_Level_PopcornPan", "Max Level: Popcorn Pan", "Reach the maximum level of the Popcorn Pan weapon.",
+        AchievementCategory.Weapons);
+
+    public static readonly AchievementDef MaxSauceBottle = Def(
+        "Max_Level_SauceBottle", "Max Level: Ketchup & Mustard", "Reach the maximum level of the Ketchup & Mustard weapon.",
+        AchievementCategory.Weapons);
+
+    public static readonly AchievementDef MaxGummyGang = Def(
+        "Max_Level_GummyGang", "Max Level: Gummy Gang", "Reach the maximum level of the Gummy Gang weapon.",
+        AchievementCategory.Weapons);
+
     // ==================================================================
     //  Buffs auf Maximalstufe
     // ==================================================================
@@ -595,6 +607,8 @@ public static class Ach
         { "mochi_melody",   MaxMochiMelody },
         { "ice_dispenser",  MaxIceDispenser },   { "mint_shield",   MaxMintShield },
         { "bubble_gun",     MaxBubbleGun },      { "candy_frisbee", MaxCandyFrisbee },
+        { "popcorn_pan",    MaxPopcornPan },     { "sauce_bottle",  MaxSauceBottle },
+        { "gummy_gang",     MaxGummyGang },
 
         { "buff_extra_shot",    MaxExtraShot },     { "buff_cooldown",     MaxCooldown },
         { "buff_duration",      MaxDuration },      { "buff_glass_cannon", MaxGlassCannon },

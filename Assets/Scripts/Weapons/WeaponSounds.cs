@@ -124,6 +124,20 @@ public static class WeaponSounds
     public static readonly Sfx MintWheelBounce = new Sfx("mint_wheel_bounce", 0.20f, 0.08f, 0.05f);
     public static readonly Sfx MintNova        = new Sfx("mint_nova",         0.30f, 0.8f,  0.03f);
 
+    // Popcorn-Pfanne
+    public static readonly Sfx PopcornThrow   = new Sfx("popcorn_throw",   0.10f, 0.3f,   0.06f);
+    public static readonly Sfx PopcornPop     = new Sfx("popcorn_pop",     0.15f, 0.045f, 0.10f);
+
+    // Ketchup & Senf
+    public static readonly Sfx SauceSquirt    = new Sfx("sauce_squirt",    0.14f, 0.1f,   0.06f);
+    public static readonly Sfx SauceSplat     = new Sfx("sauce_splat",     0.16f, 0.12f,  0.07f);
+
+    // Gummibaerchen-Bande
+    public static readonly Sfx GummySpawn     = new Sfx("gummy_spawn",     0.10f, 0.15f,  0.08f);
+    public static readonly Sfx GummyBite      = new Sfx("gummy_bite",      0.08f, 0.07f,  0.10f);
+    public static readonly Sfx GummyPop       = new Sfx("gummy_pop",       0.13f, 0.08f,  0.08f);
+    public static readonly Sfx GummyShock     = new Sfx("gummy_shock",     0.16f, 0.15f,  0.05f);
+
     // ------------------------------------------------------------ Abspielen
 
     private const string Folder = "Sounds/Weapons/";

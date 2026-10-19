@@ -333,6 +333,12 @@ public class Enemy : MonoBehaviour
     [System.NonSerialized] public float DamageTakenFactor = 1f;
 
     /// <summary>
+    /// Zusatzfaktor durch Sauce (Ketchup &amp; Senf, <see cref="SauceMark"/>),
+    /// 1 = sauber. Eigenes Feld, damit er DamageTakenFactor der Bosse nicht ueberschreibt.
+    /// </summary>
+    [System.NonSerialized] public float SauceFactor = 1f;
+
+    /// <summary>
     /// Gesetzt = Beruehrungsschaden nur, wenn das hier ja sagt. Das Herz des
     /// Verkohlten braucht seinen Trefferkreis fuer Schuesse, soll aber nur im
     /// Lavabecken unter ihm brennen - nicht hinter ihm auf dem Boden.
@@ -1138,7 +1144,7 @@ public class Enemy : MonoBehaviour
     {
         if (Untouchable) return;
 
-        float finalDamage = damage * PlayerController.Instance.damageMultiplier * Bestiary.DamageFactor(id) * DamageTakenFactor;
+        float finalDamage = damage * PlayerController.Instance.damageMultiplier * Bestiary.DamageFactor(id) * DamageTakenFactor * SauceFactor;
         float critChance = PlayerController.Instance.critChance;
         float critDamage = PlayerController.Instance.critDamage;
 

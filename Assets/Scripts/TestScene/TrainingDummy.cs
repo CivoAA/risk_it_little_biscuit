@@ -62,7 +62,7 @@ public class TrainingDummy : Enemy
 
         if (player != null)
         {
-            finalDamage = damage * player.damageMultiplier;
+            finalDamage = damage * player.damageMultiplier * SauceFactor;
             isCrit = ForceCrit || Random.value < player.critChance;
             if (isCrit)
             {

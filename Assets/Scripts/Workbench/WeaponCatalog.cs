@@ -176,6 +176,9 @@ public static class WeaponCatalog
     public static readonly WeaponDef MintShield    = Def("mint_shield", "Mint Shield", PoolKind.Weapon);
     public static readonly WeaponDef BubbleGun     = Def("bubble_gun", "P. Bubble Gun", PoolKind.Weapon);
     public static readonly WeaponDef CandyFrisbee  = Def("candy_frisbee", "Candy Frisbee", PoolKind.Weapon);
+    public static readonly WeaponDef PopcornPan    = Def("popcorn_pan", "Popcorn Pan", PoolKind.Weapon);
+    public static readonly WeaponDef SauceBottle   = Def("sauce_bottle", "Ketchup & Mustard", PoolKind.Weapon);
+    public static readonly WeaponDef GummyGang     = Def("gummy_gang", "Gummy Gang", PoolKind.Weapon);
 
     // ==================================================================
     //  Buffs
@@ -300,6 +303,11 @@ public static class WeaponCatalog
         // sofort verfuegbar, ohne Shop.
         "ice_dispenser",
         "mint_shield",
+        // Popcorn-Pfanne, Ketchup & Senf, Gummibaerchen-Bande (19.10.2026):
+        // ebenfalls ohne Shop.
+        "popcorn_pan",
+        "sauce_bottle",
+        "gummy_gang",
 
         // Buffs
         "buff_max_hp",

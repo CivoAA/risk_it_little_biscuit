@@ -28,6 +28,9 @@ using UnityEngine;
 ///   Strg + F7   Eiswuerfel-Spender geben bzw. eine Stufe hoeher
 ///   Strg + F8   Pfefferminz-Schild geben bzw. eine Stufe hoeher
 ///   Strg + Alt + F8  Pfefferminz-Bollwerk (Schild-Evo) statt des Schilds
+///   Strg + F6   Popcorn-Pfanne geben bzw. eine Stufe hoeher
+///   Strg + Alt + F6  Gummibaerchen-Bande geben bzw. eine Stufe hoeher
+///   Strg + Alt + F7  Ketchup &amp; Senf geben bzw. eine Stufe hoeher
 ///   Shift + F4-F8  nur noch diese Waffe: alle anderen Waffen und Evos weg,
 ///               sie selbst auf Stufe 1 - zum Vergleichen als Startwaffe.
 ///               F4-F8 gehen ueberall, wo ein Spieler steht (auch Test-Szene).
@@ -68,18 +71,27 @@ public class RunDebugKeys : MonoBehaviour
     }
 
     private static bool Ctrl => Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl);
+    private static bool Alt => Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt);
 
     private void Update()
     {
         if (Ctrl && Input.GetKeyDown(ChocoChipsKey))
         {
-            GiveWeapon<IceDispenser>("Eiswuerfel-Spender");
+            if (Alt) GiveWeapon<SauceBottle>("Ketchup & Senf");
+            else GiveWeapon<IceDispenser>("Eiswuerfel-Spender");
+            return;
+        }
+
+        if (Ctrl && Input.GetKeyDown(MochiMelodyKey))
+        {
+            if (Alt) GiveWeapon<GummyGang>("Gummibaerchen-Bande");
+            else GiveWeapon<PopcornPan>("Popcorn-Pfanne");
             return;
         }
 
         if (Ctrl && Input.GetKeyDown(MilkDunkKey))
         {
-            if (Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt)) GiveMintBulwark();
+            if (Alt) GiveMintBulwark();
             else GiveWeapon(FindBaseMintShield(), "Pfefferminz-Schild");
             return;
         }
