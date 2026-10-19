@@ -1036,6 +1036,7 @@
     { "key": "boss.verkohlter.heart", "value": "DAS HERZ DES VERKOHLTEN" },
     { "key": "ui.levelselect.recordstory", "value": "SCHNELLSTER SIEG" },
     { "key": "ui.levelselect.recordendless", "value": "LÄNGSTES ÜBERLEBEN" },
+    { "key": "ui.levelselect.recordscore", "value": "BESTE PUNKTE" },
 
     { "key": "hub.prompt.read", "value": "[E] Lesen" },
     { "key": "hub.book.statue_hero.0", "value": "Diese Statue zeigt den Held des Zuckers." },
@@ -1056,7 +1057,7 @@
 
     { "key": "hub.prompt.enter", "value": "[E] Betreten" },
     { "key": "hub.prompt.shop", "value": "[E] Shop" },
-    { "key": "hub.prompt.terminal", "value": "[E] Terminal" },
+    { "key": "hub.prompt.terminal", "value": "[E] Bestenliste" },
     { "key": "hub.prompt.character", "value": "[E] Charakter" },
     { "key": "hub.prompt.levelselect", "value": "[E] Levelauswahl" },
     { "key": "hub.prompt.skilltree", "value": "[E] Skilltree" },
@@ -1468,7 +1469,7 @@
     { "key": "ui.console.cmd.ende", "value": "schließt das Terminal" },
     { "key": "ui.console.cmd.status", "value": "zeigt Münzen und Fortschritt" },
     { "key": "ui.console.cmd.gibkekse", "value": "Münzen aufs Konto" },
-    { "key": "ui.console.cmd.alleswirdgut", "value": "schaltet alle Unlocks frei" },
+    { "key": "ui.console.cmd.alleswirdgut", "value": "schaltet alle Unlocks und Welten frei" },
     { "key": "ui.console.cmd.freischalten", "value": "schaltet ein einzelnes Unlock frei" },
     { "key": "ui.console.cmd.resetcookie", "value": "setzt den Shop zurück" },
     { "key": "ui.console.cmd.unlocks", "value": "zeigt die Unlock-Liste" },
@@ -1966,6 +1967,18 @@
     { "key": "weapon.evo_mint_shield.scaling", "value": "Extra-Schuss: wirkt hier nicht.\nFläche (AOE): größeres Rad, größere Wellen und Nova.\nDauer: Gegner bleiben länger gebremst.\nAbklingzeit: die Blase wächst schneller nach, das Rad rollt öfter los." },
     { "key": "weapon.evo_mint_shield.lvl0", "value": "Ein Pfefferminz-Rad rollt durch die Gegner und kehrt als heilende Nova zurück" },
     { "key": "ach.Mint_Shield_Evo.name", "value": "Pfefferminz-Bollwerk" },
-    { "key": "ach.Mint_Shield_Evo.desc", "value": "Du hast das Pfefferminz-Bollwerk zum ersten Mal erhalten!" }
+    { "key": "ach.Mint_Shield_Evo.desc", "value": "Du hast das Pfefferminz-Bollwerk zum ersten Mal erhalten!" },
+    { "key": "ui.scoreboard.title", "value": "ENDLESS-BESTENLISTE" },
+    { "key": "ui.scoreboard.friends", "value": "FREUNDE" },
+    { "key": "ui.scoreboard.global", "value": "WELTWEIT" },
+    { "key": "ui.scoreboard.loading", "value": "LÄDT..." },
+    { "key": "ui.scoreboard.empty", "value": "NOCH KEINE EINTRÄGE" },
+    { "key": "ui.scoreboard.error", "value": "STEAM ANTWORTET NICHT" },
+    { "key": "ui.scoreboard.nosteam", "value": "STEAM NICHT VERBUNDEN" },
+    { "key": "ui.scoreboard.mods", "value": "MODS ERKANNT: ZÄHLT NICHT" },
+    { "key": "ui.scoreboard.cheats", "value": "CHEATS BENUTZT: ZÄHLT NICHT" },
+    { "key": "ui.scoreboard.locked", "value": "ENDLESS NACH DER STORY" },
+    { "key": "ui.death.score", "value": "PUNKTE" },
+    { "key": "ui.console.cheat.worlds", "value": "Alle Welten offen, Story und Endless." }
   ]
 }

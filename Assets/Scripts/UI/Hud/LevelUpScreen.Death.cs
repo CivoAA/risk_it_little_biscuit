@@ -219,8 +219,13 @@ public partial class LevelUpScreen
         });
         statRows[1].Set(GameHudSkin.Skull, Loc.Get("ui.death.kills", "ENEMIES DEFEATED"), gm != null ? gm.kills : 0,
                         v => Mathf.RoundToInt(v).ToString(CultureInfo.InvariantCulture));
-        statRows[2].Set(GameHudSkin.Star, Loc.Get("ui.death.level", "LEVEL REACHED"), level,
-                        v => Mathf.RoundToInt(v).ToString(CultureInfo.InvariantCulture));
+        // Endless: statt des Levels (steht schon am Portraet) der Punktestand fuers Scoreboard.
+        if (!deathWon && GameSession.IsEndless && EndlessScore.LastScore > 0)
+            statRows[2].Set(GameHudSkin.Crown, Loc.Get("ui.death.score", "SCORE"), EndlessScore.LastScore,
+                            v => ProfilePanel.FormatNumber(Mathf.RoundToInt(v)));
+        else
+            statRows[2].Set(GameHudSkin.Star, Loc.Get("ui.death.level", "LEVEL REACHED"), level,
+                            v => Mathf.RoundToInt(v).ToString(CultureInfo.InvariantCulture));
 
         coinChip.Set(Loc.Get("ui.death.coins", "COINS"), gm != null ? gm.currency : 0);
         // Charakter-Level im Skilltree (nicht das Lauf-Level) und darunter die

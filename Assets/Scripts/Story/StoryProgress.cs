@@ -207,6 +207,27 @@ public static class StoryProgress
         Save();
     }
 
+    /// <summary>
+    /// Nur fuer die Konsole ("alleswirdgut"): die ganze Route als geschafft
+    /// eintragen, alle Gespraeche als gesehen - jede Welt ist offen, Endless
+    /// auch. Gibt true zurueck, wenn sich etwas geaendert hat.
+    /// </summary>
+    public static bool DebugOpenAllWorlds()
+    {
+        SaveFile d = Data;
+        bool changed = !d.introSeen || !d.allShardsSeen || !d.finaleDone || !d.epilogueSeen;
+        d.introSeen = d.allShardsSeen = d.finaleDone = d.epilogueSeen = true;
+        foreach (string w in ShardWorlds)
+        {
+            changed |= Add(d.briefed, w);
+            changed |= Add(d.shards, w);
+            changed |= Add(d.debriefed, w);
+        }
+        changed |= Add(d.briefed, FinaleWorld);
+        if (changed) Save();
+        return changed;
+    }
+
     // ------------------------------------------------------------------
 
     private static bool Same(string a, string b) =>

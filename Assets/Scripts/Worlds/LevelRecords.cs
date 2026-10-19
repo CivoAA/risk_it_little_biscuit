@@ -9,6 +9,8 @@ using UnityEngine;
 ///
 ///   - Story:   schnellster Sieg (Lauf endet nach dem Boss) - kleiner ist besser.
 ///   - Endless: laengste Zeit, die man ueberlebt hat - groesser ist besser.
+///   - Endless-Punkte: bester Score (<see cref="EndlessScore"/>) - den zeigt
+///              die Levelauswahl, die Zeit bleibt nur gespeichert.
 ///   - Sterne:  hoechste Schwierigkeit, auf der die Welt besiegt wurde
 ///              (Leicht 1, Normal 2, Schwer 3). Ein Sieg auf Schwer bringt
 ///              gleich alle drei.
@@ -34,6 +36,7 @@ public static class LevelRecords
         public float storyBest;      // 0 = noch nie gewonnen
         public float endlessBest;    // 0 = noch nie gespielt
         public int stars;            // 0 = noch nie gewonnen, sonst 1-3
+        public int endlessScore;     // 0 = noch kein Endless-Score (EndlessScore)
     }
 
     [Serializable]
@@ -60,6 +63,24 @@ public static class LevelRecords
     {
         EnsureLoaded();
         return entries.TryGetValue(mapId, out Entry e) ? e.endlessBest : 0f;
+    }
+
+    /// <summary>Hoechster Endless-Punktestand (<see cref="EndlessScore"/>), 0 = keiner.</summary>
+    public static int EndlessScoreBest(int mapId)
+    {
+        EnsureLoaded();
+        return entries.TryGetValue(mapId, out Entry e) ? e.endlessScore : 0;
+    }
+
+    /// <summary>Endless-Punktestand melden - zaehlt nur, wenn er besser ist. Auch ohne Steam und mit Cheats (bleibt lokal).</summary>
+    public static void ReportScore(int mapId, int score)
+    {
+        if (mapId < 0 || score <= 0) return;
+        EnsureLoaded();
+        Entry e = GetOrAdd(mapId);
+        if (score <= e.endlessScore) return;
+        e.endlessScore = score;
+        Save();
     }
 
     /// <summary>Sterne der Karte (0-3): hoechste Schwierigkeit, auf der sie besiegt wurde.</summary>

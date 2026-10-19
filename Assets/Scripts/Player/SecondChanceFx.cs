@@ -255,10 +255,23 @@ public class SecondChanceFx : MonoBehaviour
         halo.transform.position = Snap(c + HaloOffset + new Vector2(0f, bob));
     }
 
+    /// <summary>
+    /// Mitte des Koerpers, nicht des Frames: der Zwiebelritter hat 64er-Zellen
+    /// (Schwert), der Keks 40er - die Frame-Mitte laege dort zu hoch
+    /// (<see cref="CharacterLooks.BodyRect"/>).
+    /// </summary>
     private Vector2 BodyCenter()
     {
         SpriteRenderer body = player.BodyRenderer();
-        return body != null ? (Vector2)body.bounds.center : (Vector2)player.transform.position;
+        if (body == null) return player.transform.position;
+
+        Sprite s = body.sprite;
+        if (s == null || s.pixelsPerUnit <= 0f) return body.bounds.center;
+
+        Vector2 local = (CharacterLooks.BodyRect(s).center - s.pivot) / s.pixelsPerUnit;
+        if (body.flipX) local.x = -local.x;
+        if (body.flipY) local.y = -local.y;
+        return body.transform.TransformPoint(local);
     }
 
     private static Vector3 Snap(Vector2 p)

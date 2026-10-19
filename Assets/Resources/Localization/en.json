@@ -1036,6 +1036,7 @@
     { "key": "boss.verkohlter.heart", "value": "THE HEART OF THE CHARRED ONE" },
     { "key": "ui.levelselect.recordstory", "value": "FASTEST WIN" },
     { "key": "ui.levelselect.recordendless", "value": "LONGEST SURVIVAL" },
+    { "key": "ui.levelselect.recordscore", "value": "BEST SCORE" },
 
     { "key": "hub.prompt.read", "value": "[E] Read" },
     { "key": "hub.book.statue_hero.0", "value": "This statue shows the Hero of Sugar." },
@@ -1056,7 +1057,7 @@
 
     { "key": "hub.prompt.enter", "value": "[E] Enter" },
     { "key": "hub.prompt.shop", "value": "[E] Shop" },
-    { "key": "hub.prompt.terminal", "value": "[E] Terminal" },
+    { "key": "hub.prompt.terminal", "value": "[E] Leaderboard" },
     { "key": "hub.prompt.character", "value": "[E] Characters" },
     { "key": "hub.prompt.levelselect", "value": "[E] Level Select" },
     { "key": "hub.prompt.skilltree", "value": "[E] Skill Tree" },
@@ -1468,7 +1469,7 @@
     { "key": "ui.console.cmd.ende", "value": "closes the terminal" },
     { "key": "ui.console.cmd.status", "value": "shows coins and progress" },
     { "key": "ui.console.cmd.gibkekse", "value": "adds coins" },
-    { "key": "ui.console.cmd.alleswirdgut", "value": "unlocks everything" },
+    { "key": "ui.console.cmd.alleswirdgut", "value": "unlocks everything, all worlds included" },
     { "key": "ui.console.cmd.freischalten", "value": "unlocks a single item" },
     { "key": "ui.console.cmd.resetcookie", "value": "resets the shop" },
     { "key": "ui.console.cmd.unlocks", "value": "shows the unlock list" },
@@ -1966,6 +1967,18 @@
     { "key": "weapon.evo_mint_shield.scaling", "value": "Extra Shot: no effect here.\nArea (AOE): bigger wheel, bigger waves and nova.\nDuration: enemies stay slowed longer.\nCooldown: the bubble grows back faster, the wheel rolls out more often." },
     { "key": "weapon.evo_mint_shield.lvl0", "value": "A peppermint wheel rolls through enemies and returns as a healing nova" },
     { "key": "ach.Mint_Shield_Evo.name", "value": "Peppermint Bulwark" },
-    { "key": "ach.Mint_Shield_Evo.desc", "value": "Obtained the Peppermint Bulwark for the first time!" }
+    { "key": "ach.Mint_Shield_Evo.desc", "value": "Obtained the Peppermint Bulwark for the first time!" },
+    { "key": "ui.scoreboard.title", "value": "ENDLESS SCORES" },
+    { "key": "ui.scoreboard.friends", "value": "FRIENDS" },
+    { "key": "ui.scoreboard.global", "value": "WORLDWIDE" },
+    { "key": "ui.scoreboard.loading", "value": "LOADING..." },
+    { "key": "ui.scoreboard.empty", "value": "NO SCORES YET" },
+    { "key": "ui.scoreboard.error", "value": "STEAM DIDN'T ANSWER" },
+    { "key": "ui.scoreboard.nosteam", "value": "STEAM NOT CONNECTED" },
+    { "key": "ui.scoreboard.mods", "value": "MODS FOUND: NOT COUNTED" },
+    { "key": "ui.scoreboard.cheats", "value": "CHEATS USED: NOT COUNTED" },
+    { "key": "ui.scoreboard.locked", "value": "ENDLESS AFTER THE STORY" },
+    { "key": "ui.death.score", "value": "SCORE" },
+    { "key": "ui.console.cheat.worlds", "value": "All worlds open, story and endless." }
   ]
 }

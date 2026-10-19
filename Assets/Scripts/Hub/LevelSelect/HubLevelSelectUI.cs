@@ -241,9 +241,9 @@ public class HubLevelSelectUI : MonoBehaviour
 
     // Steckbrief
     private TextMeshProUGUI mapLabel, nameText, nameShadow, descText, bossLabel, bossName, bossNone,
-                            timeText, kindsText, statusText, recordLabel, recordValue, recordShadow;
+                            timeText, kindsText, statusText, recordLabel, recordTime, recordValue, recordShadow;
     private Image statusChip, bossTile, bossIcon, bossQuestion, timeIcon, kindsIcon;
-    private Image recordIcon;
+    private Image recordIcon, recordRule, recordClock;
     private Btn storyBtn, endlessBtn, playBtn, backBtn;
 
     private readonly Dictionary<string, PlanInfo> planCache = new Dictionary<string, PlanInfo>();
@@ -512,10 +512,14 @@ public class HubLevelSelectUI : MonoBehaviour
         bossNone.textWrappingMode = TextWrappingModes.Normal;
 
         // Bestwert: haengt am Schalter Story / Endless
-        OptionsKit.Img("RecordRule", page, SideX, BossY + 16, SideW, 1, GameHudSkin.White,
+        recordRule = OptionsKit.Img("RecordRule", page, SideX, BossY + 16, SideW, 1, GameHudSkin.White,
                        OptionsKit.WithAlpha(GameHudSkin.Stone, 0.5f));
         recordLabel = OptionsKit.Label("RecordLabel", page, SideX, BossY + 19, SideW, 13, "", textFont,
                                        OptionsKit.SizeText, GameHudSkin.StoneLight, TextAlignmentOptions.Left);
+        // Rechts daneben: laengstes Ueberleben, mit Uhr davor (Lage beim Fuellen).
+        recordTime = OptionsKit.Label("RecordTime", page, SideX, BossY + 19, SideW, 13, "", textFont,
+                                      OptionsKit.SizeText, GameHudSkin.Parchment, TextAlignmentOptions.Right);
+        recordClock = OptionsKit.Img("RecordClock", page, SideX, BossY + 21, 9, 9, GameHudSkin.Clock);
         recordIcon = OptionsKit.Img("RecordIcon", page, SideX, BossY + 37, 9, 9, GameHudSkin.Star);
         recordShadow = OptionsKit.Label("RecordShadow", page, SideX + 13, BossY + 32, SideW - 13, 22, "", pixelFont,
                                         OptionsKit.SizeTitle, GameHudSkin.Ink, TextAlignmentOptions.Left);
@@ -1035,8 +1039,9 @@ public class HubLevelSelectUI : MonoBehaviour
         }
         else bossIcon.color = Color.clear;
 
-        // Bestwert der Karte im gewaehlten Modus
-        bool rec = open && linked && e.mapId >= 0;
+        // Bestwert der Karte: nur im Endless (beste Punkte) - eine Bestzeit im
+        // Story-Modus sagt nichts, dort dauert jeder Sieg gleich lang bis zum Boss.
+        bool rec = open && linked && e.mapId >= 0 && endlessChosen;
 
         string none = hasBoss ? "" : !open ? "???" : Loc.Get("ui.levelselect.noboss", "Noch unbekannt.");
         // Steht darunter ein Bestwert (Welt ohne Wellenplan), ist unter dem Namen
@@ -1044,15 +1049,22 @@ public class HubLevelSelectUI : MonoBehaviour
         bossName.text = bossKnown ? Bestiary.NameOf(boss).ToUpperInvariant() : hasBoss ? "???" : rec ? none : "";
         bossName.color = bossKnown ? GameHudSkin.Cream : GameHudSkin.Stone;
         bossNone.text = rec ? "" : none;
-        float best = !rec ? 0f : endlessChosen ? LevelRecords.EndlessBest(e.mapId) : LevelRecords.StoryBest(e.mapId);
-        recordLabel.text = !rec ? "" : endlessChosen
-            ? Loc.Get("ui.levelselect.recordendless", "LÄNGSTES ÜBERLEBEN")
-            : Loc.Get("ui.levelselect.recordstory", "SCHNELLSTER SIEG");
-        string value = !rec ? "" : best > 0f ? LevelRecords.Format(best) : "--:--";
+        int best = !rec ? 0 : LevelRecords.EndlessScoreBest(e.mapId);
+        recordLabel.text = !rec ? "" : Loc.Get("ui.levelselect.recordscore", "BESTE PUNKTE");
+        string value = !rec ? "" : best > 0 ? ProfilePanel.FormatNumber(best) : "--";
         recordValue.text = recordShadow.text = value;
-        recordValue.color = best > 0f ? (Color)GameHudSkin.Gold : GameHudSkin.Stone;
-        recordIcon.enabled = rec;
-        recordIcon.color = best > 0f ? Color.white : new Color(0.55f, 0.5f, 0.52f, 1f);
+        recordValue.color = best > 0 ? (Color)GameHudSkin.Gold : GameHudSkin.Stone;
+        recordIcon.enabled = recordRule.enabled = rec;
+        recordIcon.color = best > 0 ? Color.white : new Color(0.55f, 0.5f, 0.52f, 1f);
+
+        float longest = !rec ? 0f : LevelRecords.EndlessBest(e.mapId);
+        recordTime.text = longest > 0f ? LevelRecords.Format(longest) : "";
+        recordClock.enabled = longest > 0f;
+        if (longest > 0f)
+        {
+            float tw = Mathf.Ceil(OptionsKit.Measure(recordTime, recordTime.text));
+            OptionsKit.Move(recordClock.rectTransform, SideX + SideW - tw - 12, BossY + 21, 9, 9);
+        }
 
         // Dauer und Gegnerarten
         bool stats = plan != null && plan.Duration > 0f;

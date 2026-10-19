@@ -60,6 +60,7 @@ public class GameManager : MonoBehaviour
         gameActiv = true;
         RunMetrics.RunStarted();
         SecretAchievements.RunStarted();
+        EndlessScore.RunStarted();
     }
 
     void Update()
@@ -128,6 +129,8 @@ public class GameManager : MonoBehaviour
         gameActiv = false;
         storyWon = won;
         RunMetrics.RunEnded(won, gameTime, ContinuedAsEndless);
+        // Endless: Punktestand ans Steam-Scoreboard der Welt.
+        EndlessScore.RunEnded(gameTime);
 
         // Der Lauf ist vorbei - was sich an Charakter-XP angesammelt hat, jetzt
         // wegschreiben statt auf den naechsten 5-Sekunden-Takt zu warten.
@@ -260,6 +263,23 @@ public class GameManager : MonoBehaviour
 
         // Vulkan-Finale: der Sieg fiel im Herz des Verkohlten - erst raus in die Welt.
         if (VerkohlterHerzkammer.Active != null) VerkohlterHerzkammer.Active.LeaveForEndless();
+    }
+
+    /// <summary>
+    /// Testtaste F11 (<see cref="RunDebugKeys"/>): sofort in den Endlos-Teil.
+    /// Ein Story-Lauf wird dabei zum Endless-Lauf wie nach "Endless
+    /// weiterspielen" - zurueck im Hub gilt wieder Story.
+    /// </summary>
+    public void DebugSkipToEndless()
+    {
+        if (!gameActiv || SpawnDirector.Active == null) return;
+
+        if (!GameSession.IsEndless)
+        {
+            GameSession.SelectedMode = GameMode.Endless;
+            ContinuedAsEndless = true;
+        }
+        SpawnDirector.Active.ContinueAsEndless();
     }
 
     IEnumerator ShowGameOverScreen()

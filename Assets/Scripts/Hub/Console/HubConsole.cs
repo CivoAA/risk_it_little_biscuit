@@ -219,6 +219,10 @@ public static class HubConsole
             return;
         }
 
+        // Cheats sperren das Profil fuers Scoreboard - die reine Liste nicht.
+        if (cmd.Hidden && !string.Equals(cmd.Name, "allebefehle", StringComparison.OrdinalIgnoreCase))
+            ScoreIntegrity.MarkCheated();
+
         // Ein Befehl, der sich verschluckt, darf das Spiel nicht mitreissen.
         try
         {
