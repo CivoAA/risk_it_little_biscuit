@@ -631,12 +631,17 @@ public class AchievementsBookPanel : MonoBehaviour
                 Shadow = !done,
             };
 
-            // Woher der Unlock kommt, steht unten in der Belohnungszeile.
-            if (source != null)
+            // Wie man ihn bekommt, steht unten in der Belohnungszeile. Zaehlt der
+            // Erfolg dahinter mit (Schleimkoenig 10-mal, Full Bento), zeigt der
+            // Balken den Stand.
+            e.Reward = def.HowTo;
+            e.RewardIcon = GameHudSkin.Star;
+            e.RewardColor = done ? GameHudSkin.StoneLight : GameHudSkin.GoldLight;
+
+            if (!done && source != null && source.HasProgress)
             {
-                e.Reward = string.Format(Loc.Get("ui.unlocks.from", "Aus: {0}"), source.Name);
-                e.RewardIcon = GameHudSkin.Star;
-                e.RewardColor = done ? GameHudSkin.StoneLight : GameHudSkin.GoldLight;
+                e.Progress = Mathf.Clamp01(source.Value / source.Goal);
+                e.ProgressText = $"{Mathf.FloorToInt(Mathf.Min(source.Value, source.Goal))}/{Mathf.FloorToInt(source.Goal)}";
             }
 
             entries.Add(e);

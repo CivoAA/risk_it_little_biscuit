@@ -5,7 +5,8 @@ using UnityEngine;
 /// <summary>
 /// Einmaliger Spielstand-Reset beim Versionswechsel.
 ///
-/// Liegt im persistentDataPath keine save_version.txt oder steht dort eine
+/// Liegt im persistentDataPath keine Versionsmarke (save_version.txt bzw.
+/// save_version.json, es gilt die hoehere) oder steht dort eine
 /// kleinere Zahl als <see cref="SaveVersion"/>, werden alle Fortschritts-Dateien
 /// geloescht - Shop, Gold, Charaktere, Skilltrees, Werkbank, Story, Rekorde,
 /// Bestiarium, Erfolge. Einstellungen (Audio, Sprache, Grafik) bleiben.
@@ -34,6 +35,19 @@ public static class SaveReset
 
     private const string MarkerFile = "save_version.txt";
 
+    /// <summary>
+    /// Dieselbe Marke noch einmal als .json - die Steam Auto-Cloud nimmt *.json
+    /// sicher mit. Ohne Marke hielte ein frischer PC den Spielstand aus der Cloud
+    /// fuer einen alten und wuerde ihn loeschen.
+    /// </summary>
+    private const string CloudMarkerFile = "save_version.json";
+
+    [Serializable]
+    private class CloudMarker
+    {
+        public int version;
+    }
+
     private static readonly string[] ProgressFiles =
     {
         "save.json",          // Shop, Gold, Charaktere
@@ -51,19 +65,27 @@ public static class SaveReset
     {
         string root = Application.persistentDataPath;
         string markerPath = Path.Combine(root, MarkerFile);
+        string cloudMarkerPath = Path.Combine(root, CloudMarkerFile);
 
         try
         {
-            int version = ReadVersion(markerPath);
-            if (version >= SaveVersion) return;
-
-            foreach (string dir in SaveDirectories(root))
+            int version = Math.Max(ReadVersion(markerPath), ReadCloudVersion(cloudMarkerPath));
+            if (version < SaveVersion)
             {
-                if (version < 1) DeleteProgress(dir);
-                else if (version < 3) ClearSkillTrees(dir);
+                foreach (string dir in SaveDirectories(root))
+                {
+                    if (version < 1) DeleteProgress(dir);
+                    else if (version < 3) ClearSkillTrees(dir);
+                }
             }
 
-            File.WriteAllText(markerPath, SaveVersion.ToString());
+            // Beide Marken nachziehen - fehlt eine (z. B. weil die Cloud nur die
+            // andere mitgebracht hat), steht sie danach wieder da.
+            string text = SaveVersion.ToString();
+            if (!File.Exists(markerPath) || File.ReadAllText(markerPath).Trim() != text)
+                File.WriteAllText(markerPath, text);
+            if (ReadCloudVersion(cloudMarkerPath) != SaveVersion)
+                File.WriteAllText(cloudMarkerPath, JsonUtility.ToJson(new CloudMarker { version = SaveVersion }));
         }
         catch (Exception e)
         {
@@ -113,6 +135,19 @@ public static class SaveReset
     {
         if (!File.Exists(markerPath)) return 0;
         return int.TryParse(File.ReadAllText(markerPath).Trim(), out int v) ? v : 0;
+    }
+
+    private static int ReadCloudVersion(string path)
+    {
+        if (!File.Exists(path)) return 0;
+        try
+        {
+            return JsonUtility.FromJson<CloudMarker>(File.ReadAllText(path))?.version ?? 0;
+        }
+        catch
+        {
+            return 0;
+        }
     }
 
     // ---------- Manueller Reset (Optionen / Konsole) ----------

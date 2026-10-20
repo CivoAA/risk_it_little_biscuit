@@ -16,6 +16,9 @@ public sealed class UnlockDef
     public readonly string NameEn;
     public readonly string DescEn;
 
+    /// <summary>Wie man ihn bekommt - die Zeile unten im Erfolgsbuch, auch solange er gesperrt ist.</summary>
+    public readonly string HowEn;
+
     /// <summary>Dateiname in Assets/Resources/Unlocks/. Standard: die Id.</summary>
     public readonly string IconKey;
 
@@ -25,11 +28,12 @@ public sealed class UnlockDef
     /// <summary>Von Anfang an offen, ohne im Spielstand zu stehen - Platzhalter, bis es eine Bedingung gibt.</summary>
     public readonly bool ByDefault;
 
-    public UnlockDef(string id, string nameEn, string descEn, string iconKey, bool byDefault = false)
+    public UnlockDef(string id, string nameEn, string descEn, string howEn, string iconKey, bool byDefault = false)
     {
         Id        = id;
         NameEn    = nameEn;
         DescEn    = descEn;
+        HowEn     = howEn;
         IconKey   = string.IsNullOrEmpty(iconKey) ? id : iconKey;
         ByDefault = byDefault;
     }
@@ -38,6 +42,7 @@ public sealed class UnlockDef
 
     public string Name => Loc.Get($"unlock.{Id}.name", NameEn);
     public string Description => Loc.Get($"unlock.{Id}.desc", DescEn);
+    public string HowTo => Loc.Get($"unlock.{Id}.how", HowEn);
     public Sprite Icon => UnlockIcons.Get(IconKey);
 
     public override string ToString() => Id;
@@ -47,7 +52,8 @@ public sealed class UnlockDef
 /// DER UNLOCK-KATALOG und die Schnittstelle dazu.
 ///
 /// Einen Unlock hinzufügen:
-///   1. Eine Zeile unten schreiben.
+///   1. Eine Zeile unten schreiben (Id, Name, Text beim Freischalten, wie man
+///      ihn bekommt - der letzte steht kurz unten im Erfolgsbuch, max. ~30 Zeichen).
 ///   2. An der Stelle, die ihn verdient, Unlocks.Grant(Unlocks.MeinDing) aufrufen.
 ///   3. Wer ihn abfragt (z.B. ein Shop-Eintrag), nimmt die Id als requiredUnlock.
 ///   4. Ein PNG namens [IconKey].png nach Assets/Resources/Unlocks/ legen.
@@ -71,17 +77,20 @@ public static class Unlocks
     public static readonly UnlockDef StoryKitchen = Def(
         "unlock_story_kitchen",
         "Kitchen",
-        "You beat the Forest - the Kitchen is now open!");
+        "You beat the Forest - the Kitchen is now open!",
+        "Beat the Forest story");
 
     public static readonly UnlockDef StoryGlacier = Def(
         "unlock_story_glacier",
         "Ice Cream Glacier",
-        "You beat the Kitchen - the Ice Cream Glacier is now open!");
+        "You beat the Kitchen - the Ice Cream Glacier is now open!",
+        "Beat the Kitchen story");
 
     public static readonly UnlockDef StoryGhost = Def(
         "unlock_story_ghost",
         "Haunted Forest",
-        "You beat the Ice Cream Glacier - the Haunted Forest is now open!");
+        "You beat the Ice Cream Glacier - the Haunted Forest is now open!",
+        "Beat the Ice Cream Glacier story");
 
     /// <summary>
     /// Endless in allen Welten: erst wenn die Story durch ist (alle fuenf
@@ -92,7 +101,8 @@ public static class Unlocks
     public static readonly UnlockDef Endless = Def(
         "unlock_endless",
         "Endless Mode",
-        "You destroyed the Charred One's heart - Endless mode is now open in every world!");
+        "You destroyed the Charred One's heart - Endless mode is now open in every world!",
+        "Finish the story");
 
     // ==================================================================
     //  Charaktere
@@ -105,19 +115,22 @@ public static class Unlocks
     public static readonly UnlockDef CharInari = Def(
         "unlock_char_inari",
         "Inari",
-        "Inari joins your team!");
+        "Inari joins your team!",
+        "Defeat the Ice Emperor");
 
     /// <summary>Kommt mit "Long Live the King" (Schleimkoenig 10-mal besiegt).</summary>
     public static readonly UnlockDef CharSlimeKing = Def(
         "unlock_char_slime_king",
         "Slime King",
-        "The Slime King joins your team!");
+        "The Slime King joins your team!",
+        "Defeat the Slime King 10 times");
 
     /// <summary>Kommt mit "Full Bento" (mit jedem Charakter ein Sieg).</summary>
     public static readonly UnlockDef CharTofu = Def(
         "unlock_char_tofu",
         "Tofu",
-        "Tofu joins your team!");
+        "Tofu joins your team!",
+        "Win with every character");
 
     // ==================================================================
     //  Shop-Erweiterungen
@@ -127,12 +140,14 @@ public static class Unlocks
         "unlock_weapon_slot",
         "Weapon Slot",
         "You unlocked the Weapon Slot upgrade in the shop!",
+        "Reach level 30 in a run",
         icon: "weapon_slot");
 
     public static readonly UnlockDef BuffSlot = Def(
         "unlock_buff_slot",
         "Buff Slot",
         "You unlocked the Buff Slot upgrade in the shop!",
+        "Reach level 10 in a run",
         icon: "buff_slot");
 
     /// <summary>
@@ -144,6 +159,7 @@ public static class Unlocks
         "unlock_evo_slot",
         "Evo Slot",
         "Your first Evo! More Evo Slots are now available in the shop!",
+        "Get your first Evo",
         icon: "evo_slot");
 
     /// <summary>Sobald ein Charakter <see cref="CompanionCharLevel"/> erreicht.</summary>
@@ -151,6 +167,7 @@ public static class Unlocks
         "unlock_companion",
         "Companion",
         "A character reached level 10 - companions are now available in the shop!",
+        "Get a character to level 10",
         icon: "companion");
 
     /// <summary>
@@ -161,6 +178,7 @@ public static class Unlocks
         "unlock_cursed_sugar",
         "Cursed Sugar",
         "You defeated your first boss - the Cursed Sugar buff is now available in the shop!",
+        "Defeat your first boss",
         icon: "buff_curse");
 
     /// <summary>Charakter-Level, ab dem der Begleiter im Shop auftaucht.</summary>
@@ -489,9 +507,9 @@ public static class Unlocks
         CheckAllCharacters();
     }
 
-    private static UnlockDef Def(string id, string nameEn, string descEn, string icon = null, bool byDefault = false)
+    private static UnlockDef Def(string id, string nameEn, string descEn, string howEn, string icon = null, bool byDefault = false)
     {
-        UnlockDef def = new UnlockDef(id, nameEn, descEn, icon, byDefault) { Order = Registry.Count };
+        UnlockDef def = new UnlockDef(id, nameEn, descEn, howEn, icon, byDefault) { Order = Registry.Count };
         Registry.Add(def);
         return def;
     }

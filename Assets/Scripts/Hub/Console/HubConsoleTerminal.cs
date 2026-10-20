@@ -135,6 +135,12 @@ public class HubConsoleTerminal : HubInteractable
     }
 
     /// <summary>
+    /// Aus = Strg + Shift + E oeffnet die Konsole nicht mehr, auch die Cheat-Codes
+    /// sind dann nicht erreichbar. Wieder auf true setzen, um sie zurueckzuholen.
+    /// </summary>
+    static readonly bool ConsoleEnabled = false;
+
+    /// <summary>
     /// [E] zeigt das Endless-Scoreboard (<see cref="HubScoreboardPanel"/>).
     /// Die Konsole gibt es nur mit Strg + Shift + E - fuer Spieler unsichtbar.
     /// </summary>
@@ -142,7 +148,7 @@ public class HubConsoleTerminal : HubInteractable
     {
         bool ctrl = Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl);
         bool shift = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
-        if (!(ctrl && shift))
+        if (!ConsoleEnabled || !(ctrl && shift))
         {
             HubScoreboardPanel.Open();
             return;

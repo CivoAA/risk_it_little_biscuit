@@ -1,0 +1,24 @@
+{
+    "werte":  {
+                  "m_char0_deaths":  1,
+                  "m_char0_min":  20,
+                  "m_char0_runs":  1,
+                  "m_char1_deaths":  1,
+                  "m_char1_min":  1,
+                  "m_char1_runs":  1,
+                  "m_char5_runs":  5,
+                  "m_map_world2_min":  21,
+                  "m_map_world2_story":  6,
+                  "m_pick_buff_glass_cannon":  1,
+                  "m_pick_buff_pickup_range":  1,
+                  "m_pick_buff_regeneration":  1,
+                  "m_pick_butterblast":  1,
+                  "m_pick_choco_chips":  1,
+                  "m_pick_deathstrike":  1,
+                  "m_pick_evo_choco_chips":  1,
+                  "m_pick_jam_jar":  1,
+                  "m_pick_milk_dunk":  1,
+                  "m_pick_spike_fork":  1
+              },
+    "seit":  "20.10.2026 15:03"
+}

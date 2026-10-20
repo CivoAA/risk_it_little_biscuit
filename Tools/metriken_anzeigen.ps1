@@ -4,7 +4,7 @@
 #
 # Der Publisher-Web-API-Key wird beim ersten Start abgefragt und als Windows-
 # Benutzervariable STEAM_PUBLISHER_KEY gespeichert - nie im Repo.
-param([int]$Tage = 0, [switch]$NeuerKey)
+param([int]$Tage = 0, [switch]$NeuerKey, [switch]$Reset)
 
 $ErrorActionPreference = 'Stop'
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
@@ -75,8 +75,32 @@ for ($try = 1; ; $try++) {
     }
 }
 
+# Steam kann die Gesamtsummen nicht zuruecksetzen. -Reset merkt sich deshalb den
+# aktuellen Stand in metriken_nullpunkt.json; die Seite zeigt nur, was danach dazukam.
+$BasePath = Join-Path $PSScriptRoot 'metriken_nullpunkt.json'
+function ReadBase {
+    $b = @{}; $since = $null
+    if (Test-Path $BasePath) {
+        $j = Get-Content $BasePath -Raw | ConvertFrom-Json
+        $since = $j.seit
+        foreach ($p in $j.werte.PSObject.Properties) { $b[$p.Name] = [long]$p.Value }
+    }
+    return @{ werte = $b; seit = $since }
+}
+
 # Holt alle Stats frisch und baut die Seite. Die Helfer unten lesen $v per Scope-Kette.
 function BuildPage {
+$names = ReadNames
+$v, $missing = FetchAll
+if ($Tage -le 0) {
+    $base = ReadBase
+    foreach ($k in @($v.Keys)) { if ($base.werte.ContainsKey($k)) { $v[$k] = [Math]::Max(0, $v[$k] - $base.werte[$k]) } }
+    $script:seit = $base.seit
+}
+BuildHtml
+}
+
+function FetchAll {
 $names = ReadNames
 $v = @{}; $missing = @()
 Write-Host "$(Get-Date -Format 'HH:mm:ss')  Hole Daten von Steam ..."
@@ -93,7 +117,7 @@ for ($i = 0; $i -lt $names.Count; $i += $Chunk) {
     }
     $got.GetEnumerator() | ForEach-Object { $v[$_.Key] = $_.Value }
 }
-BuildHtml
+return $v, $missing
 }
 
 function G([string]$n) { if ($v.ContainsKey($n)) { $v[$n] } else { 0 } }
@@ -130,7 +154,7 @@ $weaponRows = PickTable 'm_pick_' @('m_pick_buff_', 'm_pick_evo_')
 $buffRows = PickTable 'm_pick_buff_' @()
 $evoRows = PickTable 'm_pick_evo_' @()
 
-$zeitraum = if ($Tage -gt 0) { "letzte $Tage Tage" } else { 'gesamt' }
+$zeitraum = if ($Tage -gt 0) { "letzte $Tage Tage" } elseif ($seit) { "seit $seit" } else { 'gesamt' }
 $stand = Get-Date -Format 'dd.MM.yyyy HH:mm'
 $missingHtml = if ($missing.Count) { "<p class=warn>$($missing.Count) Stats fehlen in Steamworks oder sind nicht &bdquo;Aggregated&ldquo;: $($missing -join ', ')</p>" } else { '' }
 $emptyHtml = if ($runsTotal -eq 0) { '<p class=note>Noch keine L&auml;ufe gez&auml;hlt. Editor, Development Builds und Sandbox z&auml;hlen nicht mit; neue L&auml;ufe brauchen etwas, bis sie in der Summe auftauchen.</p>' } else { '' }
@@ -186,6 +210,16 @@ $html
 
 # Kleiner lokaler Server, damit der Knopf "Aktualisieren" neu holen kann (eine file://-Seite kann das nicht).
 # Laeuft, solange das Konsolenfenster offen ist.
+
+if ($Reset) {
+    $v, $missing = FetchAll
+    $stamp = Get-Date -Format 'dd.MM.yyyy HH:mm'
+    $werte = [ordered]@{}; foreach ($k in ($v.Keys | Sort-Object)) { $werte[$k] = $v[$k] }
+    $utf8NoBom = New-Object Text.UTF8Encoding $false
+    [IO.File]::WriteAllText($BasePath, (@{ seit = $stamp; werte = $werte } | ConvertTo-Json), $utf8NoBom)
+    Write-Host "Nullpunkt gesetzt ($stamp): $($v.Count) Stats in $BasePath"
+    return
+}
 
 $page = BuildPage
 

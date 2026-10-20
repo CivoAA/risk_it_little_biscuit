@@ -8,6 +8,11 @@ Umgebungsvariable:
     python Tools/steam_metriken.py
     python Tools/steam_metriken.py --csv metriken.csv
     python Tools/steam_metriken.py --tage 7      # nur die letzten 7 Tage
+    python Tools/steam_metriken.py --reset       # Nullpunkt auf jetzt setzen
+
+Steam kann die Gesamtsummen nicht zuruecksetzen. --reset merkt sich den
+aktuellen Stand in Tools/metriken_nullpunkt.json, danach zaehlt nur, was
+seitdem dazukam (gilt nicht fuer --tage).
 
 Die Stat-Namen kommen aus steam_metriken_stats.txt im Projektordner
 (Unity: Tools > Erfolge > Metriken-Stats ausgeben).
@@ -26,6 +31,7 @@ APP_ID = 4036370
 URL = "https://partner.steam-api.com/ISteamUserStats/GetGlobalStatsForGame/v1/"
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CHUNK = 40
+BASE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "metriken_nullpunkt.json")
 
 CHARS = ["Keks", "Marmelade", "Onigiri", "Toast", "Zwiebelritter", "Mochi", "Inari", "Schleimkoenig", "Tofu"]
 MAPS = {"world1": "Kueche", "world2": "Wald", "world5": "Eis", "world6": "Geisterwald", "world4": "Vulkan"}
@@ -82,6 +88,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--csv", help="zusaetzlich alle Rohwerte in diese Datei schreiben")
     ap.add_argument("--tage", type=int, help="nur die letzten N Tage statt Gesamtsumme")
+    ap.add_argument("--reset", action="store_true", help="aktuellen Stand als Nullpunkt merken")
     args = ap.parse_args()
 
     key = os.environ.get("STEAM_PUBLISHER_KEY")
@@ -97,9 +104,22 @@ def main():
         start = end - args.tage * 86400
 
     v, missing = fetch_all(key, names, start, end)
+
+    if args.reset:
+        stamp = time.strftime("%d.%m.%Y %H:%M")
+        with open(BASE, "w", encoding="utf-8") as f:
+            json.dump({"seit": stamp, "werte": dict(sorted(v.items()))}, f, indent=2)
+        print(f"Nullpunkt gesetzt ({stamp}): {len(v)} Stats in {BASE}")
+        return
+
+    zeitraum = "letzte %d Tage" % args.tage if args.tage else "gesamt"
+    if not args.tage and os.path.exists(BASE):
+        base = json.load(open(BASE, encoding="utf-8"))
+        v = {n: max(0, x - base["werte"].get(n, 0)) for n, x in v.items()}
+        zeitraum = "seit " + base["seit"]
     g = lambda n: v.get(n, 0)
 
-    print(f"\n=== Charaktere ({'letzte %d Tage' % args.tage if args.tage else 'gesamt'}) ===")
+    print(f"\n=== Charaktere ({zeitraum}) ===")
     runs_total = sum(g(f"m_char{c}_runs") for c in range(len(CHARS)))
     print(f"{'Charakter':<15}{'Laeufe':>8}{'Anteil':>10}{'Siege':>8}{'Siegquote':>11}{'Tode':>7}{'Abbruch':>9}{'Stunden':>9}")
     for c, name in sorted(enumerate(CHARS), key=lambda x: -g(f"m_char{x[0]}_runs")):

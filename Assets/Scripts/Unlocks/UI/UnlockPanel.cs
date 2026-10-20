@@ -372,23 +372,16 @@ public class UnlockPanel : MonoBehaviour
     }
 
     /// <summary>
-    /// Die Zeile unter der Beschreibung: woher der Unlock kommt. Vergibt ein
-    /// Achievement ihn, steht dessen Name hier - bei einem Zähler mit Stand, damit
-    /// man sieht, wie weit es noch ist. Ein verstecktes Achievement bleibt dabei
-    /// versteckt, das regelt <see cref="AchievementDef.Name"/> selbst.
+    /// Die Zeile unter der Beschreibung: wie man den Unlock bekommt
+    /// (<see cref="UnlockDef.HowTo"/>). Vergibt ihn ein zaehlendes Achievement,
+    /// steht dessen Stand dahinter, damit man sieht, wie weit es noch ist.
     /// </summary>
     private static string SourceLine(UnlockDef def, bool open)
     {
         AchievementDef source = Ach.FindByUnlock(def.Id);
+        string line = def.HowTo;
 
-        if (source == null)
-        {
-            return open ? "" : Loc.Get("ui.unlocks.hint", "Keep playing to find this one.");
-        }
-
-        string line = string.Format(Loc.Get("ui.unlocks.from", "From: {0}"), source.Name);
-
-        if (!source.IsUnlocked && source.HasProgress)
+        if (source != null && !source.IsUnlocked && source.HasProgress)
         {
             line += $"  {Mathf.FloorToInt(source.Value)} / {Mathf.FloorToInt(source.Goal)}";
         }
