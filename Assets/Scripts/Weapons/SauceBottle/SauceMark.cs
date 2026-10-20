@@ -8,8 +8,15 @@ using UnityEngine;
 /// obendrauf. Ab Stufe 6 platzt ein bekleckerter Gegner beim Tod und
 /// bekleckert seine Nachbarn.
 ///
-/// Haengt am Gegner und bleibt dort; die Flecken sind Kind-Renderer, die beim
-/// Ablaufen nur ausgeblendet werden.
+/// Zu sehen ist der Fleck als Kontur in Saucenfarbe: einfarbige Kopien des
+/// Gegner-Sprites (Shader Risk/SpriteSilhouette wie bei <see cref="EliteGlow"/>),
+/// einen Bildpixel versetzt hinter dem Gegner. Bei Ketchup + Senf liegt
+/// Ketchup innen und Senf einen Pixel weiter aussen. Waehrenddessen ist das
+/// Elite-Leuchten aus - gleiche Sortierung hinter dem Gegner wuerde sonst
+/// flackern.
+///
+/// Haengt am Gegner und bleibt dort; die Kopien werden beim Ablaufen nur
+/// ausgeblendet.
 /// </summary>
 public class SauceMark : MonoBehaviour
 {
@@ -22,16 +29,22 @@ public class SauceMark : MonoBehaviour
         public float explodeDamage;
     }
 
-    private const float DripFps = 2.5f;
+    private const string ShaderPath = "Shaders/SpriteSilhouette";
+    /// <summary>So lange blendet die Kontur am Ende aus.</summary>
+    private const float FadeTime = 0.4f;
+
+    private static readonly Vector2Int[] Dirs = { new Vector2Int(1, 0), new Vector2Int(-1, 0), new Vector2Int(0, 1), new Vector2Int(0, -1) };
+
+    private static Material material;
+    private static bool materialMissing;
 
     private Enemy enemy;
     private SpriteRenderer enemySprite;
-    private SpriteRenderer ketchupMark;
-    private SpriteRenderer mustardMark;
+    private EliteGlow eliteGlow;
+    private SpriteRenderer[] ketchupRim;
+    private SpriteRenderer[] mustardRim;
 
-    private float ketchupSince;
     private float ketchupUntil;
-    private float mustardSince;
     private float mustardUntil;
     private Recipe best;
     private bool exploded;
@@ -59,13 +72,11 @@ public class SauceMark : MonoBehaviour
         float now = Time.time;
         if (mustard)
         {
-            if (!mark.Active(true)) mark.mustardSince = now;
             mark.mustardUntil = now + recipe.duration;
             e.ApplySlow(SauceBottle.MustardSlow, recipe.duration);
         }
         else
         {
-            if (!mark.Active(false)) mark.ketchupSince = now;
             mark.ketchupUntil = now + recipe.duration;
         }
         mark.Refresh();
@@ -87,17 +98,25 @@ public class SauceMark : MonoBehaviour
         if (!Active(false) && !Active(true)) enabled = false;
     }
 
+    // Nach dem Animator, damit die Kontur schon das aktuelle Bild zeigt.
+    void LateUpdate()
+    {
+        if (enemy == null) return;
+        DrawRims();
+    }
+
     void OnDisable()
     {
         if (enemy != null) enemy.SauceFactor = 1f;
-        if (ketchupMark != null) ketchupMark.enabled = false;
-        if (mustardMark != null) mustardMark.enabled = false;
+        HideRim(ketchupRim);
+        HideRim(mustardRim);
+        if (eliteGlow != null) eliteGlow.Hidden = false;
     }
 
     void OnDestroy()
     {
-        if (ketchupMark != null) Destroy(ketchupMark.gameObject);
-        if (mustardMark != null) Destroy(mustardMark.gameObject);
+        DestroyRim(ketchupRim);
+        DestroyRim(mustardRim);
     }
 
     private static bool listening;
@@ -128,39 +147,101 @@ public class SauceMark : MonoBehaviour
         if (k) factor += best.bonus;
         if (k && m) factor += best.combo;
         enemy.SauceFactor = factor;
-
-        DrawMark(ref ketchupMark, false, k, ketchupSince, m ? -0.12f : 0f);
-        DrawMark(ref mustardMark, true, m, mustardSince, k ? 0.12f : 0f);
+        DrawRims();
     }
 
-    private void DrawMark(ref SpriteRenderer mark, bool mustard, bool on, float since, float dx)
+    // ------------------------------------------------------------------
+    //  Kontur
+    // ------------------------------------------------------------------
+
+    private void DrawRims()
     {
-        if (!on)
+        bool k = Active(false);
+        bool m = Active(true);
+
+        if (eliteGlow == null && enemySprite != null) eliteGlow = enemySprite.GetComponent<EliteGlow>();
+        if (eliteGlow != null) eliteGlow.Hidden = k || m;
+
+        DrawRim(ref ketchupRim, k, SauceBottle.Ketchup, ketchupUntil, 1);
+        // Mit Ketchup zusammen liegt Senf einen Pixel weiter aussen.
+        DrawRim(ref mustardRim, m, SauceBottle.Mustard, mustardUntil, k ? 2 : 1);
+    }
+
+    private void DrawRim(ref SpriteRenderer[] rim, bool on, Color color, float until, int distance)
+    {
+        Sprite sprite = enemySprite != null ? enemySprite.sprite : null;
+        if (!on || sprite == null || !enemySprite.enabled)
         {
-            if (mark != null) mark.enabled = false;
+            HideRim(rim);
             return;
         }
-        if (mark == null)
+        if (rim == null)
         {
-            GameObject go = new GameObject(mustard ? "MustardMark" : "KetchupMark");
-            go.transform.SetParent(enemy.transform, false);
-            mark = go.AddComponent<SpriteRenderer>();
-            if (enemySprite != null)
-            {
-                mark.sortingLayerID = enemySprite.sortingLayerID;
-                mark.sortingOrder = enemySprite.sortingOrder + (mustard ? 3 : 2);
-            }
+            rim = BuildRim();
+            if (rim == null) return;
         }
-        mark.enabled = true;
-        Sprite[] frames = SauceBottle.Mark(mustard);
-        mark.sprite = frames[Mathf.Min(frames.Length - 1, (int)((Time.time - since) * DripFps))];
 
-        Vector2 c = enemySprite != null ? (Vector2)enemySprite.bounds.center : SweetFx.Body(enemy);
-        mark.transform.position = SweetFx.Snap(c + new Vector2(dx, 0.04f));
-        // gegen die Skalierung des Gegners, damit die Pixel 1:1 bleiben
-        Vector3 parent = enemy.transform.lossyScale;
-        mark.transform.localScale = new Vector3(1f / Mathf.Max(0.01f, Mathf.Abs(parent.x)),
-                                                1f / Mathf.Max(0.01f, Mathf.Abs(parent.y)), 1f);
+        color.a *= Mathf.Clamp01((until - Time.time) / FadeTime);
+        float unit = sprite.pixelsPerUnit > 0f ? 1f / sprite.pixelsPerUnit : 1f / SweetFx.PixelsPerUnit;
+        for (int i = 0; i < rim.Length; i++)
+        {
+            SpriteRenderer r = rim[i];
+            r.enabled = true;
+            r.sprite = sprite;
+            r.flipX = enemySprite.flipX;
+            r.flipY = enemySprite.flipY;
+            r.sortingLayerID = enemySprite.sortingLayerID;
+            // innen direkt hinter dem Gegner, aussen noch einen dahinter
+            r.sortingOrder = enemySprite.sortingOrder - distance;
+            r.color = color;
+            r.transform.localPosition = new Vector3(Dirs[i].x * distance * unit, Dirs[i].y * distance * unit, 0f);
+        }
+    }
+
+    private SpriteRenderer[] BuildRim()
+    {
+        Material mat = SharedMaterial();
+        if (mat == null || enemySprite == null) return null;
+
+        SpriteRenderer[] rim = new SpriteRenderer[Dirs.Length];
+        for (int i = 0; i < rim.Length; i++)
+        {
+            // Kind des Sprites: folgt Skalierung und Spiegelung des Bildes
+            GameObject go = new GameObject("SauceRim");
+            go.transform.SetParent(enemySprite.transform, false);
+            rim[i] = go.AddComponent<SpriteRenderer>();
+            rim[i].sharedMaterial = mat;
+        }
+        return rim;
+    }
+
+    private static Material SharedMaterial()
+    {
+        if (material != null || materialMissing) return material;
+
+        Shader shader = Resources.Load<Shader>(ShaderPath);
+        if (shader == null)
+        {
+            materialMissing = true;
+            Debug.LogWarning($"[SauceMark] Shader Resources/{ShaderPath} fehlt - Sauce hat keine Kontur.");
+            return null;
+        }
+        material = new Material(shader) { name = "SauceRim" };
+        return material;
+    }
+
+    private static void HideRim(SpriteRenderer[] rim)
+    {
+        if (rim == null) return;
+        foreach (SpriteRenderer r in rim)
+            if (r != null) r.enabled = false;
+    }
+
+    private static void DestroyRim(SpriteRenderer[] rim)
+    {
+        if (rim == null) return;
+        foreach (SpriteRenderer r in rim)
+            if (r != null) Destroy(r.gameObject);
     }
 
     private void Explode()

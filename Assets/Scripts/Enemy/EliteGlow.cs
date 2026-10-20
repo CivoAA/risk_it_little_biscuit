@@ -33,6 +33,12 @@ public class EliteGlow : MonoBehaviour
     private Sprite lastSprite;
     private float phase;
 
+    /// <summary>
+    /// Leuchten aus, solange eine andere Kontur hinter dem Gegner liegt
+    /// (<see cref="SauceMark"/>) - gleiche Sortierung wuerde flackern.
+    /// </summary>
+    public bool Hidden { get; set; }
+
     /// <summary>Haengt das Leuchten an. Doppelt aufgerufen passiert nichts.</summary>
     public static void Attach(SpriteRenderer source)
     {
@@ -111,7 +117,7 @@ public class EliteGlow : MonoBehaviour
         float k = 0.5f + 0.5f * Mathf.Sin(Time.time * PulseSpeed + phase);
         Color inner = EnemyCatalog.EliteGlow; inner.a = Mathf.Lerp(InnerAlphaMin, InnerAlphaMax, k);
         Color outer = EnemyCatalog.EliteGlow; outer.a = Mathf.Lerp(OuterAlphaMin, OuterAlphaMax, k);
-        bool show = source.enabled && sprite != null;
+        bool show = !Hidden && source.enabled && sprite != null;
 
         for (int i = 0; i < copies.Length; i++)
         {

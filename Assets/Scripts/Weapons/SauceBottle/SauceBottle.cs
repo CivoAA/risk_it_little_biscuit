@@ -161,6 +161,4 @@ public class SauceBottle : Weapon
 
     public static Sprite[] Bottle(bool mustard) => SweetFx.Strip(mustard ? "sauce_bottle_m" : "sauce_bottle_k", mustard ? Mustard : Ketchup, 12);
     public static Sprite[] Drop(bool mustard) => SweetFx.Strip(mustard ? "sauce_drop_m" : "sauce_drop_k", mustard ? Mustard : Ketchup, 3);
-    public static Sprite[] Splat(bool mustard) => SweetFx.Strip(mustard ? "sauce_splat_m" : "sauce_splat_k", mustard ? Mustard : Ketchup, 10);
-    public static Sprite[] Mark(bool mustard) => SweetFx.Strip(mustard ? "sauce_mark_m" : "sauce_mark_k", mustard ? Mustard : Ketchup, 7);
-}
+    public static Sprite[] Splat(bool mustard) => SweetFx.Strip(mustard ? "sauce_splat_m" : "sauce_splat_k", mustard ? Mustard : Ketchup, 10);}

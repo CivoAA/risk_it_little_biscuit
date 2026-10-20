@@ -443,6 +443,10 @@ public static class Ach
         "Max_Level_GummyGang", "Max Level: Jelly Gang", "Reach the maximum level of the Jelly Gang weapon.",
         AchievementCategory.Weapons);
 
+    public static readonly AchievementDef MaxCrumbMayhem = Def(
+        "Max_Level_CrumbMayhem", "Max Level: Crumb Mayhem", "Reach the maximum level of the Crumb Mayhem weapon.",
+        AchievementCategory.Weapons);
+
     // ==================================================================
     //  Buffs auf Maximalstufe
     // ==================================================================
@@ -660,7 +664,7 @@ public static class Ach
         { "ice_dispenser",  MaxIceDispenser },   { "mint_shield",   MaxMintShield },
         { "bubble_gun",     MaxBubbleGun },      { "candy_frisbee", MaxCandyFrisbee },
         { "popcorn_pan",    MaxPopcornPan },     { "sauce_bottle",  MaxSauceBottle },
-        { "gummy_gang",     MaxGummyGang },
+        { "gummy_gang",     MaxGummyGang },      { "crumb_mayhem",  MaxCrumbMayhem },
 
         { "buff_extra_shot",    MaxExtraShot },     { "buff_cooldown",     MaxCooldown },
         { "buff_duration",      MaxDuration },      { "buff_glass_cannon", MaxGlassCannon },

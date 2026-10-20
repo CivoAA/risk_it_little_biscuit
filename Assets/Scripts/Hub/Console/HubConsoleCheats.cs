@@ -216,6 +216,27 @@ public static class HubConsoleCheats
         }, usage: "[alle|<id>]", hidden: true);
 
         // ------------------------------------------------------------------
+        // Nur die geheimen Erfolge freischalten.  ->  "gibgeheim"
+        // Zum Anschauen der Bilder/Texte, die sonst hinter "???" stecken.
+        // ------------------------------------------------------------------
+        HubConsole.Add("gibgeheim", "schaltet alle geheimen Erfolge frei", (args, sink) =>
+        {
+            int neu = 0;
+            foreach (AchievementDef d in Ach.All)
+            {
+                if (!d.Hidden || d.IsUnlocked) continue;
+                Achievements.Unlock(d);
+                neu++;
+            }
+
+            AchievementsBookPanel.RefreshIfOpen();
+
+            sink.Print(neu > 0
+                ? string.Format(T("cheat.ach.secret", "{0} geheime Erfolge freigeschaltet."), neu)
+                : T("cheat.ach.secret.none", "Die Geheimnisse kennst du schon alle."));
+        }, hidden: true);
+
+        // ------------------------------------------------------------------
         // Erfolge zuruecksetzen.  ->  "erfolgeweg"
         // ------------------------------------------------------------------
         HubConsole.Add("erfolgeweg", "setzt alle Erfolge zurueck", (args, sink) =>
@@ -256,6 +277,25 @@ public static class HubConsoleCheats
             Skills.SetXp(Skills.ActiveTree, CharLevel.XpForLevel(level - Skills.BossLevelsOf(Skills.ActiveTree)));
             sink.Print(CharStand());
         }, usage: "<level>", hidden: true);
+
+        // ------------------------------------------------------------------
+        // Skillpunkte schenken.  ->  "gibpunkte" (10) oder "gibpunkte 3"
+        // Freie Punkte sind Level minus Ausgegebenes, also hebt das hier einfach
+        // das Level des gewaehlten Charakters - nach oben gedeckelt wie charlevel.
+        // ------------------------------------------------------------------
+        HubConsole.Add("gibpunkte", "Skillpunkte fuer den gewaehlten Charakter", (args, sink) =>
+        {
+            SkillTreeDef tree = Skills.ActiveTree;
+            int boss = Skills.BossLevelsOf(tree);
+            int vorher = Skills.Points;
+
+            int ziel = UnityEngine.Mathf.Clamp(Skills.Level + ArgAsInt(args, 0, 10), 0, CharLevel.MaxLevel + boss);
+            Skills.SetXp(tree, CharLevel.XpForLevel(ziel - boss));
+
+            int plus = Skills.Points - vorher;
+            if (plus > 0) sink.Print(string.Format(T("cheat.points", "+{0} Skillpunkte."), plus) + " " + CharStand());
+            else          sink.Print(T("cheat.points.max", "Mehr geht nicht, das Level ist schon am Anschlag.") + " " + CharStand());
+        }, usage: "[anzahl]", hidden: true);
 
         // ------------------------------------------------------------------
         // Boss-Erstsiege des gewaehlten Charakters vergessen.  ->  "bossreset"
