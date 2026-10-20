@@ -29,7 +29,7 @@ public class CreditsPanel : MonoBehaviour
         new Section { Key = "ui.credits.cat.dev",   Fallback = "DEVELOPER",     Names = new[] { "Civoknis", "Reo" } },
         new Section { Key = "ui.credits.cat.pixel", Fallback = "PIXEL ARTISTS", Names = new[] { "Reo", "Raccoon" } },
         new Section { Key = "ui.credits.cat.sound", Fallback = "SOUND DESIGN",  Names = new[] { "Reo" } },
-        new Section { Key = "ui.credits.cat.test",  Fallback = "TESTER",        Names = new[] { SupporterName, "DaCat", "JPC", "Bubbles", "Raccoon" } },
+        new Section { Key = "ui.credits.cat.test",  Fallback = "TESTER",        Names = new[] { SupporterName, "DaCat", "JPC", "Bubbles", "Raccoon", "John Pork" } },
     };
 
     /// <summary>Wer hier oft genug angeklickt wird, schaltet Ach.SecretBiggestSupporter frei.</summary>
