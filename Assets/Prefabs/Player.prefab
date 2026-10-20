@@ -1319,6 +1319,8 @@ Transform:
   - {fileID: 2658530957147946328}
   - {fileID: 291499174613137522}
   - {fileID: 2527516144996007020}
+  - {fileID: 738535204472172044}
+  - {fileID: 2417566807645590969}
   m_Father: {fileID: 4991830239493606234}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1872045825326429319
@@ -2180,6 +2182,8 @@ MonoBehaviour:
   - {fileID: 5655142979738305804}
   - {fileID: 4889264274671078726}
   - {fileID: 5887054342971084015}
+  - {fileID: 5701451196377126471}
+  - {fileID: 3888548129889278618}
   maxLevelStuff:
   - {fileID: 9138393922043077461}
   EvoCombinations:
@@ -2231,6 +2235,12 @@ MonoBehaviour:
   - EvoWeapon: {fileID: 5887054342971084015}
     RequiredWeapon1: {fileID: 6726658811918204575}
     RequiredWeapon2: {fileID: 8273645019283746152}
+  - EvoWeapon: {fileID: 5701451196377126471}
+    RequiredWeapon1: {fileID: 3270831894025362473}
+    RequiredWeapon2: {fileID: 7414690087582486443}
+  - EvoWeapon: {fileID: 3888548129889278618}
+    RequiredWeapon1: {fileID: 2653822206787010178}
+    RequiredWeapon2: {fileID: 8150490177911122782}
   immunityDuration: 0.3
   immunityTimer: 0
 --- !u!95 &3309684457716786782
@@ -11601,6 +11611,153 @@ MonoBehaviour:
   stats: []
   weaponImage: {fileID: 4157698694273622250, guid: 5997a335c077465589035cbbe3535218, type: 3}
   weaponIcon: {fileID: 4157698694273622250, guid: 5997a335c077465589035cbbe3535218, type: 3}
+  weaponIconEvo: {fileID: 0}
+  posssibleEvo: 0
+  hasBeenRemoved: 0
+--- !u!1 &5961323504632200655
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 738535204472172044}
+  - component: {fileID: 5701451196377126471}
+  - component: {fileID: 233012813414274406}
+  m_Layer: 6
+  m_Name: Time Laser Evo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &738535204472172044
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5961323504632200655}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.064, y: 0.546, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7413418079001370670}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5701451196377126471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5961323504632200655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ac1e72fe6f84501b4f3718cd7b2c0f9, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::TimeLaserEvo
+  weaponID: evo_time_laser
+  weaponLevel: -1
+  maxweaponLevel: 0
+  stats: []
+  weaponImage: {fileID: 2519623949837709290, guid: 914507f42bd749e29c0835a3ac865b2e, type: 3}
+  weaponIcon: {fileID: 2519623949837709290, guid: 914507f42bd749e29c0835a3ac865b2e, type: 3}
+  weaponIconEvo: {fileID: 0}
+  posssibleEvo: 0
+  hasBeenRemoved: 0
+  prefab: {fileID: 6344353764558535840, guid: 17f81da5ff6b27949a638f77bc29c168, type: 3}
+  enemiesInRange: []
+  strikePrefab: {fileID: 8394641009684542137, guid: 0b1a83ae414b1384abfdf5a240ec0fd4, type: 3}
+--- !u!70 &233012813414274406
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5961323504632200655}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: -0.070917174, y: -0.31068423}
+  m_Size: {x: 19.534353, y: 9.606393}
+  m_Direction: 1
+--- !u!1 &681511255405788784
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2417566807645590969}
+  - component: {fileID: 3888548129889278618}
+  m_Layer: 0
+  m_Name: Popcorn Pan Evo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2417566807645590969
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 681511255405788784}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7413418079001370670}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3888548129889278618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 681511255405788784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a46805f4a5f641baa02bc24b100075c1, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::PopcornPanEvo
+  weaponID: evo_popcorn_pan
+  weaponLevel: -1
+  maxweaponLevel: 0
+  stats: []
+  weaponImage: {fileID: 2519209958006409658, guid: 41c318e0621e449882d65ad504c17418, type: 3}
+  weaponIcon: {fileID: 2519209958006409658, guid: 41c318e0621e449882d65ad504c17418, type: 3}
   weaponIconEvo: {fileID: 0}
   posssibleEvo: 0
   hasBeenRemoved: 0

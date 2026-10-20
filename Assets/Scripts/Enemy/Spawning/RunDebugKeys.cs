@@ -29,8 +29,10 @@ using UnityEngine;
 ///   Strg + F8   Pfefferminz-Schild geben bzw. eine Stufe hoeher
 ///   Strg + Alt + F8  Pfefferminz-Bollwerk (Schild-Evo) statt des Schilds
 ///   Strg + F6   Popcorn-Pfanne geben bzw. eine Stufe hoeher
-///   Strg + Alt + F6  Gummibaerchen-Bande geben bzw. eine Stufe hoeher
+///   Strg + Alt + F6  Fruchtgummi-Bande geben bzw. eine Stufe hoeher
 ///   Strg + Alt + F7  Ketchup &amp; Senf geben bzw. eine Stufe hoeher
+///   Strg + Alt + F5  Geisterstunde (Zeitlaser + Todesstoss) statt der Zutaten
+///   Strg + Alt + F3  Karamell-Kino (Popcorn-Pfanne + Krit-Chance) statt der Pfanne
 ///   Shift + F4-F8  nur noch diese Waffe: alle anderen Waffen und Evos weg,
 ///               sie selbst auf Stufe 1 - zum Vergleichen als Startwaffe.
 ///               F4-F8 gehen ueberall, wo ein Spieler steht (auch Test-Szene).
@@ -75,6 +77,12 @@ public class RunDebugKeys : MonoBehaviour
 
     private void Update()
     {
+        if (Ctrl && Alt)
+        {
+            if (Input.GetKeyDown(KeyCode.F5)) { GiveEvo<TimeLaserEvo>("Geisterstunde", typeof(TimeLaser), typeof(Deathstrike)); return; }
+            if (Input.GetKeyDown(KeyCode.F3)) { GiveEvo<PopcornPanEvo>("Karamell-Kino", typeof(PopcornPan)); return; }
+        }
+
         if (Ctrl && Input.GetKeyDown(ChocoChipsKey))
         {
             if (Alt) GiveWeapon<SauceBottle>("Ketchup & Senf");
@@ -84,8 +92,8 @@ public class RunDebugKeys : MonoBehaviour
 
         if (Ctrl && Input.GetKeyDown(MochiMelodyKey))
         {
-            if (Alt) GiveWeapon<GummyGang>("Gummibaerchen-Bande");
-            else GiveWeapon<PopcornPan>("Popcorn-Pfanne");
+            if (Alt) GiveWeapon<GummyGang>("Fruchtgummi-Bande");
+            else GiveWeapon(FindBase<PopcornPan, PopcornPanEvo>(), "Popcorn-Pfanne");
             return;
         }
 
@@ -208,6 +216,40 @@ public class RunDebugKeys : MonoBehaviour
         foreach (MintShield m in player.GetComponentsInChildren<MintShield>(true))
             if (!(m is MintShieldEvo)) return m;
         return null;
+    }
+
+    /// <summary>Die Grundwaffe T am Spieler - nicht ihre Evo, die von ihr erbt.</summary>
+    private static T FindBase<T, TEvo>() where T : Weapon where TEvo : T
+    {
+        PlayerController player = PlayerController.Instance;
+        if (player == null) return null;
+        foreach (T w in player.GetComponentsInChildren<T>(true))
+            if (!(w is TEvo)) return w;
+        return null;
+    }
+
+    /// <summary>
+    /// Evo zum Anschauen: die Zutaten (genau diese Typen, nicht ihre Evos)
+    /// weg, Evo dran. Buff-Zutaten bleiben - die Evo braucht sie nicht.
+    /// </summary>
+    private void GiveEvo<TEvo>(string label, params System.Type[] ingredients) where TEvo : Weapon
+    {
+        PlayerController player = PlayerController.Instance;
+        if (player == null) return;
+
+        TEvo evo = player.GetComponentInChildren<TEvo>(true);
+        if (evo == null)
+        {
+            Debug.LogWarning("[RunDebugKeys] " + label + " haengt nicht am Player-Prefab.");
+            return;
+        }
+        foreach (Weapon w in player.GetComponentsInChildren<Weapon>(true))
+            if (w != null && !w.IsCopy && System.Array.IndexOf(ingredients, w.GetType()) >= 0) TestSceneLoadout.Remove(w);
+        if (evo.weaponLevel < 0) TestSceneLoadout.StepUp(player, evo);
+
+        Debug.Log("[RunDebugKeys] " + label);
+        if (DamageNumberController.Instance != null)
+            DamageNumberController.Instance.CreateText(label, player.transform.position + Vector3.up * 1.2f);
     }
 
     /// <summary>Pfefferminz-Bollwerk zum Anschauen: Schild weg, Evo dran.</summary>

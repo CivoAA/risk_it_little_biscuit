@@ -132,7 +132,7 @@ public static class WeaponSounds
     public static readonly Sfx SauceSquirt    = new Sfx("sauce_squirt",    0.14f, 0.1f,   0.06f);
     public static readonly Sfx SauceSplat     = new Sfx("sauce_splat",     0.16f, 0.12f,  0.07f);
 
-    // Gummibaerchen-Bande
+    // Fruchtgummi-Bande
     public static readonly Sfx GummySpawn     = new Sfx("gummy_spawn",     0.10f, 0.15f,  0.08f);
     public static readonly Sfx GummyBite      = new Sfx("gummy_bite",      0.08f, 0.07f,  0.10f);
     public static readonly Sfx GummyPop       = new Sfx("gummy_pop",       0.13f, 0.08f,  0.08f);

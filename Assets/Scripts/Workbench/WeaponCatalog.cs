@@ -178,7 +178,7 @@ public static class WeaponCatalog
     public static readonly WeaponDef CandyFrisbee  = Def("candy_frisbee", "Candy Frisbee", PoolKind.Weapon);
     public static readonly WeaponDef PopcornPan    = Def("popcorn_pan", "Popcorn Pan", PoolKind.Weapon);
     public static readonly WeaponDef SauceBottle   = Def("sauce_bottle", "Ketchup & Mustard", PoolKind.Weapon);
-    public static readonly WeaponDef GummyGang     = Def("gummy_gang", "Gummy Gang", PoolKind.Weapon);
+    public static readonly WeaponDef GummyGang     = Def("gummy_gang", "Jelly Gang", PoolKind.Weapon);
 
     // ==================================================================
     //  Buffs
@@ -230,6 +230,10 @@ public static class WeaponCatalog
     // Pfefferminz-Bollwerk (Pfefferminz-Schild) - Rezept unten.
     public static readonly WeaponDef EvoMintShield     = Def("evo_mint_shield", "Mint Shield Evo", PoolKind.Evo);
 
+    // Geisterstunde, Karamell-Kino - Rezepte unten.
+    public static readonly WeaponDef EvoTimeLaser      = Def("evo_time_laser", "Time Laser Evo", PoolKind.Evo);
+    public static readonly WeaponDef EvoPopcornPan     = Def("evo_popcorn_pan", "Popcorn Pan Evo", PoolKind.Evo);
+
     // ==================================================================
     //  Rezepte - Reihenfolge wie im Player-Prefab
     // ==================================================================
@@ -255,6 +259,10 @@ public static class WeaponCatalog
     public static readonly EvoDef RecipeRoyalSplat    = Evo("evo_royal_splat", "royal_splat", "vortex");
     // Pfefferminz-Bollwerk: Pfefferminz-Schild + Candy-Frisbee - das Rad ist der Frisbee im Grossen.
     public static readonly EvoDef RecipeMintShield    = Evo("evo_mint_shield", "mint_shield", "candy_frisbee");
+    // Geisterstunde: Zeitlaser + Todesstoss - die Uhr schlaegt Mitternacht.
+    public static readonly EvoDef RecipeTimeLaser     = Evo("evo_time_laser", "time_laser", "deathstrike");
+    // Karamell-Kino: Popcorn-Pfanne + Krit-Chance - Krits machen Karamell.
+    public static readonly EvoDef RecipePopcornPan    = Evo("evo_popcorn_pan", "popcorn_pan", "buff_crit_chance");
 
     // ==================================================================
     //  Freischaltung
@@ -303,7 +311,7 @@ public static class WeaponCatalog
         // sofort verfuegbar, ohne Shop.
         "ice_dispenser",
         "mint_shield",
-        // Popcorn-Pfanne, Ketchup & Senf, Gummibaerchen-Bande (19.10.2026):
+        // Popcorn-Pfanne, Ketchup & Senf, Fruchtgummi-Bande (19.10.2026):
         // ebenfalls ohne Shop.
         "popcorn_pan",
         "sauce_bottle",

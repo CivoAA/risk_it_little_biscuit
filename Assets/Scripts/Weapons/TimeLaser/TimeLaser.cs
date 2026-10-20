@@ -19,7 +19,7 @@ public class TimeLaser : Weapon
     private float spawnCounter;
     private bool shooting = false;
 
-    void Update()
+    protected virtual void Update()
     {
         if (weaponLevel < 0) return;
 
@@ -83,7 +83,14 @@ public class TimeLaser : Weapon
 
         TimeLaserPrefab beam = laser.GetComponent<TimeLaserPrefab>();
         if (beam != null) beam.weapon = this;
+        OnBeamFired();
     }
+
+    /// <summary>Haken fuer die Evo (Geisterstunde): ein Strahl ist raus.</summary>
+    protected virtual void OnBeamFired() { }
+
+    /// <summary>Haken fuer die Evo: der Strahl hat diesen Gegner getroffen (er lebt noch).</summary>
+    public virtual void OnBeamHit(Enemy enemy) { }
 
     /// <summary>
     /// Fuellt <see cref="targets"/> mit lebenden Gegnern, die im Bild stehen.

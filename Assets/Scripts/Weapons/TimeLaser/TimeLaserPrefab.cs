@@ -48,7 +48,10 @@ public class TimeLaserPrefab : MonoBehaviour
                 if (hit == null || !hit.CompareTag("Enemy")) continue;
                 Enemy enemy = hit.GetComponent<Enemy>();
                 if (enemy != null && damaged.Add(enemy))
+                {
                     enemy.TakeDamage(weapon.CurrentStats.damage, 0.1f);
+                    if (SweetFx.Valid(enemy)) weapon.OnBeamHit(enemy);
+                }
             }
         }
 

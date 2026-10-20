@@ -15,6 +15,8 @@ public class PopcornKernel : MonoBehaviour
         public float damage;
         public float radius;
         public int hops;
+        /// <summary>Karamell (Evo Karamell-Kino): klebt beim Pop, Gegner werden gebremst.</summary>
+        public bool caramel;
     }
 
     private enum State { Flying, Lying, Done }
@@ -47,6 +49,8 @@ public class PopcornKernel : MonoBehaviour
     private int spin;
     private SpriteRenderer body;
     private SpriteRenderer shadow;
+    private Sprite[] kernelFrames;
+    private Sprite[] pieceFrames;
 
     public static void Throw(Vector2 from, Vector2 to, Pop pop, float delay)
     {
@@ -58,12 +62,14 @@ public class PopcornKernel : MonoBehaviour
         k.shadow = go.AddComponent<SpriteRenderer>();
         SaladFan.CopySorting(k.shadow, 0);
         k.shadow.sprite = PopcornPan.Shadow[0];
+        k.kernelFrames = pop.caramel ? PopcornPanEvo.Kernel : PopcornPan.Kernel;
+        k.pieceFrames = pop.caramel ? PopcornPanEvo.Piece : PopcornPan.Piece;
 
         GameObject b = new GameObject("Body");
         b.transform.SetParent(go.transform, false);
         k.body = b.AddComponent<SpriteRenderer>();
         SaladFan.CopySorting(k.body, 2);
-        k.body.sprite = PopcornPan.Kernel[k.spin];
+        k.body.sprite = k.kernelFrames[k.spin % k.kernelFrames.Length];
         k.Launch(from, to, FlightTime, FlightHeight);
         if (delay > 0f)
         {
@@ -112,7 +118,7 @@ public class PopcornKernel : MonoBehaviour
         float lift = 4f * height * u * (1f - u);
         body.transform.position = SweetFx.Snap(ground + new Vector2(0f, lift));
 
-        Sprite[] frames = piece ? PopcornPan.Piece : PopcornPan.Kernel;
+        Sprite[] frames = piece ? pieceFrames : kernelFrames;
         int n = piece ? frames.Length : Mathf.Min(4, frames.Length);
         body.sprite = frames[(spin + (int)(t * 10f)) % n];
 
@@ -128,7 +134,7 @@ public class PopcornKernel : MonoBehaviour
 
         state = State.Lying;
         fuse = Random.Range(PopcornPan.FuseMin, PopcornPan.FuseMax);
-        body.sprite = PopcornPan.Kernel[spin % 4];
+        body.sprite = kernelFrames[spin % Mathf.Min(4, kernelFrames.Length)];
         lying.Add(this);
     }
 
@@ -138,7 +144,7 @@ public class PopcornKernel : MonoBehaviour
         if (fuse <= HotTime)
         {
             // heiss: wackelt hin und her
-            Sprite[] frames = PopcornPan.Kernel;
+            Sprite[] frames = kernelFrames;
             int hot = Mathf.Min(4, frames.Length - 1);
             body.sprite = frames[Mathf.Min(frames.Length - 1, hot + (int)(Time.time * 14f) % 2)];
         }
@@ -158,19 +164,21 @@ public class PopcornKernel : MonoBehaviour
         Vector2 at = transform.position;
         Vector2 hitAt = at + PopLift;
 
-        SweetFx.Play(PopcornPan.PopFor(p.radius), hitAt, 18f, 3);
-        WeaponSounds.Play(WeaponSounds.PopcornPop);
+        SweetFx.Play(p.caramel ? PopcornPanEvo.PopFor(p.radius) : PopcornPan.PopFor(p.radius), hitAt, 18f, 3);
+        WeaponSounds.Play(WeaponSounds.PopcornPop, 1f, p.caramel ? 0.85f : 1f);
 
         SweetFx.EnemiesWithin(hitAt, p.radius + 0.2f, near);
         for (int i = 0; i < near.Count; i++)
         {
             Enemy e = near[i];
-            if (e != null) e.TakeDamage(p.damage, null, 0.6f);
+            if (e == null) continue;
+            e.TakeDamage(p.damage, null, p.caramel ? 0.2f : 0.6f);
+            if (p.caramel && SweetFx.Valid(e)) e.ApplySlow(PopcornPanEvo.StickySlow, PopcornPanEvo.StickyTime * SweetFx.DurationFactor);
         }
         near.Clear();
 
         // Kettenreaktion
-        float reach = p.radius * PopcornPan.ChainReach;
+        float reach = p.radius * (p.caramel ? PopcornPanEvo.ChainReach : PopcornPan.ChainReach);
         float reachSqr = reach * reach;
         for (int i = lying.Count - 1; i >= 0; i--)
         {

@@ -1,5 +1,5 @@
 // Zeichnet ein Sprite als einfarbige Flaeche: Form aus dem Alpha des Bildes,
-// Farbe aus der SpriteRenderer-Farbe. Fuer das Leuchten der Elite-Gegner
+// Farbe aus der SpriteRenderer-Farbe mal _Color (Material). Fuer das Leuchten der Elite-Gegner
 // (EliteGlow). Liegt unter Resources, damit Resources.Load ihn auch im Build
 // findet.
 Shader "Risk/SpriteSilhouette"
@@ -7,6 +7,7 @@ Shader "Risk/SpriteSilhouette"
     Properties
     {
         [PerRendererData] _MainTex ("Sprite", 2D) = "white" {}
+        _Color ("Farbe", Color) = (1,1,1,1)
     }
 
     SubShader
@@ -33,6 +34,7 @@ Shader "Risk/SpriteSilhouette"
             #include "UnityCG.cginc"
 
             sampler2D _MainTex;
+            fixed4 _Color;
 
             struct appdata
             {
@@ -60,7 +62,8 @@ Shader "Risk/SpriteSilhouette"
             fixed4 frag (v2f i) : SV_Target
             {
                 fixed a = tex2D(_MainTex, i.uv).a;
-                return fixed4(i.color.rgb, i.color.a * a);
+                fixed4 c = i.color * _Color;
+                return fixed4(c.rgb, c.a * a);
             }
             ENDCG
         }

@@ -247,6 +247,15 @@ public static class Ach
         "Mint_Shield_Evo", "Peppermint Bulwark", "Obtained the Peppermint Bulwark for the first time!",
         AchievementCategory.Evolutions);
 
+    // Geisterstunde, Karamell-Kino - ausgeloest in der jeweiligen Evo.
+    public static readonly AchievementDef TimeLaserEvo = Def(
+        "Time_Laser_Evo", "Witching Hour", "Obtained the Witching Hour for the first time!",
+        AchievementCategory.Evolutions);
+
+    public static readonly AchievementDef PopcornPanEvo = Def(
+        "Popcorn_Pan_Evo", "Caramel Cinema", "Obtained the Caramel Cinema for the first time!",
+        AchievementCategory.Evolutions);
+
     // ==================================================================
     //  Charaktere
     // ==================================================================
@@ -431,7 +440,7 @@ public static class Ach
         AchievementCategory.Weapons);
 
     public static readonly AchievementDef MaxGummyGang = Def(
-        "Max_Level_GummyGang", "Max Level: Gummy Gang", "Reach the maximum level of the Gummy Gang weapon.",
+        "Max_Level_GummyGang", "Max Level: Jelly Gang", "Reach the maximum level of the Jelly Gang weapon.",
         AchievementCategory.Weapons);
 
     // ==================================================================

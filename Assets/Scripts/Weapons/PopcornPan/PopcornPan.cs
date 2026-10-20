@@ -62,13 +62,13 @@ public class PopcornPan : Weapon
     private float timer;
     private static readonly List<Enemy> targets = new List<Enemy>();
 
-    void Awake()
+    protected virtual void Awake()
     {
         stats = new List<WeaponStats>(LevelStats);
         maxweaponLevel = LevelStats.Length - 1;
     }
 
-    void Update()
+    protected virtual void Update()
     {
         if (!CanAttack || PlayerController.Instance == null) return;
 
@@ -88,6 +88,9 @@ public class PopcornPan : Weapon
             hops = HopsPerLevel[lvl],
         };
     }
+
+    /// <summary>Haken fuer die Evo (Karamell-Kino): Werte eines einzelnen Korns.</summary>
+    protected virtual PopcornKernel.Pop KernelPop(PopcornKernel.Pop pop) => pop;
 
     private bool Fire()
     {
@@ -115,7 +118,7 @@ public class PopcornPan : Weapon
         {
             Enemy e = targets[Random.Range(0, pool)];
             Vector2 land = (Vector2)e.transform.position + Random.insideUnitCircle * 0.45f;
-            PopcornKernel.Throw(origin, land, pop, i * 0.06f);
+            PopcornKernel.Throw(origin, land, KernelPop(pop), i * 0.06f);
         }
 
         SweetFx.Play(Spawn, origin, 14f, 2);
