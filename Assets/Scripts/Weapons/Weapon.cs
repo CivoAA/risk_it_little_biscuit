@@ -147,6 +147,8 @@ public class Weapon : MonoBehaviour
         // Maximalstufe: der Erfolg steht im Katalog (Ach.MaxLevelFor), nicht in jeder Waffe.
         if (maxweaponLevel > 0 && weaponLevel >= maxweaponLevel)
             Achievements.Unlock(Ach.MaxLevelFor(weaponID));
+
+        SecretAchievements.WeaponLevelled();
     }
     void Update()
     {

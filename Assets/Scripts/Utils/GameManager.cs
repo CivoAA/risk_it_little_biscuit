@@ -122,6 +122,7 @@ public class GameManager : MonoBehaviour
         bool won = !gaveUp && bossSpawned && !GameSession.IsEndless;
 
         if (!gaveUp) Achievements.Unlock(Ach.FirstDeath);
+        if (!gaveUp && !won) SecretAchievements.Died(gameTime);
         currency = EstimateCurrency();
         // Nach "Endless weiterspielen" ist der Story-Teil schon ausgezahlt.
         Shop.AddCurrency(Mathf.Max(0, currency - currencyPaid));

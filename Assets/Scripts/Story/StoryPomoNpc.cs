@@ -21,6 +21,10 @@ public class StoryPomoNpc : HubInteractable
     private Sprite[] frames;
     private float nextBlink;
     private int talkIndex;
+    private int talkCount;
+
+    /// <summary>So oft mit Pomo reden, bis der Wecker klingelt (Ach.SecretWakeUp).</summary>
+    private const int WakeUpTalks = 10;
 
     protected override string PromptKey => "hub.prompt.pomo";
 
@@ -109,6 +113,9 @@ public class StoryPomoNpc : HubInteractable
     protected override void OnInteract()
     {
         if (StoryDialog.IsOpen || StoryCutscene.IsPlaying) return;
+
+        // Geheim-Erfolg: zehnmal angequatscht, seit der Hub geladen ist.
+        if (++talkCount >= WakeUpTalks) Achievements.Unlock(Ach.SecretWakeUp);
 
         string id;
         object[] args = null;
