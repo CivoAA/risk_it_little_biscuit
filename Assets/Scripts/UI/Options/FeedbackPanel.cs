@@ -246,6 +246,7 @@ public class FeedbackPanel : MonoBehaviour
 
         // Angekommen: Text leeren (der Name bleibt fuer das naechste Mal).
         SetStatus(Loc.Get("ui.feedback.status.sent", "Danke! Ist angekommen."), GameHudSkin.Mint);
+        Achievements.Unlock(Ach.SecretHonestFeedback);
         messageField.text = "";
         draftMessage = "";
 

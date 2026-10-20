@@ -29,8 +29,13 @@ public class CreditsPanel : MonoBehaviour
         new Section { Key = "ui.credits.cat.dev",   Fallback = "DEVELOPER",     Names = new[] { "Civoknis", "Reo" } },
         new Section { Key = "ui.credits.cat.pixel", Fallback = "PIXEL ARTISTS", Names = new[] { "Reo", "Raccoon" } },
         new Section { Key = "ui.credits.cat.sound", Fallback = "SOUND DESIGN",  Names = new[] { "Reo" } },
-        new Section { Key = "ui.credits.cat.test",  Fallback = "TESTER",        Names = new[] { "Papa Civoknis", "DaCat", "JPC", "Bubbles", "Raccoon" } },
+        new Section { Key = "ui.credits.cat.test",  Fallback = "TESTER",        Names = new[] { SupporterName, "DaCat", "JPC", "Bubbles", "Raccoon" } },
     };
+
+    /// <summary>Wer hier oft genug angeklickt wird, schaltet Ach.SecretBiggestSupporter frei.</summary>
+    private const string SupporterName = "Papa Civo";
+    private const int SupporterClicks = 10;
+    private int supporterClicks;
 
     // ==================================================================
     //  Masse (Seitenpixel) - Karte wie OptionsPanel
@@ -153,8 +158,10 @@ public class CreditsPanel : MonoBehaviour
 
             foreach (string name in section.Names)
             {
-                OptionsKit.Label("Name", content, 0, y, ViewW, NameH, name, textFont, OptionsKit.SizeText,
-                                 GameHudSkin.Parchment, TextAlignmentOptions.Center);
+                TextMeshProUGUI label = OptionsKit.Label("Name", content, 0, y, ViewW, NameH, name, textFont,
+                                                         OptionsKit.SizeText, GameHudSkin.Parchment,
+                                                         TextAlignmentOptions.Center);
+                if (name == SupporterName) MakeSupporterClickable(label);
                 y += NameH;
             }
 
@@ -169,6 +176,19 @@ public class CreditsPanel : MonoBehaviour
 
         content.sizeDelta = new Vector2(ViewW, Mathf.Max(ViewH, contentHeight));
         UpdateScrollBar();
+    }
+
+    /// <summary>Unauffaellig klickbar - kein Hover, nur der Klick-Sound.</summary>
+    private void MakeSupporterClickable(TextMeshProUGUI label)
+    {
+        label.raycastTarget = true;
+        Button button = label.gameObject.AddComponent<Button>();
+        button.transition = Selectable.Transition.None;
+        button.onClick.AddListener(() =>
+        {
+            OptionsKit.PlayClick();
+            if (++supporterClicks >= SupporterClicks) Achievements.Unlock(Ach.SecretBiggestSupporter);
+        });
     }
 
     private void Scroll(float delta)

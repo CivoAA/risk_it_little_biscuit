@@ -288,6 +288,7 @@ public class PlayerController : MonoBehaviour
             {
                 lastMoveDir = playerMoveDirection;
                 animator.SetBool("moving", true);
+                if (GameManager.Instance != null) SecretAchievements.Moved(GameManager.Instance.gameTime);
             }
             else
             {

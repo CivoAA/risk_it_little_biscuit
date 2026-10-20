@@ -551,6 +551,49 @@ public static class Ach
         "Secret_Flawless", "Not a Scratch", "Beat a level without losing any health. Shields don't count.",
         AchievementCategory.Secrets, hidden: true);
 
+    // Ausgeloest in CreditsPanel (Klicks auf den Namen).
+    public static readonly AchievementDef SecretBiggestSupporter = Def(
+        "Secret_Biggest_Supporter", "My Biggest Supporter", "Click on Papa Civo in the credits 10 times.",
+        AchievementCategory.Secrets, hidden: true);
+
+    public static readonly AchievementDef SecretNightOwl = Def(
+        "Secret_Night_Owl", "Night Owl", "Play a run between 3 and 4 a.m.",
+        AchievementCategory.Secrets, hidden: true);
+
+    public static readonly AchievementDef SecretStatue = Def(
+        "Secret_Statue", "Pillar of Salt", "Stand still for 60 seconds within the first 5 minutes of a run.",
+        AchievementCategory.Secrets, hidden: true);
+
+    public static readonly AchievementDef SecretShortRun = Def(
+        "Secret_Short_Run", "Short Work", "Die within the first 15 seconds of a run.",
+        AchievementCategory.Secrets, hidden: true);
+
+    public static readonly AchievementDef SecretLastCrumb = Def(
+        "Secret_Last_Crumb", "Down to the Last Crumb", "Beat a level with 5% health or less.",
+        AchievementCategory.Secrets, hidden: true);
+
+    public static readonly AchievementDef SecretMinimalist = Def(
+        "Secret_Minimalist", "Minimalist", "Win a story run without picking up a second weapon.",
+        AchievementCategory.Secrets, hidden: true);
+
+    public static readonly AchievementDef SecretSugarRush = Def(
+        "Secret_Sugar_Rush", "Sugar Rush", "Have Glass Cannon and Cursed Sugar at max level at the same time.",
+        AchievementCategory.Secrets, hidden: true);
+
+    public static readonly AchievementDef SecretCoffeeBreak = Def(
+        "Secret_Coffee_Break", "Coffee Break", "Don't touch anything in the hub for 5 minutes.",
+        AchievementCategory.Secrets, hidden: true);
+
+    // Ausgeloest in StoryPomoNpc.
+    public static readonly AchievementDef SecretWakeUp = Def(
+        "Secret_Wake_Up", "Good Morning, It's Ringing!", "Talk to Pomo 10 times in a row.",
+        AchievementCategory.Secrets, hidden: true);
+
+    // Ausgeloest in FeedbackPanel, sobald die Meldung angekommen ist.
+    public static readonly AchievementDef SecretHonestFeedback = Def(
+        "Secret_Honest_Feedback", "Honest Soul", "Send a message through the feedback window.",
+        AchievementCategory.Secrets, hidden: true);
+
     // Beispiel - hidden: true zeigt in der Liste "???", bis es freigeschaltet ist:
     //
     // public static readonly AchievementDef SecretRamen = Def(

@@ -171,6 +171,7 @@ public class HubUI : MonoBehaviour
         // Damit muss die Anzeige nichts pro Frame nachschlagen.
         Shop.Changed += RefreshCoins;
         RefreshCoins();
+        SecretAchievements.HubEntered();
     }
 
     void OnDisable() => Shop.Changed -= RefreshCoins;
@@ -596,6 +597,8 @@ public class HubUI : MonoBehaviour
         if (!InputBlocked && Time.frameCount != lastModalClosedFrame
             && Input.GetKeyDown(KeyCode.Escape))
             PauseMenuPanel.Open(PauseMenuPanel.PauseMode.Hub);
+
+        SecretAchievements.HubTick();
 
         if (!DialogueOpen) return;
 
