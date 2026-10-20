@@ -10,7 +10,6 @@ public enum ShopCategory
 {
     Upgrades,
     Slots,
-    Weapons,
     Buffs,
     Companion,
 }
@@ -18,7 +17,7 @@ public enum ShopCategory
 /// <summary>Die beiden Reiter im Hub-Shop.</summary>
 public enum ShopTab
 {
-    /// <summary>Freischalten: Buffs (und Waffen, falls sie wieder in den Shop kommen).</summary>
+    /// <summary>Freischalten: Buffs. Waffen gibt es nicht im Shop, die sind alle von Anfang an frei.</summary>
     Unlocks = 0,
     /// <summary>Alles Mehrstufige: Werte, Slots, Build-Plaetze, Begleiter.</summary>
     Upgrades = 1,
@@ -118,7 +117,7 @@ public sealed class ShopItemDef
 
     /// <summary>Reiter im Hub-Shop - folgt der Kategorie.</summary>
     public ShopTab Tab =>
-        Category == ShopCategory.Buffs || Category == ShopCategory.Weapons
+        Category == ShopCategory.Buffs
             ? ShopTab.Unlocks
             : ShopTab.Upgrades;
 

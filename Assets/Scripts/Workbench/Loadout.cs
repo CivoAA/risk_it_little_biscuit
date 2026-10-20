@@ -108,11 +108,11 @@ public static class Loadout
         // Sofort und nicht erst beim ersten Zugriff: ein Spielstand aus der
         // Zeit vor den getrennten Builds hat genau einen Verteiler, und den
         // erbt der Charakter, der hier als erster danach fragt.
-        store.Use(CurrentCharacter);
+        bool changed = UseCharacter();
 
         // Der feste Platz kann sich zwischen zwei Sitzungen geaendert haben -
         // der Spieler waehlt seinen Charakter woanders.
-        if (EnsureLocked() | store.Migrated) store.Save();
+        if (changed | store.Migrated) store.Save();
     }
 
     /// <summary>
@@ -154,8 +154,7 @@ public static class Loadout
 
             if (store.Character != CurrentCharacter)
             {
-                store.Use(CurrentCharacter);
-                if (EnsureLocked()) store.Save();
+                if (UseCharacter()) store.Save();
             }
 
             return store;
@@ -362,10 +361,94 @@ public static class Loadout
         }
 
         bool switched = store.Character != CurrentCharacter;
-        if (switched) store.Use(CurrentCharacter);
+        bool changed = switched ? UseCharacter() : EnsureLocked();
 
-        // | statt ||: EnsureLocked muss auch dann laufen, wenn gewechselt wurde.
-        if (EnsureLocked() | switched) Fire();
+        if (changed | switched) Fire();
+    }
+
+    /// <summary>
+    /// Stellt den Speicher auf den gewaehlten Charakter und zieht den festen
+    /// Platz nach. Hat der Charakter noch nie einen Verteiler gehabt, bekommt
+    /// er den Start-Build (<see cref="FillStarter"/>). True, wenn sich dabei
+    /// etwas geaendert hat.
+    /// </summary>
+    private static bool UseCharacter()
+    {
+        bool fresh = store.Use(CurrentCharacter);
+        bool changed = EnsureLocked();
+        if (!fresh) return changed;
+
+        FillStarter();
+        return true;
+    }
+
+    // ==================================================================
+    //  Start-Build
+    // ==================================================================
+
+    /// <summary>
+    /// Waffen des Start-Builds, nach Startwaffe und Evo-Partner. Was der
+    /// Charakter nicht haben darf (fremde Startwaffe) oder schon drin hat,
+    /// wird uebersprungen - der Platz wird zufaellig gefuellt.
+    /// </summary>
+    private static readonly string[] StarterWeapons =
+    {
+        "shurikookie",
+        "butterblast",
+        "coffee_pool",
+        "time_laser",
+        "deathstrike",
+        "candy_frisbee",
+        "bubble_gun",
+        "gummy_gang",
+    };
+
+    /// <summary>Buffs des Start-Builds. Die restlichen Plaetze fuellt der Zufall.</summary>
+    private static readonly string[] StarterBuffs =
+    {
+        "buff_regeneration",
+        "buff_armor",
+        "buff_aoe_range",
+        "buff_move_speed",
+    };
+
+    /// <summary>
+    /// Der Build, den ein Charakter beim allerersten Blick in die Werkbank
+    /// vorfindet: Startwaffe, die zweite Zutat ihrer Evo, dann die feste Liste.
+    /// Ist die Evo-Zutat ein Buff, kommt sie zu den Buffs und ihr Waffenplatz
+    /// wird zufaellig gefuellt. Was danach noch frei ist, auch.
+    /// </summary>
+    private static void FillStarter()
+    {
+        string partner = StartEvoPartner();
+        WeaponDef partnerDef = WeaponCatalog.Find(partner);
+        bool partnerIsBuff = partnerDef != null && partnerDef.Kind == PoolKind.Buff;
+
+        if (!partnerIsBuff) AddStarter(partner);
+        foreach (string id in StarterWeapons) AddStarter(id);
+
+        foreach (string id in StarterBuffs) AddStarter(id);
+        if (partnerIsBuff) AddStarter(partner);
+
+        FillGroupRandom(PoolKind.Weapon);
+        FillGroupRandom(PoolKind.Buff);
+    }
+
+    /// <summary>Die Zutat der Start-Evo, die nicht die Startwaffe ist. Leer = keine.</summary>
+    private static string StartEvoPartner()
+    {
+        EvoDef evo = WeaponCatalog.FindEvo(Characters.StartEvoId(CurrentCharacter));
+        if (evo == null) return "";
+        return evo.IngredientA == LockedWeaponId ? evo.IngredientB : evo.IngredientA;
+    }
+
+    /// <summary>Legt einen Eintrag still in den Verteiler, wenn er passt - ohne <see cref="Fire"/>.</summary>
+    private static void AddStarter(string id)
+    {
+        WeaponDef def = WeaponCatalog.Find(id);
+        if (def == null || def.Kind == PoolKind.Evo) return;
+        if (!IsSelectable(id) || Contains(id) || IsFull(def.Kind)) return;
+        Get(def.Kind).Add(id);
     }
 
     // ==================================================================

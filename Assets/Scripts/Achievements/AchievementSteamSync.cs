@@ -24,7 +24,7 @@ public static class AchievementSteamSync
     /// <summary>Meldet ein lokal freigeschaltetes Achievement an Steam.</summary>
     public static void Push(AchievementDef def)
     {
-        if (def == null || !Available) return;
+        if (def == null || !def.OnSteam || !Available) return;
 
         try
         {
@@ -46,7 +46,7 @@ public static class AchievementSteamSync
     /// </summary>
     public static void PushStat(AchievementDef def, float value)
     {
-        if (def == null || !def.HasProgress || !Available) return;
+        if (def == null || !def.HasProgress || !def.OnSteam || !Available) return;
 
         try
         {
@@ -94,6 +94,8 @@ public static class AchievementSteamSync
 
         foreach (AchievementDef def in Ach.All)
         {
+            if (!def.OnSteam) continue;
+
             bool steamHasIt;
 
             try

@@ -1347,6 +1347,7 @@ public class Enemy : MonoBehaviour
                 Achievements.Progress(Ach.Kill100, 1f);
                 Achievements.Progress(Ach.Kill1000, 1f);
                 Achievements.Progress(Ach.Kill10000, 1f);
+                Achievements.Progress(Ach.Kill100000, 1f);
                 break;
         }
     }

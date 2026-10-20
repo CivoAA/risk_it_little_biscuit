@@ -103,6 +103,16 @@ public static class LevelRecords
         if (stars <= e.stars) return;
         e.stars = stars;
         Save();
+        Achievements.SetCountedValue(Ach.AllStars, TotalStars());
+    }
+
+    /// <summary>Sterne aller Karten zusammen (Ach.AllStars).</summary>
+    public static int TotalStars()
+    {
+        EnsureLoaded();
+        int total = 0;
+        foreach (Entry e in entries.Values) total += Mathf.Clamp(e.stars, 0, 3);
+        return total;
     }
 
     /// <summary>

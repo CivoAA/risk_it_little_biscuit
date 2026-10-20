@@ -546,10 +546,8 @@ public class WorkbenchTests
     }
 
     [Test]
-    public void Ohne_Waffen_im_Shop_ist_jede_Waffe_von_Anfang_an_frei()
+    public void Jede_Waffe_ist_von_Anfang_an_frei()
     {
-        if (Shop.WeaponsInShop) Assert.Ignore("Shop.WeaponsInShop ist an - Waffen werden gekauft.");
-
         foreach (WeaponDef def in Loadout.Available(PoolKind.Weapon))
         {
             Assert.IsTrue(Loadout.IsSelectable(def.Id), $"'{def.Id}' ist noch gesperrt.");
@@ -557,8 +555,9 @@ public class WorkbenchTests
 
         foreach (ShopItemDef def in Shop.All)
         {
-            if (def.Category == ShopCategory.Weapons)
-                Assert.IsFalse(Shop.IsVisible(def), $"Shop-Eintrag '{def.Id}' ist noch sichtbar.");
+            WeaponDef weapon = WeaponCatalog.Find(def.UnlocksWeapon);
+            Assert.IsFalse(weapon != null && weapon.Kind == PoolKind.Weapon,
+                $"Shop-Eintrag '{def.Id}' schaltet eine Waffe frei - Waffen gibt es nicht mehr im Shop.");
         }
     }
 

@@ -60,6 +60,7 @@ public class GameManager : MonoBehaviour
         gameActiv = true;
         RunMetrics.RunStarted();
         SecretAchievements.RunStarted();
+        RunChallenges.RunStarted();
         EndlessScore.RunStarted();
     }
 
@@ -123,9 +124,12 @@ public class GameManager : MonoBehaviour
 
         if (!gaveUp) Achievements.Unlock(Ach.FirstDeath);
         if (!gaveUp && !won) SecretAchievements.Died(gameTime);
+        RunChallenges.RunEnded(won);
         currency = EstimateCurrency();
         // Nach "Endless weiterspielen" ist der Story-Teil schon ausgezahlt.
-        Shop.AddCurrency(Mathf.Max(0, currency - currencyPaid));
+        int payout = Mathf.Max(0, currency - currencyPaid);
+        Shop.AddCurrency(payout);
+        if (MapDefinition.Active != null) Achievements.Progress(Ach.Gold1M, payout);
         currencyPaid = Mathf.Max(currencyPaid, currency);
         gameActiv = false;
         storyWon = won;

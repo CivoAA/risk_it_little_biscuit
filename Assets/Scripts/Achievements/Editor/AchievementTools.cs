@@ -195,6 +195,7 @@ public static class AchievementTools
 
         foreach (AchievementDef def in Ach.All)
         {
+            if (!def.OnSteam) continue;
             sb.AppendLine($"{def.SteamApiName}\t{Strip(def.NameEn)}\t{Strip(def.DescEn)}\t{(def.Hidden ? "Yes" : "No")}");
         }
 

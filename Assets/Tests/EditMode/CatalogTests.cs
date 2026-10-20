@@ -132,7 +132,7 @@ public class CatalogTests
     {
         foreach (ShopItemDef def in Shop.All)
         {
-            bool unlock = def.Category == ShopCategory.Buffs || def.Category == ShopCategory.Weapons;
+            bool unlock = def.Category == ShopCategory.Buffs;
             Assert.AreEqual(unlock ? ShopTab.Unlocks : ShopTab.Upgrades, def.Tab,
                 $"'{def.Id}' steht unter dem falschen Reiter.");
         }

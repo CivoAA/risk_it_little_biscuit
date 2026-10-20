@@ -120,6 +120,7 @@ public class MixerObject : MonoBehaviour
                 actionTriggered = true;
                 mixerActive = true;
                 EndlessScore.AddMixer();
+                RunChallenges.MixerUsed();
                 unused.Remove(this);
 
                 // Vor dem Oeffnen wuerfeln - die Mixer-Ansicht liest die

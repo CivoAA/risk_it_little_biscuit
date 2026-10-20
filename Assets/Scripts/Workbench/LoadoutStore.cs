@@ -129,8 +129,17 @@ public class LoadoutStore
     /// Stellt auf den Verteiler dieses Charakters um. Hat er noch keinen,
     /// bekommt er einen leeren. Nichts geht dabei verloren: der bisherige
     /// bleibt in der Liste und ist beim naechsten Umstellen wieder da.
+    ///
+    /// Gibt true zurueck, wenn der Charakter dabei zum ersten Mal einen
+    /// Verteiler bekommen hat - dann legt <see cref="Loadout"/> den Start-Build
+    /// hinein. Ein geerbter v1-Verteiler zaehlt nicht als neu.
     /// </summary>
-    public void Use(int character) => current = Of(character);
+    public bool Use(int character)
+    {
+        bool created = !Has(character) && orphan == null;
+        current = Of(character);
+        return created;
+    }
 
     /// <summary>Der Charakter, dessen Verteiler gerade unter Weapons/Buffs liegt.</summary>
     public int Character => Current.character;

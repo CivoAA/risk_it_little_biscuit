@@ -78,6 +78,9 @@ public sealed class AchievementDef
     /// </summary>
     public string SteamStatName => HasProgress ? "Stat_" + Id : null;
 
+    /// <summary>Im Steamworks-Backend angelegt? Sonst nur im Spiel (siehe Ach.IsOnSteam).</summary>
+    public bool OnSteam => Ach.IsOnSteam(Id);
+
     public bool IsUnlocked => Achievements.IsUnlocked(this);
     public float Value => Achievements.GetValue(this);
 

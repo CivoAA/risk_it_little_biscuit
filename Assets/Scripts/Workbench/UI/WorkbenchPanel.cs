@@ -161,6 +161,26 @@ public class WorkbenchPanel : MonoBehaviour
     private GameObject scalingRoot;
     private TMP_Text scalingTitle, scalingText;
     private RectTransform scalingContent;
+    private RectTransform infoContent;
+    private ScrollRect infoScroll;
+
+    /// <summary>
+    /// Text der Info-Box. Setzt die Hoehe nach dem Text, damit der ScrollRect
+    /// weiss, wie weit es geht, und springt wieder nach oben.
+    /// </summary>
+    private string InfoText
+    {
+        set
+        {
+            infoDesc.text = value;
+            float height = Mathf.Ceil(infoDesc.GetPreferredValues(value ?? "", InfoDesc.z, 0f).y) + 1f;
+            height = Mathf.Max(InfoDesc.w, height);
+            infoDesc.rectTransform.sizeDelta = new Vector2(InfoDesc.z, height);
+            infoContent.sizeDelta = new Vector2(InfoDesc.z, height);
+            infoScroll.StopMovement();
+            infoContent.anchoredPosition = Vector2.zero;
+        }
+    }
     private readonly List<PresetButton> presetButtons = new List<PresetButton>();
 
     private WeaponDef inspected;
@@ -809,7 +829,22 @@ public class WorkbenchPanel : MonoBehaviour
         Img("InfoBox", page, InfoBox, Gfx("info_box")).type = Image.Type.Sliced;
         infoName = Label("InfoName", page, InfoName, "", SizeText, TextCream,
                          TextAlignmentOptions.Left);
-        infoDesc = Label("InfoDesc", page, InfoDesc, "", SizeSmall, TextDim,
+        // Lange Beschreibungen passen nicht in die Box - scrollbar wie der
+        // Skalierungs-Text (Mausrad, oder mit links ziehen).
+        RectTransform infoView = Rect("InfoView", page, InfoDesc.x, InfoDesc.y, InfoDesc.z, InfoDesc.w);
+        infoView.gameObject.AddComponent<RectMask2D>();
+        CatchScroll(infoView);
+
+        infoScroll = infoView.gameObject.AddComponent<ScrollRect>();
+        infoScroll.horizontal = false;
+        infoScroll.movementType = ScrollRect.MovementType.Clamped;
+        infoScroll.scrollSensitivity = 8f;
+        infoScroll.viewport = infoView;
+
+        infoContent = Rect("Content", infoView, 0f, 0f, InfoDesc.z, InfoDesc.w);
+        infoScroll.content = infoContent;
+
+        infoDesc = Label("InfoDesc", infoContent, new Vector4(0f, 0f, InfoDesc.z, InfoDesc.w), "", SizeSmall, TextDim,
                          TextAlignmentOptions.TopLeft);
         infoDesc.textWrappingMode = TextWrappingModes.Normal;
 
@@ -1459,13 +1494,13 @@ public class WorkbenchPanel : MonoBehaviour
         if (!Loadout.IsPresetOpen(index))
         {
             infoName.color = TextDim;
-            infoDesc.text = Loc.Get("ui.workbench.preset.locked",
+            InfoText = Loc.Get("ui.workbench.preset.locked",
                 "Weitere Build-Plätze gibt es im Shop.");
             return;
         }
 
         infoName.color = index == Loadout.ActivePreset ? TextGold : TextCream;
-        infoDesc.text = Loc.Get("ui.workbench.preset.desc",
+        InfoText = Loc.Get("ui.workbench.preset.desc",
             "Gespeicherter Build. Der zuletzt gewählte geht mit in den Lauf.");
     }
 
@@ -1485,7 +1520,7 @@ public class WorkbenchPanel : MonoBehaviour
         if (def == null)
         {
             infoName.text = "";
-            infoDesc.text = Loc.Get("ui.workbench.info.empty",
+            InfoText = Loc.Get("ui.workbench.info.empty",
                                     "Zeig auf eine Kachel, um sie zu lesen.");
             return;
         }
@@ -1535,7 +1570,7 @@ public class WorkbenchPanel : MonoBehaviour
             }
         }
 
-        infoDesc.text = string.Join("\n", lines);
+        InfoText = string.Join("\n", lines);
     }
 
     /// <summary>Info-Box fuer einen gesperrten Platz im Verteiler.</summary>
@@ -1545,7 +1580,7 @@ public class WorkbenchPanel : MonoBehaviour
         scalingButton.SetActive(false);
         infoName.text = Loc.Get("ui.workbench.closed.title", "Gesperrter Platz");
         infoName.color = TextDim;
-        infoDesc.text = kind == PoolKind.Buff
+        InfoText = kind == PoolKind.Buff
             ? string.Format(Loc.Get("ui.workbench.closed.buffs",
                   "Jeder Buff-Slot im Lauf öffnet {0} Plätze, höchstens {1}. Mehr Slots gibt es im Shop."),
                   Loadout.PicksPerSlot, Loadout.MaxBuffs)

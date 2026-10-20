@@ -172,8 +172,8 @@ public static class Unlocks
 
     public static IReadOnlyList<UnlockDef> All => Registry;
 
-    /// <summary>Gehoert der Unlock gerade ins Spiel? Nein, wenn er nur an abgeschalteten Shop-Eintraegen haengt.</summary>
-    public static bool IsShown(UnlockDef def) => def != null && !Shop.IsSwitchedOffUnlock(def.Id);
+    /// <summary>Gehoert der Unlock ins Spiel? Seit es keine Waffen im Shop mehr gibt, jeder bekannte.</summary>
+    public static bool IsShown(UnlockDef def) => def != null;
 
     /// <summary>Feuert genau einmal je Unlock, wenn er aufgeht.</summary>
     public static event Action<UnlockDef> Granted;
@@ -300,12 +300,6 @@ public static class Unlocks
     public static void Grant(UnlockDef def)
     {
         if (def == null) return;
-
-        // Waffen-Unlocks, solange die Waffen nicht im Shop liegen (Shop.WeaponsInShop):
-        // nicht vergeben - sonst kaeme "jetzt im Shop kaufbar" fuer etwas, das
-        // es dort gar nicht gibt. Wird der Schalter wieder an, kann man sie
-        // ganz normal verdienen.
-        if (!IsShown(def)) return;
 
         UnlockStore s = Store;
         if (s.IsUnlocked(def.Id)) return;

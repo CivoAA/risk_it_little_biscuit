@@ -483,3 +483,62 @@ public class PointerRelay : MonoBehaviour,
         if (e.button == PointerEventData.InputButton.Left) Down?.Invoke();
     }
 }
+
+/// <summary>
+/// Macht eine Scroll-Schiene ziehbar: Linksklick auf den Griff und ziehen,
+/// Klick daneben springt dorthin. Liegt auf einer unsichtbaren Flaeche ueber
+/// der Schiene - der Griff selbst ist fuer die Maus oft zu schmal.
+///
+/// Rechnet in Anteilen von oben (0) nach unten (1): <see cref="Handle"/> ist
+/// die Griffgroesse als Anteil der Schiene, <see cref="Value"/> der aktuelle
+/// Stand, <see cref="Changed"/> bekommt den neuen.
+/// </summary>
+public class ScrollBarDrag : MonoBehaviour, IPointerDownHandler, IDragHandler, IBeginDragHandler
+{
+    public System.Func<float> Handle, Value;
+    public System.Action<float> Changed;
+
+    private float grab;
+
+    public void OnPointerDown(PointerEventData e)
+    {
+        if (e.button != PointerEventData.InputButton.Left || !Along(e, out float t)) return;
+
+        float h = Mathf.Clamp01(Handle?.Invoke() ?? 0f);
+        float top = (Value?.Invoke() ?? 0f) * (1f - h);
+        // Auf dem Griff: dort festhalten, wo man ihn gepackt hat. Daneben:
+        // der Griff springt mit der Mitte unter die Maus.
+        grab = t >= top && t <= top + h ? t - top : h * 0.5f;
+        Apply(t, h);
+    }
+
+    // Nur da, damit das EventSystem das Ziehen hierher schickt und nicht an
+    // einen ScrollRect weiter oben.
+    public void OnBeginDrag(PointerEventData e) { }
+
+    public void OnDrag(PointerEventData e)
+    {
+        if (e.button != PointerEventData.InputButton.Left || !Along(e, out float t)) return;
+        Apply(t, Mathf.Clamp01(Handle?.Invoke() ?? 0f));
+    }
+
+    private void Apply(float t, float h)
+    {
+        if (h >= 1f) return;
+        Changed?.Invoke(Mathf.Clamp01((t - grab) / (1f - h)));
+    }
+
+    /// <summary>Wo auf der Schiene die Maus steht, 0 = oben, 1 = unten (auch ausserhalb).</summary>
+    private bool Along(PointerEventData e, out float t)
+    {
+        t = 0f;
+        var rt = (RectTransform)transform;
+        if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(rt, e.position, e.pressEventCamera, out Vector2 local))
+            return false;
+
+        Rect r = rt.rect;
+        if (r.height <= 0f) return false;
+        t = (r.yMax - local.y) / r.height;
+        return true;
+    }
+}

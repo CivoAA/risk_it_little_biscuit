@@ -286,6 +286,15 @@ public static class WeaponCatalog
         "void_spike",
         "fire_ball",
         "boomerang",
+        // Frueher im Shop (je 1000 Muenzen). Seit 20.10.2026 gibt es keine
+        // Waffen mehr im Shop - jede Waffe ist von Anfang an da.
+        "boba_gun",
+        "spike_fork",
+        "deathstrike",
+        "celestial_star",
+        "blade_swarm",
+        "candy_bomb",
+        "time_laser",
         // Neue Waffen: bewusst ohne Shop-Eintrag sofort verfuegbar.
         "crumb_trail",
         "vortex",
@@ -328,8 +337,9 @@ public static class WeaponCatalog
         "buff_duration",
         // Zweite Zutat der Marmeladen-Evo (Sticky Shatter) - darum ohne Shop.
         "buff_aoe_range",
-        "buff_glass_cannon",
-        "buff_second_chance",
+        // Muenzen (20.10.2026): sofort frei. Second Chance und Glass Cannon
+        // sind dafuer in den Shop gewandert.
+        "buff_currency",
     };
 
     /// <summary>Hat der Spieler diese Waffe/diesen Buff gerade zur Verfuegung (Standard oder gekauft)?</summary>

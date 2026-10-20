@@ -219,7 +219,24 @@ public static class Bestiary
 
         // Nur bei einer neuen Stufe Bescheid geben - sonst liefe das bei jedem Kill.
         int[] steps = StepsFor(id);
-        if (StepsReached(steps, n + 1) > StepsReached(steps, n)) Changed?.Invoke();
+        int reached = StepsReached(steps, n + 1);
+        if (reached > StepsReached(steps, n))
+        {
+            Changed?.Invoke();
+            // Letzte Stufe dieser Art erreicht - vielleicht war es die letzte ueberhaupt.
+            if (reached == steps.Length && IsComplete) Achievements.Unlock(Ach.BestiaryComplete);
+        }
+    }
+
+    /// <summary>Jede Art im Bestiarium auf der hoechsten Stufe (Ach.BestiaryComplete).</summary>
+    public static bool IsComplete
+    {
+        get
+        {
+            foreach (EnemyId e in Enemies)
+                if (StepsReached(e) < StepsFor(e).Length) return false;
+            return Enemies.Count > 0;
+        }
     }
 
     public static void Flush()

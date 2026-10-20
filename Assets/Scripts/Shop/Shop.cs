@@ -106,83 +106,6 @@ public static class Shop
         style: ShopValueStyle.Total, displayBase: Loadout.BasePresets);
 
     // ==================================================================
-    //  Waffen
-    // ==================================================================
-
-    /// <summary>
-    /// SCHALTER (seit 11.10.2026 aus): Waffen werden im Shop gekauft.
-    ///
-    /// Aus heisst: jede Waffe ist von Anfang an da. Die Eintraege unten bleiben
-    /// stehen, sind aber unsichtbar und zaehlen als gekauft; ihre Unlocks
-    /// ("jetzt im Shop kaufbar") werden nicht mehr vergeben und tauchen auch im
-    /// Erfolgsbuch nicht auf. Wieder auf true - und alles ist wie vorher,
-    /// Kaeufe aus alten Spielstaenden inklusive.
-    /// </summary>
-    public static readonly bool WeaponsInShop = false;
-
-    /// <summary>Ist dieser Eintrag gerade durch <see cref="WeaponsInShop"/> abgeschaltet?</summary>
-    public static bool IsSwitchedOff(ShopItemDef def) =>
-        def != null && !WeaponsInShop && def.Category == ShopCategory.Weapons;
-
-    /// <summary>
-    /// Haengt dieser Unlock nur an abgeschalteten Shop-Eintraegen? Dann wird er
-    /// weder vergeben noch angezeigt - er wuerde "jetzt im Shop kaufbar" sagen.
-    /// </summary>
-    public static bool IsSwitchedOffUnlock(string unlockId)
-    {
-        if (WeaponsInShop || string.IsNullOrEmpty(unlockId)) return false;
-
-        bool any = false;
-        foreach (ShopItemDef def in Registry)
-        {
-            if (def.RequiredUnlock != unlockId) continue;
-            if (!IsSwitchedOff(def)) return false;
-            any = true;
-        }
-        return any;
-    }
-
-    public static readonly ShopItemDef BobaGun = Def(
-        "boba_gun", "Boba Gun", "Unlocks Boba Gun", ShopCategory.Weapons,
-        costs: new[] { 1000 }, values: new[] { 0f, 1f },
-        unlocksWeapon: "boba_gun");
-
-    public static readonly ShopItemDef Shurikookie = Def(
-        "shurikookie", "Shurikookie", "Unlocks Shurikookie", ShopCategory.Weapons,
-        costs: new[] { 1000 }, values: new[] { 0f, 1f },
-        unlocksWeapon: "shurikookie");
-
-    public static readonly ShopItemDef Spikefork = Def(
-        "spikefork", "Spikefork", "Unlocks Spikefork", ShopCategory.Weapons,
-        costs: new[] { 1000 }, values: new[] { 0f, 1f },
-        unlocksWeapon: "spike_fork");
-
-    public static readonly ShopItemDef Deathstrike = Def(
-        "deathstrike", "Deathstrike", "Unlocks Deathstrike", ShopCategory.Weapons,
-        costs: new[] { 1000 }, values: new[] { 0f, 1f },
-        unlocksWeapon: "deathstrike");
-
-    public static readonly ShopItemDef CelestialStar = Def(
-        "celestial_star", "Celestial Star", "Unlocks Celestial Star", ShopCategory.Weapons,
-        costs: new[] { 1000 }, values: new[] { 0f, 1f },
-        unlocksWeapon: "celestial_star");
-
-    public static readonly ShopItemDef BladeSwarm = Def(
-        "blade_swarm", "Blade Swarm", "Unlocks Blade Swarm", ShopCategory.Weapons,
-        costs: new[] { 1000 }, values: new[] { 0f, 1f },
-        unlocksWeapon: "blade_swarm");
-
-    public static readonly ShopItemDef CandyBomb = Def(
-        "candy_bomb", "Candy Bomb", "Unlocks Candy Bomb", ShopCategory.Weapons,
-        costs: new[] { 1000 }, values: new[] { 0f, 1f },
-        unlocksWeapon: "candy_bomb");
-
-    public static readonly ShopItemDef TimeLaser = Def(
-        "time_laser", "Time Laser", "Unlocks Time Laser", ShopCategory.Weapons,
-        costs: new[] { 1000 }, values: new[] { 0f, 1f },
-        unlocksWeapon: "time_laser");
-
-    // ==================================================================
     //  Buffs
     // ==================================================================
 
@@ -190,11 +113,16 @@ public static class Shop
         "buff_xp_gain", "XP Gain Buff", "Unlocks XP Gain Buff", ShopCategory.Buffs,
         costs: new[] { 750 }, values: new[] { 0f, 1f }, unlocksWeapon: "buff_xp_gain");
 
-    public static readonly ShopItemDef BuffCurrency = Def(
-        "buff_currency", "Currency Buff", "Unlocks Currency Gain Buff", ShopCategory.Buffs,
-        costs: new[] { 750 }, values: new[] { 0f, 1f },
-        icon: "currency_gain", // teilt sich die Grafik mit dem Waehrungs-Upgrade
-        unlocksWeapon: "buff_currency");
+    // Der Muenz-Buff (buff_currency) steht seit 20.10.2026 nicht mehr im Shop,
+    // sondern ist sofort frei (WeaponCatalog.DefaultUnlocked). Dafuer kosten
+    // Second Chance und Glass Cannon jetzt.
+    public static readonly ShopItemDef BuffSecondChance = Def(
+        "buff_second_chance", "Second Chance", "Unlocks Second Chance Buff", ShopCategory.Buffs,
+        costs: new[] { 750 }, values: new[] { 0f, 1f }, unlocksWeapon: "buff_second_chance");
+
+    public static readonly ShopItemDef BuffGlassCannon = Def(
+        "buff_glass_cannon", "Glass Cannon", "Unlocks Glass Cannon Buff", ShopCategory.Buffs,
+        costs: new[] { 750 }, values: new[] { 0f, 1f }, unlocksWeapon: "buff_glass_cannon");
 
     public static readonly ShopItemDef BuffLifeSteal = Def(
         "buff_life_steal", "Life Steal", "Unlocks Life Steal Buff", ShopCategory.Buffs,
@@ -392,7 +320,6 @@ public static class Shop
     public static bool IsVisible(ShopItemDef def)
     {
         if (def == null) return false;
-        if (IsSwitchedOff(def)) return false;
         if (string.IsNullOrWhiteSpace(def.RequiredUnlock)) return true;
         return Unlocks.IsUnlocked(def.RequiredUnlock);
     }
@@ -545,7 +472,7 @@ public static class Shop
         if (string.IsNullOrEmpty(weaponId)) return false;
         Init();
         if (!ByWeapon.TryGetValue(weaponId, out ShopItemDef def)) return false;
-        return IsSwitchedOff(def) || IsBought(def);
+        return IsBought(def);
     }
 
     /// <summary>Gibt es ueberhaupt einen Shop-Eintrag, der diese Waffe bzw. diesen Buff freischaltet?</summary>

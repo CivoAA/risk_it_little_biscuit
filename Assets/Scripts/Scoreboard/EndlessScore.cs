@@ -153,6 +153,7 @@ public static class EndlessScore
         Debug.Log($"[EndlessScore] {plan}: {score} Punkte ({Mathf.FloorToInt(seconds)} s, {Kills} Kills, " +
                   $"{Mixers} Mixer, Level {level}, {RunDifficulty.Level}).");
         LevelRecords.ReportScore(LevelRecords.CurrentMapId(), score);
+        if (score >= 10000000 && !ScoreIntegrity.BlockedForPlayer) Achievements.Unlock(Ach.EndlessScore10M);
         SteamScoreboard.Submit(plan, score, new[]
         {
             Mathf.FloorToInt(seconds),

@@ -92,7 +92,7 @@ public class AchievementsBookPanel : MonoBehaviour
     private Image totalFill;
 
     private RectTransform viewport, content;
-    private Image scrollHandle;
+    private Image scrollHandle, scrollTrack;
     private float scrollTop, contentHeight;
 
     private readonly List<Entry> entries = new List<Entry>();
@@ -381,6 +381,15 @@ public class AchievementsBookPanel : MonoBehaviour
 
         scrollHandle = OptionsKit.Img("ScrollHandle", page, ListX + ListW - 3, ViewY, 2, 10,
                                       GameHudSkin.White, GameHudSkin.Stone);
+
+        // Unsichtbare Flaeche ueber der Schiene: den Griff mit links ziehen.
+        // Breiter als der Griff, sonst trifft ihn keiner.
+        scrollTrack = OptionsKit.Img("ScrollTrack", page, ListX + ListW - 8, ViewY, 8, ViewH, null, Color.clear);
+        scrollTrack.raycastTarget = true;
+        ScrollBarDrag drag = scrollTrack.gameObject.AddComponent<ScrollBarDrag>();
+        drag.Handle = () => contentHeight > ViewH ? ScrollHandleSize() / ViewH : 1f;
+        drag.Value = () => contentHeight > ViewH ? scrollTop / (contentHeight - ViewH) : 0f;
+        drag.Changed = v => SetScroll(v * Mathf.Max(0f, contentHeight - ViewH));
     }
 
     private void BuildDetail()
@@ -922,12 +931,15 @@ public class AchievementsBookPanel : MonoBehaviour
     {
         float hidden = Mathf.Max(0f, contentHeight - ViewH);
         scrollHandle.enabled = hidden > 0f;
+        scrollTrack.raycastTarget = hidden > 0f;
         if (hidden <= 0f) return;
 
-        float size = Mathf.Max(8f, Mathf.Round(ViewH * (ViewH / contentHeight)));
+        float size = ScrollHandleSize();
         float y = ViewY + Mathf.Round((ViewH - size) * (scrollTop / hidden));
         OptionsKit.Move(scrollHandle.rectTransform, ListX + ListW - 3, y, 2, size);
     }
+
+    private float ScrollHandleSize() => Mathf.Max(8f, Mathf.Round(ViewH * (ViewH / contentHeight)));
 
     /// <summary>Zustand jeder Zeile/Kachel: erledigt, gewaehlt, Maus.</summary>
     private void PaintViews()

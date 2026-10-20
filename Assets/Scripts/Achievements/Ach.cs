@@ -72,6 +72,26 @@ public static class Ach
         "Story_Complete", "The Clock Rings", "Finish the story: destroy the Charred One's heart.",
         AchievementCategory.Progression);
 
+    // Zaehlt die Sterne aller Karten (LevelRecords.TotalStars), gesetzt in LevelRecords.ReportWin.
+    public static readonly AchievementDef AllStars = Def(
+        "All_Stars", "Star Baker", "Collect all 15 stars: beat every world on Hard.",
+        AchievementCategory.Progression, goal: 15f);
+
+    // Beide ausgeloest in RunChallenges.
+    public static readonly AchievementDef FiveCourse = Def(
+        "Five_Course", "Five-Course Menu",
+        "Beat all 5 worlds (Forest, Kitchen, Glacier, Haunted Forest, Volcano) with the same character without dying in between. A death resets the streak.",
+        AchievementCategory.Progression, goal: 5f);
+
+    public static readonly AchievementDef HardNoMixer = Def(
+        "Hard_No_Mixer", "Unmixed", "Win a story run on Hard without using a single mixer.",
+        AchievementCategory.Progression);
+
+    // Ausgeloest in Bestiary.AddKill.
+    public static readonly AchievementDef BestiaryComplete = Def(
+        "Bestiary_Complete", "Know Your Enemy", "Complete the bestiary: reach the highest tier for every enemy.",
+        AchievementCategory.Progression);
+
     // 40 Minuten Endless je Welt (EndlessMinutes). Ausgeloest in GameManager.Update
     // ueber EndlessFor(); "Endless weiterspielen" nach einem Story-Sieg zaehlt mit.
 
@@ -110,6 +130,20 @@ public static class Ach
     public static readonly AchievementDef Kill10000 = Def(
         "Kill_10000", "Enemy Breaker III", "Defeat 10,000 enemies and prove your might.",
         AchievementCategory.Combat, goal: 10000f);
+
+    public static readonly AchievementDef Kill100000 = Def(
+        "Kill_100000", "Crumb Monster", "Defeat 100,000 enemies.",
+        AchievementCategory.Combat, goal: 100000f);
+
+    // Ausgeloest in EndlessScore.RunEnded - nicht mit Cheats/Mods (ScoreIntegrity).
+    public static readonly AchievementDef EndlessScore10M = Def(
+        "Endless_Score_10M", "Ten Million Crumbs", "Score 10,000,000 points in a single Endless run.",
+        AchievementCategory.Combat);
+
+    // Zaehlt die Waehrung, die Laeufe einbringen (GameManager.EndRun).
+    public static readonly AchievementDef Gold1M = Def(
+        "Gold_1M", "Cookie Millionaire", "Earn 1,000,000 gold in total.",
+        AchievementCategory.Progression, goal: 1000000f);
 
     public static readonly AchievementDef Kill10Miniboss = Def(
         "Kill_10_Miniboss", "Challenger",
@@ -590,7 +624,7 @@ public static class Ach
 
     // Ausgeloest in StoryPomoNpc.
     public static readonly AchievementDef SecretWakeUp = Def(
-        "Secret_Wake_Up", "Good Morning, It's Ringing!", "Talk to Pomo 10 times in a row.",
+        "Secret_Wake_Up", "Chatterbox", "Talk to Pomo 10 times in a row.",
         AchievementCategory.Secrets, hidden: true);
 
     // Ausgeloest in FeedbackPanel, sobald die Meldung angekommen ist.
@@ -607,6 +641,28 @@ public static class Ach
     // ==================================================================
     //  Ab hier nur noch Mechanik - nichts, was man zum Anlegen braucht.
     // ==================================================================
+
+    /// <summary>
+    /// Nur im Spiel, nicht bei Steam: Steam erlaubt hoechstens 100. Von
+    /// gestuften Erfolgen steht nur die hoechste Stufe bei Steam, dazu fehlen
+    /// die Zwischenbosse (ausser Schleimkoenig) und
+    /// die Maximalstufen der Buffs. Ids hier eintragen, nicht im Backend anlegen.
+    /// </summary>
+    private static readonly HashSet<string> NotOnSteam = new HashSet<string>
+    {
+        "Endless_Score_10M", "Gold_1M",
+        "Kill_100", "Kill_1000", "Kill_10_Miniboss",
+        "Midbosses_5", "Midbosses_20", "Bosses_5", "Bosses_20",
+        "Midboss_Milk_Tank", "Midboss_Stracciatella", "Midboss_Gingerbread_House", "Midboss_Baked_Potato",
+        "Max_Level_ExtraShot", "Max_Level_Cooldown", "Max_Level_Duration", "Max_Level_GlassCannon",
+        "Max_Level_SecondChance", "Max_Level_Damage", "Max_Level_CritChance", "Max_Level_CritDamage",
+        "Max_Level_AoeRange", "Max_Level_MaxHp", "Max_Level_Regeneration", "Max_Level_Armor",
+        "Max_Level_Dodge", "Max_Level_LifeSteal", "Max_Level_MoveSpeed", "Max_Level_PickupRange",
+        "Max_Level_XpGain", "Max_Level_Currency", "Max_Level_Luck", "Max_Level_CursedSugar",
+    };
+
+    /// <summary>Steht dieses Achievement im Steamworks-Backend?</summary>
+    public static bool IsOnSteam(string id) => !NotOnSteam.Contains(id);
 
     /// <summary>Alle Achievements in Katalogreihenfolge.</summary>
     public static IReadOnlyList<AchievementDef> All => Registry;
