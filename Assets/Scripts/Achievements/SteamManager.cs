@@ -94,6 +94,11 @@ public class SteamManager : MonoBehaviour
 
     void OnDestroy()
     {
+        // Doppelte Instanz (Main Menu neu geladen) wird in Awake zerstört –
+        // die darf Steam nicht für die echte Instanz herunterfahren.
+        if (Instance != this) return;
+        Instance = null;
+
         if (Initialized)
         {
             WriteDebug("SteamAPI.Shutdown() wird ausgeführt...");

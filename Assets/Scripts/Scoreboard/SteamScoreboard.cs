@@ -13,11 +13,16 @@ public struct ScoreEntry
     public CSteamID User;
     /// <summary>Charakter des Laufs (Shop.RunSkinIndex), -1 = unbekannt.</summary>
     public int Character;
+    /// <summary>Laufzeit in Sekunden, -1 = unbekannt.</summary>
+    public int Seconds;
+    /// <summary>Endless-Lauf (sonst Story).</summary>
+    public bool Endless;
 }
 
 /// <summary>
-/// Die Steam-Leaderboards fuer Endless: eins je Welt, benannt nach dem
-/// Wellenplan (<see cref="BoardName"/>, z.B. "Endless_World2" fuer den Wald).
+/// Die Steam-Leaderboards: eins je Welt fuer Story und Endless zusammen,
+/// benannt nach dem Wellenplan (<see cref="BoardName"/>, z.B. "Score_World2"
+/// fuer den Wald).
 /// Sortiert absteigend, Steam behaelt je Spieler nur den besten Wert
 /// (KeepBest).
 ///
@@ -31,7 +36,7 @@ public struct ScoreEntry
 /// Steam laeuft - so sieht man das Board auch beim Testen im Editor.
 ///
 /// Details je Eintrag (int, in dieser Reihenfolge): Sekunden, Kills, Mixer,
-/// Schwierigkeit (0-2), Charakter (Shop.RunSkinIndex), Lauf-Level.
+/// Schwierigkeit (0-2), Charakter (Shop.RunSkinIndex), Lauf-Level, Endless (0/1).
 /// </summary>
 public static class SteamScoreboard
 {
@@ -45,11 +50,11 @@ public static class SteamScoreboard
 
     private const int MaxDetails = 8;
 
-    /// <summary>Platz des Charakters in den Details (siehe Kopf).</summary>
-    private const int DetailCharacter = 4;
+    /// <summary>Plaetze in den Details (siehe Kopf).</summary>
+    private const int DetailSeconds = 0, DetailCharacter = 4, DetailEndless = 6;
 
     public static string BoardName(string planId) =>
-        "Endless_" + Canonical(planId);
+        "Score_" + Canonical(planId);
 
     /// <summary>"World2Demo" -> "World2", Gross/Klein wie in der Route.</summary>
     private static string Canonical(string planId)
@@ -152,7 +157,7 @@ public static class SteamScoreboard
     //  Hochladen
     // ==================================================================
 
-    /// <summary>Score eines Endless-Laufs einreichen. Bleibt still liegen, wenn er nicht zaehlen darf.</summary>
+    /// <summary>Score eines Laufs einreichen. Bleibt still liegen, wenn er nicht zaehlen darf.</summary>
     public static void Submit(string planId, int score, int[] details)
     {
         string board = BoardName(planId);
@@ -312,6 +317,8 @@ public static class SteamScoreboard
                         IsMe = e.m_steamIDUser == me,
                         Name = NameOf(e.m_steamIDUser),
                         Character = e.m_cDetails > DetailCharacter ? details[DetailCharacter] : -1,
+                        Seconds = e.m_cDetails > DetailSeconds ? details[DetailSeconds] : -1,
+                        Endless = e.m_cDetails > DetailEndless && details[DetailEndless] == 1,
                     });
                 }
                 Safe(() => done(rows));

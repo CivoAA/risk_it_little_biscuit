@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// Der Inhalt eines Scoreboards, ohne Rahmen: Welt (Pfeile), Freunde |
-/// Weltweit, die Zeilen mit Platz, Gesicht, Name und Punkten, darunter ein
+/// Weltweit, die Zeilen mit Platz, Gesicht, Name und Punkten (Klick auf eine
+/// Zeile zeigt statt der Punkte die Laufzeit), darunter ein
 /// Hinweis. Steckt im Hauptmenue (<see cref="MainMenuScoreboard"/>) und im
 /// Hub am Terminal (<see cref="HubScoreboardPanel"/>) - beide zeigen also
 /// dasselbe. Daten aus <see cref="SteamScoreboard"/>.
@@ -50,6 +52,9 @@ public sealed class ScoreboardView
         new Dictionary<string, (float, List<ScoreEntry>)>();
 
     private readonly Dictionary<int, Sprite> faces = new Dictionary<int, Sprite>();
+
+    /// <summary>Spieler, deren Zeile gerade die Laufzeit statt der Punkte zeigt (Klick auf die Zeile).</summary>
+    private readonly HashSet<ulong> showTime = new HashSet<ulong>();
 
     /// <param name="width">Breite in Seitenpixeln.</param>
     /// <param name="ready">Darf gerade geklickt werden? (Einblenden, Fenster darueber)</param>
@@ -150,12 +155,11 @@ public sealed class ScoreboardView
         else Load(false);
     }
 
-    /// <summary>Zeile unter dem Board: warum eigene Laeufe nicht zaehlen, oder wie man reinkommt.</summary>
+    /// <summary>Zeile unter dem Board: warum eigene Laeufe nicht zaehlen.</summary>
     private static string Footer()
     {
         if (ScoreIntegrity.ModsDetected) return Loc.Get("ui.scoreboard.mods", "MODS FOUND: NOT COUNTED");
         if (ScoreIntegrity.Cheated) return Loc.Get("ui.scoreboard.cheats", "CHEATS USED: NOT COUNTED");
-        if (!Unlocks.Endless.IsUnlocked) return Loc.Get("ui.scoreboard.locked", "ENDLESS AFTER THE STORY");
         return null;
     }
 
@@ -274,10 +278,30 @@ public sealed class ScoreboardView
             TextMeshProUGUI name = OptionsKit.Label("Name", rowsRoot, nameX, textY, w - nameX - 56, 12,
                                                     e.Name, font, OptionsKit.SizeText, c, TextAlignmentOptions.Left);
             name.overflowMode = TextOverflowModes.Ellipsis;
-            OptionsKit.Label("Score", rowsRoot, w - 56, textY, 54, 12, ProfilePanel.FormatNumber(e.Score), font,
-                             OptionsKit.SizeText, c, TextAlignmentOptions.Right);
+
+            // Angeklickt: Laufzeit statt Punkte (die Reihenfolge bleibt nach Punkten).
+            bool time = showTime.Contains(e.User.m_SteamID);
+            string value = !time ? ProfilePanel.FormatNumber(e.Score) : e.Seconds >= 0 ? LevelRecords.Format(e.Seconds) : "--";
+            OptionsKit.Label("Score", rowsRoot, w - 56, textY, 54, 12, value, font, OptionsKit.SizeText,
+                             time ? (Color)GameHudSkin.StoneLight : c, TextAlignmentOptions.Right);
+
+            Image hit = OptionsKit.Img("Hit", rowsRoot, 1, y, w - 2, RowH, GameHudSkin.White, Color.clear);
+            hit.raycastTarget = true;
+            Button button = hit.gameObject.AddComponent<Button>();
+            button.transition = Selectable.Transition.None;
+            button.targetGraphic = hit;
+            ulong user = e.User.m_SteamID;
+            button.onClick.AddListener(() => ToggleTime(user));
             y += RowH;
         }
+    }
+
+    /// <summary>Klick auf eine Zeile: zwischen Punkten und Laufzeit dieses Spielers wechseln.</summary>
+    private void ToggleTime(ulong user)
+    {
+        if (!ready() || shown == null) return;
+        if (!showTime.Remove(user)) showTime.Add(user);
+        ShowRows(shown);
     }
 
     /// <summary>Gesicht eines Charakters fuer die Zeile, wie im Profil-Schild aus der Portraet-Mitte geschnitten.</summary>

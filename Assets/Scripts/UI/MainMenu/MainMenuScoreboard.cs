@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Das Endless-Scoreboard unten rechts im Hauptmenue. Der Inhalt (Welt,
+/// Das Scoreboard unten rechts im Hauptmenue. Der Inhalt (Welt,
 /// Freunde | Weltweit, Zeilen) ist <see cref="ScoreboardView"/> - dasselbe wie
 /// im Hub am Terminal (<see cref="HubScoreboardPanel"/>).
 ///
@@ -105,7 +105,7 @@ public class MainMenuScoreboard : MonoBehaviour
         Sprite crown = GameHudSkin.Crown;
         OptionsKit.Img("Crown", board, 6, 6, crown.rect.width, crown.rect.height, crown);
         OptionsKit.ShadowLabel("Title", board, 6 + crown.rect.width + 4, 2, W - 40, 12,
-                               Loc.Get("ui.scoreboard.title", "ENDLESS SCORES"), textFont, OptionsKit.SizeText,
+                               Loc.Get("ui.scoreboard.title", "HIGH SCORES"), textFont, OptionsKit.SizeText,
                                GameHudSkin.Gold, TextAlignmentOptions.Left);
         toggleButton = SkinButton.Create(board, W - 18, 2, 14, 13, open ? "-" : "+", textFont, SkinButton.Kind.Wood, Toggle);
 
