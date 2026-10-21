@@ -255,7 +255,7 @@ public class JuicyMainMenu : MonoBehaviour
 
     /// <summary>
     /// Kueche mit Leben (<see cref="MainMenuStage"/>), das Profil-Schild oben
-    /// links (<see cref="MainMenuProfileBadge"/>) und das Endless-Scoreboard
+    /// links (<see cref="MainMenuProfileBadge"/>) und das Scoreboard
     /// unten links (<see cref="MainMenuScoreboard"/>) - alle ohne Szenenobjekt.
     /// </summary>
     private void BuildExtras()

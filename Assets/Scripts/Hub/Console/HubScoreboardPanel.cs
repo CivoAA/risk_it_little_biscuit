@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Das Endless-Scoreboard im Hub - geht am Terminal mit [E] auf
+/// Das Scoreboard im Hub - geht am Terminal mit [E] auf
 /// (<see cref="HubConsoleTerminal"/>). Inhalt wie im Hauptmenue
 /// (<see cref="ScoreboardView"/>), hier als Fenster mit Band und Knopf.
 ///
@@ -94,7 +94,7 @@ public class HubScoreboardPanel : MonoBehaviour
 
         TMPro.TMP_FontAsset textFont = PixelUI.FindTextFont();
         OptionsKit.Img("Card", page, CardX, CardY, CardW, CardH, GameHudSkin.Card, true);
-        OptionsKit.Ribbon(page, CardX + CardW / 2f, RibbonY, Loc.Get("ui.scoreboard.title", "ENDLESS SCORES"),
+        OptionsKit.Ribbon(page, CardX + CardW / 2f, RibbonY, Loc.Get("ui.scoreboard.title", "HIGH SCORES"),
                           PixelUI.FindPixelFont(), textFont);
 
         view.Build(page, CardX + 10, ViewY, textFont);

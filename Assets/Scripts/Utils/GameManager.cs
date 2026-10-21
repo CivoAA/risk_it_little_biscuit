@@ -134,7 +134,7 @@ public class GameManager : MonoBehaviour
         gameActiv = false;
         storyWon = won;
         RunMetrics.RunEnded(won, gameTime, ContinuedAsEndless);
-        // Endless: Punktestand ans Steam-Scoreboard der Welt.
+        // Punktestand ans Steam-Scoreboard der Welt (Story und Endless).
         EndlessScore.RunEnded(gameTime);
 
         // Der Lauf ist vorbei - was sich an Charakter-XP angesammelt hat, jetzt
@@ -249,6 +249,7 @@ public class GameManager : MonoBehaviour
 
         GameSession.SelectedMode = GameMode.Endless;
         ContinuedAsEndless = true;
+        EndlessScore.ContinuedAsEndless();
         storyWon = false;
         bossSpawned = false;
 
