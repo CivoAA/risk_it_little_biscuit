@@ -771,7 +771,7 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Gegner/WeisseMessermaus.prefab");
 
         Def(EnemyId.Glutwurz, "Glutwurz",
-            health: 11250f, damage: 40f, speed: 2.2f, exp: 0, pushTime: 0f,
+            health: 7500f, damage: 40f, speed: 2.2f, exp: 0, pushTime: 0f,
             role: EnemyRole.Boss, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/boss/baumboss_walk.png", fps: 12f,
             colliderRadius: 0.95f, colliderOffset: new Vector2(0f, 1.25f), scale: 1f,

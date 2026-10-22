@@ -26,7 +26,7 @@ using UnityEngine;
 ///   Feuerkreis - egal in welcher Phase
 ///     Ist er gut 2 Sekunden nicht mehr im Bild (der Spieler laeuft weg),
 ///     springt er neben den Spieler, bruellt und zieht ein Oval aus Feuer um
-///     beide (<see cref="FireArena"/>, 1.5 Kamerabilder breit und hoch). Der
+///     beide (<see cref="FireArena"/>, 2 Kamerabilder breit und hoch). Der
 ///     Sprung selbst macht keinen Schaden. Das Feuer steht, bis er tot ist -
 ///     ein zweites Mal weglaufen geht nicht. Die Uhr laeuft erst, wenn man ihn
 ///     einmal gesehen hat (er kommt von ausserhalb des Bildes herein).
@@ -132,7 +132,7 @@ public class EnemyGlutwurz : MonoBehaviour
     private const float LeapRoar = 1.1f;
 
     /// <summary>Das Oval ist so viele Kamerabilder breit und hoch.</summary>
-    private const float ArenaScreens = 1.5f;
+    private const float ArenaScreens = 2f;
 
     private const float PlayerRadius = 0.45f;
 

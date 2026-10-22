@@ -333,7 +333,7 @@ public static class WavePlans
             .Pool(EnemyId.Baumkuchen, 10f)
             .Pool(EnemyId.Walnusskrabbe, 10f)
             .Pool(EnemyId.Maronenigel, 10f)
-            .Pressure(400f, 600f)
+            .Pressure(320f, 450f)
             .Base(Patterns.Scatter)
             .Boss(2f, EnemyId.Glutwurz, "GLUTWURZ", 0.4f);
 
