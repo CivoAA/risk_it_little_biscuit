@@ -76,8 +76,8 @@ public class EnemyVerkohlter : MonoBehaviour
     private const float FallTime = 0.55f;
     private const float HeartHitRadius = 1.15f;
 
-    /// <summary>Das Herz hat so viel Leben wie dieser Anteil des ganzen Verkohlten.</summary>
-    private const float HeartHealthShare = 0.5f;
+    /// <summary>Das Herz hat so viel Leben wie dieser Anteil des ganzen Verkohlten (30k zu 55k auf Schwer).</summary>
+    private const float HeartHealthShare = 30f / 55f;
     /// <summary>So lange fuellt sich die Lebensleiste des Herzens bei der Landung.</summary>
     private const float HeartBarFill = 1.1f;
 

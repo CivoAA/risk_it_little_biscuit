@@ -14,6 +14,8 @@ using UnityEngine;
 ///   - Sterne:  hoechste Schwierigkeit, auf der die Welt besiegt wurde
 ///              (Leicht 1, Normal 2, Schwer 3). Ein Sieg auf Schwer bringt
 ///              gleich alle drei.
+///   - Siege:   wie oft die Story der Welt gewonnen wurde - ab
+///              <see cref="EndlessWins"/> ist dort Endless offen.
 ///
 /// Eingetragen wird am Laufende in <see cref="GameManager.GameOver"/>. Die Karte
 /// ist die Map-ID aus der Levelauswahl (MapsManager.selectedMap), sonst die der
@@ -26,8 +28,11 @@ public static class LevelRecords
 {
     private const string FileName = "level_records.json";
 
-    /// <summary>2 = mit Sternen. Siege aus Version 1 waren alle auf Normal.</summary>
-    private const int CurrentVersion = 2;
+    /// <summary>2 = mit Sternen (Siege aus Version 1 waren alle auf Normal), 3 = mit Siegzahl.</summary>
+    private const int CurrentVersion = 3;
+
+    /// <summary>So viele Story-Siege auf einer Welt machen dort Endless auf.</summary>
+    public const int EndlessWins = 2;
 
     [Serializable]
     private class Entry
@@ -37,6 +42,7 @@ public static class LevelRecords
         public float endlessBest;    // 0 = noch nie gespielt
         public int stars;            // 0 = noch nie gewonnen, sonst 1-3
         public int endlessScore;     // 0 = noch kein Endless-Score (EndlessScore)
+        public int wins;             // Story-Siege auf dieser Welt
     }
 
     [Serializable]
@@ -90,20 +96,32 @@ public static class LevelRecords
         return entries.TryGetValue(mapId, out Entry e) ? Mathf.Clamp(e.stars, 0, 3) : 0;
     }
 
+    /// <summary>Wie oft die Story dieser Welt gewonnen wurde.</summary>
+    public static int Wins(int mapId)
+    {
+        EnsureLoaded();
+        return entries.TryGetValue(mapId, out Entry e) ? e.wins : 0;
+    }
+
+    /// <summary>Ist Endless auf dieser Welt schon durch Story-Siege offen (<see cref="EndlessWins"/>)?</summary>
+    public static bool EndlessByWins(int mapId) => mapId >= 0 && Wins(mapId) >= EndlessWins;
+
     /// <summary>
-    /// Story-Sieg auf <paramref name="level"/> melden. Sterne gehen nie verloren -
-    /// ein leichterer Sieg nach einem schweren aendert nichts.
+    /// Story-Sieg auf <paramref name="level"/> melden: zaehlt die Siege hoch.
+    /// Sterne gehen nie verloren - ein leichterer Sieg nach einem schweren
+    /// aendert an ihnen nichts.
     /// </summary>
     public static void ReportWin(int mapId, Difficulty.Level level)
     {
         if (mapId < 0) return;
         EnsureLoaded();
         Entry e = GetOrAdd(mapId);
+        e.wins++;
         int stars = Difficulty.Stars(level);
-        if (stars <= e.stars) return;
-        e.stars = stars;
+        bool moreStars = stars > e.stars;
+        if (moreStars) e.stars = stars;
         Save();
-        Achievements.SetCountedValue(Ach.AllStars, TotalStars());
+        if (moreStars) Achievements.SetCountedValue(Ach.AllStars, TotalStars());
     }
 
     /// <summary>Sterne aller Karten zusammen (Ach.AllStars).</summary>
@@ -199,6 +217,8 @@ public static class LevelRecords
                 if (e == null) continue;
                 // Vor den Sternen gab es keine Schwierigkeit - jeder Sieg war Normal.
                 if (file.version < 2 && e.storyBest > 0f && e.stars <= 0) e.stars = 2;
+                // Vor der Siegzahl: wer eine Bestzeit hat, hat mindestens einmal gewonnen.
+                if (file.version < 3 && e.storyBest > 0f && e.wins <= 0) e.wins = 1;
                 entries[e.mapId] = e;
             }
         }

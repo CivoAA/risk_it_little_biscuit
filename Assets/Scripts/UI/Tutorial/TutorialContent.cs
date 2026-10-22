@@ -205,8 +205,8 @@ public static class TutorialContent
                     {
                         Head = "Story und Endless",
                         Body = "*Story*: Überlebe, bis der Boss kommt, und besiege ihn - dann öffnet sich " +
-                               "die *nächste Welt*. *Endless*: Hast du alle fünf Welten geschafft und das Herz des " +
-                               "Verkohlten besiegt, spielst du jede Welt ohne Ende, so lange du durchhältst.",
+                               "die *nächste Welt*. *Endless*: Hast du eine Welt *zweimal* geschafft, spielst du sie " +
+                               "ohne Ende, so lange du durchhältst - nach dem Herz des Verkohlten gilt das für alle Welten.",
                         Tip = "Gold gibt es nach *jedem* Lauf - auch wenn du verlierst.",
                         TipIcon = () => GameHudSkin.Coin,
                         Draw = DrawModes,

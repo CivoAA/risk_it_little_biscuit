@@ -283,17 +283,39 @@ public static class Skills
     /// ruft danach <see cref="Flush"/>. <see cref="Changed"/> feuert nur, wenn
     /// sich dabei das Level ändert.
     /// </summary>
-    public static void AddXp(double amount)
+    /// Gibt zurueck, wie viel davon wirklich gutgeschrieben wurde (Lauf-Deckel).
+    public static double AddXp(double amount)
     {
         SkillTreeDef tree = ActiveTree;
-        if (tree == null || amount <= 0) return;
+        if (tree == null || amount <= 0) return 0;
 
         double own = Store.XpOf(tree.Id);
         double shared = SharedXpOf(tree);
+        if (runXpCap >= 0) amount = Math.Min(amount, runXpCap - (own + shared));
+        if (amount <= 0) return 0;
+
         Store.SetXp(tree.Id, own + amount);
         Store.MarkDirty();
 
         if (CharLevel.LevelFor(own + shared) != CharLevel.LevelFor(own + shared + amount)) RaiseChanged();
+        return amount;
+    }
+
+    // Gesamt-XP, bis zu der der laufende Lauf den gewaehlten Charakter bringen
+    // darf (CharLevel.MaxLevelsPerRun Level ueber dem Stand beim Start). -1 = kein Deckel.
+    static double runXpCap = -1;
+
+    /// <summary>
+    /// Ein Lauf beginnt: ab jetzt bringen die XP hoechstens
+    /// <see cref="CharLevel.MaxLevelsPerRun"/> Level ueber den jetzigen Stand.
+    /// </summary>
+    public static void BeginRun()
+    {
+        SkillTreeDef tree = ActiveTree;
+        if (tree == null) { runXpCap = -1; return; }
+
+        int xpLevel = CharLevel.LevelFor(XpOf(tree));
+        runXpCap = CharLevel.XpForLevel(Mathf.Min(xpLevel + CharLevel.MaxLevelsPerRun, CharLevel.MaxLevel));
     }
 
     /// <summary>

@@ -705,7 +705,8 @@ public class HubLevelSelectUI : MonoBehaviour
     {
         Btn b = pressedBtn;
         pressedBtn = null;
-        if (b != null && b == hoverBtn && b.Visible && !b.Disabled)
+        // Gesperrtes ENDLESS bleibt klickbar - dann sagt Pomo, wie es aufgeht.
+        if (b != null && b == hoverBtn && b.Visible && (!b.Disabled || b == endlessBtn))
         {
             if (b == backBtn) { Close(); return; }
             if (b == playBtn) Play();
@@ -759,13 +760,34 @@ public class HubLevelSelectUI : MonoBehaviour
         LevelEntry e = Current;
         if (e == null || on == endlessChosen) return;
 
-        if (on && !EndlessUnlocked(e)) { PlayDenySound(); return; }
+        if (on && !EndlessUnlocked(e)) { PlayDenySound(); ExplainEndlessLock(e); return; }
         // Ohne offene Story bleibt Endless die einzige Wahl.
         if (!on && !StoryUnlocked(e)) { PlayDenySound(); return; }
 
         endlessChosen = on;
         PlaySfx(toggleClip != null ? toggleClip : moveClip, false);
         Refresh();
+    }
+
+    /// <summary>
+    /// Endless ist hier noch zu: Pomo sagt, wie viele Story-Siege auf dieser
+    /// Welt noch fehlen (<see cref="LevelRecords.EndlessWins"/>). Nur auf einer
+    /// offenen Welt, die Endless ueberhaupt hat.
+    /// </summary>
+    void ExplainEndlessLock(LevelEntry e)
+    {
+        if (e == null || !e.endlessAvailable || !StoryUnlocked(e) || StoryDialog.IsOpen) return;
+
+        int left = Mathf.Max(1, LevelRecords.EndlessWins - LevelRecords.Wins(e.mapId));
+        string text = left == 1
+            ? Loc.Get("ui.levelselect.endless_lock.one",
+                      "Besiege dieses Level noch <gold>einmal</gold> im Story-Modus, dann schaltest du hier den Endlos-Modus frei!")
+            : string.Format(Loc.Get("ui.levelselect.endless_lock.many",
+                      "Besiege dieses Level <gold>{0}-mal</gold> im Story-Modus, um hier den Endlos-Modus freizuschalten!"), left);
+
+        StoryTexts.Line line = new StoryTexts.Line { Who = StoryTexts.Who.Pomo, Mood = StoryTexts.Mood.Normal, Fallback = text };
+        StoryDialog.Play(new[] { line }, null,
+                         new StoryDialog.Options { FreezeTime = false, BlockHub = false, Dim = 0.45f });
     }
 
     // ---------- Maus ----------
@@ -1739,8 +1761,9 @@ public class HubLevelSelectUI : MonoBehaviour
         if (e == null || !e.endlessAvailable) return false;
         // Auch Endless geht erst auf, wenn die Welt auf der Route erreicht ist.
         if (!StoryProgress.IsWorldOpen(e.planId)) return false;
-        // Endless gibt es erst nach der ganzen Story (Herz des Verkohlten besiegt).
-        if (!Unlocks.Endless.IsUnlocked) return false;
+        // Endless gibt es nach zwei Story-Siegen auf dieser Welt - oder nach der
+        // ganzen Story (Herz des Verkohlten besiegt) gleich ueberall.
+        if (!Unlocks.Endless.IsUnlocked && !LevelRecords.EndlessByWins(e.mapId)) return false;
         // Optional im Inspector: noch eine Sperre obendrauf.
         return string.IsNullOrWhiteSpace(e.endlessUnlockId) || Unlocks.IsUnlocked(e.endlessUnlockId);
     }

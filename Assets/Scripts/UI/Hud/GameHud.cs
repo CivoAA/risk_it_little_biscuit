@@ -797,8 +797,8 @@ public class GameHud : MonoBehaviour
         bossIdCount.Clear();
         foreach (Enemy e in bossCandidates)
         {
-            bossIdCount.TryGetValue(e.Id, out int n);
-            bossIdCount[e.Id] = n + 1;
+            bossIdCount.TryGetValue(e.Identity, out int n);
+            bossIdCount[e.Identity] = n + 1;
         }
 
         // Neue bekommen die kleinste freie Nummer ihrer Sorte - die der anderen
@@ -815,18 +815,19 @@ public class GameHud : MonoBehaviour
     private bool BossNumberTaken(Enemy e, int nr)
     {
         foreach (KeyValuePair<Enemy, int> kv in bossNumbers)
-            if (kv.Value == nr && kv.Key != null && kv.Key.Id == e.Id) return true;
+            if (kv.Value == nr && kv.Key != null && kv.Key.Identity == e.Identity) return true;
         return false;
     }
 
     private string BossLabel(Enemy e)
     {
         if (e == null) return null;
-        // Name kann sich mitten im Kampf aendern (Gespenst -> Squiddy)
-        string label = string.IsNullOrEmpty(e.DisplayName) ? Bestiary.NameOf(e.Id) : e.DisplayName;
+        // Name kann sich mitten im Kampf aendern (Gespenst -> Squiddy). Identity statt
+        // Id: Prefabs ohne Katalog-Id (Altbestand) hiessen sonst "None".
+        string label = string.IsNullOrEmpty(e.DisplayName) ? Bestiary.NameOf(e.Identity) : e.DisplayName;
         // Nummer nur, wenn es die Sorte mehrfach gibt (oder gab: "NAME 2" bleibt "NAME 2")
         bossNumbers.TryGetValue(e, out int nr);
-        bossIdCount.TryGetValue(e.Id, out int count);
+        bossIdCount.TryGetValue(e.Identity, out int count);
         if (count > 1 || nr > 1) label += " " + nr;
         return label;
     }

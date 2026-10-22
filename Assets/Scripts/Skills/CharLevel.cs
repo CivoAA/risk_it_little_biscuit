@@ -45,8 +45,15 @@ public static class CharLevel
     /// <summary>
     /// Auf die ganze Kurve (0.9 = jedes Level kostet 10 % weniger). Die Zahlen
     /// oben bleiben der Bezug, der Faktor kommt erst in <see cref="XpForLevel"/> drauf.
+    /// Seit 22.10.2026 das vorherige 0.9 durch 2,5 - dafuer gilt <see cref="MaxLevelsPerRun"/>.
     /// </summary>
-    public const double CostFactor = 0.9;
+    public const double CostFactor = 0.9 / 2.5;
+
+    /// <summary>
+    /// So viele Charakter-Level (= Skillpunkte) bringen die XP eines Laufs hoechstens.
+    /// Was darueber hinaus gesammelt wird, verfaellt. Boss-Erstsiege zaehlen nicht mit.
+    /// </summary>
+    public const int MaxLevelsPerRun = 3;
 
     /// <summary>Obergrenze, nur damit keine Schleife endlos laeuft.</summary>
     public const int MaxLevel = 200;

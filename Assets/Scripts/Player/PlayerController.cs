@@ -673,6 +673,8 @@ public class PlayerController : MonoBehaviour
             GameManager.Instance.charLevelBeforeGame = Skills.Level;
             GameManager.Instance.charXpGained = 0f;
         }
+        // Ab hier hoechstens CharLevel.MaxLevelsPerRun Charakter-Level aus diesem Lauf.
+        Skills.BeginRun();
         Achievements.Unlock(Ach.FirstGame);
 
         // Skilltree-Boni. Die Summen kommen aus dem gerade aktiven Baum
@@ -956,7 +958,8 @@ public class PlayerController : MonoBehaviour
         // Unter dem Ziel-Level der Map gibt es den Nachhol-Bonus obendrauf.
         float charXp = gained * (1f + charXpBonusPercent / 100f) * RunDifficulty.CharXpShare
                      * RunDifficulty.CharXpCatchUp;
-        Skills.AddXp(charXp);
+        // Ueber dem Lauf-Deckel (CharLevel.MaxLevelsPerRun) kommt nichts mehr an.
+        charXp = (float)Skills.AddXp(charXp);
         if (GameManager.Instance != null) GameManager.Instance.charXpGained += charXp;
 
         UIController.Instance.UpdateExperienceSlider();

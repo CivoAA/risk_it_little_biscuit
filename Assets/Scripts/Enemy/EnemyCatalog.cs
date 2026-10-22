@@ -701,7 +701,7 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Elite_Gegner/Elite-Fluegdolch.prefab");
 
         Def(EnemyId.KeksKoenig, "Keks-Koenig",
-            health: 7500f, damage: 38.7f, speed: 4f, exp: 0, pushTime: 0f,
+            health: 6086f, damage: 38.7f, speed: 4f, exp: 0, pushTime: 0f,
             role: EnemyRole.Boss, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/new/boss/kekskoenig_lauf.png", fps: 12f,
             colliderRadius: 1.95f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
@@ -750,7 +750,7 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Gegner/Kirschslime.prefab", hopFirst: 4, hopLast: 6);
 
         Def(EnemyId.Milchpanzer, "Milchpanzer",
-            health: 4500f, damage: 14f, speed: 1.4f, exp: 700, pushTime: 0f,
+            health: 3463f, damage: 14f, speed: 1.4f, exp: 700, pushTime: 0f,
             role: EnemyRole.MiniBoss, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/miniboss/milchpanzer_fahrt.png", fps: 12f,
             colliderRadius: 1.2f, colliderOffset: new Vector2(0f, 1.25f), scale: 1f,
@@ -792,7 +792,7 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Boss/TodesRamen.prefab");
 
         Def(EnemyId.Verkohlter, "Der Verkohlte",
-            health: 9000f, damage: 25f, speed: 1.9f, exp: 0, pushTime: 0f,
+            health: 8271f, damage: 25f, speed: 1.9f, exp: 0, pushTime: 0f,
             role: EnemyRole.Boss, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/boss/verkohlter_walk.png", fps: 12f,
             colliderRadius: 0.85f, colliderOffset: new Vector2(0f, 1f), scale: 1f,
@@ -806,7 +806,7 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Boss/VerkohlterTod.prefab");
 
         Def(EnemyId.Pancake, "Pfannkuchen",
-            health: 600f, damage: 18f, speed: 1.75f, exp: 100, pushTime: 0.05f,
+            health: 600f, damage: 10f, speed: 1.75f, exp: 100, pushTime: 0.05f,
             role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/pfannkuchen_hop.png", fps: 16f,
             colliderRadius: 0.72f, colliderOffset: new Vector2(0f, 0.72f), scale: 1f,
@@ -834,7 +834,7 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Elite_Gegner/Softi.prefab");
 
         Def(EnemyId.Eiskaiser, "Eiskaiser",
-            health: 10500f, damage: 30f, speed: 1.7f, exp: 0, pushTime: 0f,
+            health: 7018f, damage: 30f, speed: 1.7f, exp: 0, pushTime: 0f,
             role: EnemyRole.Boss, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/boss/eiskaiser_walk_s.png", fps: 12f,
             colliderRadius: 1.0f, colliderOffset: new Vector2(0f, 1.15f), scale: 1f,
@@ -848,7 +848,7 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Boss/Lawinenkugel.prefab");
 
         Def(EnemyId.Squiddy, "Das Gespenst",
-            health: 10800f, damage: 30f, speed: 1.9f, exp: 0, pushTime: 0f,
+            health: 8187f, damage: 30f, speed: 1.9f, exp: 0, pushTime: 0f,
             role: EnemyRole.Boss, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/boss/squiddy_geist_schweben.png", fps: 12f,
             colliderRadius: 1.2f, colliderOffset: new Vector2(0f, 2.05f), scale: 1f,
@@ -876,7 +876,7 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Gegner/Zuckerwolke.prefab");
 
         Def(EnemyId.KokosYeti, "Kokos-Yeti",
-            health: 900f, damage: 14f, speed: 1.2f, exp: 200, pushTime: 0.05f,
+            health: 900f, damage: 9f, speed: 1.2f, exp: 200, pushTime: 0.05f,
             role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/new/eis/kokosyeti_stapf.png", fps: 12f,
             colliderRadius: 0.5f, colliderOffset: new Vector2(0f, 0.62f), scale: 1f,
@@ -1140,21 +1140,21 @@ public static class EnemyCatalog
         // ------------------------------------------------- Zwischenbosse (Welten 3-5)
 
         Def(EnemyId.Stracciatella, "Stracciatella",
-            health: 4800f, damage: 14f, speed: 1.5f, exp: 750, pushTime: 0f,
+            health: 2638f, damage: 14f, speed: 1.5f, exp: 750, pushTime: 0f,
             role: EnemyRole.MiniBoss, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/miniboss/stracciatella_gleit.png", fps: 12f,
             colliderRadius: 1.0f, colliderOffset: new Vector2(0f, 1.15f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Mini_Boss/Stracciatella.prefab");
 
         Def(EnemyId.Knusperhaus, "Knusperhaus",
-            health: 5400f, damage: 16f, speed: 1.7f, exp: 800, pushTime: 0f,
+            health: 5335f, damage: 16f, speed: 1.7f, exp: 800, pushTime: 0f,
             role: EnemyRole.MiniBoss, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/miniboss/knusperhaus_lauf.png", fps: 12f,
             colliderRadius: 1.05f, colliderOffset: new Vector2(0f, 1.45f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Mini_Boss/Knusperhaus.prefab");
 
         Def(EnemyId.Ofenkartoffel, "Ofenkartoffel",
-            health: 6300f, damage: 18f, speed: 1.45f, exp: 900, pushTime: 0f,
+            health: 6332f, damage: 18f, speed: 1.45f, exp: 900, pushTime: 0f,
             role: EnemyRole.MiniBoss, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/miniboss/ofenkartoffel_lauf.png", fps: 12f,
             colliderRadius: 1.0f, colliderOffset: new Vector2(0f, 1.0f), scale: 1f,
@@ -1189,7 +1189,7 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Elite_Gegner/CremeBrulee.prefab");
 
         Def(EnemyId.Baumkuchen, "Baumkuchen-Stumpf",
-            health: 600f, damage: 18f, speed: 1.75f, exp: 300, pushTime: 0.05f,
+            health: 600f, damage: 11f, speed: 1.75f, exp: 300, pushTime: 0.05f,
             role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/new/wald/baumkuchen_stapf.png", fps: 12f,
             colliderRadius: 0.55f, colliderOffset: new Vector2(0f, 0.62f), scale: 1f,

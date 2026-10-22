@@ -230,10 +230,11 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// Kann der Sieg-Bildschirm "Endless weiterspielen" anbieten? Nur nach
     /// einem Story-Sieg auf einer echten Karte, deren Plan noch laeuft, und
-    /// erst wenn Endless freigeschaltet ist (Story durch).
+    /// erst wenn Endless dort offen ist (Story durch oder zwei Siege auf der Welt).
     /// </summary>
     public bool CanContinueAsEndless =>
-        storyWon && !gameActiv && !GameSession.IsEndless && Unlocks.Endless.IsUnlocked
+        storyWon && !gameActiv && !GameSession.IsEndless
+        && (Unlocks.Endless.IsUnlocked || LevelRecords.EndlessByWins(LevelRecords.CurrentMapId()))
         && MapDefinition.Active != null && SpawnDirector.Active != null
         && PlayerController.Instance != null && !SceneFader.IsFading;
 
