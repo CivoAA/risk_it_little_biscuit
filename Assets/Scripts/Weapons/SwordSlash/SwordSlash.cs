@@ -93,12 +93,12 @@ public class SwordSlash : Weapon
     private static readonly WeaponStats[] LevelStats =
     {
         //    cooldown  damage  Tiefe  Hiebe
-        Level(2.6f, 8f, 2.5f, 1, "Schlägt vor dir zu"),
-        Level(2.3f, 8f, 2.5f, 1, "Schneller"),
-        Level(2.0f, 10f, 2.5f, 2, "Zweiter Hieb, Damage +2"),
-        Level(1.7f, 10f, 2.5f, 2, "Schneller"),
-        Level(1.5f, 12f, 2.5f, 3, "Dritter Hieb, Damage +2"),
-        Level(1.3f, 13f, 2.5f, 3, "Schneller, Damage +1"),
+        Level(2.35f, 10f, 2.5f, 1, "Schlägt vor dir zu"),
+        Level(2.05f, 10f, 2.5f, 1, "Schneller"),
+        Level(1.8f, 12.5f, 2.5f, 2, "Zweiter Hieb, Damage +2.5"),
+        Level(1.55f, 12.5f, 2.5f, 2, "Schneller"),
+        Level(1.35f, 15f, 2.5f, 3, "Dritter Hieb, Damage +2.5"),
+        Level(1.15f, 16.25f, 2.5f, 3, "Schneller, Damage +1.25"),
     };
 
     private static WeaponStats Level(float cooldown, float damage, float range, int shots, string description)

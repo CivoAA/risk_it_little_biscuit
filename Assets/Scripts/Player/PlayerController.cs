@@ -976,6 +976,7 @@ public class PlayerController : MonoBehaviour
 
             UIController.Instance.UpdateHealthSlider();
             currentLevel++;
+            EndlessScore.AddLevel();
 
             if (currentLevel >= maxLevel)
             {

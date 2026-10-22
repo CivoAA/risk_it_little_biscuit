@@ -42,6 +42,12 @@ public static class CharLevel
     /// </summary>
     public const double SharedXpFactor = 1.0 / 3.0;
 
+    /// <summary>
+    /// Auf die ganze Kurve (0.9 = jedes Level kostet 10 % weniger). Die Zahlen
+    /// oben bleiben der Bezug, der Faktor kommt erst in <see cref="XpForLevel"/> drauf.
+    /// </summary>
+    public const double CostFactor = 0.9;
+
     /// <summary>Obergrenze, nur damit keine Schleife endlos laeuft.</summary>
     public const int MaxLevel = 200;
 
@@ -49,9 +55,9 @@ public static class CharLevel
     public static double XpForLevel(int level)
     {
         if (level <= 0) return 0;
-        if (level == 1) return Level1Xp;
+        if (level == 1) return System.Math.Round(Level1Xp * CostFactor);
 
-        return System.Math.Round(Level2Xp * ((level - 1) + StepGrowth * SumK(level) + EndGrowth * SumK2(level)));
+        return System.Math.Round(Level2Xp * CostFactor * ((level - 1) + StepGrowth * SumK(level) + EndGrowth * SumK2(level)));
     }
 
     /// <summary>XP von Level n-1 auf Level n.</summary>

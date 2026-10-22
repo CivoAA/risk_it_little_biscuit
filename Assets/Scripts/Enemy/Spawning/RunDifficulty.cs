@@ -63,7 +63,10 @@ public static class RunDifficulty
     public static float CountFactor => 1f + (Effective - 1f) * 0.8f;
 
     /// <summary>Zaeher. Waechst leicht ueberproportional, damit hohes Chaos beisst. Dazu die Schwierigkeit.</summary>
-    public static float HealthFactor => Mathf.Pow(Effective, 1.4f) * WorldHealth * Difficulty.EnemyFactor(Level);
+    public static float HealthFactor => Mathf.Pow(Effective, 1.4f) * WorldHealth * Difficulty.EnemyFactor(Level) * GlobalHealth;
+
+    /// <summary>Leben aller Gegner in jedem Lauf (0.95 = 5 % weniger), auch Elites und Bosse.</summary>
+    public const float GlobalHealth = 0.95f;
 
     /// <summary>Schwierigkeit des laufenden Laufs - beim Start aus dem Hub uebernommen.</summary>
     public static Difficulty.Level Level { get; private set; } = Difficulty.Level.Normal;
@@ -84,18 +87,19 @@ public static class RunDifficulty
     /// Elites und Bosse, unabhaengig von Chaos. Jede Welt der Route liegt ueber
     /// der davor, weil der Spieler ueber Skilltree und Shop mitwaechst. Den Druck
     /// (wie viele) regeln die Plaene selbst (siehe Kopf von <see cref="WavePlans"/>).
+    /// Xp ist ein Faktor auf die XP, die Gegner fallen lassen.
     /// Unbekannte Plan-Id = 1.
     /// </summary>
-    private static (float Health, float Damage) WorldTier(string planId)
+    private static (float Health, float Damage, float Xp) WorldTier(string planId)
     {
         switch ((planId ?? "").Trim().ToLowerInvariant())
         {
-            case "world2": return (1.0f, 1.0f);    // Welt 1 Wald - Massstab
-            case "world1": return (1.6f, 1.1f);    // Welt 2 Kueche
-            case "world5": return (2.1f, 1.2f);    // Welt 3 Eisgletscher
-            case "world6": return (2.7f, 1.35f);   // Welt 4 Geisterwald
-            case "world4": return (3.5f, 1.5f);    // Welt 5 Vulkan
-            default: return (1f, 1f);
+            case "world2": return (1.0f, 1.0f, 1.0f);    // Welt 1 Wald - Massstab
+            case "world1": return (1.6f, 1.1f, 1.05f);   // Welt 2 Kueche
+            case "world5": return (2.1f, 1.2f, 1.05f);   // Welt 3 Eisgletscher
+            case "world6": return (2.7f, 1.35f, 1.05f);  // Welt 4 Geisterwald
+            case "world4": return (3.5f, 1.5f, 1.05f);   // Welt 5 Vulkan
+            default: return (1f, 1f, 1f);
         }
     }
 
@@ -104,6 +108,9 @@ public static class RunDifficulty
 
     /// <summary>Schaden-Faktor der laufenden Welt (<see cref="WorldTier"/>).</summary>
     public static float WorldDamage { get; private set; } = 1f;
+
+    /// <summary>XP-Faktor der laufenden Welt (<see cref="WorldTier"/>) - rechnet <see cref="Enemy"/> beim Drop ein.</summary>
+    public static float WorldXp { get; private set; } = 1f;
 
     /// <summary>Erfahrung und Waehrung. Muss ueber 1 bleiben, sonst lohnt Chaos nicht.</summary>
     public static float RewardFactor => Mathf.Pow(Effective, 1.2f);
@@ -118,7 +125,7 @@ public static class RunDifficulty
         Curse = 0f;
         Level = Difficulty.Current;
         InEndlessPart = false;
-        (WorldHealth, WorldDamage) = WorldTier(planId);
+        (WorldHealth, WorldDamage, WorldXp) = WorldTier(planId);
         Debug.Log($"[RunDifficulty] Lauf ({planId}) startet auf {Level} mit Chaos {Chaos:0.00} " +
                   $"(Gegner x{CountFactor:0.00}, Leben x{HealthFactor:0.00}, Belohnung x{RewardFactor:0.00}).");
     }
@@ -146,12 +153,16 @@ public static class RunDifficulty
     /// </summary>
     public const float BossHealthBonus = 2f;
 
+    /// <summary>Zwischenbosse zusaetzlich (0.95 = 5 % weniger Leben), Bosse nicht.</summary>
+    public const float MiniBossHealth = 0.95f;
+
     /// <summary>Haengt die aktuellen Faktoren an einen frisch erzeugten Gegner.</summary>
     public static void Apply(Enemy enemy)
     {
         if (enemy == null) return;
         bool boss = enemy.Role == EnemyRole.Boss || enemy.Role == EnemyRole.MiniBoss;
         float health = HealthFactor * (boss ? BossHealthBonus : 1f);
+        if (enemy.Role == EnemyRole.MiniBoss) health *= MiniBossHealth;
         enemy.ApplyRunScaling(health, DamageFactor, RewardFactor);
     }
 }
