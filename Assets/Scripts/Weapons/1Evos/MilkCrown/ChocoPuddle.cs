@@ -15,7 +15,7 @@ public class ChocoPuddle : MonoBehaviour
 {
     public const float Life = 2.5f;
     public const float Slow = 0.6f;
-    public const float DamageFactor = 0.25f;
+    public const float DamageFactor = 0.4f;
     public const float TickTime = 0.5f;
     public const int MaxPuddles = 12;
 

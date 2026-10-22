@@ -39,7 +39,7 @@ public class ChocoChipsEvo : ChocoChips
     public const float RingRadius = 2.8f;
 
     /// <summary>Schaden des Milchrings relativ zum Schaden eines Stuecks.</summary>
-    public const float RingDamageFactor = 1.5f;
+    public const float RingDamageFactor = 2f;
 
     /// <summary>So viele Gegner trifft ein getunktes Stueck (Salve Stufe 6: 3).</summary>
     public const int DunkedPierce = 4;
@@ -75,8 +75,8 @@ public class ChocoChipsEvo : ChocoChips
         {
             new WeaponStats
             {
-                cooldown = 0.9f,
-                damage = 11f,
+                cooldown = 0.8f,
+                damage = 15f,
                 range = 8.5f,
                 shots = 8,
                 description = "Getunkte Stücke, jede dritte Salve eine Milchkrone",
