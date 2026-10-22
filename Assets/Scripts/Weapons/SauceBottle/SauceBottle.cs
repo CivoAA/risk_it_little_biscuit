@@ -22,21 +22,21 @@ using UnityEngine;
 public class SauceBottle : Weapon
 {
     public const float MustardSlow = 0.65f;
-    public const float ComboBonus = 0.15f;
+    public const float ComboBonus = 0.12f;
     public const float ExplodeRadius = 1.5f;
 
     private static readonly WeaponStats[] LevelStats =
     {
         //    cooldown damage Strahl Fleck Spritzer
-        Level(1.6f, 1f, 3.0f, 4f, 1, "Ketchup-Spritzer: bekleckerte Gegner nehmen 15 % mehr Schaden von allem"),
-        Level(1.5f, 2f, 3.0f, 4f, 1, "Schaden +1, Ketchup 20 %"),
-        Level(1.5f, 2f, 3.2f, 4f, 1, "Senf: jeder zweite Spritzer ist Senf und bremst die Gegner"),
-        Level(1.4f, 3f, 3.6f, 5f, 1, "Breiterer, längerer Strahl, Ketchup 25 %, Schaden +1"),
-        Level(1.3f, 3f, 3.6f, 5f, 2, "Doppelt gewürzt: Ketchup und Senf zusammen geben 15 % extra, ein Spritzer mehr"),
-        Level(1.2f, 4f, 4.0f, 6f, 2, "Saucen-Explosion: Bekleckerte platzen beim Tod und bekleckern ihre Nachbarn, Ketchup 30 %"),
+        Level(1.6f, 1f, 3.0f, 4f, 1, "Ketchup-Spritzer: bekleckerte Gegner nehmen 12 % mehr Schaden von allem"),
+        Level(1.5f, 1.5f, 3.0f, 4f, 1, "Schaden +0,5, Ketchup 16 %"),
+        Level(1.5f, 1.5f, 3.2f, 4f, 1, "Senf: jeder zweite Spritzer ist Senf und bremst die Gegner"),
+        Level(1.4f, 2f, 3.6f, 5f, 1, "Breiterer, längerer Strahl, Ketchup 20 %, Schaden +0,5"),
+        Level(1.3f, 2f, 3.6f, 5f, 2, "Doppelt gewürzt: Ketchup und Senf zusammen geben 12 % extra, ein Spritzer mehr"),
+        Level(1.2f, 3f, 4.0f, 6f, 2, "Saucen-Explosion: Bekleckerte platzen beim Tod und bekleckern ihre Nachbarn, Ketchup 25 %"),
     };
 
-    private static readonly float[] BonusPerLevel = { 0.15f, 0.20f, 0.20f, 0.25f, 0.25f, 0.30f };
+    private static readonly float[] BonusPerLevel = { 0.12f, 0.16f, 0.16f, 0.20f, 0.20f, 0.25f };
     /// <summary>Halber Oeffnungswinkel des Kegels in Grad.</summary>
     private static readonly float[] HalfAnglePerLevel = { 26f, 26f, 26f, 34f, 34f, 36f };
     private const int MustardFrom = 2;

@@ -42,12 +42,12 @@ public class MilkDunk : Weapon
     private static readonly WeaponStats[] LevelStats =
     {
         //    cooldown  damage  Radius  Ringe
-        Level(2.6f, 6f,  2.2f, 1, "Ein Milchring stößt alle Gegner um dich weg"),
-        Level(2.5f, 8f,  2.4f, 1, "Damage +2, größerer Ring"),
-        Level(2.4f, 8f,  2.6f, 2, "Eine Nachwelle"),
-        Level(2.2f, 10f, 2.9f, 2, "Damage +2, größerer Ring"),
-        Level(2.0f, 12f, 3.2f, 2, "Damage +2, größerer Ring, schneller"),
-        Level(1.8f, 14f, 3.6f, 3, "Zweite Nachwelle, Damage +2"),
+        Level(2.6f, 5f,  2.2f, 1, "Ein Milchring stößt alle Gegner um dich weg"),
+        Level(2.5f, 6.5f, 2.4f, 1, "Damage +1,5, größerer Ring"),
+        Level(2.4f, 6.5f, 2.6f, 2, "Eine Nachwelle"),
+        Level(2.2f, 8f,  2.9f, 2, "Damage +1,5, größerer Ring"),
+        Level(2.0f, 9.5f, 3.2f, 2, "Damage +1,5, größerer Ring, schneller"),
+        Level(1.8f, 11f, 3.6f, 3, "Zweite Nachwelle, Damage +1,5"),
     };
 
     private static WeaponStats Level(float cooldown, float damage, float range, int shots, string description)

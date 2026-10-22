@@ -113,6 +113,10 @@ public class SteamManager : MonoBehaviour
     {
         string line = $"{DateTime.Now:HH:mm:ss} :: {msg}";
         Debug.Log(line);
+
+        // Die Datei nur zum Testen - im Release reicht das Player.log.
+        if (!Application.isEditor && !Debug.isDebugBuild) return;
+
         try
         {
             File.AppendAllText(logPath, line + Environment.NewLine);

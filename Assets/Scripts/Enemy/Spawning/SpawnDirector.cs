@@ -888,6 +888,7 @@ public class SpawnDirector : MonoBehaviour
             enemy.CanRecycle = recyclable;
             enemy.SpawnedAs = id;
             RunDifficulty.Apply(enemy);
+            EnemyArrivalSounds.Play(enemy.Role);
         }
 
         return spawned;

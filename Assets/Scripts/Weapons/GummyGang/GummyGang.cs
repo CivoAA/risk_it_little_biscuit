@@ -33,12 +33,12 @@ public class GummyGang : Weapon
     private static readonly WeaponStats[] LevelStats =
     {
         //    cooldown damage Suche Bisse Baerchen
-        Level(1.4f, 2f, 8f, 4f, 2, "Fruchtgummi-Bärchen rennen zu den Gegnern, beißen sich fest und platzen nach vier Bissen"),
-        Level(1.3f, 3f, 8f, 4f, 2, "Biss +1"),
-        Level(1.2f, 3f, 8f, 4f, 3, "Ein Bärchen mehr, beißen schneller"),
-        Level(1.1f, 4f, 8f, 4f, 3, "Zuckerschock: platzende Bärchen treffen alles in der Nähe, Biss +1"),
-        Level(1.0f, 4f, 9f, 5f, 4, "Ein Bärchen mehr, ein Biss mehr"),
-        Level(0.9f, 5f, 9f, 5f, 5, "Glitzerbär: jedes vierte Bärchen glitzert, beißt doppelt und platzt groß, ein Bärchen mehr"),
+        Level(1.4f, 1.5f, 8f, 4f, 2, "Fruchtgummi-Bärchen rennen zu den Gegnern, beißen sich fest und platzen nach vier Bissen"),
+        Level(1.3f, 2.5f, 8f, 4f, 2, "Biss +1"),
+        Level(1.2f, 2.5f, 8f, 4f, 3, "Ein Bärchen mehr, beißen schneller"),
+        Level(1.1f, 3.5f, 8f, 4f, 3, "Zuckerschock: platzende Bärchen treffen alles in der Nähe, Biss +1"),
+        Level(1.0f, 3.5f, 9f, 5f, 4, "Ein Bärchen mehr, ein Biss mehr"),
+        Level(0.9f, 4f, 9f, 5f, 5, "Glitzerbär: jedes vierte Bärchen glitzert, beißt doppelt und platzt groß, ein Bärchen mehr"),
     };
 
     private static readonly float[] BiteIntervalPerLevel = { 0.5f, 0.5f, 0.42f, 0.42f, 0.38f, 0.35f };

@@ -36,12 +36,12 @@ public class ChocoChips : Weapon
     private static readonly WeaponStats[] LevelStats =
     {
         //    cooldown  damage  Reichweite  Stuecke
-        Level(1.6f, 2.5f, 7f,   3, "Drei Schokostückchen auf den nächsten Gegner"),
-        Level(1.5f, 2.5f, 7f,   4, "Viertes Stückchen"),
-        Level(1.5f, 3f,   7.5f, 4, "Damage +0,5, durchschlägt 2 Gegner"),
-        Level(1.3f, 3.5f, 7.5f, 5, "Fünftes Stückchen, Damage +0,5, schneller"),
-        Level(1.2f, 4f,   8f,   6, "Sechstes Stückchen, Damage +0,5, durchschlägt 3 Gegner"),
-        Level(1.0f, 5f,   8f,   7, "Siebtes Stückchen, Damage +1, schneller"),
+        Level(1.6f, 2.5f, 6f,   3, "Drei Schokostückchen auf den nächsten Gegner"),
+        Level(1.5f, 2.5f, 6f,   4, "Viertes Stückchen"),
+        Level(1.5f, 3f,   6.5f, 4, "Damage +0,5, durchschlägt 2 Gegner"),
+        Level(1.3f, 3.5f, 6.5f, 5, "Fünftes Stückchen, Damage +0,5, schneller"),
+        Level(1.2f, 4f,   7f,   6, "Sechstes Stückchen, Damage +0,5, durchschlägt 3 Gegner"),
+        Level(1.0f, 5f,   7f,   7, "Siebtes Stückchen, Damage +1, schneller"),
     };
 
     /// <summary>So viele Gegner trifft ein Stueck je Stufe.</summary>

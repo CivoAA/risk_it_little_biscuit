@@ -1650,21 +1650,21 @@ MonoBehaviour:
     description: xx
   - cooldown: 0
     duration: 0
-    damage: 0.4
+    damage: 0.35
     range: 0
     AttackSpeed: 0
     shots: 0
     description: xx
   - cooldown: 0
     duration: 0
-    damage: 0.6
+    damage: 0.55
     range: 0
     AttackSpeed: 0
     shots: 0
     description: xx
   - cooldown: 0
     duration: 0
-    damage: 0.8
+    damage: 0.7
     range: 0
     AttackSpeed: 0
     shots: 0
@@ -1837,28 +1837,28 @@ MonoBehaviour:
   - cooldown: 1
     duration: 0
     damage: 0.1
-    range: 1.5
+    range: 1.4
     AttackSpeed: 0
     shots: 0
     description: 
   - cooldown: 0.95
     duration: 0
     damage: 0
-    range: 1.5
+    range: 1.4
     AttackSpeed: 0
     shots: 0
     description: 
   - cooldown: 0.9
     duration: 0
     damage: 0.1
-    range: 1.5
+    range: 1.4
     AttackSpeed: 0
     shots: 0
     description: 
   - cooldown: 0.85
     duration: 0
     damage: 0
-    range: 1.5
+    range: 1.4
     AttackSpeed: 0
     shots: 0
     description: 
@@ -3129,14 +3129,14 @@ MonoBehaviour:
     description: xx
   - cooldown: 0
     duration: 0
-    damage: 30
+    damage: 25
     range: 0
     AttackSpeed: 0
     shots: 0
     description: xx
   - cooldown: 0
     duration: 0
-    damage: 40
+    damage: 35
     range: 0
     AttackSpeed: 0
     shots: 0
@@ -3303,21 +3303,21 @@ MonoBehaviour:
     description: 
   - cooldown: 0
     duration: 0
-    damage: 0.1
+    damage: 0.09
     range: 0
     AttackSpeed: 0
     shots: 0
     description: 
   - cooldown: 0
     duration: 0
-    damage: 0.1
+    damage: 0.09
     range: 0
     AttackSpeed: 0
     shots: 0
     description: 
   - cooldown: 0
     duration: 0
-    damage: 0.1
+    damage: 0.08
     range: 0
     AttackSpeed: 0
     shots: 0
@@ -9254,21 +9254,21 @@ MonoBehaviour:
   stats:
   - cooldown: 0
     duration: 0
-    damage: 0.2
+    damage: 0.18
     range: 0
     AttackSpeed: 0
     shots: 0
     description: 
   - cooldown: 0
     duration: 0
-    damage: 0.15
+    damage: 0.14
     range: 0
     AttackSpeed: 0
     shots: 0
     description: 
   - cooldown: 0
     duration: 0
-    damage: 0.15
+    damage: 0.14
     range: 0
     AttackSpeed: 0
     shots: 0
