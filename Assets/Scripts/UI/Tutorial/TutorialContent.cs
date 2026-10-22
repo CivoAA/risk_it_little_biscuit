@@ -1190,7 +1190,7 @@ public static class TutorialContent
     //  Schwierigkeit
     // ==================================================================
 
-    /// <summary>Chili oben, darunter LEICHT / NORMAL / SCHWER - der Zeiger klickt sich durch.</summary>
+    /// <summary>Chili oben, darunter NORMAL / SCHWER / SEHR SCHWER - der Zeiger klickt sich durch.</summary>
     private static void DrawDifficulty(TutorialPicture p)
     {
         p.Loop = 6f;
@@ -1200,16 +1200,18 @@ public static class TutorialContent
 
         string[] names =
         {
-            Loc.Get("ui.difficulty.easy", "LEICHT"), Loc.Get("ui.difficulty.normal", "NORMAL"),
-            Loc.Get("ui.difficulty.hard", "SCHWER"),
+            Loc.Get("ui.difficulty.easy", "NORMAL"), Loc.Get("ui.difficulty.normal", "SCHWER"),
+            Loc.Get("ui.difficulty.hard", "SEHR SCHWER"),
         };
         string[] says =
         {
             T("diff.easy", "EIN WENIG LEICHTER"), T("diff.normal", "WIE GEDACHT"), T("diff.hard", "DEUTLICH SCHWERER"),
         };
+        // SEHR SCHWER ist der laengste Name und bekommt den breitesten Knopf.
+        float[] btnX = { 0, 41, 82 }, btnW = { 39, 39, 54 };
         var buttons = new FakeButton[3];
         for (int i = 0; i < 3; i++)
-            buttons[i] = p.Button(2 + i * 45, 52, 42, 18, names[i], GameHudSkin.ButtonLook.Wood);
+            buttons[i] = p.Button(btnX[i], 52, btnW[i], 18, names[i], GameHudSkin.ButtonLook.Wood);
 
         TextMeshProUGUI say = p.Text(0, 78, W, "", GameHudSkin.Cream);
 
@@ -1227,10 +1229,10 @@ public static class TutorialContent
         });
 
         p.Cursor(TutorialPicture.At(0f, 122, 106),
-                 TutorialPicture.ClickAt(1.0f, 23, 61),
-                 TutorialPicture.ClickAt(2.6f, 113, 61),
-                 TutorialPicture.ClickAt(4.2f, 68, 61),
-                 TutorialPicture.At(5.4f, 68, 61),
+                 TutorialPicture.ClickAt(1.0f, 19, 61),
+                 TutorialPicture.ClickAt(2.6f, 109, 61),
+                 TutorialPicture.ClickAt(4.2f, 60, 61),
+                 TutorialPicture.At(5.4f, 60, 61),
                  TutorialPicture.At(6.0f, 122, 106));
     }
 

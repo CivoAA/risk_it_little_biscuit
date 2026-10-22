@@ -85,6 +85,10 @@ public class WorkbenchPanel : MonoBehaviour
     // weil dort bis zu fuenf Zeilen stehen: Beschreibung (max. 3), Evo und bei
     // der Startwaffe der Hinweis, dass sie fest im Build liegt.
     private static readonly Vector4 LibView = new Vector4(186f, 57f, 119f, 48f);
+    // Scrollleiste rechts neben den Kacheln (die enden bei x = 300) - nur
+    // sichtbar, wenn der Reiter mehr als drei Reihen hat.
+    private static readonly Vector4 LibBar = new Vector4(302f, 57f, 3f, 48f);
+    private const float LibThumbMin = 8f;
     private const float LibGridDX = 4f;
     private const int LibCols = 7;
     private static readonly Vector4 InfoBox  = new Vector4(186f, 108f, 119f, 50f);
@@ -147,6 +151,7 @@ public class WorkbenchPanel : MonoBehaviour
     private RectTransform page;
     private RectTransform libContent, overlayContent;
     private ScrollRect libScroll, overlayScroll;
+    private Image libTrack, libThumb;
     private GameObject overlayRoot;
 
     private Image[] tabImages;
@@ -398,6 +403,7 @@ public class WorkbenchPanel : MonoBehaviour
     private void Update()
     {
         TickHint();
+        UpdateLibBar();
 
         // Der Tastendruck, der das Fenster aufgemacht hat, darf es nicht gleich
         // wieder zumachen.
@@ -425,6 +431,28 @@ public class WorkbenchPanel : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Alpha1 + i)) ClickPreset(i);
         }
+    }
+
+    /// <summary>
+    /// Zeigt, dass unter den drei sichtbaren Reihen noch mehr Kacheln liegen:
+    /// der Griff ist so lang wie der sichtbare Anteil und wandert beim Scrollen mit.
+    /// </summary>
+    private void UpdateLibBar()
+    {
+        if (libThumb == null || libContent == null) return;
+
+        float content = libContent.sizeDelta.y;
+        bool more = content > LibView.w + 0.5f && !overlayOpen && !scalingOpen;
+        libTrack.gameObject.SetActive(more);
+        libThumb.gameObject.SetActive(more);
+        if (!more) return;
+
+        float h = Mathf.Max(LibThumbMin, Mathf.Round(LibBar.w * LibView.w / content));
+        float scrolled = Mathf.Clamp01(libContent.anchoredPosition.y / (content - LibView.w));
+        float y = LibBar.y + Mathf.Round((LibBar.w - h) * scrolled);
+        RectTransform rt = libThumb.rectTransform;
+        rt.sizeDelta = new Vector2(LibBar.z, h);
+        rt.anchoredPosition = new Vector2(LibBar.x, -y);
     }
 
     private void StepTab(int delta)
@@ -588,8 +616,8 @@ public class WorkbenchPanel : MonoBehaviour
 
         Image allButton = Img("BtnEvoAll", page, EvoAllButton, Gfx("btn_small"));
         allButton.raycastTarget = true;
-        Label("Label", allButton.rectTransform, new Vector4(2f, 2f, EvoAllButton.z - 4f, 7f),
-              Loc.Get("ui.workbench.evo.all", "alle"), SizeSmall, TextDim,
+        Label("Label", allButton.rectTransform, new Vector4(2f, 1f, EvoAllButton.z - 4f, 8f),
+              Loc.Get("ui.workbench.evo.all", "ALLE"), SizeSmall, TextDim,
               TextAlignmentOptions.Center);
 
         Button b = allButton.gameObject.AddComponent<Button>();
@@ -824,6 +852,11 @@ public class WorkbenchPanel : MonoBehaviour
 
         libContent = Rect("Content", view, 0f, 0f, LibView.z, LibView.w);
         libScroll.content = libContent;
+
+        libTrack = Img("LibTrack", page, LibBar, null);
+        libTrack.color = new Color(TextDark.r, TextDark.g, TextDark.b, 0.6f);
+        libThumb = Img("LibThumb", page, new Vector4(LibBar.x, LibBar.y, LibBar.z, LibBar.w), null);
+        libThumb.color = TextCream;
 
         // Das Sprite ist 119x30, die Box hoeher - gesliced bleibt der 2px-Rand scharf.
         Img("InfoBox", page, InfoBox, Gfx("info_box")).type = Image.Type.Sliced;

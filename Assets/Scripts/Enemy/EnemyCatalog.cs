@@ -743,7 +743,7 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Gegner/Fluegeldolch.prefab");
 
         Def(EnemyId.Kirschslime, "Kirschslime",
-            health: 9f, damage: 3f, speed: 1.6f, exp: 3, pushTime: 0.2f,
+            health: 9f, damage: 3f, speed: 1.4f, exp: 3, pushTime: 0.2f,
             role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/new/new_slime.png", fps: 10f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
@@ -813,14 +813,14 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Archiv/pancake.prefab");
 
         Def(EnemyId.Minzkugel, "Minzkugel",
-            health: 4f, damage: 2f, speed: 1.5f, exp: 1, pushTime: 0.25f,
+            health: 4f, damage: 2f, speed: 1.35f, exp: 1, pushTime: 0.25f,
             role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/new/eis/minzkugel_gleit.png", fps: 14f,
             colliderRadius: 0.34f, colliderOffset: new Vector2(0f, 0.38f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Gegner/Minzkugel.prefab");
 
         Def(EnemyId.Raketeneis, "Raketeneis",
-            health: 12f, damage: 3f, speed: 2f, exp: 4, pushTime: 0.2f,
+            health: 12f, damage: 3f, speed: 1.75f, exp: 4, pushTime: 0.2f,
             role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/new/eis/raketeneis_hops.png", fps: 14f,
             colliderRadius: 0.3f, colliderOffset: new Vector2(0f, 0.72f), scale: 1f,
@@ -862,42 +862,42 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Boss/QuallenBaby.prefab");
 
         Def(EnemyId.EisSandwich, "Eiskeks-Sandwich",
-            health: 18f, damage: 4f, speed: 2.2f, exp: 6, pushTime: 0.25f,
+            health: 18f, damage: 4f, speed: 1.9f, exp: 6, pushTime: 0.25f,
             role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/new/eis/sandwich_schnapp.png", fps: 14f,
             colliderRadius: 0.36f, colliderOffset: new Vector2(0f, 0.36f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Gegner/EisSandwich.prefab", hopFirst: 3, hopLast: 9);
 
         Def(EnemyId.Zuckerwolke, "Zuckerwoelkchen",
-            health: 7f, damage: 3f, speed: 2.6f, exp: 3, pushTime: 0.3f,
+            health: 7f, damage: 3f, speed: 2.2f, exp: 3, pushTime: 0.3f,
             role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/new/eis/zuckerwolke_schweben.png", fps: 12f,
             colliderRadius: 0.36f, colliderOffset: new Vector2(0f, 0.66f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Gegner/Zuckerwolke.prefab");
 
         Def(EnemyId.KokosYeti, "Kokos-Yeti",
-            health: 900f, damage: 14f, speed: 1.3f, exp: 200, pushTime: 0.05f,
+            health: 900f, damage: 14f, speed: 1.2f, exp: 200, pushTime: 0.05f,
             role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/new/eis/kokosyeti_stapf.png", fps: 12f,
             colliderRadius: 0.5f, colliderOffset: new Vector2(0f, 0.62f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Gegner/KokosYeti.prefab");
 
         Def(EnemyId.Kakaotasse, "Kakaotasse",
-            health: 30f, damage: 5f, speed: 1.7f, exp: 8, pushTime: 0.25f,
+            health: 30f, damage: 5f, speed: 1.5f, exp: 8, pushTime: 0.25f,
             role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/new/eis/kakaotasse_watschel.png", fps: 12f,
             colliderRadius: 0.36f, colliderOffset: new Vector2(0f, 0.42f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Gegner/Kakaotasse.prefab");
 
         Def(EnemyId.Puddingrobbe, "Puddingrobbe",
-            health: 24f, damage: 4f, speed: 2.3f, exp: 6, pushTime: 0.25f,
+            health: 24f, damage: 4f, speed: 2f, exp: 6, pushTime: 0.25f,
             role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/new/eis/puddingrobbe_rutsch.png", fps: 12f,
             colliderRadius: 0.4f, colliderOffset: new Vector2(0f, 0.3f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Gegner/Puddingrobbe.prefab");
 
         Def(EnemyId.Plaetzchen, "Sternplaetzchen",
-            health: 8f, damage: 3f, speed: 2.8f, exp: 3, pushTime: 0.3f,
+            health: 8f, damage: 3f, speed: 2.3f, exp: 3, pushTime: 0.3f,
             role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/new/eis/plaetzchen_roll.png", fps: 16f,
             colliderRadius: 0.36f, colliderOffset: new Vector2(0f, 0.4f), scale: 1f,
@@ -977,14 +977,14 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Gegner/Honigbaer.prefab");
 
         Def(EnemyId.Eiswuerfelbaer, "Eiswuerfel-Baer",
-            health: 45f, damage: 5f, speed: 1.4f, exp: 14, pushTime: 0.2f,
+            health: 45f, damage: 5f, speed: 1.25f, exp: 14, pushTime: 0.2f,
             role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/eis/eiswuerfel_stapf.png", fps: 12f,
             colliderRadius: 0.36f, colliderOffset: new Vector2(0f, 0.39f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Gegner/Eiswuerfelbaer.prefab");
 
         Def(EnemyId.Minzschnecke, "Pfefferminz-Schnecke",
-            health: 20f, damage: 3f, speed: 1.6f, exp: 6, pushTime: 0.25f,
+            health: 20f, damage: 3f, speed: 1.4f, exp: 6, pushTime: 0.25f,
             role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/new/eis/minzschnecke_gleit.png", fps: 12f,
             colliderRadius: 0.35f, colliderOffset: new Vector2(0f, 0.34f), scale: 1f,

@@ -112,6 +112,29 @@ public static class RunDifficulty
     /// <summary>XP-Faktor der laufenden Welt (<see cref="WorldTier"/>) - rechnet <see cref="Enemy"/> beim Drop ein.</summary>
     public static float WorldXp { get; private set; } = 1f;
 
+    /// <summary>
+    /// Ziel-Level der Map fuer den Nachhol-Bonus (<see cref="CharLevel.CatchUpFactor"/>).
+    /// Unbekannte Plan-Id = 0 (kein Bonus).
+    /// </summary>
+    private static int CatchUpTargetFor(string planId)
+    {
+        switch ((planId ?? "").Trim().ToLowerInvariant())
+        {
+            case "world2": return 9;    // Welt 1 Wald
+            case "world1": return 17;   // Welt 2 Kueche
+            case "world5": return 25;   // Welt 3 Eisgletscher
+            case "world6": return 30;   // Welt 4 Geisterwald
+            case "world4": return 35;   // Welt 5 Vulkan
+            default: return 0;
+        }
+    }
+
+    /// <summary>Ziel-Level der laufenden Map (<see cref="CatchUpTargetFor"/>).</summary>
+    public static int CatchUpTarget { get; private set; }
+
+    /// <summary>Nachhol-Bonus auf die Charakter-XP, solange der Charakter unter dem Ziel-Level liegt.</summary>
+    public static float CharXpCatchUp => CharLevel.CatchUpFactor(Skills.Level, CatchUpTarget);
+
     /// <summary>Erfahrung und Waehrung. Muss ueber 1 bleiben, sonst lohnt Chaos nicht.</summary>
     public static float RewardFactor => Mathf.Pow(Effective, 1.2f);
 
@@ -126,6 +149,7 @@ public static class RunDifficulty
         Level = Difficulty.Current;
         InEndlessPart = false;
         (WorldHealth, WorldDamage, WorldXp) = WorldTier(planId);
+        CatchUpTarget = CatchUpTargetFor(planId);
         Debug.Log($"[RunDifficulty] Lauf ({planId}) startet auf {Level} mit Chaos {Chaos:0.00} " +
                   $"(Gegner x{CountFactor:0.00}, Leben x{HealthFactor:0.00}, Belohnung x{RewardFactor:0.00}).");
     }

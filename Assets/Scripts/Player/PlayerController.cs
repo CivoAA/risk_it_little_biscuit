@@ -953,7 +953,9 @@ public class PlayerController : MonoBehaviour
         // Dieselben XP gehen auch auf das Konto des Charakters (Charakter-Level
         // -> Skillpunkte). Der Skill "Charakter-XP" legt noch Prozente drauf.
         // Im Endlos-Teil eines Endless-Laufs zaehlt davon nur ein Zehntel.
-        float charXp = gained * (1f + charXpBonusPercent / 100f) * RunDifficulty.CharXpShare;
+        // Unter dem Ziel-Level der Map gibt es den Nachhol-Bonus obendrauf.
+        float charXp = gained * (1f + charXpBonusPercent / 100f) * RunDifficulty.CharXpShare
+                     * RunDifficulty.CharXpCatchUp;
         Skills.AddXp(charXp);
         if (GameManager.Instance != null) GameManager.Instance.charXpGained += charXp;
 

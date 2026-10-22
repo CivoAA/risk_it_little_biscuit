@@ -92,7 +92,7 @@ public static class SkillGrants
 
     // ------------------------------------------------------------ Wissen
 
-    /// <summary>Bestiarium: +1 % Schaden je 1000 Kills einer Gegnerart (siehe <see cref="Bestiary"/>).</summary>
+    /// <summary>Bestiarium: +2 % Schaden je Kill-Stufe einer Gegnerart, max. +20 % (siehe <see cref="Bestiary"/>).</summary>
     public const string Bestiarium = "bestiarium";
 
     /// <summary>Kartograf: ein Pfeil am Bildrand zeigt zum naechsten unbenutzten Mixer.</summary>
@@ -211,7 +211,7 @@ public static class SkillGrants
                 "Wirst du getroffen (auch wenn eine Schale den Treffer abfaengt), ist dein naechster Hieb doppelt so stark und groesser. Gilt auch fuer die Schalenklinge."),
 
         new Def(Bestiarium, "Bestiarium",
-                "Zaehlt deine Kills je Gegnerart: +1% Schaden je 1000 Kills. Neuer Reiter im Erfolge-Buch."),
+                "Zaehlt deine Kills je Gegnerart: +2% Schaden gegen sie je 150 Kills (Elite: 15, Boss: 1-2), bis +20%. Neuer Reiter im Erfolge-Buch."),
 
         new Def(Kartograf, "Kartograf",
                 "Ein Pfeil am Bildrand zeigt zum naechsten Mixer, den du noch nicht benutzt hast."),

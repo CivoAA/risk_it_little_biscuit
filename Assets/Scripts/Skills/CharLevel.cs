@@ -51,6 +51,28 @@ public static class CharLevel
     /// <summary>Obergrenze, nur damit keine Schleife endlos laeuft.</summary>
     public const int MaxLevel = 200;
 
+    // ------------------------------------------------------------ Nachhol-Bonus
+    //
+    //  Jede Map hat ein Ziel-Level (RunDifficulty.CatchUpTarget). Liegt der
+    //  Charakter darunter, zaehlen seine Charakter-XP mehr - je weiter drunter,
+    //  desto mehr, bis CatchUpMax. Das Level wird bei jeder XP neu gelesen,
+    //  der Bonus schrumpft also schon im Lauf und ist ab dem Ziel-Level weg.
+    //  Nur Charakter-XP, die XP im Lauf (Level-Ups) bleiben wie sie sind.
+
+    /// <summary>Bonus je Level unter dem Ziel (0.2 = +20 %).</summary>
+    public const float CatchUpPerLevel = 0.2f;
+
+    /// <summary>Hoechster Faktor, egal wie weit unter dem Ziel.</summary>
+    public const float CatchUpMax = 3f;
+
+    /// <summary>Faktor auf die Charakter-XP bei diesem Level und diesem Ziel-Level.</summary>
+    public static float CatchUpFactor(int level, int target)
+    {
+        int gap = target - level;
+        if (gap <= 0) return 1f;
+        return Mathf.Min(CatchUpMax, 1f + gap * CatchUpPerLevel);
+    }
+
     /// <summary>Gesamt-XP, ab der ein Charakter dieses Level hat.</summary>
     public static double XpForLevel(int level)
     {

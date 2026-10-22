@@ -995,12 +995,17 @@ public class HubLevelSelectUI : MonoBehaviour
                       : !linked ? Loc.Get("ui.levelselect.soondesc", "Hier wird noch gebacken. Bald geht es weiter!")
                       : LevelDesc(selected);
 
-        // Status oben rechts
+        // Status oben rechts: die eingestellte Schwierigkeit (offen/gesperrt zeigen Name und Text schon)
         string status; Color statusCol;
         if (!any) { status = ""; statusCol = Color.clear; }
-        else if (!open) { status = Loc.Get("ui.levelselect.locked", "GESPERRT"); statusCol = GameHudSkin.StoneLight; }
-        else if (!linked) { status = Loc.Get("ui.levelselect.soon", "BALD"); statusCol = GameHudSkin.Gold; }
-        else { status = Loc.Get("ui.levelselect.open", "OFFEN"); statusCol = GameHudSkin.Mint; }
+        else
+        {
+            Difficulty.Level level = Difficulty.Current;
+            status = DifficultyPanel.LevelName(level);
+            statusCol = level == Difficulty.Level.Easy ? GameHudSkin.Mint
+                      : level == Difficulty.Level.Hard ? GameHudSkin.JamLight
+                      : GameHudSkin.Gold;
+        }
         statusChip.enabled = statusText.enabled = status.Length > 0;
         if (status.Length > 0)
         {

@@ -145,6 +145,7 @@ public class TutorialPanel : MonoBehaviour
     public static System.Collections.Generic.IEnumerable<string> AllSeenKeys()
     {
         foreach (TutorialTopicDef t in TutorialContent.All) yield return SeenPrefix + t.Key;
+        yield return LevelUpScreen.EvoTutorialKey;
     }
 
     private static void Create(bool asLibrary, TutorialTopic topic)

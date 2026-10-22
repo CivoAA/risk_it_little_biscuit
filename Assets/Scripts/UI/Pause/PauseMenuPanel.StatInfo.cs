@@ -160,7 +160,7 @@ public partial class PauseMenuPanel
             case "critchance": return "Chance, dass ein Treffer kritisch ist. Krits machen Schaden mal Krit-Schaden.";
             case "critdamage": return "Wie hart kritische Treffer zuschlagen: ihr Schaden wird mit diesem Wert malgenommen.";
             case "size":       return "Vergrößert Flächen, Explosionen und Waffen, die eine Reichweite haben.";
-            case "shots":      return "Zusätzliche Geschosse pro Angriff. Nur ganze Punkte zählen: 1,5 ergibt einen Extra-Schuss.";
+            case "shots":      return "Zusätzliche Geschosse pro Angriff. Bruchteile zählen als Chance: 1,5 ergibt einen sicheren Extra-Schuss und 50 % Chance auf einen zweiten.\nNicht jede Waffe skaliert 1:1! Extra-Schüsse aus Skilltree und Mixer rechnen nach dem Verhältnis der Waffe (bei 1:3 braucht sie drei für ein Geschoss mehr), manche Waffen ignorieren Extra-Schuss ganz. Was gilt, steht bei der Waffe. Der Extraschuss-Buff zählt sonst immer 1:1.";
             case "speed":      return "Wie schnell du läufst.";
             case "luck":       return "Macht im Mixer seltenere Karten wahrscheinlicher. Jeder Punkt hebt die Chance auf Ungewöhnlich bis Legendär um 1 % ihres Grundwerts: 100 Glück = doppelt so oft.";
             case "pickup":     return "Wie weit du XP, Gold und andere Pickups zu dir ziehst.";

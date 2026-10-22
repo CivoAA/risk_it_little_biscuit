@@ -368,6 +368,7 @@ public partial class LevelUpScreen : MonoBehaviour
             dealAt = fresh ? now : now - 1f;
             RefreshHead();
             RefreshStrip();
+            if (fresh) MaybeStartEvoTutorial();
         }
         else
         {
@@ -377,6 +378,7 @@ public partial class LevelUpScreen : MonoBehaviour
             bookShowLocked = false;
             bookShownAt = now;
             RefreshBook();
+            OnEvoTutBookOpened();
         }
     }
 
@@ -434,6 +436,8 @@ public partial class LevelUpScreen : MonoBehaviour
             if (focus >= shown.Count) focus = shown.Count - 1;
         }
 
+        UpdateEvoTutChoose(now);
+
         // Ausgewaehlt: kurz aufblitzen lassen, dann erst die Logik rufen.
         if (pendingPick >= 0)
         {
@@ -445,7 +449,7 @@ public partial class LevelUpScreen : MonoBehaviour
             return;
         }
 
-        bool inputOpen = now >= inputFrom;
+        bool inputOpen = now >= inputFrom && !EvoTutTalking;
 
         // ---- Fokus per Maus ----
         int hover = -1;
@@ -531,6 +535,12 @@ public partial class LevelUpScreen : MonoBehaviour
         CardView card = cards[index];
         Weapon w = shown[index];
 
+        if (EvoTutLocked)
+        {
+            Deny(card, Loc.Get("ui.levelup.evo_tut_first", "Check the EVOS first"));
+            return;
+        }
+
         if (ui.banish)
         {
             // Dieselben Regeln wie LevelUpButton.SelectUpgrade - hier vorher
@@ -567,6 +577,11 @@ public partial class LevelUpScreen : MonoBehaviour
         PlayerController p = PlayerController.Instance;
         if (p == null) return;
 
+        if (EvoTutLocked)
+        {
+            DenyButton(rerollButton, Loc.Get("ui.levelup.evo_tut_first", "Check the EVOS first"));
+            return;
+        }
         if (HasEvoOffer())
         {
             DenyButton(rerollButton, Loc.Get("ui.levelup.evo_no_reroll", "Evos can't be rerolled"));
@@ -589,6 +604,11 @@ public partial class LevelUpScreen : MonoBehaviour
         PlayerController p = PlayerController.Instance;
         if (p == null) return;
 
+        if (EvoTutLocked)
+        {
+            DenyButton(banishButton, Loc.Get("ui.levelup.evo_tut_first", "Check the EVOS first"));
+            return;
+        }
         if (!ui.banish && p.banishAmount <= 0)
         {
             DenyButton(banishButton, Loc.Get("ui.levelup.no_banish", "No banishes left"));
@@ -760,6 +780,11 @@ public partial class LevelUpScreen : MonoBehaviour
             color = toastBad ? GameHudSkin.JamLight : GameHudSkin.GoldLight;
             float left = toastUntil - now;
             if (left > ToastTime - 0.25f) shake = Mathf.FloorToInt(now * 30f) % 2 == 0 ? 1 : -1;
+        }
+        else if (evoTut == EvoTut.PressEvos)
+        {
+            text = Loc.Get("ui.levelup.evo_tut_hint", "Click EVOS (E)");
+            color = Mathf.Repeat(now * 2.5f, 1f) < 0.5f ? GameHudSkin.GoldLight : GameHudSkin.Gold;
         }
         else if (ui.banish)
         {
@@ -1214,7 +1239,8 @@ public partial class LevelUpScreen : MonoBehaviour
 
     private void UpdateBook(float now, Vector2 mouse)
     {
-        bool inputOpen = now >= inputFrom;
+        bool inputOpen = now >= inputFrom && !StoryDialog.Blocking;
+        UpdateEvoTutBook(now);
 
         int hover = -1;
         for (int i = 0; i < entries.Count; i++)

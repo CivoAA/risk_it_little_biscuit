@@ -338,6 +338,33 @@ public class GameManager : MonoBehaviour
         SceneFader.Switch(RestartNow, () => this == null);
     }
 
+    /// <summary>
+    /// Derselbe Lauf noch einmal (Abschlussbildschirm "NEUSTART"): gleiche
+    /// Karte, gleicher Charakter, gleicher Shop-Stand - ohne Umweg ueber den
+    /// Hub (<see cref="RunRestarter"/>). Ohne Map-Szene (Test-Szene, Level
+    /// direkt aus dem Editor) wird einfach die aktive Szene neu geladen.
+    /// </summary>
+    public void RestartRun()
+    {
+        if (SceneFader.IsFading) return;
+
+        string map = MapSceneSystem.RunMapScene;
+        string core = gameObject.scene.name;
+        bool split = !string.IsNullOrEmpty(map) && core == MapSceneSystem.CoreScene
+                     && Application.CanStreamedLevelBeLoaded(map);
+
+        Time.timeScale = 0f;
+        SceneFader.Switch(() =>
+        {
+            Time.timeScale = 1f;
+            // Aus der Story heraus weitergespielt: der Neustart ist wieder Story.
+            if (ContinuedAsEndless) GameSession.SelectedMode = GameMode.Story;
+
+            if (split) RunRestarter.Begin(core, map);
+            else SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }, () => split ? RunRestarter.Done : this == null);
+    }
+
     private void RestartNow()
     {
         Time.timeScale = 1f;

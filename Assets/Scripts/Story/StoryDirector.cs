@@ -26,6 +26,7 @@ using UnityEngine.SceneManagement;
 ///   Lauf, Boss erscheint        Zwischenruf "boss.[Plan]"
 ///   Lauf, Boss faellt           "defeat.[Plan]", Splitter fliegt ein,
 ///                               "count.N", dann der Sieg-Bildschirm
+///   Lauf, Boss faellt nochmal   (Kapitel schon geschafft) nur der Sieg-Bildschirm
 ///   Hub, zurueck                "debrief.[Plan]", bei vier Splittern
 ///                               "allshards" + Banner, Vulkan ist offen
 ///   Lauf Vulkan, Herz zerfaellt Finale-Cutscene, dann Sieg-Bildschirm
@@ -288,12 +289,31 @@ public class StoryDirector : MonoBehaviour
         // Schon tot? Dann gibt es keinen Splitter (und keine naechste Welt) mehr.
         if (ClaimsWin || !InRun || !RunStillOn()) return;
         string plan = RunPlan;
-        if (!ChapterOpen(plan)) return;
+        if (!ChapterOpen(plan))
+        {
+            // Kapitel schon geschafft (Story-Lauf noch einmal): ohne Splitter
+            // und Gespraech, aber der Lauf endet trotzdem mit dem Sieg.
+            // Weiterspielen geht nur ueber "Endless weiterspielen" im
+            // Sieg-Bildschirm - und das erst, wenn Endless freigeschaltet ist.
+            // Das Vulkan-Finale beendet die Herzkammer selbst.
+            if (GameSession.IsEndless || IsFinale(plan)) return;
+            ClaimsWin = true;
+            StartCoroutine(ReplayEnding());
+            return;
+        }
 
         ClaimsWin = true;
         Vector3 at = boss != null ? boss.transform.position : Vector3.zero;
         if (IsFinale(plan)) StartCoroutine(FinaleEnding());
         else StartCoroutine(ShardEnding(plan, at));
+    }
+
+    /// <summary>Wiederholtes Kapitel: kurz die Beute einsammeln lassen, dann der Sieg-Bildschirm.</summary>
+    private IEnumerator ReplayEnding()
+    {
+        yield return new WaitForSeconds(1f);
+        yield return WaitForFreeScreen();
+        EndRun();
     }
 
     private IEnumerator ShardEnding(string plan, Vector3 bossPos)

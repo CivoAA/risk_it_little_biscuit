@@ -51,7 +51,15 @@ public class StoryDialog : MonoBehaviour
     // ==================================================================
 
     private static StoryDialog instance;
+    private static int closedFrame = -10;
     public static bool IsOpen => instance != null;
+
+    /// <summary>
+    /// Offen - oder im selben bzw. vorigen Frame geschlossen. Wer unter der Box
+    /// Eingaben liest (Level-Up), wartet darauf: der Klick, der die Box
+    /// schliesst, soll nicht auch noch eine Karte waehlen.
+    /// </summary>
+    public static bool Blocking => instance != null || Time.frameCount - closedFrame <= 1;
 
     /// <summary>Wer gerade spricht (nur gueltig, solange <see cref="IsOpen"/>).</summary>
     public static Who CurrentSpeaker => instance != null ? instance.who : Who.Pomo;
@@ -142,6 +150,7 @@ public class StoryDialog : MonoBehaviour
     private void OnDestroy()
     {
         if (instance == this) instance = null;
+        closedFrame = Time.frameCount;
         if (!finished) Restore();
     }
 
@@ -158,6 +167,7 @@ public class StoryDialog : MonoBehaviour
         finished = true;
         Restore();
         if (instance == this) instance = null;
+        closedFrame = Time.frameCount;
         Destroy(gameObject);
         if (callBack) onDone?.Invoke();
     }

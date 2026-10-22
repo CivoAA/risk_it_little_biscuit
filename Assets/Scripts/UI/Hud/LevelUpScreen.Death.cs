@@ -8,7 +8,7 @@ using UnityEngine.UI;
 /// Death-Screen des <see cref="LevelUpScreen"/>. Schaut wie die anderen
 /// Ansichten nur zu: GameManager.ShowGameOverScreen macht GameOverPanel an,
 /// hier wird es neu gezeichnet. Die Knoepfe rufen dieselben Methoden wie die
-/// alten (GameManager.Restart / GoToMainMenu).
+/// alten (GameManager.RestartRun = NEUSTART, GameManager.Restart = ZUM HUB).
 ///
 /// Ablauf in Stufen: Titel knallt herein, das Portraet taucht auf, die
 /// Bilanz zaehlt Zeile fuer Zeile hoch, dann die Beute, der Build Kachel fuer
@@ -44,7 +44,9 @@ public partial class LevelUpScreen
     private LootChip coinChip, soulChip;
     private readonly List<StripTileView> deathTiles = new List<StripTileView>();
     private readonly List<NewEntry> newEntries = new List<NewEntry>();
-    private ButtonView hubButton, menuButton;
+    private ButtonView restartButton, hubButton;
+    /// <summary>Ohne Rueckreiseziel (Level direkt aus dem Editor) gibt es keinen Hub - nur NEUSTART.</summary>
+    private bool offerHub;
     /// <summary>Nur nach einem Story-Sieg: der Lauf geht im Endless-Modus weiter.</summary>
     private ButtonView endlessButton;
     private bool offerEndless;
@@ -149,9 +151,9 @@ public partial class LevelUpScreen
 
         int total = 2 * DeathButtonW + DeathButtonGap;
         int bx = (RefW - total) / 2;
-        hubButton = new ButtonView(this, deathLayer, new RectInt(bx, DeathButtonsY, DeathButtonW, ButtonH), GameHudSkin.Arrow, "R");
-        menuButton = new ButtonView(this, deathLayer, new RectInt(bx + DeathButtonW + DeathButtonGap, DeathButtonsY, DeathButtonW, ButtonH),
-                                    null, "M");
+        restartButton = new ButtonView(this, deathLayer, new RectInt(bx, DeathButtonsY, DeathButtonW, ButtonH), GameHudSkin.Dice, "R");
+        hubButton = new ButtonView(this, deathLayer, new RectInt(bx + DeathButtonW + DeathButtonGap, DeathButtonsY, DeathButtonW, ButtonH),
+                                   GameHudSkin.Arrow, "H");
         endlessButton = new ButtonView(this, deathLayer, new RectInt(bx, DeathButtonsY, DeathButtonW, ButtonH), GameHudSkin.Skull, "E");
 
         deathLayer.gameObject.SetActive(false);
@@ -299,25 +301,25 @@ public partial class LevelUpScreen
         }
 
         // ---- Knoepfe ----
-        bool toHub = !string.IsNullOrEmpty(GameSession.ReturnScene);
-        hubButton.SetLabel(toHub ? Loc.Get("ui.death.to_hub", "TO THE HUB") : Loc.Get("ui.death.again", "AGAIN"));
+        offerHub = !string.IsNullOrEmpty(GameSession.ReturnScene);
+        restartButton.SetLabel(Loc.Get("ui.death.restart", "RESTART"));
+        restartButton.SetCount("", false);
+        hubButton.SetLabel(Loc.Get("ui.death.to_hub", "TO THE HUB"));
         hubButton.SetCount("", false);
-        menuButton.SetLabel(Loc.Get("ui.death.menu", "MAIN MENU"));
-        menuButton.SetCount("", false);
 
         // Story-Sieg: vorn ein dritter Knopf, der Lauf geht als Endless weiter.
         offerEndless = deathWon && gm != null && gm.CanContinueAsEndless;
         endlessButton.SetLabel(Loc.Get("ui.win.endless", "GO ENDLESS"));
         endlessButton.SetCount("", false);
-        int buttonCount = offerEndless ? 3 : 2;
+        int buttonCount = 1 + (offerHub ? 1 : 0) + (offerEndless ? 1 : 0);
         int bx = (RefW - (buttonCount * DeathButtonW + (buttonCount - 1) * DeathButtonGap)) / 2;
         if (offerEndless)
         {
             endlessButton.MoveX(bx);
             bx += DeathButtonW + DeathButtonGap;
         }
-        hubButton.MoveX(bx);
-        menuButton.MoveX(bx + DeathButtonW + DeathButtonGap);
+        restartButton.MoveX(bx);
+        hubButton.MoveX(bx + DeathButtonW + DeathButtonGap);
     }
 
     /// <summary>
@@ -503,20 +505,25 @@ public partial class LevelUpScreen
 
         // ---- Knoepfe ----
         bool buttons = t >= TButtons;
-        SetActive(hubButton.Root, buttons);
-        SetActive(menuButton.Root, buttons);
+        SetActive(restartButton.Root, buttons);
+        SetActive(hubButton.Root, buttons && offerHub);
         SetActive(endlessButton.Root, buttons && offerEndless);
         if (!buttons) return;
 
         bool live = now >= inputFrom && t >= TDone;
-        bool hub = hubButton.Update(now, mouse, live);
-        bool menu = menuButton.Update(now, mouse, live);
+        bool restart = restartButton.Update(now, mouse, live);
+        bool hub = offerHub && hubButton.Update(now, mouse, live);
         bool endless = offerEndless && endlessButton.Update(now, mouse, live);
         if (live)
         {
-            if (Input.GetKeyDown(KeyCode.R) || Input.GetKeyDown(KeyCode.Return)
-                || Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Space)) hub = true;
-            if (Input.GetKeyDown(KeyCode.M)) menu = true;
+            if (Input.GetKeyDown(KeyCode.R)) restart = true;
+            // Enter/Leertaste wie bisher: zurueck in den Hub (ohne Hub: Neustart).
+            if (Input.GetKeyDown(KeyCode.H) || Input.GetKeyDown(KeyCode.Return)
+                || Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Space))
+            {
+                if (offerHub) hub = true;
+                else restart = true;
+            }
             if (offerEndless && Input.GetKeyDown(KeyCode.E)) endless = true;
         }
 
@@ -528,17 +535,17 @@ public partial class LevelUpScreen
             inputFrom = now + 5f;
             gm.ContinueAsEndless();
         }
-        else if (hub)
+        else if (restart)
         {
             Click();
             inputFrom = now + 5f;   // doppelt ausloesen verhindern
-            gm.Restart();
+            gm.RestartRun();
         }
-        else if (menu)
+        else if (hub)
         {
             Click();
             inputFrom = now + 5f;
-            gm.GoToMainMenu();
+            gm.Restart();
         }
     }
 

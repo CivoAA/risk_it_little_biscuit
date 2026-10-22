@@ -22,6 +22,7 @@ using System.Collections.Generic;
 ///   finale.a/b       in der Abschluss-Cutscene, vor und nach dem Klingeln
 ///   epilogue         im Hub nach dem Abspann
 ///   talk.*           Pomo im Hub ansprechen
+///   tut.evo.*        beim allerersten Level-Up: EVOS-Knopf und Evo-Buch (LevelUpScreen.EvoTutorial)
 /// </summary>
 public static class StoryTexts
 {
@@ -205,6 +206,24 @@ public static class StoryTexts
         ["talk.done3"] = new[]
         {
             L(Who.Pomo, Mood.Normal, "story.talk.done3.1", "Weißt du, was das Schönste an einer Uhr ist? Dass sie weitergeht."),
+        },
+        ["tut.evo.levelup"] = new[]
+        {
+            L(Who.Pomo, Mood.Happy, "story.tut.evo.levelup.1", "<gold>Level Up!</gold> Tick, tack – du wirst stärker. Gleich suchst du dir eine Karte aus."),
+            L(Who.Pomo, Mood.Normal, "story.tut.evo.levelup.2", "Aber vorher klickst du unten rechts auf <gold>EVOS</gold>. Das musst du kennen, glaub mir."),
+        },
+        ["tut.evo.book"] = new[]
+        {
+            L(Who.Pomo, Mood.Normal, "story.tut.evo.book.1", "Das ist dein <gold>Evo-Buch</gold>. Hier steht jede Evolution, die dein Build schaffen kann."),
+            L(Who.Pomo, Mood.Normal, "story.tut.evo.book.2", "Jede Evo braucht zwei Zutaten. Bring beide auf <gold>Max-Stufe</gold> – dann bietet dir das nächste Level-Up die Evo an."),
+            L(Who.Pomo, Mood.Sad, "story.tut.evo.book.3", "Aber Achtung: Du kannst höchstens so viele Evos haben, wie du <hot>Evo-Slots</hot> hast. Und du hast nur <hot>einen</hot>. Such dir deine Evo gut aus."),
+            L(Who.Pomo, Mood.Normal, "story.tut.evo.book.4", "Die Evo frisst ihre beiden Zutaten und ist viel stärker. Deine Evo-Slots siehst du hier unten links."),
+            L(Who.Pomo, Mood.Happy, "story.tut.evo.book.5", "Mehr Slots heißt mehr Evos pro Lauf – die gibt's im <gold>Shop</gold>, sobald du deine erste Evo geschafft hast. So, genug getickt – such dir deine Karte aus!"),
+        },
+        // Ersetzt story.tut.evo.book.3, wenn schon Slots gekauft sind ({0} = Slots).
+        ["tut.evo.book.many"] = new[]
+        {
+            L(Who.Pomo, Mood.Normal, "story.tut.evo.book.many", "Aber Achtung: Du kannst höchstens so viele Evos haben, wie du <hot>Evo-Slots</hot> hast. Du hast <hot>{0}</hot>. Such sie dir gut aus."),
         },
     };
 
