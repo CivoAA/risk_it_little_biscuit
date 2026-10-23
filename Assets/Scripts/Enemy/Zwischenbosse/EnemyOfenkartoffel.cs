@@ -176,9 +176,11 @@ public class EnemyOfenkartoffel : SelfAnimatedBoss
     {
         get
         {
-            PlayerController player = Player;
+            Transform player = Player;
             if (holder != Holder.Boss || player == null || enemy.CurrentSpeed <= 0f) return 1f;
-            float chase = player.moveSpeed * Mathf.Min(ChaseMax, ChaseStart + ChaseGrowth * chaseClock);
+            PlayerController local = PlayerController.Instance;
+            float baseSpeed = local != null ? local.moveSpeed : 4f;
+            float chase = baseSpeed * Mathf.Min(ChaseMax, ChaseStart + ChaseGrowth * chaseClock);
             return Mathf.Max(1f, chase / enemy.CurrentSpeed);
         }
     }
@@ -209,6 +211,7 @@ public class EnemyOfenkartoffel : SelfAnimatedBoss
         flyClock = 0f;
         flyTime = FlightTime;
         flyTo = Holder.Player;
+        potatoPlayer = Player;
         passedBy = Holder.None;
         fuseTotal = IsPhaseTwo ? FusePhase2 : Fuse;
         fuseLeft = fuseTotal;
@@ -221,8 +224,8 @@ public class EnemyOfenkartoffel : SelfAnimatedBoss
         switch (h)
         {
             case Holder.Player:
-                PlayerController p = Player;
-                return p != null ? (Vector2)p.transform.position + new Vector2(0f, 1.0f) : groundAt;
+                Transform p = PotatoPlayer;
+                return p != null ? (Vector2)p.position + new Vector2(0f, 1.0f) : groundAt;
             case Holder.Enemy:
                 return holderEnemy != null ? (Vector2)holderEnemy.transform.position + new Vector2(0f, 0.95f) : groundAt;
             case Holder.Boss:
@@ -238,8 +241,8 @@ public class EnemyOfenkartoffel : SelfAnimatedBoss
         switch (h)
         {
             case Holder.Player:
-                PlayerController p = Player;
-                return p != null ? (Vector2)p.transform.position : groundAt;
+                Transform p = PotatoPlayer;
+                return p != null ? (Vector2)p.position : groundAt;
             case Holder.Enemy:
                 return holderEnemy != null ? (Vector2)holderEnemy.transform.position : groundAt;
             case Holder.Boss:
@@ -273,7 +276,7 @@ public class EnemyOfenkartoffel : SelfAnimatedBoss
         {
             holder = Holder.Ground;
         }
-        if (holder == Holder.Player && Player == null) holder = Holder.Ground;
+        if (holder == Holder.Player && PotatoPlayer == null) holder = Holder.Ground;
         if (holder != Holder.Ground) groundAt = ZoneCenter(holder);
 
         fuseLeft -= dt;
@@ -325,9 +328,9 @@ public class EnemyOfenkartoffel : SelfAnimatedBoss
     /// <summary>Beruehrt der Spieler einen Gegner oder den Boss, springt sie rueber.</summary>
     private void TryPass()
     {
-        PlayerController player = Player;
+        Transform player = PotatoPlayer;
         if (player == null) return;
-        Vector2 me = player.transform.position;
+        Vector2 me = player.position;
 
         if (fuseLeft > NoPassBackAt && (me - Local(BodyCenter)).sqrMagnitude <= PassRadiusBoss * PassRadiusBoss)
         {
@@ -339,7 +342,7 @@ public class EnemyOfenkartoffel : SelfAnimatedBoss
         float bestD = PassRadius * PassRadius;
         foreach (Enemy e in Enemy.Alive)
         {
-            if (e == null || e == enemy || e.IsBoss || e.Untouchable) continue;
+            if (e == null || e == enemy || e.IsBoss || e.Untouchable || e.IsRemote) continue;
             float d = ((Vector2)e.transform.position - me).sqrMagnitude;
             if (d < bestD)
             {
@@ -353,18 +356,36 @@ public class EnemyOfenkartoffel : SelfAnimatedBoss
     /// <summary>Der Boss hat sie: holt er den Spieler ein, springt sie zurueck.</summary>
     private void TryPassBack()
     {
-        PlayerController player = Player;
-        if (player == null) return;
-        if (((Vector2)player.transform.position - Local(BodyCenter)).sqrMagnitude <= PassRadiusBoss * PassRadiusBoss)
+        // Koop: wer den Boss einholt, bekommt sie - egal welcher Spieler.
+        foreach (NetPlayers.Target target in BossTargets.All())
         {
+            if ((target.Position - Local(BodyCenter)).sqrMagnitude > PassRadiusBoss * PassRadiusBoss) continue;
             Hop(Holder.Player, null);
+            potatoPlayer = target.Transform;
+            return;
+        }
+    }
+
+    // Koop: wer die Kartoffel gerade hat (oder sie gleich bekommt).
+    private Transform potatoPlayer;
+
+    private Transform PotatoPlayer
+    {
+        get
+        {
+            if (potatoPlayer == null) return null;
+            if (!NetPlayers.TryGetTarget(potatoPlayer, out NetPlayers.Target t)) return null;
+            if (t.IsLocal ? !NetPlayers.LocalTargetable : t.Transform.GetComponent<NetAvatar>()?.Targetable != true) return null;
+            return potatoPlayer;
         }
     }
 
     private void Hop(Holder target, Enemy e)
     {
         SquiddySounds.Spit();
-        if (holder == Holder.Player && Player != null) Player.GrantImmunity(PassImmunity);
+        if (holder == Holder.Player && PotatoPlayer != null && NetPlayers.TryGetTarget(PotatoPlayer, out NetPlayers.Target holderTarget)
+            && holderTarget.IsLocal)
+            holderTarget.Local.GrantImmunity(PassImmunity);
         passedBy = holder;
         flyFrom = HolderPos(holder);
         holderEnemy = e;
@@ -390,21 +411,14 @@ public class EnemyOfenkartoffel : SelfAnimatedBoss
         ScreenShake.Kick(5f, 0.4f);
         SpawnBlast(at);
 
-        PlayerController player = Player;
-        if (player != null)
-        {
-            float reach = BlastRadius + 0.25f;
-            if (((Vector2)player.transform.position - at).sqrMagnitude <= reach * reach)
-            {
-                player.TakeDamage(enemy.ContactDamage * PlayerBlastFactor);
-            }
-        }
+        // Jeder Spieler in der Explosion (im Koop auch Mitspieler).
+        BossTargets.HurtInCircle(at, BlastRadius + 0.25f, enemy.ContactDamage * PlayerBlastFactor);
 
         scratch.Clear();
         scratch.AddRange(Enemy.Alive);
         foreach (Enemy e in scratch)
         {
-            if (e == null || e == enemy || e.IsBoss) continue;
+            if (e == null || e == enemy || e.IsBoss || e.IsRemote) continue;
             if (((Vector2)e.transform.position - at).sqrMagnitude <= BlastRadius * BlastRadius)
             {
                 e.TakeDamage(EnemyBlastDamage);

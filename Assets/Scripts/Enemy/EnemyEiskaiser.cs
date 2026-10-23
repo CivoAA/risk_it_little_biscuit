@@ -255,7 +255,7 @@ public class EnemyEiskaiser : MonoBehaviour
         while (t < seconds || RingBusy)
         {
             t += Time.deltaTime;
-            PlayerController player = Player();
+            Transform player = Player();
             if (player != null)
             {
                 Vector2 to = (Vector2)player.transform.position - rb.position;
@@ -305,7 +305,7 @@ public class EnemyEiskaiser : MonoBehaviour
     private IEnumerator KaiserKick()
     {
         velocity = Vector2.zero;
-        PlayerController player = Player();
+        Transform player = Player();
         if (player == null || snowball == null) yield break;
 
         Vector2 to = (Vector2)player.transform.position - rb.position;
@@ -569,10 +569,12 @@ public class EnemyEiskaiser : MonoBehaviour
         if (body != null) body.flipX = flip;
     }
 
-    private static PlayerController Player()
+    /// <summary>Koop: der naechste Spieler, der noch steht (allein der eigene) - sonst null.</summary>
+    private Transform Player()
     {
-        PlayerController p = PlayerController.Instance;
-        return p != null && p.gameObject.activeSelf ? p : null;
+        return NetPlayers.TryNearest(rb != null ? rb.position : (Vector2)transform.position, out NetPlayers.Target t)
+            ? t.Transform
+            : null;
     }
 
 #if UNITY_EDITOR

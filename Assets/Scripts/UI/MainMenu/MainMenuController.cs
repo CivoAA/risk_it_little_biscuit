@@ -24,11 +24,28 @@ public class MainMenuController : MonoBehaviour
 
     private bool isLoading;
 
+    private void Awake()
+    {
+        // Koop-Eintrag direkt unter START - die Szene kennt ihn nicht.
+        JuicyMainMenu menu = GetComponent<JuicyMainMenu>();
+        if (menu != null) menu.InsertEntry(1, "multiplayer", PlayMultiplayer);
+    }
+
     // ---------- Spielen ----------
 
     public void PlayStory()
     {
         GameSession.SelectedMode = GameMode.Story;
+        LoadScene(levelSelectSceneName);
+    }
+
+    /// <summary>
+    /// Koop: derselbe Hub wie beim Spielen, dort geht gleich die Lobby auf
+    /// (<see cref="NetLobbyHub"/>). Story/Endless stellt dort der Host ein.
+    /// </summary>
+    public void PlayMultiplayer()
+    {
+        NetLobbyHub.OpenOnHub = true;
         LoadScene(levelSelectSceneName);
     }
 

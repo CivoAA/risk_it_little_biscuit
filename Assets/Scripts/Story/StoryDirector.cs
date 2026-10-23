@@ -124,6 +124,8 @@ public class StoryDirector : MonoBehaviour
     /// <summary>Laeuft dieser Lauf als Story-Kapitel, das noch offen ist?</summary>
     private static bool ChapterOpen(string plan)
     {
+        // Im Koop erzaehlt Pomo nichts - die Story spielt man allein.
+        if (NetSession.InRun) return false;
         if (GameSession.IsEndless || string.IsNullOrEmpty(plan)) return false;
         if (StoryProgress.IsShardWorld(plan)) return !StoryProgress.HasShard(plan);
         if (string.Equals(plan, StoryProgress.FinaleWorld, StringComparison.OrdinalIgnoreCase))
@@ -286,6 +288,8 @@ public class StoryDirector : MonoBehaviour
 
     private void OnBossDefeated(Enemy boss)
     {
+        // Koop: das Ende macht NetRun (fuer alle gleichzeitig).
+        if (NetSession.InRun) return;
         // Schon tot? Dann gibt es keinen Splitter (und keine naechste Welt) mehr.
         if (ClaimsWin || !InRun || !RunStillOn()) return;
         string plan = RunPlan;

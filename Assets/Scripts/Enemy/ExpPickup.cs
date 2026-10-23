@@ -74,6 +74,27 @@ public class ExpPickup : MonoBehaviour
     /// <summary>Glueckstreffer (goldenes Bonbon, "x2") - wird nie zusammengelegt.</summary>
     [HideInInspector] public bool lucky;
 
+    /// <summary>
+    /// Koop: Kopie eines Bonbons, das bei einem Mitspieler liegt (<see cref="NetPickups"/>).
+    /// Einsammeln rechnet es hier an und sagt dem Besitzer Bescheid.
+    /// </summary>
+    [System.NonSerialized] public bool IsRemote;
+    [System.NonSerialized] public int NetOwner = -1;
+    [System.NonSerialized] public int NetId;
+
+    /// <summary>Fliegt schon auf den eigenen Spieler zu.</summary>
+    public bool IsChasing => movingToPlayer;
+
+    /// <summary>Weg, ohne etwas anzurechnen (ein Mitspieler hat es eingesammelt).</summary>
+    public void RemoveSilently() => RunPool.Release(gameObject);
+
+    /// <summary>Kopie: beim Besitzer wurde zusammengelegt.</summary>
+    public void SetRemoteValue(int value)
+    {
+        xpValue = value;
+        RefreshLook();
+    }
+
     private void Awake()
     {
         renderers = GetComponentsInChildren<SpriteRenderer>(true);
@@ -96,6 +117,9 @@ public class ExpPickup : MonoBehaviour
     private void OnDisable()
     {
         allCandies.Remove(this);
+        NetPickups.Unregister(this);
+        IsRemote = false;
+        NetOwner = -1;
         look = null;
         lucky = false;
 
@@ -121,6 +145,8 @@ public class ExpPickup : MonoBehaviour
     private void Initialize()
     {
         initialized = true;
+        // Erst hier anmelden: SpawnExp setzt Wert und Herkunft nach dem Aktivieren.
+        if (!IsRemote) NetPickups.Register(this);
         if (spriteRenderer == null) spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         idleFrames = PickUps.LoadFrames(look ?? LookFor(xpValue));
         shownFrame = -1;
@@ -160,7 +186,7 @@ public class ExpPickup : MonoBehaviour
 
         foreach (ExpPickup candy in allCandies)
         {
-            if (candy.movingToPlayer || candy.lucky || candy.look != null || candy.bornAt > minAge) continue;
+            if (candy.movingToPlayer || candy.lucky || candy.look != null || candy.bornAt > minAge || candy.IsRemote) continue;
 
             Vector2 pos = candy.transform.position;
             if ((pos - player).sqrMagnitude < minDistSqr)
@@ -350,6 +376,7 @@ public class ExpPickup : MonoBehaviour
             else
             {
                 instantXp += candy.xpValue;
+                if (candy.IsRemote) NetPickups.TakeRemote(candy.NetOwner, candy.NetId, candy);
                 RunPool.Release(candy.gameObject);
             }
         }
@@ -364,6 +391,9 @@ public class ExpPickup : MonoBehaviour
         var pc = PlayerController.Instance;
         if (pc != null)
             pc.GetExperience(xpValue);
+
+        // Koop: das Original liegt bei einem Mitspieler - der raeumt es weg.
+        if (IsRemote) NetPickups.TakeRemote(NetOwner, NetId, this);
 
         // Zurueck in den Pool (siehe SpawnExp) - aus dem Pool stammt fast jedes Bonbon.
         RunPool.Release(gameObject);

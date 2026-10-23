@@ -130,6 +130,8 @@ public static class Achievements
     public static void Unlock(AchievementDef def)
     {
         if (def == null) return;
+        // Der Koop zaehlt nicht fuer Erfolge.
+        if (NetSession.InRun) return;
 
         AchievementStore s = Store;
         if (s.IsUnlocked(def.Id)) return;
@@ -173,6 +175,7 @@ public static class Achievements
     public static void Progress(AchievementDef def, float amount)
     {
         if (def == null || amount <= 0f) return;
+        if (NetSession.InRun) return;
 
         AchievementStore s = Store;
         if (s.IsUnlocked(def.Id)) return;

@@ -112,7 +112,12 @@ public class ChunkPropRandomizer : MonoBehaviour
     public void Reshuffle()
     {
         shuffleCount++;
-        var rng = new System.Random(transform.GetSiblingIndex() * 7919 + shuffleCount * 83492791);
+        // Koop: der Inhalt einer Zelle haengt nur am Seed und an der Zelle -
+        // bei allen Spielern stehen die Baeume an denselben Stellen.
+        var rng = NetWorld.Deterministic
+            ? NetWorld.RandomFor(NetWorld.Hash("chunkprops"), Mathf.RoundToInt(transform.position.x / Mathf.Max(1f, chunkWidth)),
+                                 Mathf.RoundToInt(transform.position.y / Mathf.Max(1f, chunkHeight)))
+            : new System.Random(transform.GetSiblingIndex() * 7919 + shuffleCount * 83492791);
 
         float halfW = Mathf.Max(1f, chunkWidth * 0.5f - edgeMargin);
         float halfH = Mathf.Max(1f, chunkHeight * 0.5f - edgeMargin);
@@ -235,10 +240,27 @@ public class ChunkPropRandomizer : MonoBehaviour
     }
 
     /// <summary>Beruehrt das (lokale) Rechteck ein Mixer-Feld?</summary>
+    private static readonly List<(Vector2 center, float radius)> plannedMixers = new List<(Vector2, float)>();
+
     private bool TouchesMixer(Rect local)
     {
         Vector2 origin = transform.position;
         Rect world = Shifted(local, origin);
+
+        // Koop: gegen die Mixer, die hier stehen WERDEN - nicht gegen die, die
+        // gerade zufaellig schon gebaut sind (das haengt von der Reihenfolge ab).
+        if (NetWorld.Deterministic)
+        {
+            Rect area = new Rect(world.xMin - 8f, world.yMin - 8f, world.width + 16f, world.height + 16f);
+            RandomObjectSpawner3x3.PlannedMixerFields(area, plannedMixers);
+            foreach (var (center, radius) in plannedMixers)
+            {
+                Vector2 near = new Vector2(Mathf.Clamp(center.x, world.xMin, world.xMax),
+                                           Mathf.Clamp(center.y, world.yMin, world.yMax));
+                if ((center - near).sqrMagnitude < radius * radius) return true;
+            }
+            return false;
+        }
 
         var mixers = MixerObject.All;
         for (int i = 0; i < mixers.Count; i++)

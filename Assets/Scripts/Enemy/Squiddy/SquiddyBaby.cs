@@ -69,12 +69,13 @@ public class SquiddyBaby : MonoBehaviour
             return;
         }
         float dt = Time.fixedDeltaTime;
-        PlayerController player = PlayerController.Instance;
+        // Koop: auf den naechsten Spieler zu.
+        Transform player = NetPlayers.TryNearest(rb.position, out NetPlayers.Target target) ? target.Transform : null;
         // Rueckstoss im Takt der Bilder: Schub kurz nach dem Zusammenziehen
         float phase = (t * Fps / 8f) % 1f;
         float thrust = phase < 0.35f ? Mathf.Sin(phase / 0.35f * Mathf.PI) : 0f;
         float speed = enemy.CurrentSpeed * (0.35f + 1.6f * thrust);
-        if (player != null && player.gameObject.activeSelf && spawnBoost <= 0f)
+        if (player != null && spawnBoost <= 0f)
         {
             Vector2 to = (Vector2)player.transform.position - rb.position;
             if (to.sqrMagnitude > 0.01f)
@@ -108,13 +109,7 @@ public class SquiddyBaby : MonoBehaviour
             Pop(false);
             return;
         }
-        PlayerController player = PlayerController.Instance;
-        if (player != null && player.gameObject.activeSelf &&
-            ((Vector2)player.transform.position - rb.position).sqrMagnitude <= TouchRadius * TouchRadius)
-        {
-            player.TakeDamage(enemy.ContactDamage);
-            Pop(false);
-        }
+        if (BossTargets.HurtInCircle(rb.position, TouchRadius, enemy.ContactDamage) > 0) Pop(false);
     }
 
     /// <summary>Hochspannung: entlaedt sich in einem Kreis um sich (Treffer wertet die Grosse aus).</summary>

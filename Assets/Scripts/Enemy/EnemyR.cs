@@ -16,10 +16,11 @@ public class EnemyR : MonoBehaviour
         // Festgeklebt (Klebreis): nicht umdrehen.
         if (enemy != null && enemy.IsFrozen) return;
 
-        if (PlayerController.Instance.gameObject.activeSelf)
+        // Koop: zum naechsten Spieler schauen.
+        if (NetPlayers.TryNearest(transform.position, out NetPlayers.Target target))
         {
             //face the player
-            if (PlayerController.Instance.transform.position.x > transform.position.x)
+            if (target.Position.x > transform.position.x)
             {
                 spriteRenderer.flipX = false;
             }
