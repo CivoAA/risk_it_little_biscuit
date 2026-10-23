@@ -180,6 +180,18 @@ public static partial class GameHudSkin
                 ".c.css.s.",
                 "...sss...",
             }, MenuIconColors));
+            case "multiplayer": return Get("menuicon_coop", () => Outlined(new[]
+            {
+                ".ll...ll.",
+                "lccl.lccl",
+                "lccs.lccs",
+                ".ss...ss.",
+                ".........",
+                ".lcc.lcc.",
+                "lcccslccc",
+                "lccsslccs",
+                "sssssssss",
+            }, MenuIconColors));
             case "quit": return Get("menuicon_door", () => Outlined(new[]
             {
                 "lllllll..",

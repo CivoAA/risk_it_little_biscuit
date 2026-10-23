@@ -257,7 +257,7 @@ public class EiskaiserFrostRing : MonoBehaviour
                 SpawnRow(nextRow, now);
                 nextRow += RowSpacing;
             }
-            if (!hitDone) CheckPlayer();
+            CheckPlayers();
 
             // Bahnen blassen aus, sobald die Front durch ist
             float k = Mathf.Clamp01(radius / maxRadius);
@@ -342,12 +342,24 @@ public class EiskaiserFrostRing : MonoBehaviour
         return false;
     }
 
-    private void CheckPlayer()
-    {
-        PlayerController player = PlayerController.Instance;
-        if (player == null || !player.gameObject.activeSelf) return;
+    // Koop: jeder Spieler wird von einem Ring hoechstens einmal erwischt.
+    private readonly BossTargets.HitSet ringHits = new BossTargets.HitSet();
 
-        Vector2 d = (Vector2)player.transform.position - center;
+    private void CheckPlayers()
+    {
+        foreach (NetPlayers.Target target in BossTargets.All())
+        {
+            if (ringHits.Contains(target.Slot)) continue;
+            if (target.IsLocal && hitDone) continue;
+            CheckPlayer(target);
+        }
+    }
+
+    private void CheckPlayer(NetPlayers.Target target)
+    {
+        PlayerController player = target.Local;
+
+        Vector2 d = target.Position - center;
         float dist = d.magnitude;
         // Direkt am Kaiser ist kein sicherer Platz: die Welle bricht dort beim
         // Stampfer schon aus (die Kristalle sind nur ausserhalb seines Koerpers gezeichnet).
@@ -359,11 +371,20 @@ public class EiskaiserFrostRing : MonoBehaviour
 
         // Schon im Eisblock (vom ersten Ring): nicht noch einmal - sonst ist der
         // zweite Ring ein sicherer Treffer, gegen den man nichts tun kann.
-        if (player.IsFrozen || PlayerIceBlock.Active) return;
+        if (player != null && (player.IsFrozen || PlayerIceBlock.Active)) return;
 
         // Luecke etwas grosszuegiger als gezeichnet: der Keks hat einen Koerper
         float a = Mathf.Atan2(d.y, d.x);
         if (InGap(a, Mathf.Max(0.5f, dist - 0.35f))) return;
+
+        ringHits.Add(target.Slot);
+        if (player == null)
+        {
+            // Mitspieler: Schaden und Eis schickt NetPlayers ihm zu.
+            NetPlayers.Hurt(target, damage);
+            NetPlayers.Freeze(target, freezeSeconds);
+            return;
+        }
 
         hitDone = true;
         player.TakeDamage(damage);

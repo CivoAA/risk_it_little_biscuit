@@ -53,13 +53,8 @@ public class SquiddyNessel : MonoBehaviour
 
         if (!hit && i >= HurtFirst && i <= HurtLast)
         {
-            PlayerController player = PlayerController.Instance;
-            if (player != null && player.gameObject.activeSelf &&
-                ((Vector2)player.transform.position - (Vector2)transform.position).sqrMagnitude <= HitRadius * HitRadius)
-            {
-                player.TakeDamage(damage);
-                hit = true;
-            }
+            // Jeder Spieler in der Nessel (im Koop auch Mitspieler).
+            if (BossTargets.HurtInCircle(transform.position, HitRadius, damage) > 0) hit = true;
         }
     }
 }

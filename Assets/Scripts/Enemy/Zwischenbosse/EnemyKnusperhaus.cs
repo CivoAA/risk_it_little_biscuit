@@ -154,8 +154,10 @@ public class EnemyKnusperhaus : SelfAnimatedBoss
 
     private void Record()
     {
-        PlayerController player = Player;
+        Transform player = Player;
         if (player == null) return;
+        // Koop: anderer Spieler am naechsten - dessen Bild aufzeichnen.
+        if (playerSprite != null && !playerSprite.transform.IsChildOf(player)) playerSprite = null;
 
         recordClock += Time.deltaTime;
         if (recordClock < 1f / RecordRate) return;
@@ -219,7 +221,7 @@ public class EnemyKnusperhaus : SelfAnimatedBoss
         return true;
     }
 
-    private static SpriteRenderer FindPlayerSprite(PlayerController player)
+    private static SpriteRenderer FindPlayerSprite(Transform player)
     {
         PlayerHitFeedback fb = player.GetComponent<PlayerHitFeedback>();
         if (fb != null && fb.playerSpriteRenderer != null) return fb.playerSpriteRenderer;
@@ -237,7 +239,7 @@ public class EnemyKnusperhaus : SelfAnimatedBoss
 
     private void UpdateGhosts()
     {
-        PlayerController player = Player;
+        Transform player = Player;
         for (int i = ghosts.Count - 1; i >= 0; i--)
         {
             Ghost g = ghosts[i];
@@ -273,10 +275,8 @@ public class EnemyKnusperhaus : SelfAnimatedBoss
             }
 
             // Treffer erst, wenn er richtig da ist
-            if (a > 0.6f && ((Vector2)player.transform.position - s.pos).sqrMagnitude <= GhostHitRadius * GhostHitRadius)
-            {
-                player.TakeDamage(enemy.ContactDamage * GhostDamageFactor);
-            }
+            // Jeder Spieler, der dem Geist in die Quere kommt (im Koop auch Mitspieler).
+            if (a > 0.6f) BossTargets.HurtInCircle(s.pos, GhostHitRadius, enemy.ContactDamage * GhostDamageFactor);
         }
     }
 

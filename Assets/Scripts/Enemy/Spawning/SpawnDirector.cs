@@ -360,7 +360,7 @@ public class SpawnDirector : MonoBehaviour
     {
         foreach (Enemy e in FindObjectsByType<Enemy>(FindObjectsSortMode.None))
         {
-            if (e != null && e.Role == EnemyRole.DeathBoss) Destroy(e.gameObject);
+            if (e != null && !e.IsRemote && e.Role == EnemyRole.DeathBoss) Destroy(e.gameObject);
         }
         finisherSpawned = true;
 
@@ -382,7 +382,15 @@ public class SpawnDirector : MonoBehaviour
     /// <summary>Boss oder Miniboss aus einer Boss-Welle: wie ein Boss-Beat (Boss-Leiste inklusive).</summary>
     internal Enemy SpawnEndlessBoss(EnemyId id)
     {
+        // Koop: auch die Boss-Wellen verteilt der Host.
+        if (NetRun.Active != null)
+        {
+            if (!NetSession.IsHost) return null;
+            if (!NetRun.Active.AssignBoss(id, BossWavePressure, 999f, "")) return null;
+        }
+
         GameObject spawned = SpawnBoss(id);
+        NetBossSpawned(spawned);
         Enemy enemy = spawned != null ? spawned.GetComponent<Enemy>() : null;
 
         // Der Verkohlte holt den Spieler nur beim ersten Mal (20:00) in sein Herz.
@@ -448,8 +456,18 @@ public class SpawnDirector : MonoBehaviour
 
             case BeatKind.Boss:
                 DampenPressure(beat.PressureScale, beat.Duration);
+
+                // Koop: einen Boss gibt es fuer alle - der Host wuerfelt aus,
+                // bei wem er erscheint. Die anderen daempfen nur ihren Nachschub.
+                if (NetRun.Active != null)
+                {
+                    if (!NetSession.IsHost) break;
+                    if (!NetRun.Active.AssignBoss(beat.Enemy, beat.PressureScale, beat.Duration, beat.Announce)) break;
+                }
+
                 Announce(PlanText(beat.Announce));
                 GameObject boss = SpawnBoss(beat.Enemy);
+                NetBossSpawned(boss);
 
                 // Ein Miniboss ist ein Kampf mitten im Level: der Nachschub
                 // bleibt nur gedaempft, solange er lebt (siehe TopUpPressure).
@@ -521,6 +539,8 @@ public class SpawnDirector : MonoBehaviour
     /// </summary>
     private void CheckFinisher()
     {
+        // Koop: kein Todes-Ramen - den Sieg-Bildschirm schickt NetRun allen gleichzeitig.
+        if (NetRun.Active != null) return;
         if (finisherSpawned || plan.Finisher == EnemyId.None || GameSession.IsEndless) return;
         // Die Story beendet diesen Lauf selbst (Splitter, Gespraech, Sieg).
         if (StoryDirector.ClaimsWin) return;
@@ -545,6 +565,7 @@ public class SpawnDirector : MonoBehaviour
         DampenPressure(0.4f, 999f);
         Announce(Bestiary.NameOf(id).ToUpperInvariant());
         GameObject boss = SpawnBoss(id);
+        NetBossSpawned(boss);
 
         Enemy bossEnemy = boss != null ? boss.GetComponent<Enemy>() : null;
         if (bossEnemy != null && bossEnemy.Role == EnemyRole.MiniBoss) activeMiniBoss = bossEnemy;
@@ -656,7 +677,7 @@ public class SpawnDirector : MonoBehaviour
         for (int i = 0; i < alive.Count; i++)
         {
             Enemy enemy = alive[i];
-            if (enemy == null) continue;
+            if (enemy == null || enemy.IsRemote) continue;
 
             aliveCount++;
             if (enemy.IsBoss) continue;
@@ -712,7 +733,7 @@ public class SpawnDirector : MonoBehaviour
         for (int i = 0; i < alive.Count; i++)
         {
             Enemy enemy = alive[i];
-            if (enemy == null || enemy.IsBoss || !enemy.CanRecycle || enemy.RecycleHeld) continue;
+            if (enemy == null || enemy.IsRemote || enemy.IsBoss || !enemy.CanRecycle || enemy.RecycleHeld) continue;
 
             Vector2 pos = enemy.transform.position;
             bool tooFar = (pos - player).sqrMagnitude >= limitSqr;
@@ -747,7 +768,7 @@ public class SpawnDirector : MonoBehaviour
         for (int i = 0; i < alive.Count; i++)
         {
             Enemy enemy = alive[i];
-            if (enemy == null || enemy.Role != EnemyRole.MiniBoss) continue;
+            if (enemy == null || enemy.IsRemote || enemy.Role != EnemyRole.MiniBoss) continue;
             if (((Vector2)enemy.transform.position - player).sqrMagnitude < limitSqr) continue;
 
             Vector2 back = playerDir.sqrMagnitude > 0.0001f ? -playerDir : Random.insideUnitCircle.normalized;
@@ -892,6 +913,54 @@ public class SpawnDirector : MonoBehaviour
         }
 
         return spawned;
+    }
+
+    // ------------------------------------------------------------------ Koop
+
+    /// <summary>Daempfung waehrend einer Boss-Welle im Endlos-Teil (wie EndlessEscalation).</summary>
+    private const float BossWavePressure = 0.5f;
+
+    /// <summary>
+    /// Koop: der Host hat einen Boss bei uns bestellt (oder ein Mitspieler hat
+    /// seinen abgegeben). Laeuft wie ein Boss-Beat: Nachschub daempfen, Ansage,
+    /// Boss hinsetzen - mit dem Rest-Leben, falls er schon gekaempft hat.
+    /// </summary>
+    public void SpawnOrderedBoss(EnemyId id, float pressureScale, float duration, string announce, float healthFraction)
+    {
+        DampenPressure(pressureScale, duration > 0f ? duration : 999f);
+        if (!string.IsNullOrEmpty(announce)) Announce(PlanText(announce));
+
+        GameObject boss = SpawnBoss(id);
+        Enemy bossEnemy = boss != null ? boss.GetComponent<Enemy>() : null;
+        if (bossEnemy == null) return;
+
+        if (healthFraction < 0.999f) bossEnemy.DebugSetHealthFraction(Mathf.Clamp01(healthFraction));
+        if (bossEnemy.Role == EnemyRole.MiniBoss) activeMiniBoss = bossEnemy;
+        if (bossEnemy.Role == EnemyRole.Boss) activeBoss = bossEnemy;
+        NetBossSpawned(boss);
+        BossSpawned?.Invoke(bossEnemy);
+    }
+
+    /// <summary>
+    /// Koop-Eigenheiten eines frisch gesetzten Bosses: der Verkohlte holt
+    /// niemanden in sein Herz (das ist ein Kampf fuer einen), und alle
+    /// erfahren, bei wem er steht.
+    /// </summary>
+    private void NetBossSpawned(GameObject boss)
+    {
+        if (boss == null || NetRun.Active == null) return;
+        EnemyVerkohlter charred = boss.GetComponent<EnemyVerkohlter>();
+        if (charred != null) charred.SkipHeartFight();
+        Enemy enemy = boss.GetComponent<Enemy>();
+        if (enemy != null) NetRun.Active.AnnounceBoss(enemy.Identity);
+    }
+
+    /// <summary>Koop: der Boss eines Mitspielers ist gefallen - im Endless-Modus beginnt jetzt bei allen der Endlos-Teil.</summary>
+    public void NetBossDefeated()
+    {
+        activeBoss = null;
+        ReleasePressure();
+        if (GameSession.IsEndless && escalation == null && plan != null) BeginEndlessPart();
     }
 
     // -------------------------------------------------------------------- UI

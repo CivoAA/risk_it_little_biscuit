@@ -75,13 +75,8 @@ public class SquiddySpukgeist : MonoBehaviour
             return;
         }
 
-        PlayerController player = PlayerController.Instance;
-        if (player != null && player.gameObject.activeSelf &&
-            ((Vector2)player.transform.position + Vector2.up * 0.35f - pos).sqrMagnitude <= HitRadius * HitRadius)
-        {
-            player.TakeDamage(damage);
+        if (BossTargets.HurtWhere(p => (p + Vector2.up * 0.35f - pos).sqrMagnitude <= HitRadius * HitRadius, damage) > 0)
             Poof();
-        }
     }
 
     public void Poof()

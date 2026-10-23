@@ -112,10 +112,10 @@ public class EiskaiserLawinenkugel : MonoBehaviour
             return;
         }
 
-        PlayerController player = PlayerController.Instance;
-        if (player != null && player.gameObject.activeSelf)
+        // Koop: rollt auf den naechsten Spieler zu.
+        if (NetPlayers.TryNearest(Center, out NetPlayers.Target target))
         {
-            Vector2 to = (Vector2)player.transform.position - Center;
+            Vector2 to = target.Position - Center;
             if (to.sqrMagnitude > 0.01f)
             {
                 float grip = phaseTwo ? GripP2 : Grip;
@@ -206,13 +206,10 @@ public class EiskaiserLawinenkugel : MonoBehaviour
 
     private void CheckPlayer()
     {
-        PlayerController player = PlayerController.Instance;
-        if (player == null || !player.gameObject.activeSelf) return;
+        // Jeder Spieler, den die Kugel erwischt (im Koop auch Mitspieler) - dann zerplatzt sie.
         float reach = RadiusUnits + 0.3f;
-        if (((Vector2)player.transform.position - Center).sqrMagnitude > reach * reach) return;
-
-        player.TakeDamage(enemy.ContactDamage * (1f + PlayerHitPerSize * size));
-        Burst(false);
+        if (BossTargets.HurtInCircle(Center, reach, enemy.ContactDamage * (1f + PlayerHitPerSize * size)) > 0)
+            Burst(false);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

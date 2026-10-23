@@ -221,14 +221,14 @@ public class EnemySchleimkoenig : MonoBehaviour
     /// </summary>
     private void BeginHopMove(int frameCount)
     {
-        PlayerController player = PlayerController.Instance;
-        if (player == null || !player.gameObject.activeSelf)
+        // Koop: springt zum naechsten Spieler (allein der eigene).
+        if (!NetPlayers.TryNearest(rb.position, out NetPlayers.Target player))
         {
             moving = false;
             return;
         }
 
-        Vector2 to = (Vector2)player.transform.position - rb.position;
+        Vector2 to = player.Position - rb.position;
         float airFrames = HopAirLast - HopAirFirst + 1;
         float airSpeed = enemy.CurrentSpeed * frameCount / airFrames;
 
@@ -275,7 +275,7 @@ public class EnemySchleimkoenig : MonoBehaviour
 
         // 4. Oben: rote Zone auf den Spieler, er zieht mit dahin
         Vector2 target = PlayerAvailable()
-            ? (Vector2)PlayerController.Instance.transform.position
+            ? NetPlayers.NearestPosition(rb.position)
             : rb.position;
         rb.position = target;
         transform.position = new Vector3(target.x, target.y, transform.position.z);
@@ -337,13 +337,8 @@ public class EnemySchleimkoenig : MonoBehaviour
 
     private void HitPlayer(Vector2 center)
     {
-        PlayerController player = PlayerController.Instance;
-        if (player == null || !player.gameObject.activeSelf) return;
-
-        float reach = ZoneRadius + PlayerRadius;
-        if (((Vector2)player.transform.position - center).sqrMagnitude > reach * reach) return;
-
-        player.TakeDamage(enemy.ContactDamage * LandingDamageFactor);
+        // Jeder Spieler in der Landezone (im Koop auch Mitspieler).
+        BossTargets.HurtInCircle(center, ZoneRadius + PlayerRadius, enemy.ContactDamage * LandingDamageFactor);
     }
 
     private IEnumerator PlaySplash()
@@ -415,11 +410,7 @@ public class EnemySchleimkoenig : MonoBehaviour
         if (hitbox != null) hitbox.enabled = !air;
     }
 
-    private static bool PlayerAvailable()
-    {
-        PlayerController player = PlayerController.Instance;
-        return player != null && player.gameObject.activeSelf;
-    }
+    private static bool PlayerAvailable() => BossTargets.AnyAlive;
 
     private void ClearMarker()
     {

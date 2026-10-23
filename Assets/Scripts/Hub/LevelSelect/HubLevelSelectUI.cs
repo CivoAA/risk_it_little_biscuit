@@ -107,6 +107,9 @@ public class HubLevelSelectUI : MonoBehaviour
     [Tooltip("Reihenfolge der Stationen. Die Nummer ist die Position in dieser Liste.")]
     [SerializeField] private List<LevelEntry> levels = new List<LevelEntry>();
 
+    /// <summary>Die Stationen in der Reihenfolge des Inspectors - die Koop-Lobby waehlt daraus.</summary>
+    public IReadOnlyList<LevelEntry> Levels => levels;
+
     [Header("Darstellung")]
     [Tooltip("Wie stark der Hub hinter dem Fenster abgedunkelt wird.")]
     [SerializeField, Range(0f, 1f)] private float dim = 0.86f;
@@ -1562,7 +1565,7 @@ public class HubLevelSelectUI : MonoBehaviour
         page.anchoredPosition = pageBase + new Vector2(0f, -lift);
     }
 
-    string LevelName(int index)
+    public string LevelName(int index)
     {
         LevelEntry e = levels[index];
         // Uebersetzung nach Position in der Liste, der Inspector ist der Rueckfall
@@ -1735,7 +1738,7 @@ public class HubLevelSelectUI : MonoBehaviour
 
     bool IsOpenLevel(LevelEntry e) => StoryUnlocked(e) || EndlessUnlocked(e);
 
-    bool StoryUnlocked(LevelEntry e)
+    public bool StoryUnlocked(LevelEntry e)
     {
         if (e == null) return false;
         // Welten auf der Story-Route: feste Reihenfolge, jede Welt oeffnet die
@@ -1756,7 +1759,7 @@ public class HubLevelSelectUI : MonoBehaviour
         return Unlocks.IsUnlocked(e.storyUnlockId);
     }
 
-    bool EndlessUnlocked(LevelEntry e)
+    public bool EndlessUnlocked(LevelEntry e)
     {
         if (e == null || !e.endlessAvailable) return false;
         // Auch Endless geht erst auf, wenn die Welt auf der Route erreicht ist.
@@ -1773,7 +1776,7 @@ public class HubLevelSelectUI : MonoBehaviour
     /// fehlt sie in den Build Settings, bleibt die Station sichtbar und zeigt
     /// "BALD" - so kann man Level vorbereiten, bevor sie gebaut sind.
     /// </summary>
-    bool IsLinked(LevelEntry e)
+    public bool IsLinked(LevelEntry e)
     {
         if (e == null || (e.mapId < 0 && string.IsNullOrWhiteSpace(e.sceneToLoad))) return false;
 
@@ -1834,59 +1837,14 @@ public class HubLevelSelectUI : MonoBehaviour
 
     void Launch(LevelEntry e, string sceneToLoad)
     {
-        // Ab hier laeuft genau das ab, was in der World Map beim Betreten eines
-        // Map-Punktes passiert (PlayerWorldInteraction, Fall "Map"). Wer beim
-        // Anbinden eines Levels etwas vermisst, vergleicht am besten dort.
-
-        // 1. Story oder Endless? Das liest der Rest des Spiels aus GameSession.
-        GameSession.SelectedMode = endlessChosen ? GameMode.Endless : GameMode.Story;
-
-        // 2. Stand sichern, bevor es losgeht: der Tracker merkt sich, welche
-        //    Achievements und Unlocks vor dem Lauf schon offen waren, damit der
-        //    Abschlussbildschirm nur die neuen zeigt. Ach.FirstGame wird hier
-        //    bewusst NICHT freigeschaltet - das macht PlayerController.StartStats()
-        //    in der Zielszene, wo auch das Charakter-Level vor dem Lauf gemerkt wird.
-        SessionProgressTracker.Instance?.SnapshotBeforeGame();
-
-        // 3. Skilltree auf den gewaehlten Charakter stellen.
-        Skills.SetActiveTreeForCharacter(Shop.SkinIndex);
-
-        // 4. Welche Welt gespielt wird, steht im MapsManager - er ueberlebt den
-        //    Szenenwechsel. Kommt der Spieler aus dem Hub, legt Ensure() ihn an.
-        MapsManager.Ensure().selectedMap = e.mapId;
-
-        // 5. Shop-Stand fuer diesen Lauf einfrieren.
-        Shop.CaptureRun();
-
-        // 6. Umschalten. Der Hub-Name ist zugleich das Rueckreiseziel:
-        //    GameManager.Restart() bringt den Spieler nach dem Lauf hierher zurueck.
-        string hubScene = gameObject.scene.name;
-        GameSession.ReturnScene = hubScene;
-
-        // Wie Hauptmenue -> Hub: Bild und Hub-Musik blenden aus, der Wechsel
-        // passiert hinter der Blende. Bis dahin bleibt die Auswahl offen und
-        // haelt den Hub gesperrt.
-        bool started = SceneFader.Switch(() => SwitchToLevel(sceneToLoad, hubScene),
-                                         () => SceneManager.GetSceneByName(MapSceneSystem.CoreScene).isLoaded);
-        if (!started) launching = false;
-    }
-
-    void SwitchToLevel(string sceneToLoad, string hubScene)
-    {
-        launching = false;
-        Close();
-
-        // Der uebliche Weg: additiv laden und den Hub stilllegen. Die Map-Szene
-        // holt sich GameCore selbst dazu (MapBootstrap).
-        if (MenuManager.Instance != null)
+        // Was dabei alles passiert, steht in RunLauncher - die Koop-Lobby
+        // startet ihre Laeufe auf genau demselben Weg.
+        bool started = RunLauncher.Launch(e.mapId, sceneToLoad, endlessChosen, gameObject.scene.name, () =>
         {
-            MenuManager.Instance.ActivateScene(sceneToLoad);
-            MenuManager.Instance.DeactivateScene(hubScene);
-            return;
-        }
-
-        // Rueckfallebene ohne MenuManager (hub allein gestartet): hart umschalten.
-        SceneManager.LoadScene(sceneToLoad, LoadSceneMode.Single);
+            launching = false;
+            Close();
+        });
+        if (!started) launching = false;
     }
 
     // ==================================================================

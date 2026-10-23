@@ -210,8 +210,9 @@ public class EnemyMilchpanzer : MonoBehaviour
     {
         if (rb == null) return;
 
-        PlayerController player = PlayerController.Instance;
-        bool hasPlayer = player != null && player.gameObject.activeSelf;
+        // Koop: faehrt auf den naechsten Spieler zu (allein der eigene).
+        Transform player = NetPlayers.TryNearest(rb.position, out NetPlayers.Target nearest) ? nearest.Transform : null;
+        bool hasPlayer = player != null;
 
         // Im Stand ist er ein Panzer: weder Spieler noch Horde schieben ihn
         // weg - sonst wandert er aus seiner eigenen Zone.
@@ -315,20 +316,21 @@ public class EnemyMilchpanzer : MonoBehaviour
     }
 
     /// <summary>Zieht Spieler und normale Gegner zur Zonenmitte. Laeuft im FixedUpdate.</summary>
-    private void Pull(PlayerController player, bool hasPlayer)
+    private void Pull(Transform player, bool hasPlayer)
     {
         Vector2 center = (Vector2)transform.position + ZoneCenter;
         float ramp = Mathf.Clamp01(suckClock / PullRampTime);
 
-        if (hasPlayer)
+        // Koop: der Sog zieht jeden Spieler in Reichweite, nicht nur den naechsten.
+        foreach (NetPlayers.Target target in BossTargets.All())
         {
-            Vector2 to = center - (Vector2)player.transform.position;
+            Vector2 to = center - target.Position;
             float d = to.magnitude;
             // In der Mitte nicht ueberschiessen, ganz aussen nachlassen
             if (d > 0.2f && d < PullRange)
             {
                 float edge = 1f - Mathf.Clamp01((d - PullRange * 0.75f) / (PullRange * 0.25f));
-                player.AddDrift(to / d * pullStrength * ramp * edge * Mathf.Clamp01(d / 0.6f));
+                NetPlayers.Drift(target, to / d * pullStrength * ramp * edge * Mathf.Clamp01(d / 0.6f));
             }
         }
 
@@ -369,15 +371,8 @@ public class EnemyMilchpanzer : MonoBehaviour
         MilchpanzerSounds.Burp();
         ScreenShake.Kick(ShakePixels, ShakeSeconds);
 
-        PlayerController player = PlayerController.Instance;
-        if (player != null && player.gameObject.activeSelf)
-        {
-            float reach = zoneRadius + PlayerRadius;
-            if (((Vector2)player.transform.position - center).sqrMagnitude <= reach * reach)
-            {
-                player.TakeDamage(enemy.ContactDamage * BurpDamageFactor);
-            }
-        }
+        // Jeder Spieler in der Zone (im Koop auch Mitspieler).
+        BossTargets.HurtInCircle(center, zoneRadius + PlayerRadius, enemy.ContactDamage * BurpDamageFactor);
 
         // Milch spritzt am Zonenrand und auf halbem Weg
         int count = Mathf.Max(8, Mathf.RoundToInt(2f * Mathf.PI * zoneRadius * SplashesPerUnit));
@@ -532,10 +527,9 @@ public class EnemyMilchpanzer : MonoBehaviour
     /// <summary>Bild schaut nach rechts - steht der Spieler links, spiegeln. 0.3 Totzone gegen Flackern.</summary>
     private void FacePlayer()
     {
-        PlayerController player = PlayerController.Instance;
-        if (player == null || body == null) return;
+        if (body == null || !NetPlayers.TryNearest(transform.position, out NetPlayers.Target player)) return;
 
-        float dx = player.transform.position.x - transform.position.x;
+        float dx = player.Position.x - transform.position.x;
         if (Mathf.Abs(dx) <= 0.3f) return;
         facingLeft = dx < 0f;
         body.flipX = facingLeft;
@@ -558,11 +552,7 @@ public class EnemyMilchpanzer : MonoBehaviour
         body.sprite = strip[((i % strip.Length) + strip.Length) % strip.Length];
     }
 
-    private static bool PlayerAvailable()
-    {
-        PlayerController player = PlayerController.Instance;
-        return player != null && player.gameObject.activeSelf;
-    }
+    private static bool PlayerAvailable() => BossTargets.AnyAlive;
 
     private void ClearMarker()
     {

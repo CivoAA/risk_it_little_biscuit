@@ -112,7 +112,20 @@ public class GameManager : MonoBehaviour
     public void GiveUp()
     {
         if (!gameActiv) return;
+        // Koop: den anderen Bescheid sagen (als Host endet der Lauf fuer alle).
+        NetRun.Active?.OnLocalGiveUp();
         EndRun(true);
+    }
+
+    /// <summary>
+    /// Koop: der Lauf ist vorbei (alle unten, Boss besiegt oder Host weg) -
+    /// abrechnen wie nach einem Tod. Gewonnen ist es, wenn vorher
+    /// <see cref="bossSpawned"/> gesetzt wurde (Story).
+    /// </summary>
+    public void NetFinishRun()
+    {
+        if (!gameActiv) return;
+        EndRun(false);
     }
 
     private void EndRun(bool gaveUp)
@@ -143,8 +156,9 @@ public class GameManager : MonoBehaviour
         Bestiary.Flush();
 
         // Bestwerte fuer die Levelauswahl: Story = schnellster Sieg, Endless =
-        // laengster Lauf. Nur auf echten Karten (nicht in der Test-Szene).
-        if (MapDefinition.Active != null)
+        // laengster Lauf. Nur auf echten Karten (nicht in der Test-Szene) und
+        // nicht im Koop - der zaehlt nicht fuer Bestwerte und Freischaltungen.
+        if (MapDefinition.Active != null && !NetSession.InRun)
         {
             LevelRecords.ReportRun(LevelRecords.CurrentMapId(), GameSession.IsEndless, won, gameTime);
             // Story-Sieg: die naechste Welt geht auf, Sterne nach Schwierigkeit.
@@ -242,7 +256,7 @@ public class GameManager : MonoBehaviour
     /// erst wenn Endless dort offen ist (Story durch oder zwei Siege auf der Welt).
     /// </summary>
     public bool CanContinueAsEndless =>
-        storyWon && !gameActiv && !GameSession.IsEndless
+        !NetSession.InRun && storyWon && !gameActiv && !GameSession.IsEndless
         && (Unlocks.Endless.IsUnlocked || LevelRecords.EndlessByWins(LevelRecords.CurrentMapId()))
         && MapDefinition.Active != null && SpawnDirector.Active != null
         && PlayerController.Instance != null && !SceneFader.IsFading;
@@ -357,6 +371,13 @@ public class GameManager : MonoBehaviour
     public void RestartRun()
     {
         if (SceneFader.IsFading) return;
+
+        // Koop: neu gestartet wird in der Lobby, gemeinsam.
+        if (NetSession.Active)
+        {
+            Restart();
+            return;
+        }
 
         string map = MapSceneSystem.RunMapScene;
         string core = gameObject.scene.name;

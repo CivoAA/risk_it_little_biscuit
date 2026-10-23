@@ -169,7 +169,8 @@ public static class RunDifficulty
     {
         Chaos = GameSession.Chaos;
         Curse = 0f;
-        Level = Difficulty.Current;
+        // Koop: die Schwierigkeit stellt der Host in der Lobby ein.
+        Level = NetSession.InRun ? NetSession.Instance.Run.Difficulty : Difficulty.Current;
         InEndlessPart = false;
         (WorldHealth, WorldDamage, WorldXp, WorldLateXp, WorldTroopHealth) = WorldTier(planId);
         CatchUpTarget = CatchUpTargetFor(planId);
@@ -214,6 +215,8 @@ public static class RunDifficulty
         if ((enemy.Role == EnemyRole.Normal || enemy.Role == EnemyRole.Elite) &&
             enemy.Identity != EnemyId.KokosYeti)
             health *= WorldTroopHealth;
+        // Koop: zu zweit 3x, zu dritt 5x, zu viert 7x so schwer (NetBalance).
+        if (NetRun.Active != null) health *= NetBalance.HealthFactor(enemy.Role, NetRun.Active.StartPlayers);
         enemy.ApplyRunScaling(health, DamageFactor, RewardFactor);
     }
 }

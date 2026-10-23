@@ -534,7 +534,12 @@ public partial class PauseMenuPanel : MonoBehaviour
             case Entry.Resume:   return Loc.Get("ui.pause.btn.resume", "WEITER");
             case Entry.Options:  return Loc.Get("ui.pause.btn.options", "OPTIONEN");
             case Entry.Tutorials: return Loc.Get("ui.pause.btn.tutorials", "TUTORIALS");
-            case Entry.GiveUp:   return Loc.Get("ui.pause.btn.giveup", "RUN AUFGEBEN");
+            case Entry.GiveUp:
+                // Koop: als Host endet der Lauf fuer alle, als Gast geht man allein.
+                if (NetSession.InRun)
+                    return NetSession.IsHost ? Loc.Get("net.pause.end_all", "LAUF FÜR ALLE BEENDEN")
+                                             : Loc.Get("net.pause.leave", "LAUF VERLASSEN");
+                return Loc.Get("ui.pause.btn.giveup", "RUN AUFGEBEN");
             default:             return Loc.Get("ui.pause.btn.mainmenu", "ZURÜCK ZUM HAUPTMENÜ");
         }
     }
@@ -564,7 +569,11 @@ public partial class PauseMenuPanel : MonoBehaviour
                 break;
 
             case Entry.GiveUp:
-                OpenDialog(Loc.Get("ui.pause.dialog.giveup", "Lauf wirklich aufgeben? Gold und Char-XP bekommst du trotzdem."),
+                OpenDialog(!NetSession.InRun
+                        ? Loc.Get("ui.pause.dialog.giveup", "Lauf wirklich aufgeben? Gold und Char-XP bekommst du trotzdem.")
+                        : NetSession.IsHost
+                        ? Loc.Get("net.pause.dialog.end_all", "Lauf für alle beenden? Alle bekommen ihr Gold und ihre Char-XP.")
+                        : Loc.Get("net.pause.dialog.leave", "Lauf verlassen? Die anderen spielen weiter, du bekommst Gold und Char-XP."),
                            GiveUpRun);
                 break;
 
@@ -594,6 +603,13 @@ public partial class PauseMenuPanel : MonoBehaviour
     private static void GoToMainMenu()
     {
         Close();
+
+        // Koop: erst den anderen Bescheid sagen, dann die Sitzung verlassen.
+        if (NetSession.Active)
+        {
+            NetRun.Active?.OnLocalGiveUp();
+            NetSession.Leave();
+        }
 
         // Ein Weg fuer beide Auspraegungen: GameSession.LoadMainMenu laedt das
         // Hauptmenue hart mit Single und raeumt damit alles ab, was sonst noch

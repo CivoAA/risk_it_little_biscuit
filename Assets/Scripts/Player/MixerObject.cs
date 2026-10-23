@@ -63,6 +63,9 @@ public class MixerObject : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        // Koop: ein Geist mixt nicht.
+        if (PlayerController.Instance != null && PlayerController.Instance.NetGhost) return;
+
         if (other.CompareTag("PlayerHitbox") && enabled)
         {
             playerInside = true;
@@ -119,6 +122,8 @@ public class MixerObject : MonoBehaviour
                 chargeSprite.transform.localScale = Vector3.zero;
                 actionTriggered = true;
                 mixerActive = true;
+                // Koop: bei allen anderen ist dieser Mixer jetzt auch leer.
+                NetWorld.Active?.LocalMixerUsed(this);
                 EndlessScore.AddMixer();
                 RunChallenges.MixerUsed();
                 unused.Remove(this);
@@ -188,6 +193,30 @@ public class MixerObject : MonoBehaviour
 
 
     private bool mixerActive = false;
+
+    /// <summary>
+    /// Koop: ein Mitspieler hat diesen Mixer geleert. Er sieht danach aus wie
+    /// ein selbst benutzter - nur ohne Auswahl, die bekam der andere.
+    /// </summary>
+    public void MarkUsedByTeammate()
+    {
+        if (actionTriggered) return;
+        actionTriggered = true;
+        playerInside = false;
+        unused.Remove(this);
+        if (currentCoroutine != null) StopCoroutine(currentCoroutine);
+        currentCoroutine = null;
+
+        if (chargeSprite != null) chargeSprite.transform.localScale = Vector3.zero;
+        foreach (Transform child in transform)
+        {
+            if (chargeSprite != null && child == chargeSprite.transform) continue;
+            var sr = child.GetComponent<SpriteRenderer>();
+            if (sr != null) sr.enabled = false;
+        }
+        Collider2D trigger = GetComponent<Collider2D>();
+        if (trigger != null) trigger.enabled = false;
+    }
     
     private void AssignRandomPowerUps()
     {

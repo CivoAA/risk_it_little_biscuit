@@ -53,6 +53,21 @@ public class JuicyMainMenu : MonoBehaviour
     [Header("Einträge (oben nach unten)")]
     [SerializeField] private List<Entry> entries = new List<Entry>();
 
+    /// <summary>
+    /// Eintrag zur Laufzeit dazunehmen - vor Start() aufrufen (z.B. aus Awake
+    /// einer Komponente daneben). So kommt MULTIPLAYER ins Menue, ohne die
+    /// Szene anzufassen.
+    /// </summary>
+    public void InsertEntry(int index, string label, UnityAction action)
+    {
+        foreach (Entry e in entries)
+            if (string.Equals(e.label, label, StringComparison.OrdinalIgnoreCase)) return;
+
+        var entry = new Entry { label = label };
+        entry.onClick.AddListener(action);
+        entries.Insert(Mathf.Clamp(index, 0, entries.Count), entry);
+    }
+
     [Header("Box")]
     [SerializeField, Tooltip("Aus = keine graue Box, nur die Einträge direkt auf dem Hintergrund " +
                              "(dunkle Schrift, keine Partikel). An = graue Box mit heller Schrift.")]

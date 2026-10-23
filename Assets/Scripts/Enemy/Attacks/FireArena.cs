@@ -227,21 +227,40 @@ public class FireArena : MonoBehaviour
         Burn();
     }
 
+    // Koop: jeder Spieler brennt fuer sich - eigener Takt, eigene Stapel.
+    private readonly System.Collections.Generic.Dictionary<int, (int stacks, float cooldown)> mates =
+        new System.Collections.Generic.Dictionary<int, (int, float)>();
+
     private void Burn()
     {
         tickCooldown -= Time.deltaTime;
 
-        PlayerController player = PlayerController.Instance;
-        if (player == null || !player.gameObject.activeSelf) return;
-        if (!IsOutside(player.transform.position)) return;
+        foreach (NetPlayers.Target target in BossTargets.All())
+        {
+            if (target.IsLocal)
+            {
+                if (!IsOutside(target.Position)) continue;
 
-        // Der Takt laeuft drinnen weiter: wer kurz rein und wieder raus geht,
-        // wartet nicht, wer laenger drin war, brennt beim Rauslaufen sofort.
-        if (tickCooldown > 0f) return;
+                // Der Takt laeuft drinnen weiter: wer kurz rein und wieder raus geht,
+                // wartet nicht, wer laenger drin war, brennt beim Rauslaufen sofort.
+                if (tickCooldown > 0f) continue;
 
-        stacks++;
-        tickCooldown = Tick;
-        player.TakeDamage(stacks * RunDifficulty.DamageFactor);
+                stacks++;
+                tickCooldown = Tick;
+                NetPlayers.Hurt(target, stacks * RunDifficulty.DamageFactor);
+                continue;
+            }
+
+            mates.TryGetValue(target.Slot, out var m);
+            m.cooldown -= Time.deltaTime;
+            if (IsOutside(target.Position) && m.cooldown <= 0f)
+            {
+                m.stacks++;
+                m.cooldown = Tick;
+                NetPlayers.Hurt(target, m.stacks * RunDifficulty.DamageFactor);
+            }
+            mates[target.Slot] = m;
+        }
     }
 
     /// <summary>Steht der Punkt im Feuer oder dahinter?</summary>

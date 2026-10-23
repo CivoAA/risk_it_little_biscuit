@@ -531,9 +531,10 @@ public class EnemyGlutwurz : MonoBehaviour
             }
 
             tick -= Time.deltaTime;
-            if (tick <= 0f && PlayerAlive && beam != null && beam.Hits(PlayerPos, PlayerRadius))
+            // Jeder Spieler im Strahl (im Koop auch Mitspieler).
+            if (tick <= 0f && beam != null &&
+                BossTargets.HurtWhere(p => beam.Hits(p, PlayerRadius), BeamDamage * RunDifficulty.DamageFactor) > 0)
             {
-                Hit(BeamDamage);
                 tick = BeamTick;
             }
             yield return null;
@@ -585,10 +586,7 @@ public class EnemyGlutwurz : MonoBehaviour
                 markers[i] = null;
                 open--;
 
-                if (PlayerAlive && Vector2.Distance(PlayerPos, spots[i]) <= NestRadius + PlayerRadius)
-                {
-                    Hit(NestDamage);
-                }
+                BossTargets.HurtInCircle(spots[i], NestRadius + PlayerRadius, NestDamage * RunDifficulty.DamageFactor);
             }
             yield return null;
         }
@@ -664,17 +662,15 @@ public class EnemyGlutwurz : MonoBehaviour
 
     private void Hit(float damage)
     {
-        if (!PlayerAlive) return;
-        PlayerController.Instance.TakeDamage(damage * RunDifficulty.DamageFactor);
+        if (NetPlayers.TryNearest(transform.position, out NetPlayers.Target target))
+            NetPlayers.Hurt(target, damage * RunDifficulty.DamageFactor);
     }
 
-    private static bool PlayerAlive =>
-        PlayerController.Instance != null && PlayerController.Instance.gameObject.activeSelf;
+    // Koop: der Boss zielt auf den naechsten Spieler, der noch steht - allein
+    // ist das immer der eigene. Getroffen wird jeder in der Flaeche (BossTargets).
+    private bool PlayerAlive => NetPlayers.TryNearest(transform.position, out _);
 
-    private static Vector2 PlayerPos =>
-        PlayerController.Instance != null
-            ? (Vector2)PlayerController.Instance.transform.position
-            : Vector2.zero;
+    private Vector2 PlayerPos => NetPlayers.NearestPosition(transform.position);
 
     private BossTelegraphMarker Track(BossTelegraphMarker marker)
     {

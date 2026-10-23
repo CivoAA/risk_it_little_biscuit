@@ -303,7 +303,7 @@ public class EnemySquiddy : MonoBehaviour
         while (t < seconds)
         {
             t += Time.deltaTime;
-            PlayerController player = Player();
+            Transform player = Player();
             if (player != null)
             {
                 Vector2 to = (Vector2)player.transform.position - rb.position;
@@ -340,7 +340,7 @@ public class EnemySquiddy : MonoBehaviour
         while (t < ShadowChase)
         {
             t += Time.deltaTime;
-            PlayerController player = Player();
+            Transform player = Player();
             if (player != null)
                 pos = Vector2.MoveTowards(pos, player.transform.position, ShadowSpeed * Time.deltaTime);
             shadow.transform.position = SquiddyFx.Snap(pos);
@@ -390,9 +390,8 @@ public class EnemySquiddy : MonoBehaviour
         ScreenShake.Kick(5f, 0.4f);
         Flare(GhostLight, 1f);
         SquiddyFx.OneShot("BuhWelle", buhWave, pos + Vector2.up * 0.3f, 16f, 30);
-        PlayerController victim = Player();
-        if (victim != null && ((Vector2)victim.transform.position - pos).sqrMagnitude <= BuhRadius * BuhRadius)
-            victim.TakeDamage(enemy.ContactDamage * BuhDamage);
+        // Jeder Spieler in der Welle (im Koop auch Mitspieler).
+        BossTargets.HurtInCircle(pos, BuhRadius, enemy.ContactDamage * BuhDamage);
 
         yield return PlayRange(ghostBuh, 6, 8);
         yield return PlayRange(ghostBuh, 9, 13);
@@ -403,7 +402,7 @@ public class EnemySquiddy : MonoBehaviour
     private IEnumerator Reigen()
     {
         velocity = Vector2.zero;
-        PlayerController player = Player();
+        Transform player = Player();
         Vector2 center = rb.position + BodyCenter * 0.8f;
         float baseAngle = player != null
             ? Mathf.Atan2(player.transform.position.y - center.y, player.transform.position.x - center.x) * Mathf.Rad2Deg
@@ -632,7 +631,7 @@ public class EnemySquiddy : MonoBehaviour
         while (t < seconds)
         {
             t += Time.deltaTime;
-            PlayerController player = Player();
+            Transform player = Player();
             if (player != null)
             {
                 // Rueckstoss: Schub in den ersten Bildern des Pulses, dann gleiten
@@ -665,7 +664,7 @@ public class EnemySquiddy : MonoBehaviour
     private IEnumerator StingVolley(float offset, float wind, bool windUpFrames)
     {
         Vector2 center = rb.position;
-        PlayerController player = Player();
+        Transform player = Player();
         float baseAngle = player != null
             ? Mathf.Atan2(player.transform.position.y - center.y, player.transform.position.x - center.x) * Mathf.Rad2Deg
             : Random.value * 360f;
@@ -734,7 +733,7 @@ public class EnemySquiddy : MonoBehaviour
         SquiddySounds.Plop();
         Flare(JellyLight, 0.6f);
         int count = Mathf.Min(rage ? BroodCountRage : BroodCount, MaxBabies - AliveBabies());
-        PlayerController player = Player();
+        Transform player = Player();
         Vector2 aim = player != null ? ((Vector2)player.transform.position - rb.position).normalized : Vector2.down;
         if (aim.sqrMagnitude < 0.01f) aim = Vector2.down;
         for (int i = 0; i < count && babyPrefab != null; i++)
@@ -813,16 +812,17 @@ public class EnemySquiddy : MonoBehaviour
         SquiddyFx.OneShot("Entladung", dischargeFx, center, 16f, 32);
         StartCoroutine(FlashScreen(new Color(0.85f, 0.75f, 1f), 0.55f, 0.3f));
 
-        PlayerController player = Player();
-        Vector2 pp = player != null ? (Vector2)player.transform.position : Vector2.one * 99999f;
-        bool hit = (pp - center).sqrMagnitude <= DischargeRadius * DischargeRadius;
-        foreach (SquiddyBaby b in babies)
+        // Jeder Spieler im Kreis um Squiddy oder um ein Baby (im Koop auch Mitspieler) - einmal.
+        BossTargets.HurtWhere(p =>
         {
-            if (b == null) continue;
-            if (!hit && (pp - (Vector2)b.transform.position).sqrMagnitude <= BabyZoneRadius * BabyZoneRadius) hit = true;
-            b.Overcharge();
-        }
-        if (hit && player != null) player.TakeDamage(enemy.ContactDamage * DischargeDamage);
+            if ((p - center).sqrMagnitude <= DischargeRadius * DischargeRadius) return true;
+            foreach (SquiddyBaby b in babies)
+                if (b != null && (p - (Vector2)b.transform.position).sqrMagnitude <= BabyZoneRadius * BabyZoneRadius)
+                    return true;
+            return false;
+        }, enemy.ContactDamage * DischargeDamage);
+        foreach (SquiddyBaby b in babies)
+            if (b != null) b.Overcharge();
 
         yield return PlayRange(charge, 13, 17);
     }
@@ -939,10 +939,10 @@ public class EnemySquiddy : MonoBehaviour
         }
     }
 
-    private static PlayerController Player()
+    /// <summary>Koop: der naechste Spieler, der noch steht (allein der eigene) - sonst null.</summary>
+    private Transform Player()
     {
-        PlayerController p = PlayerController.Instance;
-        return p != null && p.gameObject.activeSelf ? p : null;
+        return NetPlayers.TryNearest(transform.position, out NetPlayers.Target t) ? t.Transform : null;
     }
 
 #if UNITY_EDITOR
