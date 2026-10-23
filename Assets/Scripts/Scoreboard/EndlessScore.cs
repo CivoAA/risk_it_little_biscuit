@@ -168,6 +168,8 @@ public static class EndlessScore
     /// </summary>
     public static void RunEnded(float seconds)
     {
+        // Der Koop zaehlt nicht fuers Scoreboard.
+        if (NetSession.InRun) return;
         if (!counting) return;
         bool endless = GameSession.IsEndless;
 

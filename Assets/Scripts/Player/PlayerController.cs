@@ -180,6 +180,12 @@ public class PlayerController : MonoBehaviour
     public bool IsFrozen => Time.time < FrozenUntil;
 
     /// <summary>
+    /// Koop: niedergegangen und als Geist unterwegs (<see cref="NetRun"/>).
+    /// Kein Schaden, keine Waffen, langsamer - bis ein Mitspieler rettet.
+    /// </summary>
+    [System.NonSerialized] public bool NetGhost;
+
+    /// <summary>
     /// Fremder Zug in Einheiten/s (der Strohhalm-Sog des Milchpanzers). Kommt
     /// zur eigenen Bewegung dazu und wird nach jedem Physikschritt verbraucht -
     /// wer ziehen will, setzt ihn jeden FixedUpdate neu (<see cref="AddDrift"/>).
@@ -306,7 +312,7 @@ public class PlayerController : MonoBehaviour
             playerMoveDirection = Vector3.zero;
             animator.SetBool("moving", false);
         }
-        else if (Time.timeScale > 0f)
+        else if (Time.timeScale > 0f && !(NetSession.InRun && PauseMenuPanel.IsOpen))
         {
             float inputX = Input.GetAxisRaw("Horizontal");
             float inputY = Input.GetAxisRaw("Vertical");
@@ -366,6 +372,8 @@ public class PlayerController : MonoBehaviour
         if (IsKawarimi) speed *= 1f + KawarimiSpeedBonus;
         // Taifunfaecher-Evo: Rueckenwind in der eigenen Windschneise.
         if (TyphoonFan.HasTailwind) speed *= 1f + TyphoonFan.TailwindBonus;
+        // Koop: als Geist schwebt man langsamer.
+        if (NetGhost) speed *= NetBalance.GhostSpeed;
         Vector2 wanted = new Vector2(playerMoveDirection.x * speed, playerMoveDirection.y * speed);
         // Eiswelt: auf Glatteis rutscht man (sonst kommt wanted unveraendert zurueck).
         rb.linearVelocity = Glatteis.Steer(rb.position, rb.linearVelocity, wanted, Time.fixedDeltaTime) + externalDrift;
@@ -781,7 +789,7 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        if (isImmune || Captured || Untouchable || GodMode || FoxForm.Active) return;
+        if (isImmune || Captured || Untouchable || GodMode || FoxForm.Active || NetGhost) return;
 
         // Kawarimi: waehrend der Wirkung weicht der Spieler allem aus.
         if (IsKawarimi || UnityEngine.Random.value < dodgeChance)
@@ -851,6 +859,9 @@ public class PlayerController : MonoBehaviour
             // der Buff - so bleibt der Buff erhalten, wenn vorher schon etwas rettet.
             if (playerHealth <= 0 && !TryFoxForm() && !TryLuckyRevive() && !TryUseSecondChance())
             {
+                // Koop: nicht tot, sondern niedergegangen - ein Mitspieler kann retten.
+                if (NetRun.Active != null && NetRun.Active.HandleLocalDeath()) return;
+
                 gameObject.SetActive(false);
                 GameManager.Instance.GameOver();
                 WM_UIController.Instance?.UpdateCurrencyText();
@@ -981,6 +992,16 @@ public class PlayerController : MonoBehaviour
     public void GetExperience(int experienceToGet)
     {
         float gained = experienceToGet * experienceMultiplier;
+
+        // Koop: die Erfahrung geht in den Topf des Teams. Angerechnet wird sie
+        // (auch die Charakter-XP), wenn der Host den neuen Stand schickt.
+        if (NetRun.Active != null)
+        {
+            NetRun.Active.LocalXp(gained);
+            attractAllXP = false;
+            return;
+        }
+
         experience += gained;
 
         // Dieselben XP gehen auch auf das Konto des Charakters (Charakter-Level

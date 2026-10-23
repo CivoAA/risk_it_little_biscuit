@@ -66,6 +66,26 @@ public class SpawnExp : MonoBehaviour
     }
 
     /// <summary>
+    /// Koop: Kopie eines Bonbons, das bei einem Mitspieler liegt - gleiches
+    /// Aussehen, aber ohne "x2"-Schriftzug (den hat der Besitzer gesehen).
+    /// </summary>
+    public ExpPickup SpawnRemote(Vector2 pos, int expAmount, bool lucky)
+    {
+        GameObject prefab = expAmount >= ExpPickup.BigFrom ? bigPrefab
+                          : expAmount >= ExpPickup.MediumFrom ? mediumPrefab : smallPrefab;
+        if (lucky && luckyPrefab != null) prefab = luckyPrefab;
+
+        GameObject exp = RunPool.Spawn(prefab, pos, transform.rotation, "Exp");
+        ExpPickup xp = exp != null ? exp.GetComponent<ExpPickup>() : null;
+        if (xp == null) return null;
+
+        if (lucky && luckyPrefab == null) xp.SetLook("candy_lucky");
+        xp.xpValue = expAmount;
+        xp.lucky = lucky;
+        return xp;
+    }
+
+    /// <summary>
     /// Bonbon-Bilder laden und ein paar Bonbons anlegen, solange der Lauf noch
     /// laedt - sonst passiert beides beim ersten Kill mitten im Gefecht.
     /// </summary>

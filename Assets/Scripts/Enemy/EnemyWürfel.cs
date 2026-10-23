@@ -55,7 +55,7 @@ public class EnemyWürfel : MonoBehaviour
 {
     void Update()
     {
-        float px = PlayerController.Instance.transform.position.x;
+        float px = NetPlayers.NearestPosition(transform.position).x;
         float x = transform.position.x;
 
         if (px >= x + 10f) Drehen_würfel.Instance.richtung = true;

@@ -47,6 +47,9 @@ public partial class LevelUpScreen
     private ButtonView restartButton, hubButton;
     /// <summary>Ohne Rueckreiseziel (Level direkt aus dem Editor) gibt es keinen Hub - nur NEUSTART.</summary>
     private bool offerHub;
+
+    /// <summary>Koop: kein NEUSTART (der laeuft ueber die Lobby), dafuer ZURUECK ZUR LOBBY.</summary>
+    private bool coopEnd;
     /// <summary>Nur nach einem Story-Sieg: der Lauf geht im Endless-Modus weiter.</summary>
     private ButtonView endlessButton;
     private bool offerEndless;
@@ -301,17 +304,19 @@ public partial class LevelUpScreen
         }
 
         // ---- Knoepfe ----
-        offerHub = !string.IsNullOrEmpty(GameSession.ReturnScene);
+        coopEnd = NetRun.Active != null;
+        offerHub = coopEnd || !string.IsNullOrEmpty(GameSession.ReturnScene);
         restartButton.SetLabel(Loc.Get("ui.death.restart", "RESTART"));
         restartButton.SetCount("", false);
-        hubButton.SetLabel(Loc.Get("ui.death.to_hub", "TO THE HUB"));
+        hubButton.SetLabel(coopEnd && NetSession.Active ? Loc.Get("net.death.to_lobby", "TO THE LOBBY")
+                                                        : Loc.Get("ui.death.to_hub", "TO THE HUB"));
         hubButton.SetCount("", false);
 
         // Story-Sieg: vorn ein dritter Knopf, der Lauf geht als Endless weiter.
         offerEndless = deathWon && gm != null && gm.CanContinueAsEndless;
         endlessButton.SetLabel(Loc.Get("ui.win.endless", "GO ENDLESS"));
         endlessButton.SetCount("", false);
-        int buttonCount = 1 + (offerHub ? 1 : 0) + (offerEndless ? 1 : 0);
+        int buttonCount = (coopEnd ? 0 : 1) + (offerHub ? 1 : 0) + (offerEndless ? 1 : 0);
         int bx = (RefW - (buttonCount * DeathButtonW + (buttonCount - 1) * DeathButtonGap)) / 2;
         if (offerEndless)
         {
@@ -319,7 +324,7 @@ public partial class LevelUpScreen
             bx += DeathButtonW + DeathButtonGap;
         }
         restartButton.MoveX(bx);
-        hubButton.MoveX(bx + DeathButtonW + DeathButtonGap);
+        hubButton.MoveX(coopEnd ? bx : bx + DeathButtonW + DeathButtonGap);
     }
 
     /// <summary>
@@ -505,18 +510,18 @@ public partial class LevelUpScreen
 
         // ---- Knoepfe ----
         bool buttons = t >= TButtons;
-        SetActive(restartButton.Root, buttons);
+        SetActive(restartButton.Root, buttons && !coopEnd);
         SetActive(hubButton.Root, buttons && offerHub);
         SetActive(endlessButton.Root, buttons && offerEndless);
         if (!buttons) return;
 
         bool live = now >= inputFrom && t >= TDone;
-        bool restart = restartButton.Update(now, mouse, live);
+        bool restart = !coopEnd && restartButton.Update(now, mouse, live);
         bool hub = offerHub && hubButton.Update(now, mouse, live);
         bool endless = offerEndless && endlessButton.Update(now, mouse, live);
         if (live)
         {
-            if (Input.GetKeyDown(KeyCode.R)) restart = true;
+            if (Input.GetKeyDown(KeyCode.R) && !coopEnd) restart = true;
             // Enter/Leertaste wie bisher: zurueck in den Hub (ohne Hub: Neustart).
             if (Input.GetKeyDown(KeyCode.H) || Input.GetKeyDown(KeyCode.Return)
                 || Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Space))

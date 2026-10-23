@@ -30,6 +30,13 @@ public class RandomObjectSpawner : MonoBehaviour
 
     private void Update()
     {
+        // Koop: Bloecke um alle Spieler herum, gewuerfelt nach Ort statt nach Reihenfolge.
+        if (NetWorld.Deterministic)
+        {
+            foreach (Vector2 anchor in NetWorld.Anchors()) GenerateAround(anchor.x);
+            return;
+        }
+
         // Die Inspector-Referenz gilt, solange Spieler und Spawner in derselben
         // Szene liegen. Sobald die Maps in eigene Szenen wandern, faellt sie weg
         // (szenenuebergreifende Referenzen speichert Unity nicht) - dann kommt
@@ -39,9 +46,13 @@ public class RandomObjectSpawner : MonoBehaviour
 
         if (player == null)
             return;
+        GenerateAround(player.position.x);
+    }
 
-        int leftBlock = Mathf.FloorToInt((player.position.x - spawnAheadDistance) / blockSize);
-        int rightBlock = Mathf.FloorToInt((player.position.x + spawnAheadDistance) / blockSize);
+    private void GenerateAround(float x)
+    {
+        int leftBlock = Mathf.FloorToInt((x - spawnAheadDistance) / blockSize);
+        int rightBlock = Mathf.FloorToInt((x + spawnAheadDistance) / blockSize);
 
         for (int block = leftBlock; block <= rightBlock; block++)
         {
@@ -57,6 +68,12 @@ public class RandomObjectSpawner : MonoBehaviour
     {
         if (spawnablePrefabs.Length == 0)
             return;
+
+        if (NetWorld.Deterministic)
+        {
+            GenerateBlockDeterministic(blockIndex);
+            return;
+        }
 
         float blockStartX = blockIndex * blockSize;
         float blockEndX = blockStartX + blockSize;
@@ -118,6 +135,57 @@ public class RandomObjectSpawner : MonoBehaviour
     /// Props und Mixer-Feldern. Mixer selbst weichen den Props ueber deren
     /// <see cref="MixerBlocker"/> aus - je nachdem, wer zuerst steht.
     /// </summary>
+    // ------------------------------------------------------------------ Koop
+
+    /// <summary>
+    /// Wie GenerateBlock, aber nur aus Seed und Block gerechnet: bei allen
+    /// Spielern dasselbe, egal wer wann vorbeikommt. Abstaende gelten nur
+    /// innerhalb des Blocks; Mixer bleiben dafuer weit genug vom Blockrand weg.
+    /// </summary>
+    private void GenerateBlockDeterministic(int blockIndex)
+    {
+        if (mixerPrefabs == null) mixerPrefabs = System.Array.FindAll(spawnablePrefabs, MixerObject.IsMixer);
+
+        System.Random rng = NetWorld.RandomFor(NetWorld.Hash(gameObject.scene.name + "/" + gameObject.name), blockIndex, 0);
+        float x0 = blockIndex * blockSize;
+        int count = rng.Next(0, maxObjectsPerBlock + 1);
+        var placed = new List<(Vector2 pos, bool mixer, float radius)>();
+
+        for (int i = 0; i < count; i++)
+        {
+            GameObject prefab = spawnablePrefabs[rng.Next(0, spawnablePrefabs.Length)];
+            bool isMixer = System.Array.IndexOf(mixerPrefabs, prefab) >= 0;
+            float radius = isMixer ? MixerPlacement.FieldRadius(prefab) : propSpacing * 0.5f;
+            float margin = isMixer ? Mathf.Min(blockSize * 0.45f, radius * (1f + mixerGap)) : 0f;
+            int attempts = isMixer ? MixerPlacement.Attempts : propSpacing > 0f ? 8 : 1;
+
+            for (int a = 0; a < attempts; a++)
+            {
+                var pos = new Vector2(x0 + margin + (float)rng.NextDouble() * (blockSize - 2f * margin),
+                                      minY + (float)rng.NextDouble() * (maxY - minY));
+                if (NetWorld.NearStart(pos)) continue;
+
+                bool free = true;
+                foreach (var other in placed)
+                {
+                    float min = isMixer && other.mixer ? radius * 2f * (1f + mixerGap) : radius + other.radius;
+                    if ((other.pos - pos).sqrMagnitude < min * min) { free = false; break; }
+                }
+                if (!free) continue;
+
+                placed.Add((pos, isMixer, radius));
+                GameObject spawned = Instantiate(prefab, new Vector3(pos.x, pos.y, 0f), Quaternion.identity);
+                RunScene.Place(spawned, isMixer ? "Mixer" : "Map-Objekte");
+                if (isMixer && NetWorld.MixerAlreadyUsed(pos))
+                {
+                    MixerObject mixer = spawned.GetComponentInChildren<MixerObject>();
+                    if (mixer != null) mixer.MarkUsedByTeammate();
+                }
+                break;
+            }
+        }
+    }
+
     private bool IsPropSpotFree(Vector2 spot)
     {
         float minSqr = propSpacing * propSpacing;

@@ -10,6 +10,16 @@ public class PickUps : MonoBehaviour
     public float detectRange = 1f;       // Ab wann das Objekt den Spieler anzieht
     public float moveSpeed = 5f;         // Geschwindigkeit beim Hinfliegen
     public int PickUp_id = 99;
+
+    /// <summary>Koop: Kopie eines Pickups, das bei einem Mitspieler liegt (<see cref="NetPickups"/>).</summary>
+    [System.NonSerialized] public bool IsRemote;
+    [System.NonSerialized] public int NetOwner = -1;
+    [System.NonSerialized] public int NetId;
+
+    /// <summary>Weg, ohne Wirkung (ein Mitspieler hat es eingesammelt).</summary>
+    public void RemoveSilently() => Destroy(gameObject);
+
+    private void OnDestroy() => NetPickups.Unregister(this);
     [SerializeField] private GameObject destroyEffect;
 
     [Tooltip("Bilder pro Sekunde der Idle-Schleife (Schweben + Glanz).")]
@@ -70,6 +80,8 @@ public class PickUps : MonoBehaviour
             idleTime = Random.Range(0, idleFrames.Length) / Mathf.Max(0.01f, idleFps);
         AnimateIdle();
 
+        if (!IsRemote) NetPickups.Register(this);
+
         // Nimmt an, dass dein Player das Tag "Player" hat
         GameObject playerObj = GameObject.FindGameObjectWithTag("PlayerHitbox");
         if (playerObj != null)
@@ -111,8 +123,10 @@ public class PickUps : MonoBehaviour
     {
         get
         {
-            if (PickUp_id != 0) return true;
             PlayerController p = PlayerController.Instance;
+            // Koop: ein Geist sammelt nichts ein.
+            if (p != null && p.NetGhost) return false;
+            if (PickUp_id != 0) return true;
             return p != null && p.CanReceiveHealing;
         }
     }
@@ -154,6 +168,9 @@ public class PickUps : MonoBehaviour
                 return;
             }
             
+            // Koop: das Original liegt bei einem Mitspieler - der raeumt es weg.
+            if (IsRemote) NetPickups.TakeRemote(NetOwner, NetId, this);
+
             // Danach zerstören
             Destroy(gameObject);
             GameObject DestroyEffect =Instantiate(destroyEffect, transform.position, transform.rotation);

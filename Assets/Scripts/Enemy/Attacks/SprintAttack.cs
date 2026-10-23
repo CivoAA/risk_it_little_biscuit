@@ -19,8 +19,12 @@ public class SprintAttack : MonoBehaviour
 
     private void Start()
     {
-        player = PlayerController.Instance.transform;
         boss = transform.parent; // da das Prefab als Child unter dem Boss gespawnt wird
+        // Koop: auf den naechsten Spieler, allein der eigene.
+        player = NetPlayers.TryNearest(boss != null ? (Vector2)boss.position : (Vector2)transform.position,
+                                       out NetPlayers.Target target)
+            ? target.Transform
+            : PlayerController.Instance.transform;
         StartCoroutine(PrepareAndSprint());
     }
 
@@ -66,14 +70,8 @@ public class SprintAttack : MonoBehaviour
         }
 
         // Option: Explosion oder AoE beim Aufprall
-        Collider2D[] hits = Physics2D.OverlapCircleAll(boss.position, 2f);
-        foreach (var hit in hits)
-        {
-            if (hit.CompareTag("Player"))
-            {
-                PlayerController.Instance.TakeDamage(50f);
-            }
-        }
+        // Jeder Spieler im Aufprall nimmt Schaden (im Koop auch Mitspieler).
+        BossTargets.HurtInCircle(boss.position, 2f, 50f);
 
         // kurze Pause fürs "Cooldown-Feeling"
         yield return new WaitForSeconds(0.3f);

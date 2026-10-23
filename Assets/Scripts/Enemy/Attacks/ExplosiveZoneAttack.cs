@@ -44,12 +44,9 @@ public class ExplosiveZoneAttack : MonoBehaviour
             hasExploded = true;
             circleCollider.enabled = true; // optional, falls du Partikel oder Sound triggert willst
 
-            float distance = Vector2.Distance(player.position, transform.position);
+            // Jeder Spieler in der Zone (im Koop auch Mitspieler).
             float radius = maxScale * 0.5f; // einfacher Radius-Check
-            if (distance <= radius)
-            {
-                PlayerController.Instance.TakeDamage(damage);
-            }
+            BossTargets.HurtInCircle(transform.position, radius, damage);
 
             // Optional: kurzes Aufblitzen für Feedback
             if (spriteRenderer != null)

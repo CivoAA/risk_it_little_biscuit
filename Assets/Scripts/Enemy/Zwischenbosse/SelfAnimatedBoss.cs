@@ -82,10 +82,10 @@ public abstract class SelfAnimatedBoss : MonoBehaviour
         // Im Stand laesst er sich nicht schieben - sonst rutscht er aus seiner Attacke.
         rb.constraints = Moving ? RigidbodyConstraints2D.FreezeRotation : RigidbodyConstraints2D.FreezeAll;
 
-        PlayerController player = Player;
+        Transform player = Player;
         if (Moving && player != null)
         {
-            Vector2 to = (Vector2)player.transform.position - rb.position;
+            Vector2 to = (Vector2)player.position - rb.position;
             rb.linearVelocity = to.sqrMagnitude > 0.04f ? to.normalized * enemy.CurrentSpeed * SpeedFactor :Vector2.zero;
         }
         else
@@ -144,10 +144,10 @@ public abstract class SelfAnimatedBoss : MonoBehaviour
     /// <summary>Bild schaut nach rechts - steht der Spieler links, spiegeln. 0.3 Totzone gegen Flackern.</summary>
     protected void FacePlayer()
     {
-        PlayerController player = Player;
+        Transform player = Player;
         if (player == null || body == null) return;
 
-        float dx = player.transform.position.x - transform.position.x;
+        float dx = player.position.x - transform.position.x;
         if (Mathf.Abs(dx) <= 0.3f) return;
         facingLeft = dx < 0f;
         body.flipX = facingLeft;
@@ -160,15 +160,12 @@ public abstract class SelfAnimatedBoss : MonoBehaviour
         return (Vector2)transform.position + p;
     }
 
-    /// <summary>Der Spieler, solange er im Spiel ist - sonst null.</summary>
-    protected static PlayerController Player
-    {
-        get
-        {
-            PlayerController p = PlayerController.Instance;
-            return p != null && p.gameObject.activeSelf ? p : null;
-        }
-    }
+    /// <summary>
+    /// Der Spieler, auf den der Boss es gerade abgesehen hat - sonst null.
+    /// Allein der eigene; im Koop der naechste, der noch steht (<see cref="NetPlayers"/>).
+    /// </summary>
+    protected Transform Player =>
+        NetPlayers.TryNearest(transform.position, out NetPlayers.Target t) ? t.Transform : null;
 
     protected static Vector3 Snap(Vector2 p)
     {

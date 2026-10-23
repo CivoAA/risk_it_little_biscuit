@@ -122,8 +122,18 @@ public class Enemy : MonoBehaviour
     /// </summary>
     public Vector2 Velocity
     {
-        get { return rb != null ? rb.linearVelocity : Vector2.zero; }
+        get
+        {
+            if (IsRemote) return ProxyVelocity;
+            return rb != null ? rb.linearVelocity : Vector2.zero;
+        }
     }
+
+    /// <summary>Leben gerade jetzt (nach Lauf-Skalierung und Treffern).</summary>
+    public float CurrentHealth => health;
+
+    /// <summary>Der Renderer des Koerpers (fuer Bilder, die an Mitspieler gehen).</summary>
+    public SpriteRenderer MainRenderer => spriteRenderer;
 
     /// <summary>
     /// Bosse und Minibosse lassen sich nicht ziehen oder wegschieben. Elites
@@ -347,6 +357,83 @@ public class Enemy : MonoBehaviour
 
     private bool deathHeld;
 
+    // ---------------------------------------------------------------- Koop
+
+    /// <summary>
+    /// Stellvertreter eines Gegners, der einem Mitspieler gehoert
+    /// (<see cref="NetVisuals"/>). Er sieht aus wie der echte, laesst sich
+    /// treffen und tut bei Beruehrung weh - laufen, Leben verlieren und
+    /// sterben tut aber nur das Original beim Besitzer. Treffer gehen dorthin.
+    /// </summary>
+    public bool IsRemote { get; private set; }
+
+    /// <summary>Platz des Besitzers (nur Stellvertreter).</summary>
+    [System.NonSerialized] public int NetOwner = -1;
+
+    /// <summary>Nummer beim Besitzer. Am Original vergibt sie NetVisuals, sobald es jemand sieht.</summary>
+    [System.NonSerialized] public int NetId;
+
+    /// <summary>Tempo des Stellvertreters (aus den Positionen) - fuer den Vorhalt der Schuetzen.</summary>
+    [System.NonSerialized] public Vector2 ProxyVelocity;
+
+    /// <summary>Ist gestorben (nicht nur verschwunden) - die Mitspieler hoeren dann den Todesklang.</summary>
+    public bool NetDied { get; private set; }
+
+    private EnemyRole proxyRole;
+    private float nextPullSend, nextLureSend;
+
+    /// <summary>Am noch inaktiven Objekt aufrufen, vor Awake (siehe NetVisuals).</summary>
+    public void ConfigureProxy(int owner, int netId, EnemyId identity, EnemyRole role,
+                               float maxHp, float hp, float contactDamage, string displayName)
+    {
+        IsRemote = true;
+        NetOwner = owner;
+        NetId = netId;
+        id = EnemyId.None;
+        SpawnedAs = identity;
+        proxyRole = role;
+        health = Mathf.Max(1f, hp);
+        maxHealth = Mathf.Max(health, maxHp);
+        damage = contactDamage;
+        moveSpeed = 0f;
+        experienceToGive = 0;
+        rightlooking = false;
+        if (!string.IsNullOrEmpty(displayName)) DisplayName = displayName;
+    }
+
+    public void SetProxyRenderer(SpriteRenderer renderer)
+    {
+        if (IsRemote) spriteRenderer = renderer;
+    }
+
+    /// <summary>Stand vom Besitzer (Boss-Leiste, Lebensanzeigen).</summary>
+    public void NetSetHealth(float hp, float max)
+    {
+        if (!IsRemote) return;
+        health = Mathf.Max(0.01f, hp);
+        maxHealth = Mathf.Max(0.01f, max);
+    }
+
+    public void SetProxyFlags(byte flags)
+    {
+        if (!IsRemote) return;
+        Untouchable = (flags & 1) != 0;
+    }
+
+    /// <summary>
+    /// Besitzer: ein Mitspieler hat diesen Gegner getroffen. Der Schaden ist
+    /// schon fertig gerechnet (seine Multiplikatoren, sein Krit) - hier wird
+    /// nur noch abgezogen, zurueckgestossen und ggf. gestorben.
+    /// </summary>
+    public void NetReceiveHit(float amount, float knockback, float? slowMultiplier)
+    {
+        if (IsRemote || Untouchable || amount <= 0f || health <= 0f) return;
+        LoseHealth(amount);
+        ApplyKnockback(knockback);
+        if (DieIfDead()) return;
+        if (slowMultiplier.HasValue) ApplySlow(slowMultiplier.Value, 1.5f);
+    }
+
     /// <summary>Wer der Gegner ist: Katalog-Id, sonst wie der Director ihn gesetzt hat.</summary>
     public EnemyId Identity => id != EnemyId.None ? id : SpawnedAs;
 
@@ -366,6 +453,15 @@ public class Enemy : MonoBehaviour
         if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
         if (rb == null) rb = GetComponent<Rigidbody2D>();
         hop = GetComponent<HopMovement>();
+
+        // Stellvertreter: Werte kommen vom Besitzer, Leuchten und Bild auch.
+        if (IsRemote)
+        {
+            role = proxyRole;
+            facing = EnemyFacing.Neutral;
+            baseSpeed = 0f;
+            return;
+        }
 
         EnemyDef def = EnemyCatalog.Get(id);
         if (def != null)
@@ -501,6 +597,14 @@ public class Enemy : MonoBehaviour
     public void ApplyPull(Vector2 velocity, float holdTime = 0.2f)
     {
         if (IsBoss) return;
+        if (IsRemote)
+        {
+            // Wirbel ziehen jeden Frame - beim Besitzer reicht alle 0,1 s ein neuer Zug.
+            if (Time.time < nextPullSend) return;
+            nextPullSend = Time.time + 0.1f;
+            NetVisuals.Active?.QueueCtrl(this, NetVisuals.CtrlPull, velocity.x, velocity.y, Mathf.Max(holdTime, 0.15f));
+            return;
+        }
 
         externalVelocity = velocity;
         externalVelocityTimer = holdTime;
@@ -517,12 +621,16 @@ public class Enemy : MonoBehaviour
             restoreInterpolation = false;
         }
 
-        PlayerController player = PlayerController.Instance;
-        if (player == null || !player.gameObject.activeSelf)
+        // Stellvertreter bewegt NetVisuals.
+        if (IsRemote) return;
+
+        // Der naechste Spieler, der noch steht - allein immer der eigene.
+        if (!NetPlayers.TryNearest(transform.position, out NetPlayers.Target target))
         {
             if (rb != null) rb.linearVelocity = Vector2.zero;
             return;
         }
+        Vector2 player = target.Position;
 
         // Festgeklebt: kein Laufen, kein Umdrehen, kein Schieben.
         if (IsFrozen)
@@ -601,6 +709,11 @@ public class Enemy : MonoBehaviour
     public void Freeze(float seconds, float recycleDelay)
     {
         if (IsBoss || IsBubbled) return;
+        if (IsRemote)
+        {
+            NetVisuals.Active?.QueueCtrl(this, NetVisuals.CtrlFreeze, seconds, recycleDelay);
+            return;
+        }
 
         if (!IsFrozen)
         {
@@ -633,6 +746,11 @@ public class Enemy : MonoBehaviour
     /// <summary>Festkleben sofort beenden (Eiswuerfel-Spender: zerschmettert).</summary>
     public void EndFreeze()
     {
+        if (IsRemote)
+        {
+            NetVisuals.Active?.QueueCtrl(this, NetVisuals.CtrlEndFreeze, 0f);
+            return;
+        }
         if (IsFrozen) Unfreeze();
     }
 
@@ -673,7 +791,7 @@ public class Enemy : MonoBehaviour
     /// <see cref="IsBlocked"/> - wer hinten festhaengt und aus dem Bild faellt,
     /// wird vom Director nach vorn geholt.
     /// </summary>
-    private Vector3 PursuitDirection(PlayerController player)
+    private Vector3 PursuitDirection(Vector2 player)
     {
         Vector2 toPlayer = ChaseTarget(player) - (Vector2)transform.position;
         if (toPlayer.sqrMagnitude < 0.0001f) return Vector3.zero;
@@ -699,7 +817,7 @@ public class Enemy : MonoBehaviour
     /// festgeklebt sind und nicht schon in einer Blase stecken.
     /// </summary>
     public bool CanBeBubbled =>
-        IsNormal && !bubbled && !SelfSteered && !IsFrozen && !HoldDeath && !Untouchable
+        !IsRemote && IsNormal && !bubbled && !SelfSteered && !IsFrozen && !HoldDeath && !Untouchable
         && rb != null && health > 0f;
 
     /// <summary>
@@ -791,15 +909,22 @@ public class Enemy : MonoBehaviour
     public void Lure(Transform target, float seconds)
     {
         if (IsBoss || target == null) return;
+        if (IsRemote)
+        {
+            if (Time.time < nextLureSend) return;
+            nextLureSend = Time.time + 0.25f;
+            NetVisuals.Active?.QueueCtrl(this, NetVisuals.CtrlLure, target.position.x, target.position.y, seconds);
+            return;
+        }
 
         lureTarget = target;
         lureUntil = Time.time + seconds;
     }
 
     /// <summary>Wohin der Gegner gerade will: zum Lockziel, sonst zum Spieler.</summary>
-    private Vector2 ChaseTarget(PlayerController player)
+    private Vector2 ChaseTarget(Vector2 player)
     {
-        return IsLured ? (Vector2)lureTarget.position : (Vector2)player.transform.position;
+        return IsLured ? (Vector2)lureTarget.position : player;
     }
 
     // ------------------------------------------------------------- Stau
@@ -845,7 +970,7 @@ public class Enemy : MonoBehaviour
         blockedCheckTimer = 0f;
     }
 
-    private void UpdateBlocked(PlayerController player, float dt)
+    private void UpdateBlocked(Vector2 player, float dt)
     {
         if (blockedCheckTimer < 0f) blockedCheckTimer = Random.value * BlockedCheckInterval;
 
@@ -862,7 +987,7 @@ public class Enemy : MonoBehaviour
         }
 
         Vector2 me = BodyCenter;
-        Vector2 toPlayer = (Vector2)player.transform.position - me;
+        Vector2 toPlayer = player - me;
         float distance = toPlayer.magnitude;
 
         if (distance < BlockedMinDistance)
@@ -1107,7 +1232,7 @@ public class Enemy : MonoBehaviour
     /// ist. Die 0.2 Einheiten Totzone verhindern das Flackern, wenn der Spieler
     /// genau auf der Achse steht.
     /// </summary>
-    private void FacePlayer(PlayerController player)
+    private void FacePlayer(Vector2 player)
     {
         if (facing == EnemyFacing.Neutral || spriteRenderer == null) return;
 
@@ -1158,6 +1283,18 @@ public class Enemy : MonoBehaviour
             DamageNumberController.Instance.CreateNumber(finalDamage, transform.position);
         }
 
+        // Gegner eines Mitspielers: abgezogen wird bei ihm. Hier nur
+        // vorgerechnet, damit Lebensanzeigen sofort reagieren - sterben kann
+        // der Stellvertreter nicht.
+        if (IsRemote)
+        {
+            health = Mathf.Max(1f, health - finalDamage);
+            NetVisuals.Active?.QueueHit(this, finalDamage, knockback, slowMultiplier);
+            Damaged?.Invoke(this, damage);
+            if (LifeSteal.Instance != null) LifeSteal.Instance.StealLife((int)damage);
+            return;
+        }
+
         LoseHealth(finalDamage);
 
         // Fuer Waffen, die Treffer weiterreichen (Mochi-Faden) - roher Schaden
@@ -1187,6 +1324,12 @@ public class Enemy : MonoBehaviour
     {
         if (Untouchable || amount <= 0f) return;
         DamageNumberController.Instance.CreateNumberCrit(amount, transform.position);
+        if (IsRemote)
+        {
+            health = Mathf.Max(1f, health - amount);
+            NetVisuals.Active?.QueueHit(this, amount, 0f, null);
+            return;
+        }
         LoseHealth(amount);
         DieIfDead();
     }
@@ -1243,6 +1386,11 @@ public class Enemy : MonoBehaviour
     /// <summary>Bremst ohne Schaden, z.B. in der Windschneise des <see cref="TyphoonFan"/>.</summary>
     public void ApplySlow(float multiplier, float duration)
     {
+        if (IsRemote)
+        {
+            NetVisuals.Active?.QueueCtrl(this, NetVisuals.CtrlSlow, multiplier, duration);
+            return;
+        }
         slowFactor = Mathf.Min(slowFactor, Mathf.Clamp01(multiplier));
         slowUntil = Mathf.Max(slowUntil, Time.time + duration);
     }
@@ -1258,6 +1406,8 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
+        if (IsRemote) return;
+        NetDied = true;
         TryDropPickup();
 
         // Ohne Null-Pruefung reisst ein fehlender Spawner den ganzen
@@ -1366,7 +1516,7 @@ public class Enemy : MonoBehaviour
         for (int i = alive.Count - 1; i >= 0; i--)
         {
             Enemy other = alive[i];
-            if (other == null || other == this) continue;
+            if (other == null || other == this || other.IsRemote) continue;
             if (other.gameObject.layer != blockerLayer) continue;
 
             Destroy(other.gameObject);

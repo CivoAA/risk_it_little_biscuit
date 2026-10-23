@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class WorldManager3x3 : MonoBehaviour
@@ -58,10 +59,18 @@ public class WorldManager3x3 : MonoBehaviour
             centerWorldPos = transform.position;
 
         SnapGridToCenter(); // alle 9 Chunks exakt ausrichten
+
+        if (NetWorld.Deterministic) InitNet();
     }
 
     void Update()
     {
+        if (netMode)
+        {
+            UpdateNet();
+            return;
+        }
+
         if (PlayerController.Instance == null) return;
 
         Vector3 playerPos = PlayerController.Instance.transform.position;
@@ -97,6 +106,110 @@ public class WorldManager3x3 : MonoBehaviour
 
         chunks = newGrid;
         centerIndex = new Vector2Int((centerIndex.x - dir.x + 3) % 3, (centerIndex.y - dir.y + 3) % 3);
+    }
+
+    // ------------------------------------------------------------------ Koop
+    //
+    // Allein wandern neun Chunks mit dem Spieler. Im Koop gibt es mehrere
+    // Spieler - jeder braucht seine drei mal drei Zellen. Jede Zelle hat einen
+    // festen Inhalt (welcher der neun Chunks dort liegt, ergibt sich aus der
+    // Zelle modulo 3 - genau wie beim Wandern allein), und fuer jeden Inhalt
+    // gibt es so viele Kopien wie gerade gebraucht. Wo sich die Bereiche
+    // zweier Spieler ueberlappen, liegt eine Zelle nur einmal.
+
+    private bool netMode;
+    private Vector2 netOrigin;
+    private readonly GameObject[,] originals = new GameObject[3, 3];
+    private readonly List<GameObject>[,] pool = new List<GameObject>[3, 3];
+    private readonly Dictionary<Vector2Int, GameObject> placed = new Dictionary<Vector2Int, GameObject>();
+    private readonly HashSet<Vector2Int> needed = new HashSet<Vector2Int>();
+    private readonly List<Vector2Int> releasing = new List<Vector2Int>();
+
+    private void InitNet()
+    {
+        netMode = true;
+        netOrigin = centerWorldPos;
+        for (int x = 0; x < 3; x++)
+        {
+            for (int y = 0; y < 3; y++)
+            {
+                originals[x, y] = chunks[x, y];
+                pool[x, y] = new List<GameObject>();
+                if (chunks[x, y] == null) continue;
+                var cell = new Vector2Int(x - 1, y - 1);
+                placed[cell] = chunks[x, y];
+                // Auch die Ausgangslage nach Seed + Zelle - sonst stuenden bei
+                // einem Spieler die Baeume aus dem Editor, beim anderen gewuerfelte.
+                Reshuffle(chunks[x, y]);
+            }
+        }
+    }
+
+    private Vector2Int CellOf(Vector2 position)
+    {
+        return new Vector2Int(Mathf.RoundToInt((position.x - netOrigin.x) / chunkWidth),
+                              Mathf.RoundToInt((position.y - netOrigin.y) / chunkHeight));
+    }
+
+    private Vector3 CellPosition(Vector2Int cell, float z)
+    {
+        return new Vector3(netOrigin.x + cell.x * chunkWidth, netOrigin.y + cell.y * chunkHeight, z);
+    }
+
+    private static int Mod3(int v) => ((v % 3) + 3) % 3;
+
+    private void UpdateNet()
+    {
+        needed.Clear();
+        foreach (Vector2 anchor in NetWorld.Anchors())
+        {
+            Vector2Int c = CellOf(anchor);
+            for (int dx = -1; dx <= 1; dx++)
+                for (int dy = -1; dy <= 1; dy++)
+                    needed.Add(new Vector2Int(c.x + dx, c.y + dy));
+        }
+        if (needed.Count == 0) return;
+
+        // Zellen, die keiner mehr braucht, geben ihren Chunk frei.
+        releasing.Clear();
+        foreach (var kv in placed)
+            if (!needed.Contains(kv.Key)) releasing.Add(kv.Key);
+        foreach (Vector2Int cell in releasing)
+        {
+            GameObject go = placed[cell];
+            placed.Remove(cell);
+            if (go != null) pool[Mod3(cell.x + 1), Mod3(cell.y + 1)].Add(go);
+        }
+
+        foreach (Vector2Int cell in needed)
+        {
+            if (placed.ContainsKey(cell)) continue;
+            int kx = Mod3(cell.x + 1), ky = Mod3(cell.y + 1);
+            GameObject original = originals[kx, ky];
+            if (original == null) continue;
+
+            List<GameObject> free = pool[kx, ky];
+            GameObject go = null;
+            while (free.Count > 0 && go == null)
+            {
+                go = free[free.Count - 1];
+                free.RemoveAt(free.Count - 1);
+            }
+
+            bool fresh = go == null;
+            if (fresh) go = Instantiate(original, original.transform.parent);
+
+            go.transform.position = CellPosition(cell, original.transform.position.z);
+            placed[cell] = go;
+            // Kopien bringen die Baeume des Originals mit - neu wuerfeln. Wer
+            // nur umzieht, wuerfelt selbst (der Sprung ist immer drei Zellen gross).
+            if (fresh) Reshuffle(go);
+        }
+    }
+
+    private static void Reshuffle(GameObject chunk)
+    {
+        foreach (ChunkPropRandomizer r in chunk.GetComponentsInChildren<ChunkPropRandomizer>(true)) r.Reshuffle();
     }
 
     // setzt ALLE Chunk-Positionen absolut relativ zum logischen Zentrum

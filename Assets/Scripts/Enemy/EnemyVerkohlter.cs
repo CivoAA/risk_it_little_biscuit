@@ -1260,17 +1260,24 @@ public class EnemyVerkohlter : MonoBehaviour
         if (m != null) markers.Remove(m);
     }
 
-    private static bool Inside(Vector2 center, float radius)
+    // Koop: Inside merkt sich, WER drinsteht, und Hit trifft genau die -
+    // allein ist das der eigene Spieler, im Koop jeder in der Flaeche.
+    private readonly System.Collections.Generic.List<NetPlayers.Target> inside =
+        new System.Collections.Generic.List<NetPlayers.Target>();
+
+    private bool Inside(Vector2 center, float radius)
     {
-        if (!PlayerAlive) return false;
+        inside.Clear();
         float reach = radius + PlayerRadius;
-        return (PlayerPos - center).sqrMagnitude <= reach * reach;
+        foreach (NetPlayers.Target t in BossTargets.All())
+            if ((t.Position - center).sqrMagnitude <= reach * reach) inside.Add(t);
+        return inside.Count > 0;
     }
 
     private void Hit(float factor)
     {
-        if (!PlayerAlive) return;
-        PlayerController.Instance.TakeDamage(enemy.ContactDamage * factor);
+        foreach (NetPlayers.Target t in inside) NetPlayers.Hurt(t, enemy.ContactDamage * factor);
+        inside.Clear();
     }
 
     private static void Boom(float pixels, float seconds)
@@ -1282,13 +1289,11 @@ public class EnemyVerkohlter : MonoBehaviour
         }
     }
 
-    private static bool PlayerAlive =>
-        PlayerController.Instance != null && PlayerController.Instance.gameObject.activeSelf;
+    // Koop: der Boss zielt auf den naechsten Spieler, der noch steht - allein
+    // ist das immer der eigene. Getroffen wird jeder in der Flaeche (BossTargets).
+    private bool PlayerAlive => NetPlayers.TryNearest(transform.position, out _);
 
-    private static Vector2 PlayerPos =>
-        PlayerController.Instance != null
-            ? (Vector2)PlayerController.Instance.transform.position
-            : Vector2.zero;
+    private Vector2 PlayerPos => NetPlayers.NearestPosition(transform.position);
 
 #if UNITY_EDITOR
     /// <summary>Nur fuer VerkohlterBuilder.</summary>

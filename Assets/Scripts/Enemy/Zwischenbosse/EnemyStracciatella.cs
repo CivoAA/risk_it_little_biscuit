@@ -121,25 +121,31 @@ public class EnemyStracciatella : SelfAnimatedBoss
         FreezeHorde(glareTime);
         yield return PlayOnce(glare, 0, 1);
 
-        float moved = 0f;
+        // Koop: der Blick gilt fuer jeden Spieler - wer sich zu lange bewegt, wird erwischt.
+        var moved = new System.Collections.Generic.Dictionary<int, float>();
         bool zapped = false;
         t = 0f;
         while (t < glareTime)
         {
             t += Time.deltaTime;
             Show(glare, 2 + Mathf.FloorToInt(t * Fps) % 8);
-            PlayerController player = Player;
-            if (player == null) break;
+            if (Player == null) break;
 
             if (!zapped)
             {
                 SetEye(4 + Mathf.FloorToInt(t * 6f) % 4);
-                bool moving = !player.IsFrozen && player.playerMoveDirection.sqrMagnitude > 0.01f;
-                moved = moving && t > Grace ? moved + Time.deltaTime : 0f;
-                if (moved >= MoveTolerance)
+                Transform caught = null;
+                foreach (NetPlayers.Target target in BossTargets.All())
+                {
+                    moved.TryGetValue(target.Slot, out float m);
+                    m = NetPlayers.IsMoving(target) && t > Grace ? m + Time.deltaTime : 0f;
+                    moved[target.Slot] = m;
+                    if (m >= MoveTolerance && caught == null) caught = target.Transform;
+                }
+                if (caught != null)
                 {
                     zapped = true;
-                    yield return Zap(player);
+                    yield return Zap(caught);
                     // nach dem Treffer starrt er nicht mehr lange
                     t = Mathf.Max(t, glareTime - 0.5f);
                 }
@@ -151,7 +157,7 @@ public class EnemyStracciatella : SelfAnimatedBoss
     }
 
     /// <summary>Frostblick: Funkenstrahl von seinen Augen zum Spieler, dann Eisblock.</summary>
-    private IEnumerator Zap(PlayerController player)
+    private IEnumerator Zap(Transform player)
     {
         SetEye(8);
         Vector2 from = Local(EyesAt);
@@ -164,11 +170,19 @@ public class EnemyStracciatella : SelfAnimatedBoss
         yield return new WaitForSeconds(0.12f);
         SetEye(9);
 
-        player = Player;
-        if (player != null)
+        // Der Erwischte bekommt Schaden und Eis - ein Mitspieler per Nachricht.
+        if (player != null && NetPlayers.TryGetTarget(player, out NetPlayers.Target target))
         {
-            player.TakeDamage(enemy.ContactDamage * ZapDamageFactor);
-            if (player.gameObject.activeSelf) PlayerIceBlock.Apply(player, iceBlock, FreezeSeconds);
+            NetPlayers.Hurt(target, enemy.ContactDamage * ZapDamageFactor);
+            PlayerController local = target.Local;
+            if (local != null)
+            {
+                if (local.gameObject.activeSelf) PlayerIceBlock.Apply(local, iceBlock, FreezeSeconds);
+            }
+            else
+            {
+                NetPlayers.Freeze(target, FreezeSeconds);
+            }
         }
         ScreenShake.Kick(3f, 0.25f);
     }
@@ -206,13 +220,13 @@ public class EnemyStracciatella : SelfAnimatedBoss
     private void LateUpdate()
     {
         if (eyeMarker == null || !eyeMarker.enabled) return;
-        PlayerController player = Player;
+        Transform player = Player;
         if (player == null)
         {
             eyeMarker.enabled = false;
             return;
         }
-        eyeMarker.transform.position = Snap((Vector2)player.transform.position + EyeOffset);
+        eyeMarker.transform.position = Snap((Vector2)player.position + EyeOffset);
     }
 
     // ---------------------------------------------------------------- Funken

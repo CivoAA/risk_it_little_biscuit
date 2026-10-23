@@ -318,6 +318,9 @@ public static class Unlocks
     public static void Grant(UnlockDef def)
     {
         if (def == null) return;
+        // Der Koop schaltet nichts frei - bis auf den Begleiter, der nur am
+        // Charakter-Level haengt (und Level gibt es im Koop ja).
+        if (NetSession.InRun && def != Companion) return;
 
         UnlockStore s = Store;
         if (s.IsUnlocked(def.Id)) return;

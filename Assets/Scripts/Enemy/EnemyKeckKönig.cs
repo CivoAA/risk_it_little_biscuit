@@ -602,7 +602,7 @@ public class EnemyKeckKönig : MonoBehaviour
         FaceToward(direction);
         Loop(run, runP2, RunFps);
 
-        bool hitAlongPath = false;
+        var chargeHits = new BossTargets.HitSet();
         float running = 0f;
         Vector2 previous = rb.position;
 
@@ -618,11 +618,9 @@ public class EnemyKeckKönig : MonoBehaviour
             // Die Strecke pruefen, nicht nur die Position: bei 26 Einheiten
             // pro Sekunde liegen zwischen zwei Frames gut 0.4 Einheiten, und
             // ein reiner Abstandstest wuerde den Spieler durchrutschen lassen.
-            if (!hitAlongPath && SegmentHitsPlayer(previous, now, ChargeWidth * size * 0.5f))
-            {
-                hitAlongPath = true;
-                Hit(ChargeDamage);
-            }
+            // Jeder Spieler auf der Bahn einmal (im Koop auch Mitspieler).
+            BossTargets.HurtOnSegment(previous, now, ChargeWidth * size * 0.5f + PlayerRadius,
+                                      ChargeDamage * RunDifficulty.DamageFactor, chargeHits);
             previous = now;
 
             // Ziel erreicht oder daran vorbei
@@ -636,10 +634,8 @@ public class EnemyKeckKönig : MonoBehaviour
         Untrack(spot);
         ScreenShake.Kick(ShakeCharge, ShakeChargeTime);
 
-        if (PlayerAlive && Vector2.Distance(PlayerPos, transform.position) <= ChargeImpactRadius + PlayerRadius)
-        {
-            Hit(ChargeImpactDamage);
-        }
+        BossTargets.HurtInCircle(transform.position, ChargeImpactRadius + PlayerRadius,
+                                 ChargeImpactDamage * RunDifficulty.DamageFactor);
 
         // In der Kette ist die Pause kurz - dann nur der Anfang vom Bremsen,
         // schneller abgespielt, und gleich wieder ausholen.
@@ -747,11 +743,11 @@ public class EnemyKeckKönig : MonoBehaviour
                 }
             }
 
-            if (PlayerAlive && flight - lastHit >= CrownHitCooldown
-                && Vector2.Distance(PlayerPos, pos) <= CrownRadius * size + PlayerRadius)
+            if (flight - lastHit >= CrownHitCooldown
+                && BossTargets.HurtInCircle(pos, CrownRadius * size + PlayerRadius,
+                                            CrownDamage * RunDifficulty.DamageFactor) > 0)
             {
                 lastHit = flight;
-                Hit(CrownDamage);
             }
 
             yield return null;
@@ -773,7 +769,7 @@ public class EnemyKeckKönig : MonoBehaviour
         faceLock = 0;
     }
 
-    private static Vector2 CrownTarget(Vector2 from)
+    private Vector2 CrownTarget(Vector2 from)
     {
         Vector2 direction = PlayerPos - from;
         if (direction.sqrMagnitude < 0.0001f) direction = Vector2.left;
@@ -863,10 +859,7 @@ public class EnemyKeckKönig : MonoBehaviour
                 StartCoroutine(PlayImpact(spots[i]));
                 ScreenShake.Kick(ShakeRain, ShakeRainTime);
 
-                if (PlayerAlive && Vector2.Distance(PlayerPos, spots[i]) <= RainRadius + PlayerRadius)
-                {
-                    Hit(RainDamage);
-                }
+                BossTargets.HurtInCircle(spots[i], RainRadius + PlayerRadius, RainDamage * RunDifficulty.DamageFactor);
             }
 
             yield return null;
@@ -980,7 +973,7 @@ public class EnemyKeckKönig : MonoBehaviour
         rb.linearVelocity = delta.sqrMagnitude > 0.04f ? delta.normalized * speed : Vector2.zero;
     }
 
-    private static bool SegmentHitsPlayer(Vector2 from, Vector2 to, float radius)
+    private bool SegmentHitsPlayer(Vector2 from, Vector2 to, float radius)
     {
         if (!PlayerAlive) return false;
 
@@ -997,31 +990,17 @@ public class EnemyKeckKönig : MonoBehaviour
 
     private void Hit(float damage)
     {
-        if (!PlayerAlive) return;
-
         // Wie bei den Gegnern haengt auch der Boss am Chaos-Regler, sonst
         // waere er in einem harten Lauf ploetzlich der harmloseste Teil.
-        PlayerController.Instance.TakeDamage(damage * RunDifficulty.DamageFactor);
+        if (NetPlayers.TryNearest(transform.position, out NetPlayers.Target target))
+            NetPlayers.Hurt(target, damage * RunDifficulty.DamageFactor);
     }
 
-    private static bool PlayerAlive
-    {
-        get
-        {
-            return PlayerController.Instance != null
-                && PlayerController.Instance.gameObject.activeSelf;
-        }
-    }
+    // Koop: der Boss zielt auf den naechsten Spieler, der noch steht - allein
+    // ist das immer der eigene. Getroffen wird jeder in der Flaeche (BossTargets).
+    private bool PlayerAlive => NetPlayers.TryNearest(transform.position, out _);
 
-    private static Vector2 PlayerPos
-    {
-        get
-        {
-            return PlayerController.Instance != null
-                ? (Vector2)PlayerController.Instance.transform.position
-                : Vector2.zero;
-        }
-    }
+    private Vector2 PlayerPos => NetPlayers.NearestPosition(transform.position);
 
     private BossTelegraphMarker Track(BossTelegraphMarker marker)
     {
