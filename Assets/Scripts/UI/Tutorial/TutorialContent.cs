@@ -13,6 +13,9 @@ public enum TutorialTopic
     Shop,
     Capsule,
     Difficulty,
+
+    /// <summary>Einmaliger Hinweis nach einem Skilltree-Reset durch ein Update (<see cref="SaveReset"/>).</summary>
+    SkilltreeReset,
 }
 
 /// <summary>Eine Seite: Bildtafel links, Ueberschrift + Text (+ Hinweiskasten) rechts.</summary>
@@ -31,6 +34,10 @@ public sealed class TutorialTopicDef
     public string Key;
 
     public string Title;
+
+    /// <summary>Nicht in der Bibliothek - ein Hinweis, der nur einmal kommt.</summary>
+    public bool Hidden;
+
     public System.Func<Sprite> Icon;
     public TutorialPageDef[] Pages;
 
@@ -286,6 +293,24 @@ public static class TutorialContent
                               "Je mehr du von einer Art besiegst, desto mehr Schaden machst du gegen sie.",
                         TipIcon = () => GameHudSkin.Skull,
                         Draw = DrawCapsule,
+                    },
+                },
+            },
+            new TutorialTopicDef
+            {
+                Topic = TutorialTopic.SkilltreeReset, Key = "skilltree_reset", Title = "SKILLTREE",
+                Hidden = true,
+                Icon = () => GameHudSkin.Gem,
+                Pages = new[]
+                {
+                    new TutorialPageDef
+                    {
+                        Head = "Skilltree zurückgesetzt",
+                        Body = "Durch ein *Balancing-Update* wurden alle Skilltrees *zurückgesetzt*. Du hast " +
+                               "*alle Skillpunkte zurückbekommen* - deine Charakter-XP bleiben erhalten.",
+                        Tip = "*Sterne* kosten jetzt *3 Punkte* statt 2. Lern deine Knoten einfach neu.",
+                        TipIcon = () => GameHudSkin.Gem,
+                        Draw = DrawPoints,
                     },
                 },
             },

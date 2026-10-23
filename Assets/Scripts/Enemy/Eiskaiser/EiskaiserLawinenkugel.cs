@@ -229,9 +229,12 @@ public class EiskaiserLawinenkugel : MonoBehaviour
         if (done) return;
         float reach = AvalancheBase + AvalanchePerSize * size;
         Vector2 c = Center;
-        scratch.Clear();
-        scratch.AddRange(Enemy.Alive);
-        foreach (Enemy e in scratch)
+        // Eigene Liste statt scratch: reisst die Lawine eine zweite Kugel mit,
+        // laeuft deren OnShotDown mitten in dieser Schleife. Mit der geteilten
+        // Liste flog dann "Collection was modified" bis in die Waffe hoch,
+        // die geschossen hatte (Schwerthieb/Schalenklinge blieb stehen).
+        var around = new List<Enemy>(Enemy.Alive);
+        foreach (Enemy e in around)
         {
             if (e == null || e == enemy || e.IsBoss) continue;
             if (((Vector2)e.transform.position - c).sqrMagnitude > reach * reach) continue;

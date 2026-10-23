@@ -483,9 +483,10 @@ public class EnemySquiddy : MonoBehaviour
         }
         body.enabled = true;
 
+        // Die Musik laeuft bis zum Heiligenschein weiter und blendet erst dort
+        // ueber - vorher war hier ~4 s Stille, das klang, als waere sie weg.
         AudioController audio = AudioController.Instance;
         AudioClip mapMusic = audio != null ? audio.CurrentRunClip : null;
-        if (audio != null) audio.FadeRunMusic(1.4f);
         SquiddySounds.Rumble();
 
         StartCoroutine(Dim(0f, 0.55f, 0.7f));
@@ -585,7 +586,7 @@ public class EnemySquiddy : MonoBehaviour
 
         AudioController audio = AudioController.Instance;
         AudioClip next = phaseTwoMusic != null ? phaseTwoMusic : mapMusic;
-        if (audio != null && next != null) audio.SwapRunMusic(next, 0f, phaseTwoMusic != null ? 0.4f : 1.5f);
+        if (audio != null && next != null) audio.SwapRunMusic(next, 1.2f, phaseTwoMusic != null ? 0.4f : 1.5f);
     }
 
     // ============================================================ PHASE 2

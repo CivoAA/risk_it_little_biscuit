@@ -15,7 +15,7 @@ public class ExpPickup : MonoBehaviour
     /// <summary>
     /// Ab so viel XP wird das Bonbon mittel bzw. gross (gleich wie SpawnExp).
     /// Passend zu den Gegnern: Grundgegner (1-9 XP) klein, zaehe Brocken
-    /// (Eichel, Golem ...) mittel, Elites, Minibosse und Honey/Pfannkuchen gross.
+    /// (Eichel, Golem, Honey ...) mittel, Elites und Minibosse gross.
     /// </summary>
     public const int MediumFrom = 10, BigFrom = 100;
 

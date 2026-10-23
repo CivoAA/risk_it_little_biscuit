@@ -3,6 +3,9 @@ using System.Collections;
 
 public class BloodyFork : Weapon
 {
+    /// <summary>So viel vom AOE-Zuwachs bekommt das Bild (die Hitbox bekommt alles).</summary>
+    private const float ArtGrowth = 0.8f;
+
     [SerializeField] private GameObject prefab;
     private float spawnCounter;
     private bool shooting = false;
@@ -80,9 +83,19 @@ public class BloodyFork : Weapon
         Vector3 pos = transform.position + offset;
         GameObject fork = Instantiate(prefab, pos, Quaternion.Euler(0f, 0f, angle), transform);
 
-        // 🔹 Fork-Größe dynamisch skalieren mit AOERange
-        float scaleFactor = PlayerController.Instance.AOERange;
-        fork.transform.localScale *= scaleFactor;
+        // Mit AOERange wachsen: die Hitbox voll, das Bild nur zu ArtGrowth -
+        // jede Skalierung macht Mixels, so fallen sie weniger auf.
+        float aoe = PlayerController.Instance.AOERange;
+        float art = 1f + (aoe - 1f) * ArtGrowth;
+        fork.transform.localScale *= art;
+
+        BoxCollider2D box = fork.GetComponent<BoxCollider2D>();
+        if (box != null && art > 0.0001f)
+        {
+            float k = aoe / art;
+            box.size *= k;
+            box.offset *= k;
+        }
 
         StartCoroutine(DestroyAfterDelay(fork, 0.5f));
     }

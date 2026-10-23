@@ -15,7 +15,10 @@ using UnityEngine;
 ///   macht die letzten Level deutlich teurer.
 ///
 /// EndGrowth wird nicht eingestellt, sondern so gerechnet, dass Level
-/// FullTreeLevel (ein voller Baum, ohne Boss-Level) genau FullTreeXp kostet.
+/// FullTreeLevel genau FullTreeXp kostet.
+///
+/// Ab LateLevel kostet jedes Level noch einmal mehr: Level n kostet
+/// (1 + LateRamp * (n - LateLevel)) mal so viel wie in der Kurve oben.
 ///
 /// Zum Nachstellen reichen die Zahlen unten.
 /// </summary>
@@ -25,7 +28,11 @@ public static class CharLevel
     public const double Level2Xp   = 16200;
     public const double StepGrowth = 0.15;
 
-    /// <summary>Level, ab dem ein voller Baum (41 Punkte) bezahlt ist.</summary>
+    /// <summary>
+    /// Eichpunkt der Grundkurve: so viele Punkte hatte ein voller Baum, als die
+    /// Kurve gebaut wurde. Seit 23.10.2026 kosten Sterne 3, ein Baum hat 46 -
+    /// der Wert bleibt trotzdem stehen, sonst verschiebt sich die ganze Kurve.
+    /// </summary>
     public const int    FullTreeLevel = 41;
 
     /// <summary>Gesamt-XP fuer FullTreeLevel. Vorher 2.543.400.</summary>
@@ -58,6 +65,12 @@ public static class CharLevel
     /// <summary>Obergrenze, nur damit keine Schleife endlos laeuft.</summary>
     public const int MaxLevel = 200;
 
+    /// <summary>Bis zu diesem Level gilt die Grundkurve, danach wird jedes Level teurer.</summary>
+    public const int LateLevel = 25;
+
+    /// <summary>Aufschlag je Level ueber <see cref="LateLevel"/> (0.03 = Level 35 kostet 30 % mehr als in der Grundkurve).</summary>
+    public const double LateRamp = 0.03;
+
     // ------------------------------------------------------------ Nachhol-Bonus
     //
     //  Jede Map hat ein Ziel-Level (RunDifficulty.CatchUpTarget). Liegt der
@@ -82,6 +95,27 @@ public static class CharLevel
 
     /// <summary>Gesamt-XP, ab der ein Charakter dieses Level hat.</summary>
     public static double XpForLevel(int level)
+    {
+        if (level <= LateLevel) return BaseXp(level);
+
+        // Die spaeten Level einmal aufsummieren, danach nur noch nachschlagen
+        if (lateXp == null)
+        {
+            lateXp = new double[MaxLevel + 2];
+            double total = BaseXp(LateLevel);
+            for (int n = LateLevel + 1; n < lateXp.Length; n++)
+            {
+                total += (BaseXp(n) - BaseXp(n - 1)) * (1 + LateRamp * (n - LateLevel));
+                lateXp[n] = System.Math.Round(total);
+            }
+        }
+        return level < lateXp.Length ? lateXp[level] : lateXp[lateXp.Length - 1];
+    }
+
+    private static double[] lateXp;
+
+    /// <summary>Die Grundkurve ohne den spaeten Aufschlag.</summary>
+    private static double BaseXp(int level)
     {
         if (level <= 0) return 0;
         if (level == 1) return System.Math.Round(Level1Xp * CostFactor);

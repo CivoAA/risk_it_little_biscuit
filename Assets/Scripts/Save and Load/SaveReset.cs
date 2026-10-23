@@ -28,10 +28,12 @@ using UnityEngine;
 ///   3 - Neue Levelkurve (CharLevel, voller Baum = 7,5 Mio. XP): wieder nur
 ///       die gelernten Knoten weg. Die XP bleiben, das Level rechnet sich
 ///       daraus neu - niemand faengt bei 0 an.
+///   4 - Sterne kosten 3 statt 2 Punkte, Charakter-Level ab 25 teurer: wieder
+///       nur die gelernten Knoten weg, alle Punkte kommen zurueck. XP bleiben.
 /// </summary>
 public static class SaveReset
 {
-    public const int SaveVersion = 3;
+    public const int SaveVersion = 4;
 
     private const string MarkerFile = "save_version.txt";
 
@@ -75,7 +77,7 @@ public static class SaveReset
                 foreach (string dir in SaveDirectories(root))
                 {
                     if (version < 1) DeleteProgress(dir);
-                    else if (version < 3) ClearSkillTrees(dir);
+                    else if (version < 4) ClearSkillTrees(dir);
                 }
             }
 
@@ -129,6 +131,36 @@ public static class SaveReset
         store.ClearAllUnlocks();
         store.Save();
         Debug.Log("[SaveReset] Skilltrees zurueckgesetzt, Charakter-XP bleiben.");
+
+        // Beim naechsten Oeffnen des Skilltrees einmal Bescheid sagen
+        File.WriteAllText(Path.Combine(Application.persistentDataPath, NoticeFile), "1");
+    }
+
+    /// <summary>
+    /// Merker fuer den Hinweis "Skilltree wurde zurueckgesetzt". Bewusst .txt:
+    /// die Steam Cloud nimmt ihn nicht mit (nur *.json und save_version.txt),
+    /// er gilt nur auf dem Rechner, auf dem der Reset lief.
+    /// </summary>
+    private const string NoticeFile = "skilltree_reset_notice.txt";
+
+    /// <summary>
+    /// True genau einmal nach einem Skilltree-Reset durch ein Update - der
+    /// Merker ist danach weg. Fragt <see cref="HubSkilltreeUI"/> beim Oeffnen.
+    /// </summary>
+    public static bool TakeSkilltreeNotice()
+    {
+        string path = Path.Combine(Application.persistentDataPath, NoticeFile);
+        try
+        {
+            if (!File.Exists(path)) return false;
+            File.Delete(path);
+            return true;
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning("[SaveReset] Hinweis-Merker: " + e.Message);
+            return false;
+        }
     }
 
     private static int ReadVersion(string markerPath)

@@ -708,7 +708,7 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Boss/KecksKoenig.prefab");
 
         Def(EnemyId.Eichel, "Eichel",
-            health: 45f, damage: 5f, speed: 1.3f, exp: 18, pushTime: 0.2f,
+            health: 45f, damage: 5f, speed: 1.3f, exp: 16, pushTime: 0.2f,
             role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/new/eichel.png", fps: 8f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
@@ -757,7 +757,7 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Mini_Boss/Milchpanzer.prefab");
 
         Def(EnemyId.Honey, "Honey",
-            health: 150f, damage: 10f, speed: 1.4f, exp: 45, pushTime: 0f,
+            health: 150f, damage: 10f, speed: 1.4f, exp: 30, pushTime: 0f,
             role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/new/honey.png", fps: 8f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
@@ -963,14 +963,14 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Gegner/Beerenspinne.prefab");
 
         Def(EnemyId.Walnusskrabbe, "Walnuss-Krabbe",
-            health: 70f, damage: 6f, speed: 1.4f, exp: 26, pushTime: 0.15f,
+            health: 70f, damage: 6f, speed: 1.4f, exp: 23, pushTime: 0.15f,
             role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/wald/walnusskrabbe_krabbel.png", fps: 14f,
             colliderRadius: 0.4f, colliderOffset: new Vector2(0f, 0.4f), scale: 1f,
             prefab: "Assets/Prefabs/Enemy/Gegner/Walnusskrabbe.prefab");
 
         Def(EnemyId.Honigbaer, "Honigbaerchen",
-            health: 35f, damage: 5f, speed: 1.8f, exp: 12, pushTime: 0.2f,
+            health: 35f, damage: 5f, speed: 1.8f, exp: 11, pushTime: 0.2f,
             role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/new/wald/honigbaer_watschel.png", fps: 14f,
             colliderRadius: 0.34f, colliderOffset: new Vector2(0f, 0.42f), scale: 1f,
@@ -1189,7 +1189,7 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Elite_Gegner/CremeBrulee.prefab");
 
         Def(EnemyId.Baumkuchen, "Baumkuchen-Stumpf",
-            health: 180f, damage: 11f, speed: 1.75f, exp: 80, pushTime: 0.05f,
+            health: 180f, damage: 11f, speed: 1.75f, exp: 70, pushTime: 0.05f,
             role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/new/wald/baumkuchen_stapf.png", fps: 12f,
             colliderRadius: 0.55f, colliderOffset: new Vector2(0f, 0.62f), scale: 1f,

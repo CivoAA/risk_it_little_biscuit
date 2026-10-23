@@ -155,8 +155,30 @@ public class SwordSlash : Weapon
 
     private IEnumerator RunAttack()
     {
-        yield return Attack();
+        // Von Hand durchlaufen statt "yield return Attack()": wirft ein Treffer
+        // eine Exception (z.B. in einem Gegner), bricht sonst die Coroutine ab,
+        // swinging bleibt true und die Waffe schlaegt nie wieder.
+        IEnumerator attack = Attack();
+        while (true)
+        {
+            bool more;
+            try { more = attack.MoveNext(); }
+            catch (System.Exception e)
+            {
+                Debug.LogException(e);
+                more = false;
+            }
+            if (!more) break;
+            yield return attack.Current;
+        }
+
         spawnCounter = NextAttackDelay();
+        swinging = false;
+    }
+
+    /// <summary>Abgeschaltet stirbt die Coroutine mit - sonst haengt swinging danach fest.</summary>
+    protected virtual void OnDisable()
+    {
         swinging = false;
     }
 

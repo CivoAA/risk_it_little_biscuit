@@ -156,7 +156,7 @@ public class TutorialPanel : MonoBehaviour
 
         panel.library = asLibrary;
         panel.topics = asLibrary
-            ? new List<TutorialTopicDef>(TutorialContent.All)
+            ? new List<TutorialTopicDef>(TutorialContent.All).FindAll(t => !t.Hidden)
             : new List<TutorialTopicDef> { TutorialContent.Get(topic) };
         panel.topicIndex = Mathf.Max(0, panel.topics.FindIndex(t => t.Topic == topic));
         panel.pageIndex = 0;

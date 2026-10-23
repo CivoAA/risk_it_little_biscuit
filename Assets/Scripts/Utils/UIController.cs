@@ -181,7 +181,9 @@ public class UIController : MonoBehaviour
     public void LevelUpPanelClose()
     {
         LevelUpPanel.SetActive(false);
-        Time.timeScale = 1f;
+        // Kam gleichzeitig ein Mixer, zeigt der LevelUpScreen jetzt den -
+        // das Spiel bleibt stehen, bis auch der gewaehlt ist.
+        if (!PowerUpPanel.activeSelf) Time.timeScale = 1f;
     }
     public void EvoPanelOpen()
     {
@@ -204,7 +206,8 @@ public class UIController : MonoBehaviour
     public void PowerUpPanelClose()
     {
         PowerUpPanel.SetActive(false);
-        Time.timeScale = 1f;
+        // Umgekehrt genauso: ein offenes Level-Up laeuft nicht in Echtzeit weiter.
+        if (!LevelUpPanel.activeSelf && !EvoPanel.activeSelf) Time.timeScale = 1f;
     }
 
     public void RerollLevelUp()

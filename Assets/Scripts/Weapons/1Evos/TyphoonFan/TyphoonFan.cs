@@ -8,8 +8,8 @@ using UnityEngine;
 /// Zielt und schlaegt wie der <see cref="SaladFan"/> (erbt von ihm), aber mit
 /// wenigen, schweren Wellen: Schaden x<see cref="DamageFactor"/> der hoechsten
 /// Faecherstufe, groesser, schneller, durchschlagender. Dafuer zaehlen
-/// Extra-Schuesse nur halb (<see cref="ExtraShotsPerShot"/>): ein Faecher mit
-/// 8 Wellen wird zum Taifunfaecher mit 4.
+/// Extra-Schuesse nur halb (<see cref="ExtraShotsPerShot"/>): zwei Extra-Schuesse
+/// fuer eine Welle mehr. Grundwert sind 6 Wellen.
 ///
 /// Jede Hauptwelle zieht eine Windschneise (<see cref="TyphoonTrail"/>) hinter
 /// sich her, die Gegner bremst. Steht Toast selbst darin, hat er Rueckenwind
@@ -101,8 +101,8 @@ public class TyphoonFan : SaladFan
                 cooldown = max.cooldown,
                 damage = max.damage * DamageFactor,
                 range = max.range + 0.5f,
-                shots = 4,
-                description = "Vier schwere Taifunwellen mit Windschneise",
+                shots = 6,
+                description = "Sechs schwere Taifunwellen mit Windschneise",
             },
         };
         maxweaponLevel = 0;

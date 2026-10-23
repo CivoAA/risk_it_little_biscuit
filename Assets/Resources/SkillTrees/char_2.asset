@@ -407,7 +407,7 @@ MonoBehaviour:
     lane: 1
     step: 5
     shape: 3
-    price: 2
+    price: 3
     displayName: "Gl\xFCckskeks"
     description: 
     icon: {fileID: 0}
@@ -563,7 +563,7 @@ MonoBehaviour:
     lane: 1
     step: 5
     shape: 3
-    price: 2
+    price: 3
     displayName: Meisterschaft
     description: 
     icon: {fileID: 0}
@@ -667,7 +667,7 @@ MonoBehaviour:
     lane: 1
     step: 5
     shape: 3
-    price: 2
+    price: 3
     displayName: Schattenschwarm
     description: 
     icon: {fileID: 0}
@@ -684,7 +684,7 @@ MonoBehaviour:
     lane: 0
     step: 5
     shape: 3
-    price: 2
+    price: 3
     displayName: Kawarimi
     description: 
     icon: {fileID: 0}
@@ -701,7 +701,7 @@ MonoBehaviour:
     lane: 2
     step: 5
     shape: 3
-    price: 2
+    price: 3
     displayName: Klebreis
     description: 
     icon: {fileID: 0}

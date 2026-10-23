@@ -150,6 +150,9 @@ public class HubSkilltreeUI : MonoBehaviour
 
         PlaySfx(openClip);
 
+        // Nach einem Update mit Skilltree-Reset einmal Bescheid sagen (auch ohne "Tipps");
+        // das normale Skilltree-Tutorial kommt dann beim naechsten Oeffnen.
+        if (SaveReset.TakeSkilltreeNotice()) TutorialPanel.Open(TutorialTopic.SkilltreeReset);
         TutorialPanel.ShowOnce(TutorialTopic.Skilltree);
     }
 

@@ -223,7 +223,9 @@ public class PlayerController : MonoBehaviour
     //  Ab BarrierLevel (die Schwelle gegen Ueberleveln in den ersten Laeufen)
     //  kostet ein Level BarrierCost, jedes weitere LateGrowth mehr, und alle
     //  TierEvery Level kommt noch einmal TierJump drauf (35, 45, 55, ...).
-    //  Grob: Level 30 ~21k XP ab Laufstart, 45 ~86k, 60 ~250k.
+    //  Ab SteepLevel wird jedes Level noch SteepGrowth mal teurer als sonst,
+    //  SteepLevels lang; danach bleibt dieser Aufschlag und die Kurve laeuft normal weiter.
+    //  Grob: Level 30 ~21k XP ab Laufstart, 45 ~86k, 55 ~250k, 70 ~1M, 100 ~7,5M.
 
     /// <summary>Ab diesem Level gilt die spaete Kurve.</summary>
     public const int BarrierLevel = 25;
@@ -239,6 +241,15 @@ public class PlayerController : MonoBehaviour
 
     /// <summary>Aufschlag je Stufe.</summary>
     public const float TierJump = 1.35f;
+
+    /// <summary>Ab diesem Level zieht die Kurve noch einmal an.</summary>
+    public const int SteepLevel = 45;
+
+    /// <summary>Zusaetzlicher Faktor je Level ab <see cref="SteepLevel"/> ...</summary>
+    public const float SteepGrowth = 1.1f;
+
+    /// <summary>... so viele Level lang (45-54), danach bleibt der Aufschlag stehen (x2,6).</summary>
+    public const int SteepLevels = 10;
 
     // Levelkurve einmalig aufbauen (vorher jeden Frame in Update geprüft)
     private void BuildLevelCurve()
@@ -266,6 +277,7 @@ public class PlayerController : MonoBehaviour
             {
                 int k = level - BarrierLevel;
                 float cost = BarrierCost * Mathf.Pow(LateGrowth, k) * Mathf.Pow(TierJump, k / TierEvery);
+                if (level >= SteepLevel) cost *= Mathf.Pow(SteepGrowth, Mathf.Min(level - SteepLevel + 1, SteepLevels));
                 playerLevels.Add(Mathf.CeilToInt(cost));
             }
         }

@@ -44,7 +44,19 @@ public static class SquiddySounds
     public static void Zap() => Play(zap ??= Crackle("SquiddyZap", 0.16f), 0.3f);
     public static void Charge() => Play(charge ??= Buzz("SquiddyCharge", 1.7f), 0.55f);
     public static void Discharge() => Play(discharge ??= Thunder("SquiddyDischarge", 1.3f), 1f);
-    public static void Erupt() => Play(erupt ??= Bubble("SquiddyErupt", 0.3f, 90f, 260f, true), 0.35f);
+    /// <summary>
+    /// Kommt beim Nessel-Stern von jedem Tentakel (bis zu 60 in einer halben
+    /// Sekunde, je 6 gleichzeitig) - darum hoechstens alle <see cref="EruptGap"/> Sekunden.
+    /// </summary>
+    public static void Erupt()
+    {
+        if (Time.time < nextErupt) return;
+        nextErupt = Time.time + EruptGap;
+        Play(erupt ??= Bubble("SquiddyErupt", 0.3f, 90f, 260f, true), 0.35f);
+    }
+
+    private const float EruptGap = 0.12f;
+    private static float nextErupt;
     public static void Plop() => Play(plop ??= Bubble("SquiddyPlop", 0.16f, 300f, 700f), 0.5f);
     public static void Pop() => Play(pop ??= Crackle("SquiddyPop", 0.3f, true), 0.45f);
     public static void Ascend() => Play(ascend ??= Choir("SquiddyAscend", 3.6f, false), 0.8f);
