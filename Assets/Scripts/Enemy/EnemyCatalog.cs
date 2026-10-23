@@ -757,7 +757,7 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Mini_Boss/Milchpanzer.prefab");
 
         Def(EnemyId.Honey, "Honey",
-            health: 450f, damage: 10f, speed: 1.4f, exp: 120, pushTime: 0f,
+            health: 150f, damage: 10f, speed: 1.4f, exp: 45, pushTime: 0f,
             role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/new/honey.png", fps: 8f,
             colliderRadius: 0f, colliderOffset: new Vector2(0f, 0f), scale: 1f,
@@ -806,7 +806,7 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Boss/VerkohlterTod.prefab");
 
         Def(EnemyId.Pancake, "Pfannkuchen",
-            health: 600f, damage: 10f, speed: 1.75f, exp: 100, pushTime: 0.05f,
+            health: 180f, damage: 10f, speed: 1.75f, exp: 55, pushTime: 0.05f,
             role: EnemyRole.Normal, facing: EnemyFacing.Neutral,
             sheet: "Assets/Art/Gegner/new/pfannkuchen_hop.png", fps: 16f,
             colliderRadius: 0.72f, colliderOffset: new Vector2(0f, 0.72f), scale: 1f,
@@ -876,7 +876,7 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Gegner/Zuckerwolke.prefab");
 
         Def(EnemyId.KokosYeti, "Kokos-Yeti",
-            health: 900f, damage: 9f, speed: 1.2f, exp: 200, pushTime: 0.05f,
+            health: 240f, damage: 9f, speed: 1.2f, exp: 70, pushTime: 0.05f,
             role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/new/eis/kokosyeti_stapf.png", fps: 12f,
             colliderRadius: 0.5f, colliderOffset: new Vector2(0f, 0.62f), scale: 1f,
@@ -1189,7 +1189,7 @@ public static class EnemyCatalog
             prefab: "Assets/Prefabs/Enemy/Elite_Gegner/CremeBrulee.prefab");
 
         Def(EnemyId.Baumkuchen, "Baumkuchen-Stumpf",
-            health: 600f, damage: 11f, speed: 1.75f, exp: 300, pushTime: 0.05f,
+            health: 180f, damage: 11f, speed: 1.75f, exp: 80, pushTime: 0.05f,
             role: EnemyRole.Normal, facing: EnemyFacing.ArtFacesLeft,
             sheet: "Assets/Art/Gegner/new/wald/baumkuchen_stapf.png", fps: 12f,
             colliderRadius: 0.55f, colliderOffset: new Vector2(0f, 0.62f), scale: 1f,

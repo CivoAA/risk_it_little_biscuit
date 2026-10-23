@@ -1144,7 +1144,7 @@ public class Enemy : MonoBehaviour
     {
         if (Untouchable) return;
 
-        float finalDamage = damage * PlayerController.Instance.damageMultiplier * Bestiary.DamageFactor(id) * DamageTakenFactor * SauceFactor;
+        float finalDamage = damage * PlayerController.Instance.damageMultiplier * Bestiary.DamageFactor(Identity) * DamageTakenFactor * SauceFactor;
         float critChance = PlayerController.Instance.critChance;
         float critDamage = PlayerController.Instance.critDamage;
 
@@ -1269,7 +1269,7 @@ public class Enemy : MonoBehaviour
         SpawnDeathEffect();
         if (GameManager.Instance != null) GameManager.Instance.kills++;
         EndlessScore.AddKill(role);
-        Bestiary.AddKill(id);
+        Bestiary.AddKill(Identity);
 
         AudioController.Instance.PlayEnemyDeath();
 
