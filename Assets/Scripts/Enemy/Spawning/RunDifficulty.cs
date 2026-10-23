@@ -87,19 +87,21 @@ public static class RunDifficulty
     /// Elites und Bosse, unabhaengig von Chaos. Jede Welt der Route liegt ueber
     /// der davor, weil der Spieler ueber Skilltree und Shop mitwaechst. Den Druck
     /// (wie viele) regeln die Plaene selbst (siehe Kopf von <see cref="WavePlans"/>).
-    /// Xp ist ein Faktor auf die XP, die Gegner fallen lassen.
+    /// Xp ist ein Faktor auf die XP, die Gegner fallen lassen. LateXp ist der
+    /// Zeitbonus obendrauf, voll ab <see cref="LateXpEnd"/> (<see cref="LateXpFactor"/>) -
+    /// fuer die hohen Level, die man in den spaeten Welten braucht.
     /// Unbekannte Plan-Id = 1.
     /// </summary>
-    private static (float Health, float Damage, float Xp) WorldTier(string planId)
+    private static (float Health, float Damage, float Xp, float LateXp) WorldTier(string planId)
     {
         switch ((planId ?? "").Trim().ToLowerInvariant())
         {
-            case "world2": return (1.0f, 1.0f, 1.0f);    // Welt 1 Wald - Massstab
-            case "world1": return (1.6f, 1.1f, 1.05f);   // Welt 2 Kueche
-            case "world5": return (2.1f, 1.2f, 1.05f);   // Welt 3 Eisgletscher
-            case "world6": return (2.7f, 1.35f, 1.05f);  // Welt 4 Geisterwald
-            case "world4": return (3.5f, 1.5f, 1.05f);   // Welt 5 Vulkan
-            default: return (1f, 1f, 1f);
+            case "world2": return (1.0f, 1.0f, 1.0f, 1f);     // Welt 1 Wald - Massstab
+            case "world1": return (1.6f, 1.1f, 1.05f, 1f);    // Welt 2 Kueche
+            case "world5": return (2.1f, 1.2f, 1.1f, 1.3f);   // Welt 3 Eisgletscher
+            case "world6": return (2.7f, 1.35f, 1.2f, 1.4f);  // Welt 4 Geisterwald
+            case "world4": return (3.5f, 1.5f, 1.3f, 1.5f);   // Welt 5 Vulkan
+            default: return (1f, 1f, 1f, 1f);
         }
     }
 
@@ -111,6 +113,22 @@ public static class RunDifficulty
 
     /// <summary>XP-Faktor der laufenden Welt (<see cref="WorldTier"/>) - rechnet <see cref="Enemy"/> beim Drop ein.</summary>
     public static float WorldXp { get; private set; } = 1f;
+
+    /// <summary>Voller Zeitbonus auf die XP der laufenden Welt (<see cref="WorldTier"/>), 1 = keiner.</summary>
+    public static float WorldLateXp { get; private set; } = 1f;
+
+    /// <summary>Ab hier (Sekunden) waechst der Zeitbonus auf die XP.</summary>
+    public const float LateXpStart = 300f;   // Minute 5
+
+    /// <summary>Ab hier (Sekunden) gilt <see cref="WorldLateXp"/> voll.</summary>
+    public const float LateXpEnd = 1200f;    // Minute 20
+
+    /// <summary>
+    /// Zeitbonus auf die XP aller Gegner: 1 bis Minute 5, gleitend hoch bis
+    /// <see cref="WorldLateXp"/> zu Minute 20. Rechnet <see cref="Enemy"/> beim Drop ein.
+    /// </summary>
+    public static float LateXpFactor(float runTime) =>
+        Mathf.Lerp(1f, WorldLateXp, Mathf.InverseLerp(LateXpStart, LateXpEnd, runTime));
 
     /// <summary>
     /// Ziel-Level der Map fuer den Nachhol-Bonus (<see cref="CharLevel.CatchUpFactor"/>).
@@ -148,7 +166,7 @@ public static class RunDifficulty
         Curse = 0f;
         Level = Difficulty.Current;
         InEndlessPart = false;
-        (WorldHealth, WorldDamage, WorldXp) = WorldTier(planId);
+        (WorldHealth, WorldDamage, WorldXp, WorldLateXp) = WorldTier(planId);
         CatchUpTarget = CatchUpTargetFor(planId);
         Debug.Log($"[RunDifficulty] Lauf ({planId}) startet auf {Level} mit Chaos {Chaos:0.00} " +
                   $"(Gegner x{CountFactor:0.00}, Leben x{HealthFactor:0.00}, Belohnung x{RewardFactor:0.00}).");

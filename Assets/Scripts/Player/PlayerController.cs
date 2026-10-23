@@ -216,6 +216,30 @@ public class PlayerController : MonoBehaviour
         UIController.Instance.UpdateExperienceSlider();
     }
 
+    // ------------------------------------------------------------ Levelkurve im Lauf
+    //
+    //  playerLevels[L - 1] = XP von Level L auf L + 1. Die ersten Werte kommen
+    //  aus dem Prefab, danach bis BarrierLevel jedes Level x1.1 + 15.
+    //  Ab BarrierLevel (die Schwelle gegen Ueberleveln in den ersten Laeufen)
+    //  kostet ein Level BarrierCost, jedes weitere LateGrowth mehr, und alle
+    //  TierEvery Level kommt noch einmal TierJump drauf (35, 45, 55, ...).
+    //  Grob: Level 30 ~21k XP ab Laufstart, 45 ~86k, 60 ~250k.
+
+    /// <summary>Ab diesem Level gilt die spaete Kurve.</summary>
+    public const int BarrierLevel = 25;
+
+    /// <summary>XP fuer das Level-Up ab <see cref="BarrierLevel"/> (davor ~1.100).</summary>
+    public const float BarrierCost = 2400f;
+
+    /// <summary>Jedes Level ab der Schwelle kostet so viel mal das davor.</summary>
+    public const float LateGrowth = 1.03f;
+
+    /// <summary>Alle so viele Level ab der Schwelle eine weitere Stufe.</summary>
+    public const int TierEvery = 10;
+
+    /// <summary>Aufschlag je Stufe.</summary>
+    public const float TierJump = 1.35f;
+
     // Levelkurve einmalig aufbauen (vorher jeden Frame in Update geprüft)
     private void BuildLevelCurve()
     {
@@ -229,25 +253,20 @@ public class PlayerController : MonoBehaviour
             Debug.LogWarning("PlayerController: playerLevels war leer – Fallback-Startwert gesetzt.");
         }
 
-        int targetLevel = 30;
-        int level30Value = 10000;
-
         for (int i = playerLevels.Count; i < maxLevel; i++)
         {
-            int lastValue = playerLevels[playerLevels.Count - 1];
+            int level = i + 1;
 
-            if (i == targetLevel)
+            if (level < BarrierLevel)
             {
-                playerLevels.Add(level30Value); // Set level 30 explicitly
-            }
-            else if (i < targetLevel)
-            {
+                int lastValue = playerLevels[playerLevels.Count - 1];
                 playerLevels.Add(Mathf.CeilToInt(lastValue * 1.1f + 15f));
             }
             else
             {
-                // From level 31 onward, grow based on the previous level (starting from 5000)
-                playerLevels.Add(Mathf.CeilToInt(lastValue * 1.1f + 20f));
+                int k = level - BarrierLevel;
+                float cost = BarrierCost * Mathf.Pow(LateGrowth, k) * Mathf.Pow(TierJump, k / TierEvery);
+                playerLevels.Add(Mathf.CeilToInt(cost));
             }
         }
     }

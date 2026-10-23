@@ -1420,12 +1420,18 @@ public class Enemy : MonoBehaviour
         int exp = experienceToGive;
         if (exp > 0)
         {
-            // Weltbonus fuer alle; normale Gegner ab Minute 3-4 etwas weniger.
-            // Der Rest hinter dem Komma ist eine Chance auf +1, sonst gaeben
-            // 1-XP-Gegner gar nichts mehr bzw. nie etwas extra.
+            // Weltbonus fuer alle, in spaeten Welten mit der Zeit mehr; normale
+            // Gegner ab Minute 3-4 etwas weniger. Der Rest hinter dem Komma ist
+            // eine Chance auf +1, sonst gaeben 1-XP-Gegner gar nichts mehr bzw.
+            // nie etwas extra.
             float factor = RunDifficulty.WorldXp;
-            if (role == EnemyRole.Normal && GameManager.Instance != null)
-                factor *= EnemyCatalog.NormalXpFactor(GameManager.Instance.gameTime);
+            if (GameManager.Instance != null)
+            {
+                float runTime = GameManager.Instance.gameTime;
+                factor *= RunDifficulty.LateXpFactor(runTime);
+                if (role == EnemyRole.Normal)
+                    factor *= EnemyCatalog.NormalXpFactor(runTime);
+            }
 
             float scaled = exp * factor;
             exp = Mathf.FloorToInt(scaled);
