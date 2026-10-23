@@ -158,6 +158,10 @@ public class GameManager : MonoBehaviour
         // Charakter-Level nach dem Lauf: ab Level 10 gibt es den Begleiter im Shop.
         Unlocks.CheckCharLevels();
 
+        // Endless: der Welt-Boss ist gefallen - das Level ist geschafft, auch wenn
+        // der Lauf danach mit dem Tod endet. Zaehlt fuer die Sieg-Erfolge.
+        if (GameSession.IsEndless && bossSpawned) GrantWinAchievements();
+
         if (!won)
         {
             // Tot ist tot: das Spiel steht sofort still - kein Geschoss, das
@@ -171,13 +175,18 @@ public class GameManager : MonoBehaviour
             // Gewonnen: ab hier kann nichts mehr passieren - kein spaeter Tod,
             // der den Sieg in einen zweiten Abschluss verwandelt.
             if (PlayerController.Instance != null) PlayerController.Instance.Untouchable = true;
-            Achievements.Unlock(Ach.FirstWin);
-            // Sieg mit diesem Charakter - zaehlt auf den Tofu (Ach.AllCharacters).
-            Achievements.Unlock(Ach.CharacterWin(Shop.RunSkinIndex));
+            GrantWinAchievements();
             SecretAchievements.LevelBeaten();
             SessionProgressTracker.Instance.EvaluateAfterGame();
             StartCoroutine(ShowWinScreen());
         }
+    }
+
+    private static void GrantWinAchievements()
+    {
+        Achievements.Unlock(Ach.FirstWin);
+        // Sieg mit diesem Charakter - zaehlt auf den Tofu (Ach.AllCharacters).
+        Achievements.Unlock(Ach.CharacterWin(Shop.RunSkinIndex));
     }
 
     /// <summary>
