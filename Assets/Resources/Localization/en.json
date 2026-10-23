@@ -1562,7 +1562,7 @@
     { "key": "weapon.foxfire.lvl4", "value": "Four wisps, bigger ring of flame" },
     { "key": "weapon.foxfire.lvl5", "value": "Damage +2, wildfire leaps to two enemies" },
     { "key": "weapon.royal_splat.name", "value": "Royal Splat" },
-    { "key": "weapon.royal_splat.desc", "value": "The Slime King hurls a glob of grape jelly at the densest pack of enemies. It splats down, shoves everyone apart and bounces straight on to the next pack. A ring on the ground shows exactly where it will land." },
+    { "key": "weapon.royal_splat.desc", "value": "The Slime King hurls a glob of grape jelly at the densest pack of enemies. It splats down, hits everyone in the ring and bounces straight on to the next pack. A ring on the ground shows exactly where it will land." },
     { "key": "weapon.royal_splat.scaling", "value": "Extra Shot: 1:3 - three extra shots give one more blob per throw (up to 8).\nArea (AOE): the splat gets bigger (up to x2.2).\nDuration: the sticky puddle lasts longer (Sticky Jelly star).\nCooldown: throws more often." },
     { "key": "weapon.royal_splat.lvl0", "value": "A jelly glob drops on the densest pack of enemies and bounces on once" },
     { "key": "weapon.royal_splat.lvl1", "value": "Damage +2" },

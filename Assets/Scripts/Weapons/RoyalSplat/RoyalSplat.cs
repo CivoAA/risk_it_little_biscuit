@@ -5,8 +5,8 @@ using UnityEngine;
 /// Koenigsplumps - die Startwaffe des Schleimkoenigs (nur fuer ihn). Er
 /// schleudert einen Klops Traubengelee (mit ganzer Traube drin) im hohen
 /// Bogen auf die DICHTESTE Gegnergruppe in Reichweite. Der Klops klatscht
-/// auf, schubst alles im Kreis nach aussen und huepft sofort zur naechsten
-/// Gruppe weiter (<see cref="SplatBlob"/>). Ein gestrichelter Ring am Boden
+/// auf, trifft alles im Kreis (ohne Schubs - der schob Gegner sonst auch zum
+/// Spieler hin) und huepft sofort zur naechsten Gruppe weiter (<see cref="SplatBlob"/>). Ein gestrichelter Ring am Boden
 /// zeigt vorher genau, wo und wie gross er landet.
 ///
 /// Stufen: mehr Abpraller, mehr Schaden, groesserer Platscher. Die klebrige
@@ -33,9 +33,6 @@ public class RoyalSplat : Weapon
 
     /// <summary>So weit springt ein Abpraller hoechstens.</summary>
     public const float BounceRange = 4.5f;
-
-    /// <summary>Schubs nach aussen (Tiles/s) - kurz, damit die Gruppe auseinanderspritzt, aber nicht wegfliegt.</summary>
-    public const float Shove = 7f;
 
     /// <summary>Tempo-Faktor in der Pfuetze.</summary>
     public const float PuddleSlow = 0.45f;
@@ -246,11 +243,10 @@ public class RoyalSplat : Weapon
     private static readonly List<Enemy> hitBuffer = new List<Enemy>();
 
     /// <summary>
-    /// Platscher bei <paramref name="at"/>: Schaden fuer alle im Kreis, alle
-    /// werden nach aussen geschubst - ausser <paramref name="shove"/> ist aus
-    /// (die Evo zieht danach mit dem Strudel, da wuerde der Schubs gegenhalten).
+    /// Platscher bei <paramref name="at"/>: Schaden fuer alle im Kreis, ohne
+    /// Knockback - ein Schubs nach aussen schob Gegner auch zum Spieler hin.
     /// </summary>
-    public static void Splash(Vector2 at, float damage, float radius, HashSet<Enemy> seen, float shake, bool shove = true)
+    public static void Splash(Vector2 at, float damage, float radius, HashSet<Enemy> seen, float shake)
     {
         FoxFx.Play(HitFor(radius), at, 22f, 1);
         if (shake > 0f) ScreenShake.Kick(shake, 0.12f);
@@ -273,11 +269,7 @@ public class RoyalSplat : Weapon
             Enemy enemy = hitBuffer[i];
             if (enemy == null) continue;
             if (seen != null) seen.Add(enemy);
-
-            Vector2 away = (Vector2)enemy.transform.position + BodyOffset - at;
-            away = away.sqrMagnitude > 1e-4f ? away.normalized : Random.insideUnitCircle.normalized;
             enemy.TakeDamage(damage, null, 0f);
-            if (shove && enemy != null) enemy.ApplyPull(away * Shove, 0.12f);
         }
         hitBuffer.Clear();
     }

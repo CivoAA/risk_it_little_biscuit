@@ -178,8 +178,7 @@ public class SlimeClone : MonoBehaviour
         mark.enabled = false;
         shadow.enabled = false;
 
-        // der Strudel zieht gleich danach - ein Schubs nach aussen wuerde nur gegenhalten
-        RoyalSplat.Splash(to, hit.damage, hit.radius, null, 1.5f, false);
+        RoyalSplat.Splash(to, hit.damage, hit.radius, null, 1.5f);
         if (hit.puddleTime > 0f) SplatPuddle.Create(to, hit.radius * 0.95f, hit.puddleTime);
 
         swirlT.position = Snap(to);
