@@ -90,23 +90,28 @@ public static class RunDifficulty
     /// Xp ist ein Faktor auf die XP, die Gegner fallen lassen. LateXp ist der
     /// Zeitbonus obendrauf, voll ab <see cref="LateXpEnd"/> (<see cref="LateXpFactor"/>) -
     /// fuer die hohen Level, die man in den spaeten Welten braucht.
+    /// TroopHealth gilt obendrauf nur fuer normale Gegner und Elites (nicht
+    /// Bosse, nicht den Kokos-Yeti, siehe <see cref="Apply"/>).
     /// Unbekannte Plan-Id = 1.
     /// </summary>
-    private static (float Health, float Damage, float Xp, float LateXp) WorldTier(string planId)
+    private static (float Health, float Damage, float Xp, float LateXp, float TroopHealth) WorldTier(string planId)
     {
         switch ((planId ?? "").Trim().ToLowerInvariant())
         {
-            case "world2": return (1.0f, 1.0f, 1.0f, 1f);     // Welt 1 Wald - Massstab
-            case "world1": return (1.6f, 1.1f, 1.05f, 1f);    // Welt 2 Kueche
-            case "world5": return (2.1f, 1.2f, 1.1f, 1.3f);   // Welt 3 Eisgletscher
-            case "world6": return (2.7f, 1.35f, 1.2f, 1.4f);  // Welt 4 Geisterwald
-            case "world4": return (3.5f, 1.5f, 1.3f, 1.5f);   // Welt 5 Vulkan
-            default: return (1f, 1f, 1f, 1f);
+            case "world2": return (1.0f, 1.0f, 1.0f, 1f, 1f);       // Welt 1 Wald - Massstab
+            case "world1": return (1.6f, 1.1f, 1.05f, 1f, 1f);      // Welt 2 Kueche
+            case "world5": return (2.1f, 1.2f, 1.1f, 1.3f, 1.05f);  // Welt 3 Eisgletscher
+            case "world6": return (2.7f, 1.35f, 1.2f, 1.4f, 1.1f);  // Welt 4 Geisterwald
+            case "world4": return (3.5f, 1.5f, 1.3f, 1.5f, 1.1f);   // Welt 5 Vulkan
+            default: return (1f, 1f, 1f, 1f, 1f);
         }
     }
 
     /// <summary>Leben-Faktor der laufenden Welt (<see cref="WorldTier"/>).</summary>
     public static float WorldHealth { get; private set; } = 1f;
+
+    /// <summary>Leben-Faktor nur fuer normale Gegner und Elites der laufenden Welt (<see cref="WorldTier"/>).</summary>
+    public static float WorldTroopHealth { get; private set; } = 1f;
 
     /// <summary>Schaden-Faktor der laufenden Welt (<see cref="WorldTier"/>).</summary>
     public static float WorldDamage { get; private set; } = 1f;
@@ -166,7 +171,7 @@ public static class RunDifficulty
         Curse = 0f;
         Level = Difficulty.Current;
         InEndlessPart = false;
-        (WorldHealth, WorldDamage, WorldXp, WorldLateXp) = WorldTier(planId);
+        (WorldHealth, WorldDamage, WorldXp, WorldLateXp, WorldTroopHealth) = WorldTier(planId);
         CatchUpTarget = CatchUpTargetFor(planId);
         Debug.Log($"[RunDifficulty] Lauf ({planId}) startet auf {Level} mit Chaos {Chaos:0.00} " +
                   $"(Gegner x{CountFactor:0.00}, Leben x{HealthFactor:0.00}, Belohnung x{RewardFactor:0.00}).");
@@ -205,6 +210,10 @@ public static class RunDifficulty
         bool boss = enemy.Role == EnemyRole.Boss || enemy.Role == EnemyRole.MiniBoss;
         float health = HealthFactor * (boss ? BossHealthBonus : 1f);
         if (enemy.Role == EnemyRole.MiniBoss) health *= MiniBossHealth;
+        // Der Yeti ist schon zaeh genug und bekommt den Aufschlag nicht.
+        if ((enemy.Role == EnemyRole.Normal || enemy.Role == EnemyRole.Elite) &&
+            enemy.Identity != EnemyId.KokosYeti)
+            health *= WorldTroopHealth;
         enemy.ApplyRunScaling(health, DamageFactor, RewardFactor);
     }
 }
