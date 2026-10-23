@@ -7,6 +7,8 @@ public class ItemMenuBuffs : MonoBehaviour
     /// <summary>Die Buff-Slots in Anzeigereihenfolge, nach jedem UpdateUI neu - fuer das GameHud.</summary>
     public readonly List<ItemSlotInfo> CurrentSlots = new List<ItemSlotInfo>();
 
+    private readonly List<Sprite> shownBuffs = new List<Sprite>();
+
     public UnityEngine.UI.Image[] weaponSlots;
     public List<TMP_Text> levelTexts = new List<TMP_Text>();
     public List<GameObject> weaponSlot = new List<GameObject>();
@@ -88,10 +90,11 @@ public class ItemMenuBuffs : MonoBehaviour
     {
         // Fehlende Buffs fallen hier raus, statt die ganze Liste zu sprengen.
         var weapons = new List<(int level, int maxLevel, Sprite sprite)>();
+        var collected = new HashSet<Weapon>();
 
         void Collect(Weapon buff)
         {
-            if (buff == null) return;
+            if (buff == null || !collected.Add(buff)) return;
             weapons.Add((buff.weaponLevel, buff.maxweaponLevel, buff.weaponIcon));
         }
 
@@ -115,61 +118,43 @@ public class ItemMenuBuffs : MonoBehaviour
         Collect(glassCannon);
         Collect(secondChance);
 
-        List<Sprite> currentWeapons = new List<Sprite>();
+        // Alles, was oben (noch) nicht namentlich steht - z.B. Cursed Sugar.
+        // Neue Buffs tauchen damit von selbst oben links auf.
+        PlayerController player = PlayerController.Instance;
+        if (player != null && player.activeBuffs != null)
+            foreach (Weapon b in player.activeBuffs) Collect(b);
 
-        // aktive Buffs prüfen
-        foreach (var slot in weaponSlots)
-        {
-            if (slot.sprite != defaultSprite)
-            {
-                bool stillActive = false;
-                foreach (var weapon in weapons)
-                {
-                    if (weapon.sprite == slot.sprite && weapon.level >= 0)
-                    {
-                        stillActive = true;
-                        break;
-                    }
-                }
-
-                if (stillActive)
-                    currentWeapons.Add(slot.sprite);
-            }
-        }
+        // aktive Buffs prüfen - die Reihenfolge merkt sich shownBuffs, nicht
+        // die alten Slot-Bilder: davon liegen nur 4 in der Szene, im Lauf
+        // gibt es aber bis zu 6 Buffslots (Shop + Tofu).
+        shownBuffs.RemoveAll(sprite => !weapons.Exists(w => w.sprite == sprite && w.level >= 0));
 
         // neue hinzufügen
         foreach (var weapon in weapons)
         {
-            if (weapon.level >= 0 && !currentWeapons.Contains(weapon.sprite))
+            if (weapon.level >= 0 && !shownBuffs.Contains(weapon.sprite))
             {
-                currentWeapons.Add(weapon.sprite);
+                shownBuffs.Add(weapon.sprite);
             }
         }
 
-        // Slots und Leveltexte aktualisieren
+        // Level- & Max-Level je Slot fuers GameHud
         CurrentSlots.Clear();
+        foreach (var sprite in shownBuffs)
+        {
+            var w = weapons.Find(x => x.sprite == sprite);
+            CurrentSlots.Add(new ItemSlotInfo { Icon = sprite, Level = w.level, MaxLevel = w.maxLevel });
+        }
+
+        // alte Slots und Leveltexte aktualisieren
         for (int i = 0; i < weaponSlots.Length; i++)
         {
-            if (i < currentWeapons.Count)
+            if (i < CurrentSlots.Count)
             {
-                var sprite = currentWeapons[i];
+                var sprite = CurrentSlots[i].Icon;
+                int level = CurrentSlots[i].Level;
+                int maxLevel = CurrentSlots[i].MaxLevel;
                 weaponSlots[i].sprite = sprite;
-
-                // Level- & Max-Level finden
-                int level = -1;
-                int maxLevel = -1;
-
-                foreach (var w in weapons)
-                {
-                    if (w.sprite == sprite)
-                    {
-                        level = w.level;
-                        maxLevel = w.maxLevel;
-                        break;
-                    }
-                }
-
-                CurrentSlots.Add(new ItemSlotInfo { Icon = sprite, Level = level, MaxLevel = maxLevel });
 
                 // 🔹 Text aktualisieren
                 if (i < levelTexts.Count)
