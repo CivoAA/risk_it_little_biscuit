@@ -795,10 +795,63 @@ public class SpawnDirector : MonoBehaviour
         };
     }
 
-    /// <summary>Wo ein Gegner wirklich auftaucht: ausserhalb des Bildes und im Spawnband der Karte.</summary>
+    /// <summary>
+    /// Wo ein Gegner wirklich auftaucht: ausserhalb des Bildes und im Spawnband
+    /// der Karte. Im Koop ausserdem ausserhalb JEDES Bildes - auch eines
+    /// Mitspielers, der nur zuschaut oder am Boden liegt.
+    /// </summary>
     private Vector2 SpawnPoint(Vector2 point)
     {
-        return KeepInMap(KeepOffScreen(point));
+        Vector2 p = KeepInMap(KeepOffScreen(point));
+        return NetRun.Active != null ? KeepOffAllScreens(p) : p;
+    }
+
+    /// <summary>Mitspieler-Bilder sind groesser gerechnet: ihr Stand ist bei uns ein paar Pakete alt.</summary>
+    private const float MateSpawnMargin = 1.5f;
+
+    /// <summary>
+    /// Koop: liegt der Punkt in irgendeinem Bild, wird er aus diesem Bild
+    /// herausgeschoben (wie <see cref="KeepOffScreen"/>, von dessen Mitte weg).
+    /// Ueberlappen sich Bilder, kann er dabei im naechsten landen - darum ein
+    /// paar Runden. Klappt das nicht (alle eng beisammen, Gang-Karte), wird
+    /// reihum um den eigenen Spieler gesucht, immer weiter draussen, bis eine
+    /// Stelle frei ist. Nie gefunden: ganz weit weg ist auch frei.
+    /// </summary>
+    private Vector2 KeepOffAllScreens(Vector2 point)
+    {
+        Vector2 p = point;
+        for (int round = 0; round < 6; round++)
+        {
+            if (!TryAnyView(p, out Rect view)) return p;
+            p = KeepInMap(PushOut(p, view));
+        }
+
+        Vector2 anchor = PlayerController.Instance != null
+            ? (Vector2)PlayerController.Instance.transform.position
+            : lastPlayerPos;
+        Vector2 half = ViewBounds.TryGetWorldRect(out Rect own) ? own.size * 0.5f : new Vector2(spawnHalfWidth, spawnHalfHeight);
+        float baseDist = half.magnitude + offScreenMargin + MateSpawnMargin;
+        float start = Random.value * Mathf.PI * 2f;
+        for (int k = 0; k < 48; k++)
+        {
+            float ang = start + k * 2.39996f;   // goldener Winkel: verteilt sich gleichmaessig
+            float dist = baseDist * (1f + (k / 8) * 0.35f);
+            Vector2 c = KeepInMap(anchor + new Vector2(Mathf.Cos(ang), Mathf.Sin(ang)) * dist);
+            if (!TryAnyView(c, out _)) return c;
+        }
+        return anchor + Random.insideUnitCircle.normalized * baseDist * 4f;
+    }
+
+    /// <summary>Liegt der Punkt im eigenen Bild oder dem eines Mitspielers (jeweils mit Rand)?</summary>
+    private bool TryAnyView(Vector2 point, out Rect view)
+    {
+        if (ViewBounds.TryGetWorldRect(out Rect own))
+        {
+            view = new Rect(own.xMin - offScreenMargin, own.yMin - offScreenMargin,
+                            own.width + offScreenMargin * 2f, own.height + offScreenMargin * 2f);
+            if (view.Contains(point)) return true;
+        }
+        return NetPlayers.TryMateView(point, offScreenMargin + MateSpawnMargin, out view);
     }
 
     /// <summary>
@@ -840,6 +893,12 @@ public class SpawnDirector : MonoBehaviour
 
         Rect safe = new Rect(view.xMin - offScreenMargin, view.yMin - offScreenMargin,
                              view.width + offScreenMargin * 2f, view.height + offScreenMargin * 2f);
+        return PushOut(point, safe);
+    }
+
+    /// <summary>Punkt im Rechteck: von dessen Mitte aus in derselben Richtung bis knapp hinter den Rand.</summary>
+    private static Vector2 PushOut(Vector2 point, Rect safe)
+    {
         if (!safe.Contains(point)) return point;
 
         Vector2 center = safe.center;
@@ -849,7 +908,8 @@ public class SpawnDirector : MonoBehaviour
         float tx = Mathf.Abs(dir.x) > 0.0001f ? (safe.width * 0.5f) / Mathf.Abs(dir.x) : float.MaxValue;
         float ty = Mathf.Abs(dir.y) > 0.0001f ? (safe.height * 0.5f) / Mathf.Abs(dir.y) : float.MaxValue;
 
-        return center + dir * Mathf.Min(tx, ty);
+        // Ein Hauch weiter, damit der Punkt sicher draussen liegt.
+        return center + dir * (Mathf.Min(tx, ty) * 1.001f + 0.05f / dir.magnitude);
     }
 
     /// <summary>Setzt eine bestimmte Bedrohungsmenge auf einmal - fuer Bursts.</summary>

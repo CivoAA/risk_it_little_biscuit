@@ -124,21 +124,45 @@ public static class NetPlayers
         return (fallback - from).sqrMagnitude;
     }
 
-    /// <summary>Liegt der Punkt im Bild eines Mitspielers (plus Rand)? Allein immer false.</summary>
+    /// <summary>
+    /// Liegt der Punkt im Bild eines Mitspielers (plus Rand)? Allein immer false.
+    /// Zaehlt jedes Bild, nicht nur das von Stehenden: auch wer am Boden liegt
+    /// oder raus ist und zuschaut, sieht etwas. Gemessen wird an der Bildmitte,
+    /// die er schickt, in seine Laufrichtung gestreckt (sein Stand ist bei uns
+    /// ein paar Pakete alt).
+    /// </summary>
     public static bool SeenByMate(Vector2 pos, float margin)
     {
+        return TryMateView(pos, margin, out _);
+    }
+
+    /// <summary>Wie <see cref="SeenByMate"/>, liefert dazu das Bild (mit Rand), in dem der Punkt liegt.</summary>
+    public static bool TryMateView(Vector2 pos, float margin, out Rect view)
+    {
+        view = default;
         NetRun run = NetRun.Active;
-        if (run == null) return false;
-        for (int i = 0; i < avatars.Count; i++)
+        NetSession s = NetSession.Instance;
+        if (run == null || s == null) return false;
+        for (int slot = 0; slot < run.Peers.Length; slot++)
         {
-            NetAvatar a = avatars[i];
-            if (a == null || !a.Targetable || a.Slot < 0 || a.Slot >= run.Peers.Length) continue;
-            Vector2 half = run.Peers[a.Slot].ViewHalf + new Vector2(margin, margin);
-            Vector2 d = pos - (Vector2)a.transform.position;
-            if (Mathf.Abs(d.x) <= half.x && Mathf.Abs(d.y) <= half.y) return true;
+            if (slot == s.LocalSlot) continue;
+            NetRun.Peer p = run.Peers[slot];
+            if (!p.Playing || p.State == NetRun.PeerState.Left || p.LastState < 0f) continue;
+
+            // Das Bild jetzt und dort, wo es gleich ist: in Laufrichtung gestreckt.
+            Vector2 lead = p.Velocity * MateLead;
+            Vector2 center = p.ViewCenter + lead * 0.5f;
+            Vector2 half = p.ViewHalf + new Vector2(margin + Mathf.Abs(lead.x) * 0.5f, margin + Mathf.Abs(lead.y) * 0.5f);
+            Vector2 d = pos - center;
+            if (Mathf.Abs(d.x) > half.x || Mathf.Abs(d.y) > half.y) continue;
+            view = new Rect(center - half, half * 2f);
+            return true;
         }
         return false;
     }
+
+    /// <summary>So weit (Sekunden Laufweg) wird das Bild eines Mitspielers vorgezogen.</summary>
+    private const float MateLead = 0.35f;
 
     /// <summary>Kurzform: Position des naechsten Spielers, sonst die des eigenen (oder from).</summary>
     public static Vector2 NearestPosition(Vector2 from)

@@ -234,6 +234,37 @@ public static partial class GameHudSkin
         "..o....",
     }, UiColors));
 
+    /// <summary>
+    /// Grosser gelber Blaetterpfeil unter der Keksdose (ohne Knopf dahinter).
+    /// Licht kommt von oben links, die untere Schraege liegt im Schatten.
+    /// </summary>
+    public static Sprite PagerRight => Get("pagerright", () => Outlined(PagerRows, UiColors));
+
+    /// <summary>Spiegelbild von <see cref="PagerRight"/>.</summary>
+    public static Sprite PagerLeft => Get("pagerleft", () => Outlined(System.Array.ConvertAll(PagerRows, r =>
+    {
+        char[] c = r.ToCharArray();
+        System.Array.Reverse(c);
+        return new string(c);
+    }), UiColors));
+
+    private static readonly string[] PagerRows =
+    {
+        "l......",
+        "ll.....",
+        "lyl....",
+        "lyyl...",
+        "lyyyl..",
+        "lyyyyl.",
+        "lyyyyyy",
+        "yyyyyo.",
+        "yyyyo..",
+        "yyyo...",
+        "yyo....",
+        "yo.....",
+        "o......",
+    };
+
     private static Dictionary<char, Color32> SelectColors => selectColors ??= new Dictionary<char, Color32>
     {
         { 's', StoneLight }, { 'y', Gold }, { 'd', GoldDark }, { 'k', Ink },

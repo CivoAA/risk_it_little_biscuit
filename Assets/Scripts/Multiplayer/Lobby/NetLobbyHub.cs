@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 /// Klebt die Koop-Lobby an den Rest des Spiels:
 ///
 ///  * MULTIPLAYER im Hauptmenue laedt den Hub und oeffnet dort die Lobby
-///    (<see cref="OpenOnHub"/>).
+///    (<see cref="OpenOnHub"/>) - schon hinter der Blende, vom Hub sieht man nichts.
 ///  * Kommt ein Koop-Lauf zurueck in den Hub, geht die Lobby von selbst
 ///    wieder auf - die Sitzung lebt weiter, dieselbe Gruppe spielt weiter.
 ///  * Startet der Host, schaltet jeder Spieler hier seinen Lauf an
@@ -68,6 +68,20 @@ public class NetLobbyHub : MonoBehaviour
         }
     }
 
+    /// <summary>Wie <see cref="HubIsCurrent"/>, nur darf die Blende noch laufen.</summary>
+    private static bool HubLoaded
+    {
+        get
+        {
+            Scene hub = SceneManager.GetSceneByName(GameSession.HubScene);
+            if (!hub.IsValid() || !hub.isLoaded) return false;
+            Scene core = SceneManager.GetSceneByName(MapSceneSystem.CoreScene);
+            if (core.IsValid() && core.isLoaded) return false;
+            HubUI ui = FindAnyObjectByType<HubUI>();
+            return ui != null && ui.isActiveAndEnabled;
+        }
+    }
+
     private static bool InMainMenu
     {
         get
@@ -94,7 +108,10 @@ public class NetLobbyHub : MonoBehaviour
 
         HandleInvite();
 
-        if (!HubIsCurrent) return;
+        // Schon hinter der Blende aufmachen: wer MULTIPLAYER waehlt (oder aus
+        // einem Koop-Lauf zurueckkommt), sieht den Hub gar nicht erst - das
+        // Fenster deckt ihn ganz ab, wenn das Bild aufgeht.
+        if (!HubLoaded) return;
 
         bool wanted = OpenOnHub || NetSession.Active;
         if (wanted && !NetLobbyPanel.IsOpen && NetSession.Instance?.Run == null)

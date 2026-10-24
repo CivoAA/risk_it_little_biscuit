@@ -52,6 +52,12 @@ public class NetRun : MonoBehaviour
         public string Name = "";
         public Vector2 Position, Velocity;
         public Vector2 ViewHalf = new Vector2(16f, 9f);
+        /// <summary>
+        /// Mitte seines Bildes - nicht immer seine Figur: wer raus ist, schaut
+        /// einem anderen zu. Danach richten sich, was man ihm schickt und wo
+        /// keine Gegner auftauchen duerfen.
+        /// </summary>
+        public Vector2 ViewCenter;
         public float Health = 1f, MaxHealth = 1f, Shield;
         public float Revive;
         public float Bleed;
@@ -551,6 +557,7 @@ public class NetRun : MonoBehaviour
         me.MaxHealth = pc.playerMaxHealth;
         me.Shield = pc.shield;
         me.ViewHalf = LocalViewHalf();
+        me.ViewCenter = LocalViewCenter(me.Position);
 
         NetWriter w = session.Begin(NetMsg.PlayerState);
         w.Vector2(me.Position);
@@ -563,7 +570,14 @@ public class NetRun : MonoBehaviour
         w.Byte((byte)Mathf.Clamp(Mathf.CeilToInt(me.Bleed), 0, 255));
         w.Byte((byte)Mathf.Clamp(Mathf.CeilToInt(me.ViewHalf.x), 1, 255));
         w.Byte((byte)Mathf.Clamp(Mathf.CeilToInt(me.ViewHalf.y), 1, 255));
+        w.Vector2(me.ViewCenter);
         session.SendAll(false);
+    }
+
+    private static Vector2 LocalViewCenter(Vector2 fallback)
+    {
+        if (!ViewBounds.TryGetWorldRect(out Rect view)) return fallback;
+        return view.center;
     }
 
     private static Vector2 LocalViewHalf()
@@ -585,6 +599,7 @@ public class NetRun : MonoBehaviour
         p.Revive = r.Byte() / 255f;
         p.Bleed = r.Byte();
         p.ViewHalf = new Vector2(r.Byte(), r.Byte());
+        p.ViewCenter = r.Vector2();
         p.LastState = Time.unscaledTime;
 
         // Den Zustand NICHT von hier uebernehmen: unzuverlaessige Pakete koennen

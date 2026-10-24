@@ -82,6 +82,19 @@ public class NetRevive : MonoBehaviour
         inside = a.Inside;
         return true;
     }
+    /// <summary>Naechstes Keksglas von <paramref name="from"/> aus (fuer den Test-Bot).</summary>
+    public bool TryNearestAltar(Vector2 from, out Vector2 position)
+    {
+        position = default;
+        float best = float.MaxValue;
+        foreach (Altar a in altars.Values)
+        {
+            float d = (a.Position - from).sqrMagnitude;
+            if (d < best) { best = d; position = a.Position; }
+        }
+        return best < float.MaxValue;
+    }
+
     private readonly List<int> finished = new List<int>();
     private NetSession session;
     private float progressTimer;
@@ -242,10 +255,10 @@ public class NetRevive : MonoBehaviour
         bool me = slot == session.LocalSlot;
         string name = run.Peers[slot].Name.ToUpperInvariant();
         NetRun.ShowToast(me
-            ? NetText.Get("net.revive.altar_self", "DEINE SEELE HÄNGT AM KREUZ - DEIN TEAM KANN DICH HOLEN")
-            : string.Format(NetText.Get("net.revive.altar_other", "{0} HÄNGT AM KREUZ - FOLGT DEM TOTENKOPF!"), name),
+            ? NetText.Get("net.revive.altar_self", "DU STECKST IM KEKSGLAS - DEIN TEAM KANN DICH BEFREIEN")
+            : string.Format(NetText.Get("net.revive.altar_other", "{0} STECKT IM KEKSGLAS - FOLGT DEM PFEIL!"), name),
             GameHudSkin.IcingLight);
-        Debug.Log($"[NetRevive] Kreuz fuer {name} bei {spot}, Rettung {altar.Required:0} s.");
+        Debug.Log($"[NetRevive] Keksglas fuer {name} bei {spot}, Rettung {altar.Required:0} s.");
     }
 
     // ==================================================================

@@ -11,8 +11,9 @@ using UnityEngine;
 /// Shop.RunSkinIndex im PlayerSkinSwitcher. Die Waffennummer ist der Platz in
 /// PlayerController.activeWeapon.
 ///
-/// STAND (11.10.2026): neun Charaktere - 0 Keks, 1 Marmelade, 2 Onigiri,
-/// 3 Toast, 4 Zwiebelritter, 5 Mochi, 6 Inari (Fuchs), 7 Schleimkoenig, 8 Tofu, alle im 32x32-Format (der Ritter hat 64er-Zellen,
+/// STAND (24.10.2026): zehn Charaktere - 0 Keks, 1 Marmelade, 2 Onigiri,
+/// 3 Toast, 4 Zwiebelritter, 5 Mochi, 6 Inari (Fuchs), 7 Schleimkoenig, 8 Tofu, seit 24.10.2026 9 Yeti
+/// (zweite Seite der Keksdose), alle im 32x32-Format (der Ritter hat 64er-Zellen,
 /// weil sein Schwert heraussteht - Pivot unter dem Koerper, PPU 32). Grauer und Roter Keks sind raus, die anderen sind
 /// aufgerueckt. Beide Skin-Switcher holen den Animator fuer jeden Index aus
 /// <see cref="CharacterLooks"/> - Eintrag i dort MUSS zu Charakter i passen.
@@ -30,7 +31,7 @@ using UnityEngine;
 public static class Characters
 {
     /// <summary>Startwaffe je Charakter - Index in PlayerController.activeWeapon.</summary>
-    private static readonly int[] StartWeaponByskin = { 20, 1, 11, 19, 18, 25, 23, 24, 26 };
+    private static readonly int[] StartWeaponByskin = { 20, 1, 11, 19, 18, 25, 23, 24, 26, 34 };
 
     /// <summary>
     /// Dieselbe Startwaffe noch einmal, diesmal als <c>Weapon.weaponID</c>.
@@ -55,6 +56,7 @@ public static class Characters
         "foxfire",       // 6 - Inari (Fuchsfeuer; vorher vorlaeufig "shurikookie")
         "royal_splat",   // 7 - Schleimkoenig (Koenigsplumps)
         "crumb_mayhem",  // 8 - Tofu (Kruemelchaos: kopiert reihum die Startwaffen der anderen)
+        "snowball_effect", // 9 - Yeti (Schneeballeffekt)
     };
 
     /// <summary>
@@ -75,6 +77,7 @@ public static class Characters
         "evo_foxfire",         // 6 - Inari (Kyuubi)
         "evo_royal_splat",     // 7 - Schleimkoenig (Schleimstrudel)
         "evo_crumb_mayhem",    // 8 - Tofu
+        "evo_snowball_effect", // 9 - Yeti (Yeti-Lawine)
     };
 
     /// <summary>
@@ -103,6 +106,7 @@ public static class Characters
         "foxfire",       // 6 - Inari
         "royal_splat",   // 7 - Schleimkoenig
         "crumb_mayhem",  // 8 - Tofu
+        "snowball_effect", // 9 - Yeti
     };
 
     /// <summary>
@@ -120,6 +124,7 @@ public static class Characters
         "Inari",          // 6 - Animator aus CharacterLooks (32x32, Char_Fuchs)
         "Schleimkönig",   // 7 - Animator aus CharacterLooks (8x4-Sheet 32x32, Char_SlimeKing)
         "Tofu",           // 8 - Animator aus CharacterLooks (8x4-Sheet 32x32, Char_Tofu)
+        "Yeti",           // 9 - Animator aus CharacterLooks (8x4-Sheet 32x32, Char_Yeti)
     };
 
     /// <summary>
@@ -137,6 +142,7 @@ public static class Characters
         "Klein, flink, gut gefüllt",
         "Klein, aber gekrönt",
         "Ein Block. Mehr nicht.",
+        "Eine Kugel Flausch",
     };
 
     /// <summary>Zwei, drei Saetze fuer die Charakterauswahl. Rueckfall fuer <c>character.N.desc</c>.</summary>
@@ -151,6 +157,7 @@ public static class Characters
         "Ein kleiner Fuchs aus Inari-Sushi. Das Halstuch hat er selbst gebunden - schief, aber mit Stolz.",
         "Wackelpudding mit selbstgebastelter Krone. Wer ihm im Weg steht, wird eingeschleimt.",
         "Seidentofu ohne Miene. Kein Gewürz, keine Soße, keine Gefühle - aber wenn er plumpst, fliegen Krümel.",
+        "Eine Kugel Vanilleeis mit Fell, Waffelhörnchen und Streuseln. Klein und flauschig - aber seine Schneebälle werden riesig.",
     };
 
     /// <summary>
@@ -168,6 +175,7 @@ public static class Characters
         "unlock_char_inari",
         "unlock_char_slime_king",
         "unlock_char_tofu",
+        "",
     };
 
     public static int Count => StartWeaponByskin.Length;

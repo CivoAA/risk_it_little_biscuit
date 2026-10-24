@@ -276,6 +276,10 @@ public static class Ach
         "Crumb_Mayhem_Evo", "Crumb Mayhem Evo", "Obtained the Crumb Mayhem Evo for the first time!",
         AchievementCategory.Evolutions);
 
+    public static readonly AchievementDef SnowballEffectEvo = Def(
+        "Snowball_Effect_Evo", "Yeti Avalanche", "Obtained the Yeti Avalanche for the first time!",
+        AchievementCategory.Evolutions);
+
     // Pfefferminz-Bollwerk - keine Startwaffen-Evo, ausgeloest in MintShieldEvo.
     public static readonly AchievementDef MintShieldEvo = Def(
         "Mint_Shield_Evo", "Peppermint Bulwark", "Obtained the Peppermint Bulwark for the first time!",
@@ -331,6 +335,10 @@ public static class Ach
 
     public static readonly AchievementDef WinTofu = Def(
         "Win_Tofu", "Unflavored", "Beat a level with Tofu.",
+        AchievementCategory.Characters);
+
+    public static readonly AchievementDef WinYeti = Def(
+        "Win_Yeti", "Brain Freeze", "Beat a level with the Yeti.",
         AchievementCategory.Characters);
 
     /// <summary>
@@ -479,6 +487,10 @@ public static class Ach
 
     public static readonly AchievementDef MaxCrumbMayhem = Def(
         "Max_Level_CrumbMayhem", "Max Level: Crumb Mayhem", "Reach the maximum level of the Crumb Mayhem weapon.",
+        AchievementCategory.Weapons);
+
+    public static readonly AchievementDef MaxSnowballEffect = Def(
+        "Max_Level_SnowballEffect", "Max Level: Snowball Effect", "Reach the maximum level of the Snowball Effect weapon.",
         AchievementCategory.Weapons);
 
     // ==================================================================
@@ -721,6 +733,7 @@ public static class Ach
         { "bubble_gun",     MaxBubbleGun },      { "candy_frisbee", MaxCandyFrisbee },
         { "popcorn_pan",    MaxPopcornPan },     { "sauce_bottle",  MaxSauceBottle },
         { "gummy_gang",     MaxGummyGang },      { "crumb_mayhem",  MaxCrumbMayhem },
+        { "snowball_effect", MaxSnowballEffect },
 
         { "buff_extra_shot",    MaxExtraShot },     { "buff_cooldown",     MaxCooldown },
         { "buff_duration",      MaxDuration },      { "buff_glass_cannon", MaxGlassCannon },
@@ -745,6 +758,7 @@ public static class Ach
     private static readonly AchievementDef[] WinBySkin =
     {
         WinCookie, WinJam, WinOnigiri, WinToast, WinOnionKnight, WinMochi, WinInari, WinSlimeKing, WinTofu,
+        WinYeti,
     };
 
     /// <summary>Evo der Startwaffe je Charakter - passt zu Characters.StartEvoIdByskin.</summary>
@@ -752,6 +766,7 @@ public static class Ach
     {
         ChocoChipsEvo, StickyShatterEvo, BladeSwarmEvo, TyphoonFanEvo, SwordSlashEvo,
         MochiMelodyEvo, FoxfireEvo, RoyalSplatEvo, CrumbMayhemEvo,
+        SnowballEffectEvo,
     };
 
     /// <summary>Der Sieg-Erfolg eines Charakters, oder null.</summary>
@@ -782,7 +797,8 @@ public static class Ach
         int done = 0;
         for (int skin = 0; skin < Characters.Count; skin++)
         {
-            if (skin == Characters.Tofu) continue;
+            // Nur die acht vor dem Tofu - der Yeti (seit 24.10.2026) kam danach und zaehlt nicht mit.
+            if (skin >= Characters.Tofu) break;
             if (Achievements.IsUnlocked(CharacterWin(skin))) done++;
         }
         return done;

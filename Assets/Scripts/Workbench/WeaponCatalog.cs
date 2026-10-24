@@ -179,6 +179,7 @@ public static class WeaponCatalog
     public static readonly WeaponDef PopcornPan    = Def("popcorn_pan", "Popcorn Pan", PoolKind.Weapon);
     public static readonly WeaponDef SauceBottle   = Def("sauce_bottle", "Ketchup & Mustard", PoolKind.Weapon);
     public static readonly WeaponDef GummyGang     = Def("gummy_gang", "Jelly Gang", PoolKind.Weapon);
+    public static readonly WeaponDef SnowballEffect = Def("snowball_effect", "Snowball Effect", PoolKind.Weapon);
 
     // ==================================================================
     //  Buffs
@@ -234,6 +235,9 @@ public static class WeaponCatalog
     public static readonly WeaponDef EvoTimeLaser      = Def("evo_time_laser", "Time Laser Evo", PoolKind.Evo);
     public static readonly WeaponDef EvoPopcornPan     = Def("evo_popcorn_pan", "Popcorn Pan Evo", PoolKind.Evo);
 
+    // Yeti-Lawine (Yeti) - Rezept unten.
+    public static readonly WeaponDef EvoSnowballEffect = Def("evo_snowball_effect", "Yeti Avalanche", PoolKind.Evo);
+
     // ==================================================================
     //  Rezepte - Reihenfolge wie im Player-Prefab
     // ==================================================================
@@ -263,6 +267,8 @@ public static class WeaponCatalog
     public static readonly EvoDef RecipeTimeLaser     = Evo("evo_time_laser", "time_laser", "deathstrike");
     // Karamell-Kino: Popcorn-Pfanne + Krit-Chance - Krits machen Karamell.
     public static readonly EvoDef RecipePopcornPan    = Evo("evo_popcorn_pan", "popcorn_pan", "buff_crit_chance");
+    // Yeti-Lawine: Schneeballeffekt + P. Bubble Gun - der Riesenball faengt Gegner ein wie die Blase.
+    public static readonly EvoDef RecipeSnowballEffect = Evo("evo_snowball_effect", "snowball_effect", "bubble_gun");
 
     // ==================================================================
     //  Freischaltung
@@ -316,6 +322,8 @@ public static class WeaponCatalog
         "royal_splat",
         // Tofus Startwaffe (kopiert die Startwaffen der anderen).
         "crumb_mayhem",
+        // Yetis Startwaffe (24.10.2026).
+        "snowball_effect",
         // Eiswuerfel-Spender, Pfefferminz-Schild (16.10.2026): fuer alle
         // sofort verfuegbar, ohne Shop.
         "ice_dispenser",

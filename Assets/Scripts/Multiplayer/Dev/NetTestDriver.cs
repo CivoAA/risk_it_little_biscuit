@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -49,6 +50,8 @@ public class NetTestDriver : MonoBehaviour
         int.TryParse(NetSession.CommandLine("-nettestchar") ?? "0", out character);
         int.TryParse(NetSession.CommandLine("-nettestplayers") ?? "2", out players);
         god = NetSession.HasFlag("-nettestgod");
+        noRescue = NetSession.HasFlag("-nettestnorescue");
+        goAltar = NetSession.HasFlag("-nettestaltar");
         float.TryParse(NetSession.CommandLine("-nettestdieat") ?? "-1",
                        System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out dieAt);
         float.TryParse(NetSession.CommandLine("-nettestbossat") ?? "-1",
@@ -123,12 +126,18 @@ public class NetTestDriver : MonoBehaviour
                 if (s.Run != null)
                 {
                     Log("Lauf startet");
+                known.Clear();
                     step = Step.Running;
                     startedAt = Time.unscaledTime;
                     nextShot = startedAt + 8f;
                     break;
                 }
                 if (role == "host" && s.PlayerCount < players) break;
+                if (s.Countdown >= 0f && s.Countdown < 2.2f && !shotCountdown)
+                {
+                    shotCountdown = true;
+                    Shot("lobby_countdown");
+                }
                 NetSlot me = s.LocalSlotData;
                 if (me != null && me.Character == character && !me.Ready)
                 {
@@ -146,13 +155,18 @@ public class NetTestDriver : MonoBehaviour
     }
 
     private float quitAt = -1f;
-    private bool god;
+    private bool god, noRescue, goAltar, shotCountdown;
+
+    // Spawn-Pruefung: jeder neue eigene Gegner darf in keinem Bild auftauchen.
+    private readonly System.Collections.Generic.HashSet<Enemy> known = new System.Collections.Generic.HashSet<Enemy>();
+    private int spawnsSeen, spawnsInSight;
 
     private void RunBot()
     {
         float now = Time.unscaledTime;
         PlayerController self = PlayerController.Instance;
         if (god && self != null) self.GodMode = true;
+        CheckSpawns();
         if (dieAt > 0f && now - startedAt > dieAt && self != null)
         {
             dieAt = -1f;
@@ -182,7 +196,8 @@ public class NetTestDriver : MonoBehaviour
                     $"Gegner {Enemy.Alive.Count}, out {s.BytesOutPerSecond} B/s, in {s.BytesInPerSecond} B/s, " +
                     $"Level {(PlayerController.Instance != null ? PlayerController.Instance.currentLevel : 0)}, " +
                     $"Treffer fremd raus {NetVisuals.Active?.HitsSent}, rein {NetVisuals.Active?.HitsReceived}, " +
-                    $"Bilanz {StatsLine()}");
+                    $"Bilanz {StatsLine()}, Spawns {spawnsSeen} davon im Bild {spawnsInSight}, " +
+                    $"Zuschauer {run.Spectating}, fremde Gegner hier {RemoteEnemies()}");
             NetEmotes.Active?.Send((NetEmotes.Kind)(shots % NetEmotes.Count));
         }
 
@@ -218,7 +233,14 @@ public class NetTestDriver : MonoBehaviour
         // Der Gast bleibt beim Host, damit sich beide Welten ueberlappen; der
         // Host zieht Kreise.
         NetAvatar mate = NetPlayers.Avatars.Count > 0 ? NetPlayers.Avatars[0] : null;
-        bool mateDown = mate != null && mate.State == NetRun.PeerState.Downed;
+        bool mateDown = !noRescue && mate != null && mate.State == NetRun.PeerState.Downed;
+        if (goAltar && NetRevive.Active != null && NetRevive.Active.TryNearestAltar(me, out Vector2 altar))
+        {
+            // Zum Keksglas und mitten in den Kreis stellen.
+            Vector2 to = altar - me;
+            pc.playerMoveDirection = to.magnitude > 1.5f ? to.normalized : Vector2.zero;
+            return;
+        }
         if (mate != null && (role != "host" || mateDown))
         {
             // Liegt der andere am Boden: hin und draufstellen (Rettung testen).
@@ -233,6 +255,32 @@ public class NetTestDriver : MonoBehaviour
             botDir = Rotate(botDir, 50f);
         }
         pc.playerMoveDirection = botDir.normalized;
+    }
+
+    private void CheckSpawns()
+    {
+        IReadOnlyList<Enemy> alive = Enemy.Alive;
+        for (int i = 0; i < alive.Count; i++)
+        {
+            Enemy e = alive[i];
+            if (e == null || e.IsRemote || !known.Add(e)) continue;
+            spawnsSeen++;
+            Vector2 pos = e.transform.position;
+            bool own = ViewBounds.TryGetWorldRect(out Rect view) && view.Contains(pos);
+            bool mate = NetPlayers.TryMateView(pos, 0f, out _);
+            if (!own && !mate) continue;
+            spawnsInSight++;
+            Log($"Spawn im Bild: {e.name} bei {pos} (eigenes Bild {own}, Mitspieler {mate})");
+        }
+        known.RemoveWhere(x => x == null);
+    }
+
+    private static int RemoteEnemies()
+    {
+        int n = 0;
+        IReadOnlyList<Enemy> alive = Enemy.Alive;
+        for (int i = 0; i < alive.Count; i++) if (alive[i] != null && alive[i].IsRemote) n++;
+        return n;
     }
 
     private static string StatsLine()

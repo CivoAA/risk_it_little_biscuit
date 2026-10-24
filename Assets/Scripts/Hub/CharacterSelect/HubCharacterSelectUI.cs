@@ -172,6 +172,8 @@ public class HubCharacterSelectUI : MonoBehaviour
         public TextMeshProUGUI Label;
         public GameHudSkin.ButtonLook Normal, Hover;
         public bool Disabled, Active, Visible = true;
+        /// <summary>Nur das Symbol, kein Holzknopf (die Blaetterpfeile).</summary>
+        public bool Bare;
     }
 
     private sealed class SkillRow
@@ -338,8 +340,10 @@ public class HubCharacterSelectUI : MonoBehaviour
             slots.Add(BuildSlot(i, area));
         }
 
-        prevBtn = MakeButton("Prev", RosterX + 30, PagerY, 22, 16, "", GameHudSkin.ArrowLeft, false);
-        nextBtn = MakeButton("Next", RosterX + RosterW - 52, PagerY, 22, 16, "", GameHudSkin.Arrow, false);
+        // Blaettern: grosse gelbe Pfeile ohne Knopf dahinter (Nick, 24.10.2026).
+        prevBtn = MakeButton("Prev", RosterX + 30, PagerY - 1, 20, 18, "", GameHudSkin.PagerLeft, false);
+        nextBtn = MakeButton("Next", RosterX + RosterW - 50, PagerY - 1, 20, 18, "", GameHudSkin.PagerRight, false);
+        prevBtn.Bare = nextBtn.Bare = true;
         pageLabel = OptionsKit.Label("Page", page, RosterX + 56, PagerY + 1, RosterW - 112, 14, "",
                                      textFont, OptionsKit.SizeText, GameHudSkin.Parchment,
                                      TextAlignmentOptions.Center);
@@ -1010,6 +1014,8 @@ public class HubCharacterSelectUI : MonoBehaviour
         else if (down) look = GameHudSkin.ButtonLook.Pressed;
         else look = hover ? b.Hover : b.Normal;
         b.Bg.sprite = GameHudSkin.Button(look);
+        // Per Farbe statt enabled: wechselnde Bilder nie ab- und wieder anschalten.
+        b.Bg.color = b.Bare ? Color.clear : Color.white;
 
         Color ink;
         switch (look)
@@ -1021,7 +1027,8 @@ public class HubCharacterSelectUI : MonoBehaviour
             default:                               ink = GameHudSkin.Cream; break;
         }
         b.Label.color = ink;
-        b.Icon.color = look == GameHudSkin.ButtonLook.Disabled ? new Color(0.7f, 0.65f, 0.68f, 1f) : Color.white;
+        if (b.Bare) b.Icon.color = b.Disabled ? new Color(0.45f, 0.42f, 0.44f, 0.55f) : Color.white;
+        else b.Icon.color = look == GameHudSkin.ButtonLook.Disabled ? new Color(0.7f, 0.65f, 0.68f, 1f) : Color.white;
 
         // Gedrueckt rutscht der Inhalt 1 px nach unten - wie bei SkinButton.
         float push = down ? 1f : 0f;
@@ -1049,6 +1056,24 @@ public class HubCharacterSelectUI : MonoBehaviour
         UpdateSlots(now);
         UpdateStage(now, dt);
         UpdateSparks(now);
+        UpdatePager(now);
+    }
+
+    /// <summary>
+    /// Die gelben Blaetterpfeile stupsen alle paar Augenblicke 1 px nach
+    /// aussen, unter der Maus bleiben sie draussen - "hier geht's weiter".
+    /// </summary>
+    void UpdatePager(float now)
+    {
+        foreach ((Btn b, int dir) in new[] { (prevBtn, -1), (nextBtn, +1) })
+        {
+            if (b == null || !b.Visible || !b.Icon.enabled) continue;
+
+            bool nudge = !b.Disabled && (b == hoverBtn || (animate && Mathf.Repeat(now, 1.2f) < 0.3f));
+            float iw = b.Icon.sprite.rect.width;
+            Vector2 p = b.Icon.rectTransform.anchoredPosition;
+            b.Icon.rectTransform.anchoredPosition = new Vector2(Mathf.Round((b.Area.width - iw) / 2f) + (nudge ? dir : 0), p.y);
+        }
     }
 
     void UpdateSlots(float now)

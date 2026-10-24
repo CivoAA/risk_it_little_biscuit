@@ -140,7 +140,7 @@ public class NetPickups : MonoBehaviour
 
     private void SendTo(int p, NetRun.Peer peer)
     {
-        Rect view = new Rect(peer.Position - peer.ViewHalf - Vector2.one * Margin, (peer.ViewHalf + Vector2.one * Margin) * 2f);
+        Rect view = new Rect(peer.ViewCenter - peer.ViewHalf - Vector2.one * Margin, (peer.ViewHalf + Vector2.one * Margin) * 2f);
 
         enterW.Clear();
         leaveW.Clear();

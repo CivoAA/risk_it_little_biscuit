@@ -374,6 +374,8 @@ public class PlayerController : MonoBehaviour
         if (TyphoonFan.HasTailwind) speed *= 1f + TyphoonFan.TailwindBonus;
         // Koop: als Geist schwebt man langsamer.
         if (NetGhost) speed *= NetBalance.GhostSpeed;
+        // Yeti-Lawine: als Walze rollt der Yeti schneller.
+        if (YetiRoll.Active) speed *= 1f + YetiRoll.SpeedBonus;
         Vector2 wanted = new Vector2(playerMoveDirection.x * speed, playerMoveDirection.y * speed);
         // Eiswelt: auf Glatteis rutscht man (sonst kommt wanted unveraendert zurueck).
         rb.linearVelocity = Glatteis.Steer(rb.position, rb.linearVelocity, wanted, Time.fixedDeltaTime) + externalDrift;
@@ -659,6 +661,7 @@ public class PlayerController : MonoBehaviour
         rageUntil = 0f;
         foxFormReadyAt = 0f;
         FoxForm.Cancel();
+        YetiRoll.Cancel();
         rageReadyAt = 0f;
         kawarimiUntil = 0f;
         kawarimiReadyAt = 0f;
@@ -804,6 +807,8 @@ public class PlayerController : MonoBehaviour
         // Alles Faktoren, die Reihenfolge aendert das Ergebnis also nicht.
         float finalDamage = damage * (1f - ArmorReduction(playerArmor)) * damageTakenMultiplier
                           * RunDifficulty.DifficultyDamage;
+        // Yeti-Lawine: der Schneepanzer der Walze schluckt einen Teil - unverwundbar ist er nicht.
+        if (YetiRoll.Active) finalDamage *= YetiRoll.DamageTaken;
         if (finalDamage <= 0f) return;
 
         LastStruckTime = Time.time;

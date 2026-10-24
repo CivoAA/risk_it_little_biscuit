@@ -15,7 +15,8 @@ using UnityEngine;
 ///  * Mixer und Deko der Zufalls-Spawner: gewuerfelt aus Seed + Block, jeder
 ///    Block fuer sich (kein Abstand ueber Blockgrenzen, der von der
 ///    Reihenfolge abhinge). Die Spawner bauen Bloecke um alle Spieler herum.
-///  * Mixer: wer einen benutzt, sagt es allen - bei ihnen ist er dann auch leer.
+///  * Mixer: wer einen benutzt, sagt es allen - bei ihnen ist er dann auch leer;
+///    wer in dem Moment mit im Feld steht, bekommt seine eigene Auswahl.
 ///
 /// Allein laeuft alles wie immer (Seed = keiner).
 /// </summary>
@@ -153,7 +154,8 @@ public class NetWorld : MonoBehaviour
             MixerObject m = all[i];
             if (m != null && MixerKey(m.transform.position) == key)
             {
-                m.MarkUsedByTeammate();
+                // Wer mit im Feld steht, bekommt auch eine Auswahl.
+                m.TeammateFinished();
                 return;
             }
         }

@@ -99,7 +99,7 @@ public sealed class NetRunInfo
 public sealed class NetSession : MonoBehaviour, INetTransportListener
 {
     /// <summary>Hochzaehlen, sobald sich ein Nachrichtenformat aendert.</summary>
-    public const int Protocol = 3;   // 2: Kreuz-Altar (NetRevive), 3: Team-Bilanz + Emotes
+    public const int Protocol = 4;   // 2: Kreuz-Altar (NetRevive), 3: Team-Bilanz + Emotes, 4: Bildmitte im Spielerzustand
 
     public const int MaxPlayers = 4;
 

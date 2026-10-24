@@ -138,6 +138,13 @@ public static class WeaponSounds
     public static readonly Sfx GummyPop       = new Sfx("gummy_pop",       0.13f, 0.08f,  0.08f);
     public static readonly Sfx GummyShock     = new Sfx("gummy_shock",     0.16f, 0.15f,  0.05f);
 
+    // Schneeballeffekt (Yeti) + Yeti-Lawine (Evo) - Eis-Sounds, tiefer gestimmt
+    public static readonly Sfx SnowThrow      = new Sfx("ice_launch",      0.11f, 0.1f,   0.06f, 0.8f);
+    public static readonly Sfx SnowHit        = new Sfx("ice_hit",         0.08f, 0.05f,  0.08f, 0.75f);
+    public static readonly Sfx SnowBurst      = new Sfx("mint_burst",      0.16f, 0.1f,   0.06f, 1.25f);
+    public static readonly Sfx AvalancheGrab  = new Sfx("ice_freeze",      0.12f, 0.06f,  0.06f, 0.85f);
+    public static readonly Sfx AvalancheBoom  = new Sfx("candy_boom",      0.28f, 0.2f,   0.04f, 0.7f);
+
     // ------------------------------------------------------------ Abspielen
 
     private const string Folder = "Sounds/Weapons/";

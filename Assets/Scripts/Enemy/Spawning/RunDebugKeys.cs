@@ -33,6 +33,8 @@ using UnityEngine;
 ///   Strg + Alt + F7  Ketchup &amp; Senf geben bzw. eine Stufe hoeher
 ///   Strg + Alt + F5  Geisterstunde (Zeitlaser + Todesstoss) statt der Zutaten
 ///   Strg + Alt + F3  Karamell-Kino (Popcorn-Pfanne + Krit-Chance) statt der Pfanne
+///   Strg + F4   Schneeballeffekt (Yeti) geben bzw. eine Stufe hoeher
+///   Strg + Alt + F4  Yeti-Lawine (Schneeballeffekt + P. Bubble Gun) statt der Zutaten
 ///   Shift + F4-F8  nur noch diese Waffe: alle anderen Waffen und Evos weg,
 ///               sie selbst auf Stufe 1 - zum Vergleichen als Startwaffe.
 ///               F4-F8 gehen ueberall, wo ein Spieler steht (auch Test-Szene).
@@ -81,6 +83,13 @@ public class RunDebugKeys : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.F5)) { GiveEvo<TimeLaserEvo>("Geisterstunde", typeof(TimeLaser), typeof(Deathstrike)); return; }
             if (Input.GetKeyDown(KeyCode.F3)) { GiveEvo<PopcornPanEvo>("Karamell-Kino", typeof(PopcornPan)); return; }
+            if (Input.GetKeyDown(RoyalSplatKey)) { GiveEvo<SnowballEffectEvo>("Yeti-Lawine", typeof(SnowballEffect), typeof(BubbleGun)); return; }
+        }
+
+        if (Ctrl && Input.GetKeyDown(RoyalSplatKey))
+        {
+            GiveWeapon(FindBase<SnowballEffect, SnowballEffectEvo>(), "Schneeballeffekt");
+            return;
         }
 
         if (Ctrl && Input.GetKeyDown(ChocoChipsKey))

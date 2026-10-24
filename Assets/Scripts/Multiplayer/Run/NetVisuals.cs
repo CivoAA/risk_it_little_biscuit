@@ -420,7 +420,7 @@ public class NetVisuals : MonoBehaviour
             if (!Receives(p)) continue;
             NetRun.Peer peer = run.Peers[p];
             if (peer.LastState < 0f) continue;
-            if ((peer.Position - me).sqrMagnitude < near2) return true;
+            if ((peer.ViewCenter - me).sqrMagnitude < near2) return true;
         }
 
         IReadOnlyList<Enemy> alive = Enemy.Alive;
@@ -498,7 +498,7 @@ public class NetVisuals : MonoBehaviour
     {
         NetRun.Peer peer = run.Peers[p];
         bool known = peer.LastState >= 0f;
-        Rect view = new Rect(peer.Position - peer.ViewHalf, peer.ViewHalf * 2f);
+        Rect view = new Rect(peer.ViewCenter - peer.ViewHalf, peer.ViewHalf * 2f);   // Bild, nicht Figur: Zuschauer sehen woanders hin
 
         enterW.Clear();
         lookW.Clear();
@@ -568,7 +568,7 @@ public class NetVisuals : MonoBehaviour
             session.SendPayload(NetMsg.VisLook, lookW, (byte)p, true);
         }
 
-        SendMotion(p, peer.Position);
+        SendMotion(p, peer.ViewCenter);
     }
 
     private static bool Inside(Rect view, Vector3 pos, float margin) =>

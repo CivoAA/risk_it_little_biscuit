@@ -119,6 +119,8 @@ public class NetHud : MonoBehaviour
         public Image Ring, Portrait, Arrow, Skull;
         public RectTransform Mask;
         public Label Dist;
+        /// <summary>Mitte des Knopfs in HUD-Pixeln (fuer Emotes am Rand).</summary>
+        public Vector2 At;
     }
 
     private class Bubble
@@ -583,7 +585,7 @@ public class NetHud : MonoBehaviour
                 fill = trail = 0f;
                 if (NetRevive.Active != null && NetRevive.Active.TryGetAltar(p.Slot, out float progress, out int inside))
                 {
-                    right = NetText.Get("net.hud.altar", "KREUZ") + " " + Mathf.FloorToInt(progress * 100f) + "%";
+                    right = NetText.Get("net.hud.altar", "GLAS") + " " + Mathf.FloorToInt(progress * 100f) + "%";
                     rightColor = GameHudSkin.IcingLight;
                     revive = progress;
                     icon = GameHudSkin.Ghost;
@@ -778,6 +780,7 @@ public class NetHud : MonoBehaviour
         float hw = hudW / 2f - 22f, hh = hudH / 2f - 24f;
         float t = Mathf.Min(hw / Mathf.Max(0.001f, Mathf.Abs(dir.x)), hh / Mathf.Max(0.001f, Mathf.Abs(dir.y)));
         Vector2 at = mid + dir * t;
+        ptr.At = at;
         Pos(ptr.Root, at.x - 10f, at.y - 10f);
 
         bool downed = p.State == NetRun.PeerState.Downed;
@@ -887,7 +890,7 @@ public class NetHud : MonoBehaviour
 
             string sub = NetText.Get("net.hud.spectate_switch", "LEERTASTE: WECHSELN");
             if (NetRevive.Active != null && NetRevive.Active.TryGetAltar(run.LocalPeer.Slot, out float progress, out int inside))
-                sub = string.Format(NetText.Get("net.hud.altar_self", "DEIN TEAM HOLT DICH AM KREUZ: {0}%"), Mathf.FloorToInt(progress * 100f))
+                sub = string.Format(NetText.Get("net.hud.altar_self", "DEIN TEAM BEFREIT DICH AUS DEM GLAS: {0}%"), Mathf.FloorToInt(progress * 100f))
                     + (inside > 0 ? "  (" + inside + ")" : "");
             outSub.Set(sub, pixelFont, textFont);
             int w = Mathf.CeilToInt(Mathf.Max(outTitle.Width, outSub.Width)) + 20;
@@ -905,6 +908,7 @@ public class NetHud : MonoBehaviour
         {
             Bubble b = bubbles[slot];
             Transform who = null;
+            bool atEdge = false;
             float lift = 1.15f;
             if (emotes != null && cam != null && s != null && emotes.TryGet(slot, out NetEmotes.Kind kind, out float age))
             {
@@ -917,21 +921,38 @@ public class NetHud : MonoBehaviour
                 {
                     NetAvatar a = NetPlayers.AvatarOf(slot);
                     if (a != null && plates[slot].Root.gameObject.activeSelf) { who = a.transform; lift = 1.15f; }
+                    // Nicht im Bild: die Blase haengt am Randknopf - ein "HILFE!" soll man auch von weitem sehen.
+                    else if (pointers[slot].Root.gameObject.activeSelf) atEdge = true;
                 }
 
-                if (who != null)
+                if (who != null || atEdge)
                 {
                     Show(b.Root, true);
                     SetBubble(b, kind);
-                    Vector2 px = ToHud(cam, who.position + Vector3.up * lift, out _);
-                    float extra = slot == s.LocalSlot ? 4f : 30f;   // ueber dem Namensschild der anderen
-                    float w = b.Root.sizeDelta.x;
+                    float w = b.Root.sizeDelta.x, h = b.Root.sizeDelta.y;
                     // Auftritt: springt gross auf, setzt sich, wippt; am Ende kurz ausblenden.
                     float sc = age < 0.08f ? 0.6f : age < 0.16f ? 1.25f : 1f;
                     int bob = Mathf.RoundToInt(Mathf.Sin(age * 6f) * 1.2f);
-                    b.Root.localScale = new Vector3(sc, sc, 1f);
                     b.Root.pivot = new Vector2(0.5f, 0f);
-                    b.Root.anchoredPosition = new Vector2(Mathf.Round(px.x), -Mathf.Round(px.y - extra - bob));
+                    if (atEdge)
+                    {
+                        // Ueber dem Knopf, am oberen Rand darunter (dann ohne Spitze); nie aus dem Bild.
+                        Vector2 at = pointers[slot].At;
+                        bool below = at.y - 12f - h < 2f;
+                        float x = Mathf.Clamp(at.x, w / 2f + 2f, hudW - w / 2f - 2f);
+                        float bottom = below ? at.y + 34f + h : at.y - 12f;
+                        if (kind == NetEmotes.Kind.Help && Mathf.Repeat(age * 2.5f, 1f) < 0.2f) sc *= 1.15f;
+                        b.Root.anchoredPosition = new Vector2(Mathf.Round(x), -Mathf.Round(bottom - bob));
+                        Show(b.Tail, !below);
+                    }
+                    else
+                    {
+                        Vector2 px = ToHud(cam, who.position + Vector3.up * lift, out _);
+                        float extra = slot == s.LocalSlot ? 4f : 30f;   // ueber dem Namensschild der anderen
+                        b.Root.anchoredPosition = new Vector2(Mathf.Round(px.x), -Mathf.Round(px.y - extra - bob));
+                        Show(b.Tail, true);
+                    }
+                    b.Root.localScale = new Vector3(sc, sc, 1f);
                     float alpha = Mathf.Clamp01((NetEmotes.Duration - age) / 0.3f);
                     Tint(b.Back, new Color(1f, 1f, 1f, alpha));
                     Tint(b.Tail, new Color(1f, 1f, 1f, alpha));

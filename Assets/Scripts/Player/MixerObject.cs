@@ -119,44 +119,10 @@ public class MixerObject : MonoBehaviour
             // Wenn Sprite leer (0) → Aktion auslösen
             if (chargeSprite.transform.localScale.x <= 0f && !actionTriggered)
             {
-                chargeSprite.transform.localScale = Vector3.zero;
-                actionTriggered = true;
-                mixerActive = true;
-                // Koop: bei allen anderen ist dieser Mixer jetzt auch leer.
+                // Koop: bei allen anderen ist dieser Mixer jetzt auch leer
+                // (wer gerade mit drinsteht, bekommt ebenfalls eine Auswahl).
                 NetWorld.Active?.LocalMixerUsed(this);
-                EndlessScore.AddMixer();
-                RunChallenges.MixerUsed();
-                unused.Remove(this);
-
-                // Vor dem Oeffnen wuerfeln - die Mixer-Ansicht liest die
-                // Ergebnisse fuer Titel und Hinweis.
-                RollSpecials();
-
-                UIController.Instance.PowerUpPanelOpen();
-                AssignRandomPowerUps();
-
-                // 🔹 Animation aktiv lassen
-                if (animator != null)
-                {
-                    animator.enabled = true; // sicherstellen, dass sie weiterläuft
-                }
-
-                // 🔹 Alle "Beine-Zone"-Sprites deaktivieren (außer dem Mixer selbst)
-                foreach (Transform child in transform)
-                {
-                    if (child != chargeSprite.transform)
-                    {
-                        var sr = child.GetComponent<SpriteRenderer>();
-                        if (sr != null)
-                            sr.enabled = false;
-                    }
-                }
-
-                // 🔹 Collider deaktivieren, aber NICHT das Script selbst!
-                GetComponent<Collider2D>().enabled = false;
-                // Script aktiv lassen, damit Animation weiterläuft
-                playerInside = false; // Sicherheitshalber
-
+                Trigger();
                 break;
             }
 
@@ -193,6 +159,67 @@ public class MixerObject : MonoBehaviour
 
 
     private bool mixerActive = false;
+
+    /// <summary>Mixer ist leer: Auswahl oeffnen, Ring und Zone weg, nicht mehr aufladen.</summary>
+    private void Trigger()
+    {
+        chargeSprite.transform.localScale = Vector3.zero;
+        actionTriggered = true;
+        mixerActive = true;
+        EndlessScore.AddMixer();
+        RunChallenges.MixerUsed();
+        unused.Remove(this);
+
+        // Vor dem Oeffnen wuerfeln - die Mixer-Ansicht liest die
+        // Ergebnisse fuer Titel und Hinweis.
+        RollSpecials();
+
+        UIController.Instance.PowerUpPanelOpen();
+        AssignRandomPowerUps();
+
+        // 🔹 Animation aktiv lassen
+        if (animator != null)
+        {
+            animator.enabled = true; // sicherstellen, dass sie weiterläuft
+        }
+
+        // 🔹 Alle "Beine-Zone"-Sprites deaktivieren (außer dem Mixer selbst)
+        foreach (Transform child in transform)
+        {
+            if (child != chargeSprite.transform)
+            {
+                var sr = child.GetComponent<SpriteRenderer>();
+                if (sr != null)
+                    sr.enabled = false;
+            }
+        }
+
+        // 🔹 Collider deaktivieren, aber NICHT das Script selbst!
+        GetComponent<Collider2D>().enabled = false;
+        // Script aktiv lassen, damit Animation weiterläuft
+        playerInside = false; // Sicherheitshalber
+        if (currentCoroutine != null) StopCoroutine(currentCoroutine);
+        currentCoroutine = null;
+    }
+
+    /// <summary>
+    /// Koop: ein Mitspieler hat diesen Mixer leer gemacht. Steht der eigene
+    /// Spieler gerade mit im Feld, bekommt er seine eigene Auswahl - zwei im
+    /// Mixer heisst zwei Belohnungen. Sonst ist der Mixer fuer ihn nur leer.
+    /// </summary>
+    public void TeammateFinished()
+    {
+        if (actionTriggered) return;
+        PlayerController pc = PlayerController.Instance;
+        bool canMix = pc != null && pc.gameObject.activeInHierarchy && !pc.NetGhost
+                      && (NetRun.Active == null || NetRun.Active.LocalAlive);
+        if (playerInside && canMix && enabled && UIController.Instance != null)
+        {
+            Trigger();
+            return;
+        }
+        MarkUsedByTeammate();
+    }
 
     /// <summary>
     /// Koop: ein Mitspieler hat diesen Mixer geleert. Er sieht danach aus wie
