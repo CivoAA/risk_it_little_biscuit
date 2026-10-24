@@ -7,6 +7,7 @@ public class LifeSteal : Weapon
     public float damageMultiplire;
     public float cooldown = 1;
     private int lastAppliedLevel = -2;
+    private float appliedChance, appliedMultiplier;   // Summen aller Stufen - fuer RemoveEffect
 
     void Awake()
     {
@@ -26,9 +27,21 @@ public class LifeSteal : Weapon
             // Werte übernehmen
             PlayerController.Instance.lifeStealChance       += stats[weaponLevel].range;
             PlayerController.Instance.lifeStealMultiplire   += stats[weaponLevel].damage;
+            appliedChance     += stats[weaponLevel].range;
+            appliedMultiplier += stats[weaponLevel].damage;
             // neuen Stand merken
             lastAppliedLevel = weaponLevel;
         }
+    }
+
+    public override void RemoveEffect()
+    {
+        if (PlayerController.Instance != null)
+        {
+            PlayerController.Instance.lifeStealChance     -= appliedChance;
+            PlayerController.Instance.lifeStealMultiplire -= appliedMultiplier;
+        }
+        appliedChance = appliedMultiplier = 0f;
     }
     
     public void StealLife(int damage)

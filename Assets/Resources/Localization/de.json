@@ -2179,6 +2179,25 @@
     { "key": "net.pause.dialog.end_all", "value": "Lauf für alle beenden? Alle bekommen ihr Gold und ihre Char-XP." },
     { "key": "net.pause.dialog.leave", "value": "Lauf verlassen? Die anderen spielen weiter, du bekommst Gold und Char-XP." },
     { "key": "net.start.no_steam", "value": "Steam nicht verbunden - nur Direktverbindung per IP." },
-    { "key": "net.lobby.ip", "value": "IP" }
+    { "key": "net.lobby.ip", "value": "IP" },
+    { "key": "ui.shrine.title", "value": "OPFERSCHREIN" },
+    { "key": "ui.shrine.weapons", "value": "WAFFEN" },
+    { "key": "ui.shrine.buffs", "value": "BUFFS" },
+    { "key": "ui.shrine.sacrifice", "value": "OPFERN" },
+    { "key": "ui.shrine.leave", "value": "GEHEN" },
+    { "key": "ui.shrine.sure", "value": "SICHER?" },
+    { "key": "ui.shrine.pick", "value": "Opfere eine Waffe oder einen Buff - für diesen Lauf verbannt" },
+    { "key": "ui.shrine.pick_first", "value": "Wähle zuerst etwas aus" },
+    { "key": "ui.shrine.nothing", "value": "Hier ist nichts, was der Schrein nimmt" },
+    { "key": "ui.shrine.block_start", "value": "Deine Startwaffe bleibt" },
+    { "key": "ui.shrine.block_evo", "value": "Evos kann man nicht opfern" },
+    { "key": "ui.shrine.sure_hint", "value": "Nochmal OPFERN zum Bestätigen" },
+    { "key": "ui.shrine.cost", "value": "-{0} LEVEL  -  DRUCK +{1}% FÜR {2}" },
+    { "key": "ui.shrine.lose_evo", "value": "Damit verlierst du die Evo: {0}" },
+    { "key": "ui.shrine.banished", "value": "Für den Rest des Laufs weg" },
+    { "key": "ui.shrine.float_levels", "value": "-{0} LEVEL" },
+    { "key": "ui.shrine.float_pressure", "value": "DRUCK +{0}%" },
+    { "key": "net.revive.altar_self", "value": "DEINE SEELE HÄNGT AM KREUZ - DEIN TEAM KANN DICH HOLEN" },
+    { "key": "net.revive.altar_other", "value": "{0} HÄNGT AM KREUZ - FOLGT DEM TOTENKOPF!" }
   ]
 }

@@ -2,7 +2,8 @@ using UnityEngine;
 
 /// <summary>
 /// Prueft fuer die Zufalls-Spawner, ob ein Mixer an einer Stelle stehen darf:
-///  - sein Feld (der Ring = Trigger-Kreis) haelt Abstand zu allen anderen Mixer-Feldern,
+///  - sein Feld (der Ring = Trigger-Kreis) haelt Abstand zu allen anderen Mixer-Feldern
+///    und Opferschreinen (<see cref="SacrificeShrine"/>),
 ///  - und beruehrt keinen <see cref="MixerBlocker"/> (Baeume).
 ///
 /// Auf der 3x3-Map wandern die Chunks mit dem Spieler mit. Ein Baum taucht
@@ -47,6 +48,18 @@ public static class MixerPlacement
             Vector2 otherCenter = FieldCenter(go, go.transform.position);
             float minDistance = radius + FieldRadius(go) + gap;
             if ((center - otherCenter).sqrMagnitude < minDistance * minDistance)
+                return false;
+        }
+
+        // Opferschreine haben ein Feld wie ein Mixer und halten denselben Abstand.
+        var shrines = SacrificeShrine.All;
+        for (int i = 0; i < shrines.Count; i++)
+        {
+            SacrificeShrine shrine = shrines[i];
+            if (shrine == null) continue;
+
+            float minDistance = radius + shrine.Radius + gap;
+            if ((center - (Vector2)shrine.transform.position).sqrMagnitude < minDistance * minDistance)
                 return false;
         }
 

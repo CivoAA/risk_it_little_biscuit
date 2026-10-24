@@ -96,6 +96,7 @@ public static class EndlessScore
         earned = earnedStory = 0f;
         Kills = Mixers = 0;
         LastScore = 0;
+        bestLevel = 1;
     }
 
     /// <summary>Fortschritt des Laufs: 1 am Anfang, +1 je <see cref="ProgressStep"/> Sekunden.</summary>
@@ -117,6 +118,7 @@ public static class EndlessScore
         earned = earnedStory = 0f;
         Kills = Mixers = 0;
         LastScore = 0;
+        bestLevel = 1;
     }
 
     /// <summary>Ein Gegner ist gefallen (<see cref="Enemy"/>).</summary>
@@ -135,10 +137,16 @@ public static class EndlessScore
         Earn(MixerPoints * Progress);
     }
 
+    // Hoechstes Lauf-Level bisher. Nach einem Opfer am Schrein (Level weg)
+    // bringt das Wiederaufsteigen erst ueber dem alten Stand neue Punkte.
+    private static int bestLevel = 1;
+
     /// <summary>Der Spieler ist ein Lauf-Level aufgestiegen (<see cref="PlayerController.LevelUp"/>).</summary>
     public static void AddLevel()
     {
         if (!counting) return;
+        if (PlayerLevel <= bestLevel) return;
+        bestLevel = PlayerLevel;
         Earn(PointsPerLevel);
     }
 

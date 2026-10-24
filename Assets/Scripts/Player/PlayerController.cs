@@ -1058,6 +1058,31 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Opferschrein (<see cref="Sacrifice"/>): der Spieler faellt um
+    /// <paramref name="levels"/> Lauf-Level zurueck, nie unter Level 1. Die
+    /// Erfahrung im angefangenen Level ist weg, und das +1 Max-HP je Level-Up
+    /// geht mit - sonst brachte jedes Wiederaufsteigen neues Leben. Die
+    /// Charakter-XP bleiben, die sind schon verbucht.
+    /// </summary>
+    /// <returns>Wie viele Level es wirklich waren.</returns>
+    public int LoseLevels(int levels)
+    {
+        int lost = Mathf.Clamp(levels, 0, Mathf.Max(0, currentLevel - 1));
+        currentLevel -= lost;
+        experience = 0f;
+
+        playerMaxHealth = Mathf.Max(1f, playerMaxHealth - lost);
+        if (playerHealth > playerMaxHealth) playerHealth = playerMaxHealth;
+
+        if (UIController.Instance != null)
+        {
+            UIController.Instance.UpdateHealthSlider();
+            UIController.Instance.UpdateExperienceSlider();
+        }
+        return lost;
+    }
+
     public void RandomWeapon()
     {
         int maxWeaponSlots = WeaponSlots;

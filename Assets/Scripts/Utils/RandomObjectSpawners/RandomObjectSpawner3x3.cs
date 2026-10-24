@@ -128,6 +128,12 @@ public class RandomObjectSpawner3x3 : MonoBehaviour
             {
                 Debug.LogWarning("⚠️ Keine Lauf-Szene gefunden! Objekt bleibt in aktueller Scene.");
             }
+
+            // Mit etwas Glueck steht neben dem Mixer ein Opferschrein im Block.
+            if (isMixer)
+                SacrificeShrine.MaybeSpawn(prefab, mixerGap,
+                    () => new Vector2(Random.Range(blockStartX, blockEndX), Random.Range(blockStartY, blockEndY)),
+                    spot => !IsInNoSpawnZone(spot.x, spot.y));
         }
     }
 
@@ -199,6 +205,9 @@ public class RandomObjectSpawner3x3 : MonoBehaviour
         PlanBlock(block, plan);
         foreach (Planned p in plan)
         {
+            // Koop: aus diesem Mixer ist ein Kreuz-Altar geworden (NetRevive).
+            if (p.Mixer && NetRevive.IsAltarSpot(p.Position)) continue;
+
             GameObject spawned = Instantiate(spawnablePrefabs[p.Prefab], new Vector3(p.Position.x, p.Position.y, 0f), Quaternion.identity);
             RunScene.Place(spawned, p.Mixer ? "Mixer" : "Map-Objekte");
             if (p.Mixer && NetWorld.MixerAlreadyUsed(p.Position))
@@ -235,6 +244,30 @@ public class RandomObjectSpawner3x3 : MonoBehaviour
                         GameObject prefab = s.spawnablePrefabs[p.Prefab];
                         into.Add((MixerPlacement.FieldCenter(prefab, p.Position), MixerPlacement.FieldRadius(prefab)));
                     }
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Koop: Stellen (Transform-Position) aller Mixer, die in diesem Rechteck
+    /// stehen werden - auch in Bloecken, die noch keiner gebaut hat. Daraus
+    /// sucht <see cref="NetRevive"/> den Mixer aus, der zum Kreuz-Altar wird.
+    /// </summary>
+    public static void PlannedMixers(Rect area, List<Vector2> into)
+    {
+        foreach (RandomObjectSpawner3x3 s in active)
+        {
+            if (s == null || s.spawnablePrefabs == null || s.spawnablePrefabs.Length == 0) continue;
+            int bx0 = Mathf.FloorToInt(area.xMin / s.blockSize), bx1 = Mathf.FloorToInt(area.xMax / s.blockSize);
+            int by0 = Mathf.FloorToInt(area.yMin / s.blockSize), by1 = Mathf.FloorToInt(area.yMax / s.blockSize);
+            for (int x = bx0; x <= bx1; x++)
+            {
+                for (int y = by0; y <= by1; y++)
+                {
+                    s.PlanBlock(new Vector2Int(x, y), query);
+                    foreach (Planned p in query)
+                        if (p.Mixer && area.Contains(p.Position)) into.Add(p.Position);
                 }
             }
         }

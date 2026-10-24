@@ -39,4 +39,13 @@ public class SecondChance : Weapon
             Achievements.Unlock(Ach.MaxSecondChance);
         }
     }
+
+    /// <summary>Nimmt die Ladungen dieses Buffs wieder weg - schon verbrauchte bleiben verbraucht.</summary>
+    public override void RemoveEffect()
+    {
+        PlayerController player = PlayerController.Instance;
+        if (player != null)
+            player.secondChanceCharges = Mathf.Max(0, player.secondChanceCharges - appliedCharges);
+        appliedCharges = 0;
+    }
 }

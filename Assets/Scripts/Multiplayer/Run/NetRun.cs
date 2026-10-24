@@ -71,6 +71,12 @@ public class NetRun : MonoBehaviour
     /// <summary>Kurze Meldung fuers HUD ("NICK IST NIEDERGEGANGEN!").</summary>
     public static event Action<string, Color> Toast;
 
+    /// <summary>Ein Spieler hat seinen Zustand gewechselt: Platz, vorher, nachher (<see cref="NetRevive"/>).</summary>
+    public static event Action<int, PeerState, PeerState> StateChanged;
+
+    /// <summary>Meldung fuers HUD von aussen (Kreuz-Altar).</summary>
+    public static void ShowToast(string text, Color color) => Toast?.Invoke(text, color);
+
     public Phase CurrentPhase { get; private set; } = Phase.Loading;
     public NetRunInfo Info { get; private set; }
 
@@ -175,6 +181,7 @@ public class NetRun : MonoBehaviour
         gameObject.AddComponent<NetPickups>();
         gameObject.AddComponent<NetWorld>();
         gameObject.AddComponent<NetHud>();
+        gameObject.AddComponent<NetRevive>();
 
         Time.timeScale = 0f;
         Debug.Log($"[NetRun] Koop-Lauf mit {StartPlayers} Spielern, warte auf alle.");
@@ -623,7 +630,7 @@ public class NetRun : MonoBehaviour
                     Toast?.Invoke(string.Format(NetText.Get("net.run.down", "{0} IST NIEDERGEGANGEN!"), name),
                                   GameHudSkin.JamLight);
                 break;
-            case PeerState.Alive when before == PeerState.Downed:
+            case PeerState.Alive when before == PeerState.Downed || before == PeerState.Out:
                 Toast?.Invoke(string.Format(NetText.Get("net.run.revived", "{0} IST WIEDER DA!"), name), GameHudSkin.Mint);
                 break;
             case PeerState.Out:
@@ -634,6 +641,8 @@ public class NetRun : MonoBehaviour
                                        GameHudSkin.StoneLight);
                 break;
         }
+
+        StateChanged?.Invoke(p.Slot, before, p.State);
     }
 
     // ==================================================================
@@ -778,6 +787,42 @@ public class NetRun : MonoBehaviour
         ClearOwnEnemies();
         pc.gameObject.SetActive(false);
         SpectateNext();
+    }
+
+    /// <summary>
+    /// Kreuz-Altar (<see cref="NetRevive"/>): der eigene Spieler war raus und
+    /// steht am Altar wieder auf - mit <paramref name="healthFraction"/> seiner
+    /// Max-HP, kurz unverwundbar, die Kamera wieder bei ihm.
+    /// </summary>
+    public void ReviveFromOut(Vector2 at, float healthFraction)
+    {
+        PlayerController pc = PlayerController.Instance;
+        Peer me = LocalPeer;
+        if (pc == null || me == null || me.State != PeerState.Out || CurrentPhase != Phase.Running) return;
+
+        pc.transform.position = new Vector3(at.x, at.y, pc.transform.position.z);
+        pc.gameObject.SetActive(true);
+        Rigidbody2D rb = pc.GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.position = at;
+            rb.linearVelocity = Vector2.zero;
+        }
+
+        me.Revive = 0f;
+        me.Bleed = 0f;
+        SetGhost(pc, false);
+        pc.playerHealth = Mathf.Max(1f, pc.playerMaxHealth * healthFraction);
+        pc.GrantImmunity(NetBalance.ReviveImmunity);
+        UIController.Instance?.UpdateHealthSlider();
+
+        Spectating = -1;
+        CinemachineCamera cam = FindAnyObjectByType<CinemachineCamera>();
+        if (cam != null) cam.Follow = pc.transform;
+
+        DamageNumberController.Instance?.CreateText(NetText.Get("net.run.float_revived", "GERETTET!"), pc.transform.position);
+        AudioController.Instance?.PalySound(AudioController.Instance.LevelUpSound);
+        SetState(me.Slot, PeerState.Alive, true);
     }
 
     /// <summary>Wer raus ist, nimmt seine normalen Gegner mit - um ihn herum spielt ja niemand mehr.</summary>

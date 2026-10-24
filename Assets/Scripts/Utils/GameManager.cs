@@ -494,7 +494,8 @@ public class GameManager : MonoBehaviour
             && !ui.WinPanel.activeSelf
             && !ui.LevelUpPanel.activeSelf
             && !ui.PowerUpPanel.activeSelf
-            && !ui.EvoPanel.activeSelf;
+            && !ui.EvoPanel.activeSelf
+            && !SacrificeShrine.PanelOpen;
     }
 
     /// <summary>

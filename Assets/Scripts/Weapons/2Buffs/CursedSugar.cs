@@ -21,4 +21,9 @@ public class CursedSugar : Weapon
         RunDifficulty.Curse = stats[weaponLevel].damage;
         lastAppliedLevel = weaponLevel;
     }
+
+    public override void RemoveEffect()
+    {
+        RunDifficulty.Curse = 0f;
+    }
 }

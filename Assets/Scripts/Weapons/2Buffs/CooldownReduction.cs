@@ -34,4 +34,10 @@ public class CooldownReduction : Weapon
             Achievements.Unlock(Ach.MaxCooldown);
         }
     }
+
+    public override void RemoveEffect()
+    {
+        if (PlayerController.Instance != null) PlayerController.Instance.cooldownMultiplier += appliedReduction;
+        appliedReduction = 0f;
+    }
 }

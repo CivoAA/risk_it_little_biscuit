@@ -163,6 +163,11 @@ public class GameHud : MonoBehaviour
     private int goldTarget, goldDrawn = -1;
     private float nextGoldPoll;
 
+    // Opferschrein: Druck und Restzeit unter dem Gold
+    private RectTransform pressureRoot, pressureChip, pressureIcon;
+    private Shadowed pressureText;
+    private int pressureTextWidth = -1;
+
     // Boss
     private RectTransform bottom;
     private BossView bossView, miniView;
@@ -346,6 +351,48 @@ public class GameHud : MonoBehaviour
                         SizeGold, GameHudSkin.Gold, TextAlignmentOptions.Right, TextStyle.Outline);
         goldText.Set("0");
         FitGoldChip();
+
+        // Nur sichtbar, solange ein Opfer am Schrein den Druck hochhaelt.
+        pressureRoot = NewRect("Pressure", right);
+        Place(pressureRoot, new RectInt(0, 0, RightW, PressureChipY + GoldChipH));
+        pressureChip = Img("PressureChip", pressureRoot, new RectInt(0, PressureChipY, 30, GoldChipH), GameHudSkin.Plate,
+                           Color.white, true).rectTransform;
+        Sprite skull = GameHudSkin.Skull;
+        pressureIcon = Img("Skull", pressureRoot, new RectInt(0, PressureChipY + 2, Mathf.RoundToInt(skull.rect.width),
+                           Mathf.RoundToInt(skull.rect.height)), skull, Color.white).rectTransform;
+        pressureText = Text("Pressure", pressureRoot, new RectInt(0, PressureChipY, RightW - Margin - 3, GoldChipH),
+                            SizeGold, GameHudSkin.JamLight, TextAlignmentOptions.Right, TextStyle.Outline);
+        pressureRoot.gameObject.SetActive(false);
+    }
+
+    private const int PressureChipY = GoldChipY + GoldChipH + 3;
+
+    /// <summary>Wie <see cref="FitGoldChip"/>: Chip rechtsbuendig, so breit wie Schaedel plus Text.</summary>
+    private void FitPressureChip()
+    {
+        pressureText.Main.ForceMeshUpdate();
+        int textW = Mathf.CeilToInt(pressureText.Main.preferredWidth);
+        if (textW == pressureTextWidth) return;
+        pressureTextWidth = textW;
+
+        int iconW = Mathf.RoundToInt(pressureIcon.sizeDelta.x);
+        int w = 3 + iconW + 3 + textW + 4;
+        int x = RightW - Margin - w;
+        pressureChip.anchoredPosition = new Vector2(x, -PressureChipY);
+        pressureChip.sizeDelta = new Vector2(w, GoldChipH);
+        pressureIcon.anchoredPosition = new Vector2(x + 3, -(PressureChipY + (GoldChipH - pressureIcon.sizeDelta.y) / 2f));
+    }
+
+    private void UpdatePressure()
+    {
+        int count = RunDifficulty.ActiveSacrifices;
+        bool show = count > 0;
+        if (pressureRoot.gameObject.activeSelf != show) pressureRoot.gameObject.SetActive(show);
+        if (!show) return;
+
+        string text = "+" + Mathf.RoundToInt(count * RunDifficulty.SacrificePressure * 100f) + "% "
+                    + Sacrifice.FormatTime(RunDifficulty.SacrificeTimeLeft);
+        if (pressureText.Set(text)) FitPressureChip();
     }
 
     // ---------- unten ----------
@@ -390,6 +437,7 @@ public class GameHud : MonoBehaviour
         UpdateTimer(now);
         UpdateLabel(now);
         UpdateGold(dt, now);
+        UpdatePressure();
         UpdateSlots(now);
         UpdateShake(now);
         UpdateBoss(dt, now);

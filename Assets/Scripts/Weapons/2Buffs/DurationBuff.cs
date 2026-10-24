@@ -32,4 +32,10 @@ public class DurationBuff : Weapon
             Achievements.Unlock(Ach.MaxDuration);
         }
     }
+
+    public override void RemoveEffect()
+    {
+        if (PlayerController.Instance != null) PlayerController.Instance.durationMultiplier -= appliedBonus;
+        appliedBonus = 0f;
+    }
 }

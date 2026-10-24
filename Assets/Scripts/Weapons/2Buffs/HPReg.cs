@@ -4,6 +4,7 @@ public class HPReg : Weapon
 {
     private float regTimer = 0f;
     private int lastAppliedLevel = -2; 
+    private float applied;   // Summe aller verbuchten Stufen - fuer RemoveEffect
 
     void Update()
     {
@@ -14,6 +15,7 @@ public class HPReg : Weapon
         if (weaponLevel != lastAppliedLevel && weaponLevel >= 0)
         {
             PlayerController.Instance.playerHealthReg += stats[weaponLevel].damage;
+            applied += stats[weaponLevel].damage;
             lastAppliedLevel = weaponLevel;
         }
 
@@ -38,5 +40,11 @@ public class HPReg : Weapon
             UIController.Instance.UpdateHealthSlider();
             regTimer = currentCooldown;
         }
+    }
+
+    public override void RemoveEffect()
+    {
+        if (PlayerController.Instance != null) PlayerController.Instance.playerHealthReg -= applied;
+        applied = 0f;
     }
 }

@@ -64,4 +64,9 @@ public enum NetMsg : byte
 
     // ------------------------------------------------------------- Welt
     MixerUsed = 110,
+
+    // ----------------------------------------------- Kreuz-Altar (NetRevive)
+    ReviveAltar = 111,    // H->alle: fuer Spieler X steht ein Kreuz an Stelle Y, so lange dauert die Rettung
+    ReviveProgress = 112, // H->alle (unzuverlaessig): Fortschritt und wie viele gerade im Kreis stehen
+    ReviveDone = 113,     // H->alle: geschafft, Spieler X steht am Kreuz wieder auf
 }

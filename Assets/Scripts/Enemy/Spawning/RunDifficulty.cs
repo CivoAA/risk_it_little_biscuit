@@ -56,8 +56,65 @@ public static class RunDifficulty
         set { curse = Mathf.Max(0f, value); }
     }
 
-    /// <summary>Chaos plus Fluch - daraus rechnen alle Faktoren.</summary>
-    public static float Effective => Mathf.Max(0.25f, chaos + curse);
+    // ------------------------------------------------------------ Opferschrein
+
+    /// <summary>
+    /// So viel Chaos legt jedes Opfer am Schrein (<see cref="Sacrifice"/>) fuer
+    /// seine Dauer drauf. 0.25 = gut die Haelfte von Cursed Sugar auf Max (0.6).
+    /// Mehrere Opfer stapeln sich, jedes laeuft fuer sich ab.
+    /// </summary>
+    public const float SacrificePressure = 0.25f;
+
+    // Spielzeit (Time.time - steht bei Pause und Level-Up still), zu der ein Opfer ablaeuft.
+    private static readonly System.Collections.Generic.List<float> sacrificeEnds =
+        new System.Collections.Generic.List<float>();
+
+    /// <summary>Ein Opfer am Schrein: <see cref="SacrificePressure"/> mehr Chaos fuer <paramref name="seconds"/> Sekunden.</summary>
+    public static void AddSacrifice(float seconds)
+    {
+        sacrificeEnds.Add(Time.time + Mathf.Max(0f, seconds));
+    }
+
+    /// <summary>Wie viele Opfer gerade noch wirken.</summary>
+    public static int ActiveSacrifices
+    {
+        get
+        {
+            float now = Time.time;
+            int n = 0;
+            for (int i = 0; i < sacrificeEnds.Count; i++)
+                if (sacrificeEnds[i] > now) n++;
+            return n;
+        }
+    }
+
+    /// <summary>Restzeit des Opfers, das am laengsten wirkt (0 = keins).</summary>
+    public static float SacrificeTimeLeft
+    {
+        get
+        {
+            float left = 0f, now = Time.time;
+            for (int i = 0; i < sacrificeEnds.Count; i++)
+                left = Mathf.Max(left, sacrificeEnds[i] - now);
+            return left;
+        }
+    }
+
+    /// <summary>Chaos aus allen laufenden Opfern.</summary>
+    public static float SacrificeChaos => ActiveSacrifices * SacrificePressure;
+
+    /// <summary>
+    /// Koop: Chaos, solange am Kreuz-Altar jemand wiederbelebt wird
+    /// (<see cref="NetRevive"/> setzt es jeden Frame, 0 = keiner).
+    /// </summary>
+    public static float ReviveChaos { get; set; }
+
+    /// <summary>
+    /// Chaos plus Fluch plus Opfer und Wiederbelebung - daraus rechnen alle
+    /// Faktoren ausser der Belohnung (<see cref="RewardFactor"/>): beides ist
+    /// eine Strafe, keine Farm.
+    /// </summary>
+    public static float Effective => Mathf.Max(0.25f, chaos + curse + SacrificeChaos + ReviveChaos);
 
     /// <summary>Mehr Gegner gleichzeitig auf dem Feld.</summary>
     public static float CountFactor => 1f + (Effective - 1f) * 0.8f;
@@ -159,7 +216,7 @@ public static class RunDifficulty
     public static float CharXpCatchUp => CharLevel.CatchUpFactor(Skills.Level, CatchUpTarget);
 
     /// <summary>Erfahrung und Waehrung. Muss ueber 1 bleiben, sonst lohnt Chaos nicht.</summary>
-    public static float RewardFactor => Mathf.Pow(Effective, 1.2f);
+    public static float RewardFactor => Mathf.Pow(Mathf.Max(0.25f, chaos + curse), 1.2f);
 
     /// <summary>
     /// Setzt den Regler auf den Stand, mit dem der Lauf startet. Ruft der
@@ -169,6 +226,8 @@ public static class RunDifficulty
     {
         Chaos = GameSession.Chaos;
         Curse = 0f;
+        sacrificeEnds.Clear();
+        ReviveChaos = 0f;
         // Koop: die Schwierigkeit stellt der Host in der Lobby ein.
         Level = NetSession.InRun ? NetSession.Instance.Run.Difficulty : Difficulty.Current;
         InEndlessPart = false;

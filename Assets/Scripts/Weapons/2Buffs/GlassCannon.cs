@@ -39,4 +39,16 @@ public class GlassCannon : Weapon
             Achievements.Unlock(Ach.MaxGlassCannon);
         }
     }
+
+    public override void RemoveEffect()
+    {
+        PlayerController player = PlayerController.Instance;
+        if (player != null)
+        {
+            player.damageMultiplier -= appliedDamage;
+            player.damageTakenMultiplier -= appliedDamageTaken;
+        }
+        appliedDamage = 0f;
+        appliedDamageTaken = 0f;
+    }
 }

@@ -127,6 +127,12 @@ public class RandomObjectSpawner : MonoBehaviour
             {
                 Debug.LogWarning("⚠️ Keine Lauf-Szene gefunden! Objekt bleibt in aktueller Scene.");
             }
+
+            // Mit etwas Glueck steht neben dem Mixer ein Opferschrein im Block.
+            if (isMixer)
+                SacrificeShrine.MaybeSpawn(prefab, mixerGap,
+                    () => new Vector2(Random.Range(blockStartX, blockEndX), Random.Range(minY, maxY)),
+                    spot => !IsInNoSpawnZone(spot.x));
         }
     }
 
@@ -137,6 +143,20 @@ public class RandomObjectSpawner : MonoBehaviour
     /// </summary>
     // ------------------------------------------------------------------ Koop
 
+    private struct Planned
+    {
+        public GameObject Prefab;
+        public Vector2 Position;
+        public bool Mixer;
+    }
+
+    private static readonly List<Planned> plan = new List<Planned>();
+
+    // Alle laufenden Spawner - der Koop fragt sie, wo Mixer stehen werden (NetRevive).
+    private static readonly List<RandomObjectSpawner> active = new List<RandomObjectSpawner>();
+    private void OnEnable() => active.Add(this);
+    private void OnDisable() => active.Remove(this);
+
     /// <summary>
     /// Wie GenerateBlock, aber nur aus Seed und Block gerechnet: bei allen
     /// Spielern dasselbe, egal wer wann vorbeikommt. Abstaende gelten nur
@@ -144,6 +164,47 @@ public class RandomObjectSpawner : MonoBehaviour
     /// </summary>
     private void GenerateBlockDeterministic(int blockIndex)
     {
+        PlanBlock(blockIndex, plan);
+        foreach (Planned p in plan)
+        {
+            // Koop: aus diesem Mixer ist ein Kreuz-Altar geworden (NetRevive).
+            if (p.Mixer && NetRevive.IsAltarSpot(p.Position)) continue;
+
+            GameObject spawned = Instantiate(p.Prefab, new Vector3(p.Position.x, p.Position.y, 0f), Quaternion.identity);
+            RunScene.Place(spawned, p.Mixer ? "Mixer" : "Map-Objekte");
+            if (p.Mixer && NetWorld.MixerAlreadyUsed(p.Position))
+            {
+                MixerObject mixer = spawned.GetComponentInChildren<MixerObject>();
+                if (mixer != null) mixer.MarkUsedByTeammate();
+            }
+        }
+    }
+
+    /// <summary>
+    /// Koop: Stellen aller Mixer, die in diesem Rechteck stehen werden - auch
+    /// in Bloecken, die noch keiner gebaut hat (siehe <see cref="RandomObjectSpawner3x3.PlannedMixers"/>).
+    /// </summary>
+    public static void PlannedMixers(Rect area, List<Vector2> into)
+    {
+        var query = new List<Planned>();
+        foreach (RandomObjectSpawner s in active)
+        {
+            if (s == null || s.spawnablePrefabs == null || s.spawnablePrefabs.Length == 0) continue;
+            int b0 = Mathf.FloorToInt(area.xMin / s.blockSize), b1 = Mathf.FloorToInt(area.xMax / s.blockSize);
+            for (int b = b0; b <= b1; b++)
+            {
+                s.PlanBlock(b, query);
+                foreach (Planned p in query)
+                    if (p.Mixer && area.Contains(p.Position)) into.Add(p.Position);
+            }
+        }
+    }
+
+    /// <summary>Was in diesem Block stehen wird - nur aus Seed und Block gerechnet.</summary>
+    private void PlanBlock(int blockIndex, List<Planned> into)
+    {
+        into.Clear();
+        if (spawnablePrefabs.Length == 0) return;
         if (mixerPrefabs == null) mixerPrefabs = System.Array.FindAll(spawnablePrefabs, MixerObject.IsMixer);
 
         System.Random rng = NetWorld.RandomFor(NetWorld.Hash(gameObject.scene.name + "/" + gameObject.name), blockIndex, 0);
@@ -174,13 +235,7 @@ public class RandomObjectSpawner : MonoBehaviour
                 if (!free) continue;
 
                 placed.Add((pos, isMixer, radius));
-                GameObject spawned = Instantiate(prefab, new Vector3(pos.x, pos.y, 0f), Quaternion.identity);
-                RunScene.Place(spawned, isMixer ? "Mixer" : "Map-Objekte");
-                if (isMixer && NetWorld.MixerAlreadyUsed(pos))
-                {
-                    MixerObject mixer = spawned.GetComponentInChildren<MixerObject>();
-                    if (mixer != null) mixer.MarkUsedByTeammate();
-                }
+                into.Add(new Planned { Prefab = prefab, Position = pos, Mixer = isMixer });
                 break;
             }
         }
@@ -208,6 +263,17 @@ public class RandomObjectSpawner : MonoBehaviour
             GameObject go = mixer.gameObject;
             float min = MixerPlacement.FieldRadius(go) + propSpacing * 0.5f;
             if ((MixerPlacement.FieldCenter(go, go.transform.position) - spot).sqrMagnitude < min * min)
+                return false;
+        }
+
+        var shrines = SacrificeShrine.All;
+        for (int i = 0; i < shrines.Count; i++)
+        {
+            SacrificeShrine shrine = shrines[i];
+            if (shrine == null) continue;
+
+            float min = shrine.Radius + propSpacing * 0.5f;
+            if (((Vector2)shrine.transform.position - spot).sqrMagnitude < min * min)
                 return false;
         }
 

@@ -137,6 +137,14 @@ public class Weapon : MonoBehaviour
     /// </summary>
     protected int WholeExtraShots => Mathf.FloorToInt(ExtraShotValue + 0.0001f);
 
+    /// <summary>
+    /// Nimmt alles zurueck, was die Waffe am Spieler veraendert hat - fuer den
+    /// Opferschrein (<see cref="Sacrifice"/>). Waffen greifen danach ohnehin
+    /// nicht mehr an (<see cref="IsActive"/>); Buffs, die Werte am Spieler
+    /// hochgedreht haben, ziehen sie hier wieder ab.
+    /// </summary>
+    public virtual void RemoveEffect() { }
+
     public void LevelUP()
     {
         if (weaponLevel < stats.Count - 1)

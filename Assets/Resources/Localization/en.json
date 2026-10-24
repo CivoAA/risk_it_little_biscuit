@@ -2179,6 +2179,25 @@
     { "key": "net.pause.dialog.end_all", "value": "End the run for everyone? Everyone keeps their gold and char XP." },
     { "key": "net.pause.dialog.leave", "value": "Leave the run? The others keep playing, you keep your gold and char XP." },
     { "key": "net.start.no_steam", "value": "Steam not connected - direct IP connection only." },
-    { "key": "net.lobby.ip", "value": "IP" }
+    { "key": "net.lobby.ip", "value": "IP" },
+    { "key": "ui.shrine.title", "value": "SACRIFICE" },
+    { "key": "ui.shrine.weapons", "value": "WEAPONS" },
+    { "key": "ui.shrine.buffs", "value": "BUFFS" },
+    { "key": "ui.shrine.sacrifice", "value": "SACRIFICE" },
+    { "key": "ui.shrine.leave", "value": "LEAVE" },
+    { "key": "ui.shrine.sure", "value": "SURE?" },
+    { "key": "ui.shrine.pick", "value": "Sacrifice a weapon or buff - it's banished for this run" },
+    { "key": "ui.shrine.pick_first", "value": "Pick something first" },
+    { "key": "ui.shrine.nothing", "value": "Nothing here the shrine would take" },
+    { "key": "ui.shrine.block_start", "value": "Your starting weapon stays" },
+    { "key": "ui.shrine.block_evo", "value": "Evos can't be sacrificed" },
+    { "key": "ui.shrine.sure_hint", "value": "Press SACRIFICE again to confirm" },
+    { "key": "ui.shrine.cost", "value": "-{0} LEVEL  -  PRESSURE +{1}% FOR {2}" },
+    { "key": "ui.shrine.lose_evo", "value": "You lose the evo: {0}" },
+    { "key": "ui.shrine.banished", "value": "Gone for the rest of the run" },
+    { "key": "ui.shrine.float_levels", "value": "-{0} LEVEL" },
+    { "key": "ui.shrine.float_pressure", "value": "PRESSURE +{0}%" },
+    { "key": "net.revive.altar_self", "value": "YOUR SOUL HANGS ON THE CROSS - YOUR TEAM CAN BRING YOU BACK" },
+    { "key": "net.revive.altar_other", "value": "{0} HANGS ON THE CROSS - FOLLOW THE SKULL!" }
   ]
 }

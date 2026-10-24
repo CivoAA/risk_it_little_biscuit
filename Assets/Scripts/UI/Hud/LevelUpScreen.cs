@@ -8,7 +8,8 @@ using UnityEngine.UI;
 
 /// <summary>
 /// Level-Up-Auswahl, Evo-Buch und Mixer-Power-ups im Stil des <see cref="GameHud"/>.
-/// Der Mixer steht in LevelUpScreen.Mixer.cs, der Death-Screen in LevelUpScreen.Death.cs.
+/// Der Mixer steht in LevelUpScreen.Mixer.cs, der Death-Screen in LevelUpScreen.Death.cs,
+/// der Opferschrein in LevelUpScreen.Shrine.cs.
 ///
 ///   LevelUpScreen.Create(uiController);   // macht UIController.Awake selbst
 ///
@@ -79,7 +80,7 @@ public partial class LevelUpScreen : MonoBehaviour
     //  Zustand
     // ==================================================================
 
-    private enum Mode { Hidden, Choose, Book, Mixer, Death }
+    private enum Mode { Hidden, Choose, Book, Mixer, Death, Shrine }
     private enum Kind { Weapon, Buff, Evo, Bonus }
     private enum TextStyle { Plain, Shadow, Outline }
 
@@ -206,6 +207,7 @@ public partial class LevelUpScreen : MonoBehaviour
         BuildBook();
         BuildMixer();
         BuildDeath();
+        BuildShrine();
 
         chooseLayer.gameObject.SetActive(false);
         bookLayer.gameObject.SetActive(false);
@@ -309,6 +311,7 @@ public partial class LevelUpScreen : MonoBehaviour
         if (mode == Mode.Choose) UpdateChoose(now, mouse, mouseMoved);
         else if (mode == Mode.Mixer) UpdateMixer(now, mouse, mouseMoved);
         else if (mode == Mode.Death) UpdateDeath(now, mouse);
+        else if (mode == Mode.Shrine) UpdateShrine(now, mouse, mouseMoved);
         else UpdateBook(now, mouse);
     }
 
@@ -320,6 +323,7 @@ public partial class LevelUpScreen : MonoBehaviour
         if (ui.EvoPanel != null && ui.EvoPanel.activeInHierarchy) return Mode.Book;
         if (ui.LevelUpPanel != null && ui.LevelUpPanel.activeInHierarchy) return Mode.Choose;
         if (ui.PowerUpPanel != null && ui.PowerUpPanel.activeInHierarchy) return Mode.Mixer;
+        if (SacrificeShrine.PanelOpen) return Mode.Shrine;
         return Mode.Hidden;
     }
 
@@ -333,6 +337,7 @@ public partial class LevelUpScreen : MonoBehaviour
         bookLayer.gameObject.SetActive(next == Mode.Book);
         mixerLayer.gameObject.SetActive(next == Mode.Mixer);
         deathLayer.gameObject.SetActive(next == Mode.Death);
+        shrineLayer.gameObject.SetActive(next == Mode.Shrine);
         pressed = -1;
 
         if (next == Mode.Hidden)
@@ -352,6 +357,10 @@ public partial class LevelUpScreen : MonoBehaviour
         else if (next == Mode.Death)
         {
             EnterDeath(now);
+        }
+        else if (next == Mode.Shrine)
+        {
+            EnterShrine(now);
         }
         else if (next == Mode.Choose)
         {
