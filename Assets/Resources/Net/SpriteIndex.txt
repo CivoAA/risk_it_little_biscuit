@@ -1029,6 +1029,8 @@ secret_wake_up_12|AchievementsBook/secret_wake_up_12
 secret_wake_up_21|AchievementsBook/secret_wake_up_21
 secret_wake_up_32|AchievementsBook/secret_wake_up_32
 secret_wake_up|Achievements/secret_wake_up
+shrine_altar|Shrine/shrine_altar
+shrine_keeper|Shrine/shrine_keeper
 shrink_speed|Shop/shrink_speed
 shuri_blast_evo_12|AchievementsBook/shuri_blast_evo_12
 shuri_blast_evo_21|AchievementsBook/shuri_blast_evo_21

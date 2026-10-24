@@ -71,6 +71,17 @@ public class NetRevive : MonoBehaviour
     }
 
     private readonly Dictionary<int, Altar> altars = new Dictionary<int, Altar>();
+
+    /// <summary>Haengt dieser Spieler gerade an einem Kreuz? Fortschritt 0..1 (fuer das HUD).</summary>
+    public bool TryGetAltar(int slot, out float progress, out int inside)
+    {
+        progress = 0f;
+        inside = 0;
+        if (!altars.TryGetValue(slot, out Altar a)) return false;
+        progress = Mathf.Clamp01(a.Elapsed / a.Required);
+        inside = a.Inside;
+        return true;
+    }
     private readonly List<int> finished = new List<int>();
     private NetSession session;
     private float progressTimer;

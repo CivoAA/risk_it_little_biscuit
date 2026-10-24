@@ -736,10 +736,13 @@ public class SpawnDirector : MonoBehaviour
             if (enemy == null || enemy.IsRemote || enemy.IsBoss || !enemy.CanRecycle || enemy.RecycleHeld) continue;
 
             Vector2 pos = enemy.transform.position;
-            bool tooFar = (pos - player).sqrMagnitude >= limitSqr;
+            // Koop: zaehlt der naechste Spieler und jedes Bild - wer einen
+            // Mitspieler jagt, wird ihm nicht unter der Nase weggezogen.
+            bool tooFar = NetPlayers.NearestSqr(pos, player) >= limitSqr;
             bool stuckOffScreen = hasView
                 && enemy.BlockedFor >= blockedRecycleDelay
-                && !visible.Contains(pos);
+                && !visible.Contains(pos)
+                && !NetPlayers.SeenByMate(pos, offScreenMargin);
             if (!tooFar && !stuckOffScreen) continue;
 
             points.Clear();
@@ -769,7 +772,7 @@ public class SpawnDirector : MonoBehaviour
         {
             Enemy enemy = alive[i];
             if (enemy == null || enemy.IsRemote || enemy.Role != EnemyRole.MiniBoss) continue;
-            if (((Vector2)enemy.transform.position - player).sqrMagnitude < limitSqr) continue;
+            if (NetPlayers.NearestSqr(enemy.transform.position, player) < limitSqr) continue;
 
             Vector2 back = playerDir.sqrMagnitude > 0.0001f ? -playerDir : Random.insideUnitCircle.normalized;
             Vector2 behind = player + new Vector2(back.x * spawnHalfWidth, back.y * spawnHalfHeight);

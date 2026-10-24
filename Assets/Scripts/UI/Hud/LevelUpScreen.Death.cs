@@ -159,6 +159,8 @@ public partial class LevelUpScreen
                                    GameHudSkin.Arrow, "H");
         endlessButton = new ButtonView(this, deathLayer, new RectInt(bx, DeathButtonsY, DeathButtonW, ButtonH), GameHudSkin.Skull, "E");
 
+        BuildCoopTally();
+
         deathLayer.gameObject.SetActive(false);
     }
 
@@ -325,6 +327,8 @@ public partial class LevelUpScreen
         }
         restartButton.MoveX(bx);
         hubButton.MoveX(coopEnd ? bx : bx + DeathButtonW + DeathButtonGap);
+
+        EnterCoopTally();
     }
 
     /// <summary>
@@ -503,10 +507,11 @@ public partial class LevelUpScreen
             if (bt >= 0f) v.Highlight(Color.clear, false, false, null, now);
         }
 
-        // ---- Neu ----
-        SetActive(newLabelRoot, t >= TNew);
+        // ---- Neu (im Koop steht hier die Team-Abrechnung) ----
+        SetActive(newLabelRoot, t >= TNew && !coopEnd);
         for (int i = 0; i < newCount; i++)
             newEntries[i].Animate(now, t - TNew - i * 0.12f);
+        UpdateCoopTally(t, now);
 
         // ---- Knoepfe ----
         bool buttons = t >= TButtons;

@@ -113,6 +113,33 @@ public static class NetPlayers
         return target.Valid;
     }
 
+    /// <summary>
+    /// Quadrierter Abstand zum naechsten Spieler, der noch steht - allein der
+    /// zum eigenen. Fuer den Director: ein Gegner, der gerade einen Mitspieler
+    /// jagt, ist nicht "zu weit weg", nur weil er weit vom eigenen weg ist.
+    /// </summary>
+    public static float NearestSqr(Vector2 from, Vector2 fallback)
+    {
+        if (TryNearest(from, out Target t)) return (t.Position - from).sqrMagnitude;
+        return (fallback - from).sqrMagnitude;
+    }
+
+    /// <summary>Liegt der Punkt im Bild eines Mitspielers (plus Rand)? Allein immer false.</summary>
+    public static bool SeenByMate(Vector2 pos, float margin)
+    {
+        NetRun run = NetRun.Active;
+        if (run == null) return false;
+        for (int i = 0; i < avatars.Count; i++)
+        {
+            NetAvatar a = avatars[i];
+            if (a == null || !a.Targetable || a.Slot < 0 || a.Slot >= run.Peers.Length) continue;
+            Vector2 half = run.Peers[a.Slot].ViewHalf + new Vector2(margin, margin);
+            Vector2 d = pos - (Vector2)a.transform.position;
+            if (Mathf.Abs(d.x) <= half.x && Mathf.Abs(d.y) <= half.y) return true;
+        }
+        return false;
+    }
+
     /// <summary>Kurzform: Position des naechsten Spielers, sonst die des eigenen (oder from).</summary>
     public static Vector2 NearestPosition(Vector2 from)
     {

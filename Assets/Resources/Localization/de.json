@@ -2198,6 +2198,22 @@
     { "key": "ui.shrine.float_levels", "value": "-{0} LEVEL" },
     { "key": "ui.shrine.float_pressure", "value": "DRUCK +{0}%" },
     { "key": "net.revive.altar_self", "value": "DEINE SEELE HÄNGT AM KREUZ - DEIN TEAM KANN DICH HOLEN" },
-    { "key": "net.revive.altar_other", "value": "{0} HÄNGT AM KREUZ - FOLGT DEM TOTENKOPF!" }
+    { "key": "net.revive.altar_other", "value": "{0} HÄNGT AM KREUZ - FOLGT DEM TOTENKOPF!" },
+    { "key": "net.hud.altar", "value": "KREUZ" },
+    { "key": "net.hud.choosing_short", "value": "WÄHLT" },
+    { "key": "net.hud.reviving", "value": "RETTE" },
+    { "key": "net.hud.revive_me", "value": "RETTEN!" },
+    { "key": "net.hud.being_revived_pct", "value": "DU WIRST GERETTET ... {0}%" },
+    { "key": "net.hud.spectating_name", "value": "ZUSCHAUER - DU SIEHST {0}" },
+    { "key": "net.hud.spectate_switch", "value": "LEERTASTE: WECHSELN" },
+    { "key": "net.hud.altar_self", "value": "DEIN TEAM HOLT DICH AM KREUZ: {0}%" },
+    { "key": "net.hud.waiting_short", "value": "WARTE AUF MITSPIELER" },
+    { "key": "net.hud.others_choosing_short", "value": "{0} WÄHLT" },
+    { "key": "net.hud.emote_hint", "value": "1-4: EMOTES" },
+    { "key": "net.emote.help", "value": "HILFE!" },
+    { "key": "net.emote.haha", "value": "HAHA" },
+    { "key": "net.emote.gg", "value": "GG" },
+    { "key": "net.run.float_rescuer", "value": "RETTER!" },
+    { "key": "net.tally.title", "value": "TEAM-BILANZ" }
   ]
 }

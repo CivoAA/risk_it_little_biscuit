@@ -69,4 +69,10 @@ public enum NetMsg : byte
     ReviveAltar = 111,    // H->alle: fuer Spieler X steht ein Kreuz an Stelle Y, so lange dauert die Rettung
     ReviveProgress = 112, // H->alle (unzuverlaessig): Fortschritt und wie viele gerade im Kreis stehen
     ReviveDone = 113,     // H->alle: geschafft, Spieler X steht am Kreuz wieder auf
+
+    // ------------------------------------------- Team (NetStats, NetEmotes)
+    KillCredit = 114,     // Besitzer->Spieler: so viele meiner Gegner hast du erledigt
+    ReviveCredit = 115,   // Geretteter->Retter: du hast mich aufgehoben
+    TeamStats = 116,      // ->alle: meine Bilanz (Schaden, Kills, Rettungen, Niedergaenge)
+    Emote = 117,          // ->alle: Sprechblase ueber meiner Figur
 }

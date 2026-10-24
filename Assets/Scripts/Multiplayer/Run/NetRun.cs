@@ -91,6 +91,9 @@ public class NetRun : MonoBehaviour
     public bool LocalDowned => LocalPeer != null && LocalPeer.State == PeerState.Downed;
     public bool LocalOut => LocalPeer != null && (LocalPeer.State == PeerState.Out || LocalPeer.State == PeerState.Left);
 
+    /// <summary>Der Lauf ist zu Ende und war ein Sieg (fuer die Abrechnung).</summary>
+    public bool Won { get; private set; }
+
     /// <summary>Gerade steht das Spiel, weil jemand waehlt.</summary>
     public bool Paused { get; private set; }
 
@@ -182,6 +185,8 @@ public class NetRun : MonoBehaviour
         gameObject.AddComponent<NetWorld>();
         gameObject.AddComponent<NetHud>();
         gameObject.AddComponent<NetRevive>();
+        gameObject.AddComponent<NetStats>();
+        gameObject.AddComponent<NetEmotes>();
 
         Time.timeScale = 0f;
         Debug.Log($"[NetRun] Koop-Lauf mit {StartPlayers} Spielern, warte auf alle.");
@@ -573,7 +578,7 @@ public class NetRun : MonoBehaviour
         Peer p = Peers[from];
         p.Position = r.Vector2();
         p.Velocity = r.Vector2();
-        var state = (PeerState)r.Byte();
+        r.Byte();   // Zustand - gilt nur, was zuverlaessig als PlayerEvent kommt (siehe unten)
         p.Health = r.Float();
         p.MaxHealth = r.Float();
         p.Shield = r.Float();
@@ -582,9 +587,10 @@ public class NetRun : MonoBehaviour
         p.ViewHalf = new Vector2(r.Byte(), r.Byte());
         p.LastState = Time.unscaledTime;
 
-        // Der Zustand kommt zuverlaessig als PlayerEvent - hier nur als Rueckfall,
-        // falls ein Ereignis spaeter ankommt als der naechste Stand.
-        if (state != p.State && p.State != PeerState.Left && state != PeerState.Left) p.State = state;
+        // Den Zustand NICHT von hier uebernehmen: unzuverlaessige Pakete koennen
+        // ein zuverlaessiges Ereignis ueberholen - ein alter Stand "lebt" hat einen
+        // gerade Niedergegangenen sonst kurz wieder aufstehen lassen, ohne Meldung
+        // und ohne StateChanged (der Kreuz-Altar verpasste ihn).
     }
 
     private void SetState(int slot, PeerState state, bool broadcast)
@@ -735,19 +741,17 @@ public class NetRun : MonoBehaviour
         PlayerController pc = PlayerController.Instance;
         if (pc == null) return;
 
-        bool helped = false;
-        Vector2 at = pc.transform.position;
-        float r2 = NetBalance.ReviveRadius * NetBalance.ReviveRadius;
-        foreach (NetAvatar a in NetPlayers.Avatars)
-        {
-            if (a == null || !a.Targetable) continue;
-            if (((Vector2)a.transform.position - at).sqrMagnitude <= r2) { helped = true; break; }
-        }
+        int helper = NearestHelper(pc.transform.position);
 
-        if (helped)
+        if (helper >= 0)
         {
             me.Revive += dt / NetBalance.ReviveSeconds;
-            if (me.Revive >= 1f) { ReviveLocal(); return; }
+            if (me.Revive >= 1f)
+            {
+                NetStats.Active?.CreditRevive(helper);
+                ReviveLocal();
+                return;
+            }
         }
         else
         {
@@ -755,6 +759,20 @@ public class NetRun : MonoBehaviour
             me.Bleed -= dt;
             if (me.Bleed <= 0f) GoOut();
         }
+    }
+
+    /// <summary>Platz des naechsten stehenden Mitspielers in Rettungsweite, sonst -1.</summary>
+    private static int NearestHelper(Vector2 at)
+    {
+        int best = -1;
+        float bestD = NetBalance.ReviveRadius * NetBalance.ReviveRadius;
+        foreach (NetAvatar a in NetPlayers.Avatars)
+        {
+            if (a == null || !a.Targetable) continue;
+            float d = ((Vector2)a.transform.position - at).sqrMagnitude;
+            if (d <= bestD) { bestD = d; best = a.Slot; }
+        }
+        return best;
     }
 
     private void ReviveLocal()
@@ -1092,7 +1110,9 @@ public class NetRun : MonoBehaviour
     private void EndLocally(bool won)
     {
         if (CurrentPhase == Phase.Ended) return;
+        NetStats.Active?.Flush();
         CurrentPhase = Phase.Ended;
+        Won = won;
 
         GameManager gm = GameManager.Instance;
         if (gm == null) return;

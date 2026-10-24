@@ -379,6 +379,15 @@ public class Enemy : MonoBehaviour
     /// <summary>Ist gestorben (nicht nur verschwunden) - die Mitspieler hoeren dann den Todesklang.</summary>
     public bool NetDied { get; private set; }
 
+    /// <summary>Platz des Mitspielers mit dem letzten Treffer, -1 = der eigene Spieler (fuer die Team-Abrechnung).</summary>
+    [System.NonSerialized] public int LastHitBy = -1;
+
+    /// <summary>Der eigene Spieler hat einen Gegner getroffen: Gegner und fertiger Schaden (Koop-Abrechnung).</summary>
+    public static event System.Action<Enemy, float> DamageDealt;
+
+    /// <summary>Ein eigener Gegner ist gestorben (nicht Stellvertreter) - wer zuletzt traf, steht in <see cref="LastHitBy"/>.</summary>
+    public static event System.Action<Enemy> Killed;
+
     private EnemyRole proxyRole;
     private float nextPullSend, nextLureSend;
 
@@ -425,9 +434,12 @@ public class Enemy : MonoBehaviour
     /// schon fertig gerechnet (seine Multiplikatoren, sein Krit) - hier wird
     /// nur noch abgezogen, zurueckgestossen und ggf. gestorben.
     /// </summary>
-    public void NetReceiveHit(float amount, float knockback, float? slowMultiplier)
+    public void NetReceiveHit(int fromSlot, float amount, float knockback, float? slowMultiplier)
     {
         if (IsRemote || Untouchable || amount <= 0f || health <= 0f) return;
+        // Was nur das Original kennt (offenes Herz, Sauce des Besitzers), gilt auch fuer fremde Treffer.
+        amount *= DamageTakenFactor * SauceFactor;
+        LastHitBy = fromSlot;
         LoseHealth(amount);
         ApplyKnockback(knockback);
         if (DieIfDead()) return;
@@ -1283,6 +1295,8 @@ public class Enemy : MonoBehaviour
             DamageNumberController.Instance.CreateNumber(finalDamage, transform.position);
         }
 
+        DamageDealt?.Invoke(this, Mathf.Min(finalDamage, Mathf.Max(0f, health)));
+
         // Gegner eines Mitspielers: abgezogen wird bei ihm. Hier nur
         // vorgerechnet, damit Lebensanzeigen sofort reagieren - sterben kann
         // der Stellvertreter nicht.
@@ -1295,6 +1309,7 @@ public class Enemy : MonoBehaviour
             return;
         }
 
+        LastHitBy = -1;
         LoseHealth(finalDamage);
 
         // Fuer Waffen, die Treffer weiterreichen (Mochi-Faden) - roher Schaden
@@ -1408,6 +1423,7 @@ public class Enemy : MonoBehaviour
     {
         if (IsRemote) return;
         NetDied = true;
+        Killed?.Invoke(this);
         TryDropPickup();
 
         // Ohne Null-Pruefung reisst ein fehlender Spawner den ganzen

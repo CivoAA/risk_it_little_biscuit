@@ -979,6 +979,8 @@ public class NetVisuals : MonoBehaviour
         byte colFlags = r.Byte();
 
         m.Go.layer = layer;
+        // Alle Waffen erkennen Gegner am Tag - ohne ihn flogen die Treffer durch die Gegner der anderen.
+        m.Go.tag = "Enemy";
         m.Rb = m.Go.AddComponent<Rigidbody2D>();
         m.Rb.bodyType = RigidbodyType2D.Kinematic;
         m.Rb.useFullKinematicContacts = true;
@@ -1256,7 +1258,12 @@ public class NetVisuals : MonoBehaviour
         int owner = proxy.NetOwner;
         if (owner < 0 || owner >= NetSession.MaxPlayers) return;
         hits[owner].Add(new Hit { Id = proxy.NetId, Damage = damage, Knock = knockback, Slow = slow ?? -1f });
+        HitsSent++;
     }
+
+    /// <summary>Zaehler fuer den Koop-Test: Treffer an fremden Gegnern raus / an eigenen rein.</summary>
+    public int HitsSent { get; private set; }
+    public int HitsReceived { get; private set; }
 
     /// <summary>Bremsen/Festkleben/Ziehen/Locken an einem Stellvertreter.</summary>
     public void QueueCtrl(Enemy proxy, byte kind, float a, float b = 0f, float c = 0f)
@@ -1320,7 +1327,8 @@ public class NetVisuals : MonoBehaviour
             float? slow = slowByte == 255 ? (float?)null : slowByte / 200f;
 
             if (!sources.TryGetValue(id, out Source s) || s.Enemy == null) continue;
-            s.Enemy.NetReceiveHit(damage, knock, slow);
+            s.Enemy.NetReceiveHit(from, damage, knock, slow);
+            HitsReceived++;
         }
     }
 

@@ -180,7 +180,10 @@ public class NetTestDriver : MonoBehaviour
             if (run != null && s != null)
                 Log($"Zustand {run.LocalPeer?.State}, Rettung {run.LocalPeer?.Revive:0.00}, Phase {run.CurrentPhase}, Pause {run.Paused}, Mitspieler-Figuren {NetPlayers.Avatars.Count}, " +
                     $"Gegner {Enemy.Alive.Count}, out {s.BytesOutPerSecond} B/s, in {s.BytesInPerSecond} B/s, " +
-                    $"Level {(PlayerController.Instance != null ? PlayerController.Instance.currentLevel : 0)}");
+                    $"Level {(PlayerController.Instance != null ? PlayerController.Instance.currentLevel : 0)}, " +
+                    $"Treffer fremd raus {NetVisuals.Active?.HitsSent}, rein {NetVisuals.Active?.HitsReceived}, " +
+                    $"Bilanz {StatsLine()}");
+            NetEmotes.Active?.Send((NetEmotes.Kind)(shots % NetEmotes.Count));
         }
 
         // Auswahlfenster: einfach die erste Karte nehmen.
@@ -230,6 +233,16 @@ public class NetTestDriver : MonoBehaviour
             botDir = Rotate(botDir, 50f);
         }
         pc.playerMoveDirection = botDir.normalized;
+    }
+
+    private static string StatsLine()
+    {
+        NetStats st = NetStats.Active;
+        if (st == null) return "-";
+        var parts = new System.Collections.Generic.List<string>();
+        for (int i = 0; i < st.Lines.Length; i++)
+            parts.Add($"[{i}: {st.Lines[i].Damage:0} dmg, {st.Lines[i].Kills} kills, {st.Lines[i].Revives} rev, {st.Lines[i].Downs} down]");
+        return string.Join(" ", parts);
     }
 
     private static Vector2 Rotate(Vector2 v, float degrees)

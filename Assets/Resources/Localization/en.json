@@ -2198,6 +2198,22 @@
     { "key": "ui.shrine.float_levels", "value": "-{0} LEVEL" },
     { "key": "ui.shrine.float_pressure", "value": "PRESSURE +{0}%" },
     { "key": "net.revive.altar_self", "value": "YOUR SOUL HANGS ON THE CROSS - YOUR TEAM CAN BRING YOU BACK" },
-    { "key": "net.revive.altar_other", "value": "{0} HANGS ON THE CROSS - FOLLOW THE SKULL!" }
+    { "key": "net.revive.altar_other", "value": "{0} HANGS ON THE CROSS - FOLLOW THE SKULL!" },
+    { "key": "net.hud.altar", "value": "CROSS" },
+    { "key": "net.hud.choosing_short", "value": "CHOOSING" },
+    { "key": "net.hud.reviving", "value": "REVIVING" },
+    { "key": "net.hud.revive_me", "value": "REVIVE!" },
+    { "key": "net.hud.being_revived_pct", "value": "BEING REVIVED ... {0}%" },
+    { "key": "net.hud.spectating_name", "value": "SPECTATING {0}" },
+    { "key": "net.hud.spectate_switch", "value": "SPACE: SWITCH" },
+    { "key": "net.hud.altar_self", "value": "YOUR TEAM IS FREEING YOU AT THE CROSS: {0}%" },
+    { "key": "net.hud.waiting_short", "value": "WAITING FOR PLAYERS" },
+    { "key": "net.hud.others_choosing_short", "value": "{0} IS CHOOSING" },
+    { "key": "net.hud.emote_hint", "value": "1-4: EMOTES" },
+    { "key": "net.emote.help", "value": "HELP!" },
+    { "key": "net.emote.haha", "value": "HAHA" },
+    { "key": "net.emote.gg", "value": "GG" },
+    { "key": "net.run.float_rescuer", "value": "RESCUER!" },
+    { "key": "net.tally.title", "value": "TEAM SCORE" }
   ]
 }
