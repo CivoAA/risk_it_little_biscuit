@@ -404,10 +404,13 @@ public class OptionsPanel : MonoBehaviour
                 i => GameSettings.Tips = i == 0);
 
         // Die Sprachkuerzel bleiben unuebersetzt - "DE" heisst in jeder Sprache DE.
-        ChipRow(Loc.Get("ui.options.display.language", "Sprache"),
-                new[] { "DE", "EN" },
-                () => Loc.Language == "de" ? 0 : 1,
-                i => Loc.SetLanguage(i == 0 ? "de" : "en"));
+        string[] languages = Loc.Available;
+        string[] codes = new string[languages.Length];
+        for (int i = 0; i < languages.Length; i++) codes[i] = languages[i].ToUpperInvariant();
+
+        ChipRow(Loc.Get("ui.options.display.language", "Sprache"), codes,
+                () => Mathf.Max(0, System.Array.IndexOf(languages, Loc.Language)),
+                i => Loc.SetLanguage(languages[i]));
     }
 
     private static string[] OnOff()

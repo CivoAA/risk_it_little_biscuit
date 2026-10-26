@@ -48,7 +48,7 @@ public static class Loc
     public static event Action LanguageChanged;
 
     /// <summary>Sprachen, die als Datei vorliegen.</summary>
-    public static readonly string[] Available = { "en", "de" };
+    public static readonly string[] Available = { "de", "en", "es", "fr", "ru" };
 
     public static string Language
     {
@@ -70,7 +70,14 @@ public static class Loc
     /// <summary>Die Sprache, die ohne eigene Wahl gelten würde.</summary>
     public static string SystemDefault()
     {
-        return Application.systemLanguage == SystemLanguage.German ? "de" : DefaultLanguage;
+        switch (Application.systemLanguage)
+        {
+            case SystemLanguage.German:  return "de";
+            case SystemLanguage.Spanish: return "es";
+            case SystemLanguage.French:  return "fr";
+            case SystemLanguage.Russian: return "ru";
+            default:                     return DefaultLanguage;
+        }
     }
 
     public static void SetLanguage(string lang)
