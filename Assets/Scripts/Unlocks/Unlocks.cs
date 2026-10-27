@@ -123,7 +123,7 @@ public static class Unlocks
         "unlock_char_slime_king",
         "Slime King",
         "The Slime King joins your team!",
-        "Defeat the Slime King 10 times");
+        "Defeat the King of All Slimes 10 times");
 
     /// <summary>Kommt mit "Full Bento" (mit jedem Charakter ein Sieg).</summary>
     public static readonly UnlockDef CharTofu = Def(
