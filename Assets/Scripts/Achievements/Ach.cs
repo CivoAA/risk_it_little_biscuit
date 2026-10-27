@@ -155,12 +155,12 @@ public static class Ach
         AchievementCategory.Combat, goal: 100f);
 
     public static readonly AchievementDef KillSlimeKing = Def(
-        "Kill_Slime_King", "Dethroned", "Defeat the Slime King.",
+        "Kill_Slime_King", "Dethroned", "Defeat the King of All Slimes.",
         AchievementCategory.Combat);
 
     /// <summary>Zaehlt in Enemy.GrantRewards (Zwischenboss Schleimkoenig) mit.</summary>
     public static readonly AchievementDef KillSlimeKing10 = Def(
-        "Kill_Slime_King_10", "Long Live the King", "Defeat the Slime King 10 times.",
+        "Kill_Slime_King_10", "Long Live the King", "Defeat the King of All Slimes 10 times.",
         AchievementCategory.Combat, goal: 10f, grantsUnlock: "unlock_char_slime_king");
 
     // Erster Sieg ueber jeden Zwischenboss der Wellenplaene. Ausgeloest in

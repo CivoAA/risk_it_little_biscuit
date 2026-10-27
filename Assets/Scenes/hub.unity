@@ -1044,7 +1044,10 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   pages:
-  - Diese Statue zeigt den Held des Zuckers.
+  - "Diese Statue zeigt den Helden des Zuckers. Er beherrschte jede Waffe des Zuckerlands - und trat doch ohne eine einzige zwischen die Heere."
+  - "In der dritten Nacht des Cookie-Kriegs fing er die Hiebe der Kekse und der Donuts ab. Er blieb stehen, bis beide Seiten ihre Waffen gesenkt hatten. Im Morgengrauen zerbrach er."
+  - "Sein Grab liegt weit von hier, auf dem alten Kr\xFCmelfeld. Die Ritter vom Orden der Schale haben geschworen, es f\xFCr immer zu bewachen."
+  - "In den Sockel ist ein einziger Satz geritzt:\n<wave>Wer jede Waffe kennt, wei\xDF auch, wann er keine braucht.</wave>"
   locKey: statue_hero
   speaker: 
   portrait: {fileID: 0}
